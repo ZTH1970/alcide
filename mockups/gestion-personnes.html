@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Gestion des personnes</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script>
+    $(function() {
+    	$('#service-links a').click(function() {
+		$('#header span').text($(this).text());
+		$('#service-links a').removeClass('active');
+		$(this).addClass('active');
+	});
+    	$('#service-links a.cmpp').click(function() { $('#splash').removeClass().addClass('cmpp'); });
+    	$('#service-links a.camsp').click(function() { $('#splash').removeClass().addClass('camsp'); });
+    	$('#service-links a.sessad-ted').click(function() { $('#splash').removeClass().addClass('sessad-ted'); });
+    	$('#service-links a.sessad-sys').click(function() { $('#splash').removeClass().addClass('sessad-sys'); });
+	$('#tabs').tabs();
+    });
+    </script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1>APS 42</h1>
+      <span>SESSAD SYS</span>
+    </div>
+    <div id="splash" class="sessad-sys">
+      <div id="user-info">
+        Dernière connexion le 4 juillet 2012 à 8h05
+      </div>
+      <div id="user-links">
+        <a href="#">Changer de mot de passe</a> —
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+      <div id="service-links">
+        <a class="cmpp" href="#">CMPP</a>
+        <a class="camsp" href="#">CAMSP</a>
+        <a class="sessad-ted" href="#">SESSAD TED</a>
+        <a class="sessad-sys active" href="#">SESSAD SYS</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Gestion des personnes</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+    </div>
+
+    <h3>Personnel</h3>
+    <ul>
+     <li><a href="acces.html">Accès</a></li>
+      <!-- gestion des accès à l'application, une liste de comptes + la
+	   possibilité de les attacher à un membre du personnel -->
+     <li><a href="admin-personnel.html">Administration du personnel</a></li>
+     <li><a href="conges.html">Congés</a></li>
+      <!-- affiche les congés de tout le monde -->
+      <!-- + la possibilité de définir les congés annuels -->
+      <!-- "elle se sert d'un tableau avec les congés de tout le monde pour
+	   savoir qui est présent sur le site dans les périodes creuses",
+	   "que personne ne soit seul" -->
+    </ul>
+    <h3>Extérieurs</h3>
+
+    <ul>
+     <li><a href="#">Intervenants extérieurs</a></li>
+     <li><a href="#">Médecins extérieurs</a></li>
+     <li><a href="#">Professeurs des écoles</a></li>
+    </ul>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+
+  </body>
+</html>

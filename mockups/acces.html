@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Accès</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('#new-membre').click(function() {
+			$('#new-membre-dlg').dialog({title: 'Nouvel accès',
+				  width: '300px',
+				  buttons: [ { text: "Fermer",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() {
+					       $(this).dialog("close"); } } ]
+					});
+			});
+	});
+	</script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1>APS 42</h1>
+      <span>Gestion - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-info">
+        Dernière connexion le 4 juillet 2012 à 8h05
+      </div>
+      <div id="user-links">
+        <a href="#">Changer de mot de passe</a> —
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+      <div id="service-links">
+        <a class="cmpp active" href="#">CMPP</a>
+        <a class="camsp" href="#">CAMSP</a>
+        <a class="sessad-ted" href="#">SESSAD TED</a>
+        <a class="sessad-sys" href="#">SESSAD SYS</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Gestion des personnes — Accès</h2>
+    <a href="gestion-personnes.html">Retourner à la gestion des personnes</a>
+
+    <button id="new-membre">Nouvel accès</button>
+    <br/>&nbsp;
+    </div>
+
+    <div id="sidebar">
+     <div>
+      <h3>Rechercher dans les comptes</h3>
+       <label>Identifiant : <input type="text"/></label>
+       <button>Rechercher</button>
+     </div>
+   </div>
+
+   <div class="content">
+   <table id="membres">
+    <thead>
+     <tr>
+     <th>Identifiant</th>
+     <th>Courriel</th>
+     <th>Fiche Personnel</th>
+     </tr>
+    </thead>
+    <tbody>
+
+     <tr>
+      <td>fdurant</td>
+      <td>fdurant@example.com</td>
+      <td><a href="un-membre.html">Durant François</a>
+      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
+     </tr>
+
+     <tr>
+      <td>smaurier</td>
+      <td>smaurier@example.com</td>
+      <td><a href="#">Maurier Stéphanie</a></td>
+      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
+     </tr>
+
+     <tr>
+      <td>mhosseini</td>
+      <td>mhosseini@example.com</td>
+      <td><a href="#">Hosseini Marcus</a></td>
+      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
+     </tr>
+
+     <tr>
+      <td>mates</td>
+      <td>mates@entrouvert.com</td>
+      <td>-</td>
+      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
+     </tr>
+
+    </tbody>
+   </table>
+
+   <h4>Comptes déactivés</h4>
+
+   <table id="membres"> <!-- duplicated id :( -->
+    <thead>
+     <tr>
+     <th>Identifiant</th>
+     <th>Courriel</th>
+     <th>Fiche Personnel</th>
+     </tr>
+    </thead>
+    <tbody>
+
+     <tr>
+      <td>gdupont</td>
+      <td>gdupont@example.com</td>
+      <td><a href="#">Dupont Gloria</a></td>
+      <td><button>⎅</button> <button>+</button> <button>Histo</button></td>
+     </tr>
+    </tbody>
+   </table>
+
+
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="new-membre-dlg" style="display: none;">
+   <form>
+   <p>
+    <label for="id_nom">Identifiant :</label>
+    <input id="id_nom" type="text" name="nom"/>
+   </p>
+   <p>
+    <label for="id_password">Mot de passe :</label>
+    <input id="id_password" type="text" name="password"/>
+   </p>
+   <p>
+    <label for="id_member">Membre du personnel associé :</label>
+    <select id="id_member" name="member">
+     <option>aucun</option>
+     <option>Bob Leponge</option>
+     <option>...</option>
+    </select>
+   </p>
+   </form>
+  </div>
+  </body>
+</html>

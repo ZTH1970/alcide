@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Congés</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('#new-membre').click(function() {
+			$('#new-membre-dlg').dialog({title: 'Nouvel accès',
+				  width: '300px',
+				  buttons: [ { text: "Fermer",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() {
+					       $(this).dialog("close"); } } ]
+					});
+			});
+	});
+	</script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1>APS 42</h1>
+      <span>Gestion - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-info">
+        Dernière connexion le 4 juillet 2012 à 8h05
+      </div>
+      <div id="user-links">
+        <a href="#">Changer de mot de passe</a> —
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+      <div id="service-links">
+        <a class="cmpp active" href="#">CMPP</a>
+        <a class="camsp" href="#">CAMSP</a>
+        <a class="sessad-ted" href="#">SESSAD TED</a>
+        <a class="sessad-sys" href="#">SESSAD SYS</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Gestion des personnes — Congés</h2>
+    <a href="gestion-personnes.html">Retourner à la gestion des personnes</a>
+    </div>
+
+    <h3>Congés du personnel</h3>
+
+    <h4>En cours</h4>
+
+    <ul>
+     <li><a href="un-membre.html">Durant François</a>, du 20 août au 3 septembre 2012</li>
+    </ul>
+
+    <h4>À venir</h4>
+
+    <table id="conges-a-venir">
+    <tr>
+    <th>Août</th>
+    <th>Septembre</th>
+    <th>Octobre</th>
+    </tr>
+    <tr>
+    <td>
+    <ul>
+     <li><a href="#">Dupont Gloria</a>, le 30 août 2012, de 14h à 17h30</li>
+    </ul>
+    </td>
+    <td>
+    <ul>
+     <li><a href="#">Dupont Gloria</a>, le 2 septembre 2012</li>
+    </ul>
+    </td>
+    <td>
+    <ul>
+     <li><a href="un-membre.html">Durant François</a>, du 3 au 10 octobre 2012</li>
+     <li><a href="#">Dupont Gloria</a>, du 8 au 15 octobre 2012</li>
+     <li>...</li>
+    </ul>
+    </td>
+    </tr>
+    </table>
+
+    <h3>Congés annuels</h3>
+    <ul>
+      <li>Du 24 décembre 2012 au 4 janvier 2013</li>
+    </ul>
+    <button>Gestion des congés annuels</button>
+
+    <h3>Affichage interactif</h3>
+
+    <p>Afficher la liste des congés pris entre
+    <input size="20"/> et <input size="20"/>
+    <button>Valider</button>
+    </p>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="new-membre-dlg" style="display: none;">
+   <form>
+   <p>
+    <label for="id_nom">Identifiant :</label>
+    <input id="id_nom" type="text" name="nom"/>
+   </p>
+   <p>
+    <label for="id_password">Mot de passe :</label>
+    <input id="id_password" type="text" name="password"/>
+   </p>
+   <p>
+    <label for="id_member">Membre du personnel associé :</label>
+    <input id="id_member" type="text" name="member"/>
+   </p>
+   </form>
+  </div>
+  </body>
+</html>

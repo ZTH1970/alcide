@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Dossiers</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('table#dossiers tr').click(function() {
+			window.location = 'un-dossier.html';
+		});
+		$('#filtre input').click(function () {
+			var states = new Array();
+			$('#filtre input:checked').each(function() {
+				states.push($(this).attr('class'));
+			});
+			$('table#dossiers tbody tr').each(function() {
+				$(this).find(':nth-child(6)').each(function() {
+					state = $(this).attr('class');
+					if ($.inArray(state, states) != -1) {
+						$(this).parent().show();
+					} else {
+						$(this).parent().hide();
+					}
+				});
+			});
+		});
+		$('#new-dossier').click(function() {
+			$('#homonyms').hide();
+			$('#dossier-dlg').dialog({title: 'Nouveau dossier',
+				  width: '500px',
+				  buttons: [ { text: "Fermer",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() {
+						if ($('#homonyms').is(':visible')) {
+					       	  $(this).dialog("close");
+						} else {
+						  $('#homonyms').show();
+						}
+					} }]}
+			);
+			});
+		var tempScrollTop, currentScrollTop = 0;
+		$(window).scroll(function() {
+			/* load more rows when we reach the bottom of the table */
+			currentScrollTop = $(window).scrollTop();
+			if (tempScrollTop < currentScrollTop ) {
+				if ($('#dossiers').offset().top + $('#dossiers').height() - $(window).scrollTop() - $(window).height() < 20) {
+					$('#dossiers tbody').append($('#dossiers tbody tr').slice(0, 10).clone());
+				}
+			}
+			tempScrollTop = currentScrollTop;
+		});
+
+	});
+	</script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1>APS 42</h1>
+      <span>Dossiers - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-info">
+        Dernière connexion le 4 juillet 2012 à 8h05
+      </div>
+      <div id="user-links">
+        <a href="#">Changer de mot de passe</a> —
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+      <div id="service-links">
+        <a class="cmpp active" href="#">CMPP</a>
+        <a class="camsp" href="#">CAMSP</a>
+        <a class="sessad-ted" href="#">SESSAD TED</a>
+        <a class="sessad-sys" href="#">SESSAD SYS</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Dossiers</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+
+
+    <button id="new-dossier">Nouveau dossier</button>
+    &nbsp; &nbsp; &nbsp;
+    <span>Dossiers: <span class="num">1032</span> - En accueil: <span class="num">28</span> - Fin d'accueil: <span class="num">8</span> -
+    <span>En diagnostic: <span class="num">322</span> - En traitement: <span class="num">485</span> - Clos: <span class="num">193</span></span>
+    <br/>
+    <br/>&nbsp;
+    </div>
+
+
+    <div id="sidebar">
+     <div>
+      <h3>Rechercher dans les dossiers</h3>
+       <!--
+      <ul>
+       <span title="ces boutons radio sont-ils vraiment nécessaires ? les filtres au-dessus se cochent / décochent facilement">XXX</span>
+       <li><label><input name="scope" type="radio"/>Tenir compte des états
+       sélectionnés</label></li>
+       <li><label><input name="scope" type="radio"/>Rechercher dans tous les
+       dossiers</label></li>
+      </ul>
+      -->
+       <label>Nom: <input type="text"/></label>
+       <label>Numéro de dossier: <input type="text"/></label>
+       <label>Numéro de sécu: <input type="text"/></label>
+       <button>Rechercher</button>
+     </div>
+     <div id="filtre">
+      <h3>Afficher les dossiers</h3>
+      <ul>
+        <li><label><input checked="checked"  class="en-accueil" type="checkbox"/>En accueil</label></li>
+        <li><label><input checked="checked"  class="fin-accueil" type="checkbox"/>Fin d'accueil</label></li>
+        <li><label><input checked="checked"  class="diag" type="checkbox"/>En diagnostic</label></li>
+        <li><label><input checked="checked"  class="traite" type="checkbox"/>En traitement</label></li>
+        <li><label><input checked="checked"  class="clos" type="checkbox"/>Clos</label></li>
+        <li><button>Tous</button> <button>Aucun</button></li>
+      </ul>
+     <hr/>
+     <ul>
+       <li><label><input type="checkbox"/>Dossiers avec PC arrivant à expiration</label></li>
+       <li><label><input type="checkbox"/>Dossiers où une prolongation est nécessaire</label></li>
+       <li><label><input type="checkbox"/>Dossiers avec PC manquante ou expirée</label></li>
+       <li><label><input type="checkbox"/>Dossiers éligibles pour un rediagnostic</label></li>
+       <li><label><input type="checkbox"/>Dossiers en pause facturation</label></li>
+     </ul>
+    </div>
+   </div>
+
+   <div class="content">
+   <table id="dossiers">
+    <thead>
+     <tr>
+     <th colspan="2">N° dossier
+     <th rowspan="2">Nom</th>
+     <th rowspan="2">Prénom</th>
+     <th rowspan="2">Date de naissance</th>
+     <th rowspan="2">État du dossier</th>
+     <th rowspan="2"><span title="Notification concernant la prise en charge">N</span> / <span title="Dossier en pause facturation">F</span></th>
+     <th rowspan="2">Dernier acte</th>
+     <th rowspan="2">Prochain rendez-vous</th>
+     </tr>
+     <tr>
+     <th>papier</th>
+     <th>inform.</th>
+     </tr>
+    </thead>
+    <tbody>
+
+     <tr>
+      <td>12346</td>
+      <td>67891</td>
+      <td>Bouclier</td>
+      <td>Guillaume</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence excusée</td>
+      <td>18/08/2012 14:00<br/>Roudon - mini synthèse</td>
+     </tr>
+
+     <tr>
+      <td>12347</td>
+      <td>67892</td>
+      <td>Hendrickx</td>
+      <td>André</td>
+      <td>12/03/1965</td>
+      <td class="en-accueil">En accueil</td>
+      <td></td>
+      <td>28/06/2012<br/>D - absence non excusable</td>
+      <td>18/08/2012 15:00<br/>Roudon - accueil</td>
+     </tr>
+
+     <tr>
+      <td>12348</td>
+      <td>67893</td>
+      <td>Manglos</td>
+      <td>Thérèse</td>
+      <td>12/03/1965</td>
+      <td class="en-accueil">En accueil</td>
+      <td></td>
+      <td>28/06/2012<br/>T - non facturable</td>
+      <td>18/08/2012 16:00<br/>Roudon - accueil</td>
+     </tr>
+
+     <tr>
+      <td>12349</td>
+      <td>67894</td>
+      <td>Caswell</td>
+      <td>Augustin</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 14:00<br/>Roudon - mini synthèse</td>
+     </tr>
+
+     <tr>
+      <td>12350</td>
+      <td>67895</td>
+      <td>Zehkat</td>
+      <td>Marie</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td><span title="Notification concernant la prise en charge">N</span></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 14:00<br/>Roudon - mini synthèse</td>
+     </tr>
+
+     <tr>
+      <td>12351</td>
+      <td>67896</td>
+      <td>Verstraete</td>
+      <td>Barbara</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 14:00<br/>Roudon - entretien</td>
+     </tr>
+
+     <tr>
+      <td>12352</td>
+      <td>67897</td>
+      <td>Jover</td>
+      <td>Henri</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 14:00<br/>Roudon - entretien</td>
+     </tr>
+
+     <tr>
+      <td>12361</td>
+      <td>67898</td>
+      <td>Masson</td>
+      <td>Valentine</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12353</td>
+      <td>67899</td>
+      <td>Sinclair</td>
+      <td>Juliette</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12354</td>
+      <td>67904</td>
+      <td>Paige</td>
+      <td>Emmanuelle</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td><span title="Dossier en pause facturation">F</span></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12355</td>
+      <td>67900</td>
+      <td>Kosumovic</td>
+      <td>Timothée</td>
+      <td>12/03/1965</td>
+      <td class="fin-accueil">Fin d'accueil</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12346</td>
+      <td>67891</td>
+      <td>Bouclier</td>
+      <td>Guillaume</td>
+      <td>12/03/1965</td>
+      <td class="clos">Clos</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12347</td>
+      <td>67892</td>
+      <td>Hendrickx</td>
+      <td>André</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12348</td>
+      <td>67893</td>
+      <td>Manglos</td>
+      <td>Thérèse</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td><span title="Notification concernant la prise en charge">N</span> / <span title="Dossier en pause facturation">F</span></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12349</td>
+      <td>67894</td>
+      <td>Caswell</td>
+      <td>Augustin</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12350</td>
+      <td>67895</td>
+      <td>Zehkat</td>
+      <td>Marie</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12351</td>
+      <td>67896</td>
+      <td>Verstraete</td>
+      <td>Barbara</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12352</td>
+      <td>67897</td>
+      <td>Jover</td>
+      <td>Henri</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12361</td>
+      <td>67898</td>
+      <td>Masson</td>
+      <td>Valentine</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12353</td>
+      <td>67899</td>
+      <td>Sinclair</td>
+      <td>Juliette</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12354</td>
+      <td>67904</td>
+      <td>Paige</td>
+      <td>Emmanuelle</td>
+      <td>12/03/1965</td>
+      <td class="traite">En traitement</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+     <tr>
+      <td>12355</td>
+      <td>67900</td>
+      <td>Kosumovic</td>
+      <td>Timothée</td>
+      <td>12/03/1965</td>
+      <td class="diag">En diagnostic</td>
+      <td></td>
+      <td>28/06/2012<br/>T - absence non excusable</td>
+      <td>18/08/2012 (...)</td>
+     </tr>
+
+
+
+
+
+    </tbody>
+   </table>
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="dossier-dlg" style="display: none;">
+   <form>
+   <p>
+    <label for="id_nom">Nom :</label>
+    <input id="id_nom" type="text" name="nom"/>
+   </p>
+   <p>
+    <label for="id_prenom">Prénom :</label>
+    <input id="id_prenom" type="text" name="prenom"/>
+   </p>
+   </form>
+
+  <div id="homonyms" style="display: none;">
+   <p>Attention, il existe des homonymes; cliquez sur le bouton pour consulter
+      le dossier correspondant. Si vous voulez confirmer la création d'un nouveau
+      dossier, cliquez sur le bouton 'Ajouter'.</p>
+   <button>Doe James</button><br/>
+   <button>Doe Dolassaumure</button>
+  </div>
+  </div>
+
+  </body>
+</html>
