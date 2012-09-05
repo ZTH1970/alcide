@@ -38,7 +38,9 @@
                                                 $('#teletrans-btn').show();
                                                 $('#facturation-contents').hide();
                                                 $('#facturation-validee').show();
-                                                $('filtre-dossiers').hide();
+                                                $('#filtre-dossiers').hide();
+                                                $('#dossier-bouba').hide();
+                                                $('#pause-fac').hide();
                                                 $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012 - validée");
                                                } }]}
 			);
@@ -146,13 +148,13 @@
       <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
       <p>En diagnostic (6 actes) - 0 actes facturés</p>
       </div>
-      <p>Pause facturation (manuel - 28/08/2012)</p>
+      <p id="pause-fac">Pause facturation (manuel - 28/08/2012)</p>
       <ul>
       <li>2 actes facturables <button class="blind">détails</button><ul><li>...</li><li></ul></li>
       </ul>
      </div>
 
-     <div class="dossier">
+     <div class="dossier" id="dossier-bouba">
       <h3><a href="un-dossier.html">5678</a> Bouba Lourson - 06/11/2006</a></h3>
       <div class="info">
       <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
