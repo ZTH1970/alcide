@@ -44,6 +44,10 @@
 			);
 			});
 
+                $('button.blind').next().hide();
+                $('button.blind').click(function() {
+                        $(this).next().toggle('blind');
+                });
 	});
     </script>
   </head>
@@ -130,14 +134,43 @@
    <div id="dossiers">
     <h3>Dossiers concernés</h3>
 
-    <div id="filtre-dossiers">
+    <p id="filtre-dossiers">
      <input type="checkbox">N'afficher que les dossiers avec des actes non facturés</input>
-    </div>
+    </p>
 
     <div id="dossiers-concernes">
-     <p>
-     XXX besoin d'un scan plus sombre, trop difficile à lire :(
-     </p>
+
+     <div class="dossier">
+      <h3><a href="un-dossier.html">1234</a> Clarisse Denice - 02/05/1999</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      <p>En diagnostic (6 actes) - 0 actes facturés</p>
+      </div>
+      <p>Pause facturation (manuel - 28/08/2012)</p>
+      <ul>
+      <li>2 actes facturables <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      </ul>
+     </div>
+
+     <div class="dossier">
+      <h3><a href="un-dossier.html">5678</a> Bouba Lourson - 06/11/2006</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      <p>En traitement (prises en charge 40 actes au 10/09/2011) (prolongation
+      10 actes au 5/06/2012) - 38 actes facturés</p>
+      </div>
+      <ul>
+      <li>2 actes facturables <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      <li>2 actes facturables non pris en charge <button class="blind">détails</button>
+       <ul>
+        <li>28/08/2012 - 8h00 - 45 min - Sylvain Mirouf - Analyse</li>
+        <li>31/08/2012 - 9h30 - 60 min - Bob Dilane - Entretien</li>
+       </ul>
+      </li>
+      </ul>
+     </div>
+
+
     </div>
 
    </div>
