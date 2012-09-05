@@ -773,3 +773,9 @@ div.dossier div.info {
   margin-bottom: 10px;
 }
 
+button.blind {
+ border: 1px solid #555;
+ border-radius: 5px;
+ background: white;
+ font-size: 80%;
+}
