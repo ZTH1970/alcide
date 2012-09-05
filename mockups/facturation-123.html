@@ -35,6 +35,7 @@
 					       click: function() {
                                                 $(this).dialog("close");
                                                 $("#valider-btn").hide();
+                                                $('#teletrans-btn').show();
                                                 $('#facturation-contents').hide();
                                                 $('#facturation-validee').show();
                                                 $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012 - validée");
@@ -73,6 +74,10 @@
     <a href="facturation.html">Retourner à facturation</a>
     <button id="clore-btn">Clôre cette facturation</button>
     <button id="valider-btn" style="display: none;">Valider cette facturation</button>
+    <button id="teletrans-btn" style="display: none;">Télétransmission à l'assurance maladie</button>
+    </div>
+
+    <div id="export-compta">
     </div>
 
     <div id="facturation-contents">
@@ -90,9 +95,9 @@
          <li>Dossiers concernés : 12
           <ul>
            <li>Pause facturation : 7</li>
-           <li>Nombre d'actes XXX dépassé : 2</li>
-           <li>XXX autres éléments sur le scan sur le côté (prises en charge
-           expirées et pas de prise en charge), à afficher ici ?</li>
+           <li>Quota des actes pris en charge dépassé : 2</li>
+           <li>Prises en charge expirées : 2</li>
+           <li>Pas de prise en charge : 1</li>
           </ul>
          </li>
         </ul>
@@ -101,15 +106,31 @@
      </li>
     </ul>
 
-    <p>
-    XXX : infobulle?
-    </p>
+    </div> <!-- #facturation-contents -->
 
+
+    <div id="facturation-validee" style="display: none;">
+     <p>
+      <button>Export comptabilité</button>
+     </p>
+
+    <h3>Résumé</h3>
+      <ul>
+       <li>Actes facturés : 602
+        <ul>
+         <li>Dossiers concernés : 125</li>
+         <li>Nombre de factures : 305</li>
+        </ul></li>
+      </ul>
+
+    </div>
+
+
+   <div id="dossiers">
     <h3>Dossiers concernés</h3>
 
     <div>
-     <input type="checkbox">actes non facturés</input>
-     <input type="checkbox">actes facturés</input>
+     <input type="checkbox">N'afficher que les dossiers avec des actes non facturés</input>
     </div>
 
     <div id="dossiers-concernes">
@@ -118,22 +139,7 @@
      </p>
     </div>
 
-
-    </div> <!-- #facturation-contents -->
-
-    <div id="facturation-validee" style="display: none;">
-     <p>
-      602 actes - 305 factures - 125 dossiers <button>Détails</button>
-     </p>
-
-     <p>
-      <button>Export comptabilité</button>
-     </p>
-
-     <p>
-      <button>Télétransmission à l'assurance maladie</button>
-     </p>
-    </div>
+   </div>
 
     </div>
 
