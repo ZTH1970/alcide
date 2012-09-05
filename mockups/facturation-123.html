@@ -38,6 +38,7 @@
                                                 $('#teletrans-btn').show();
                                                 $('#facturation-contents').hide();
                                                 $('#facturation-validee').show();
+                                                $('filtre-dossiers').hide();
                                                 $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012 - validée");
                                                } }]}
 			);
@@ -129,7 +130,7 @@
    <div id="dossiers">
     <h3>Dossiers concernés</h3>
 
-    <div>
+    <div id="filtre-dossiers">
      <input type="checkbox">N'afficher que les dossiers avec des actes non facturés</input>
     </div>
 
