@@ -2,8 +2,8 @@ import os.path
 
 PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
 
-from django import *
-from aps42 import *
+from common import *
+from calebasse import *
 
 #########################################################################
 # Import settings from local_settings.py, if it exists.

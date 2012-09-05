@@ -2,12 +2,12 @@
 from setuptools import setup, find_packages
 import os
 
-setup(name='aps42',
+setup(name='calebasse',
         version='0.1',
         license='AGPLv3',
         description='',
-        url='http://dev.entrouvert.org/projects/aps42/',
-        download_url='http://repos.entrouvert.org/aps42.git/',
+        url='http://dev.entrouvert.org/projects/calebasse/',
+        download_url='http://repos.entrouvert.org/calebasse.git/',
         author="Entr'ouvert",
         author_email="info@entrouvert.com",
         packages=find_packages(os.path.dirname(__file__) or '.'),

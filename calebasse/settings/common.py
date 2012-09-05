@@ -1,6 +1,7 @@
-# Django settings for aps42 project.
+# Django settings for calebasse project.
 
 import os
+from logging.handlers import SysLogHandler
 
 from ..settings import PROJECT_PATH
 
@@ -16,7 +17,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(PROJECT_PATH, 'aps42.sqlite3'),                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(PROJECT_PATH, 'calebasse.sqlite3'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -104,10 +105,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'aps42.urls'
+ROOT_URLCONF = 'calebasse.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'aps42.wsgi.application'
+WSGI_APPLICATION = 'calebasse.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -128,7 +129,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'aps42.a42base',
+    'calebasse.cale_base',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -149,13 +150,19 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'syslog':{
+            'level':'INFO',
+            'class':'logging.handlers.SysLogHandler', 
+            'formatter': 'syslog',
+            'facility': SysLogHandler.LOG_LOCAL0,
+            'address': '/dev/log',
+        },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
+        '': {
+            'handlers': ['mail_admins','syslog'],
+            'level': 'INFO',
         },
-    }
+    },
 }

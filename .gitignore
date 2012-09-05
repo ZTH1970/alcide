@@ -32,4 +32,4 @@ nosetests.xml
 
 # Django files
 local_settings.py
-aps42.sqlite3
+calebasse.sqlite3

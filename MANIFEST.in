@@ -1,4 +1,4 @@
 include README INSTALL LICENSE AUTHORS
 recursive-include mockups *
-recursive-include aps42/*/static *
-recursive-include aps42/*/templates *
+recursive-include calebasse/*/static *
+recursive-include calebasse/*/templates *
