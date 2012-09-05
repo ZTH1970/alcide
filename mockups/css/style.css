@@ -779,3 +779,7 @@ button.blind {
  background: white;
  font-size: 80%;
 }
+
+#content div.agenda h3.busy-elsewhere {
+  background: #eee;
+}
