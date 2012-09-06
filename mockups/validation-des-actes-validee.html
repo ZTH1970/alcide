@@ -18,7 +18,7 @@
 				  buttons: [ { text: "Annuler",
 					       click: function() { $(this).dialog("close"); } },
 					     { text: "Valider",
-					       click: function() { parent.location='validation-des-actes-validee.html'; } }]}
+					       click: function() { $(this).dialog("close"); } }]}
 			);
 			});
 
@@ -28,7 +28,7 @@
 				  buttons: [ { text: "Annuler",
 					       click: function() { $(this).dialog("close"); } },
 					     { text: "Valider",
-					       click: function() { $(this).dialog("close"); } }]}
+					       click: function() { parent.location='validation-des-actes.html'; } }]}
 			);
 			});
 
@@ -59,10 +59,10 @@
     <div id="content">
 
     <div id="appbar">
-    <h2>Validation des actes - 5 juillet 2012</h2>
+    <h2>Validation des actes - 5 juillet 2012 validé le 24 août 2012 à 8h05</h2>
     <a href="agenda.html">Retourner à l'agenda</a>
-    <button id="valider-btn">Valider</button>
-    <!--<button id="annuler-btn">Annuler la validation</button>-->
+    <!--<button id="valider-btn">Valider</button>-->
+    <button id="annuler-btn">Annuler la validation</button>
     </div>
 
    <div id="datesel" style="float: right;">
@@ -73,35 +73,34 @@
    </div>
 
     <ul>
-     <li>Validation annulée le 24 août 2012 à 8h09</li>
      <li>Validé le 24 août 2012 à 8h05</li>
     </ul>
 
     <div id="actes">
 
      <div class="acte">
-     <h3>8:00 - 45m - <strong>John Doe</strong> (1051) - <strong>Sylvie Legrand</strong> (28) - 3, 46, 52 - <strong>Bilan</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></h3>
-     <p><strong>Absent</strong>, pointé le 24 août 2012 à 7h46. <button>Annuler le pointage</button></p>
+     <h3>8:00 - 45m - <strong>John Doe</strong> (1051) - <strong>Sylvie Legrand</strong> (28) - 3, 46, 52 - <strong>Bilan</strong> <span title="Bla bla bla">(C)</span></h3>
+     <p><strong>Absent</strong>, pointé le 24 août 2012 à 7h46. </p>
      </div>
 
      <div class="acte">
-     <h3>8:00 - 1h - <strong>Bob Dilane</strong> (3051) - <strong>Sylvain Mirouf</strong> (51) - 2 - <strong>Rééducation</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></h3>
-     <p><strong>Absent</strong>, pointé le 24 août 2012 à 7h46. <button>Annuler le pointage</button></p>
+     <h3>8:00 - 1h - <strong>Bob Dilane</strong> (3051) - <strong>Sylvain Mirouf</strong> (51) - 2 - <strong>Rééducation</strong> <span title="Bla bla bla">(C)</span></h3>
+     <p><strong>Absent</strong>, pointé le 24 août 2012 à 7h46. </p>
      </div>
 
      <div class="acte">
      <h3>9:00 - 45m - <strong>Sabine Malouf</strong> (4048) - <strong>Norbert Lecuisto</strong> (12) - <strong>Synthèse</strong></h3>
-     <p><select><option>Absent</option></select> <button>Pointer</button></p>
+     <p>Validé</p>
      </div>
 
      <div class="acte">
-     <h3>9:00 - 45m - <strong>Gomez Chavez</strong> (4049) - <strong>Sylvie Legrand</strong> (28) - 46 - <strong>Bilan</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></span></h3>
-     <p><select><option>Absent</option></select> <button>Pointer</button></p>
+     <h3>9:00 - 45m - <strong>Gomez Chavez</strong> (4049) - <strong>Sylvie Legrand</strong> (28) - 46 - <strong>Bilan</strong> <span title="Bla bla bla">(C)</span></h3>
+     <p>Validé</p>
      </div>
 
      <div class="acte">
-     <h3>10:00 - 1h - <strong>Lechat Kitchyan</strong> (5012) - <strong>Martine Dupont</strong> (17) - <strong>Entretien</strong></span></h3>
-     <p><select><option>Absent</option></select> <button>Pointer</button></p>
+     <h3>10:00 - 1h - <strong>Lechat Kitchyan</strong> (5012) - <strong>Martine Dupont</strong> (17) - <strong>Entretien</strong> <span title="Bla bla bla">(C)</span></h3>
+     <p>Validé</p>
      <p><em>Type d'acte non facturable</em></p>
      </div>
 
