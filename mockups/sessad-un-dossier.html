@@ -67,6 +67,16 @@
 			);
 			});
 
+		$('#add-notif-btn').click(function() {
+			$('#add-notif-dlg').dialog({title: 'Notification',
+				width: '400px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() { $(this).dialog("close"); } }]}
+			);
+			});
+
                 $('button.blind').next().hide();
                 $('button.blind').click(function() {
                         $(this).next().toggle('blind');
@@ -108,7 +118,7 @@
      <li><a href="#tabs-1">Général</a></li>
      <li><a href="#tabs-2">Fiche administrative</a></li>
      <li><a href="#tabs-3">Adresses / contacts</a></li>
-     <li><a href="#tabs-4">Prise en charge</a></li>
+     <li><a href="#tabs-4">Notifications</a></li>
      <!--<li><a href="#tabs-5">Liste des actes</a>-->
      <li><a href="#tabs-6">Prochains rendez-vous</a>
      <li><a href="#tabs-7">Socialisation</a>
@@ -283,123 +293,19 @@
 
     </div>
 
-    <div id="tabs-4"> <!-- Prise en charge -->
-      <div id="patient-diag">
+    <div id="tabs-4"> <!-- Notifications -->
       <div>
-       <h3>En diagnostic depuis le 11 juin 2012</h3>
-       <ul>
-       <li><input size="4" value="6"/> actes prévus</li>
-       <li><strong>3</strong> actes réalisés dont <strong>2</strong> facturés <button class="blind">détails</button>
-         <ul>
-          <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>2</strong> actes
-           <ul>
-            <li>Accueil le 11 juin 2012 - 9h00 - 45 minutes - Bob Leponge</li>
-            <li>Dialogue le 12 juin 2012 - 10h00 - 30 minutes - Bob Leponge</li>
-           </ul></li>
-          <li>Non facturé - <strong>1 acte</strong>
-           <ul>
-            <li>Dialogue le 13 juin 2012 - 11h00 - 45 minutes - Sandy Kilo</li>
-           </ul></li>
-         </ul>
-         </li>
-       </ul>
-      </div>
-      </div>
 
-      <div id="patient-traitement" style="display: none;">
-       <div>
-       <h3>En diagnostic depuis le 6 mars 2012</h3>
-       <ul>
-       <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
-         <ul>
-          <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
-           <ul>
-            <li>...</li>
-           </ul></li>
-         </ul>
-         </li>
-       </ul>
-       </div>
-
-       <div>
-        <h3>En traitement depuis le 11 juin 2012</h3>
+      <div>
+        <h3>Notification du 5 septembre 2009 au 4 septembre 2012</h3>
         <ul>
-         <li><strong>4</strong> actes réalisés <button class="blind">détails</button>
-          <ul><li>...</li></ul>
-          </li>
-         <li>Pas de prise en charge - <button id="add-prise-en-charge-btn">Ajouter une prise en charge</button></li>
+         <li>Ajoutée le 12 octobre 2009</li>
+         <li>bla bla bla</li>
         </ul>
-       </div>
-
       </div>
 
-      <div id="patient-traitement-charge" style="display: none;">
-
-       <div>
-       <h3>En diagnostic depuis le 2 avril 2008</h3>
-       <ul>
-       <li><strong>3</strong> actes réalisés et facturés <button class="blind">détails</button>
-         <ul>
-          <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>3</strong> actes
-           <ul>
-            <li>...</li>
-           </ul></li>
-         </ul>
-         </li>
-       </ul>
-       </div>
-
-       <div>
-       <h3>En diagnostic depuis le 5 octobre 2010</h3>
-       <ul>
-       <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
-         <ul>
-          <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
-           <ul>
-            <li>...</li>
-           </ul></li>
-         </ul>
-         </li>
-       </ul>
-       </div>
-
-       <div>
-        <h3>En traitement depuis le 12 décembre 2010</h3>
-        <ul>
-         <li>Prise en charge depuis le 12 décembre 2010
-          <ul>
-           <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>
-            <ul><li>...</li></ul></li>
-           <li><strong>10</strong> actes réalisés et facturés en prolongation <button class="blind">détails</button>
-            <ul><li>...</li></ul></li>
-           <li><strong>6</strong> actes réalisés et non pris en charge <button class="blind">détails</button>
-            <ul><li>...</li></ul></li>
-          </ul>
-         </li>
-         <li>Prise en charge depuis le 15 décembre 2011
-          <ul>
-           <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>
-            <ul><li>...</li></ul></li>
-           <li><strong>6</strong> actes réalisés non facturés <button class="blind">détails</button>
-            <ul><li>...</li></ul></li>
-           <li><button id="add-prolongation-btn">Ajouter une prolongation</button></li>
-          </ul>
-         </li>
-        </ul>
-       </div>
-
-
+      <button id="add-notif-btn">Ajouter une notification</button>
       </div>
-
-      <div id="overlay">
-      <p>
-       Exemples pour cet onglet :
-        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a> -
-        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a> -
-        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>
-      </p>
-      </div>
-
     </div>
 
     <!--
@@ -501,6 +407,22 @@
    <div>
     <label for="id_pour">Pour :</label>
     <input id="id_pour" class="pour" name="pour" size="4" value="10"/> actes
+   </div>
+  </div>
+
+  <div id="add-notif-dlg" style="display: none;">
+   <div>
+    <label for="id_debut">Date de début :</label><br/>
+    <input id="id_debut" class="debut" name="debut" size="10" value=""/>
+   </div>
+   <div>
+    <label for="id_fin">Date de fin :</label><br/>
+    <input id="id_fin" class="fin" name="fin" size="10" value=""/>
+   </div>
+   <div>
+    <label for="id_comment">Commentaire :</label>
+    <textarea id="id_comment" name="id_comment" rows="4" cols="30"/>
+    </textarea>
    </div>
   </div>
 

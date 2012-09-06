@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Décompte 123</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('#clore-btn').click(function() {
+			$('#clore-dlg').dialog({title: 'Clôre la facturation',
+				width: '300px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Valider",
+					       click: function() {
+                                                $(this).dialog("close");
+                                                $("#clore-btn").hide();
+                                                $("#valider-btn").show();
+                                                $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012");
+                                               } }]}
+			);
+			});
+
+		$('#valider-btn').click(function() {
+			$('#valider-dlg').dialog({title: 'Valider la facturation',
+				width: '300px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Valider",
+					       click: function() {
+                                                $(this).dialog("close");
+                                                $("#valider-btn").hide();
+                                                $('#teletrans-btn').show();
+                                                $('#facturation-contents').hide();
+                                                $('#facturation-validee').show();
+                                                $('#filtre-dossiers').hide();
+                                                $('#dossier-bouba').hide();
+                                                $('#pause-fac').hide();
+                                                $('.facturable').toggleClass('facturable');
+                                                $('.dossier ul li span').text('2 actes facturés');
+                                                $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012 - validée");
+                                               } }]}
+			);
+			});
+
+                $('button.blind').next().hide();
+                $('button.blind').click(function() {
+                        $(this).next().toggle('blind');
+                });
+
+		$('#hide-dossiers-cb').click(function() {
+			$('#dossier-bouclier').toggle('fold');
+		});
+	});
+    </script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1>APS 42</h1>
+      <span>Décompte - SESSAD TED</span>
+    </div>
+    <div id="splash" class="sessad-ted">
+      <div id="user-info">
+        Dernière connexion le 4 juillet 2012 à 8h05
+      </div>
+      <div id="user-links">
+        <a href="#">Changer de mot de passe</a> —
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+      <div id="service-links">
+        <a class="cmpp" href="#">CMPP</a>
+        <a class="camsp" href="#">CAMSP</a>
+        <a class="sessad-ted active" href="#">SESSAD TED</a>
+        <a class="sessad-sys" href="#">SESSAD SYS</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Décompte 123 - en cours depuis le 6 juillet 2012</h2>
+    <a href="sessad-facturation.html">Retourner aux décomptes</a>
+    <button id="clore-off-btn">Clôre ce décompte</button>
+    <button id="valider-btn" style="display: none;">Valider cette facturation</button>
+    <button id="teletrans-btn" style="display: none;">Télétransmission à l'assurance maladie</button>
+    </div>
+
+    <div id="export-compta">
+    </div>
+
+    <div id="facturation-contents">
+    <h3>Résumé</h3>
+    <ul>
+     <li>Actes décomptables : 142
+      <ul>
+       <li>Actes décomptés : 130
+        <ul>
+         <li>Dossiers concernés : 72</li>
+        </ul></li>
+       <li>Actes non décompté : 12
+        <ul>
+         <li>Dossiers concernés : 6
+          <ul>
+           <li>Notification manquante : 3</li>
+           <li>Notification expirée : 3</li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+    </ul>
+
+    </div> <!-- #facturation-contents -->
+
+
+    <div id="facturation-validee" style="display: none;">
+     <p>
+      <button>Export comptabilité</button>
+     </p>
+
+    <h3>Résumé</h3>
+      <ul>
+       <li>Actes facturés : 602
+        <ul>
+         <li>Dossiers concernés : 125</li>
+         <li>Nombre de factures : 305</li>
+        </ul></li>
+      </ul>
+
+    </div>
+
+
+   <div id="dossiers">
+    <h3>Dossiers concernés</h3>
+
+    <p id="filtre-dossiers">
+     <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers avec des actes décomptables non décomptés</label></input>
+    </p>
+
+    <div id="dossiers-concernes">
+
+     <div class="dossier facturable">
+      <h3><a href="un-dossier.html">1234</a> Philippe Maurice - 02/05/2004</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      </div>
+      <p id="pause-fac"><span class="hi-fact">Notification manquante</span></p>
+      <ul>
+      <li><span>2 actes décomptables non décomptés</span> <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      </ul>
+     </div>
+
+     <div class="dossier facturable" id="dossier-bouba">
+      <h3><a href="un-dossier.html">5678</a> David Hazelvoski - 04/05/2006</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      </div>
+      <p id="pause-fac"><span class="hi-fact">Notification expirée</span></p>
+      <ul>
+      <li>2 actes décomptables <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      <li>2 actes décomptables non décomptés</span> <button class="blind">détails</button>
+       <ul>
+        <li>28/08/2012 - 8h00 - 45 min - Sylvain Mirouf - Analyse</li>
+        <li>31/08/2012 - 9h30 - 60 min - Bob Dilane - Entretien</li>
+       </ul>
+      </li>
+      </ul>
+     </div>
+
+     <div class="dossier" id="dossier-bouclier">
+      <h3><a href="un-dossier.html">9012</a> Bob Ricard - 07/08/2011</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      </div>
+      <ul>
+      <li><span>2 actes décomptables</span> <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      </ul>
+     </div>
+
+    </div>
+
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="clore-dlg" style="display: none;">
+   <form>
+   <p>
+    <label for="id_nom">Clôre la facturation 123 en date du :</label>
+    <input id="id_nom" type="text" name="nom" value="29/08/2012"/>
+   </p>
+   <p>
+    et commencer la facturation 124.
+   </p>
+   </form>
+  </div>
+
+  <div id="valider-dlg" style="display: none;">
+   <form>
+   <p>
+    Valider la facturation de 602 actes sur 305 factures pour 125 dossiers.
+   </p>
+   </form>
+  </div>
+
+  </body>
+</html>
