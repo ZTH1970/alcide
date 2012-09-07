@@ -154,7 +154,6 @@ LOGGING = {
         'syslog':{
             'level':'INFO',
             'class':'logging.handlers.SysLogHandler', 
-            'formatter': 'syslog',
             'facility': SysLogHandler.LOG_LOCAL0,
             'address': '/dev/log',
         },

@@ -1,4 +1,5 @@
-from django.db import Model
+
+from django.db.models import Model
 
 class Exemple(Model):
 
