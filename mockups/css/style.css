@@ -509,6 +509,7 @@ table#dossiers tr:nth-child(odd) td {
 
 table#membres tr:hover td,
 table#actes tr:hover td,
+table#actes tr.non-factu:hover td,
 table#dossiers tr:hover td {
 	background: #ccf;
 	cursor: pointer;
@@ -517,6 +518,7 @@ table#dossiers tr:hover td {
 table#actes tr.non-factu td {
   background: #ccc;
 }
+
 
 td.traite {
 	color: blue;
