@@ -482,31 +482,40 @@ div#intervenants ul {
 }
 
 table#membres,
+table#actes,
 table#dossiers {
 	width: 100%;
 }
 
 table#membres th,
+table#actes th,
 table#dossiers th {
 	font-weight: normal;
 	border-bottom: 1px solid #888;
 }
 
 table#membres td,
+table#actes td,
 table#dossiers td {
 	text-align: center;
 }
 
 table#tableau-recap-facturation tbody tr:nth-child(odd) td,
 table#membres tr:nth-child(odd) td,
+table#actes tr:nth-child(odd) td,
 table#dossiers tr:nth-child(odd) td {
 	background: #eee;
 }
 
 table#membres tr:hover td,
+table#actes tr:hover td,
 table#dossiers tr:hover td {
 	background: #ccf;
 	cursor: pointer;
+}
+
+table#actes tr.non-factu td {
+  background: #ccc;
 }
 
 td.traite {

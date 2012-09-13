@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Actes</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('table#actes tr').click(function() {
+
+			$('#acte-dlg').dialog({title: 'Acte',
+				  width: '500px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Enregistrer",
+					       click: function() { $(this).dialog("close"); } }
+					]}
+			);
+
+		});
+		$('#new-acte').click(function() {
+			$('#new-acte-dlg').dialog({title: 'Nouvel acte',
+				  width: '500px',
+				  buttons: [ { text: "Fermer",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() { $(this).dialog("close"); } }
+					]}
+			);
+			});
+
+	});
+	</script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1>APS 42</h1>
+      <span>Actes - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-info">
+        Dernière connexion le 4 juillet 2012 à 8h05
+      </div>
+      <div id="user-links">
+        <a href="#">Changer de mot de passe</a> —
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+      <div id="service-links">
+        <a class="cmpp active" href="#">CMPP</a>
+        <a class="camsp" href="#">CAMSP</a>
+        <a class="sessad-ted" href="#">SESSAD TED</a>
+        <a class="sessad-sys" href="#">SESSAD SYS</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Saisie des actes</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+    <button id="new-acte">Ajouter un acte</button>
+    </div>
+
+
+    <div id="sidebar">
+     <div id="filtre">
+      <h3>Filtrer les actes</h3>
+      <ul>
+        <li>...</li>
+        <li><button>Tous</button> <button>Aucun</button></li>
+      </ul>
+    </div>
+   </div>
+
+   <div class="content">
+   <table id="actes">
+    <thead>
+     <tr>
+     <th>Dossier</th>
+     <th>État</th>
+     <th>Type d'acte</th>
+     <th>Validation</th>
+     <th>Facturation</th>
+     <th>Thérapeuts</th>
+     <th>Heure</th>
+     <th>Durée</th>
+     </tr>
+    </thead>
+    <tbody>
+
+     <tr>
+      <td>1234 Bob Léponge</td>
+      <td>Traitement</td>
+      <td>(11) Ortophonie</td>
+      <td>Validé</td>
+      <td>123-123456</td>
+      <td>(10) Peyrard</td>
+      <td>17:15</td>
+      <td>00:45</td>
+     </tr>
+
+     <tr class="non-factu">
+      <td>2345 Cindy Lop</td>
+      <td>Traitement</td>
+      <td>(29) Travail perso</td>
+      <td>Non facturable<br/>Validé</td>
+      <td></td>
+      <td>(62) Grangy<br/>(81) Blondiau</td>
+      <td>10:00</td>
+      <td>01:00</td>
+     </tr>
+
+
+     <tr class="non-factu">
+      <td>3456 Mark Spencer</td>
+      <td>Traitement</td>
+      <td>(29) Travail perso</td>
+      <td>Non facturable<br/>Absence non excusée</td>
+      <td></td>
+      <td>(62) Grangy<br/>(81) Blondiau</td>
+      <td>11:00</td>
+      <td>01:00</td>
+     </tr>
+
+     <tr>
+      <td>4567 John Doe</td>
+      <td>Diagnostic</td>
+      <td>(10) Entretien</td>
+      <td>Validé</td>
+      <td>124-en cours</td>
+      <td>(5) Roudon</td>
+      <td>14:15</td>
+      <td>00:45</td>
+     </tr>
+
+     <tr class="non-factu">
+      <td>5678 Philippe Maurice</td>
+      <td>Traitement</td>
+      <td>(16) Groupe langage</td>
+      <td>Validé</td>
+      <td>Acte perdu</td>
+      <td>(11) Douare</td>
+      <td>14:00</td>
+      <td>01:00</td>
+     </tr>
+
+    </tbody>
+   </table>
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="new-acte-dlg" style="display: none;">
+   <form>
+   <p>
+   <label for="id_date">Date:</label>
+   <input id="id_date" class="date" name="date" value="5/7/2012"/>
+   </p>
+   <table><tr><td>
+   <p>
+    <label for="id_debut">Heure de début :</label>
+    <input id="id_debut" type="text" name="debut" maxlength="10"/>
+   </p>
+   </td><td>
+   <p>
+    <label for="id_fin">Heure de fin :</label>
+    <input id="id_fin" type="text" name="fin" maxlength="10"/>
+   </p>
+   </td></tr>
+
+   <tr>
+   <td>
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+   <td>
+   <h4>Patient</h4>
+   <input name="patient"/>
+   <a href="#">rechercher</a>
+
+   <h4>Type d'acte</h4>
+   <select>
+    <option>Analyse</option>
+    <option>Bla bla bla bla bla bla</option>
+   </select>
+   </td>
+   </tr>
+   </table>
+
+   </form>
+  </div>
+
+  <div id="acte-dlg" style="display: none;">
+   <p>1234 Bob Leponge (Traitement)</p>
+   <p><select><option>(11) Ortophonie</option></select></p>
+   <p>8 août 2012 - 17:15 - 45 minutes</p>
+
+   <table>
+   <tr><td width="50%">
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+
+   <td width="50%">
+
+   <ul>
+    <li>Rendez-vous pris le 5 juillet 2012 à 10:36</li>
+    <li>Acte validé le 10 août 2012 à 9h10</li>
+    <li>En cours de facturation (123) <button class="flat">Acte perdu</button></li>
+   </ul>
+   </td>
+   </tr>
+   </table>
+
+   <br/>
+   <br/>
+   <textarea cols="50">Bla bla bla</textarea>
+
+  </div>
+
+  </body>
+</html>
