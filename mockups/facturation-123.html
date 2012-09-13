@@ -56,6 +56,18 @@
 		$('#hide-dossiers-cb').click(function() {
 			$('#dossier-bouclier').toggle('fold');
 		});
+
+		$('.acte-btn').click(function() {
+			$('#acte-dlg').dialog({title: 'Acte',
+				  width: '500px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Enregistrer",
+					       click: function() { $(this).dialog("close"); } }
+					]}
+			);
+		});
+
 	});
     </script>
   </head>
@@ -171,8 +183,8 @@
       <li>2 actes facturables <button class="blind">détails</button><ul><li>...</li><li></ul></li>
       <li><span class="hi-fact">2 actes facturables non pris en charge</span> <button class="blind">détails</button>
        <ul>
-        <li>28/08/2012 - 8h00 - 45 min - Sylvain Mirouf - Analyse <button class="flat">Acte perdu</button></li>
-        <li>31/08/2012 - 9h30 - 60 min - Bob Dilane - Entretien <button class="flat">Acte perdu</button></li>
+        <li>28/08/2012 - 8h00 - 45 min - Sylvain Mirouf - Analyse <button class="flat acte-btn">Modifier</button></li>
+        <li>31/08/2012 - 9h30 - 60 min - Bob Dilane - Entretien <button class="flat acte-btn">Modifier</button></li>
        </ul>
       </li>
       </ul>
@@ -220,6 +232,43 @@
    </p>
    </form>
   </div>
+
+
+  <div id="acte-dlg" style="display: none;">
+   <p>1234 Bob Leponge (Traitement)</p>
+   <p><select><option>(11) Ortophonie</option></select></p>
+   <p>8 août 2012 - 17:15 - 45 minutes</p>
+
+   <table>
+   <tr><td width="50%">
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+
+   <td width="50%">
+
+   <ul>
+    <li>Rendez-vous pris le 5 juillet 2012 à 10:36</li>
+    <li>Acte validé le 10 août 2012 à 9h10</li>
+    <li>En cours de facturation (123) <button class="flat">Acte perdu</button></li>
+   </ul>
+   </td>
+   </tr>
+   </table>
+
+   <br/>
+   <br/>
+   <textarea cols="50">Bla bla bla</textarea>
+
+  </div>
+
 
   </body>
 </html>

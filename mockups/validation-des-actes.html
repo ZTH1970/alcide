@@ -32,6 +32,17 @@
 			);
 			});
 
+		$('.acte-btn').click(function() {
+			$('#acte-dlg').dialog({title: 'Acte',
+				  width: '500px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Enregistrer",
+					       click: function() { $(this).dialog("close"); } }
+					]}
+			);
+		});
+
 	});
 	</script>
   </head>
@@ -80,27 +91,27 @@
     <div id="actes">
 
      <div class="acte">
-     <h3>8:00 - 45m - <strong>John Doe</strong> (1051) - <strong>Sylvie Legrand</strong> (28) - 3, 46, 52 - <strong>Bilan</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></h3>
+     <h3>8:00 - 45m - <strong>John Doe</strong> (1051) - <strong>Sylvie Legrand</strong> (28) - 3, 46, 52 - <strong>Bilan</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/> <button class="acte-btn">Modifier</button></h3>
      <p><strong>Absent</strong>, pointé le 24 août 2012 à 7h46. <button>Annuler le pointage</button></p>
      </div>
 
      <div class="acte">
-     <h3>8:00 - 1h - <strong>Bob Dilane</strong> (3051) - <strong>Sylvain Mirouf</strong> (51) - 2 - <strong>Rééducation</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></h3>
+     <h3>8:00 - 1h - <strong>Bob Dilane</strong> (3051) - <strong>Sylvain Mirouf</strong> (51) - 2 - <strong>Rééducation</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/> <button class="acte-btn">Modifier</button></h3>
      <p><strong>Absent</strong>, pointé le 24 août 2012 à 7h46. <button>Annuler le pointage</button></p>
      </div>
 
      <div class="acte">
-     <h3>9:00 - 45m - <strong>Sabine Malouf</strong> (4048) - <strong>Norbert Lecuisto</strong> (12) - <strong>Synthèse</strong></h3>
+     <h3>9:00 - 45m - <strong>Sabine Malouf</strong> (4048) - <strong>Norbert Lecuisto</strong> (12) - <strong>Synthèse</strong> <button class="acte-btn">Modifier</button></h3>
      <p><select><option>Absent</option></select> <button>Pointer</button></p>
      </div>
 
      <div class="acte">
-     <h3>9:00 - 45m - <strong>Gomez Chavez</strong> (4049) - <strong>Sylvie Legrand</strong> (28) - 46 - <strong>Bilan</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></span></h3>
+     <h3>9:00 - 45m - <strong>Gomez Chavez</strong> (4049) - <strong>Sylvie Legrand</strong> (28) - 46 - <strong>Bilan</strong> <img title="Un commentaire existe" src="images/emblem-documents.png"/></span> <button class="acte-btn">Modifier</button></h3>
      <p><select><option>Absent</option></select> <button>Pointer</button></p>
      </div>
 
      <div class="acte">
-     <h3>10:00 - 1h - <strong>Lechat Kitchyan</strong> (5012) - <strong>Martine Dupont</strong> (17) - <strong>Entretien</strong></span></h3>
+     <h3>10:00 - 1h - <strong>Lechat Kitchyan</strong> (5012) - <strong>Martine Dupont</strong> (17) - <strong>Entretien</strong></span> <button class="acte-btn">Modifier</button></h3>
      <p><select><option>Absent</option></select> <button>Pointer</button></p>
      <p><em>Type d'acte non facturable</em></p>
      </div>
@@ -138,6 +149,41 @@
    </p>
   </div>
 
+
+  <div id="acte-dlg" style="display: none;">
+   <p>1234 Bob Leponge (Traitement)</p>
+   <p><select><option>(11) Ortophonie</option></select></p>
+   <p>8 août 2012 - 17:15 - 45 minutes</p>
+
+   <table>
+   <tr><td width="50%">
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+
+   <td width="50%">
+
+   <ul>
+    <li>Rendez-vous pris le 5 juillet 2012 à 10:36</li>
+    <li>Acte validé le 10 août 2012 à 9h10</li>
+    <li>En cours de facturation (123) <button class="flat">Acte perdu</button></li>
+   </ul>
+   </td>
+   </tr>
+   </table>
+
+   <br/>
+   <br/>
+   <textarea cols="50">Bla bla bla</textarea>
+
+  </div>
 
 
   </body>

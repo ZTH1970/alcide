@@ -804,3 +804,9 @@ div.dossier.facturable h3 {
 div.dossier.facturable a {
   color: white;
 }
+
+
+div.acte button.acte-btn {
+  position: absolute;
+  right: 30px;
+}
