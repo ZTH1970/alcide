@@ -13,13 +13,14 @@ html {
 }
 
 a, #tab-personnes a, #tab-ressources a {
-	color: #413C3C;
+	color: #FF7800;
 	text-decoration: underline;
 }
 
 a:hover, #tab-personnes a:hover, #tab-ressources a:hover {
 	text-decoration: none;
 }
+
 
 div#wrap-large,
 div#wrap {
@@ -42,7 +43,7 @@ div#wrap-large {
 #header
 {
 	position: absolute;
-	background: #413C3C repeat-x;
+	background: #FF7800 url(../images/a8.gif) repeat-x;
 	-moz-border-radius: 6px 0 0 6px;
 	-webkit-border-radius: 6px 0 0 6px;
 	width: 212px;
@@ -91,10 +92,10 @@ div#wrap-large {
 	padding-top: 5px;
 }
 
-#splash.cmpp { background: #539a2f; }
-#splash.camsp { background: #a13143; }
-#splash.sessad-ted { background: #942d8b; }
-#splash.sessad-sys { background: #2d6994; }
+#splash.cmpp { background-image: url(../images/banner-green.jpg); }
+#splash.camsp { background-image: url(../images/banner-red.jpg); }
+#splash.sessad-ted { background-image: url(../images/banner-purple.jpg); }
+#splash.sessad-sys { background-image: url(../images/sky-birds.jpg); }
 
 #service-links {
 	position: absolute;
@@ -110,19 +111,19 @@ div#wrap-large {
 }
 
 #service-links a.cmpp {
-	background: #539a2f;
+	background: #56D72B;
 }
 
 #service-links a.camsp {
-	background: #a13143;
+	background: #D72B2F;
 }
 
 #service-links a.sessad-ted {
-	background: #942d8b;
+	background: #D72BBF;
 }
 
 #service-links a.sessad-sys {
-	background: #2d6994;
+	background: #2B6CD7;
 }
 
 #service-links a.active {
@@ -280,11 +281,11 @@ div#sidebar {
 }
 
 div#sidebar input[type=text] {
-	width: 95%;
+       width: 95%;
 }
 
 div#sidebar button {
-	width: 100%;
+       width: 100%;
 }
 
 select {
@@ -410,20 +411,17 @@ div.agenda span.hour {
 }
 
 div.agenda h3.info {
+	color: #8c8c73;
 	font-style: italic;
 }
 
 div.agenda h3.free {
-	border: 2px solid green;
+	border: 1px solid green;
 }
 
-div.agenda h3.busy-here {
-	border: 2px solid red;
-}
-
+div.agenda h3.busy-here,
 div.agenda h3.busy-elsewhere {
 	border: 1px solid red;
-	color: #c0c0c0;
 }
 
 tr.hour-mark td {
@@ -798,7 +796,7 @@ button.blind {
  font-size: 80%;
 }
 
-#content div.agenda {
+#content div.agenda h3.busy-elsewhere {
   background: #eee;
 }
 
