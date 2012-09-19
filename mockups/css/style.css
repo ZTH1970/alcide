@@ -281,7 +281,11 @@ div#sidebar {
 }
 
 div#sidebar input[type=text] {
-	width: 80%;
+       width: 95%;
+}
+
+div#sidebar button {
+       width: 100%;
 }
 
 select {
