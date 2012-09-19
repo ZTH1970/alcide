@@ -69,10 +69,26 @@
 
 
     <div id="sidebar">
+     <div>
+      <h3>Rechercher dans les actes</h3>
+        <h4>Patient</h4>
+       <label>Nom: <input type="text"/></label>
+       <label>Numéro de dossier: <input type="text"/></label>
+       <label>Numéro de sécu: <input type="text"/></label>
+       <button>Rechercher</button>
+       <h4>Thérapeute</h4>
+       <label>Nom: <input type="text"/></label>
+       <button>Rechercher</button>
+     </div>
      <div id="filtre">
       <h3>Filtrer les actes</h3>
       <ul>
-        <li>...</li>
+        <li><label><input checked="checked"  class="diag" type="checkbox"/>Non facturables</label></li>
+        <li><label><input checked="checked"  class="fin-accueil" type="checkbox"/>Absences ou annulés</label></li>
+        <li><label><input checked="checked"  class="traite" type="checkbox"/>Perdus</label></li>
+        <li><label><input checked="checked"  class="en-accueil" type="checkbox"/>Facturés</label></li>
+        <li><label><input checked="checked"  class="traite" type="checkbox"/>Dernière facturation</label></li>
+        <li><label><input checked="checked"  class="traite" type="checkbox"/>Facturation en cours</label></li>
         <li><button>Tous</button> <button>Aucun</button></li>
       </ul>
     </div>
