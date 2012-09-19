@@ -15,7 +15,7 @@ setup(name='calebasse',
             'django >= 1.4',
             'south >= 0.7',
             'django-reversion >= 1.6.2',
-            'django-swingtime >= 0.2.1',
+            'python-dateutil >= 2.0',
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',
