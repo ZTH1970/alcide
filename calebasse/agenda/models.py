@@ -5,10 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.conf import settings
 
-from calebasse.cale_base.models import Patient, Service
+#from calebasse.cale_base.models import Patient, Service
 
 from dateutil import rrule
 
@@ -35,7 +35,7 @@ class Note(models.Model):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        app_label = 'a42base'
+        app_label = 'agenda'
         verbose_name = _('note')
         verbose_name_plural = _('notes')
 
@@ -51,7 +51,7 @@ class EventType(models.Model):
     label = models.CharField(_('label'), max_length=50)
 
     class Meta:
-        app_label = 'a42base'
+        app_label = 'agenda'
         verbose_name = _('event type')
         verbose_name_plural = _('event types')
 
@@ -69,12 +69,12 @@ class Event(models.Model):
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
-    patient = models.ForeignKey(Patient, verbose_name=('patient'))
-    service = models.ForeignKey('Service')
-    owners = models.ManyToManyField(User, verbose_name=_('owners'))
+    patient = models.ForeignKey('cale_base.Patient', verbose_name=('patient'))
+    services = models.ManyToManyField('cale_base.Service', verbose_name=('services'))
+    owners = models.ManyToManyField('auth.User', verbose_name=_('owners'))
 
     class Meta:
-        app_label = 'a42base'
+        app_label = 'agenda'
         verbose_name = _('event')
         verbose_name_plural = _('events')
         ordering = ('title', )
@@ -177,7 +177,7 @@ class Occurrence(models.Model):
     objects = OccurrenceManager()
 
     class Meta:
-        app_label = 'a42base'
+        app_label = 'agenda'
         verbose_name = _('occurrence')
         verbose_name_plural = _('occurrences')
         ordering = ('start_time', 'end_time')

@@ -5,7 +5,7 @@ from django.db import models
 class Act(models.Model):
 
     class Meta:
-        app_label = 'a42base'
+        app_label = 'cale_base'
 
     STATUS_CHOICES = (
             ('AB', 'Absent'),
@@ -21,7 +21,7 @@ class Act(models.Model):
 class ActType(models.Model):
 
     class Meta:
-        app_label = 'a42base'
+        app_label = 'cale_base'
 
     name = models.CharField(max_length=200)
 
