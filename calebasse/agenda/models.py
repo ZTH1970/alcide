@@ -69,8 +69,10 @@ class Event(models.Model):
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
-    patient = models.ForeignKey('cale_base.Patient', verbose_name=('patient'))
-    services = models.ManyToManyField('cale_base.Service', verbose_name=('services'))
+    patient = models.ForeignKey('cale_base.Patient', verbose_name=('patient'),
+            null=True, blank=True, default=None)
+    services = models.ManyToManyField('cale_base.Service', verbose_name=('services'),
+            null=True, blank=True, default=None)
     owners = models.ManyToManyField('auth.User', verbose_name=_('owners'))
 
     class Meta:
@@ -198,9 +200,12 @@ class Occurrence(models.Model):
 
 
 def create_event(
-    title, 
+    title,
     event_type,
+    owners,
     description='',
+    patient=None,
+    services=[],
     start_time=None,
     end_time=None,
     note=None,
@@ -238,10 +243,17 @@ def create_event(
         )
 
     event = Event.objects.create(
-        title=title, 
+        title=title,
+        patient=patient,
         description=description,
         event_type=event_type
     )
+
+    for owner in owners:
+        event.owners.add(owner)
+
+    for service in services:
+        event.services.add(service)
 
     if note is not None:
         event.notes.create(note=note)
@@ -252,10 +264,7 @@ def create_event(
         microsecond=0
     )
 
-    if settings.DEFAULT_OCCURRENCE_DURATION:
-        occurence_duration = settings.DEFAULT_OCCURRENCE_DURATION
-    else:
-        occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
+    occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
     end_time = end_time or start_time + occurence_duration
     event.add_occurrences(start_time, end_time, **rrule_params)
     return event
