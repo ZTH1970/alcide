@@ -1,0 +1,341 @@
+a {
+	color: #028;
+}
+
+div.content {
+	margin-left: 5px;
+}
+
+div.TextWidget textarea,
+div.RankedItemsWidget input,
+div.StringWidget input,
+div.IntWidget input,
+div.DateWidget input,
+div.WcsExtraStringWidget input,
+div.RegexStringWidget input,
+div.EmailWidget input,
+div.PasswordWidget input {
+	border: 1px inset #ccc;
+	margin: 1px;
+	padding: 2px 3px;
+}
+
+div.WidgetDict .content div {
+	display: inline;
+}
+
+div.RankedItemsWidget input {
+	margin-right: 1em;
+}
+
+div.RankedItemsWidget li.error input {
+	border: 1px solid red;
+}
+
+div.SingleSelectWidget select {
+	margin: 1px;
+}
+
+div.widget input.prefill-button {
+	border: 1px outset #ccc;
+	margin: 0 0 0 1em;
+	padding: 0px 0px;
+}
+
+div.widget input.prefill-button:focus {
+	border: 1px outset #ccc;
+	margin: 0 0 0 1em;
+	padding: 0;
+}
+
+
+div.widget textarea.readonly,
+div.widget input.readonly {
+	border: 1px solid #ccc;
+	background: #eee;
+	margin: 0 0 0 1em;
+}
+
+div.TextWidget textarea:focus,
+div.DateWidget input:focus,
+div.StringWidget input:focus,
+div.IntWidget input:focus,
+div.WcsExtraStringWidget input:focus,
+div.RegexStringWidget input:focus,
+div.EmailWidget input:focus,
+div.PasswordWidget input:focus {
+	border: 2px solid #ccf;
+	/*margin: 0px; */
+	padding: 1px 2px;
+}
+
+div.AccountSettingWidget label {
+	padding-right: 2em;
+}
+
+div.SubmitWidget input, input[type=submit] {
+	margin-top: 1em;
+	border: 1px outset #ccc;
+}
+
+div.form .title, form.quixote .title {
+	font-weight: bold;
+}
+
+div.errornotice {
+	background: #fd6;
+	border: 1px solid #ffae15;
+	margin: 0em 1em 1em 1em;
+	padding: 5px;
+}
+
+div.infonotice {
+	color: white;
+	font-weight: bold;
+	background: #7b95a6;
+	border: 1px solid #153eaf;
+	margin: 1em;
+	padding: 5px;
+}
+
+div.error {
+	color: black;
+	font-weight: bold;
+	background: transparent url(warning.png) top left no-repeat;
+	padding-left: 20px;
+}
+
+div.signok {
+	background: #b5ffbc;
+	border: 1px solid #5cde68;
+}
+
+div.signerror {
+	background: #ffa6a6;
+	border: 1px solid #cb2121;
+}
+
+
+div.buttons div.SubmitWidget,
+div.buttons div.SubmitWidget div.content {
+	display: inline;
+}
+
+div.buttons br { display: none; }
+
+div.widget {
+	margin-bottom: 0.5em;
+	clear: both;
+}
+
+input[type="submit"][name="submit"] {
+	font-weight: bold;
+}
+
+div.form pre {
+	overflow: scroll;
+}
+
+
+div#error h1 {
+	margin: 0;
+}
+
+div#error {
+	width: 40em;
+	max-width: 500px;
+	margin: 15% auto;
+	background: white;
+	border: 1px solid #999;
+	padding: 1em;
+}
+
+div.hint {
+	font-size: 80%;
+}
+
+span.required {
+	background: transparent url(required.png) 0px 0.5ex no-repeat;
+	padding: 0 0 0 24px;
+	margin-left: 1ex;
+	overflow: hidden;
+	color: white;
+}
+
+div.buttons {
+	margin-top: 1em;
+}
+
+div.RadiobuttonsWidget div.content {
+	display: block;
+}
+
+div.error-page {
+	margin: 1em;
+}
+
+pre#exception {
+	overflow: scroll;
+	padding: 1em;
+	border: 1px solid #bbb;
+	background: #f0f0f0;
+	font-size: 90%;
+}
+
+div.StringWidget ul {
+	margin: 0;
+	padding-left: 2em;
+	list-style: circle;
+}
+
+div.inline-first div.title,
+div.inline div.title {
+	display: inline;
+	float: left;
+	max-width: 20em;
+	text-align: left;
+	padding-top: 6px;
+}
+
+div.inline-first div.title span.required,
+div.inline div.title span.required {
+	margin-left: 1ex;
+	padding-left: 12px;
+}
+
+div.inline-first div.content,
+div.inline div.content {
+	margin-left: 1ex;
+}
+
+div.inline-first div.hint,
+div.inline div.hint {
+	display: none;
+}
+
+div.inline-first {
+	float: left;
+	clear: both;
+}
+
+div.inline {
+	float: left;
+	clear: none;
+}
+
+div.inline-first div.content,
+div.inline div.content {
+	margin-right: 1.5em;
+}
+
+	
+
+div.inline-first div.content,
+div.inline div.content {
+	display: inline;
+}
+
+.clear-both {
+	clear: both;
+}
+
+div.CheckboxesWidget div.content ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+div.CheckboxesWidget div.content ul.inline li {
+	display: inline;
+	margin-right: 2em;
+}
+
+div.dataview {
+	clear: both;
+}
+
+div.dataview span.label {
+	font-weight: bold;
+	display: block;
+}
+
+div.dataview span.value {
+	display: block;
+	margin-left: 1em;
+}
+
+form div.page,
+div.dataview div.page {
+	border: 1px solid #aaa;
+	padding: 1ex;
+	margin-bottom: 1em;
+}
+
+form div.page p,
+div.dataview div.page p {
+	margin-top: 0;
+}
+
+form div.page h3,
+div.dataview div.page h3 {
+	margin: 0;
+	margin-bottom: 1ex;
+}
+
+#modalOverlay {
+	height:100%;
+	width:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	z-index:3000;
+	background-color: rgba(0, 0, 0, 0.8);
+	cursor:wait;
+}
+
+div#popup {
+	position:fixed;
+	/*width:600px;
+	left:50%;
+	margin-left:-300px; */
+	z-index:3100;
+	border: 1px solid black;
+	border-color: #333 black black #333;
+}
+
+
+div#popup div.popup-content {
+	padding: 10px;
+	max-width: 30em;
+	background: white;
+	border: 2px solid #6d81b9;
+}
+
+div#popup form div.widget {
+	text-align: left;
+}
+
+div#popup form div.buttons {
+	text-align: center;
+}
+
+div#popup h2 {
+	margin: -10px -10px 10px -10px;
+	padding: 2px 5px;
+	font-size: 110%;
+	background: #6d81b9;
+	color: white;
+}
+
+a#display-exception {
+    display: none;
+}
+
+a.edit-custom-text {
+	float: right;
+	margin: 0 0 1ex 1ex;
+	background: #ccc;
+	color: #333;
+	padding: 3px 5px;
+	font-size: 50%;
+}
