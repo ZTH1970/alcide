@@ -7,4 +7,5 @@ class Service(models.Model):
         app_label = 'cale_base'
 
     name = models.CharField(max_length=100)
+    # TODO : add other fields
 

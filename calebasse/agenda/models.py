@@ -73,7 +73,7 @@ class Event(models.Model):
             null=True, blank=True, default=None)
     services = models.ManyToManyField('cale_base.Service', verbose_name=('services'),
             null=True, blank=True, default=None)
-    owners = models.ManyToManyField('auth.User', verbose_name=_('owners'))
+    participants = models.ManyToManyField('cale_base.CalebasseUser')
 
     class Meta:
         app_label = 'agenda'
@@ -202,7 +202,7 @@ class Occurrence(models.Model):
 def create_event(
     title,
     event_type,
-    owners,
+    participants,
     description='',
     patient=None,
     services=[],

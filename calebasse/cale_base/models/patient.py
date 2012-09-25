@@ -8,3 +8,8 @@ class Patient(models.Model):
 
     firstname = models.CharField(max_length=150)
     lastname = models.CharField(max_length=150)
+    # TODO add other fields
+
+
+
+
