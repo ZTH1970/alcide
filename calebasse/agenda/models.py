@@ -5,10 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
-#from django.contrib.auth.models import User
 from django.conf import settings
-
-#from calebasse.cale_base.models import Patient, Service
 
 from dateutil import rrule
 
@@ -73,7 +70,8 @@ class Event(models.Model):
             null=True, blank=True, default=None)
     services = models.ManyToManyField('cale_base.Service', verbose_name=('services'),
             null=True, blank=True, default=None)
-    participants = models.ManyToManyField('cale_base.CalebasseUser')
+    participants = models.ManyToManyField('cale_base.CalebasseUser',
+            null=True, blank=True, default=None)
 
     class Meta:
         app_label = 'agenda'
@@ -202,7 +200,7 @@ class Occurrence(models.Model):
 def create_event(
     title,
     event_type,
-    participants,
+    participants=[],
     description='',
     patient=None,
     services=[],
@@ -249,8 +247,8 @@ def create_event(
         event_type=event_type
     )
 
-    for owner in owners:
-        event.owners.add(owner)
+    for participant in participants:
+        event.participants.add(participant)
 
     for service in services:
         event.services.add(service)
