@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from calebasse import agenda
 
 class Act(models.Model):
 
@@ -29,4 +30,15 @@ class ActType(models.Model):
 
     name = models.CharField(max_length=200)
     billable = models.BooleanField(default=True)
+
+class ActEvent(agenda.models.Event):
+    """ ActEvent is patient appointment special event
+    """
+
+    class Meta:
+        app_label = 'cale_base'
+
+    patient = models.ForeignKey('cale_base.Patient', verbose_name=('patient'))
+    act_type = models.ForeignKey('cale_base.ActType')
+
 

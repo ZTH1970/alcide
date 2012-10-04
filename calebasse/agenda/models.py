@@ -44,7 +44,6 @@ class EventType(models.Model):
     '''
     Simple ``Event`` classifcation.
     '''
-    abbr = models.CharField(_(u'abbreviation'), max_length=4, unique=True)
     label = models.CharField(_('label'), max_length=50)
 
     class Meta:
@@ -66,8 +65,6 @@ class Event(models.Model):
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
-    patient = models.ForeignKey('cale_base.Patient', verbose_name=('patient'),
-            null=True, blank=True, default=None)
     services = models.ManyToManyField('cale_base.Service', verbose_name=('services'),
             null=True, blank=True, default=None)
     participants = models.ManyToManyField('cale_base.CalebasseUser',
@@ -78,6 +75,7 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
         ordering = ('title', )
+
 
     def __unicode__(self):
         return self.title
@@ -195,76 +193,5 @@ class Occurrence(models.Model):
     @property
     def event_type(self):
         return self.event.event_type
-
-
-def create_event(
-    title,
-    event_type,
-    participants=[],
-    description='',
-    patient=None,
-    services=[],
-    start_time=None,
-    end_time=None,
-    note=None,
-    **rrule_params
-):
-    '''
-    Convenience function to create an ``Event``, optionally create an 
-    ``EventType``, and associated ``Occurrence``s. ``Occurrence`` creation
-    rules match those for ``Event.add_occurrences``.
-
-    Returns the newly created ``Event`` instance.
-
-    Parameters
-
-    ``event_type``
-        can be either an ``EventType`` object or 2-tuple of ``(abbreviation,label)``, 
-        from which an ``EventType`` is either created or retrieved.
-
-    ``start_time`` 
-        will default to the current hour if ``None``
-
-    ``end_time`` 
-        will default to ``start_time`` plus agenda_settings.DEFAULT_OCCURRENCE_DURATION
-        hour if ``None``
-
-    ``freq``, ``count``, ``rrule_params``
-        follow the ``dateutils`` API (see http://labix.org/python-dateutil)
-
-    '''
-
-    if isinstance(event_type, tuple):
-        event_type, created = EventType.objects.get_or_create(
-            abbr=event_type[0],
-            label=event_type[1]
-        )
-
-    event = Event.objects.create(
-        title=title,
-        patient=patient,
-        description=description,
-        event_type=event_type
-    )
-
-    for participant in participants:
-        event.participants.add(participant)
-
-    for service in services:
-        event.services.add(service)
-
-    if note is not None:
-        event.notes.create(note=note)
-
-    start_time = start_time or datetime.now().replace(
-        minute=0,
-        second=0, 
-        microsecond=0
-    )
-
-    occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
-    end_time = end_time or start_time + occurence_duration
-    event.add_occurrences(start_time, end_time, **rrule_params)
-    return event
 
 

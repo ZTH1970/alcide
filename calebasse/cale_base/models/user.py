@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from calebasse.agenda.models import create_event
+from calebasse.agenda.calendar import Calendar
 from calebasse.exceptions import CalebasseException
 from dateutil import rrule
 
@@ -11,12 +11,14 @@ class CalebasseUser(User):
     class Meta:
         app_label = 'cale_base'
 
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
     services = models.ManyToManyField('ActType')
     work_event = models.ManyToManyField('agenda.Event', related_name='work_events')
     holidays = models.ManyToManyField('agenda.Event', related_name='holidays')
 
-    def add_work_event(self, weekday, start_time, end_time, until, services=None):
-        ''' `add_work_event` allows you to add quickly a work event for a user
+    def add_work_event(self, weekday, start_time, end_time, until, services=[]):
+        """ `add_work_event` allows you to add quickly a work event for a user
 
         Args:
             weekday (str): weekday constants (MO, TU, etc)
@@ -29,7 +31,7 @@ class CalebasseUser(User):
 
         Raise:
             CalebasseException
-        '''
+        """
 
         if weekday == 'MO':
             weekday = rrule.MO
@@ -48,12 +50,11 @@ class CalebasseUser(User):
         else:
             raise CalebasseException("%s is not a valid weekday constants" % day)
 
-        self.event = create_event("work %s" % weekday,
-                ('work_event', 'Work event'),
-                freq = rrule.WEEKLY,
-                byweekday = weekday,
-                start_time = start_time,
-                end_time = end_time,
-                until  = until)
+        cal = Calendar()
+        self.event = cal.create_event("work %s" % weekday,
+                'work_event', services=services,
+                freq = rrule.WEEKLY, byweekday = weekday,
+                start_datetime = start_time, end_datetime = end_time,
+                until = until)
 
 
