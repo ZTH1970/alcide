@@ -118,6 +118,8 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates")
 )
 
+AUTH_PROFILE_MODULE = "cale_base.CalebasseUser"
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

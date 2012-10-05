@@ -10,7 +10,8 @@ class Calendar(object):
 
     def __set_event(self, event, participants=[], description='', services=[],
             start_time=None, end_time=None, note=None, **rrule_params):
-        """ """
+        """ Private method to configure an Event or an ActEvent
+        """
         event.description = description
         for participant in participants:
             event.participants.add(participant)
@@ -27,15 +28,16 @@ class Calendar(object):
 
         return event
 
-    def create_patient_appointment(self, title, patient, paticipants, act_type,
-            service, start_datetime, end_datetime, **rrule_params):
+    def create_patient_appointment(self, title, patient, participants, act_type,
+            service, start_datetime, end_datetime, description='', note=None,
+            **rrule_params):
         """
         This method allow you to create a new patient appointment quickly
 
         Args:
             title: patient appointment title (str)
             patient: Patient object
-            paticipants: List of CalebasseUser (therapists)
+            participants: List of CalebasseUser (therapists)
             act_type: ActType object
             service: Service object. Use session service by defaut
             start_datetime: datetime with the start date and time
@@ -44,44 +46,25 @@ class Calendar(object):
             follow the ``dateutils`` API (see http://labix.org/python-dateutil)
 
         Example:
-            You want to add a new appointment the 2 October 2020 from 7:15 to
-            9h20. This event will be repeated every month and every Friday,
-            during 10 year.
-
-            from datetime import datetime
-            from dateutil import rrule
-
-            from calebasse.agenda import calendar
-            from calebasse.cale_base.models import CalebasseUser, Patient
-
-            patient = Patient(...)
-            therapist1 = CalebasseUser(...)
-            therapist2 = CalebasseUser(...)
-
-            cal = calendar.Calendar()
-            cal.add_patient_appointment(patient, [therapist1, therapist2],
-            act_type, datetime(2020, 10, 2, 7, 15), datetime(2020, 10, 2, 9, 20),
-            freq=rrule.WEEKLY, byweekday=rrule.FR, until=datetime(2040, 10, 2))
+            Look at calebasse.agenda.tests.EventTest (test_create_appointments method)
         """
 
-        if isinstance(event_type, str):
-            event_type, created = EventType.objects.get_or_create(
-                label=event_type
-            )
+        event_type, created = EventType.objects.get_or_create(
+                label="patient_appointment"
+                )
 
         act_event = ActEvent.objects.create(
                 title=title,
-                event_type=event_type
+                event_type=event_type,
+                patient=patient,
+                act_type=act_type,
                 )
-
-        act_event.patient = patient
-        act_event.act_type = act_type
 
         if service:
             service = [service]
 
-        return self.__set_event(act_event, participants, description, services=service,
-                start_time = start_datetime, end_time = end_datetime,
+        return self.__set_event(act_event, participants, description,
+                services=service, start_time = start_datetime, end_time = end_datetime,
                 note = note, **rrule_params)
 
 
@@ -96,7 +79,7 @@ class Calendar(object):
         Args:
             event_type: can be either an ``EventType`` object or the label
             is either created or retrieved.
-            paticipants: List of CalebasseUser
+            participants: List of CalebasseUser
             start_time: will default to the current hour if ``None``
             end_time: will default to ``start_time`` plus
             default.DEFAULT_OCCURRENCE_DURATION hour if ``None``

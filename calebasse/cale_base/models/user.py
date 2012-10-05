@@ -6,13 +6,12 @@ from calebasse.agenda.calendar import Calendar
 from calebasse.exceptions import CalebasseException
 from dateutil import rrule
 
-class CalebasseUser(User):
+class CalebasseUser(models.Model):
 
     class Meta:
         app_label = 'cale_base'
 
-    firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
+    user = models.OneToOneField(User)
     services = models.ManyToManyField('ActType')
     work_event = models.ManyToManyField('agenda.Event', related_name='work_events')
     holidays = models.ManyToManyField('agenda.Event', related_name='holidays')
