@@ -101,15 +101,17 @@ div#wrap-large {
 
 #service-links {
 	position: absolute;
-	right: 5px;
-	bottom: 10px;
+	right: 15px;
 }
 
 #service-links a {
-	padding: 2px;
+	padding: 1em 2px;
 	border: 1px outset #ccc;
 	color: white;
 	text-decoration: none;
+	width: 10em;
+	display: inline-block;
+	text-align: center;
 }
 
 #service-links a.cmpp {
