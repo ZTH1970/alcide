@@ -69,8 +69,10 @@ div#wrap-large {
 	color: #FCE2CA;
 }
 
+#header h1 a,
 #header span a {
 	color: white;
+	text-decoration: none;
 }
 
 #splash
