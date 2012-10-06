@@ -501,36 +501,26 @@ div#intervenants ul {
 	color: #8c8c73;
 }
 
-table#membres,
-table#actes,
-table#dossiers {
+table.main {
 	width: 100%;
 }
 
-table#membres th,
-table#actes th,
-table#dossiers th {
+table.main th {
 	font-weight: normal;
 	border-bottom: 1px solid #888;
 }
 
-table#membres td,
-table#actes td,
-table#dossiers td {
+table.main td {
 	text-align: center;
 }
 
 table#tableau-recap-facturation tbody tr:nth-child(odd) td,
-table#membres tr:nth-child(odd) td,
-table#actes tr:nth-child(odd) td,
-table#dossiers tr:nth-child(odd) td {
+table.main tr:nth-child(odd) td {
 	background: #eee;
 }
 
-table#membres tr:hover td,
-table#actes tr:hover td,
-table#actes tr.non-factu:hover td,
-table#dossiers tr:hover td {
+table.main tr:hover td,
+table#actes tr.non-factu:hover td {
 	background: #ccf;
 	cursor: pointer;
 }
@@ -538,7 +528,6 @@ table#dossiers tr:hover td {
 table#actes tr.non-factu td {
   background: #ccc;
 }
-
 
 td.traite {
 	color: blue;
@@ -590,21 +579,12 @@ span.num {
 	color: #333;
 }
 
-div.dossier,
-#info-membre div,
-#tabs-2 div,
-#tabs-3 div,
-#tabs-4 div div {
+div.frame {
   border: 1px solid #333;
   margin-bottom: 1em;
 }
 
-div.dossier h3,
-div.acte h3,
-#info-membre h3,
-#tabs-2 h3,
-#tabs-3 h3,
-#tabs-4 h3 {
+div.frame h3 {
   margin: 0;
   margin-bottom: 1ex;
   padding: 3px 1ex;
@@ -613,9 +593,7 @@ div.acte h3,
   background: #ccc url(smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
 }
 
-#info-membre p,
-#tabs-2 p,
-#tabs-3 p {
+div.frame p {
   margin: 0 1ex;
 }
 
