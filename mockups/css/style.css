@@ -448,25 +448,20 @@ li.active {
 	font-weight: bold;
 }
 
-a.button,
-div.agenda div a {
-	background: white url(smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
-	color: black;
-	padding: 8px 8px;
-	border-radius: 5px;
-	text-decoration: none;
-	margin: 0 5px;
+div.agenda span.right {
+	position: absolute;
+	right: 5px;
 }
 
-div.agenda div a:hover {
-	background-position: 50% 0%;
-}
-
-div.agenda img {
-	float: right;
+div.agenda span.right button,
+div.agenda span.right img {
 	position: relative;
 	top: -2px;
-	padding-left: 5px;
+}
+
+div.agenda span.right button {
+	top: -10px;
+	padding: 2px 3px;
 }
 
 div.agenda p {
