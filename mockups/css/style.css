@@ -827,3 +827,36 @@ div.acte button.acte-btn {
   position: absolute;
   right: 30px;
 }
+
+ul#apps {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+ul#apps li {
+	display: block;
+	float: left;
+	margin-right: 1em;
+}
+
+ul#apps li a {
+	display: block;
+	width: 120px;
+	height: 40px;
+	padding-top: 80px;
+	font-weight: bold;
+	text-align: center;
+	border: 1px dotted #666;
+	text-decoration: none;
+}
+
+ul#apps li a:hover {
+	border: 1px solid #333;
+}
+
+li#calendar a { background: transparent url(calendar.png) no-repeat 50% 50%; }
+li#calendar a:hover { background-image: url(calendar-hover.png); }
+
+li#personnes a { background: transparent url(personnes.png) no-repeat 50% 50%; }
+li#personnes a:hover { background-image: url(personnes-hover.png); }
+
