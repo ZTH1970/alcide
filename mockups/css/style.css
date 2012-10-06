@@ -24,7 +24,6 @@ a:hover, #tab-personnes a:hover, #tab-ressources a:hover {
 div#user-links {
 	display: inline;
 	padding: 5px;
-	margin-right: -10px;
 	background: rgba(100, 100, 100, 0.8);
 	border-top-right-radius: 6px;
 	border-bottom-left-radius: 6px;
@@ -35,6 +34,9 @@ div#user-links a {
 	text-decoration: none;
 }
 
+div#user-links a:hover {
+	text-shadow: 1px 1px 1px black;
+}
 
 div#wrap-large,
 div#wrap {
@@ -102,16 +104,20 @@ div#wrap-large {
 
 	color: white;
 	font-weight: bold;
-	text-shadow: 1px 1px 1px black;
 	text-align: right;
-	padding-right: 10px;
 	padding-top: 5px;
 }
 
-#splash.cmpp { background-image: url(../images/banner-green.jpg); }
-#splash.camsp { background-image: url(../images/banner-red.jpg); }
+#service-links a.cmpp, #splash.cmpp { background-color: #56D72B; }
+#service-links a.camsp, #splash.camsp { background-color: #D72B2F; }
+#service-links a.sessad-ted, #splash.sessad-ted { background-color: #D72BBF; }
+#service-links a.sessad-sys, #splash.sessad-sys { background-color: #5D91E5; }
+
+#splash.cmpp { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
+#splash.camsp { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }
 #splash.sessad-ted { background-image: url(../images/banner-purple.jpg); }
 #splash.sessad-sys { background-image: url(../images/sky-birds.jpg); }
+
 
 #service-links {
 	position: absolute;
@@ -126,22 +132,6 @@ div#wrap-large {
 	width: 10em;
 	display: inline-block;
 	text-align: center;
-}
-
-#service-links a.cmpp {
-	background: #56D72B;
-}
-
-#service-links a.camsp {
-	background: #D72B2F;
-}
-
-#service-links a.sessad-ted {
-	background: #D72BBF;
-}
-
-#service-links a.sessad-sys {
-	background: #2B6CD7;
 }
 
 #service-links a.active {
