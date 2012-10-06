@@ -58,6 +58,12 @@
 			tempScrollTop = currentScrollTop;
 		});
 
+		$('table#dossiers tbody tr').hide();
+		$('#search-results').hide();
+		$('#search').click(function () {
+			$('#search-results').show();
+			$('table#dossiers tbody tr').show();
+		});
 	});
 	</script>
   </head>
@@ -104,7 +110,10 @@
        <label>Prénom <input type="text"/></label>
        <label>Numéro de dossier <input type="text"/></label>
        <label>Numéro d'assuré social <input type="text"/></label>
-       <button>Rechercher</button>
+       <button id="search">Rechercher</button>
+       <p id="search-results">
+        (123 dossiers trouvés)
+       </p>
      </div>
      <div id="filtre">
       <h3>Filtres sur l'état</h3>
@@ -279,13 +288,13 @@
       <td>18/08/2012 (...)</td>
      </tr>
 
-     <tr>
+     <tr class="clos">
       <td>12346</td>
       <td>67891</td>
       <td>Bouclier</td>
       <td>Guillaume</td>
       <td>12/03/1965</td>
-      <td class="clos">Clos</td>
+      <td class="clos">Clos<br/>23/07/2012</td>
       <td></td>
       <td>28/06/2012<br/>T - absence non excusable</td>
       <td>18/08/2012 (...)</td>

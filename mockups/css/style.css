@@ -848,3 +848,7 @@ div.agenda a.print {
 	display: block;
 	text-align: right;
 }
+
+tr.clos {
+	color: red;
+}
