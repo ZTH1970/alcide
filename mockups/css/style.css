@@ -111,12 +111,12 @@ div#wrap-large {
 #service-links a.cmpp, #splash.cmpp { background-color: #56D72B; }
 #service-links a.camsp, #splash.camsp { background-color: #D72B2F; }
 #service-links a.sessad-ted, #splash.sessad-ted { background-color: #D72BBF; }
-#service-links a.sessad-sys, #splash.sessad-sys { background-color: #5D91E5; }
+#service-links a.sessad-dys, #splash.sessad-dys { background-color: #5D91E5; }
 
 #splash.cmpp { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
 #splash.camsp { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }
 #splash.sessad-ted { background-image: url(../images/banner-purple.jpg); }
-#splash.sessad-sys { background-image: url(../images/sky-birds.jpg); }
+#splash.sessad-dys { background-image: url(../images/sky-birds.jpg); }
 
 
 #service-links {
