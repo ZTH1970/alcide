@@ -121,7 +121,8 @@ div#wrap-large {
 
 #service-links {
 	position: absolute;
-	right: 15px;
+	right: -5px;
+	top: 0px;
 }
 
 #service-links a {
@@ -136,12 +137,14 @@ div#wrap-large {
 
 #service-links a.active {
 	border: 1px inset white;
+	font-weight: bold;
 }
 
 div#content {
 	margin: 1em 1ex;
 	margin-top: 100px;
 	padding: 1ex;
+	position: relative;
 }
 
 div#content h2 {
