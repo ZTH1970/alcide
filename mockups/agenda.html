@@ -67,7 +67,18 @@
     <div id="appbar">
     <h2>Agenda</h2>
     <a href="accueil.html">Retourner à l'accueil</a>
+    <button>Nouvel événement (autre)</button>
+    <button id="newrdv">Nouveau rendez-vous patient</button>
     </div>
+
+    <div id="extra-top-links">
+     <a href="activite-serivce">Activité du service</a>
+     —
+     <a href="validation-des-actes.html">Validation des actes</a>
+     —
+     <a href="#">Rendez-vous périodiques</a>
+    </div>
+
 
     <div id="users">
     <div id="filtre">
@@ -89,18 +100,13 @@
    </div>
 
    <div class="content">
+
    <div id="datesel">
    <a href="#">««</a> <a href="#">«</a>
    <!-- <span>Jeudi 5 juillet 2012</span> -->
    <input id="agenda-date" value="Jeudi 5 juillet 2012"/>
    <a href="#">»</a> <a href="#">»»</a>
    </div>
-
-   <p>
-    <button id="newrdv">Nouveau rendez-vous</button>
-    <button>Imprimer</button>
-    <button onclick="window.location = 'validation-des-actes.html'">Validation des actes</button>
-   </p>
 
    <table>
     <thead>
@@ -167,10 +173,11 @@
      <td id="agendas">
        <div id="tabs">
        <ul>
-         <li><a href="#tabs-1" class="sandy">Sandy Kilo</a></li>
-         <li><a href="#tabs-2" class="bob">Bob Léponge</a></li>
+         <li><a href="#tabs-agenda-1" class="sandy">Sandy Kilo</a></li>
+         <li><a href="#tabs-agenda-2" class="bob">Bob Léponge</a></li>
        </ul>
-       <div id="tabs-1" class="agenda sandy">
+       <div id="tabs-agenda-1" class="agenda sandy">
+       <a class="print" href="#">Imprimer</a>
        <div>
         <h3 class="info"><span class="hour">8:00</span> — Arrivée</h3>
         <div></div>
@@ -205,7 +212,8 @@
        </div>
        </div>
 
-       <div id="tabs-2" class="agenda bob">
+       <div id="tabs-agenda-2" class="agenda bob">
+       <a class="print" href="#">Imprimer</a>
        <div>
         <h3 class="info"><span class="hour">8:30</span> — Arrivée</h3>
         <div></div>

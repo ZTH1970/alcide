@@ -373,6 +373,11 @@ div#appbar button {
 	top: -55px;
 }
 
+div#extra-top-links {
+	position: absolute;
+	right: 20px;
+}
+
 
 div#datesel {
 	text-align: center;
@@ -860,3 +865,7 @@ li#calendar a:hover { background-image: url(calendar-hover.png); }
 li#personnes a { background: transparent url(personnes.png) no-repeat 50% 50%; }
 li#personnes a:hover { background-image: url(personnes-hover.png); }
 
+div.agenda a.print {
+	display: block;
+	text-align: right;
+}
