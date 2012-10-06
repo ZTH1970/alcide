@@ -580,8 +580,9 @@ span.num {
 }
 
 div.frame {
-  border: 1px solid #333;
+  border: 1px solid #aaa;
   margin-bottom: 1em;
+  border-radius: 4px;
 }
 
 div.frame h3 {
