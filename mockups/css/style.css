@@ -819,6 +819,12 @@ ul#apps li {
 }
 
 ul#apps li a {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
+ul#apps li a {
 	display: block;
 	width: 120px;
 	height: 40px;
@@ -833,11 +839,23 @@ ul#apps li a:hover {
 	border: 1px solid #333;
 }
 
-li#calendar a { background: transparent url(calendar.png) no-repeat 50% 50%; }
-li#calendar a:hover { background-image: url(calendar-hover.png); }
+li#calendar a { background-image: url(icon-calendar.png); }
+li#calendar a:hover { background-image: url(icon-calendar-hover.png); }
 
-li#personnes a { background: transparent url(personnes.png) no-repeat 50% 50%; }
-li#personnes a:hover { background-image: url(personnes-hover.png); }
+li#personnes a { background-image: url(icon-personnes.png); }
+li#personnes a:hover { background-image: url(icon-personnes-hover.png); }
+
+li#dossiers a { background-image: url(icon-dossiers.png); }
+li#dossiers a:hover { background-image: url(icon-dossiers-hover.png); }
+
+li#actes a { background-image: url(icon-actes.png); }
+li#actes a:hover { background-image: url(icon-actes-hover.png); }
+
+li#ressources a { background-image: url(icon-ressources.png); }
+li#ressources a:hover { background-image: url(icon-ressources-hover.png); }
+
+li#facturation a { background-image: url(icon-facturation.png); }
+li#facturation a:hover { background-image: url(icon-facturation-hover.png); }
 
 div.agenda a.print {
 	display: block;
