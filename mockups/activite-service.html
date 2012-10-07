@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Activité du service</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+	});
+	</script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1><a href="accueil.html">APS 42</a></h1>
+      <span>Agenda - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-links">
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Activité du service - 5 juillet 2012</h2>
+    <a href="agenda.html">Retourner à l'agenda</a>
+    <button>Imprimer</button>
+    </div>
+
+   <div id="datesel">
+   <a href="#">««</a> <a href="#">«</a>
+   <!-- <span>Jeudi 5 juillet 2012</span> -->
+   <input id="agenda-date" value="Jeudi 5 juillet 2012"/>
+   <a href="#">»</a> <a href="#">»»</a>
+   </div>
+
+   <table class="main">
+    <thead>
+    <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>
+    </thead>
+    <tbody>
+    <tr> <td>08:00</td> <td>45m</td> <td>John Doe</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+    <tr> <td>08:00</td> <td>1h</td> <td>Bob Dilane</td> <td>Sylvain Mirouf</td> <td>Rééducation</td> </tr>
+    <tr> <td>09:00</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+    <tr> <td>09:00</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+    </tbody>
+   </table>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="valider-dlg" style="display: none;">
+   <h3>Bilan de la validation pour le 5 juillet 2012</h3>
+   <ul>
+    <li>Nombre d'actes : 123</li>
+    <li>Actes pointés : 38
+     <ul>
+      <li>Absences : 32</li>
+      <li>Annulation médecin : 6</li>
+     </ul>
+    </li>
+    <li>Actes en double : <strong>5</strong></li>
+    <li>Actes facturables : <strong>58</strong></li>
+    <li>Actes de type non facturable : <strong>22</strong></li>
+   </ul>
+  </div>
+
+
+  <div id="annuler-dlg" style="display: none;">
+   <p>
+    <strong>85</strong> actes validés seront à nouveau pointables.
+   </p>
+  </div>
+
+
+  <div id="acte-dlg" style="display: none;">
+   <p>1234 Bob Leponge (Traitement)</p>
+   <p><select><option>(11) Ortophonie</option></select></p>
+   <p>8 août 2012 - 17:15 - 45 minutes</p>
+
+   <table>
+   <tr><td width="50%">
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+
+   <td width="50%">
+
+   <ul>
+    <li>Rendez-vous pris le 5 juillet 2012 à 10:36</li>
+    <li>Acte validé le 10 août 2012 à 9h10</li>
+    <li>En cours de facturation (123) <button class="flat">Acte perdu</button></li>
+   </ul>
+   </td>
+   </tr>
+   </table>
+
+   <br/>
+   <br/>
+   <textarea cols="50">Bla bla bla</textarea>
+
+  </div>
+
+
+  </body>
+</html>
