@@ -440,8 +440,9 @@ div.agenda h3.info {
 	font-style: italic;
 }
 
-div.agenda h3.free {
+#content div.agenda h3.free {
 	border: 1px solid green;
+        background: #D4FFA7;
 }
 
 div.agenda h3.busy-here,
@@ -796,7 +797,8 @@ button.blind {
 }
 
 #content div.agenda h3.busy-elsewhere {
-  background: #eee;
+  color: #888;
+  background: #f0f0f0;
 }
 
 span.hi-fact { color: red; }
