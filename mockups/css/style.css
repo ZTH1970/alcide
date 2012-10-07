@@ -865,3 +865,12 @@ div.agenda a.print {
 tr.clos {
 	color: red;
 }
+
+div.big-msg-info {
+        background: transparent url(info.png) 5px 5px no-repeat;
+        width: 30em;
+        padding-left: 90px;
+        margin: 3em auto;
+        min-height: 90px;
+        padding-top: 20px;
+}

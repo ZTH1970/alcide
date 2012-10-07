@@ -61,6 +61,7 @@
 		$('table#dossiers tbody tr').hide();
 		$('#search-results').hide();
 		$('#search').click(function () {
+			$('.big-msg-info').hide();
 			$('#search-results').show();
 			$('table#dossiers tbody tr').show();
 		});
@@ -420,12 +421,14 @@
       <td>18/08/2012 (...)</td>
      </tr>
 
-
-
-
-
     </tbody>
    </table>
+
+   <div class="big-msg-info">
+     Utilisez le formulaire de recherche sur la gauche de l'écran pour afficher
+     les dossiers correspondants.
+   </div>
+
    </div>
 
     </div>
