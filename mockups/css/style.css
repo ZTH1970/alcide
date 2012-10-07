@@ -143,7 +143,7 @@ div#wrap-large {
 div#content {
 	margin: 1em 1ex;
 	margin-top: 100px;
-	padding: 1ex;
+	padding: 7px;
 	position: relative;
 }
 
@@ -804,7 +804,7 @@ div.dossier.facturable a {
 
 div.acte button.acte-btn {
   position: absolute;
-  right: 30px;
+  right: 3px;
 }
 
 ul#apps {
