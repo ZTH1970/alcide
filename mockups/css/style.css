@@ -108,10 +108,19 @@ div#wrap-large {
 	padding-top: 5px;
 }
 
-#service-links a.cmpp, #splash.cmpp { background-color: #56D72B; }
-#service-links a.camsp, #splash.camsp { background-color: #D72B2F; }
-#service-links a.sessad-ted, #splash.sessad-ted { background-color: #D72BBF; }
-#service-links a.sessad-dys, #splash.sessad-dys { background-color: #5D91E5; }
+#agendas span.box {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border: 1px outset gray;
+  position: relative;
+  top: -4px;
+}
+
+span.cmpp, #service-links a.cmpp, #splash.cmpp { background-color: #56D72B; }
+span.camsp, #service-links a.camsp, #splash.camsp { background-color: #D72B2F; }
+span.sessad-ted, #service-links a.sessad-ted, #splash.sessad-ted { background-color: #D72BBF; }
+span.sessad-sys, #service-links a.sessad-dys, #splash.sessad-dys { background-color: #5D91E5; }
 
 #splash.cmpp { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
 #splash.camsp { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }
