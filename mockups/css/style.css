@@ -900,3 +900,16 @@ div.textedit button {
         right: -20px;
         top: 0px;
 }
+
+table#activity tr:nth-child(odd) td {
+}
+
+table#activity tr.hour-change  td {
+	border-top: 20px solid white;
+}
+
+table#activity tr td.hour {
+	background: #ccc;
+	font-size: 120%;
+	font-weight: bold;
+}
