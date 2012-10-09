@@ -58,28 +58,25 @@
 			tempScrollTop = currentScrollTop;
 		});
 
+		$('table#dossiers tbody tr').hide();
+		$('#search-results').hide();
+		$('#search').click(function () {
+			$('.big-msg-info').hide();
+			$('#search-results').show();
+			$('table#dossiers tbody tr').show();
+		});
 	});
 	</script>
   </head>
   <body>
   <div id="wrap-large">
     <div id="header">
-      <h1>APS 42</h1>
+      <h1><a href="accueil.html">APS 42</a></h1>
       <span>Dossiers - SESSAD TED</span>
     </div>
     <div id="splash" class="sessad-ted">
-      <div id="user-info">
-        Dernière connexion le 4 juillet 2012 à 8h05
-      </div>
       <div id="user-links">
-        <a href="#">Changer de mot de passe</a> —
         <a href="connexion.html">Déconnexion</a>
-      </div>
-      <div id="service-links">
-        <a class="cmpp" href="#">CMPP</a>
-        <a class="camsp" href="#">CAMSP</a>
-        <a class="sessad-ted active" href="#">SESSAD TED</a>
-        <a class="sessad-sys" href="#">SESSAD DYS</a>
       </div>
     </div>
     <div id="content">
@@ -110,13 +107,16 @@
        dossiers</label></li>
       </ul>
       -->
-       <label>Nom: <input type="text"/></label>
-       <label>Numéro de dossier: <input type="text"/></label>
-       <label>Numéro de sécu: <input type="text"/></label>
-       <button>Rechercher</button>
+       <label>Nom <input type="text"/></label>
+       <label>Prénom <input type="text"/></label>
+       <label>Numéro de dossier <input type="text"/></label>
+       <label>Numéro d'assuré social <input type="text"/></label>
+       <button id="search">Rechercher</button>
+       <p id="search-results">
+        (123 dossiers trouvés)
      </div>
      <div id="filtre">
-      <h3>Afficher les dossiers</h3>
+      <h3>Filtres sur l'état</h3>
       <ul>
         <li><label><input checked="checked"  class="en-accueil" type="checkbox"/>En accueil</label></li>
         <li><label><input checked="checked"  class="fin-accueil" type="checkbox"/>Fin d'accueil</label></li>
@@ -125,19 +125,19 @@
         <li><label><input checked="checked"  class="clos" type="checkbox"/>Clos</label></li>
         <li><button>Tous</button> <button>Aucun</button></li>
       </ul>
-     <hr/>
+      <h3>Afficher les dossiers</h3>
      <ul>
-       <li><label><input type="checkbox"/>Dossiers avec PC arrivant à expiration</label></li>
-       <li><label><input type="checkbox"/>Dossiers où une prolongation est nécessaire</label></li>
-       <li><label><input type="checkbox"/>Dossiers avec PC manquante ou expirée</label></li>
-       <li><label><input type="checkbox"/>Dossiers éligibles pour un rediagnostic</label></li>
-       <li><label><input type="checkbox"/>Dossiers en pause facturation</label></li>
+       <li><button>En pause facturation</button></li>
+       <li><button>Une prolongation est nécessaire</button></li>
+       <li><button>Prise en charge arrivant à expiration</button></li>
+       <li><button>Prise en charge manquante ou expirée</button></li>
+       <li><button>Eligibles pour un rediagnostic</button></li>
      </ul>
     </div>
    </div>
 
    <div class="content">
-   <table id="dossiers">
+   <table id="dossiers" class="main">
     <thead>
      <tr>
      <th colspan="2">N° dossier
@@ -145,7 +145,7 @@
      <th rowspan="2">Prénom</th>
      <th rowspan="2">Date de naissance</th>
      <th rowspan="2">État du dossier</th>
-     <th rowspan="2"><span title="Notification concernant la prise en charge">N</span> / <span title="Dossier en pause facturation">F</span></th>
+     <th rowspan="2"><span title="Information à propos de la prise en charge">I</span> / <span title="Dossier en pause facturation">F</span></th>
      <th rowspan="2">Dernier acte</th>
      <th rowspan="2">Prochain rendez-vous</th>
      </tr>
@@ -211,7 +211,7 @@
       <td>Marie</td>
       <td>12/03/1965</td>
       <td class="traite">En traitement</td>
-      <td><span title="Notification concernant la prise en charge">N</span></td>
+      <td><span title="Information à propos de la prise en charge">I</span></td>
       <td>28/06/2012<br/>T - absence non excusable</td>
       <td>18/08/2012 14:00<br/>Roudon - mini synthèse</td>
      </tr>
@@ -288,13 +288,13 @@
       <td>18/08/2012 (...)</td>
      </tr>
 
-     <tr>
+     <tr class="clos">
       <td>12346</td>
       <td>67891</td>
       <td>Bouclier</td>
       <td>Guillaume</td>
       <td>12/03/1965</td>
-      <td class="clos">Clos</td>
+      <td class="clos">Clos<br/>23/07/2012</td>
       <td></td>
       <td>28/06/2012<br/>T - absence non excusable</td>
       <td>18/08/2012 (...)</td>
@@ -319,7 +319,7 @@
       <td>Thérèse</td>
       <td>12/03/1965</td>
       <td class="diag">En diagnostic</td>
-      <td><span title="Notification concernant la prise en charge">N</span> / <span title="Dossier en pause facturation">F</span></td>
+      <td><span title="Information à propos de la prise en charge">I</span> / <span title="Dossier en pause facturation">F</span></td>
       <td>28/06/2012<br/>T - absence non excusable</td>
       <td>18/08/2012 (...)</td>
      </tr>
@@ -420,12 +420,14 @@
       <td>18/08/2012 (...)</td>
      </tr>
 
-
-
-
-
     </tbody>
    </table>
+
+   <div class="big-msg-info">
+     Utilisez le formulaire de recherche sur la gauche de l'écran pour afficher
+     les dossiers correspondants.
+   </div>
+
    </div>
 
     </div>

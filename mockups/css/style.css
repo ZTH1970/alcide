@@ -21,6 +21,22 @@ a:hover, #tab-personnes a:hover, #tab-ressources a:hover {
 	text-decoration: none;
 }
 
+div#user-links {
+	display: inline;
+	padding: 5px;
+	background: rgba(100, 100, 100, 0.8);
+	border-top-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
+
+div#user-links a {
+	color: white;
+	text-decoration: none;
+}
+
+div#user-links a:hover {
+	text-shadow: 1px 1px 1px black;
+}
 
 div#wrap-large,
 div#wrap {
@@ -69,8 +85,10 @@ div#wrap-large {
 	color: #FCE2CA;
 }
 
+#header h1 a,
 #header span a {
 	color: white;
+	text-decoration: none;
 }
 
 #splash
@@ -86,54 +104,56 @@ div#wrap-large {
 
 	color: white;
 	font-weight: bold;
-	text-shadow: 1px 1px 1px black;
 	text-align: right;
-	padding-right: 10px;
 	padding-top: 5px;
 }
 
-#splash.cmpp { background-image: url(../images/banner-green.jpg); }
-#splash.camsp { background-image: url(../images/banner-red.jpg); }
+#agendas span.box {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border: 1px outset gray;
+  position: relative;
+  top: -4px;
+}
+
+span.cmpp, #service-links a.cmpp, #splash.cmpp { background-color: #56D72B; }
+span.camsp, #service-links a.camsp, #splash.camsp { background-color: #D72B2F; }
+span.sessad-ted, #service-links a.sessad-ted, #splash.sessad-ted { background-color: #D72BBF; }
+span.sessad-sys, #service-links a.sessad-dys, #splash.sessad-dys { background-color: #5D91E5; }
+
+#splash.cmpp { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
+#splash.camsp { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }
 #splash.sessad-ted { background-image: url(../images/banner-purple.jpg); }
-#splash.sessad-sys { background-image: url(../images/sky-birds.jpg); }
+#splash.sessad-dys { background-image: url(../images/sky-birds.jpg); }
+
 
 #service-links {
 	position: absolute;
-	right: 5px;
-	bottom: 10px;
+	right: -5px;
+	top: 0px;
 }
 
 #service-links a {
-	padding: 2px;
+	padding: 1em 2px;
 	border: 1px outset #ccc;
 	color: white;
 	text-decoration: none;
-}
-
-#service-links a.cmpp {
-	background: #56D72B;
-}
-
-#service-links a.camsp {
-	background: #D72B2F;
-}
-
-#service-links a.sessad-ted {
-	background: #D72BBF;
-}
-
-#service-links a.sessad-sys {
-	background: #2B6CD7;
+	width: 10em;
+	display: inline-block;
+	text-align: center;
 }
 
 #service-links a.active {
 	border: 1px inset white;
+	font-weight: bold;
 }
 
 div#content {
 	margin: 1em 1ex;
 	margin-top: 100px;
-	padding: 1ex;
+	padding: 7px;
+	position: relative;
 }
 
 div#content h2 {
@@ -362,6 +382,11 @@ div#appbar button {
 	top: -55px;
 }
 
+div#extra-top-links {
+	position: absolute;
+	right: 20px;
+}
+
 
 div#datesel {
 	text-align: center;
@@ -415,8 +440,9 @@ div.agenda h3.info {
 	font-style: italic;
 }
 
-div.agenda h3.free {
+#content div.agenda h3.free {
 	border: 1px solid green;
+        background: #D4FFA7;
 }
 
 div.agenda h3.busy-here,
@@ -432,25 +458,20 @@ li.active {
 	font-weight: bold;
 }
 
-a.button,
-div.agenda div a {
-	background: white url(smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
-	color: black;
-	padding: 8px 8px;
-	border-radius: 5px;
-	text-decoration: none;
-	margin: 0 5px;
+div.agenda span.right {
+	position: absolute;
+	right: 5px;
 }
 
-div.agenda div a:hover {
-	background-position: 50% 0%;
-}
-
-div.agenda img {
-	float: right;
+div.agenda span.right button,
+div.agenda span.right img {
 	position: relative;
 	top: -2px;
-	padding-left: 5px;
+}
+
+div.agenda span.right button {
+	top: -10px;
+	padding: 2px 3px;
 }
 
 div.agenda p {
@@ -485,36 +506,26 @@ div#intervenants ul {
 	color: #8c8c73;
 }
 
-table#membres,
-table#actes,
-table#dossiers {
+table.main {
 	width: 100%;
 }
 
-table#membres th,
-table#actes th,
-table#dossiers th {
+table.main th {
 	font-weight: normal;
 	border-bottom: 1px solid #888;
 }
 
-table#membres td,
-table#actes td,
-table#dossiers td {
+table.main td {
 	text-align: center;
 }
 
 table#tableau-recap-facturation tbody tr:nth-child(odd) td,
-table#membres tr:nth-child(odd) td,
-table#actes tr:nth-child(odd) td,
-table#dossiers tr:nth-child(odd) td {
+table.main tr:nth-child(odd) td {
 	background: #eee;
 }
 
-table#membres tr:hover td,
-table#actes tr:hover td,
-table#actes tr.non-factu:hover td,
-table#dossiers tr:hover td {
+table.main tr:hover td,
+table#actes tr.non-factu:hover td {
 	background: #ccf;
 	cursor: pointer;
 }
@@ -522,7 +533,6 @@ table#dossiers tr:hover td {
 table#actes tr.non-factu td {
   background: #ccc;
 }
-
 
 td.traite {
 	color: blue;
@@ -574,21 +584,13 @@ span.num {
 	color: #333;
 }
 
-div.dossier,
-#info-membre div,
-#tabs-2 div,
-#tabs-3 div,
-#tabs-4 div div {
-  border: 1px solid #333;
+div.frame {
+  border: 1px solid #aaa;
   margin-bottom: 1em;
+  border-radius: 4px;
 }
 
-div.dossier h3,
-div.acte h3,
-#info-membre h3,
-#tabs-2 h3,
-#tabs-3 h3,
-#tabs-4 h3 {
+div.frame h3 {
   margin: 0;
   margin-bottom: 1ex;
   padding: 3px 1ex;
@@ -597,9 +599,7 @@ div.acte h3,
   background: #ccc url(smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
 }
 
-#info-membre p,
-#tabs-2 p,
-#tabs-3 p {
+div.frame p {
   margin: 0 1ex;
 }
 
@@ -797,7 +797,8 @@ button.blind {
 }
 
 #content div.agenda h3.busy-elsewhere {
-  background: #eee;
+  color: #888;
+  background: #f0f0f0;
 }
 
 span.hi-fact { color: red; }
@@ -814,5 +815,101 @@ div.dossier.facturable a {
 
 div.acte button.acte-btn {
   position: absolute;
-  right: 30px;
+  right: 3px;
+}
+
+ul#apps {
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+ul#apps li {
+	display: block;
+	float: left;
+	margin-right: 1em;
+}
+
+ul#apps li a {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
+ul#apps li a {
+	display: block;
+	width: 120px;
+	height: 40px;
+	padding-top: 80px;
+	font-weight: bold;
+	text-align: center;
+	border: 1px dotted #666;
+	text-decoration: none;
+}
+
+ul#apps li a:hover {
+	border: 1px solid #333;
+}
+
+li#calendar a { background-image: url(icon-calendar.png); }
+li#calendar a:hover { background-image: url(icon-calendar-hover.png); }
+
+li#personnes a { background-image: url(icon-personnes.png); }
+li#personnes a:hover { background-image: url(icon-personnes-hover.png); }
+
+li#dossiers a { background-image: url(icon-dossiers.png); }
+li#dossiers a:hover { background-image: url(icon-dossiers-hover.png); }
+
+li#actes a { background-image: url(icon-actes.png); }
+li#actes a:hover { background-image: url(icon-actes-hover.png); }
+
+li#ressources a { background-image: url(icon-ressources.png); }
+li#ressources a:hover { background-image: url(icon-ressources-hover.png); }
+
+li#facturation a { background-image: url(icon-facturation.png); }
+li#facturation a:hover { background-image: url(icon-facturation-hover.png); }
+
+div.agenda a.print {
+	display: block;
+	text-align: right;
+}
+
+tr.clos {
+	color: red;
+}
+
+div.big-msg-info {
+        background: transparent url(info.png) 5px 5px no-repeat;
+        width: 30em;
+        padding-left: 90px;
+        margin: 3em auto;
+        min-height: 90px;
+        padding-top: 20px;
+}
+
+div.textedit {
+        position: relative;
+        padding-right: 20px;
+}
+
+div.textedit textarea {
+        width: 99%;
+}
+
+div.textedit button {
+        position: absolute;
+        right: -20px;
+        top: 0px;
+}
+
+table#activity tr:nth-child(odd) td {
+}
+
+table#activity tr.hour-change  td {
+	border-top: 20px solid white;
+}
+
+table#activity tr td.hour {
+	background: #ccc;
+	font-size: 120%;
+	font-weight: bold;
 }

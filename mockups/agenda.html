@@ -54,22 +54,12 @@
   <body>
   <div id="wrap-large">
     <div id="header">
-      <h1>APS 42</h1>
+      <h1><a href="accueil.html">APS 42</a></h1>
       <span>Agenda - CMPP</span>
     </div>
     <div id="splash" class="cmpp">
-      <div id="user-info">
-        Dernière connexion le 4 juillet 2012 à 8h05
-      </div>
       <div id="user-links">
-        <a href="#">Changer de mot de passe</a> —
         <a href="connexion.html">Déconnexion</a>
-      </div>
-      <div id="service-links">
-        <a class="cmpp active" href="#">CMPP</a>
-        <a class="camsp" href="#">CAMSP</a>
-        <a class="sessad-ted" href="#">SESSAD TED</a>
-        <a class="sessad-sys" href="#">SESSAD DYS</a>
       </div>
     </div>
     <div id="content">
@@ -77,7 +67,18 @@
     <div id="appbar">
     <h2>Agenda</h2>
     <a href="accueil.html">Retourner à l'accueil</a>
+    <button>Nouvel événement (autre)</button>
+    <button id="newrdv">Nouveau rendez-vous patient</button>
     </div>
+
+    <div id="extra-top-links">
+     <a href="activite-service.html">Activité du service</a>
+     —
+     <a href="validation-des-actes.html">Validation des actes</a>
+     —
+     <a href="#">Rendez-vous périodiques</a>
+    </div>
+
 
     <div id="users">
     <div id="filtre">
@@ -99,6 +100,7 @@
    </div>
 
    <div class="content">
+
    <div id="datesel">
    <a href="#">««</a> <a href="#">«</a>
    <!-- <span>Jeudi 5 juillet 2012</span> -->
@@ -106,28 +108,17 @@
    <a href="#">»</a> <a href="#">»»</a>
    </div>
 
-   <p>
-    <a href="#" id="newrdv" class="button">Nouveau rendez-vous</a>
-    <a href="#" class="button">Imprimer</a>
-    <a href="validation-des-actes.html" class="button">Validation des actes</a>
-   </p>
-
    <table>
-    <thead>
-    <tr>
-     <td>Disponibilités</td>
-     <td>Agendas</td>
-    </tr>
-    </thead>
     <tbody>
     <tr>
      <td id="dispos">
+      Disponibilités
       <table>
-      <tr class="hour-mark"><td rowspan="4">8:00</td> <td class="sandy free"></td> <td class="bob away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">08:00</td> <td class="sandy free"></td> <td class="bob away"></td></tr>
       <tr>   <td class="sandy free"></td> <td class="bob away"></td></tr>
       <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
       <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
-      <tr class="hour-mark"><td rowspan="4">9:00</td> <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">09:00</td> <td class="sandy free"></td> <td class="bob free"></td></tr>
       <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
       <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
       <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
@@ -177,62 +168,86 @@
      <td id="agendas">
        <div id="tabs">
        <ul>
-         <li><a href="#tabs-1" class="sandy">Sandy Kilo</a></li>
-         <li><a href="#tabs-2" class="bob">Bob Léponge</a></li>
+         <li><a href="#tabs-agenda-1" class="sandy">Sandy Kilo</a></li>
+         <li><a href="#tabs-agenda-2" class="bob">Bob Léponge</a></li>
        </ul>
-       <div id="tabs-1" class="agenda sandy">
+       <div id="tabs-agenda-1" class="agenda sandy">
+       <a class="print" href="#">Imprimer</a>
        <div>
-        <h3 class="info"><span class="hour">8:00</span> — Arrivée</h3>
+        <h3 class="info"><span class="hour">08:00</span> — Arrivée</h3>
         <div></div>
-        <h3 class="free"><span class="hour">8:00</span> — 120m — LIBRE</h3>
-        <div><a href="#">Prendre un rendez-vous</a></div>
-        <h3 class="busy-elsewhere convocation"><span class="hour">10:00</span> — 45m — John Doe (B)
+        <h3 class="free"><span class="hour">08:00</span> — 120m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="busy-elsewhere convocation"><span class="hour">10:00</span> — 45m — John Doe — SK
+         <span class="right">
+         <span class="box camsp" title="CAMSP"></span>
          <img title="Une convocation a été envoyée" src="images/emblem-mail.png"/>
          <img title="Un commentaire existe" src="images/emblem-documents.png"/>
+         <button>✍</button>
+         <button>➖</button>
+         </span>
         </h3>
         <div>
-          <p>(24) bla bla bla (1, 3, 5) <a href="#">Modifier le commentaire</a></p>
-          <a href="#">Modifier</a>
-          <a href="#">Supprimer</a>
-          <a href="#">Dossier patient</a>
-          <a href="#">Prochains rendez-vous</a>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+          <a href="#">Dossier patient</a> -
+          <a href="#">Prochains rendez-vous</a> -
           <a href="#">Convoquer patient</a>
         </div>
-        <h3 class="busy-here"><span class="hour">10:45</span> — 45m — Jack Itchan
+        <h3 class="busy-here"><span class="hour">10:45</span> — 45m — Jack Itchan — SK
+         <span class="right">
          <img title="Un commentaire existe" src="images/emblem-documents.png"/>
+         <button>✍</button>
+         <button>➖</button>
+         </span>
         </h3>
         <div>
-          <p>(24) bla bla bla (1, 3, 5) <a href="#">Modifier le commentaire</a></p>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+          <a href="#">Dossier patient</a> -
+          <a href="#">Prochains rendez-vous</a> -
+          <a href="#">Convoquer patient</a>
         </div>
-        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion</h3>
+        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
         <div>
-         <p>S4 (5, 6, 8, 14)</p>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
         </div>
-        <h3 class="free"><span class="hour">12:00</span> — 30m — LIBRE</h3>
+        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
         <div></div>
         <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
         <div></div>
        </div>
        </div>
 
-       <div id="tabs-2" class="agenda bob">
+       <div id="tabs-agenda-2" class="agenda bob">
+       <a class="print" href="#">Imprimer</a>
        <div>
-        <h3 class="info"><span class="hour">8:30</span> — Arrivée</h3>
+        <h3 class="info"><span class="hour">08:30</span> — Arrivée</h3>
         <div></div>
-        <h3 class="free"><span class="hour">8:30</span> — 180m — LIBRE</h3>
-        <div><a href="#">Prendre un rendez-vous</a></div>
-        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion</h3>
+        <h3 class="free"><span class="hour">08:30</span> — 180m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
         <div>
-         <p>S4 (5, 6, 8, 14)</p>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
         </div>
-        <h3 class="free"><span class="hour">12:00</span> — 30m — LIBRE</h3>
+        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
         <div></div>
         <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
         <div></div>
         <h3 class="info"><span class="hour">13:00</span> — Arrivée</h3>
         <div></div>
-        <h3 class="free"><span class="hour">13:00</span> — 270m — LIBRE</h3>
-        <div><a href="#">Prendre un rendez-vous</a></div>
+        <h3 class="free"><span class="hour">13:00</span> — 270m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
         <h3 class="info"><span class="hour">17:30</span> — Départ</h3>
         <div></div>
        </div>

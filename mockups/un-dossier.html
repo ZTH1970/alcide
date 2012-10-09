@@ -77,22 +77,12 @@
   <body>
   <div id="wrap-large">
     <div id="header">
-      <h1>APS 42</h1>
+      <h1><a href="accueil.html">APS 42</a></h1>
       <span>Dossiers - CMPP</span>
     </div>
     <div id="splash" class="cmpp">
-      <div id="user-info">
-        Dernière connexion le 4 juillet 2012 à 8h05
-      </div>
       <div id="user-links">
-        <a href="#">Changer de mot de passe</a> —
         <a href="connexion.html">Déconnexion</a>
-      </div>
-      <div id="service-links">
-        <a class="cmpp active" href="#">CMPP</a>
-        <a class="camsp" href="#">CAMSP</a>
-        <a class="sessad-ted" href="#">SESSAD TED</a>
-        <a class="sessad-sys" href="#">SESSAD DYS</a>
       </div>
     </div>
     <div id="content">
@@ -117,7 +107,7 @@
     <div id="tabs-1"> <!-- Général -->
      <div class="left">
      <ul>
-      <li><label>N° dossier papier :</label> 12345 <button>Modifier</button></li>
+      <li><label>N° dossier papier :</label> 12345 <button>✍</button></li>
       <li><label>N° dossier informatique :</label> 67890</li>
       <li><label>Nom :</label> Bouclier</li>
       <li><label>Prénom :</label> Guillaume</li>
@@ -160,9 +150,9 @@
     </div>
 
     <div id="tabs-2"> <!-- Fiche administrative -->
-     <div>
+     <div class="frame">
      <h3>État civil</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p><label>Nom :</label> <input value="Bouclier"/>
      <label>Prénom(s) :</label> <input value="Guillaume"/></p>
      <p><label>Date de naissance :</label> <input value="1/1/2005"/>
@@ -170,17 +160,17 @@
      <label>Nationalité :</label> <input value="française"/></p>
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Physiologie</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p><label>Taille (cm) :</label> <input value="176"/>
         <label>Poids (kg) :</label> <input value="68"/>
         <label>Terme en semaines :</label> <input/></p>
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Inscription</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p>
       <label>Motif (analysé) :</label> <select><option>Indéfini</option></select> <button>+</button>
       <label>Motif (famille) :</label> <select><option>Indéfini</option></select> <button>+</button>
@@ -189,9 +179,9 @@
 
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Famille</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p><label>Place dans la fratrie :</label> <input size="4"/>
         <label>Nombre d'enfants dans la fratrie :</label> <input size="4"/>
         <label>Rang (gémellité) :</label> <input size="4"/>
@@ -204,9 +194,9 @@
 
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Transport</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p>
       <label>Type de transport :</label> <select><option>Indéfini</option></select> <button>+</button>
       <label>Compagnie de transport :</label> <select><option>Indéfini</option></select> <button>+</button>
@@ -218,9 +208,9 @@
      </table>
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Suivi du patient</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p>
       <label>Coordinateur I :</label> <select><option>Indéfini</option></select> <button>+</button>
       <label>Coordinateur II :</label> <select><option>Indéfini</option></select> <button>+</button>
@@ -236,9 +226,9 @@
 
     <div id="tabs-3"> <!-- Adresses / Contacts -->
       <button id="new-address-btn">Nouvelle adresse</button> <button>Nouveau contact</button>
-      <div>
+      <div class="frame">
        <h3>16 rue du Clocher</h3>
-       <div class="buttons"><button>Supprimer</button> <button>Modifier</button></div>
+       <div class="buttons"><button>➖</button> <button>✍</button></div>
        <div class="right">
        <input type="checkbox" checked>Lieu de vie</input>
        </div>
@@ -248,7 +238,7 @@
         <h4>Mme Marie Carmarie</h4>
         <div class="right">
          <input type="radio" name="radio-assure" checked="checked">Assuré</input>
-         <button>Supprimer</button> <button>Modifier</button>
+         <button>➖</button> <button>✍</button>
         </div>
         <p>2 70 12 34 567 890 12</p>
         <p>06 12 34 56 78</p>
@@ -257,15 +247,15 @@
         <h4>M. Guillaume Bouclier (PATIENT)</h4>
         <div class="right">
          <input type="radio" name="radio-assure" >Assuré</input>
-         <button>Supprimer</button> <button>Modifier</button>
+         <button>➖</button> <button>✍</button>
         </div>
         <p>1 04 12 34 567 890 12</p>
        </div>
       </div>
 
-      <div>
+      <div class="frame">
        <h3>2 rue du Château</h3>
-       <div class="buttons"><button>Supprimer</button> <button>Modifier</button></div>
+       <div class="buttons"><button>➖</button> <button>✍</button></div>
        <div class="right">
        <input type="checkbox">Lieu de vie</input>
        </div>
@@ -275,7 +265,7 @@
         <h4>M. John Leponge</h4>
         <div class="right">
          <input type="radio" name="radio-assure">Assuré</input>
-         <button>Supprimer</button> <button>Modifier</button>
+         <button>➖</button> <button>✍</button>
         </div>
         <p>1 70 12 34 567 890 12</p>
        </div>
@@ -285,7 +275,7 @@
 
     <div id="tabs-4"> <!-- Prise en charge -->
       <div id="patient-diag">
-      <div>
+      <div class="frame">
        <h3>En diagnostic depuis le 11 juin 2012</h3>
        <ul>
        <li><input size="4" value="6"/> actes prévus</li>
@@ -307,7 +297,7 @@
       </div>
 
       <div id="patient-traitement" style="display: none;">
-       <div>
+       <div class="frame">
        <h3>En diagnostic depuis le 6 mars 2012</h3>
        <ul>
        <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
@@ -321,7 +311,7 @@
        </ul>
        </div>
 
-       <div>
+       <div class="frame">
         <h3>En traitement depuis le 11 juin 2012</h3>
         <ul>
          <li><strong>4</strong> actes réalisés <button class="blind">détails</button>
@@ -335,7 +325,7 @@
 
       <div id="patient-traitement-charge" style="display: none;">
 
-       <div>
+       <div class="frame">
        <h3>En diagnostic depuis le 2 avril 2008</h3>
        <ul>
        <li><strong>3</strong> actes réalisés et facturés <button class="blind">détails</button>
@@ -349,7 +339,7 @@
        </ul>
        </div>
 
-       <div>
+       <div class="frame">
        <h3>En diagnostic depuis le 5 octobre 2010</h3>
        <ul>
        <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
@@ -363,7 +353,7 @@
        </ul>
        </div>
 
-       <div>
+       <div class="frame">
         <h3>En traitement depuis le 12 décembre 2010</h3>
         <ul>
          <li>Prise en charge depuis le 12 décembre 2010

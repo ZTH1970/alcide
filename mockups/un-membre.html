@@ -26,22 +26,12 @@
   <body>
   <div id="wrap-large">
     <div id="header">
-      <h1>APS 42</h1>
+      <h1><a href="accueil.html">APS 42</a></h1>
       <span>Gestion - CMPP</span>
     </div>
     <div id="splash" class="cmpp">
-      <div id="user-info">
-        Dernière connexion le 4 juillet 2012 à 8h05
-      </div>
       <div id="user-links">
-        <a href="#">Changer de mot de passe</a> —
         <a href="connexion.html">Déconnexion</a>
-      </div>
-      <div id="service-links">
-        <a class="cmpp active" href="#">CMPP</a>
-        <a class="camsp" href="#">CAMSP</a>
-        <a class="sessad-ted" href="#">SESSAD TED</a>
-        <a class="sessad-sys" href="#">SESSAD DYS</a>
       </div>
     </div>
     <div id="content">
@@ -53,17 +43,17 @@
     </div>
 
     <div id="info-membre">
-     <div>
+     <div class="frame">
      <h3>État civil</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
      <p><label>Nom :</label> <input value="Durant"/>
      <label>Prénom(s) :</label> <input value="François"/>
      <label>Genre :</label> <input value="M"/></p>
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Services</h3>
-     <button class="save">Enregistrer les modifications</button>
+     <button class="save">✔</button>
 
      <p class="services">
      <input type="checkbox" checked="checked"><label>CMPP</label></input>
@@ -74,7 +64,7 @@
 
      </div>
 
-     <div id="schedule">
+     <div class="frame" id="schedule">
      <h3>Horaires de travail</h3>
 
      <table>
@@ -93,9 +83,9 @@
      </table>
      </div>
 
-     <div>
+     <div class="frame">
      <h3>Congés</h3>
-     <button class="save">Modifier</button>
+     <button class="save">✍</button>
      <ul>
       <li>Du 20 août au 3 septembre 2012 (en cours)</li>
       <li>Du 3 au 10 octobre 2012</li>

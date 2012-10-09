@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — HIG</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+
+    <script>
+	$(function() {
+		$('#tabs').tabs();
+
+                $('button.blind').next().hide();
+                $('button.blind').click(function() {
+                        $(this).next().toggle('blind');
+                });
+	});
+	</script>
+
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1><a href="accueil.html">APS 42</a></h1>
+      <span>Section - SERVICE</span>
+    </div>
+    <div id="splash">
+      <div id="user-links">
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Titre</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+    <button>Une autre action</button>
+    <button>Une action en rapport</button>
+    </div>
+
+    <div id="extra-top-links">
+     <a href="#">Lien vers une page en rapport</a>
+     —
+     <a href="#">Autre lien</a>
+    </div>
+
+
+    <div id="users">
+     <p>
+      Une éventuelle colonne sur la droite, à utiliser pour les pages de
+      tableau pour lesquelles il faut une zone de recherche / filtre.
+     </p>
+   </div>
+
+   <div class="content">
+
+   <table class="main">
+    <thead>
+    <tr>
+     <th>Colonne 1</th>
+     <th>Colonne 2</th>
+     <th>Colonne 3</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr> <td>Bla bla bla</td> <td>Foo</td> <td>Bar</td> </tr>
+    <tr> <td>Bla bla bla</td> <td>Foo</td> <td>Bar</td> </tr>
+    <tr> <td>Bla bla bla</td> <td>Foo</td> <td>Bar</td> </tr>
+    <tr> <td>Bla bla bla</td> <td>Foo</td> <td>Bar</td> </tr>
+    <tr> <td>Bla bla bla</td> <td>Foo</td> <td>Bar</td> </tr>
+    </tbody>
+   </table>
+
+   <p>
+    Bla bla bla
+   </p>
+
+   <div class="frame">
+   <h3>Un bloc d'informations</h3>
+   <p>
+    Bonjour tout le monde.
+   </p>
+   <ul>
+    <li>Un résumé d'info <button class="blind">détails</button>
+     <ul>
+      <li>Bla bla bla</li>
+      <li>Bla bla bla</li>
+     </ul>
+    </li>
+   </ul>
+   </div> <!-- .frame -->
+
+    <div id="tabs">
+    <ul>
+     <li><a href="#tabs-hig-1">Premier onglet</a></li>
+     <li><a href="#tabs-hig-2">Second onglet</a></li>
+    </ul>
+    <div id="tabs-hig-1">
+     <p>
+      Hello world.
+     </p>
+    </div>
+    <div id="tabs-hig-2">
+     <p>
+      Lorem ipstum.
+     </p>
+    </div>
+   </div> <!-- #tabs -->
+
+   <p>Bla bla bla</p>
+
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="rdv" style="display: none;">
+   <form>
+   <p>
+   <label for="id_date">Date:</label>
+   <input id="id_date" class="date" name="date" value="5/7/2012"/>
+   </p>
+   <table><tr><td>
+   <p>
+    <label for="id_debut">Heure de début :</label>
+    <input id="id_debut" type="text" name="debut" maxlength="10"/>
+   </p>
+   </td><td>
+   <p>
+    <label for="id_fin">Heure de fin :</label>
+    <input id="id_fin" type="text" name="fin" maxlength="10"/>
+   </p>
+   </td></tr>
+
+   <tr>
+   <td>
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+   <td>
+   <h4>Patient</h4>
+   <input name="patient"/>
+   <a href="#">rechercher</a>
+
+   <h4>Type d'acte</h4>
+   <select>
+    <option>Analyse</option>
+    <option>Bla bla bla bla bla bla</option>
+   </select>
+   </td>
+   </tr>
+   </table>
+
+   <a class="button">Configurer la périodicité</a>
+
+   </form>
+  </div>
+
+
+  </body>
+</html>
