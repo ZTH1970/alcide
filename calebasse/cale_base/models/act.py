@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from calebasse import agenda
+from calebasse.agenda.models import Event
 
 class Act(models.Model):
 
@@ -31,7 +31,7 @@ class ActType(models.Model):
     name = models.CharField(max_length=200)
     billable = models.BooleanField(default=True)
 
-class ActEvent(agenda.models.Event):
+class ActEvent(Event):
     """ ActEvent is patient appointment special event
     """
 

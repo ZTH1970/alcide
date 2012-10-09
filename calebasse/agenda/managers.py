@@ -1,10 +1,17 @@
 
-from calebasse.agenda.models import Event, EventType
-from calebasse.cale_base.models import ActEvent
+from datetime import datetime
+
+from django.db import models
 
 from calebasse.agenda.conf import default
+from calebasse import agenda
 
-class Calendar(object):
+__all__ = (
+    'EventManager',
+    'OccurrenceManager',
+)
+
+class EventManager(object):
     """ This class allows you to manage events, appointment, ...
     """
 
@@ -48,8 +55,9 @@ class Calendar(object):
         Example:
             Look at calebasse.agenda.tests.EventTest (test_create_appointments method)
         """
+        from calebasse.cale_base.models import ActEvent
 
-        event_type, created = EventType.objects.get_or_create(
+        event_type, created = agenda.models.EventType.objects.get_or_create(
                 label="patient_appointment"
                 )
 
@@ -90,11 +98,11 @@ class Calendar(object):
         """
 
         if isinstance(event_type, str):
-            event_type, created = EventType.objects.get_or_create(
+            event_type, created = agenda.models.EventType.objects.get_or_create(
                 label=event_type
             )
 
-        event = Event.objects.create(
+        event = agenda.models.Event.objects.create(
                 title=title,
                 event_type=event_type
                 )
@@ -103,4 +111,44 @@ class Calendar(object):
                 start_time = start_datetime, end_time = end_datetime,
                 **rrule_params)
 
+
+class OccurrenceManager(models.Manager):
+
+    use_for_related_fields = True
+
+    class Meta:
+        app_label = 'agenda'
+
+    def daily_occurrences(self, date=None, participants=None):
+        '''
+        Returns a queryset of for instances that have any overlap with a 
+        particular day.
+
+        Args:
+            date: may be either a datetime.datetime, datetime.date object, or
+            ``None``. If ``None``, default to the current day.
+            participants: a list of CalebasseUser
+        '''
+        date = date or datetime.now()
+        start = datetime(date.year, date.month, date.day)
+        end = start.replace(hour=23, minute=59, second=59)
+        qs = self.filter(
+            models.Q(
+                start_time__gte=start,
+                start_time__lte=end,
+            ) |
+            models.Q(
+                end_time__gte=start,
+                end_time__lte=end,
+            ) |
+            models.Q(
+                start_time__lt=start,
+                end_time__gt=end,
+            )
+        )
+
+        if participants:
+            return qs.filter(event__participants__in=participants)
+        else:
+            return qs
 

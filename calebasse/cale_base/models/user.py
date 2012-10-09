@@ -2,8 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from calebasse.agenda.calendar import Calendar
 from calebasse.exceptions import CalebasseException
+from calebasse.agenda import managers
 from dateutil import rrule
 
 class CalebasseUser(models.Model):
@@ -49,8 +49,8 @@ class CalebasseUser(models.Model):
         else:
             raise CalebasseException("%s is not a valid weekday constants" % day)
 
-        cal = Calendar()
-        self.event = cal.create_event("work %s" % weekday,
+        ev_manager = managers.EventManager()
+        self.event = ev_manager.create_event("work %s" % weekday,
                 'work_event', services=services,
                 freq = rrule.WEEKLY, byweekday = weekday,
                 start_datetime = start_time, end_datetime = end_time,

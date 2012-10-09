@@ -9,14 +9,14 @@ from django.conf import settings
 
 from dateutil import rrule
 
-from conf import default
+from calebasse.agenda.conf import default
+from calebasse.agenda import managers
 
 __all__ = (
     'Note',
     'EventType',
     'Event',
     'Occurrence',
-    'create_event'
 )
 
 class Note(models.Model):
@@ -127,40 +127,6 @@ class Event(models.Model):
         return Occurrence.objects.daily_occurrences(dt=dt, event=self)
 
 
-class OccurrenceManager(models.Manager):
-
-    use_for_related_fields = True
-
-    def daily_occurrences(self, dt=None, event=None):
-        '''
-        Returns a queryset of for instances that have any overlap with a 
-        particular day.
-
-        * ``dt`` may be either a datetime.datetime, datetime.date object, or
-          ``None``. If ``None``, default to the current day.
-
-        * ``event`` can be an ``Event`` instance for further filtering.
-        '''
-        dt = dt or datetime.now()
-        start = datetime(dt.year, dt.month, dt.day)
-        end = start.replace(hour=23, minute=59, second=59)
-        qs = self.filter(
-            models.Q(
-                start_time__gte=start,
-                start_time__lte=end,
-            ) |
-            models.Q(
-                end_time__gte=start,
-                end_time__lte=end,
-            ) |
-            models.Q(
-                start_time__lt=start,
-                end_time__gt=end
-            )
-        )
-
-        return qs.filter(event=event) if event else qs
-
 
 class Occurrence(models.Model):
     '''
@@ -172,7 +138,7 @@ class Occurrence(models.Model):
     event = models.ForeignKey(Event, verbose_name=_('event'), editable=False)
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
-    objects = OccurrenceManager()
+    objects = managers.OccurrenceManager()
 
     class Meta:
         app_label = 'agenda'
