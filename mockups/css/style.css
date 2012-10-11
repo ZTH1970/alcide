@@ -913,3 +913,17 @@ table#activity tr td.hour {
 	font-size: 120%;
 	font-weight: bold;
 }
+
+#id_date,
+#id_debut,
+#id_duree {
+	width: 6em;
+}
+
+#rdv table {
+	width: 100%;
+}
+
+#rdv table td {
+	width: 30%;
+}

@@ -38,10 +38,16 @@
 			});
 		});
 		$('#agenda-date').datepicker();
-		$('.date').datepicker();
+		$('.date').datepicker({showOn: 'button'});
+		$('#add-intervenant-btn').click(function() {
+			var text = $(this).prev().val();
+			$('#intervenants ul').append('<li><input type="checkbox" value="' + text + '" checked="checked">' + text + '</input></li>');
+			$(this).prev().val('').focus();
+			return false;
+		});
 		$('#newrdv').click(function() {
 			$('#rdv').dialog({title: 'Nouveau rendez-vous',
-				  width: '500px',
+				  width: '800px',
 				  buttons: [ { text: "Fermer",
 					       click: function() { $(this).dialog("close"); } },
 					     { text: "Ajouter",
@@ -273,19 +279,20 @@
 
   <div id="rdv" style="display: none;">
    <form>
+   <table><tr><td>
    <p>
    <label for="id_date">Date:</label>
    <input id="id_date" class="date" name="date" value="5/7/2012"/>
    </p>
-   <table><tr><td>
+   </td><td>
    <p>
     <label for="id_debut">Heure de début :</label>
     <input id="id_debut" type="text" name="debut" maxlength="10"/>
    </p>
    </td><td>
    <p>
-    <label for="id_fin">Heure de fin :</label>
-    <input id="id_fin" type="text" name="fin" maxlength="10"/>
+    <label for="id_duree">Durée :</label>
+    <input id="id_duree" type="text" name="duree" maxlength="10"/>
    </p>
    </td></tr>
 
@@ -297,14 +304,18 @@
      <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
      <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
     </ul>
-    <a href="#">Ajouter</a><br/>
-    <a href="#">Tout le monde</a>
+    <input/><button id="add-intervenant-btn">➕</button>
+   <p><small>(champ avec autocomplétion)</small></p>
+    <!-- <a href="#">Tout le monde</a> -->
    </div>
    </td>
    <td>
    <h4>Patient</h4>
    <input name="patient"/>
-   <a href="#">rechercher</a>
+   <br/>
+   <p><small>(champ avec autocomplétion)</small></p>
+   </td>
+   <td>
 
    <h4>Type d'acte</h4>
    <select>
@@ -315,7 +326,8 @@
    </tr>
    </table>
 
-   <a class="button">Configurer la périodicité</a>
+   <hr/>
+   <button>Configurer la périodicité</button>
 
    </form>
   </div>
