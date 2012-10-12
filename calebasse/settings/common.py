@@ -133,6 +133,11 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'calebasse.agenda',
+    'calebasse.dossier',
+    'calebasse.acte',
+    'calebasse.facturation',
+    'calebasse.personnel',
+    'calebasse.ressources',
     'calebasse.cale_base',
 )
 
