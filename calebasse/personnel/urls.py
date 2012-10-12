@@ -1,0 +1,59 @@
+from django.conf.urls import patterns, url, include
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+
+from django.contrib.auth.models import User
+from models import Personnel, CongeAnnuel, Conge
+from forms import CreateUserForm, EditUserForm
+from forms import CreatePersonnelForm, EditPersonnelForm
+from forms import CreateCongeAnnuelForm, EditCongeAnnuelForm
+
+acces_patterns = patterns('',
+    url(r'^$', ListView.as_view(model=User)),
+    url(r'^nouveau/$', CreateView.as_view(model=User,
+        form_class=CreateUserForm,
+        template_name_suffix='_nouveau.html')),
+    url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=User,
+        form_class=EditUserForm,
+        template_name_suffix='_edit.html')),
+    url(r'^(?P<pk>\d+)/supprimer/$', DeleteView.as_view(model=User)),
+)
+
+
+personne_patterns = patterns('',
+    url(r'^$', ListView.as_view(model=Personnel)),
+    url(r'^nouveau/$', CreateView.as_view(model=Personnel,
+        form_class=CreatePersonnelForm,
+        template_name_suffix='_nouveau.html')),
+    url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=Personnel,
+        form_class=EditPersonnelForm,
+        template_name_suffix='_edit.html')),
+    url(r'^(?P<pk>\d+)/supprimer/$', DeleteView.as_view(model=Personnel)),
+)
+
+
+conges_annuels_patterns = patterns('',
+    url(r'^$', ListView.as_view(model=CongeAnnuel)),
+    url(r'^nouveau/$', CreateView.as_view(model=CongeAnnuel,
+        form_class=CreateCongeAnnuelForm,
+        template_name_suffix='_nouveau.html')),
+    url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=CongeAnnuel,
+        form_class=EditCongeAnnuelForm,
+        template_name_suffix='_edit.html')),
+    url(r'^(?P<pk>\d+)/supprimer/$', DeleteView.as_view(model=CongeAnnuel)),
+)
+
+
+conges_patterns = patterns('',
+    url(r'^$', ListView.as_view(model=Conge)),
+    url(r'^conges-annuels/', include(conges_annuels_patterns)),
+)
+
+
+urlpatterns = patterns('',
+    url(r'^$', TemplateView.as_view(template_name='personnel/index.html')),
+    url(r'^acces/', include(acces_patterns)),
+    url(r'^gestion/', include(personne_patterns)),
+    url(r'^conges/', include(personne_patterns)),
+    )
