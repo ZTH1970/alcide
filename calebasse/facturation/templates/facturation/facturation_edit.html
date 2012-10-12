@@ -1,0 +1,265 @@
+{% extends "calebasse/popup.html %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Facturation 123</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('#clore-btn').click(function() {
+			$('#clore-dlg').dialog({title: 'Clôre la facturation',
+				width: '300px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Valider",
+					       click: function() {
+                                                $(this).dialog("close");
+                                                $("#clore-btn").hide();
+                                                $("#valider-btn").show();
+                                                $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012");
+                                               } }]}
+			);
+			});
+
+		$('#valider-btn').click(function() {
+			$('#valider-dlg').dialog({title: 'Valider la facturation',
+				width: '300px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Valider",
+					       click: function() {
+                                                $(this).dialog("close");
+                                                $("#valider-btn").hide();
+                                                $('#teletrans-btn').show();
+                                                $('#facturation-contents').hide();
+                                                $('#facturation-validee').show();
+                                                $('#filtre-dossiers').hide();
+                                                $('#dossier-bouba').hide();
+                                                $('#pause-fac').hide();
+                                                $('.facturable').toggleClass('facturable');
+                                                $('.dossier ul li span').text('2 actes facturés');
+                                                $("#appbar h2").text("Facturation 123 - du 6 juillet au 29 août 2012 - validée");
+                                               } }]}
+			);
+			});
+
+                $('button.blind').next().hide();
+                $('button.blind').click(function() {
+                        $(this).next().toggle('blind');
+                });
+
+		$('#hide-dossiers-cb').click(function() {
+			$('#dossier-bouclier').toggle('fold');
+		});
+
+		$('.acte-btn').click(function() {
+			$('#acte-dlg').dialog({title: 'Acte',
+				  width: '500px',
+				  buttons: [ { text: "Annuler",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Enregistrer",
+					       click: function() { $(this).dialog("close"); } }
+					]}
+			);
+		});
+
+	});
+    </script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1><a href="accueil.html">APS 42</a></h1>
+      <span>Facturation - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-links">
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Facturation 123 - en cours depuis le 6 juillet 2012</h2>
+    <a href="facturation.html">Retourner à facturation</a>
+    <button id="clore-btn">Clôre cette facturation</button>
+    <button id="valider-btn" style="display: none;">Valider cette facturation</button>
+    <button id="teletrans-btn" style="display: none;">Télétransmission à l'assurance maladie</button>
+    </div>
+
+    <div id="export-compta">
+    </div>
+
+    <div id="facturation-contents">
+    <h3>Résumé</h3>
+    <ul>
+     <li>Actes facturables : 652
+      <ul>
+       <li>Actes facturés : 602
+        <ul>
+         <li>Dossiers concernés : 125</li>
+         <li>Nombre de factures : 305</li>
+        </ul></li>
+       <li>Actes non facturés : 50
+        <ul>
+         <li>Dossiers concernés : 12
+          <ul>
+           <li>Pause facturation : 7</li>
+           <li>Quota des actes pris en charge dépassé : 2</li>
+           <li>Prises en charge expirées : 2</li>
+           <li>Pas de prise en charge : 1</li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+    </ul>
+
+    </div> <!-- #facturation-contents -->
+
+
+    <div id="facturation-validee" style="display: none;">
+     <p>
+      <button>Export comptabilité</button>
+     </p>
+
+    <h3>Résumé</h3>
+      <ul>
+       <li>Actes facturés : 602
+        <ul>
+         <li>Dossiers concernés : 125</li>
+         <li>Nombre de factures : 305</li>
+        </ul></li>
+      </ul>
+
+    </div>
+
+
+   <div id="dossiers">
+    <h3>Dossiers concernés</h3>
+
+    <p id="filtre-dossiers">
+     <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers avec des actes non facturés</label></input>
+    </p>
+
+    <div id="dossiers-concernes">
+
+     <div class="frame dossier facturable">
+      <h3><a href="un-dossier.html">1234/8652 Clarisse Denice - 02/05/1999</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      <p>En diagnostic (6 actes) - 0 actes facturés</p>
+      </div>
+      <p id="pause-fac"><span class="hi-fact">Pause facturation (manuel - 28/08/2012)</span></p>
+      <ul>
+      <li><span>2 actes facturables</span> <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      </ul>
+     </div>
+
+     <div class="frame dossier facturable" id="dossier-bouba">
+      <h3><a href="un-dossier.html">5678/7854 Bouba Lourson - 06/11/2006</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      <p>En traitement (prise en charge 40 actes au 10/09/2011) (prolongation
+      10 actes au 5/06/2012) - 38 actes facturés</p>
+      </div>
+      <ul>
+      <li>2 actes facturables <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      <li><span class="hi-fact">2 actes facturables non pris en charge</span> <button class="blind">détails</button>
+       <ul>
+        <li>28/08/2012 - 8h00 - 45 min - Sylvain Mirouf - Analyse <button class="flat acte-btn">Modifier</button></li>
+        <li>31/08/2012 - 9h30 - 60 min - Bob Dilane - Entretien <button class="flat acte-btn">Modifier</button></li>
+       </ul>
+      </li>
+      </ul>
+     </div>
+
+     <div class="frame dossier" id="dossier-bouclier">
+      <h3><a href="un-dossier.html">9012/4567 Bouclier Guillaume - 05/12/2010</a></h3>
+      <div class="info">
+      <p>Caisse 8 CPAM Saint-Etienne 1 23 45 67 890 12345</p>
+      <p>En traitement (prise en charge 30 actes au 15/11/2011)
+      - 24 actes facturés</p>
+      </div>
+      <ul>
+      <li><span>2 actes facturables</span> <button class="blind">détails</button><ul><li>...</li><li></ul></li>
+      </ul>
+     </div>
+
+    </div>
+
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="clore-dlg" style="display: none;">
+   <form>
+   <p>
+    <label for="id_nom">Clôre la facturation 123 en date du :</label>
+    <input id="id_nom" type="text" name="nom" value="29/08/2012"/>
+   </p>
+   <p>
+    et commencer la facturation 124.
+   </p>
+   </form>
+  </div>
+
+  <div id="valider-dlg" style="display: none;">
+   <form>
+   <p>
+    Valider la facturation de 602 actes sur 305 factures pour 125 dossiers.
+   </p>
+   </form>
+  </div>
+
+
+  <div id="acte-dlg" style="display: none;">
+   <p>1234 Bob Leponge (Traitement)</p>
+   <p><select><option>(11) Ortophonie</option></select></p>
+   <p>8 août 2012 - 17:15 - 45 minutes</p>
+
+   <table>
+   <tr><td width="50%">
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <a href="#">Ajouter</a><br/>
+    <a href="#">Tout le monde</a>
+   </div>
+   </td>
+
+   <td width="50%">
+
+   <ul>
+    <li>Rendez-vous pris le 5 juillet 2012 à 10:36</li>
+    <li>Acte validé le 10 août 2012 à 9h10</li>
+    <li>En cours de facturation (123) <button class="flat">Acte perdu</button></li>
+   </ul>
+   </td>
+   </tr>
+   </table>
+
+   <br/>
+   <br/>
+   <textarea cols="50">Bla bla bla</textarea>
+
+  </div>
+
+
+  </body>
+</html>
