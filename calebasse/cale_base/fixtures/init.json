@@ -1,0 +1,48 @@
+[
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "admin", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": true, 
+      "is_staff": true, 
+      "last_login": "2012-10-12T16:15:37.306Z", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "pbkdf2_sha256$10000$xOHA5JSe957o$aY6RMvHjwJTOluyCTiVAv51UlYzxCASiAGbq9kV7WVE=", 
+      "email": "info@entrouvert.com", 
+      "date_joined": "2012-10-12T15:59:07Z"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "cale_base.service", 
+    "fields": {
+      "name": "CMPP"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "cale_base.service", 
+    "fields": {
+      "name": "CAMSP"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "cale_base.service", 
+    "fields": {
+      "name": "SESSAD DYS"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "cale_base.service", 
+    "fields": {
+      "name": "SESSAD TED"
+    }
+  }
+]
