@@ -1,64 +1,29 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8"/>
-    <title>APS42 — Gestion des personnes</title>
-    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
-    <script src="js/jquery-1.7.2.min.js"></script>
-    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
-    <script>
-    $(function() {
-	$('#tabs').tabs();
-    });
-    </script>
-  </head>
-  <body>
-  <div id="wrap-large">
-    <div id="header">
-      <h1><a href="accueil.html">APS 42</a></h1>
-      <span>Gestion des personnes - CMPP</span>
-    </div>
-    <div id="splash" class="cmpp">
-      <div id="user-links">
-        <a href="connexion.html">Déconnexion</a>
-      </div>
-    </div>
-    <div id="content">
+{% extends "calebasse/base.html" %}
 
-    <div id="appbar">
-    <h2>Gestion des personnes</h2>
-    <a href="accueil.html">Retourner à l'accueil</a>
-    </div>
+{% block header %}
+  {{ block.super }}
+  <span>Gestion des personnes - {{ service_name }}</span>
+{% endblock %}
 
+{% block appbar %}
+  <h2>Gestion des personnes</h2>
+  <a href="/">Retourner à l'accueil</a>
+{% endblock %}
+
+{% block content %}
     <h3>Personnel</h3>
     <ul>
-     <li><a href="acces.html">Accès</a></li>
+     <li><a href="acces/">Accès</a></li>
       <!-- gestion des accès à l'application, une liste de comptes + la
 	   possibilité de les attacher à un membre du personnel -->
-     <li><a href="admin-personnel.html">Administration du personnel</a></li>
-     <li><a href="conges.html">Congés</a></li>
-      <!-- affiche les congés de tout le monde -->
-      <!-- + la possibilité de définir les congés annuels -->
-      <!-- "elle se sert d'un tableau avec les congés de tout le monde pour
-	   savoir qui est présent sur le site dans les périodes creuses",
-	   "que personne ne soit seul" -->
+     <li><a href="gestion/">Administration du personnel</a></li>
+     <li><a href="conges/">Congés</a></li>
     </ul>
     <h3>Extérieurs</h3>
 
     <ul>
-     <li><a href="#">Intervenants extérieurs</a></li>
-     <li><a href="#">Médecins extérieurs</a></li>
-     <li><a href="#">Professeurs des écoles</a></li>
+     <li><a href="intervenants-exterieurs/">Intervenants extérieurs</a></li>
+     <li><a href="medecins-exterieurs/">Médecins extérieurs</a></li>
+     <li><a href="professeurs-des-ecoles/">Professeurs des écoles</a></li>
     </ul>
-
-    </div>
-
-    <div id="footer">
-        —
-    </div>
-  </div>
-
-
-  </body>
-</html>
+{% endblock %}
