@@ -1,0 +1,40 @@
+{% load url from future %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>{% block page-title %}APS42{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/style.css"/>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+  </head>
+  <body class="{% firstof service params.service %} {% block body-class %}{% endblock %}">
+  <div id="wrap-large">
+    <div id="header">
+      {% block header %}<h1><a href="/">APS 42</a></h1>{% endblock %}
+    </div>
+    <div id="splash" class="{{ service }}">
+      <div id="user-links">
+        {% block user-links %}
+        <a href="{% url 'logout' %}">Déconnexion</a>
+        {% endblock %}
+      </div>
+    </div>
+    <div id="content">
+
+      <div id="appbar">
+        {% block appbar %}
+        {% endblock %}
+      </div>
+      {% block content %}
+      {% endblock %}
+      </div>
+
+    <div id="footer">
+      {% block footer %}—{% endblock %}
+    </div>
+  </div>
+
+
+  </body>
+</html>
