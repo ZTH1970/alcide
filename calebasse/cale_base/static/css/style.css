@@ -117,15 +117,15 @@ div#wrap-large {
   top: -4px;
 }
 
-span.cmpp, #service-links a.cmpp, #splash.cmpp { background-color: #56D72B; }
-span.camsp, #service-links a.camsp, #splash.camsp { background-color: #D72B2F; }
-span.sessad-ted, #service-links a.sessad-ted, #splash.sessad-ted { background-color: #D72BBF; }
-span.sessad-sys, #service-links a.sessad-dys, #splash.sessad-dys { background-color: #5D91E5; }
+span.cmpp, #service-links a.cmpp, body.cmpp #splash { background-color: #56D72B; }
+span.camsp, #service-links a.camsp, body.camsp #splash { background-color: #D72B2F; }
+span.sessad-ted, #service-links a.sessad-ted, body.sessad-ted #splash { background-color: #D72BBF; }
+span.seesad-dys, #service-links a.sessad-dys, body.sessad-dys #splash { background-color: #5D91E5; }
 
-#splash.cmpp { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
-#splash.camsp { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }
-#splash.sessad-ted { background-image: url(../images/banner-purple.jpg); }
-#splash.sessad-dys { background-image: url(../images/sky-birds.jpg); }
+body.cmpp #splash { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
+body.camsp #splash { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }
+body.sessad-ted #splash { background-image: url(../images/banner-purple.jpg); }
+body.sessad-dys #splash { background-image: url(../images/sky-birds.jpg); }
 
 
 #service-links {
@@ -850,8 +850,8 @@ ul#apps li a:hover {
 	border: 1px solid #333;
 }
 
-li#calendar{ background-image: url(icon-calendar.png); }
-li#calendar:hover { background-image: url(icon-calendar-hover.png); }
+li#agenda a { background-image: url(icon-calendar.png); }
+li#agenda:hover a:hover { background-image: url(icon-calendar-hover.png); }
 
 li#personnes a { background-image: url(icon-personnes.png); }
 li#personnes a:hover { background-image: url(icon-personnes-hover.png); }

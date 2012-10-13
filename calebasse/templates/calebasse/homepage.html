@@ -1,0 +1,37 @@
+{% extends "calebasse/base.html" %}
+{% load url from future %}
+
+{% block page-title %}
+APS42 - Accueil
+{% endblock %}
+
+{% block header %}
+{{ block.super }}
+<span>{{service_name}}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Bienvenue</h2>
+{% endblock %}
+
+{% block content %}
+    <div id="user-info">
+      Votre précédente connexion était le 4 juillet 2012 à 8h05.
+      (<a href="{% url 'password_change' %}">changer de mot de passe</a>)
+    </div>
+
+    <div id="service-links">
+      {% for name,slug in services %}
+      <a class="{{ slug }}{% if slug == service %} active{% endif %}"
+        href="{% url 'homepage' service=slug %}">{{ name }}</a>
+      {% endfor %}
+    </div>
+
+    <ul id="apps">
+      {% for name, slug in applications %}
+        <li id="{{slug}}"><a href="/{{service}}/{{slug}}/">{{name}}</a></li>
+      {% endfor %}
+    </ul>
+
+    <br style="clear: both;"/>
+{% endblock %}
