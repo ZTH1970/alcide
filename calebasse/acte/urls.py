@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, url
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from calebasse.cbv import ListView, CreateView, DeleteView, UpdateView
 
 from models import Acte
 from forms import CreateActeForm, EditActeForm

@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url, include
-from django.views.generic.base import TemplateView
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from calebasse.cbv import (ListView, CreateView, DeleteView, UpdateView,
+        TemplateView)
 
 from django.contrib.auth.models import User
 from models import Personnel, CongeAnnuel, Conge
