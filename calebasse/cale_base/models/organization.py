@@ -9,7 +9,7 @@ class Place(models.Model):
     def __unicode__(self):
         return self.name
 
-    name = models.CharField(max_length=40, blank=Flase)
+    name = models.CharField(max_length=40, blank=False)
     address = models.CharField(max_length=120)
     address_complement = models.CharField(max_length=120, blank=True, null=True, default=None)
     zip_code = models.IntegerField(max_length=6)
@@ -23,7 +23,7 @@ class OrganizationAnnex(models.Model):
     def __unicode__(self):
         return self.name
 
-    name = models.CharField(max_length=40, blank=Flase)
+    name = models.CharField(max_length=40, blank=False)
     phone = models.CharField(max_length=30)
     fax = models.CharField(max_length=30)
     email = models.EmailField()
@@ -37,7 +37,7 @@ class Organization(models.Model):
     def __unicode__(self):
         return self.name
 
-    name = models.CharField(max_length=40, blank=Flase)
+    name = models.CharField(max_length=40, blank=False)
     phone = models.CharField(max_length=30)
     fax = models.CharField(max_length=30)
     email = models.EmailField()
