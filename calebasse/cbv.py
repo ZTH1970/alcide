@@ -15,11 +15,11 @@ class ServiceViewMixin(object):
 
     def dispatch(self, request, **kwargs):
         self.popup = request.GET.get('popup')
-        if 'service' in self.kwargs:
-            self.service = get_object_or_404(Service, slug=self.kwargs['service'])
-        if 'date' in self.kwargs:
+        if 'service' in kwargs:
+            self.service = get_object_or_404(Service, slug=kwargs['service'])
+        if 'date' in kwargs:
             try:
-                self.date = datetime.strptime(self.kwargs.get('date'),
+                self.date = datetime.strptime(kwargs.get('date'),
                         '%Y-%m-%d').date()
             except (TypeError, ValueError):
                 raise Http404
