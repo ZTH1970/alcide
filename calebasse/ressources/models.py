@@ -3,7 +3,15 @@
 from django.db import models
 from django.contrib.localflavor.fr.forms import FRPhoneNumberField, FRZipCodeField
 
+
+class ServiceLinkedManager(models.Manager):
+    def for_service(self, service, allow_global=True):
+        '''Allows service local and service global objects'''
+        return self.filter(models.Q(service=service)
+                |models.Q(service__isnull=allow_global))
+
 class ServiceLinkedModelAbstract(models.Model):
+    objects = ServiceLinkedManager()
     service = models.ForeignKey('Service', null=True, blank=True)
 
     class Meta:
