@@ -1,12 +1,12 @@
 from django.forms import ModelForm
 
-from models import Facturation
+from models import Facture
 
-class CreateFacturationForm(ModelForm):
+class CreateFactureForm(ModelForm):
     class Meta:
-        model = Facturation
+        model = Facture
 
 
-class EditFacturationForm(ModelForm):
+class EditFactureForm(ModelForm):
     class Meta:
-        model = Facturation
+        model = Facture
