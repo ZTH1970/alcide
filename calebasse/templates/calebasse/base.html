@@ -8,8 +8,9 @@
     <script src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/jquery-ui-1.8.21.custom.min.js"></script>
   </head>
-  <body class="{% firstof service params.service %} {% block body-class %}{% endblock %}">
+  <body class="{% firstof service params.service %} {% block body-class %}{% endblock %}{% if popup %} popup{% endif %}">
   <div id="wrap-large">
+    {% if not popup %}
     <div id="header">
       {% block header %}<h1><a href="/">APS 42</a></h1>{% endblock %}
     </div>
@@ -20,6 +21,7 @@
         {% endblock %}
       </div>
     </div>
+    {% endif %}
     <div id="content">
 
       <div id="appbar">
@@ -29,10 +31,11 @@
       {% block content %}
       {% endblock %}
       </div>
-
+    {% if not popup %}
     <div id="footer">
       {% block footer %}Logiciel Calebasse — Copyright © Entr'ouvert{% endblock %}
     </div>
+    {% endif %}
   </div>
 
 

@@ -7,6 +7,8 @@ from views import SERVICES_MAP
 class ServiceViewMixin(object):
     def get_context_data(self, **kwargs):
         context = super(ServiceViewMixin, self).get_context_data(**kwargs)
+        if self.request.GET.get('popup'):
+            context['popup'] = True
         context['service'] = self.kwargs.get('service')
         context['service_name'] = SERVICES_MAP.get(context['service'])
         return context
