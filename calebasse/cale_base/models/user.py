@@ -23,7 +23,7 @@ class CalebasseUser(models.Model):
             weekday (str): weekday constants (MO, TU, etc)
             start_date (datetime): start time
             end_date (datetime): end time
-            services (list): list of cale_base.models.Service objects
+            services (list): list of calebasse.ressources.models.Service objects
 
         Returns:
             Nothing

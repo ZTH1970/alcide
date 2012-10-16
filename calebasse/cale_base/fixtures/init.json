@@ -16,33 +16,5 @@
       "email": "info@entrouvert.com", 
       "date_joined": "2012-10-12T15:59:07Z"
     }
-  }, 
-  {
-    "pk": 1, 
-    "model": "cale_base.service", 
-    "fields": {
-      "name": "CMPP"
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "cale_base.service", 
-    "fields": {
-      "name": "CAMSP"
-    }
-  }, 
-  {
-    "pk": 3, 
-    "model": "cale_base.service", 
-    "fields": {
-      "name": "SESSAD DYS"
-    }
-  }, 
-  {
-    "pk": 4, 
-    "model": "cale_base.service", 
-    "fields": {
-      "name": "SESSAD TED"
-    }
   }
 ]

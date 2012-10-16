@@ -27,7 +27,7 @@ class OrganizationAnnex(models.Model):
     phone = models.CharField(max_length=30)
     fax = models.CharField(max_length=30)
     email = models.EmailField()
-    services = models.ForeignKey('Service')
+    services = models.ForeignKey('ressources.Service')
 
 class Organization(models.Model):
 
@@ -41,6 +41,6 @@ class Organization(models.Model):
     phone = models.CharField(max_length=30)
     fax = models.CharField(max_length=30)
     email = models.EmailField()
-    services = models.ForeignKey('Service')
+    services = models.ForeignKey('ressources.Service')
     # TODO: add this fields : finess, suite, dm, dpa, genre, categorie, statut_juridique, mft, mt, dmt
 
