@@ -81,7 +81,7 @@ class TarifDesSeance(models.Model):
         verbose_name_plural = u'Tarifs des séances'
 
 
-class Typesctes(models.Model):
+class TypeActes(models.Model):
     class Meta:
         verbose_name = u'Type d\'actes'
         verbose_name_plural = u'Types d\'actes'
