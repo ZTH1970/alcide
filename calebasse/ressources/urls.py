@@ -5,7 +5,7 @@ from calebasse.cbv import ListView, CreateView, DeleteView, UpdateView
 from models import (AnnexeEtablissement, CaisseAssuranceMaladie,
         CompagnieDeTransport, CodeCFTMEA, CodeDeNonFacturation, Etablissement,
         LieuDeScolarisation, MotifInscription, Nationalite, Profession, Salle,
-        TarifDesSeance, Typesctes, TypeAutoriteParentale, TypeDeConseilleur,
+        TarifDesSeance, TypeActes, TypeAutoriteParentale, TypeDeConseilleur,
         TypeDeGardesParentales, TypeDeSeances, TypeDeSituationFamiliale,
         TypeDeTransport)
 
@@ -227,18 +227,18 @@ tarif_des_seances_patterns = patterns('',
 
 type_actes_patterns = patterns('',
     url(r'^$',
-        ListView.as_view(model=Typesctes),
+        ListView.as_view(model=TypeActes),
         name='type-actes'),
     url(r'^nouveau/$',
-        CreateView.as_view(model=Typesctes,
+        CreateView.as_view(model=TypeActes,
         template_name_suffix='_default_nouveau.html'),
         name='type-actes-nouveau'),
     url(r'^(?P<pk>\d+)/$',
-        UpdateView.as_view(model=Typesctes,
+        UpdateView.as_view(model=TypeActes,
         template_name_suffix='_edit.html'),
         name='type-actes-edit'),
     url(r'^(?P<pk>\d+)/supprimer/$',
-        DeleteView.as_view(model=Typesctes),
+        DeleteView.as_view(model=TypeActes),
         name='type-actes-supprimer'),
 )
 
