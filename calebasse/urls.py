@@ -7,10 +7,10 @@ admin.autodiscover()
 service_patterns = patterns('',
     url(r'^$', 'calebasse.views.homepage', name='homepage'),
     url(r'^agenda/', include('calebasse.agenda.urls')),
-    url(r'^dossiers/', include('calebasse.dossier.urls')),
-    url(r'^actes/', include('calebasse.acte.urls')),
+    url(r'^dossiers/', include('calebasse.dossiers.urls')),
+    url(r'^actes/', include('calebasse.actes.urls')),
     url(r'^facturation/', include('calebasse.facturation.urls')),
-    url(r'^personnes/', include('calebasse.personnel.urls')),
+    url(r'^personnes/', include('calebasse.personnes.urls')),
     url(r'^ressources/', include('calebasse.ressources.urls')),
 )
 

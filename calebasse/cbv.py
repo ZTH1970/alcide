@@ -3,25 +3,41 @@ from dateutil.relativedelta import relativedelta
 
 from django.views.generic import list as list_cbv, edit, base # ListView
 # from django.views.generic.edit import # CreateView, DeleteView, UpdateView
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
-from views import SERVICES_MAP
-
+from calebasse.ressources.models import Service
 
 class ServiceViewMixin(object):
+    service = None
+    date = None
+    popup = False
+
+    def dispatch(self, request, **kwargs):
+        self.popup = request.GET.get('popup')
+        if 'service' in self.kwargs:
+            self.service = get_object_or_404(Service, slug=self.kwargs['service'])
+        if 'date' in self.kwargs:
+            try:
+                self.date = datetime.strptime(self.kwargs.get('date'),
+                        '%Y-%m-%d').date()
+            except (TypeError, ValueError):
+                raise Http404
+        return super(ServiceViewMixin, self).dispatch(request, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(ServiceViewMixin, self).get_context_data(**kwargs)
-        if self.request.GET.get('popup'):
-            context['popup'] = True
-        context['service'] = self.kwargs.get('service')
-        context['service_name'] = SERVICES_MAP.get(context['service'])
-        if 'date' in self.kwargs:
-            day = datetime.strptime(self.kwargs.get('date'),
-                    '%Y-%m-%d').date()
-            context['date'] = day
-            context['previous_day'] = day + relativedelta(days=-1)
-            context['next_day'] = day + relativedelta(days=1)
-            context['previous_month'] = day + relativedelta(months=-1)
-            context['next_month'] = day + relativedelta(months=1)
+        context['popup'] = self.popup
+        if self.service is not None:
+            context['service'] = self.service.slug
+            context['service_name'] = self.service.name
+
+        if self.date is not None:
+            context['date'] = self.date
+            context['previous_day'] = self.date + relativedelta(days=-1)
+            context['next_day'] = self.date + relativedelta(days=1)
+            context['previous_month'] = self.date + relativedelta(months=-1)
+            context['next_month'] = self.date + relativedelta(months=1)
         return context
 
 class TemplateView(ServiceViewMixin, base.TemplateView):

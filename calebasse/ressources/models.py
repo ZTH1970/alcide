@@ -1,17 +1,48 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.contrib.localflavor.fr.forms import FRPhoneNumberField, FRZipCodeField
 
-class AnnexeEtablissement(models.Model):
+class ServiceLinkedModelAbstract(models.Model):
+    service = models.ForeignKey('Service', null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+class AnnexeEtablissement(ServiceLinkedModelAbstract):
     class Meta:
         verbose_name = u'Annexe d\'établissement'
         verbose_name_plural = u'Annexes d\'établissement'
 
+    def __unicode__(self):
+        return self.name
+
+    name = models.CharField(max_length=40, blank=False)
+    phone = models.CharField(max_length=30)
+    fax = models.CharField(max_length=30)
+    email = models.EmailField()
 
 class CaisseAssuranceMaladie(models.Model):
     class Meta:
         verbose_name = u'Caisse d\'assurances maladie'
         verbose_name_plural = u'Caisses d\'assurances maladie'
+
+    def __unicode__(self):
+        return self.name
+
+    name = models.CharField(max_length=80)
+    abbreviation = models.CharField(max_length=8)
+    active = models.BooleanField(default=True)
+    address = models.CharField(max_length=120)
+    address_complement = models.CharField(max_length=120, blank=True,
+            null=True, default=None)
+    zip_code = models.IntegerField(max_length=8)
+    city = models.CharField(max_length=80)
+    phone = models.CharField(max_length=30)
+    fax = models.CharField(max_length=30)
+    email = models.EmailField()
+    accounting_number = models.CharField(max_length=30)
+    correspondant = models.CharField(max_length=80)
 
 
 class CompagnieDeTransport(models.Model):
@@ -32,16 +63,38 @@ class CodeDeNonFacturation(models.Model):
         verbose_name_plural = u'Codes de non-facturation'
 
 
-class Etablissement(models.Model):
+class Etablissement(ServiceLinkedModelAbstract):
     class Meta:
         verbose_name = u'Établissement'
         verbose_name_plural = u'Établissements'
 
+    def __unicode__(self):
+        return self.name
+
+    name = models.CharField(max_length=40, blank=False)
+    phone = models.CharField(max_length=30)
+    fax = models.CharField(max_length=30)
+    email = models.EmailField()
+    # TODO: add this fields : finess, suite, dm, dpa, genre, categorie, statut_juridique, mft, mt, dmt
 
 class LieuDeScolarisation(models.Model):
     class Meta:
         verbose_name = u'Lieu de scolarisation'
         verbose_name_plural = u'Lieux de scolarisation'
+
+    def __unicode__(self):
+        return self.name
+
+    name = models.CharField(max_length=70, blank=False)
+    description = models.TextField()
+    address = models.CharField(max_length=120)
+    address_complement = models.CharField(max_length=120, blank=True, null=True, default=None)
+    zip_code = FRZipCodeField()
+    city = models.CharField(max_length=80)
+    phone = FRPhoneNumberField()
+    fax = models.CharField(max_length=30)
+    email = models.EmailField()
+    director_name = models.CharField(max_length=70)
 
 
 class MotifInscription(models.Model):
@@ -68,6 +121,8 @@ class Salle(models.Model):
         verbose_name_plural = u'Salles'
 
 class Service(models.Model):
+    admin_only = True
+
     name = models.CharField(max_length=50)
     slug = models.SlugField()
 
@@ -82,6 +137,9 @@ class TarifDesSeance(models.Model):
 
 
 class TypeActes(models.Model):
+    name = models.CharField(max_length=200)
+    billable = models.BooleanField(default=True)
+
     class Meta:
         verbose_name = u'Type d\'actes'
         verbose_name_plural = u'Types d\'actes'
@@ -121,5 +179,3 @@ class TypeDeTransport(models.Model):
     class Meta:
         verbose_name = u'Type de transport'
         verbose_name_plural = u'Types de transports'
-
-
