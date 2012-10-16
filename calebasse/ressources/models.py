@@ -67,6 +67,13 @@ class Salle(models.Model):
         verbose_name = u'Salles'
         verbose_name_plural = u'Salles'
 
+class Service(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField()
+
+    class Meta:
+        verbose_name = u'Service'
+        verbose_name_plural = u'Services'
 
 class TarifDesSeance(models.Model):
     class Meta:
