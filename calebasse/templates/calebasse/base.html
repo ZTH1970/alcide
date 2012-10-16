@@ -5,8 +5,12 @@
     <meta charset="utf-8"/>
     <title>{% block page-title %}APS42{% endblock %}</title>
     <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/smoothness/jquery-ui-1.8.21.custom.css"/>
     <script src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="{{ STATIC_URL }}development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    {% block extrascripts %}
+    {% endblock %}
   </head>
   <body class="{% firstof service params.service %} {% block body-class %}{% endblock %}{% if popup %} popup{% endif %}">
   <div id="wrap-large">
@@ -28,9 +32,11 @@
         {% block appbar %}
         {% endblock %}
       </div>
+      {% block beforecontent %}
+      {% endblock %}
       {% block content %}
       {% endblock %}
-      </div>
+    </div>
     {% if not popup %}
     <div id="footer">
       {% block footer %}Logiciel Calebasse — Copyright © Entr'ouvert{% endblock %}
@@ -38,6 +44,7 @@
     {% endif %}
   </div>
 
-
+  {% block dialogs %}
+  {% endblock %}
   </body>
 </html>
