@@ -1,7 +1,337 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Agenda</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
 
-{% block title %}Agenda{% endblock %}
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+	$(function() {
+		$('#tabs').tabs();
+		$('div.agenda > div').accordion({active: false, autoHeight: false});
+		$('#sandy-kilo-item').click(function() {
+			$(this).toggleClass('active');
+			$(this).find('span').toggle();
+			$('.sandy').toggle();
+			if ($(this).hasClass('active')) $('#tabs').tabs('select', 0);
+		});
+		$('#bob-leponge-item').click(function() {
+			$(this).toggleClass('active');
+			$(this).find('span').toggle();
+			$('.bob').toggle();
+			if ($(this).hasClass('active')) $('#tabs').tabs('select', 1);
+		});
+		$('#sandy-kilo-item').click();
+		$('#bob-leponge-item').click();
+		$('#filtre input').keyup(function() {
+			var filtre = $(this).val();
+			$('#users li').each(function() {
+				if ($(this).attr('id').match(filtre)) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			});
+		});
+		$('#agenda-date').datepicker();
+		$('.date').datepicker({showOn: 'button'});
+		$('#add-intervenant-btn').click(function() {
+			var text = $(this).prev().val();
+			$('#intervenants ul').append('<li><input type="checkbox" value="' + text + '" checked="checked">' + text + '</input></li>');
+			$(this).prev().val('').focus();
+			return false;
+		});
+		$('#newrdv').click(function() {
+			$('#rdv').dialog({title: 'Nouveau rendez-vous',
+				  width: '800px',
+				  buttons: [ { text: "Fermer",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() { $(this).dialog("close"); } }]}
+			);
+			});
+	});
+	</script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1><a href="accueil.html">APS 42</a></h1>
+      <span>Agenda - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-links">
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+    </div>
+    <div id="content">
 
-{% block content %}
-{{ content }}
-{% endblock %}
+    <div id="appbar">
+    <h2>Agenda</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+    <button>Nouvel événement (autre)</button>
+    <button id="newrdv">Nouveau rendez-vous patient</button>
+    </div>
+
+    <div id="extra-top-links">
+     <a href="activite-service.html">Activité du service</a>
+     —
+     <a href="validation-des-actes.html">Validation des actes</a>
+     —
+     <a href="#">Rendez-vous périodiques</a>
+    </div>
+
+
+    <div id="users">
+    <div id="filtre">
+     <input type="text"/>
+    </div>
+    <dl>
+     <dt>Assistants</dt>
+     <dd><ul>
+       <li id="andika-triwidata-item">Andika Triwidada</li>
+       <li id="paolo-bacchilega">Paolo Bacchilega</li>
+     </ul></dd>
+     <dt>Orthophonistes</dt>
+     <dd><ul>
+       <li id="sandy-kilo-item" class="active">Sandy Kilo <span title="cliquer pour déselectionner">(-)</span></li>
+       <li id="bob-leponge-item" class="active">Bob Léponge <span title="cliquer pour déselectionner">(-)</span></li>
+       <li id="pol-lepoulpe-item">Pol Lepoulpe</li>
+     </ul></dd>
+   </dl>
+   </div>
+
+   <div class="content">
+
+   <div id="datesel">
+   <a href="#">««</a> <a href="#">«</a>
+   <!-- <span>Jeudi 5 juillet 2012</span> -->
+   <input id="agenda-date" value="Jeudi 5 juillet 2012"/>
+   <a href="#">»</a> <a href="#">»»</a>
+   </div>
+
+   <table>
+    <tbody>
+    <tr>
+     <td id="dispos">
+      Disponibilités
+      <table>
+      <tr class="hour-mark"><td rowspan="4">08:00</td> <td class="sandy free"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">09:00</td> <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">10:00</td> <td class="sandy busy"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy busy"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy busy"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy busy"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">11:00</td> <td class="sandy busy"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy busy"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy busy"></td> <td class="bob busy"></td></tr>
+      <tr>   <td class="sandy busy"></td> <td class="bob busy"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">12:00</td> <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy free"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">13:00</td> <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">14:00</td> <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">15:00</td> <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">16:00</td> <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">17:00</td> <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob free"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">18:00</td> <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">19:00</td> <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      <tr>   <td class="sandy away"></td> <td class="bob away"></td></tr>
+      </table>
+     </td>
+
+     <td id="agendas">
+       <div id="tabs">
+       <ul>
+         <li><a href="#tabs-agenda-1" class="sandy">Sandy Kilo</a></li>
+         <li><a href="#tabs-agenda-2" class="bob">Bob Léponge</a></li>
+       </ul>
+       <div id="tabs-agenda-1" class="agenda sandy">
+       <a class="print" href="#">Imprimer</a>
+       <div>
+        <h3 class="info"><span class="hour">08:00</span> — Arrivée</h3>
+        <div></div>
+        <h3 class="free"><span class="hour">08:00</span> — 120m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="busy-elsewhere convocation"><span class="hour">10:00</span> — 45m — John Doe — SK
+         <span class="right">
+         <span class="box camsp" title="CAMSP"></span>
+         <img title="Une convocation a été envoyée" src="images/emblem-mail.png"/>
+         <img title="Un commentaire existe" src="images/emblem-documents.png"/>
+         <button>✍</button>
+         <button>➖</button>
+         </span>
+        </h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+          <a href="#">Dossier patient</a> -
+          <a href="#">Prochains rendez-vous</a> -
+          <a href="#">Convoquer patient</a>
+        </div>
+        <h3 class="busy-here"><span class="hour">10:45</span> — 45m — Jack Itchan — SK
+         <span class="right">
+         <img title="Un commentaire existe" src="images/emblem-documents.png"/>
+         <button>✍</button>
+         <button>➖</button>
+         </span>
+        </h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+          <a href="#">Dossier patient</a> -
+          <a href="#">Prochains rendez-vous</a> -
+          <a href="#">Convoquer patient</a>
+        </div>
+        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+        </div>
+        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
+        <div></div>
+        <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
+        <div></div>
+       </div>
+       </div>
+
+       <div id="tabs-agenda-2" class="agenda bob">
+       <a class="print" href="#">Imprimer</a>
+       <div>
+        <h3 class="info"><span class="hour">08:30</span> — Arrivée</h3>
+        <div></div>
+        <h3 class="free"><span class="hour">08:30</span> — 180m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+        </div>
+        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
+        <div></div>
+        <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
+        <div></div>
+        <h3 class="info"><span class="hour">13:00</span> — Arrivée</h3>
+        <div></div>
+        <h3 class="free"><span class="hour">13:00</span> — 270m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="info"><span class="hour">17:30</span> — Départ</h3>
+        <div></div>
+       </div>
+
+       </div>
+
+       </div>
+     </td>
+    </tr>
+    </tbody>
+   </table>
+
+
+
+   </div>
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="rdv" style="display: none;">
+   <form>
+   <table><tr><td>
+   <p>
+   <label for="id_date">Date:</label>
+   <input id="id_date" class="date" name="date" value="5/7/2012"/>
+   </p>
+   </td><td>
+   <p>
+    <label for="id_debut">Heure de début :</label>
+    <input id="id_debut" type="text" name="debut" maxlength="10"/>
+   </p>
+   </td><td>
+   <p>
+    <label for="id_duree">Durée :</label>
+    <input id="id_duree" type="text" name="duree" maxlength="10"/>
+   </p>
+   </td></tr>
+
+   <tr>
+   <td>
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <input/><button id="add-intervenant-btn">➕</button>
+   <p><small>(champ avec autocomplétion)</small></p>
+    <!-- <a href="#">Tout le monde</a> -->
+   </div>
+   </td>
+   <td>
+   <h4>Patient</h4>
+   <input name="patient"/>
+   <br/>
+   <p><small>(champ avec autocomplétion)</small></p>
+   </td>
+   <td>
+
+   <h4>Type d'acte</h4>
+   <select>
+    <option>Analyse</option>
+    <option>Bla bla bla bla bla bla</option>
+   </select>
+   </td>
+   </tr>
+   </table>
+
+   <hr/>
+   <button>Configurer la périodicité</button>
+
+   </form>
+  </div>
+
+
+  </body>
+</html>

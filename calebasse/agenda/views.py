@@ -1,18 +1,8 @@
+import datetime
 
-from calebasse import agenda
-from dateutil import rrule
-from django.contrib.auth.models import User
-from django.template import Context, Template
-from django.shortcuts import render
+from django.shortcuts import redirect
 
-    #owners=User.objects.all()
-    #agenda.models.create_event('rdv 42', ('rdv', 'Rendez-vous'),
-    #        owners=owners, freq=rrule.MONTHLY)
-
-def index(request, *args, **kwargs):
-
-    context = {}
-    template='index.html'
-    return render(request, template, context)
-
-
+def redirect_today(request, service):
+    '''If not date is given we redirect on the agenda for today'''
+    return redirect('agenda', date=datetime.date.today().strftime('%Y-%m-%d'),
+            service=service)

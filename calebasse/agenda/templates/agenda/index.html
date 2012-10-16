@@ -1,0 +1,329 @@
+{% extends "calebasse/base.html" %}
+{% block extrascripts %}
+    <script>
+  $(function() {
+    $('#tabs').tabs();
+
+    $('div.agenda > div').accordion({active: false, autoHeight: false});
+
+    $('.person-item').on('click', function() {
+      $(this).toggleClass('active');
+      var $target = $($(this).data('target'));
+      $target.toggle();
+      // var selected = $('#tabs').tabs('option', 'selected');
+      // var length = $('#tabs').tabs('length');
+      // alert($('.tabs').index($target.filter('.tabs')));
+      if ($target.is(':visible')) {
+        $target.click();
+      }
+    });
+
+    /* Gestion du filtre sur les utilisateurs */
+		$('#filtre input').keyup(function() {
+			var filtre = $(this).val();
+      if (filtre) {
+        $('#users li').each(function() {
+          if ($(this).text().match(filtre)) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      } else {
+        $('#users li').show();
+      }
+
+		});
+		$('#agenda-date').datepicker();
+		$('.date').datepicker({showOn: 'button'});
+		$('#add-intervenant-btn').click(function() {
+			var text = $(this).prev().val();
+			$('#intervenants ul').append('<li><input type="checkbox" value="' + text + '" checked="checked">' + text + '</input></li>');
+			$(this).prev().val('').focus();
+			return false;
+		});
+		$('#newrdv').click(function() {
+			$('#rdv').dialog({title: 'Nouveau rendez-vous',
+				  width: '800px',
+				  buttons: [ { text: "Fermer",
+					       click: function() { $(this).dialog("close"); } },
+					     { text: "Ajouter",
+					       click: function() { $(this).dialog("close"); } }]}
+			);
+			});
+	});
+	</script>
+  <style>
+    .person-item span { display: none; }
+    .person-item.active span { display: inline; }
+    #agenda-date { width: 20em; }
+  </style>
+{% endblock %}
+
+{% block title %}{{ block.super }} - Agenda {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Agenda - {{ service_name }}</spam>
+{% endblock %}
+
+{% block appbar %}
+    <h2>Agenda</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+    <button>Nouvel événement (autre)</button>
+    <button id="newrdv">Nouveau rendez-vous patient</button>
+{% endblock %}
+
+{% block beforecontent %}
+    <div id="extra-top-links">
+     <a href="activite-du-service">Activité du service</a>
+     —
+     <a href="validation-des-actes">Validation des actes</a>
+     —
+     <a href="rendez-vous-periodiques">Rendez-vous périodiques</a>
+    </div>
+
+
+    <div id="users">
+    <div id="filtre">
+     <input type="text"/>
+    </div>
+    <dl>
+     <dt>Assistants</dt>
+     <dd><ul>
+       <li class="person-item" data-target=".andika-triwidada.agenda">Andika Triwidada</li>
+       <li class="person-item" data-target=".andika-triwidada.agenda">Paolo Bacchilega</li>
+     </ul></dd>
+     <dt>Orthophonistes</dt>
+     <dd><ul>
+       <li class="person-item active" data-target=".sandy-kilo.agenda">Sandy Kilo <span title="cliquer pour déselectionner">(-)</span></li>
+       <li class="person-item active" data-target=".bob-leponge.agenda">Bob Léponge <span title="cliquer pour déselectionner">(-)</span></li>
+       <li class="person-item active">Pol Lepoulpe</li>
+     </ul></dd>
+   </dl>
+ </div>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+   <div id="datesel">
+     <a href="../{{ previous_month|date:"SHORT_DATE_FORMAT"}}">««</a>
+     <a href="../{{ previous_day|date:"SHORT_DATE_FORMAT"}}">«</a>
+   <!-- <span>Jeudi 5 juillet 2012</span> -->
+   <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
+   <a href="../{{ next_day|date:"SHORT_DATE_FORMAT"}}">»</a>
+   <a href="../{{ next_month|date:"SHORT_DATE_FORMAT"}}">»»</a>
+   </div>
+
+   <table>
+    <tbody>
+    <tr>
+     <td id="dispos">
+      Disponibilités
+      <table>
+      <tr class="hour-mark"><td rowspan="4">08:00</td> <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">09:00</td> <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">10:00</td> <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">11:00</td> <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda busy"></td></tr>
+      <tr>   <td class="sandy-kilo agenda busy"></td> <td class="bob-leponge agenda busy"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">12:00</td> <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda free"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">13:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">14:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">15:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">16:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">17:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda free"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">18:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr class="hour-mark"><td rowspan="4">19:00</td> <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      <tr>   <td class="sandy-kilo agenda away"></td> <td class="bob-leponge agenda away"></td></tr>
+      </table>
+     </td>
+
+     <td id="agendas">
+       <div id="tabs">
+       <ul>
+         <li><a href="#tabs-sandy-kilo" class="sandy-kilo agenda">Sandy Kilo</a></li>
+         <li><a href="#tabs-bob-leponge" class="bob-leponge agenda">Bob Léponge</a></li>
+       </ul>
+       <div id="tabs-sandy-kilo" class="tabs agenda sandy-kilo agenda">
+       <a class="print" href="#">Imprimer</a>
+       <div>
+        <h3 class="info"><span class="hour">08:00</span> — Arrivée</h3>
+        <div></div>
+        <h3 class="free"><span class="hour">08:00</span> — 120m
+        </h3>
+        <div><button class='booking' data-hour="08:00">Prendre un rendez-vous</button></div>
+        <h3 class="busy-elsewhere convocation"><span class="hour">10:00</span> — 45m — John Doe — SK
+         <span class="right">
+         <span class="box camsp" title="CAMSP"></span>
+         <img title="Une convocation a été envoyée" src="{{ STATIC_URL }}images/emblem-mail.png"/>
+         <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png"/>
+         <button>✍</button>
+         <button>➖</button>
+         </span>
+        </h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+          <a href="#">Dossier patient</a> -
+          <a href="#">Prochains rendez-vous</a> -
+          <a href="#">Convoquer patient</a>
+        </div>
+        <h3 class="busy-here"><span class="hour">10:45</span> — 45m — Jack Itchan — SK
+         <span class="right">
+           <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png"/>
+         <button>✍</button>
+         <button>➖</button>
+         </span>
+        </h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+          <a href="#">Dossier patient</a> -
+          <a href="#">Prochains rendez-vous</a> -
+          <a href="#">Convoquer patient</a>
+        </div>
+        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+        </div>
+        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
+        <div></div>
+        <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
+        <div></div>
+       </div>
+       </div>
+
+       <div id="tabs-bob-leponge" class="tabs agenda bob-leponge">
+       <a class="print" href="#">Imprimer</a>
+       <div>
+        <h3 class="info"><span class="hour">08:30</span> — Arrivée</h3>
+        <div></div>
+        <h3 class="free"><span class="hour">08:30</span> — 180m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
+        <div>
+          <div class="textedit">
+           <textarea>bla bla bla</textarea>
+           <button>✔</button>
+          </div>
+        </div>
+        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
+        <div></div>
+        <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
+        <div></div>
+        <h3 class="info"><span class="hour">13:00</span> — Arrivée</h3>
+        <div></div>
+        <h3 class="free"><span class="hour">13:00</span> — 270m</h3>
+        <div><button>Prendre un rendez-vous</button></div>
+        <h3 class="info"><span class="hour">17:30</span> — Départ</h3>
+        <div></div>
+       </div>
+
+       </div>
+
+       </div>
+     </td>
+    </tr>
+    </tbody>
+   </table>
+ </div>
+
+{% endblock %}
+
+{% block dialogs %}
+  <div id="rdv" style="display: none;">
+   <form>
+   <table><tr><td>
+   <p>
+   <label for="id_date">Date:</label>
+   <input id="id_date" class="date" name="date" value="5/7/2012"/>
+   </p>
+   </td><td>
+   <p>
+    <label for="id_debut">Heure de début :</label>
+    <input id="id_debut" type="text" name="debut" maxlength="10"/>
+   </p>
+   </td><td>
+   <p>
+    <label for="id_duree">Durée :</label>
+    <input id="id_duree" type="text" name="duree" maxlength="10"/>
+   </p>
+   </td></tr>
+
+   <tr>
+   <td>
+   <h4>Intervenants</h4>
+   <div id="intervenants">
+    <ul>
+     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+    </ul>
+    <input/><button id="add-intervenant-btn">➕</button>
+   <p><small>(champ avec autocomplétion)</small></p>
+    <!-- <a href="#">Tout le monde</a> -->
+   </div>
+   </td>
+   <td>
+   <h4>Patient</h4>
+   <input name="patient"/>
+   <br/>
+   <p><small>(champ avec autocomplétion)</small></p>
+   </td>
+   <td>
+
+   <h4>Type d'acte</h4>
+   <select>
+    <option>Analyse</option>
+    <option>Bla bla bla bla bla bla</option>
+   </select>
+   </td>
+   </tr>
+   </table>
+
+   <hr/>
+   <button>Configurer la périodicité</button>
+
+   </form>
+ </div>
+{% endblock %}
