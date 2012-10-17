@@ -1,9 +1,11 @@
 
 from datetime import datetime
+from dateutil import rrule
 
 from django.db import models
 
 from calebasse.agenda.conf import default
+from calebasse.exceptions import CalebasseException
 from calebasse import agenda
 
 __all__ = (
@@ -11,19 +13,17 @@ __all__ = (
     'OccurrenceManager',
 )
 
-class EventManager(object):
+class EventManager(models.Manager):
     """ This class allows you to manage events, appointment, ...
     """
 
-    def __set_event(self, event, participants=[], description='', services=[],
+    def _set_event(self, event, participants=[], description='', service=None,
             start_time=None, end_time=None, note=None, **rrule_params):
-        """ Private method to configure an Event or an ActEvent
+        """ Private method to configure an Event or an EventAct
         """
         event.description = description
-        for participant in participants:
-            event.participants.add(participant)
-        for service in services:
-            event.services.add(service)
+        event.participants = participants
+        event.service = service
         if note is not None:
             event.notes.create(note=note)
         start_time = start_time or datetime.now().replace(
@@ -32,52 +32,13 @@ class EventManager(object):
         occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
         end_time = end_time or start_time + occurence_duration
         event.add_occurrences(start_time, end_time, **rrule_params)
+        event.save()
 
         return event
 
-    def create_patient_appointment(self, title, patient, participants, act_type,
-            service, start_datetime, end_datetime, description='', note=None,
-            **rrule_params):
-        """
-        This method allow you to create a new patient appointment quickly
-
-        Args:
-            title: patient appointment title (str)
-            patient: Patient object
-            participants: List of CalebasseUser (therapists)
-            act_type: ActType object
-            service: Service object. Use session service by defaut
-            start_datetime: datetime with the start date and time
-            end_datetime: datetime with the end date and time
-            freq, count, until, byweekday, rrule_params:
-            follow the ``dateutils`` API (see http://labix.org/python-dateutil)
-
-        Example:
-            Look at calebasse.agenda.tests.EventTest (test_create_appointments method)
-        """
-        from calebasse.cale_base.models import ActEvent
-
-        event_type, created = agenda.models.EventType.objects.get_or_create(
-                label="patient_appointment"
-                )
-
-        act_event = ActEvent.objects.create(
-                title=title,
-                event_type=event_type,
-                patient=patient,
-                act_type=act_type,
-                )
-
-        if service:
-            service = [service]
-
-        return self.__set_event(act_event, participants, description,
-                services=service, start_time = start_datetime, end_time = end_datetime,
-                note = note, **rrule_params)
-
 
     def create_event(self, title, event_type, participants=[], description='',
-        services=[], start_datetime=None, end_datetime=None, note=None,
+        service=None, start_datetime=None, end_datetime=None, note=None,
         **rrule_params):
         """
         Convenience function to create an ``Event``, optionally create an 
@@ -102,15 +63,52 @@ class EventManager(object):
                 label=event_type
             )
 
-        event = agenda.models.Event.objects.create(
+        event = self.create(
                 title=title,
                 event_type=event_type
                 )
 
-        return self.__set_event(event, participants, services = services,
+        return self._set_event(event, participants, service = service,
                 start_time = start_datetime, end_time = end_datetime,
                 **rrule_params)
 
+    def create_work_event(self, people, weekday, start_time, end_time, until, service=None):
+        """ `create_work_event` allows you to add quickly a work event for a user
+
+        Args:
+            weekday (str): weekday constants (MO, TU, etc)
+            start_date (datetime): start time
+            end_date (datetime): end time
+
+        Returns:
+            Nothing
+
+        Raise:
+            CalebasseException
+        """
+
+        if weekday == 'MO':
+            weekday = rrule.MO
+        elif weekday == 'TU':
+            weekday = rrule.TU
+        elif weekday == 'WE':
+            weekday = rrule.WE
+        elif weekday == 'TH':
+            weekday = rrule.TH
+        elif weekday == 'FR':
+            weekday = rrule.FR
+        elif weekday == 'SA':
+            weekday = rrule.SA
+        elif weekday == 'SU':
+            weekday = rrule.SU
+        else:
+            raise CalebasseException("%s is not a valid weekday constants" % day)
+
+        return self.create_event("work %s" % weekday,
+                'work_event', service=service, participants=[people],
+                freq = rrule.WEEKLY, byweekday = weekday,
+                start_datetime = start_time, end_datetime = end_time,
+                until = until)
 
 class OccurrenceManager(models.Manager):
 

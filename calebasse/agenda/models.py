@@ -24,51 +24,50 @@ class Note(models.Model):
     A generic model for adding simple, arbitrary notes to other models such as
     ``Event`` or ``Occurrence``.
     '''
-    note = models.TextField(_('note'))
-    created = models.DateTimeField(_('created'), auto_now_add=True)
-
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'))
-    object_id = models.PositiveIntegerField(_('object id'))
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        app_label = 'agenda'
-        verbose_name = _('note')
-        verbose_name_plural = _('notes')
+        verbose_name = u'Note'
+        verbose_name_plural = u'Notes'
 
     def __unicode__(self):
         return self.note
+
+    note = models.TextField(_('note'))
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    content_type = models.ForeignKey(ContentType)
 
 
 class EventType(models.Model):
     '''
     Simple ``Event`` classifcation.
     '''
-    label = models.CharField(_('label'), max_length=50)
-
     class Meta:
-        app_label = 'agenda'
-        verbose_name = _('event type')
-        verbose_name_plural = _('event types')
+        verbose_name = u'Type d\'événement'
+        verbose_name_plural = u'Types d\'événement'
 
     def __unicode__(self):
         return self.label
 
+    label = models.CharField(_('label'), max_length=50)
 
-class Event(ServiceLinkedAbstractModel, models.Model):
+
+class Event(ServiceLinkedAbstractModel):
     '''
     Container model for general metadata and associated ``Occurrence`` entries.
     '''
+    objects = managers.EventManager()
 
     title = models.CharField(_('title'), max_length=32)
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
+    participants = models.ManyToManyField('personnes.People',
+            null=True, blank=True, default=None)
+
     class Meta:
-        app_label = 'agenda'
-        verbose_name = _('event')
-        verbose_name_plural = _('events')
+        verbose_name = u'Evénement'
+        verbose_name_plural = u'Evénements'
         ordering = ('title', )
 
 
@@ -122,23 +121,21 @@ class Event(ServiceLinkedAbstractModel, models.Model):
         return Occurrence.objects.daily_occurrences(dt=dt, event=self)
 
 
-
 class Occurrence(models.Model):
     '''
     Represents the start end time for a specific occurrence of a master ``Event``
     object.
     '''
-    start_time = models.DateTimeField(_('start time'))
-    end_time = models.DateTimeField(_('end time'))
-    event = models.ForeignKey(Event, verbose_name=_('event'), editable=False)
-    notes = generic.GenericRelation(Note, verbose_name=_('notes'))
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    event = models.ForeignKey('Event', verbose_name=_('event'), editable=False)
+    notes = generic.GenericRelation('Note', verbose_name=_('notes'))
 
     objects = managers.OccurrenceManager()
 
     class Meta:
-        app_label = 'agenda'
-        verbose_name = _('occurrence')
-        verbose_name_plural = _('occurrences')
+        verbose_name = u'Occurrence'
+        verbose_name_plural = u'Occurrences'
         ordering = ('start_time', 'end_time')
 
     def __unicode__(self):

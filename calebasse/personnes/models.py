@@ -7,13 +7,13 @@ from calebasse.agenda.models import Event, EventType
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 
 class People(models.Model):
-    nom = models.CharField(max_length=128)
-    prenoms = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
+    last_name = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
     display_name = models.CharField(max_length=256)
 
-    def save(self):
-        self.display_nom = self.prenom + ' ' + self.nom
-        super(People, self).save()
+    def save(self, **kwargs):
+        self.display_nom = self.first_name + ' ' + self.last_name
+        super(People, self).save(**kwargs)
 
 class Worker(People):
     class Meta:
@@ -33,10 +33,10 @@ class SchoolTeacher(People):
 class Holliday(Event):
     worker = models.ForeignKey(People)
 
-    def save(self):
+    def save(self, **kwargs):
         self.event_type = \
                 EventType.objects.get_or_create(label=u'Congé')
-        super(Conge, self).save()
+        super(Conge, self).save(**kwargs)
         self.participants.add(self.personne)
 
 class AnnualHollidays(Event, ServiceLinkedAbstractModel):
