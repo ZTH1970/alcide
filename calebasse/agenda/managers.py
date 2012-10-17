@@ -17,28 +17,28 @@ class EventManager(models.Manager):
     """ This class allows you to manage events, appointment, ...
     """
 
-    def _set_event(self, event, participants=[], description='', service=None,
-            start_time=None, end_time=None, note=None, **rrule_params):
+    def _set_event(self, event, participants=[], description='', services=[],
+            start_datetime=None, end_datetime=None, note=None, **rrule_params):
         """ Private method to configure an Event or an EventAct
         """
         event.description = description
         event.participants = participants
-        event.service = service
+        event.services = services
         if note is not None:
             event.notes.create(note=note)
-        start_time = start_time or datetime.now().replace(
+        start_datetime = start_datetime or datetime.now().replace(
             minute=0, second=0, microsecond=0
         )
         occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
-        end_time = end_time or start_time + occurence_duration
-        event.add_occurrences(start_time, end_time, **rrule_params)
+        end_datetime = end_datetime or start_datetime + occurence_duration
+        event.add_occurrences(start_datetime, end_datetime, **rrule_params)
         event.save()
 
         return event
 
 
     def create_event(self, title, event_type, participants=[], description='',
-        service=None, start_datetime=None, end_datetime=None, note=None,
+        services=[], start_datetime=None, end_datetime=None, note=None,
         **rrule_params):
         """
         Convenience function to create an ``Event``, optionally create an 
@@ -49,8 +49,8 @@ class EventManager(models.Manager):
             event_type: can be either an ``EventType`` object or the label
             is either created or retrieved.
             participants: List of CalebasseUser
-            start_time: will default to the current hour if ``None``
-            end_time: will default to ``start_time`` plus
+            start_datetime: will default to the current hour if ``None``
+            end_datetime: will default to ``start_datetime`` plus
             default.DEFAULT_OCCURRENCE_DURATION hour if ``None``
             freq, count, rrule_params:
             follow the ``dateutils`` API (see http://labix.org/python-dateutil)
@@ -62,53 +62,20 @@ class EventManager(models.Manager):
             event_type, created = agenda.models.EventType.objects.get_or_create(
                 label=event_type
             )
+        event = self.create(title=title, event_type=event_type)
 
-        event = self.create(
-                title=title,
-                event_type=event_type
-                )
-
-        return self._set_event(event, participants, service = service,
-                start_time = start_datetime, end_time = end_datetime,
+        return self._set_event(event, participants, services = services,
+                start_datetime = start_datetime, end_datetime = end_datetime,
                 **rrule_params)
 
-    def create_work_event(self, people, weekday, start_time, end_time, until, service=None):
-        """ `create_work_event` allows you to add quickly a work event for a user
-
-        Args:
-            weekday (str): weekday constants (MO, TU, etc)
-            start_date (datetime): start time
-            end_date (datetime): end time
-
-        Returns:
-            Nothing
-
-        Raise:
-            CalebasseException
-        """
-
-        if weekday == 'MO':
-            weekday = rrule.MO
-        elif weekday == 'TU':
-            weekday = rrule.TU
-        elif weekday == 'WE':
-            weekday = rrule.WE
-        elif weekday == 'TH':
-            weekday = rrule.TH
-        elif weekday == 'FR':
-            weekday = rrule.FR
-        elif weekday == 'SA':
-            weekday = rrule.SA
-        elif weekday == 'SU':
-            weekday = rrule.SU
-        else:
-            raise CalebasseException("%s is not a valid weekday constants" % day)
-
-        return self.create_event("work %s" % weekday,
-                'work_event', service=service, participants=[people],
-                freq = rrule.WEEKLY, byweekday = weekday,
-                start_datetime = start_time, end_datetime = end_time,
-                until = until)
+    def create_holiday(self, start_date, end_date, peoples=[], services=[], motive=''):
+        event_type, created = agenda.models.EventType.objects.get_or_create(
+                label="holiday"
+                )
+        event = self.create(title="Conge", event_type=event_type)
+        start_datetime = datetime(start_date.year, start_date.month, start_date.day)
+        end_datetime = datetime(end_date.year, end_date.month, end_date.day, 23, 59)
+        return self._set_event(event, peoples, motive, services, start_datetime, end_datetime)
 
 class OccurrenceManager(models.Manager):
 

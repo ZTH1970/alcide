@@ -60,7 +60,7 @@ class EventActManager(EventManager):
                 )
 
         return self._set_event(act_event, participants, description,
-                service=service, start_time = start_datetime, end_time = end_datetime,
+                services = [service], start_datetime = start_datetime, end_datetime = end_datetime,
                 note = note, **rrule_params)
 
 

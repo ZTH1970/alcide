@@ -51,7 +51,7 @@ class EventType(models.Model):
     label = models.CharField(_('label'), max_length=50)
 
 
-class Event(ServiceLinkedAbstractModel):
+class Event(models.Model):
     '''
     Container model for general metadata and associated ``Occurrence`` entries.
     '''
@@ -62,6 +62,8 @@ class Event(ServiceLinkedAbstractModel):
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
+    services = models.ManyToManyField('ressources.Service',
+            null=True, blank=True, default=None)
     participants = models.ManyToManyField('personnes.People',
             null=True, blank=True, default=None)
 

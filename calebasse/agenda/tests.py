@@ -7,14 +7,14 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, date
 from dateutil import rrule
 
 from calebasse.agenda.models import Occurrence, Event
 from calebasse.actes.models import EventAct
 from calebasse.dossiers.models import PatientRecord
-from calebasse.ressources.models import ActType, Service
-from calebasse.personnes.models import Doctor
+from calebasse.ressources.models import ActType, Service, WorkerType
+from calebasse.personnes.models import Worker
 
 class EventTest(TestCase):
 
@@ -26,9 +26,10 @@ class EventTest(TestCase):
 
     def test_create_appointments(self):
         patient = PatientRecord.objects.create(first_name='Jean', last_name='Le Pouple')
-        therapist1 = Doctor.objects.create(first_name='Bob', last_name='Leponge')
-        therapist2 = Doctor.objects.create(first_name='Jean', last_name='Valjean')
-        therapist3 = Doctor.objects.create(first_name='Pierre', last_name='PaulJacques')
+        wtype = WorkerType.objects.create(name='ElDoctor', intervene=True)
+        therapist1 = Worker.objects.create(first_name='Bob', last_name='Leponge', type=wtype)
+        therapist2 = Worker.objects.create(first_name='Jean', last_name='Valjean', type=wtype)
+        therapist3 = Worker.objects.create(first_name='Pierre', last_name='PaulJacques', type=wtype)
         act_type = ActType.objects.create(name='trepanation')
         service = Service.objects.create(name='CMPP')
         act_event = EventAct.objects.create_patient_appointment('RDV avec M X', patient,
@@ -54,12 +55,13 @@ class EventTest(TestCase):
                 '[<Occurrence: RDV avec M Y: 2020-10-09T10:15:00>]'
                 )
 
-    def test_create_work_event(self):
+    def test_create_holiday(self):
         """docstring for test_create_event"""
-        user = Doctor.objects.create(first_name='Jean-Claude', last_name='Van Damme')
-        event = Event.objects.create_work_event(user, 'MO', datetime(2016,10,2,10), datetime(2016,10,2,12),
-                datetime(2018,1,1))
-        self.assertEqual(str(event), 'work MO')
+        wtype = WorkerType.objects.create(name='ElProfessor', intervene=True)
+        user = Worker.objects.create(first_name='Jean-Claude', last_name='Van Damme', type=wtype)
+        event = Event.objects.create_holiday(date(2012, 12, 12), date(2012,12,30),
+                [user], motive='tournage d\'un film')
+        self.assertEqual(str(event), 'Conge')
         #event = user.event.occurrence_set.all()[0]
         #self.assertEqual(event.end_time - event.start_time, timedelta(0, 7200))
 
