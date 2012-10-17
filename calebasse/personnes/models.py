@@ -27,13 +27,8 @@ class Doctor(People, ServiceLinkedAbstractModel):
     pass
 
 class SchoolTeacher(People):
-    ROLE_CHOICES = (
-            ('principal', u'Principal'),
-            ('referent', u'Référent'))
     schools = models.ManyToManyField('ressources.School')
-    role = models.CharField(choices=ROLE_CHOICES,
-            max_length=10,
-            default='referent')
+    role = models.ForeignKey('ressources.SchoolTeacherRole')
 
 class Holliday(Event):
     worker = models.ForeignKey(People)
