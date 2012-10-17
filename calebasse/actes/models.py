@@ -20,7 +20,8 @@ class Act(models.Model):
             blank=True,
             null=True,
             verbose_name=u'Type de transport')
-    doctors = models.ManyToManyField('personnes.Doctor',
+    doctors = models.ManyToManyField('personnes.Worker',
+            limit_choices_to={'type__intervene': True },
             verbose_name=u'Thérapeute')
 
 class EventActManager(EventManager):
