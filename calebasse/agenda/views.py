@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import redirect
 
 from calebasse.cbv import TemplateView
-from calebasse.personnes.models import Therapeute, Personnel
+from calebasse.personnes.models import Worker
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -15,6 +15,6 @@ class AgendaHomepageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
-        context['therapeutes'] = Therapeute.objects.for_service(self.service)
-        context['personnels'] = Personnel.objects.for_service(self.service)
+        #context['therapeutes'] = Therapeute.objects.for_service(self.service)
+        #context['personnels'] = Personnel.objects.for_service(self.service)
         return context

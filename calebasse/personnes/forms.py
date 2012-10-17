@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 
 from django.contrib.auth.models import User
-from models import Personnel, CongeAnnuel
+from models import Worker
 
 class CreateUserForm(ModelForm):
     class Meta:
@@ -14,18 +14,18 @@ class EditUserForm(ModelForm):
 
 class CreatePersonnelForm(ModelForm):
     class Meta:
-        model = Personnel
+        model = Worker
 
 
 class EditPersonnelForm(ModelForm):
     class Meta:
-        model = Personnel
+        model = Worker
 
-class CreateCongeAnnuelForm(ModelForm):
-    class Meta:
-        model = CongeAnnuel
-
-
-class EditCongeAnnuelForm(ModelForm):
-    class Meta:
-        model = CongeAnnuel
+#class CreateCongeAnnuelForm(ModelForm):
+#    class Meta:
+#        model = CongeAnnuel
+#
+#
+#class EditCongeAnnuelForm(ModelForm):
+#    class Meta:
+#        model = CongeAnnuel

@@ -128,7 +128,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages")
 
-AUTH_PROFILE_MODULE = "cale_base.CalebasseUser"
+#AUTH_PROFILE_MODULE = "cale_base.CalebasseUser"
 
 INSTALLED_APPS = (
     'django.contrib.auth',

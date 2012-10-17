@@ -1,12 +1,12 @@
 from django.forms import ModelForm
 
-from models import Dossier
+from models import PatientRecord
 
 class CreateDossierForm(ModelForm):
     class Meta:
-        model = Dossier
+        model = PatientRecord
 
 
 class EditDossierForm(ModelForm):
     class Meta:
-        model = Dossier
+        model = PatientRecord

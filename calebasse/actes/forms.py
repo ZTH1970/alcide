@@ -1,12 +1,12 @@
 from django.forms import ModelForm
 
-from models import Acte
+from models import Act
 
-class CreateActeForm(ModelForm):
+class CreateActForm(ModelForm):
     class Meta:
-        model = Acte
+        model = Act
 
 
-class EditActeForm(ModelForm):
+class EditActForm(ModelForm):
     class Meta:
-        model = Acte
+        model = Act

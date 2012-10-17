@@ -1,3 +1,4 @@
 from django.db import models
 
-# class Invoice:
+class Invoice(models.Model):
+    pass
