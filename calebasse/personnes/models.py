@@ -4,35 +4,39 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from calebasse.agenda.models import Event, EventType
-from calebasse.ressources.models import ServiceLinkedModelAbstract
+from calebasse.ressources.models import ServiceLinkedAbstractModel
 
-class Personne(models.Model):
+class People(models.Model):
     nom = models.CharField(max_length=128)
     prenoms = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
     display_name = models.CharField(max_length=256)
 
     def save(self):
         self.display_nom = self.prenom + ' ' + self.nom
-        super(Personne, self).save()
+        super(People, self).save()
 
-class Personnel(Personne, ServiceLinkedModelAbstract):
-    user = models.ForeignKey(User, blank=True,
-            null=True)
+class Worker(People):
+    class Meta:
+        verbose_name = u'Personnel'
+        verbose_name_plural = u'Personnels'
 
-class Therapeute(Personne, ServiceLinkedModelAbstract):
+class UserPeople(ServiceLinkedAbstractModel, User):
+    people = models.ForeignKey('People')
+
+class Doctor(People, ServiceLinkedAbstractModel):
     pass
 
-class Professeur(Personne):
+class SchoolTeacher(People):
     ROLE_CHOICES = (
             ('principal', u'Principal'),
             ('referent', u'Référent'))
-    etablissement = models.ForeignKey('ressources.Etablissement')
+    schools = models.ManyToManyField('ressources.School')
     role = models.CharField(choices=ROLE_CHOICES,
             max_length=10,
             default='referent')
 
-class Conge(Event):
-    worker = models.ForeignKey(Personnel)
+class Holliday(Event):
+    worker = models.ForeignKey(People)
 
     def save(self):
         self.event_type = \
@@ -40,5 +44,5 @@ class Conge(Event):
         super(Conge, self).save()
         self.participants.add(self.personne)
 
-class CongeAnnuel(Event, ServiceLinkedModelAbstract):
+class AnnualHollidays(Event, ServiceLinkedAbstractModel):
     pass

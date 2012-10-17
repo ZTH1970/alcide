@@ -1,16 +1,16 @@
+# -*- coding: utf-8 -*-
 
-from datetime import datetime, date, timedelta
+from datetime import datetime
+
+from dateutil import rrule
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
-from django.conf import settings
 
-from dateutil import rrule
-
-from calebasse.agenda.conf import default
 from calebasse.agenda import managers
+from calebasse.ressources.models import ServiceLinkedAbstractModel
 
 __all__ = (
     'Note',
@@ -55,7 +55,7 @@ class EventType(models.Model):
         return self.label
 
 
-class Event(models.Model):
+class Event(ServiceLinkedAbstractModel, models.Model):
     '''
     Container model for general metadata and associated ``Occurrence`` entries.
     '''
@@ -64,11 +64,6 @@ class Event(models.Model):
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
-
-    services = models.ManyToManyField('cale_base.Service', verbose_name=('services'),
-            null=True, blank=True, default=None)
-    participants = models.ManyToManyField('cale_base.CalebasseUser',
-            null=True, blank=True, default=None)
 
     class Meta:
         app_label = 'agenda'

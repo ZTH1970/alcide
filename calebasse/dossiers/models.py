@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 
-from calebasse.personnes.models import Personne
-from calebasse.ressources.models import ServiceLinkedModelAbstract
+from calebasse.personnes.models import People
+from calebasse.ressources.models import ServiceLinkedAbstractModel
 
-class Dossier(Personne, ServiceLinkedModelAbstract):
-    pass
+class Records(People, ServiceLinkedAbstractModel):
+    class Meta:
+        verbose_name = u'Dossier'
+        verbose_name_plural = u'Dossiers'
 
-class ContactsPatient(Personne):
-    dossier = models.ForeignKey(Dossier)
+    contacts = models.ManyToManyField('personnes.People',
+            related_name='contact_of')
