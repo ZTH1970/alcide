@@ -218,6 +218,10 @@ class TransportType(NamedAbstractModel):
 
 
 class WorkerType(NamedAbstractModel):
+    intervene = models.BooleanField(
+            verbose_name=u'Intervenant',
+            blank=True)
+
     class Meta:
         verbose_name = u'Type de personnel'
         verbose_name_plural = u'Types de personnel'
