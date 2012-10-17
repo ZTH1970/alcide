@@ -162,10 +162,9 @@ class Room(models.Model):
         verbose_name_plural = u'Salles'
 
 
-class Service(models.Model):
+class Service(NamedAbstractModel):
     admin_only = True
 
-    name = models.CharField(max_length=50)
     slug = models.SlugField()
     description = models.TextField()
 
@@ -225,3 +224,4 @@ class WorkerType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de personnel'
         verbose_name_plural = u'Types de personnel'
+

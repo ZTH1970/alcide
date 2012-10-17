@@ -12,7 +12,7 @@ class People(BaseModelMixin, models.Model):
             verbose_name=u'Nom complet', editable=False)
 
     def save(self, **kwargs):
-        self.display_nom = self.first_name + ' ' + self.last_name
+        self.display_name = self.first_name + ' ' + self.last_name
         super(People, self).save(**kwargs)
 
     def __unicode__(self):
