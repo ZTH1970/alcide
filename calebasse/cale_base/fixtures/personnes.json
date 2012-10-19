@@ -63,6 +63,24 @@
     }
   }, 
   {
+    "pk": 8, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "John", 
+      "last_name": "Doe", 
+      "display_name": "John Doe"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "Jack", 
+      "last_name": "Itchan", 
+      "display_name": "Jack Itchan"
+    }
+  }, 
+  {
     "pk": 1, 
     "model": "personnes.worker", 
     "fields": {

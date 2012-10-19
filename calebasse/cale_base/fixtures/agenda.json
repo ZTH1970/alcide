@@ -1,0 +1,90 @@
+[
+  {
+    "pk": 1, 
+    "model": "agenda.eventtype", 
+    "fields": {
+      "label": "patient_appointment"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "agenda.eventtype", 
+    "fields": {
+      "label": "meeting"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "agenda.event", 
+    "fields": {
+      "event_type": 2, 
+      "services": [
+        1, 
+        2
+      ], 
+      "participants": [], 
+      "description": "", 
+      "title": "R\u00e9union"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "agenda.event", 
+    "fields": {
+      "event_type": 1, 
+      "services": [
+        1
+      ], 
+      "participants": [
+        5
+      ], 
+      "description": "blabla bla bla", 
+      "title": "rdv jack"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "agenda.event", 
+    "fields": {
+      "event_type": 1, 
+      "services": [
+        1
+      ], 
+      "participants": [
+        5
+      ], 
+      "description": "blabla", 
+      "title": "rdv john doe"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "agenda.occurrence", 
+    "fields": {
+      "start_time": "2012-10-30T10:00:00", 
+      "room": null, 
+      "end_time": "2012-10-30T10:30:00", 
+      "event": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "agenda.occurrence", 
+    "fields": {
+      "start_time": "2012-10-30T10:45:00", 
+      "room": null, 
+      "end_time": "2012-10-30T11:00:00", 
+      "event": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "agenda.occurrence", 
+    "fields": {
+      "start_time": "2012-10-30T11:30:00", 
+      "room": null, 
+      "end_time": "2012-10-30T12:00:00", 
+      "event": 3
+    }
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "pk": 8, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 1, 
+      "contacts": [
+        1, 
+        2, 
+        3, 
+        4
+      ]
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 1, 
+      "contacts": [
+        1, 
+        2, 
+        3, 
+        4
+      ]
+    }
+  }
+]

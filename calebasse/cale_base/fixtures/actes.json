@@ -1,0 +1,60 @@
+[
+  {
+    "pk": 1, 
+    "model": "actes.act", 
+    "fields": {
+      "act_type": 1, 
+      "patient": 8, 
+      "transport_type": null, 
+      "transport_company": null, 
+      "doctors": [], 
+      "date": "2012-10-30T00:00:00", 
+      "validated": false
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "actes.act", 
+    "fields": {
+      "act_type": 1, 
+      "patient": 9, 
+      "transport_type": null, 
+      "transport_company": null, 
+      "doctors": [], 
+      "date": "2012-10-30T00:00:00", 
+      "validated": false
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "actes.eventact", 
+    "fields": {
+      "attendance": "absent", 
+      "participants": [
+        5
+      ], 
+      "doctors": [], 
+      "services": [
+        1
+      ], 
+      "event_ptr": 1, 
+      "convocation_sent": false
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "actes.eventact", 
+    "fields": {
+      "attendance": "absent", 
+      "participants": [
+        5
+      ], 
+      "doctors": [], 
+      "services": [
+        1
+      ], 
+      "event_ptr": 2, 
+      "convocation_sent": false
+    }
+  }
+]
