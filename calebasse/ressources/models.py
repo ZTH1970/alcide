@@ -75,15 +75,15 @@ class Office(ServiceLinkedAbstractModel):
         verbose_name_plural = u'Établissements'
 
     def __unicode__(self):
-        return self.name
+        return self.slug
 
-    slug = models.SlugField()
-    description = models.TextField()
+    slug = models.SlugField(verbose_name='Label')
+    description = models.TextField(blank=True, null=True)
 
     # Contact
-    phone = PhoneNumberField()
-    fax = PhoneNumberField()
-    email = models.EmailField()
+    phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
+    fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
     # Address
     address = models.CharField(max_length=120,
@@ -93,8 +93,8 @@ class Office(ServiceLinkedAbstractModel):
             null=True,
             default=None,
             verbose_name=u"Complément d'addresse")
-    zip_code = ZipCodeField(
-            verbose_name=u"Code postal")
+    zip_code = ZipCodeField(verbose_name=u"Code postal")
+            #verbose_name=u"Code postal")
     city = models.CharField(max_length=80,
             verbose_name=u"Ville")
 
@@ -115,9 +115,9 @@ class School(models.Model):
             blank=True,
             null=True,
             default=None)
-    zip_code = ZipCodeField()
+    zip_code = ZipCodeField(verbose_name=u"Code postal")
     city = models.CharField(max_length=80)
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(verbose_name=u"Téléphone")
     fax = models.CharField(max_length=30)
     email = models.EmailField()
     director_name = models.CharField(max_length=70)
@@ -153,7 +153,7 @@ class SalleManager(models.Manager):
         return self.filter(etablissement__service=service)
 
 
-class Room(models.Model):
+class Room(NamedAbstractModel):
     objects = SalleManager()
     etablissement = models.ForeignKey('Office')
 
@@ -178,8 +178,7 @@ class Service(NamedAbstractModel):
         verbose_name_plural = u'Services'
 
 
-class ActType(models.Model):
-    name = models.CharField(max_length=200)
+class ActType(NamedAbstractModel):
     billable = models.BooleanField(default=True)
 
     class Meta:

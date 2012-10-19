@@ -11,14 +11,14 @@ class BaseModelMixin(object):
 
 
 class PhoneNumberField(models.CharField):
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 20
-        super(PhoneNumberField, self).__init__(**kwargs)
+        super(PhoneNumberField, self).__init__(*args,**kwargs)
 
     def formfield(self, **kwargs):
         default = { 'form_class': FRPhoneNumberField }
         default.update(kwargs)
-        return super(PhoneNumberField, self).formfield(**default)
+        return super(PhoneNumberField, self).formfield(**kwargs)
 
 
 class ZipCodeField(models.CharField):
@@ -29,7 +29,7 @@ class ZipCodeField(models.CharField):
     def formfield(self, **kwargs):
         default = { 'form_class': FRZipCodeField }
         default.update(kwargs)
-        return super(ZipCodeField, self).formfield(**default)
+        return super(ZipCodeField, self).formfield(**kwargs)
 
 
 
@@ -41,3 +41,4 @@ class WeekdayField(models.CharField):
         kwargs['max_length'] = 16
         kwargs['choices'] = self.WEEKDAYS_CHOICE
         super(WeekdayField, self).__init__(**kwargs)
+

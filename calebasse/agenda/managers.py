@@ -18,7 +18,7 @@ class EventManager(models.Manager):
     """
 
     def _set_event(self, event, participants=[], description='', services=[],
-            start_datetime=None, end_datetime=None, note=None, **rrule_params):
+            start_datetime=None, end_datetime=None, note=None, room=None, **rrule_params):
         """ Private method to configure an Event or an EventAct
         """
         event.description = description
@@ -31,14 +31,14 @@ class EventManager(models.Manager):
         )
         occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
         end_datetime = end_datetime or start_datetime + occurence_duration
-        event.add_occurrences(start_datetime, end_datetime, **rrule_params)
+        event.add_occurrences(start_datetime, end_datetime, room, **rrule_params)
         event.save()
 
         return event
 
 
     def create_event(self, title, event_type, participants=[], description='',
-        services=[], start_datetime=None, end_datetime=None, note=None,
+        services=[], start_datetime=None, end_datetime=None, room=None, note=None,
         **rrule_params):
         """
         Convenience function to create an ``Event``, optionally create an 

@@ -76,7 +76,7 @@ class Event(models.Model):
     def __unicode__(self):
         return self.title
 
-    def add_occurrences(self, start_time, end_time, **rrule_params):
+    def add_occurrences(self, start_time, end_time, room=None, **rrule_params):
         '''
         Add one or more occurences to the event using a comparable API to 
         ``dateutil.rrule``. 
@@ -132,6 +132,8 @@ class Occurrence(models.Model):
     end_time = models.DateTimeField()
     event = models.ForeignKey('Event', verbose_name=_('event'), editable=False)
     notes = generic.GenericRelation('Note', verbose_name=_('notes'))
+    room = models.ForeignKey('ressources.Room', blank=True, null=True,
+            verbose_name=u'Salle')
 
     objects = managers.OccurrenceManager()
 

@@ -27,8 +27,8 @@ class Act(models.Model):
 class EventActManager(EventManager):
 
     def create_patient_appointment(self, title, patient, participants, act_type,
-            service, start_datetime, end_datetime, description='', note=None,
-            **rrule_params):
+            service, start_datetime, end_datetime, description='', room=None,
+            note=None, **rrule_params):
         """
         This method allow you to create a new patient appointment quickly
 
@@ -61,14 +61,11 @@ class EventActManager(EventManager):
 
         return self._set_event(act_event, participants, description,
                 services = [service], start_datetime = start_datetime, end_datetime = end_datetime,
-                note = note, **rrule_params)
+                room = room, note = note, **rrule_params)
 
 
 class EventAct(Act, Event):
     objects = EventActManager()
-    room = models.ForeignKey('ressources.Room', blank=True, null=True,
-            verbose_name=u'Salle')
-
 
     VALIDATION_CODE_CHOICES = (
             ('absent', u'Absent'),
