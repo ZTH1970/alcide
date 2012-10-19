@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from calebasse.ressources.models import WorkerType
 from calebasse.models import WeekdayField, BaseModelMixin
 
 class People(BaseModelMixin, models.Model):
@@ -18,7 +19,18 @@ class People(BaseModelMixin, models.Model):
     def __unicode__(self):
         return self.display_name
 
+class WorkerManager(models.Manager):
+
+    def for_service(self, service, type=None):
+        if type:
+            return self.filter(services__in=[service]).filter(type=type)
+        else:
+            return self.filter(services__in=[service])
+    
+
 class Worker(People):
+    objects = WorkerManager()
+    # TODO : use manytomany here ?
     type = models.ForeignKey('ressources.WorkerType',
             verbose_name=u'Type de personnel')
     services = models.ManyToManyField('ressources.Service')

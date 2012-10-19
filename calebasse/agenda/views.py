@@ -1,9 +1,11 @@
+import ipdb
 import datetime
 
 from django.shortcuts import redirect
 
 from calebasse.cbv import TemplateView
 from calebasse.personnes.models import Worker
+from calebasse.ressources.models import WorkerType
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -11,10 +13,13 @@ def redirect_today(request, service):
             service=service)
 
 class AgendaHomepageView(TemplateView):
+
     template_name = 'agenda/index.html'
 
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
-        #context['therapeutes'] = Therapeute.objects.for_service(self.service)
-        #context['personnels'] = Personnel.objects.for_service(self.service)
+        context['workers_types'] = []
+        for worker_type in WorkerType.objects.all():
+            data = {'type': worker_type.name, 'workers': Worker.objects.for_service(self.service, worker_type) }
+            context['workers_types'].append(data)
         return context
