@@ -1,0 +1,184 @@
+[
+  {
+    "pk": 1, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "Gloria", 
+      "last_name": "Dupond", 
+      "display_name": "Gloria Dupond"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "Fran\u00e7ois", 
+      "last_name": "Durant", 
+      "display_name": "Fran\u00e7ois Durant"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "St\u00e9phanie", 
+      "last_name": "Maurier", 
+      "display_name": "St\u00e9phanie Maurier"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "Marcus", 
+      "last_name": "Hosseini", 
+      "display_name": "Marcus Hosseini"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "Kilo", 
+      "last_name": "Sandy", 
+      "display_name": "Kilo Sandy"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": "L\u00e9ponge", 
+      "last_name": "Bob", 
+      "display_name": "L\u00e9ponge Bob"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "personnes.people", 
+    "fields": {
+      "first_name": " Lepoulpe", 
+      "last_name": "Pol", 
+      "display_name": " Lepoulpe Pol"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        4
+      ], 
+      "type": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2
+      ], 
+      "type": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "type": 3
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "type": 3
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "end_date": null, 
+      "service": 1, 
+      "start_time": "08:00:00", 
+      "worker": 5, 
+      "weekday": "lundi", 
+      "start_date": "2012-10-18", 
+      "end_time": "12:30:00"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "end_date": null, 
+      "service": 1, 
+      "start_time": "08:30:00", 
+      "worker": 6, 
+      "weekday": "lundi", 
+      "start_date": "2012-10-18", 
+      "end_time": "12:30:00"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "end_date": null, 
+      "service": 1, 
+      "start_time": "13:00:00", 
+      "worker": 6, 
+      "weekday": "lundi", 
+      "start_date": "2012-10-18", 
+      "end_time": "17:30:00"
+    }
+  }
+]
