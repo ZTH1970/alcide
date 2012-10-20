@@ -131,7 +131,8 @@ class Occurrence(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     event = models.ForeignKey('Event', verbose_name=_('event'), editable=False)
-    notes = generic.GenericRelation('Note', verbose_name=_('notes'))
+    notes = models.ManyToManyField('Note', verbose_name=_('notes'),
+            null=True, blank=True, default=None)
     room = models.ForeignKey('ressources.Room', blank=True, null=True,
             verbose_name=u'Salle')
 

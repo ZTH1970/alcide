@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import rrule
 
 from django.db import models
@@ -79,10 +79,7 @@ class EventManager(models.Manager):
 
 class OccurrenceManager(models.Manager):
 
-    use_for_related_fields = True
-
-    class Meta:
-        app_label = 'agenda'
+    #use_for_related_fields = True
 
     def daily_occurrences(self, date=None, participants=None):
         '''
@@ -116,4 +113,42 @@ class OccurrenceManager(models.Manager):
             return qs.filter(event__participants__in=participants)
         else:
             return qs
+
+    def daily_disponiblity(self, date, participants):
+        start_datetime = datetime(date.year, date.month, date.day, 8, 0)
+        end_datetime = datetime(date.year, date.month, date.day, 8, 15)
+        result = dict()
+        while (start_datetime.hour <= 19):
+            for participant in participants:
+                if not result.has_key(start_datetime.hour):
+                    result[start_datetime.hour] = [0, 1, 2, 3]
+                    result[start_datetime.hour][0] = []
+                    result[start_datetime.hour][1] = []
+                    result[start_datetime.hour][2] = []
+                    result[start_datetime.hour][3] = []
+                    quater = 0
+                qs = self.filter(
+                    models.Q(
+                        start_time__gte=start_datetime,
+                        start_time__lt=end_datetime,
+                        ) |
+                    models.Q(
+                        end_time__gt=start_datetime,
+                        end_time__lte=end_datetime,
+                        ) |
+                    models.Q(
+                        start_time__lt=start_datetime,
+                        end_time__gt=end_datetime,
+                        )
+                    ).filter(event__participants__in=[participant])
+
+                if qs:
+                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
+                else:
+                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'free'})
+            quater += 1
+            start_datetime += timedelta(minutes=15)
+            end_datetime += timedelta(minutes=15)
+        return result
+
 
