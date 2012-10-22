@@ -119,20 +119,20 @@
      <td id="dispos">
       Disponibilités
       <table>
-        {% for start_time, quaters in disponnibility.items %}
-        <tr class="hour-mark">
-          <td rowspan="4">{{ start_time }}:00</td>
-            {% for quater in quaters|slice:":1" %}
-              {% for value in quater %}
-              <td class="worker-{{ value.id }} agenda {{ value.dispo }}" style="display: none; "></td>
+        {% for start_time, quaters in disponibility.items %}
+          <tr class="hour-mark">
+              <td rowspan="4">{{ start_time }}:00</td>
+              {% for quater in quaters|slice:":1" %}
+                {% for value in quater %}
+                <td class="worker-{{ value.id }} agenda {{ value.dispo }}" style="display: none; "></td>
+                {% endfor %}
               {% endfor %}
-            </tr>
-          {% endfor %}
+          </tr>
           {% for quater in quaters|slice:"1:4" %}
             <tr>
-            {% for value in quater %}
-              <td class="worker-{{ value.id }} agenda {{ value.dispo }}" style="display: none; "></td>
-            {% endfor %}
+              {% for value in quater %}
+                <td class="worker-{{ value.id }} agenda {{ value.dispo }}" style="display: none; "></td>
+              {% endfor %}
             </tr>
           {% endfor %}
         {% endfor %}
