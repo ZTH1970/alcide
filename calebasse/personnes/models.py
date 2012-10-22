@@ -26,7 +26,6 @@ class WorkerManager(models.Manager):
             return self.filter(services__in=[service]).filter(type=type)
         else:
             return self.filter(services__in=[service])
-    
 
 class Worker(People):
     objects = WorkerManager()

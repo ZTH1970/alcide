@@ -81,7 +81,7 @@ class OccurrenceManager(models.Manager):
 
     #use_for_related_fields = True
 
-    def daily_occurrences(self, date=None, participants=None):
+    def daily_occurrences(self, date, participants=None, services=None):
         '''
         Returns a queryset of for instances that have any overlap with a 
         particular day.
@@ -110,9 +110,10 @@ class OccurrenceManager(models.Manager):
         )
 
         if participants:
-            return qs.filter(event__participants__in=participants)
-        else:
-            return qs
+            qs = qs.filter(event__participants__in=participants)
+        if services:
+            qs = qs.filter(services__in=services)
+        return qs
 
     def daily_disponiblity(self, date, participants):
         start_datetime = datetime(date.year, date.month, date.day, 8, 0)

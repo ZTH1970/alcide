@@ -31,5 +31,5 @@ class AgendaHomepageView(TemplateView):
             context['workers_agenda'].append({'worker': worker,
                     'agenda': Occurrence.objects.daily_occurrences(context['date'], [worker])})
 
-        context['disponnibility'] = Occurrence.objects.daily_disponiblity(context['date'], context['workers'])
+        context['disponnibility'] = Occurrence.objects.daily_disponiblity(context['date'], workers)
         return context
