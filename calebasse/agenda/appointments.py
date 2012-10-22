@@ -17,7 +17,7 @@ class Appointment(object):
         self.convocation_sent = None
         self.service_name = None
 
-    def load_from_occurence(self, occurence, service):
+    def init_from_occurence(self, occurence, service):
         """ """
         delta = occurence.end_time - occurence.start_time
         self.length = (delta.hours * 60) + dela.minutes
@@ -32,9 +32,26 @@ class Appointment(object):
         self.convocation_sent = occurence.convocation_sent
         self.description = occurence.description
 
+    def init_free_time(self, length, begin_hour):
+        """ """
+        self.type = "free"
+        self.length = length
+        self.begin_hour = begin_hour
+        
+
+    def init_start_stop(self, title, hour):
+        """
+        title: Arrivee ou Depart
+        """
+        self.type = "info"
+        self.title = title
+        self.begin_hour = hour
+        
+
 def get_daily_appointments(date, worker, service):
     """
     """
+    appointments = []
     weekday_mapping = {
             '0': 'dimanche',
             '1': 'lundi',
@@ -49,7 +66,17 @@ def get_daily_appointments(date, worker, service):
             filter(service=service).\
             filter(weekday=weekday).\
             filter(start_date__lte=date).\
-            filter(end_date__gte=date)
-    occurences = Occurence.objects.daily_occurrences(date, [worker])
+            filter(end_date__gte=date).\
+            order_by('start_date')
+    if not time_tables:
+        occurences = Occurence.objects.daily_occurrences(date, [worker]).order_by('start_time')
+        for occurence in occurences:
+            appointment = Appointment()
+            appointments.append(appointment.init_from_occurence(occurence, service))
+        return appointments
+    #start_datetime = datetime(date.year, date
+    #occurences = Occurence.objects.range_occurences(
+    
+
 
 
