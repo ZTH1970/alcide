@@ -1,4 +1,3 @@
-import ipdb
 import datetime
 
 from django.shortcuts import redirect
@@ -20,12 +19,17 @@ class AgendaHomepageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
         context['workers_types'] = []
-        context['workers'] = []
+        context['workers_agenda'] = []
         context['disponnibility'] = {}
+        workers = []
         for worker_type in WorkerType.objects.all():
             data = {'type': worker_type.name, 'workers': Worker.objects.for_service(self.service, worker_type) }
             context['workers_types'].append(data)
-            context['workers'].extend(Worker.objects.for_service(self.service, worker_type))
+            workers.extend(data['workers'])
+
+        for worker in workers:
+            context['workers_agenda'].append({'worker': worker,
+                    'agenda': Occurrence.objects.daily_occurrences(context['date'], [worker])})
 
         context['disponnibility'] = Occurrence.objects.daily_disponiblity(context['date'], context['workers'])
         return context

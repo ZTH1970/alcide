@@ -141,8 +141,9 @@
      <td id="agendas">
        <div id="tabs">
        <ul>
-         <li><a href="#tabs-sandy-kilo" class="sandy-kilo agenda">Sandy Kilo</a></li>
-         <li><a href="#tabs-bob-leponge" class="bob-leponge agenda">Bob Léponge</a></li>
+        {% for worker_agenda in workers_agenda %}
+           <li><a href="#tabs-worker-{{ worker_agenda.worker.id }}" class="worker-{{ worker_agenda.worker.id }} agenda" style="display: none;">{{ worker_agenda.worker.display_name }}</a></li>
+        {% endfor %}
        </ul>
        <div id="tabs-sandy-kilo" class="tabs agenda sandy-kilo agenda">
        <a class="print" href="#">Imprimer</a>
