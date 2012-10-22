@@ -119,6 +119,7 @@ class OccurrenceManager(models.Manager):
         start_datetime = datetime(date.year, date.month, date.day, 8, 0)
         end_datetime = datetime(date.year, date.month, date.day, 8, 15)
         result = dict()
+        quater = 0
         while (start_datetime.hour <= 19):
             for participant in participants:
                 if not result.has_key(start_datetime.hour):
