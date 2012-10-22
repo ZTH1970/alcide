@@ -17,6 +17,7 @@
     "pk": 3, 
     "model": "agenda.event", 
     "fields": {
+      "room": 2, 
       "event_type": 2, 
       "services": [
         1, 
@@ -34,6 +35,7 @@
     "pk": 2, 
     "model": "agenda.event", 
     "fields": {
+      "room": 1, 
       "event_type": 1, 
       "services": [
         1
@@ -49,6 +51,7 @@
     "pk": 1, 
     "model": "agenda.event", 
     "fields": {
+      "room": 1, 
       "event_type": 1, 
       "services": [
         1
@@ -65,7 +68,6 @@
     "model": "agenda.occurrence", 
     "fields": {
       "start_time": "2012-10-30T10:00:00", 
-      "room": 1, 
       "notes": [],
       "end_time": "2012-10-30T10:45:00", 
       "event": 1
@@ -76,7 +78,6 @@
     "model": "agenda.occurrence", 
     "fields": {
       "start_time": "2012-10-30T10:45:00", 
-      "room": 1,
       "notes": [],
       "end_time": "2012-10-30T11:30:00", 
       "event": 2
@@ -87,7 +88,6 @@
     "model": "agenda.occurrence", 
     "fields": {
       "start_time": "2012-10-30T11:30:00", 
-      "room": 2, 
       "notes": [],
       "end_time": "2012-10-30T12:00:00", 
       "event": 3

@@ -66,6 +66,8 @@ class Event(models.Model):
             null=True, blank=True, default=None)
     participants = models.ManyToManyField('personnes.People',
             null=True, blank=True, default=None)
+    room = models.ForeignKey('ressources.Room', blank=True, null=True,
+            verbose_name=u'Salle')
 
     class Meta:
         verbose_name = u'Evénement'
@@ -133,8 +135,6 @@ class Occurrence(models.Model):
     event = models.ForeignKey('Event', verbose_name=_('event'), editable=False)
     notes = models.ManyToManyField('Note', verbose_name=_('notes'),
             null=True, blank=True, default=None)
-    room = models.ForeignKey('ressources.Room', blank=True, null=True,
-            verbose_name=u'Salle')
 
     objects = managers.OccurrenceManager()
 

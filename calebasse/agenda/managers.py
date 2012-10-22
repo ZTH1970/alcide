@@ -24,6 +24,7 @@ class EventManager(models.Manager):
         event.description = description
         event.participants = participants
         event.services = services
+        event.room = room
         if note is not None:
             event.notes.create(note=note)
         start_datetime = start_datetime or datetime.now().replace(
@@ -31,7 +32,7 @@ class EventManager(models.Manager):
         )
         occurence_duration = default.DEFAULT_OCCURRENCE_DURATION
         end_datetime = end_datetime or start_datetime + occurence_duration
-        event.add_occurrences(start_datetime, end_datetime, room, **rrule_params)
+        event.add_occurrences(start_datetime, end_datetime, **rrule_params)
         event.save()
 
         return event
@@ -66,7 +67,7 @@ class EventManager(models.Manager):
 
         return self._set_event(event, participants, services = services,
                 start_datetime = start_datetime, end_datetime = end_datetime,
-                **rrule_params)
+                room=room, **rrule_params)
 
     def create_holiday(self, start_date, end_date, peoples=[], services=[], motive=''):
         event_type, created = agenda.models.EventType.objects.get_or_create(
