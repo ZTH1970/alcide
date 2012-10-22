@@ -3,7 +3,7 @@ import datetime
 from django.conf.urls import url, patterns, include
 
 from calebasse.cbv import TemplateView
-from views import redirect_today, AgendaHomepageView
+from views import redirect_today, AgendaHomepageView, new_appointment
 
 
 agenda_patterns = patterns('',
@@ -11,6 +11,9 @@ agenda_patterns = patterns('',
                 AgendaHomepageView.as_view(
                     template_name='agenda/index.html'),
                 name='agenda'),
+            url(r'^nouveau-rdv/$',
+                new_appointment,
+                name='nouveau-rdv'),
             url(r'^activite-du-service/$',
                 TemplateView.as_view(
                     template_name='agenda/activite-du-service.html'),

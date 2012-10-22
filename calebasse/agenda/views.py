@@ -7,6 +7,8 @@ from calebasse.agenda.models import Occurrence
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import WorkerType
 
+from forms import NewAppointmentForm
+
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
     return redirect('agenda', date=datetime.date.today().strftime('%Y-%m-%d'),
@@ -21,6 +23,7 @@ class AgendaHomepageView(TemplateView):
         context['workers_types'] = []
         context['workers_agenda'] = []
         context['disponnibility'] = {}
+        context['new_appointment_form'] = NewAppointmentForm()
         workers = []
         for worker_type in WorkerType.objects.all():
             data = {'type': worker_type.name, 'workers': Worker.objects.for_service(self.service, worker_type) }
@@ -33,3 +36,6 @@ class AgendaHomepageView(TemplateView):
 
         context['disponnibility'] = Occurrence.objects.daily_disponiblity(context['date'], workers)
         return context
+
+def new_appointment(request):
+    pass

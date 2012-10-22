@@ -1,4 +1,5 @@
 {% extends "calebasse/base.html" %}
+{% load url from future %}
 {% block extrascripts %}
     <script>
   $(function() {
@@ -48,7 +49,7 @@
 				  buttons: [ { text: "Fermer",
 					       click: function() { $(this).dialog("close"); } },
 					     { text: "Ajouter",
-					       click: function() { $(this).dialog("close"); } }]}
+					       click: function() { $("#rdv form").submit(); } }]}
 			);
 			});
 	});
@@ -240,57 +241,48 @@
 
 {% block dialogs %}
   <div id="rdv" style="display: none;">
-   <form>
+    <form method="post" action="{% url "nouveau-rdv" service=service date=date %}">
+     {% with new_appointment_form as form %}
    <table><tr><td>
    <p>
-   <label for="id_date">Date:</label>
-   <input id="id_date" class="date" name="date" value="5/7/2012"/>
+
+   {{ form.date.label_tag }}
+   {{ form.date }}
    </p>
    </td><td>
    <p>
-    <label for="id_debut">Heure de début :</label>
-    <input id="id_debut" type="text" name="debut" maxlength="10"/>
+   {{ form.time.label_tag }}
+   {{ form.time }}
    </p>
    </td><td>
    <p>
-    <label for="id_duree">Durée :</label>
-    <input id="id_duree" type="text" name="duree" maxlength="10"/>
+   {{ form.duration.label_tag }}
+   {{ form.duration }}
    </p>
    </td></tr>
 
    <tr>
    <td>
-   <h4>Intervenants</h4>
+     <h4>{{ form.participants.label_tag }}</h4>
    <div id="intervenants">
-    <ul>
-     <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
-     <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
-    </ul>
-    <input/><button id="add-intervenant-btn">➕</button>
-   <p><small>(champ avec autocomplétion)</small></p>
-    <!-- <a href="#">Tout le monde</a> -->
+     {{ form.participants }}
    </div>
    </td>
    <td>
-   <h4>Patient</h4>
-   <input name="patient"/>
-   <br/>
-   <p><small>(champ avec autocomplétion)</small></p>
+     <h4>{{ form.patient.label_tag }}</h4>
+     {{ form.patient }}
    </td>
    <td>
 
-   <h4>Type d'acte</h4>
-   <select>
-    <option>Analyse</option>
-    <option>Bla bla bla bla bla bla</option>
-   </select>
+     <h4>{{ form.act_type.label_tag }}</h4>
+     {{ form.act_type }}
    </td>
    </tr>
    </table>
 
    <hr/>
    <button>Configurer la périodicité</button>
-
+   {% endwith %}
    </form>
  </div>
 {% endblock %}
