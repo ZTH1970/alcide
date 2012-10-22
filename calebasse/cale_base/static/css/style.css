@@ -394,6 +394,7 @@ div#datesel {
 
 td#dispos {
 	padding-top: 55px;
+  vertical-align: top;
 }
 
 td#dispos td {
