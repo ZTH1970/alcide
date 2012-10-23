@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil import rrule
 
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from calebasse.agenda.conf import default
 from calebasse.exceptions import CalebasseException
@@ -13,7 +14,7 @@ __all__ = (
     'OccurrenceManager',
 )
 
-class EventManager(models.Manager):
+class EventManager(InheritanceManager):
     """ This class allows you to manage events, appointment, ...
     """
 
