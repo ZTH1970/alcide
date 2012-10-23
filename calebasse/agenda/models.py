@@ -10,7 +10,6 @@ from django.contrib.contenttypes import generic
 from django.db import models
 
 from calebasse.agenda import managers
-from calebasse.ressources.models import ServiceLinkedAbstractModel
 
 __all__ = (
     'Note',
