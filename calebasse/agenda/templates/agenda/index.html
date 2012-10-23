@@ -184,87 +184,33 @@
            <li><a href="#tabs-worker-{{ worker_agenda.worker.id }}" class="worker-{{ worker_agenda.worker.id }} agenda" style="display: none;">{{ worker_agenda.worker.display_name }}</a></li>
         {% endfor %}
        </ul>
-       <div id="tabs-sandy-kilo" class="tabs agenda sandy-kilo agenda">
-       <a class="print" href="#">Imprimer</a>
-       <div>
-        <h3 class="info"><span class="hour">08:00</span> — Arrivée</h3>
-        <div></div>
-        <h3 class="free"><span class="hour">08:00</span> — 120m
-        </h3>
-        <div><button class='booking' data-hour="08:00">Prendre un rendez-vous</button></div>
-        <h3 class="busy-elsewhere convocation"><span class="hour">10:00</span> — 45m — John Doe — SK
-         <span class="right">
-         <span class="box camsp" title="CAMSP"></span>
-         <img title="Une convocation a été envoyée" src="{{ STATIC_URL }}images/emblem-mail.png"/>
-         <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png"/>
-         <button>✍</button>
-         <button>➖</button>
-         </span>
-        </h3>
-        <div>
-          <div class="textedit">
-           <textarea>bla bla bla</textarea>
-           <button>✔</button>
-          </div>
-          <a href="#">Dossier patient</a> -
-          <a href="#">Prochains rendez-vous</a> -
-          <a href="#">Convoquer patient</a>
-        </div>
-        <h3 class="busy-here"><span class="hour">10:45</span> — 45m — Jack Itchan — SK
-         <span class="right">
-           <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png"/>
-         <button>✍</button>
-         <button>➖</button>
-         </span>
-        </h3>
-        <div>
-          <div class="textedit">
-           <textarea>bla bla bla</textarea>
-           <button>✔</button>
-          </div>
-          <a href="#">Dossier patient</a> -
-          <a href="#">Prochains rendez-vous</a> -
-          <a href="#">Convoquer patient</a>
-        </div>
-        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
-        <div>
-          <div class="textedit">
-           <textarea>bla bla bla</textarea>
-           <button>✔</button>
-          </div>
-        </div>
-        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
-        <div></div>
-        <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
-        <div></div>
-       </div>
-       </div>
+       {% for worker_agenda in workers_agenda %}
+       <div id="tabs-worker-{{ worker_agenda.worker.id }}" class="tabs agenda worker-{{ worker_agenda.worker.id }}" style="display: none;">
+         <a class="print" href="#">Imprimer</a>
+         <div>
+           {% for appointment in worker_agenda.appointments %}
+           <h3 class="{{ appointment.type }}"><span class="hour">{{ appointment.begin_hour }}</span>
+             {% if appointment.title %} — {{ appointment.title }}  {% endif %}
+             {% if appointment.length %} — {{ appointment.length }}m {% endif %}
+             {% if appointment.room %} — {{ appointment.room }} {% endif %}
+           </h3>
 
-       <div id="tabs-bob-leponge" class="tabs agenda bob-leponge">
-       <a class="print" href="#">Imprimer</a>
-       <div>
-        <h3 class="info"><span class="hour">08:30</span> — Arrivée</h3>
-        <div></div>
-        <h3 class="free"><span class="hour">08:30</span> — 180m</h3>
-        <div><button>Prendre un rendez-vous</button></div>
-        <h3 class="busy-elsewhere"><span class="hour">11:30</span> — 30m — Réunion — Salle S4</h3>
-        <div>
-          <div class="textedit">
-           <textarea>bla bla bla</textarea>
-           <button>✔</button>
-          </div>
-        </div>
-        <h3 class="free"><span class="hour">12:00</span> — 30m</h3>
-        <div></div>
-        <h3 class="info"><span class="hour">12:30</span> — Départ</h3>
-        <div></div>
-        <h3 class="info"><span class="hour">13:00</span> — Arrivée</h3>
-        <div></div>
-        <h3 class="free"><span class="hour">13:00</span> — 270m</h3>
-        <div><button>Prendre un rendez-vous</button></div>
-        <h3 class="info"><span class="hour">17:30</span> — Départ</h3>
-        <div></div>
+           <div>
+             {% if appointment.type == 'free' %}<button class='booking' data-hour="{{ appointment.begin_hour }}">Prendre un rendez-vous</button> {% endif %}
+             {% if appointment.description %}
+             <div class="textedit">
+               <textarea>{{ appointment.description }}</textarea>
+               <button>✔</button>
+             </div>
+             {% endif %}
+             <a href="#">Dossier patient</a> -
+             <a href="#">Prochains rendez-vous</a> -
+             <a href="#">Convoquer patient</a>
+           </div>
+           {% endfor %}
+         </div>
        </div>
+       {% endfor %}
 
        </div>
 

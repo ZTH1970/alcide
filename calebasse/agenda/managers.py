@@ -155,28 +155,40 @@ class OccurrenceManager(models.Manager):
             end_datetime += timedelta(minutes=15)
         return result
 
-    def range_occurences(self, start_datetime, end_datetime, participants=None, services=None):
+    def smallest_start_in_range(self, start_datetime, end_datetime, participants=None, services=None):
         """ """
         qs = self.filter(
             models.Q(
                 start_time__gte=start_datetime,
-                start_time__lte=end_datetime,
-            ) |
-            models.Q(
-                end_time__gte=start_datetime,
-                end_time__lte=end_datetime,
-            ) |
-            models.Q(
-                start_time__lt=start_datetime,
-                end_time__gt=end_datetime,
-            )
+                start_time__lt=end_datetime,
+            ) 
         )
         if participants:
             qs = qs.filter(event__participants__in=participants)
         if services:
             qs = qs.filter(services__in=services)
-        return qs
+        qs = qs.order_by('start_time')
+        if qs:
+            return qs[0]
+        else:
+            return None
 
-        
 
+    def biggest_end_in_range(self, start_datetime, end_datetime, participants=None, services=None):
+        """ """
+        qs = self.filter(
+            models.Q(
+                end_time__gt=start_datetime,
+                end_time__lte=end_datetime,
+            ) 
+        )
+        if participants:
+            qs = qs.filter(event__participants__in=participants)
+        if services:
+            qs = qs.filter(services__in=services)
+        qs = qs.order_by('-end_time')
+        if qs:
+            return qs[0]
+        else:
+            return None
 

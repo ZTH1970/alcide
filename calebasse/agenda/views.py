@@ -4,8 +4,9 @@ from django.shortcuts import redirect
 
 from calebasse.cbv import TemplateView
 from calebasse.agenda.models import Occurrence
+from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
-from calebasse.ressources.models import WorkerType
+from calebasse.ressources.models import Service, WorkerType
 
 from forms import NewAppointmentForm
 
@@ -25,6 +26,7 @@ class AgendaHomepageView(TemplateView):
         context['disponnibility'] = {}
         context['new_appointment_form'] = NewAppointmentForm()
         workers = []
+        service = Service.objects.get(name=context['service_name'])
         for worker_type in WorkerType.objects.all():
             data = {'type': worker_type.name, 'workers': Worker.objects.for_service(self.service, worker_type) }
             context['workers_types'].append(data)
@@ -32,7 +34,7 @@ class AgendaHomepageView(TemplateView):
 
         for worker in workers:
             context['workers_agenda'].append({'worker': worker,
-                    'agenda': Occurrence.objects.daily_occurrences(context['date'], [worker])})
+                    'appointments': get_daily_appointments(context['date'], worker, service)})
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'], workers)
         return context
