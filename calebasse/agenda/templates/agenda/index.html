@@ -2,21 +2,51 @@
 {% load url from future %}
 {% block extrascripts %}
     <script>
+      function replace_anchor(url, anchor) {
+        var splitted = url.split('#');
+        return splitted[0] + '#' + encodeURI(anchor);
+      }
+      function extract_anchor() {
+        if (window.location.href.indexOf('#') == -1) {
+          return "";
+        }
+        var splitted = window.location.href.split('#');
+        return decodeURI(splitted[1]).split(',');
+      }
+      function make_anchor() {
+        return $.makeArray($('.person-item.active').map(function (v, i) { return '_' + $(i).attr('id'); })).join(',');
+      }
+      function toggle_worker(worker_selector) {
+        $(worker_selector).toggleClass('active');
+        // update the anchor
+        var anchor = make_anchor();
+        var new_uri = replace_anchor(window.location.href, anchor);
+        console.log(new_uri);
+        window.location.href = new_uri;
+        $('a[href^="../"]').each(function (i, a) {
+          $(a).attr('href', replace_anchor($(a).attr('href'), anchor));
+        });
+
+        var $target = $($(worker_selector).data('target'));
+        $target.toggle();
+        // var selected = $('#tabs').tabs('option', 'selected');
+        // var length = $('#tabs').tabs('length');
+        // alert($('.tabs').index($target.filter('.tabs')));
+        if ($target.is(':visible')) {
+          //$target.click();
+        }
+      }
   $(function() {
     $('#tabs').tabs();
 
     $('div.agenda > div').accordion({active: false, autoHeight: false});
 
     $('.person-item').on('click', function() {
-      $(this).toggleClass('active');
-      var $target = $($(this).data('target'));
-      $target.toggle();
-      // var selected = $('#tabs').tabs('option', 'selected');
-      // var length = $('#tabs').tabs('length');
-      // alert($('.tabs').index($target.filter('.tabs')));
-      if ($target.is(':visible')) {
-        $target.click();
-      }
+      toggle_worker(this);
+    });
+    // select all anchors
+    $.each(extract_anchor(), function (i, anchor) {
+      $('#'+anchor.substr(1)).each(function (i, worker_selector) { toggle_worker(worker_selector); });
     });
 
     /* Gestion du filtre sur les utilisateurs */
@@ -35,7 +65,15 @@
       }
 
 		});
-		$('#agenda-date').datepicker();
+    $('#agenda-date').datepicker({
+      dateFormat: "DD d MM yy",
+      onClose: function(dateText, inst) {
+        console.log('close');
+      }
+    });
+    $('#agenda-date').on('change', function () {
+      window.location.href=replace_anchor('../' + $(this).datepicker('getDate').toISOString().substr(0,10), make_anchor());
+    });
 		$('.date').datepicker({showOn: 'button'});
 		$('#add-intervenant-btn').click(function() {
 			var text = $(this).prev().val();
@@ -94,7 +132,7 @@
      <dt>{{ workers_type.type }}</dt>
      <dd><ul>
        {% for worker in workers_type.workers %}
-       <li class="person-item" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }}</li>
+       <li id="selector-worker-{{worker.id}}" class="person-item" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
        {% endfor %}
      </ul></dd>
      {% endfor %}
