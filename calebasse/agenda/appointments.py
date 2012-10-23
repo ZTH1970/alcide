@@ -40,7 +40,7 @@ class Appointment(object):
         else:
             self.type = "busy-elsewhere"
             self.service_name = service.name
-        self.room = occurrence.room.name
+        self.room = occurrence.event.room.name
         self.description = occurrence.event.description
         if occurrence.event.event_type.label == 'patient_appointment':
             self.convocation_sent = occurrence.event.eventact.convocation_sent
