@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     'reversion',
     'south',
     'django.contrib.admin',
+    'ajax_select',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'calebasse.agenda',
@@ -185,3 +186,12 @@ LOGGING = {
     },
 }
 
+# AJAX Select
+AJAX_LOOKUP_CHANNELS = {
+    #   pass a dict with the model and the field to search against
+    'worker'  : {'model':'personnes.Worker', 'search_field':'display_name'},
+    'patientrecord'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
+}
+# magically include jqueryUI/js/css
+AJAX_SELECT_BOOTSTRAP = True
+AJAX_SELECT_INLINES = 'inline'

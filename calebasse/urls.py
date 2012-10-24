@@ -1,7 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic.simple import redirect_to
-
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
+
+from urls_utils import decorated_includes
+
 admin.autodiscover()
 
 service_patterns = patterns('',
@@ -24,5 +27,7 @@ urlpatterns = patterns('',
     (r'^$', redirect_to, { 'url': '/cmpp/' }),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^(?P<service>[a-z-]+)/', include(service_patterns)),
+    url(r'^(?P<service>[a-z-]+)/', decorated_includes(login_required,
+        include(service_patterns))),
+    url(r'^lookups/', include('ajax_select.urls')),
 )

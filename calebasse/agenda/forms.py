@@ -8,6 +8,8 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.actes.models import EventAct
 
+from ajax_select import make_ajax_field
+
 class NewAppointmentForm(forms.ModelForm):
     time = forms.TimeField(label=u'Heure de début')
     DURATION_CHOICES = (
@@ -15,6 +17,9 @@ class NewAppointmentForm(forms.ModelForm):
     )
     duration = forms.TypedChoiceField(choices=DURATION_CHOICES,
             coerce=int, label=u'Durée')
+
+    participants = make_ajax_field(EventAct, 'participants', 'worker', True)
+    patient = make_ajax_field(EventAct, 'patient', 'patientrecord', False)
 
     class Meta:
         model = EventAct
