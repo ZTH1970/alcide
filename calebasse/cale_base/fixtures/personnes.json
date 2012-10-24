@@ -198,5 +198,18 @@
       "start_date": "2012-10-18", 
       "end_time": "17:30:00"
     }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "end_date": null, 
+      "service": 1, 
+      "start_time": "08:00:00", 
+      "worker": 5, 
+      "weekday": "mardi", 
+      "start_date": "2012-10-24", 
+      "end_time": "12:30:00"
+    }
   }
 ]
