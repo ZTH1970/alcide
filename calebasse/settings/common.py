@@ -192,6 +192,3 @@ AJAX_LOOKUP_CHANNELS = {
     'worker'  : {'model':'personnes.Worker', 'search_field':'display_name'},
     'patientrecord'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
 }
-# magically include jqueryUI/js/css
-AJAX_SELECT_BOOTSTRAP = True
-AJAX_SELECT_INLINES = 'inline'

@@ -2,8 +2,9 @@ import datetime
 
 from django.shortcuts import redirect
 
-from calebasse.cbv import TemplateView
+from calebasse.cbv import TemplateView, CreateView
 from calebasse.agenda.models import Occurrence
+from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, WorkerType
@@ -24,7 +25,6 @@ class AgendaHomepageView(TemplateView):
         context['workers_types'] = []
         context['workers_agenda'] = []
         context['disponnibility'] = {}
-        context['new_appointment_form'] = NewAppointmentForm()
         workers = []
         service = Service.objects.get(name=context['service_name'])
         for worker_type in WorkerType.objects.all():
@@ -38,6 +38,20 @@ class AgendaHomepageView(TemplateView):
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'], workers)
         return context
+
+class NewAppointmentView(CreateView):
+    model = EventAct
+    form_class = NewAppointmentForm
+    template_name = 'agenda/nouveau-rdv.html'
+    success_url = '..'
+
+    def get_form_kwargs(self):
+        kwargs = super(NewAppointmentView, self).get_form_kwargs()
+        kwargs['service'] = self.service
+        return kwargs
+
+    def post(self, *args, **kwargs):
+        return super(NewAppointmentView, self).post(*args, **kwargs)
 
 def new_appointment(request):
     pass

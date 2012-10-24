@@ -82,14 +82,33 @@
 			return false;
 		});
 		$('#newrdv').click(function() {
-			$('#rdv').dialog({title: 'Nouveau rendez-vous',
-				  width: '800px',
-				  buttons: [ { text: "Fermer",
-					       click: function() { $(this).dialog("close"); } },
-					     { text: "Ajouter",
-					       click: function() { $("#rdv form").submit(); } }]}
-			);
-			});
+      var new_appointment_url = "{% url 'nouveau-rdv' service=service date=date %}";
+      $('#rdv').load(new_appointment_url,
+        function () {
+          function onsuccess(response, status, xhr, form) {
+            var parse = $(response);
+            if ($('.errorlist', parse).length != 0) {
+              $('#rdv').html(response);
+              $('#rdv form').ajaxForm({
+                success: onsuccess,
+              });
+              console.log('error');
+            } else {
+              console.log('success');
+              window.location.reload(true);
+            }
+          }
+          $('form', this).ajaxForm({
+            success: onsuccess
+          });
+          $(this).dialog({title: 'Nouveau rendez-vous',
+              width: '800px',
+              buttons: [ { text: "Fermer",
+                     click: function() { $(this).dialog("close"); } },
+                   { text: "Ajouter",
+                     click: function() { $("#rdv form").submit(); } }]});
+      });
+    });
 	});
 	</script>
   <style>
@@ -225,48 +244,5 @@
 
 {% block dialogs %}
   <div id="rdv" style="display: none;">
-    <form method="post" action="{% url "nouveau-rdv" service=service date=date %}">
-     {% with new_appointment_form as form %}
-   <table><tr><td>
-   <p>
-
-   {{ form.date.label_tag }}
-   {{ form.date }}
-   </p>
-   </td><td>
-   <p>
-   {{ form.time.label_tag }}
-   {{ form.time }}
-   </p>
-   </td><td>
-   <p>
-   {{ form.duration.label_tag }}
-   {{ form.duration }}
-   </p>
-   </td></tr>
-
-   <tr>
-   <td>
-     <h4>{{ form.participants.label_tag }}</h4>
-   <div id="intervenants">
-     {{ form.participants }}
-   </div>
-   </td>
-   <td>
-     <h4>{{ form.patient.label_tag }}</h4>
-     {{ form.patient }}
-   </td>
-   <td>
-
-     <h4>{{ form.act_type.label_tag }}</h4>
-     {{ form.act_type }}
-   </td>
-   </tr>
-   </table>
-
-   <hr/>
-   <button>Configurer la périodicité</button>
-   {% endwith %}
-   </form>
  </div>
 {% endblock %}

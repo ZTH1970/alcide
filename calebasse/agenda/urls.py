@@ -1,10 +1,8 @@
 from django.conf.urls import url, patterns, include
 
-from calebasse.cbv import TemplateView, CreateView
-from calebasse.actes.models import EventAct
+from calebasse.cbv import TemplateView
 
-from views import redirect_today, AgendaHomepageView
-from forms import NewAppointmentForm
+from views import redirect_today, AgendaHomepageView, NewAppointmentView
 
 
 agenda_patterns = patterns('',
@@ -13,9 +11,7 @@ agenda_patterns = patterns('',
                     template_name='agenda/index.html'),
                 name='agenda'),
             url(r'^nouveau-rdv/$',
-                CreateView.as_view(model=EventAct,
-                    form_class=NewAppointmentForm,
-                    template_name='agenda/nouveau-rdv.html'),
+                NewAppointmentView.as_view(),
                 name='nouveau-rdv'),
             url(r'^activite-du-service/$',
                 TemplateView.as_view(
