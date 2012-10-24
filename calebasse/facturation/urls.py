@@ -7,9 +7,9 @@ from forms import CreateInvoiceForm, EditInvoiceForm
 
 urlpatterns = patterns('',
     url(r'^$', ListView.as_view(model=Invoice)),
-    url(r'^nouveau/$', CreateView.as_view(model=Invoice,
+    url(r'^new/$', CreateView.as_view(model=Invoice,
         form_class=CreateInvoiceForm,
-        template_name_suffix='_nouveau.html')),
+        template_name_suffix='_new.html')),
     url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=Invoice,
         form_class=EditInvoiceForm,
         template_name_suffix='_edit.html')),

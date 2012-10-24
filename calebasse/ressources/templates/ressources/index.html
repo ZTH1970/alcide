@@ -1,0 +1,35 @@
+{% extends "calebasse/base.html" %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Gestion des ressources - {{ service_name }}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Gestion des ressources</h2>
+  <a href="/">Retourner à l'accueil</a>
+{% endblock %}
+
+{% block content %}
+    <ul>
+     <li><a href="#">Annexes d'établissement</a></li>
+     <li><a href="#">Caisses d'assurances maladie</a></li>
+     <li><a href="#">Compagnies de transport</a></li>
+     <li><a href="#">Codes CFTMEA</a></li>
+     <li><a href="#">Codes de non-facturation</a></li>
+     <li><a href="#">Établissements</a></li>
+     <li><a href="#">Lieux de scolarisation</a></li>
+     <li><a href="#">Motifs d'inscription</a></li>
+     <li><a href="#">Nationalités</a></li>
+     <li><a href="#">Professions</a></li>
+     <li><a href="#">Salles</a></li>
+     <li><a href="#">Tarifs de séances</a></li>
+     <li><a href="#">Types d'actes</a></li>
+     <li><a href="#">Types d'autorités parentales</a></li>
+     <li><a href="#">Types de conseilleurs</a></li>
+     <li><a href="#">Types de gardes parentales</a></li>
+     <li><a href="#">Types de séances</a></li>
+     <li><a href="#">Types de situations familiales</a></li>
+     <li><a href="#">Types de transports</a></li>
+    </ul>
+{% endblock %}

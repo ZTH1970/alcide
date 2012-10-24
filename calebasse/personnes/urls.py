@@ -12,23 +12,23 @@ acces_patterns = patterns('',
     url(r'^$', ListView.as_view(model=User)),
     url(r'^nouveau/$', CreateView.as_view(model=User,
         form_class=CreateUserForm,
-        template_name_suffix='_nouveau.html')),
+        template_name_suffix='_new.html')),
     url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=User,
         form_class=EditUserForm,
         template_name_suffix='_edit.html')),
-    url(r'^(?P<pk>\d+)/supprimer/$', DeleteView.as_view(model=User)),
+    url(r'^(?P<pk>\d+)/delete/$', DeleteView.as_view(model=User)),
 )
 
 
 personne_patterns = patterns('',
     url(r'^$', ListView.as_view(model=Worker)),
-    url(r'^nouveau/$', CreateView.as_view(model=Worker,
+    url(r'^new/$', CreateView.as_view(model=Worker,
         form_class=CreatePersonnelForm,
-        template_name_suffix='_nouveau.html')),
+        template_name_suffix='_new.html')),
     url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=Worker,
         form_class=EditPersonnelForm,
         template_name_suffix='_edit.html')),
-    url(r'^(?P<pk>\d+)/supprimer/$', DeleteView.as_view(model=Worker)),
+    url(r'^(?P<pk>\d+)/delete/$', DeleteView.as_view(model=Worker)),
 )
 
 
@@ -49,7 +49,7 @@ personne_patterns = patterns('',
 #)
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='personnel/index.html')),
+    url(r'^$', TemplateView.as_view(template_name='personnes/index.html')),
     url(r'^acces/', include(acces_patterns)),
     url(r'^gestion/', include(personne_patterns)),
     url(r'^conges/', include(personne_patterns)),
