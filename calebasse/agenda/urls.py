@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf.urls import url, patterns, include
 
 from calebasse.cbv import TemplateView
