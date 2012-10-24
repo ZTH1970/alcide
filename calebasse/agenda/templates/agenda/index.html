@@ -221,14 +221,16 @@
            <div>
              {% if appointment.type == 'free' %}<button class='booking' data-hour="{{ appointment.begin_hour }}">Prendre un rendez-vous</button> {% endif %}
              {% if appointment.description %}
-             <div class="textedit">
+             <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
                <textarea>{{ appointment.description }}</textarea>
-               <button>✔</button>
+               <button disabled="disabled">✔</button>
              </div>
              {% endif %}
-             <a href="#">Dossier patient</a> -
+             {% if appointment.patient_record_id %}
+             <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}">Dossier patient</a> -
              <a href="#">Prochains rendez-vous</a> -
              <a href="#">Convoquer patient</a>
+             {% endif %}
            </div>
            {% endfor %}
          </div>

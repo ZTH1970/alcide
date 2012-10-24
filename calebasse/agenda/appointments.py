@@ -11,7 +11,7 @@ class Appointment(object):
 
     def __init__(self, title=None, begin_time=None, type=None,
             length=None, description=None, room=None, convocation_sent=None,
-            service_name=None):
+            service_name=None, patient_record_id=None):
         """ """
         self.title = title
         self.type = type
@@ -20,6 +20,7 @@ class Appointment(object):
         self.room = room
         self.convocation_sent = None
         self.service_name = None
+        self.patient_record_id = None
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -28,7 +29,7 @@ class Appointment(object):
             self.begin_hour = time.strftime("%H:%M")
         else:
             self.begin_hour = None
-        
+
     def init_from_occurrence(self, occurrence, service):
         """ """
         delta = occurrence.end_time - occurrence.start_time
@@ -43,14 +44,16 @@ class Appointment(object):
         self.room = occurrence.event.room.name
         self.description = occurrence.event.description
         if occurrence.event.event_type.label == 'patient_appointment':
-            self.convocation_sent = occurrence.event.eventact.convocation_sent
+            event_act = occurrence.event.eventact
+            self.convocation_sent = event_act.convocation_sent
+            self.patient_record_id = event_act.patient.id
 
     def init_free_time(self, length, begin_time):
         """ """
         self.type = "free"
         self.length = length
         self.__set_time(begin_time)
-        
+
 
     def init_start_stop(self, title, time):
         """
