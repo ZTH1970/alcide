@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'south',
     'django.contrib.admin',
     'ajax_select',
+    'widget_tweaks',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'calebasse.agenda',

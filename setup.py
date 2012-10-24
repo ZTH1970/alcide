@@ -18,6 +18,7 @@ setup(name='calebasse',
             'python-dateutil >= 2.0',
             'django-model-utils < 1.2.0',
             'django-ajax-selects < 1.3.0',
+            'django-widget-tweaks < 1.2.0',
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',

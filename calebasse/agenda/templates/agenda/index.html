@@ -81,8 +81,10 @@
 			$(this).prev().val('').focus();
 			return false;
 		});
-		$('#newrdv').click(function() {
-      var new_appointment_url = "{% url 'nouveau-rdv' service=service date=date %}";
+    $('#newrdv').click(function() {
+      var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
+      var qs = $.param({participants: $.makeArray(participants) }, true);
+      var new_appointment_url = "{% url 'nouveau-rdv' service=service date=date %}?" + qs;
       $('#rdv').load(new_appointment_url,
         function () {
           function onsuccess(response, status, xhr, form) {
@@ -92,12 +94,14 @@
               $('#rdv form').ajaxForm({
                 success: onsuccess,
               });
+              $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
               console.log('error');
             } else {
               console.log('success');
               window.location.reload(true);
             }
           }
+          $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
           $('form', this).ajaxForm({
             success: onsuccess
           });
@@ -151,7 +155,7 @@
      <dt>{{ workers_type.type }}</dt>
      <dd><ul>
        {% for worker in workers_type.workers %}
-       <li id="selector-worker-{{worker.id}}" class="person-item" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
        {% endfor %}
      </ul></dd>
      {% endfor %}

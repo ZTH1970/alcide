@@ -45,6 +45,13 @@ class NewAppointmentView(CreateView):
     template_name = 'agenda/nouveau-rdv.html'
     success_url = '..'
 
+    def get_initial(self):
+        initial = super(NewAppointmentView, self).get_initial()
+        initial['date'] = self.kwargs.get('date')
+        initial['participants'] = self.request.GET.getlist('participants')
+        initial['time'] = self.request.GET.get('time')
+        return initial
+
     def get_form_kwargs(self):
         kwargs = super(NewAppointmentView, self).get_form_kwargs()
         kwargs['service'] = self.service
