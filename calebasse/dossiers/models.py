@@ -5,7 +5,7 @@ from django.db import models
 from calebasse.personnes.models import People
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 
-class PatientRecord(People, ServiceLinkedAbstractModel):
+class PatientRecord(ServiceLinkedAbstractModel, People):
     class Meta:
         verbose_name = u'Dossier'
         verbose_name_plural = u'Dossiers'
