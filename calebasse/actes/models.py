@@ -22,7 +22,22 @@ class Act(models.Model):
             verbose_name=u'Type de transport')
     doctors = models.ManyToManyField('personnes.Worker',
             limit_choices_to={'type__intervene': True },
-            verbose_name=u'Thérapeute')
+            verbose_name=u'Thérapeutes')
+
+    def __unicode__(self):
+        return '{0} le {1} pour {2} avec {3}'.format(
+                self.act_type, self.date, self.patient,
+                ', '.join(map(unicode, self.doctors.all())))
+
+    def __repr__(self):
+        return '<%s %r %r>' % (self.__class__.__name__, unicode(self), self.id)
+
+
+    class Meta:
+        verbose_name = u"Acte"
+        verbose_name_plural = u"Actes"
+        ordering = ['-date', 'patient']
+
 
 class EventActManager(EventManager):
 
