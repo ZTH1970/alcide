@@ -22,6 +22,7 @@ class Appointment(object):
         self.service_name = None
         self.patient_record_id = None
         self.event_id = None
+        self.service = None
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -36,6 +37,9 @@ class Appointment(object):
         delta = occurrence.end_time - occurrence.start_time
         self.length = delta.seconds / 60
         self.title = occurrence.title
+        services = occurrence.event.services.all()
+        if services:
+            self.service = services[0].name.lower()
         self.__set_time(time(occurrence.start_time.hour, occurrence.start_time.minute))
         if service in occurrence.event.services.all():
             self.type = "busy-here"
