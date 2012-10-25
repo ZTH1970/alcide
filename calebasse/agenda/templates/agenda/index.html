@@ -52,12 +52,14 @@
     $('.textedit button').on('click', function() {
         var textarea = $(this).prev();
         var span = textarea.prev()
+        var btn = $(this)
         $.ajax({
             url: '/api/event/' + $(this).data("event-id") + '/?format=json',
             type: 'PATCH',
             contentType: 'application/json',
             data: '{"description": "' + textarea.val() + '"}',
             success: function(data) {
+                btn.attr('disabled', 'disabled');
                 span.html('Commentaire modifiée avec succès');
             }
         });
