@@ -72,6 +72,7 @@ class EventActManager(EventManager):
                 patient=patient,
                 act_type=act_type,
                 date=start_datetime.date(),
+                doctors=participants,
                 )
 
         return self._set_event(act_event, participants, description,
