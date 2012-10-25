@@ -12,11 +12,8 @@ from ajax_select import make_ajax_field
 
 class NewAppointmentForm(forms.ModelForm):
     time = forms.TimeField(label=u'Heure de début')
-    DURATION_CHOICES = (
-            (45, '45 minutes'),
-    )
-    duration = forms.TypedChoiceField(choices=DURATION_CHOICES,
-            coerce=int, label=u'Durée')
+    duration = forms.CharField(label=u'Durée',
+            help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
 
     participants = make_ajax_field(EventAct, 'participants', 'worker', True)
     patient = make_ajax_field(EventAct, 'patient', 'patientrecord', False)
