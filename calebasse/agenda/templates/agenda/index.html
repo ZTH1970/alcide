@@ -29,11 +29,8 @@
 
         var $target = $($(worker_selector).data('target'));
         $target.toggle();
-        // var selected = $('#tabs').tabs('option', 'selected');
-        // var length = $('#tabs').tabs('length');
-        // alert($('.tabs').index($target.filter('.tabs')));
         if ($target.is(':visible')) {
-          //$target.click();
+          $target.click();
         }
       }
   $(function() {
