@@ -10,6 +10,7 @@ from django.contrib.contenttypes import generic
 from django.db import models
 
 from calebasse.agenda import managers
+from interval import Interval
 
 __all__ = (
     'Note',
@@ -156,4 +157,5 @@ class Occurrence(models.Model):
     def event_type(self):
         return self.event.event_type
 
-
+    def to_interval(self):
+        return Interval(self.start_time, self.end_time)

@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
 from calebasse.ressources.models import WorkerType
 from calebasse.models import WeekdayField, BaseModelMixin
+from calebasse.interval import Interval
+
+from interval import Interval
 
 class People(BaseModelMixin, models.Model):
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
@@ -78,3 +83,7 @@ class TimeTable(BaseModelMixin, models.Model):
     class Meta:
         verbose_name = u'Emploi du temps'
         verbose_name_plural = u'Emplois du temps'
+
+    def to_interval(self, date):
+        return Interval(datetime.combine(date, self.start_time),
+                datetime.combine(date, self.end_time))
