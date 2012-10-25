@@ -42,6 +42,13 @@ class NewAppointmentForm(forms.ModelForm):
             self.fields['patient'].queryset = \
                     PatientRecord.objects.for_service(service)
 
+    def clean_duration(self):
+        duration = self.cleaned_data['duration']
+        try:
+            return int(duration)
+        except:
+            return None
+
     def save(self, commit=False):
         start_datetime = datetime.combine(self.cleaned_data['date'],
                     self.cleaned_data['time'])
