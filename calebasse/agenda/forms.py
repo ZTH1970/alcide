@@ -56,14 +56,14 @@ class NewAppointmentForm(forms.ModelForm):
                 minutes=self.cleaned_data['duration'])
         patient = self.cleaned_data['patient']
         self.instance = EventAct.objects.create_patient_appointment(
-                title='Rdv ' + patient.display_name,
+                title=+ patient.display_name,
                 patient=patient,
                 participants=self.cleaned_data['participants'],
                 act_type=self.cleaned_data['act_type'],
                 service=self.service,
                 start_datetime=start_datetime,
                 end_datetime=end_datetime,
-                description='description #FIXME#',
+                description='',
                 room=self.cleaned_data['room'],
                 note=None,)
         return self.instance
