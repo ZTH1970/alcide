@@ -54,9 +54,10 @@ class NewAppointmentForm(forms.ModelForm):
                     self.cleaned_data['time'])
         end_datetime = start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
+        patient = self.cleaned_data['patient']
         self.instance = EventAct.objects.create_patient_appointment(
-                title='title #FIXME#',
-                patient=self.cleaned_data['patient'],
+                title='Rdv ' + patient.display_name,
+                patient=patient,
                 participants=self.cleaned_data['participants'],
                 act_type=self.cleaned_data['act_type'],
                 service=self.service,
