@@ -62,6 +62,9 @@
             }
         });
     });
+    $('.appointment').on('click', function() {
+        $('.textedit span').html('');
+    });
 
 
     /* Gestion du filtre sur les utilisateurs */
@@ -227,7 +230,7 @@
          <a class="print" href="#">Imprimer</a>
          <div>
            {% for appointment in worker_agenda.appointments %}
-           <h3 class="{{ appointment.type }}"><span class="hour">{{ appointment.begin_hour }}</span>
+           <h3 class="{{ appointment.type }} appointment"><span class="hour">{{ appointment.begin_hour }}</span>
              {% if appointment.title %} — {{ appointment.title }}  {% endif %}
              {% if appointment.length %} — {{ appointment.length }}m {% endif %}
              {% if appointment.room %} — {{ appointment.room }} {% endif %}
