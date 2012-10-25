@@ -42,11 +42,6 @@ class NewAppointmentForm(forms.ModelForm):
             self.fields['patient'].queryset = \
                     PatientRecord.objects.for_service(service)
 
-    def clean_participants(self):
-        if self.cleaned_data['participants'] and len(self.cleaned_data['participants']) > 1:
-            raise forms.ValidationError(u'Un seul thérapeute est permis.')
-        return self.cleaned_data['participants']
-
     def clean_duration(self):
         duration = self.cleaned_data['duration']
         try:
