@@ -1,0 +1,34 @@
+[
+  {
+    "pk": 1, 
+    "model": "ressources.service", 
+    "fields": {
+      "name": "CMPP",
+      "slug": "cmpp"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "ressources.service", 
+    "fields": {
+      "name": "CAMSP",
+      "slug": "camsp"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "ressources.service", 
+    "fields": {
+      "name": "SESSAD DYS",
+      "slug": "sessad-dys"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "ressources.service", 
+    "fields": {
+      "name": "SESSAD TED",
+      "slug": "sessad-ted"
+    }
+  }
+]
