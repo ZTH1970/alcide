@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 
 from calebasse.ressources.models import WorkerType
 from calebasse.models import WeekdayField, BaseModelMixin
-from calebasse.interval import Interval
 
 from interval import Interval
 
