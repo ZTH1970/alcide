@@ -47,7 +47,7 @@ USE_I18N = True
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
 USE_L10N = True
-FORMAT_MODULE_PATH = 'calebasse.formats'
+FORMAT_MODULE_PATH = 'calebasse.settings.formats'
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = False
