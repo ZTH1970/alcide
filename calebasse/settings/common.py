@@ -128,8 +128,6 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages")
 
-#AUTH_PROFILE_MODULE = "cale_base.CalebasseUser"
-
 FIXTURE_DIRS = (
         os.path.join(PROJECT_PATH, 'fixtures'),
 )
@@ -154,7 +152,6 @@ INSTALLED_APPS = (
     'calebasse.facturation',
     'calebasse.personnes',
     'calebasse.ressources',
-    'calebasse.cale_base',
 )
 
 # A sample logging configuration. The only tangible logging
