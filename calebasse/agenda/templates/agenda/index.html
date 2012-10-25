@@ -51,11 +51,15 @@
     });
     $('.textedit button').on('click', function() {
         var textarea = $(this).prev();
+        var span = textarea.prev()
         $.ajax({
             url: '/api/event/' + $(this).data("event-id") + '/?format=json',
             type: 'PATCH',
             contentType: 'application/json',
-            data: '{"description": "' + textarea.val() + '"}'
+            data: '{"description": "' + textarea.val() + '"}',
+            success: function(data) {
+                span.html('Commentaire modifiée avec succès');
+            }
         });
     });
 
@@ -231,8 +235,9 @@
 
            <div>
              {% if appointment.type == 'free' %}<button class='booking' data-hour="{{ appointment.begin_hour }}">Prendre un rendez-vous</button> {% endif %}
-             {% if appointment.description %}
+             {% if appointment.event_id %}
              <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
+                 <span></span>
                  <textarea>{{ appointment.description }}</textarea>
                  <button disabled="disabled" data-event-id="{{ appointment.event_id }}">✔</button>
              </div>

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from models import (ActType, CFTMEACode, FamilySituationType, HealthFund,
         InscriptionMotive, Job, Nationality, Office, ParentalAuthorityType,
-        ParentalCustodyType, Room, SalleManager, School, SchoolTeacherRole,
+        ParentalCustodyType, Room, School, SchoolTeacherRole,
         Service, SessionType, TransportCompany, TransportType,
         UninvoicableCode, WorkerType)
 
@@ -17,7 +17,6 @@ admin.site.register(Office)
 admin.site.register(ParentalAuthorityType)
 admin.site.register(ParentalCustodyType)
 admin.site.register(Room)
-admin.site.register(SalleManager)
 admin.site.register(School)
 admin.site.register(SchoolTeacherRole)
 admin.site.register(Service)
