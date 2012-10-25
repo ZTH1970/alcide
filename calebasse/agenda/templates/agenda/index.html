@@ -46,6 +46,20 @@
       $('#'+anchor.substr(1)).each(function (i, worker_selector) { toggle_worker(worker_selector); });
     });
 
+    $('.textedit').on('keydown', function() {
+        $('button', this).removeAttr("disabled");
+    });
+    $('.textedit button').on('click', function() {
+        var textarea = $(this).prev();
+        $.ajax({
+            url: '/api/event/' + $(this).data("event-id") + '/?format=json',
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: '{"description": "' + textarea.val() + '"}'
+        });
+    });
+
+
     /* Gestion du filtre sur les utilisateurs */
 		$('#filtre input').keyup(function() {
 			var filtre = $(this).val();
@@ -219,8 +233,8 @@
              {% if appointment.type == 'free' %}<button class='booking' data-hour="{{ appointment.begin_hour }}">Prendre un rendez-vous</button> {% endif %}
              {% if appointment.description %}
              <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
-               <textarea>{{ appointment.description }}</textarea>
-               <button disabled="disabled">✔</button>
+                 <textarea>{{ appointment.description }}</textarea>
+                 <button disabled="disabled" data-event-id="{{ appointment.event_id }}">✔</button>
              </div>
              {% endif %}
              {% if appointment.patient_record_id %}
@@ -242,6 +256,7 @@
     </tbody>
    </table>
  </div>
+
 
 {% endblock %}
 

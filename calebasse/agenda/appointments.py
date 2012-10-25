@@ -11,7 +11,7 @@ class Appointment(object):
 
     def __init__(self, title=None, begin_time=None, type=None,
             length=None, description=None, room=None, convocation_sent=None,
-            service_name=None, patient_record_id=None):
+            service_name=None, patient_record_id=None, event_id=None):
         """ """
         self.title = title
         self.type = type
@@ -21,6 +21,7 @@ class Appointment(object):
         self.convocation_sent = None
         self.service_name = None
         self.patient_record_id = None
+        self.event_id = None
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -41,6 +42,7 @@ class Appointment(object):
         else:
             self.type = "busy-elsewhere"
             self.service_name = service.name
+        self.event_id = occurrence.event.id
         if occurrence.event.room:
             self.room = occurrence.event.room.name
         self.description = occurrence.event.description
