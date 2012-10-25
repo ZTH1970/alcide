@@ -94,3 +94,15 @@ class EventAct(Act, Event):
     convocation_sent = models.BooleanField(blank=True,
             verbose_name=u'Convoqué')
 
+    def __unicode__(self):
+        return 'Rdv le {0} de {1} avec {2} pour {3}'.format(
+                self.occurrence_set.all()[0].start_time, self.patient,
+                ', '.join(map(unicode, self.participants.all())), self.act_type)
+
+    def __repr__(self):
+        return '<%s %r %r>' % (self.__class__.__name__, unicode(self), self.id)
+
+    class Meta:
+        verbose_name = 'Rendez-vous patient'
+        verbose_name_plural = 'Rendez-vous patient'
+        ordering = ['-date', 'patient']
