@@ -70,6 +70,13 @@ class Appointment(object):
         self.title = title
         self.__set_time(time)
 
+def _add_free_time(delta, appointments, begin_time):
+    if delta > 0:
+        delta_minutes = delta / 60
+        appointment = Appointment()
+        appointment.init_free_time(delta_minutes, begin_time)
+        appointments.append(appointment)
+    return appointments
 
 def get_daily_appointments(date, worker, service):
     """
@@ -110,11 +117,8 @@ def get_daily_appointments(date, worker, service):
                             time_table.end_time.hour, time_table.end_time.minute)
                     if (occurrence.end_time >= start_time_table) and (next_occurrence.start_time < end_time_table):
                         delta = next_occurrence.start_time - occurrence.end_time
-                        if delta.seconds > 0:
-                            delta_minutes = delta.seconds / 60
-                            appointment = Appointment()
-                            appointment.init_free_time(delta_minutes, time(occurrence.end_time.hour, occurrence.end_time.minute))
-                            appointments.append(appointment)
+                        appointments = _add_free_time(delta.seconds, appointments,
+                                time(occurrence.end_time.hour, occurrence.end_time.minute))
 
     for time_table in time_tables:
         appointment = Appointment()
@@ -133,25 +137,16 @@ def get_daily_appointments(date, worker, service):
         biggest = Occurrence.objects.biggest_end_in_range(start_datetime, end_datetime, [worker])
         if not smallest and not biggest:
             delta = end_datetime - start_datetime
-            delta = delta.seconds / 60
-            appointment = Appointment()
-            appointment.init_free_time(delta,
+            appointments = _add_free_time(delta.seconds, appointments,
                     time(start_datetime.hour, start_datetime.minute))
-            appointments.append(appointment)
         if smallest:
             delta = smallest.start_time - start_datetime
-            delta = delta.seconds / 60
-            appointment = Appointment()
-            appointment.init_free_time(delta,
+            appointments = _add_free_time(delta.seconds, appointments,
                     time(start_datetime.hour, start_datetime.minute))
-            appointments.append(appointment)
         if biggest:
             delta = end_datetime - biggest.end_time
-            delta = delta.seconds / 60
-            appointment = Appointment()
-            appointment.init_free_time(delta,
+            appointments = _add_free_time(delta.seconds, appointments,
                     time(biggest.end_time.hour, biggest.end_time.minute))
-            appointments.append(appointment)
 
     appointments = sorted(appointments, key=lambda app: app.begin_time)
     return appointments
