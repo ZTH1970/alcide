@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from calebasse.ressources.models import ActType, TransportCompany, WorkerType, Service, Office, School, Room
+from models import (ActType, CFTMEACode, FamilySituationType, HealthFund,
+        InscriptionMotive, Job, Nationality, Office, ParentalAuthorityType,
+        ParentalCustodyType, Room, SalleManager, School, SchoolTeacherRole,
+        Service, SessionType, TransportCompany, TransportType,
+        UninvoicableCode, WorkerType)
 
 admin.site.register(ActType)
 admin.site.register(CFTMEACode)
