@@ -10,8 +10,7 @@ from calebasse.personnes.models import TimeTable
 class Appointment(object):
 
     def __init__(self, title=None, begin_time=None, type=None,
-            length=None, description=None, room=None, convocation_sent=None,
-            service_name=None, patient_record_id=None, event_id=None):
+            length=None, description=None, room=None):
         """ """
         self.title = title
         self.type = type
@@ -23,6 +22,8 @@ class Appointment(object):
         self.patient_record_id = None
         self.event_id = None
         self.service = None
+        self.workers_initial = None
+        self.act_type = None
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -52,8 +53,14 @@ class Appointment(object):
         self.description = occurrence.event.description
         if occurrence.event.event_type.label == 'patient_appointment':
             event_act = occurrence.event.eventact
+            workers = event_act.participants.all()
             self.convocation_sent = event_act.convocation_sent
             self.patient_record_id = event_act.patient.id
+            self.workers_initial = ""
+            for worker in workers:
+                self.workers_initial += " " + worker.first_name.upper()[0]
+                self.workers_initial += worker.last_name.upper()[0]
+            self.act_type = event_act.act_type.name
 
     def init_free_time(self, length, begin_time):
         """ """

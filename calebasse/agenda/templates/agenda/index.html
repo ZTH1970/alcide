@@ -233,6 +233,8 @@
            <h3 class="{{ appointment.type }} appointment"><span class="hour">{{ appointment.begin_hour }}</span>
              {% if appointment.title %} — {{ appointment.title }}  {% endif %}
              {% if appointment.length %} — {{ appointment.length }}m {% endif %}
+             {% if appointment.workers_initial %} —{{ appointment.workers_initial }} {% endif %}
+             {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
              {% if appointment.room %} — {{ appointment.room }} {% endif %}
              <span class="right">
                  {% if appointment.service and appointment.service != service %}
