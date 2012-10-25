@@ -39,18 +39,18 @@
     "pk": 5, 
     "model": "personnes.people", 
     "fields": {
-      "first_name": "Kilo", 
-      "last_name": "Sandy", 
-      "display_name": "Kilo Sandy"
+      "first_name": "Sandy", 
+      "last_name": "Kilo", 
+      "display_name": "Sandy Kilo"
     }
   }, 
   {
     "pk": 6, 
     "model": "personnes.people", 
     "fields": {
-      "first_name": "L\u00e9ponge", 
-      "last_name": "Bob", 
-      "display_name": "L\u00e9ponge Bob"
+      "first_name": "Bob", 
+      "last_name": "L\u00e9ponge", 
+      "display_name": "Bob L\u00e9ponge"
     }
   }, 
   {
