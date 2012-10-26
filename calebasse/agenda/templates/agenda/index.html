@@ -4,7 +4,7 @@
     <script>
       function replace_anchor(url, anchor) {
         var splitted = url.split('#');
-        return splitted[0] + '#' + encodeURI(anchor);
+       return splitted[0] + '#' + encodeURI(anchor);
       }
       function extract_anchor() {
         if (window.location.href.indexOf('#') == -1) {
@@ -35,8 +35,7 @@
       }
       function delete_appointment(id, title)  {
           var r=confirm("Etes-vous sûr de vouloir supprimer le rendez-vous "+ title + " ?");
-          } 
-      }
+      } 
   $(function() {
     $('#tabs').tabs();
 
