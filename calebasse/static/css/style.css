@@ -471,8 +471,10 @@ div.agenda span.right img {
 }
 
 div.agenda span.right button {
-	top: -10px;
-	padding: 2px 3px;
+    /* margin: 0px; */
+    padding: 0px;
+    background: transparent;
+    border: 0;
 }
 
 div.agenda p {

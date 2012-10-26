@@ -33,6 +33,10 @@
           $target.click();
         }
       }
+      function delete_appointment(id, title)  {
+          var r=confirm("Etes-vous sûr de vouloir supprimer le rendez-vous "+ title + " ?");
+          } 
+      }
   $(function() {
     $('#tabs').tabs();
 
@@ -67,6 +71,7 @@
     $('.appointment').on('click', function() {
         $('.textedit span').html('');
     });
+
 
 
     /* Gestion du filtre sur les utilisateurs */
@@ -247,6 +252,10 @@
                  {% endif %}
                  {% if appointment.description %}
                  <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">
+                 {% endif %}
+                 {% if appointment.event_id %}
+                 <button type="button"><img title="Editer un rendez-vous" src="{{ STATIC_URL }}images/accessories-text-editor.png"></button>
+                 <button type="button" onclick="javascript:delete_appointment({{ appointment.event_id }}, '{{ appointment.title }}')"><img title="Supprimer un rendez-vous" src="{{ STATIC_URL }}images/list-remove.png"></button>
                  {% endif %}
             </span>
            </h3>
