@@ -35,7 +35,7 @@ class AgendaHomepageView(TemplateView):
                 '6': u'samedi'
                 }
         weekday = weekday_mapping[context['date'].strftime("%w")]
-        time_tables = TimeTable.objects.select_related().\
+        time_tables = TimeTable.objects.select_related('worker').\
                 filter(service=self.service).\
                 filter(weekday=weekday).\
                 filter(start_date__lte=context['date']).\
@@ -54,7 +54,7 @@ class AgendaHomepageView(TemplateView):
 
         for worker in workers:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
-            occurrences_worker = [o for o in occurrences for id in o.event.participants.values_list('id') if id[0] == worker.id]
+            occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
             context['workers_agenda'].append({'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, occurrences_worker)})

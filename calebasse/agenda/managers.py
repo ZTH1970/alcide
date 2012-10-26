@@ -96,7 +96,7 @@ class OccurrenceManager(models.Manager):
         date = date or datetime.now()
         start = datetime(date.year, date.month, date.day)
         end = start.replace(hour=23, minute=59, second=59)
-        qs = self.filter(
+        qs = self.select_related('event').filter(
             models.Q(
                 start_time__gte=start,
                 start_time__lte=end,

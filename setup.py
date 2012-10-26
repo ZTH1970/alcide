@@ -21,6 +21,7 @@ setup(name='calebasse',
             'django-widget-tweaks < 1.2.0',
             'django-tastypie>=0.9, < 1.0',
             'interval == 1.0.0',
+            'django-debug-toolbar',
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',
