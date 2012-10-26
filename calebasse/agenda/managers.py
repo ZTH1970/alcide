@@ -1,6 +1,7 @@
 
 from datetime import datetime, timedelta
 from dateutil import rrule
+from interval import IntervalSet, Interval
 
 from django.db import models
 from model_utils.managers import InheritanceManager
@@ -81,8 +82,6 @@ class EventManager(InheritanceManager):
 
 class OccurrenceManager(models.Manager):
 
-    #use_for_related_fields = True
-
     def daily_occurrences(self, date=None, participants=None, services=None):
         '''
         Returns a queryset of for instances that have any overlap with a 
@@ -117,11 +116,14 @@ class OccurrenceManager(models.Manager):
             qs = qs.filter(services__in=services)
         return qs
 
-    def daily_disponiblity(self, date, participants):
-        start_datetime = datetime(date.year, date.month, date.day, 8, 0)
-        end_datetime = datetime(date.year, date.month, date.day, 8, 15)
+    def daily_disponiblity(self, date, occurrences, participants):
         result = dict()
         quater = 0
+        occurrences_set = {}
+        for participant in participants:
+            occurrences_set[participant.id] = IntervalSet((o.to_interval() for o in occurrences[participant.id]))
+        start_datetime = datetime(date.year, date.month, date.day, 8, 0)
+        end_datetime = datetime(date.year, date.month, date.day, 8, 15)
         while (start_datetime.hour <= 19):
             for participant in participants:
                 if not result.has_key(start_datetime.hour):
@@ -131,64 +133,15 @@ class OccurrenceManager(models.Manager):
                     result[start_datetime.hour][2] = []
                     result[start_datetime.hour][3] = []
                     quater = 0
-                qs = self.filter(
-                    models.Q(
-                        start_time__gte=start_datetime,
-                        start_time__lt=end_datetime,
-                        ) |
-                    models.Q(
-                        end_time__gt=start_datetime,
-                        end_time__lte=end_datetime,
-                        ) |
-                    models.Q(
-                        start_time__lt=start_datetime,
-                        end_time__gt=end_datetime,
-                        )
-                    ).filter(event__participants__in=[participant])
 
-                if qs:
-                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
-                else:
+                interval = IntervalSet.between(start_datetime, end_datetime)
+                delta = interval - occurrences_set[participant.id]
+                if delta and delta[0].upper_bound == interval[0].upper_bound and \
+                        delta[0].lower_bound and interval[0].upper_bound :
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'free'})
+                else:
+                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
             quater += 1
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
         return result
-
-    def smallest_start_in_range(self, start_datetime, end_datetime, participants=None, services=None):
-        """ """
-        qs = self.filter(
-            models.Q(
-                start_time__gte=start_datetime,
-                start_time__lt=end_datetime,
-            ) 
-        )
-        if participants:
-            qs = qs.filter(event__participants__in=participants)
-        if services:
-            qs = qs.filter(services__in=services)
-        qs = qs.order_by('start_time')
-        if qs:
-            return qs[0]
-        else:
-            return None
-
-
-    def biggest_end_in_range(self, start_datetime, end_datetime, participants=None, services=None):
-        """ """
-        qs = self.filter(
-            models.Q(
-                end_time__gt=start_datetime,
-                end_time__lte=end_datetime,
-            ) 
-        )
-        if participants:
-            qs = qs.filter(event__participants__in=participants)
-        if services:
-            qs = qs.filter(services__in=services)
-        qs = qs.order_by('-end_time')
-        if qs:
-            return qs[0]
-        else:
-            return None
-

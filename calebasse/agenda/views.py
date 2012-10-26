@@ -41,7 +41,7 @@ class AgendaHomepageView(TemplateView):
                 filter(start_date__lte=context['date']).\
                 filter(Q(end_date=None) |Q(end_date__gte=context['date'])).\
                 order_by('start_date')
-        occurrences = Occurrence.objects.daily_occurrences(context['date']).select_related().order_by('start_time')
+        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
 
         context['workers_types'] = []
         context['workers_agenda'] = []
@@ -52,14 +52,17 @@ class AgendaHomepageView(TemplateView):
             context['workers_types'].append(data)
             workers.extend(data['workers'])
 
+        occurrences_workers = {}
         for worker in workers:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
             occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
+            occurrences_workers[worker.id] = occurrences_worker
             context['workers_agenda'].append({'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, occurrences_worker)})
 
-        context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'], workers)
+        context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
+                occurrences_workers, workers)
         return context
 
 class NewAppointmentView(CreateView):
