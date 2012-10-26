@@ -3,6 +3,8 @@
 from django.db.models import Q
 from datetime import datetime, time
 
+from interval import IntervalSet
+
 from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Occurrence
 from calebasse.personnes.models import TimeTable
@@ -77,56 +79,25 @@ class Appointment(object):
         self.title = title
         self.__set_time(time)
 
-def _add_free_time(delta, appointments, begin_time):
-    if delta > 0:
-        delta_minutes = delta / 60
-        appointment = Appointment()
-        appointment.init_free_time(delta_minutes, begin_time)
-        appointments.append(appointment)
-    return appointments
-
-def get_daily_appointments(date, worker, service):
+def get_daily_appointments(date, worker, service, time_tables, occurrences):
     """
     """
     appointments = []
-    weekday_mapping = {
-            '0': u'dimanche',
-            '1': u'lundi',
-            '2': u'mardi',
-            '3': u'mercredi',
-            '4': u'jeudi',
-            '5': u'vendredi',
-            '6': u'samedi'
-            }
-    weekday = weekday_mapping[date.strftime("%w")]
-    time_tables = TimeTable.objects.filter(worker=worker).\
-            filter(service=service).\
-            filter(weekday=weekday).\
-            filter(start_date__lte=date).\
-            filter(Q(end_date=None) |Q(end_date__gte=date)).\
-            order_by('start_date')
 
-    appointments = []
-    occurrences = Occurrence.objects.daily_occurrences(date, [worker]).order_by('start_time')
+    timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
+    occurrences_set = IntervalSet((o.to_interval() for o in occurrences))
+    for free_time in timetables_set - occurrences_set:
+        if free_time:
+            delta = free_time.upper_bound - free_time.lower_bound
+            delta_minutes = delta.seconds / 60
+            appointment = Appointment()
+            appointment.init_free_time(delta_minutes,
+                    time(free_time.lower_bound.hour, free_time.upper_bound.minute))
+            appointments.append(appointment)
     for occurrence in occurrences:
         appointment = Appointment()
         appointment.init_from_occurrence(occurrence, service)
         appointments.append(appointment)
-        # Find free times between occurrences in time_tables
-        next_occurrences = Occurrence.objects.filter(start_time__gte=occurrence.end_time).order_by('start_time')
-        if next_occurrences:
-            next_occurrence = next_occurrences[0]
-            if not Occurrence.objects.filter(end_time__gt=occurrence.end_time).filter(end_time__lt=next_occurrence.start_time):
-                for time_table in time_tables:
-                    start_time_table =  datetime(date.year, date.month, date.day,
-                            time_table.start_time.hour, time_table.start_time.minute)
-                    end_time_table =  datetime(date.year, date.month, date.day,
-                            time_table.end_time.hour, time_table.end_time.minute)
-                    if (occurrence.end_time >= start_time_table) and (next_occurrence.start_time < end_time_table):
-                        delta = next_occurrence.start_time - occurrence.end_time
-                        appointments = _add_free_time(delta.seconds, appointments,
-                                time(occurrence.end_time.hour, occurrence.end_time.minute))
-
     for time_table in time_tables:
         appointment = Appointment()
         appointment.init_start_stop(u"Arrivée",
@@ -136,24 +107,6 @@ def get_daily_appointments(date, worker, service):
         appointment.init_start_stop(u"Départ",
             time(time_table.end_time.hour, time_table.end_time.minute))
         appointments.append(appointment)
-        start_datetime = datetime(date.year, date.month, date.day,
-            time_table.start_time.hour, time_table.start_time.minute)
-        end_datetime = datetime(date.year, date.month, date.day,
-            time_table.end_time.hour, time_table.end_time.minute)
-        smallest = Occurrence.objects.smallest_start_in_range(start_datetime, end_datetime, [worker])
-        biggest = Occurrence.objects.biggest_end_in_range(start_datetime, end_datetime, [worker])
-        if not smallest and not biggest:
-            delta = end_datetime - start_datetime
-            appointments = _add_free_time(delta.seconds, appointments,
-                    time(start_datetime.hour, start_datetime.minute))
-        if smallest:
-            delta = smallest.start_time - start_datetime
-            appointments = _add_free_time(delta.seconds, appointments,
-                    time(start_datetime.hour, start_datetime.minute))
-        if biggest:
-            delta = end_datetime - biggest.end_time
-            appointments = _add_free_time(delta.seconds, appointments,
-                    time(biggest.end_time.hour, biggest.end_time.minute))
 
     appointments = sorted(appointments, key=lambda app: app.begin_time)
     return appointments

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import ipdb
 import os
 import csv
 

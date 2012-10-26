@@ -1,9 +1,11 @@
 import datetime
 
+from django.db.models import Q
 from django.shortcuts import redirect
 
 from calebasse.cbv import TemplateView, CreateView
 from calebasse.agenda.models import Occurrence
+from calebasse.personnes.models import TimeTable
 from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
@@ -22,19 +24,40 @@ class AgendaHomepageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
+
+        weekday_mapping = {
+                '0': u'dimanche',
+                '1': u'lundi',
+                '2': u'mardi',
+                '3': u'mercredi',
+                '4': u'jeudi',
+                '5': u'vendredi',
+                '6': u'samedi'
+                }
+        weekday = weekday_mapping[context['date'].strftime("%w")]
+        time_tables = TimeTable.objects.select_related().\
+                filter(service=self.service).\
+                filter(weekday=weekday).\
+                filter(start_date__lte=context['date']).\
+                filter(Q(end_date=None) |Q(end_date__gte=context['date'])).\
+                order_by('start_date')
+        occurrences = Occurrence.objects.daily_occurrences(context['date']).select_related().order_by('start_time')
+
         context['workers_types'] = []
         context['workers_agenda'] = []
         context['disponnibility'] = {}
         workers = []
-        service = Service.objects.get(name=context['service_name'])
         for worker_type in WorkerType.objects.all():
             data = {'type': worker_type.name, 'workers': Worker.objects.for_service(self.service, worker_type) }
             context['workers_types'].append(data)
             workers.extend(data['workers'])
 
         for worker in workers:
+            time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
+            occurrences_worker = [o for o in occurrences for id in o.event.participants.values_list('id') if id[0] == worker.id]
             context['workers_agenda'].append({'worker': worker,
-                    'appointments': get_daily_appointments(context['date'], worker, service)})
+                    'appointments': get_daily_appointments(context['date'], worker, self.service,
+                        time_tables_worker, occurrences_worker)})
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'], workers)
         return context
@@ -62,3 +85,4 @@ class NewAppointmentView(CreateView):
 
 def new_appointment(request):
     pass
+

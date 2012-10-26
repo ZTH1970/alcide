@@ -159,3 +159,4 @@ class Occurrence(models.Model):
 
     def to_interval(self):
         return Interval(self.start_time, self.end_time)
+

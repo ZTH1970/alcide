@@ -57,9 +57,9 @@
     "pk": 7, 
     "model": "personnes.people", 
     "fields": {
-      "first_name": " Lepoulpe", 
-      "last_name": "Pol", 
-      "display_name": " Lepoulpe Pol"
+      "first_name": "Pol", 
+      "last_name": "Lepoulpe", 
+      "display_name": "Pol Lepoulpe"
     }
   }, 
   {
