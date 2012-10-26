@@ -25,6 +25,7 @@ class Appointment(object):
         self.event_id = None
         self.service = None
         self.workers_initial = None
+        self.weight = 0
         self.act_type = None
         self.__set_time(begin_time)
 
@@ -92,7 +93,7 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences):
             delta_minutes = delta.seconds / 60
             appointment = Appointment()
             appointment.init_free_time(delta_minutes,
-                    time(free_time.lower_bound.hour, free_time.upper_bound.minute))
+                    time(free_time.lower_bound.hour, free_time.lower_bound.minute))
             appointments.append(appointment)
     for occurrence in occurrences:
         appointment = Appointment()
@@ -102,12 +103,14 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences):
         appointment = Appointment()
         appointment.init_start_stop(u"Arrivée",
             time(time_table.start_time.hour, time_table.start_time.minute))
+        appointment.weight = -1
         appointments.append(appointment)
         appointment = Appointment()
         appointment.init_start_stop(u"Départ",
             time(time_table.end_time.hour, time_table.end_time.minute))
+        appointment.weight = 1
         appointments.append(appointment)
 
-    appointments = sorted(appointments, key=lambda app: app.begin_time)
-    return appointments
+    s = sorted(appointments, key=lambda app: app.weight)
+    return sorted(s, key=lambda app: app.begin_time)
 
