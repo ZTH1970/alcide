@@ -23,6 +23,7 @@ class Appointment(object):
         self.service_name = None
         self.patient_record_id = None
         self.event_id = None
+        self.occurrence_id = None
         self.service = None
         self.workers_initial = None
         self.weight = 0
@@ -39,6 +40,7 @@ class Appointment(object):
     def init_from_occurrence(self, occurrence, service):
         """ """
         delta = occurrence.end_time - occurrence.start_time
+        self.occurrence_id = occurrence.id
         self.length = delta.seconds / 60
         self.title = occurrence.title
         services = occurrence.event.services.all()

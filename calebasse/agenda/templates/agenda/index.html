@@ -35,7 +35,17 @@
       }
       function delete_appointment(id, title)  {
           var r=confirm("Etes-vous sûr de vouloir supprimer le rendez-vous "+ title + " ?");
-      } 
+          if (r == true)
+          {
+              $.ajax({
+                  url: '/api/occurrence/' + id + '/',
+                  type: 'DELETE',
+                  success: function(data) {
+                      window.location.reload(true);
+                  }
+              });
+          }
+      }
   $(function() {
     $('#tabs').tabs();
 
@@ -236,7 +246,8 @@
          <a class="print" href="#">Imprimer</a>
          <div>
            {% for appointment in worker_agenda.appointments %}
-           <h3 class="{{ appointment.type }} appointment"><span class="hour">{{ appointment.begin_hour }}</span>
+           <h3 class="{{ appointment.type }} appointment">
+             <span class="hour">{{ appointment.begin_hour }}</span>
              {% if appointment.title %} — {{ appointment.title }}  {% endif %}
              {% if appointment.length %} — {{ appointment.length }}m {% endif %}
              {% if appointment.workers_initial %} —{{ appointment.workers_initial }} {% endif %}
@@ -254,7 +265,7 @@
                  {% endif %}
                  {% if appointment.event_id %}
                  <button type="button"><img title="Editer un rendez-vous" src="{{ STATIC_URL }}images/accessories-text-editor.png"></button>
-                 <button type="button" onclick="javascript:delete_appointment({{ appointment.event_id }}, '{{ appointment.title }}')"><img title="Supprimer un rendez-vous" src="{{ STATIC_URL }}images/list-remove.png"></button>
+                 <button type="button"  onclick="javascript:delete_appointment({{ appointment.occurrence_id }}, '{{ appointment.title }}')"><img title="Supprimer un rendez-vous" src="{{ STATIC_URL }}images/list-remove.png"></button>
                  {% endif %}
             </span>
            </h3>
