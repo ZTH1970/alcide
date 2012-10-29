@@ -63,7 +63,7 @@ class EventActManager(EventManager):
         """
 
         event_type, created = EventType.objects.get_or_create(
-                label="patient_appointment"
+                label=u"Rendez-vous patient"
                 )
 
         act_event = EventAct.objects.create(
@@ -106,3 +106,4 @@ class EventAct(Act, Event):
         verbose_name = 'Rendez-vous patient'
         verbose_name_plural = 'Rendez-vous patient'
         ordering = ['-date', 'patient']
+

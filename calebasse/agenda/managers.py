@@ -73,7 +73,7 @@ class EventManager(InheritanceManager):
 
     def create_holiday(self, start_date, end_date, peoples=[], services=[], motive=''):
         event_type, created = agenda.models.EventType.objects.get_or_create(
-                label="holiday"
+                label=u"Vacances"
                 )
         event = self.create(title="Conge", event_type=event_type)
         start_datetime = datetime(start_date.year, start_date.month, start_date.day)

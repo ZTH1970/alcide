@@ -1,19 +1,5 @@
 [
   {
-    "pk": 1, 
-    "model": "agenda.eventtype", 
-    "fields": {
-      "label": "patient_appointment"
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "agenda.eventtype", 
-    "fields": {
-      "label": "meeting"
-    }
-  }, 
-  {
     "pk": 3, 
     "model": "agenda.event", 
     "fields": {

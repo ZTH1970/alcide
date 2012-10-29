@@ -30,5 +30,26 @@
       "name": "SESSAD TED",
       "slug": "sessad-ted"
     }
+  },
+  {
+    "pk": 1, 
+    "model": "agenda.eventtype", 
+    "fields": {
+      "label": "Rendez-vous patient"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "agenda.eventtype", 
+    "fields": {
+      "label": "R\u00e9union"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "agenda.eventtype", 
+    "fields": {
+      "label": "Vacances"
+    }
   }
 ]
