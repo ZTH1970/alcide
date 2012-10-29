@@ -6,12 +6,12 @@ from django.shortcuts import redirect
 from calebasse.cbv import TemplateView, CreateView
 from calebasse.agenda.models import Occurrence
 from calebasse.personnes.models import TimeTable
-from calebasse.actes.models import EventAct
+from calebasse.actes.models import EventAct, Event
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, WorkerType
 
-from forms import NewAppointmentForm
+from forms import NewAppointmentForm, NewEventForm
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -85,6 +85,27 @@ class NewAppointmentView(CreateView):
 
     def post(self, *args, **kwargs):
         return super(NewAppointmentView, self).post(*args, **kwargs)
+
+class NewEventView(CreateView):
+    model = Event
+    form_class = NewEventForm
+    template_name = 'agenda/new-event.html'
+    success_url = '..'
+
+    def get_initial(self):
+        initial = super(NewEventView, self).get_initial()
+        initial['date'] = self.kwargs.get('date')
+        initial['participants'] = self.request.GET.getlist('participants')
+        initial['time'] = self.request.GET.get('time')
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(NewEventView, self).get_form_kwargs()
+        #kwargs['service'] = self.service
+        return kwargs
+
+    def post(self, *args, **kwargs):
+        return super(NewEventView, self).post(*args, **kwargs)
 
 def new_appointment(request):
     pass
