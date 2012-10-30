@@ -120,7 +120,39 @@ $(function() {
     $('#newrdv').click(function() {
         var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
         var qs = $.param({participants: $.makeArray(participants) }, true);
-        var new_appointment_url = "{% url 'nouveau-rdv' service=service date=date %}?" + qs;
+        var new_appointment_url = $(this).data('url') + "?" + qs;
+        $('#rdv').load(new_appointment_url,
+            function () {
+                function onsuccess(response, status, xhr, form) {
+                    var parse = $(response);
+                    if ($('.errorlist', parse).length != 0) {
+                        $('#rdv').html(response);
+                        $('#rdv form').ajaxForm({
+                            success: onsuccess,
+                        });
+                        $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
+                        console.log('error');
+                    } else {
+                        console.log('success');
+                        window.location.reload(true);
+                    }
+                }
+                $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
+                $('form', this).ajaxForm({
+                    success: onsuccess
+                });
+                $(this).dialog({title: 'Nouveau rendez-vous',
+                    width: '800px',
+                    buttons: [ { text: "Fermer",
+                        click: function() { $(this).dialog("close"); } },
+                    { text: "Ajouter",
+                        click: function() { $("#rdv form").submit(); } }]});
+            });
+    });
+    $('#newevent').click(function() {
+        var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
+        var qs = $.param({participants: $.makeArray(participants) }, true);
+        var new_appointment_url = $(this).data('url') + "?" + qs;
         $('#rdv').load(new_appointment_url,
             function () {
                 function onsuccess(response, status, xhr, form) {

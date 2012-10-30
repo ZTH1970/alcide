@@ -19,8 +19,8 @@
 {% block appbar %}
     <h2>Agenda</h2>
     <a href="../..">Retourner à l'accueil</a>
-    <button>Nouvel événement (autre)</button>
-    <button id="newrdv">Nouveau rendez-vous patient</button>
+    <button id="newevent" data-url="{% url 'new-event' service=service date=date %}">Nouvel événement (autre)</button>
+    <button id="newrdv" data-url="{% url 'nouveau-rdv' service=service date=date %}">Nouveau rendez-vous patient</button>
 {% endblock %}
 
 {% block beforecontent %}
