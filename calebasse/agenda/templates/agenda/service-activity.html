@@ -1,0 +1,64 @@
+{% extends "calebasse/base.html" %}
+{% block extrascripts %}
+<script></script>
+{% endblock %}
+
+{% block title %}{{ block.super }} - Agenda {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Agenda - {{ service_name }}</spam>
+{% endblock %}
+
+{% block appbar %}
+    <h2>Activité du service - 5 juillet 2012</h2>
+    <a href="agenda.html">Retourner à l'agenda</a>
+    <button>Imprimer</button>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+   <div id="datesel">
+     <a href="../../{{ previous_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">««</a>
+     <a href="../../{{ previous_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">«</a>
+     <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
+     <a href="../../{{ next_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»</a>
+     <a href="../../{{ next_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»»</a>
+   </div>
+
+  <table class="main" id="activity">
+    <thead>
+      <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>
+    </thead>
+    <tbody>
+      <tr class="hour-change"> <td class="hour"  rowspan="2">08:00</td> <td>45m</td> <td>John Doe</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>1h</td> <td>Bob Dilane</td> <td>Sylvain Mirouf</td> <td>Rééducation</td> </tr>
+      <tr class="hour-change"> <td class="hour" >08:15</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr class="hour-change"> <td class="hour"  rowspan="4">09:00</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr>  <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr class="hour-change"> <td class="hour"  rowspan="2">09:30</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr class="hour-change"> <td class="hour" >09:45</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr class="hour-change"> <td class="hour"  rowspan="3">10:00</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr>  <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr class="hour-change"> <td class="hour" >10:15</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr class="hour-change"> <td class="hour"  rowspan="2">10:30</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr>  <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr class="hour-change"> <td class="hour" >10:45</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr class="hour-change"> <td class="hour"  rowspan="3">12:00</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr>  <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr class="hour-change"> <td class="hour"  rowspan="4">14:00</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr>  <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr>  <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr>  <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+      <tr class="hour-change"> <td class="hour" >14:15</td> <td>45m</td> <td>Sabine Malouf</td> <td>Norbert Lecuisto</td> <td>Synthèse</td> </tr>
+      <tr class="hour-change"> <td class="hour" >14:30</td> <td>45m</td> <td>Gomez Chavez</td> <td>Sylvie Legrand</td> <td>Bilan</td> </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+

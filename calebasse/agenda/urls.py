@@ -18,7 +18,7 @@ agenda_patterns = patterns('',
                 name='new-event'),
             url(r'^activite-du-service/$',
                 TemplateView.as_view(
-                    template_name='agenda/activite-du-service.html'),
+                    template_name='agenda/service-activity.html'),
                 name='activite-du-service'),
             url(r'^validation-des-actes/$',
                 TemplateView.as_view(
