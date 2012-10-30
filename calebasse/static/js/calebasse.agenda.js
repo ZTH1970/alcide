@@ -90,7 +90,7 @@ $(function() {
         var filtre = $(this).val();
         if (filtre) {
             $('#users li').each(function() {
-                if ($(this).text().match(filtre)) {
+                if ($(this).text().match(new RegExp(filtre, "i"))) {
                     $(this).show();
                 } else {
                     $(this).hide();
