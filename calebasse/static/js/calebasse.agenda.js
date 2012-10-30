@@ -142,7 +142,7 @@ $(function() {
                     success: onsuccess
                 });
                 $(this).dialog({title: 'Nouveau rendez-vous',
-                    width: '800px',
+                    width: '820px',
                     buttons: [ { text: "Fermer",
                         click: function() { $(this).dialog("close"); } },
                     { text: "Ajouter",
@@ -170,11 +170,13 @@ $(function() {
                     }
                 }
                 $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
+                $('#id_description').attr('rows', '3');
+                $('#id_description').attr('cols', '30');
                 $('form', this).ajaxForm({
                     success: onsuccess
                 });
-                $(this).dialog({title: 'Nouveau rendez-vous',
-                    width: '800px',
+                $(this).dialog({title: 'Nouvelle événement',
+                    width: '850px',
                     buttons: [ { text: "Fermer",
                         click: function() { $(this).dialog("close"); } },
                     { text: "Ajouter",

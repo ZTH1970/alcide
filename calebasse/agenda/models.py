@@ -57,9 +57,9 @@ class Event(models.Model):
     '''
     objects = managers.EventManager()
 
-    title = models.CharField(_('title'), max_length=32)
-    description = models.CharField(_('description'), max_length=100)
-    event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
+    title = models.CharField(_('Titre'), max_length=32)
+    description = models.TextField(_('Description'), max_length=100)
+    event_type = models.ForeignKey(EventType, verbose_name=u"Type d'événement")
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
     services = models.ManyToManyField('ressources.Service',

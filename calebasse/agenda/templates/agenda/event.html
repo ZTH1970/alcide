@@ -1,52 +1,71 @@
 {% load widget_tweaks %}
-<table><tr>
+<table>
+  <tr>
+    <td>
       <p>
       {{ form.title.label_tag }}
       {{ form.title }}
       </p>
+    </td>
+    <td>
+      <p>
+      {{ form.event_type.label_tag }}
+      {{ form.event_type }}
+      </p>
+    </td>
+    <td>
+      <p>
+      {{ form.room.label_tag }}
+      {{ form.room }}
+      </p>
+    </td>
+  </tr>
 
-      <td>
-        <p>
-        {{ form.date.label_tag }}
-        {{ form.date|add_class:"datepicker-date" }}
-        {{ form.date.errors }}
-        </p>
-        </td>
-        <td>
-        <p>
-        {{ form.time.label_tag }}
-        {{ form.time }}
-        {{ form.time.errors }}
-        </p>
-        </td><td>
-        <p>
-        {{ form.duration.label_tag }}
-        {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:15" }}
-        {{ form.duration.errors }}
-        <div>
-          {{ form.duration.help_text }}
-        </div>
-        </p>
-    </td></tr>
+  <tr>
+    <td>
+      <p>
+      {{ form.date.label_tag }}
+      {{ form.date|add_class:"datepicker-date" }}
+      {{ form.date.errors }}
+      </p>
+    </td>
+    <td>
+      <p>
+      {{ form.time.label_tag }}
+      {{ form.time }}
+      {{ form.time.errors }}
+      </p>
+    </td>
+    <td>
+      <p>
+      {{ form.duration.label_tag }}
+      {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:15" }}
+      {{ form.duration.errors }}
+      <div>
+        {{ form.duration.help_text }}
+      </div>
+      </p>
+    </td>
+  </tr>
 
-    <tr>
-      <td>
-        <h4>{{ form.participants.label_tag }}</h4>
-        <div id="intervenants">
-          {{ form.participants }}
-          {{ form.participants.errors }}
-        </div>
-      </td>
-      <td>
-        <h4>{{ form.services.label_tag }}</h4>
-        <div id="services">
-          {{ form.services }}
-          {{ form.services.errors }}
-        </div>
-      </td>
-    </tr>
-  </table>
+  <tr>
+    <td>
+      {{ form.participants.label_tag }}
+      <div id="intervenants">
+        {{ form.participants }}
+        {{ form.participants.errors }}
+      </div>
+    </td>
+    <td>
+      {{ form.services.label_tag }}
+      <div id="services">
+        {{ form.services }}
+        {{ form.services.errors }}
+      </div>
+    </td>
+  </tr>
+</table>
 
-  <hr/>
-  <button>Configurer la périodicité</button>
+<hr/>
+<button>Configurer la périodicité</button>
 

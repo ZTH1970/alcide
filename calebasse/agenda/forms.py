@@ -85,18 +85,24 @@ class NewEventForm(forms.ModelForm):
                 'time',
                 'duration',
                 'room',
+                'participants',
                 'services',
                 'event_type'
         )
 
-    def __init__(self, instance, services=None, **kwargs):
-        #self.services = []
+    def __init__(self, instance, service=None, **kwargs):
+        #self.service = None
+        if service:
+            initial['services'] = [service]
+            print "----------"
+            print service
+            print "------------"
+            kwargs['initial'] = initial
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
-        #if service:
-        #    self.service = service
-        #    self.fields['participants'].queryset = \
-        #            Worker.objects.for_service(service)
+        if service:
+            self.fields['participants'].queryset = \
+                    Worker.objects.for_service(service)
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
@@ -110,11 +116,11 @@ class NewEventForm(forms.ModelForm):
                     self.cleaned_data['time'])
         end_datetime = start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
-        self.instance = EventAct.objects.create_event(
-                title=self.title,
-                event_type=self.event_type,
+        self.instance = Event.objects.create_event(
+                title=self.cleaned_data['title'],
+                event_type=self.cleaned_data['event_type'],
                 participants=self.cleaned_data['participants'],
-                services=self.services,
+                services=self.cleaned_data['services'],
                 start_datetime=start_datetime,
                 end_datetime=end_datetime,
                 description='',
