@@ -40,6 +40,10 @@ $(function() {
     $('div.agenda > div').accordion({active: false, autoHeight: false});
 
     $('.person-item').on('click', function() {
+        $('#filtre input').val('')
+        $('#users li').each(function() {
+            $(this).show();
+        });
         toggle_worker(this);
     });
     // select all anchors
