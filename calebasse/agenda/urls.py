@@ -2,7 +2,8 @@ from django.conf.urls import url, patterns, include
 
 from calebasse.cbv import TemplateView
 
-from views import redirect_today, AgendaHomepageView, NewAppointmentView, NewEventView
+from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
+        NewEventView, AgendaServiceActivityView)
 
 
 agenda_patterns = patterns('',
@@ -17,7 +18,7 @@ agenda_patterns = patterns('',
                 NewEventView.as_view(),
                 name='new-event'),
             url(r'^activite-du-service/$',
-                TemplateView.as_view(
+                AgendaServiceActivityView.as_view(
                     template_name='agenda/service-activity.html'),
                 name='activite-du-service'),
             url(r'^validation-des-actes/$',

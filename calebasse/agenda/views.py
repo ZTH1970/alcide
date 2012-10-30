@@ -4,9 +4,9 @@ from django.db.models import Q
 from django.shortcuts import redirect
 
 from calebasse.cbv import TemplateView, CreateView
-from calebasse.agenda.models import Occurrence
+from calebasse.agenda.models import Occurrence, Event, EventType
 from calebasse.personnes.models import TimeTable
-from calebasse.actes.models import EventAct, Event
+from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, WorkerType
@@ -64,6 +64,44 @@ class AgendaHomepageView(TemplateView):
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
                 occurrences_workers, workers)
         return context
+
+class AgendaServiceActivityView(TemplateView):
+
+    template_name = 'agenda/service-activity.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AgendaServiceActivityView, self).get_context_data(**kwargs)
+
+        appointments_times = dict()
+        appoinment_type = EventType.objects.get(id=1)
+        occurrences = Occurrence.objects.daily_occurrences(context['date'],
+                services=[self.service],
+                event_type=appoinment_type).order_by('start_time')
+        for occurrence in occurrences:
+            start_time = occurrence.start_time.strftime("%H:%M")
+            if not appointments_times.has_key(start_time):
+                appointments_times[start_time] = dict()
+                appointments_times[start_time]['row'] = 0
+                appointments_times[start_time]['appointments'] = []
+            appointment = dict()
+            length = occurrence.end_time - occurrence.start_time
+            if length.seconds:
+                length = length.seconds / 60
+                appointment['length'] = "%sm" % length
+            event_act = occurrence.event.eventact
+            appointment['patient'] = event_act.patient
+            appointment['therapists'] = ""
+            for participant in occurrence.event.participants.all():
+                appointment['therapists'] += str(participant) + "; "
+            if appointment['therapists']:
+                appointment['therapists'] = appointment['therapists'][:-2]
+            appointment['act'] = event_act.act_type.name
+            appointments_times[start_time]['row'] += 1
+            appointments_times[start_time]['appointments'].append(appointment)
+        context['appointments_times'] = appointments_times
+        print context['appointments_times']
+        return context
+
 
 class NewAppointmentView(CreateView):
     model = EventAct

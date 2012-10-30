@@ -82,7 +82,8 @@ class EventManager(InheritanceManager):
 
 class OccurrenceManager(models.Manager):
 
-    def daily_occurrences(self, date=None, participants=None, services=None):
+    def daily_occurrences(self, date=None, participants=None, services=None,
+            event_type=None):
         '''
         Returns a queryset of for instances that have any overlap with a 
         particular day.
@@ -113,7 +114,9 @@ class OccurrenceManager(models.Manager):
         if participants:
             qs = qs.filter(event__participants__in=participants)
         if services:
-            qs = qs.filter(services__in=services)
+            qs = qs.filter(event__services__in=services)
+        if event_type:
+            qs = qs.filter(event__event_type=event_type)
         return qs
 
     def daily_disponiblity(self, date, occurrences, participants):
@@ -145,3 +148,4 @@ class OccurrenceManager(models.Manager):
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
         return result
+
