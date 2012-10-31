@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block appbar %}
-    <h2>Activité du service - 5 juillet 2012</h2>
-    <a href="agenda.html">Retourner à l'agenda</a>
+<h2>Activité du service - {{ date|date:"DATE_FORMAT" }}</h2>
+    <a href="..">Retourner à l'agenda</a>
     <button>Imprimer</button>
 {% endblock %}
 
