@@ -47,6 +47,7 @@ class Act(models.Model):
     doctors = models.ManyToManyField('personnes.Worker',
             limit_choices_to={'type__intervene': True},
             verbose_name=u'Thérapeutes')
+    histories = models.ManyToManyField('HistoryAct')
 
     def is_absent(self):
         if self.get_state() in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
@@ -84,6 +85,19 @@ class Act(models.Model):
         verbose_name = u"Acte"
         verbose_name_plural = u"Actes"
         ordering = ['-date', 'patient']
+
+
+class HistoryAct(models.Model):
+    EVENT_CHOICES = (
+            ('NR', u'Nouveau rendez-vous'),
+            ('AV', u'Acte validé'),
+            ('CF', u'En cours de facturation'),
+            ('AF', u'Acte facturé'),
+            )
+    date = models.DateTimeField()
+    event_type = models.CharField(max_length=2,
+            choices=EVENT_CHOICES)
+    description = models.TextField(default='')
 
 
 class EventActManager(EventManager):

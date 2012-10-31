@@ -60,6 +60,8 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
         editable=False)
     contacts = models.ManyToManyField('personnes.People',
             related_name='contact_of')
+    birthdate = models.DateField()
+    paper_id = models.CharField(max_length=12)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
