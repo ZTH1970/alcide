@@ -8,8 +8,7 @@
       "act_type": 1,
       "validation_locked": false,
       "transport_type": null,
-      "transport_company": null,
-      "doctors": [],
+      "transport_company": null
     }
   },
   {
@@ -21,8 +20,7 @@
       "act_type": 1,
       "validation_locked": false,
       "transport_type": null,
-      "transport_company": null,
-      "doctors": [],
+      "transport_company": null
     }
   },
   {
@@ -33,7 +31,6 @@
       "participants": [
         5
       ],
-      "doctors": [],
       "services": [
         1
       ],
@@ -49,7 +46,6 @@
       "participants": [
         5
       ],
-      "doctors": [],
       "services": [
         1
       ],
