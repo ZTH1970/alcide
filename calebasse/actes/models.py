@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from calebasse.agenda.models import Event, EventType
 from calebasse.agenda.managers import EventManager
 
+from validation_states import VALIDATION_STATES
+
 
 class ActValidationState(models.Model):
 
@@ -86,7 +88,7 @@ class Act(models.Model):
 
 class EventActManager(EventManager):
 
-    def create_patient_appointment(self, title, patient, participants,
+    def create_patient_appointment(self, creator, title, patient, participants,
             act_type, service, start_datetime, end_datetime, description='',
             room=None, note=None, **rrule_params):
         """
@@ -117,9 +119,12 @@ class EventActManager(EventManager):
                 event_type=event_type,
                 patient=patient,
                 act_type=act_type,
-                date=start_datetime.date(),
+                date=start_datetime,
                 )
         act_event.doctors = participants
+        ActValidationState(act=act_event, state_name='NON_VALIDE',
+            author=creator, previous_state=None).save()
+
 
         return self._set_event(act_event, participants, description,
                 services=[service], start_datetime=start_datetime,
