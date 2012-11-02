@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -39,6 +38,10 @@ class Act(models.Model):
             verbose_name=u'Type d\'acte')
     validation_locked = models.BooleanField(default=False,
             verbose_name=u'Vérouillage')
+    is_billed = models.BooleanField(default=False,
+            verbose_name=u'Facturé')
+    switch_billable = models.BooleanField(default=False,
+            verbose_name=u'Inverser type facturable')
     transport_company = models.ForeignKey('ressources.TransportCompany',
             blank=True,
             null=True,
@@ -75,6 +78,11 @@ class Act(models.Model):
         current_state = self.get_state()
         ActValidationState(act=self, state_name=state_name,
             author=author, previous_state=current_state).save()
+
+    def is_billable(self):
+        if (self.act_type.billable and not self.switch_billable) or \
+                (not self.act_type.billable and self.switch_billable):
+            return True
 
     # START Specific to sessad healthcare
     def was_covered_by_notification(self):
