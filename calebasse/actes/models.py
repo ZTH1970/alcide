@@ -23,17 +23,17 @@ class ActValidationState(models.Model):
         verbose_name=u'Etat précédent',
         editable=False, blank=True, null=True)
     # To record if the validation has be done by the automated validation
-    auto  = models.BooleanField(default=False,
+    auto = models.BooleanField(default=False,
             verbose_name=u'Vérouillage')
 
 
 class Act(models.Model):
+    patient = models.ForeignKey('dossiers.PatientRecord')
+    date = models.DateTimeField()
     act_type = models.ForeignKey('ressources.ActType',
             verbose_name=u'Type d\'acte')
-    validated = models.BooleanField(blank=True,
-            verbose_name=u'Validé')
-    date = models.DateTimeField()
-    patient = models.ForeignKey('dossiers.PatientRecord')
+    validation_locked = models.BooleanField(default=False,
+            verbose_name=u'Vérouillage')
     transport_company = models.ForeignKey('ressources.TransportCompany',
             blank=True,
             null=True,
@@ -45,6 +45,30 @@ class Act(models.Model):
     doctors = models.ManyToManyField('personnes.Worker',
             limit_choices_to={'type__intervene': True},
             verbose_name=u'Thérapeutes')
+
+    def is_absent(self):
+        if self.get_state() in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
+                'ANNUL_FAMILLE', 'ABS_ESS_PPS', 'ENF_HOSP'):
+            return True
+
+    def get_state(self):
+        return self.actvalidationstate_set.latest('created')
+
+    def is_state(self, state_name):
+        state = self.get_state()
+        if state and state.state_name == state_name:
+            return True
+        return False
+
+    def set_state(self, state_name, author, auto=False,
+            change_state_check=True):
+        if not author:
+            raise Exception('Missing author to set state')
+        if not state_name in VALIDATION_STATES.keys():
+            raise Exception("Etat d'acte non existant %s")
+        current_state = self.get_state()
+        ActValidationState(act=self, state_name=state_name,
+            author=author, previous_state=current_state).save()
 
     def __unicode__(self):
         return '{0} le {1} pour {2} avec {3}'.format(
