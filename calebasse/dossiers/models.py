@@ -142,3 +142,20 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
             self.get_state().delete()
         except:
             pass
+
+
+def create_patient(first_name, last_name, service, creator,
+        date_selected=None):
+    logger.debug('create_patient: creation for patient %s %s in service %s '
+        'by %s' % (first_name, last_name, service, creator))
+    if not (first_name and last_name and service and creator):
+        raise Exception('Missing parameter to create a patient record.')
+    patient = PatientRecord(first_name=first_name, last_name=last_name,
+        service=service, creator=creator)
+    patient.save()
+    if not date_selected:
+        date_selected = patient.created
+    FileState(patient=patient, state_name=STATE_ACCUEIL[service.name],
+        date_selected=date_selected, author=creator,
+        previous_state=None).save()
+    return patient
