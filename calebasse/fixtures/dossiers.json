@@ -1,26 +1,30 @@
 [
   {
-    "pk": 8, 
-    "model": "dossiers.patientrecord", 
+    "pk": 8,
+    "model": "dossiers.patientrecord",
     "fields": {
-      "service": 1, 
+      "service": 1,
+      "created": "2012-10-12T16:15:37.306",
+      "creator": "1",
       "contacts": [
-        1, 
-        2, 
-        3, 
+        1,
+        2,
+        3,
         4
       ]
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "dossiers.patientrecord", 
+    "pk": 9,
+    "model": "dossiers.patientrecord",
     "fields": {
-      "service": 1, 
+      "service": 1,
+      "created": "2012-10-12T16:15:37.306",
+      "creator": "1",
       "contacts": [
-        1, 
-        2, 
-        3, 
+        1,
+        2,
+        3,
         4
       ]
     }
