@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from calebasse.agenda.models import Event, EventType
 from calebasse.agenda.managers import EventManager
+from calebasse.dossiers.models import SessadHealthCareNotification
 
 from validation_states import VALIDATION_STATES
 
