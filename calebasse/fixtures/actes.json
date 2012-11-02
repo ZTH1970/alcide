@@ -1,59 +1,59 @@
 [
   {
-    "pk": 1, 
-    "model": "actes.act", 
+    "pk": 1,
+    "model": "actes.act",
     "fields": {
-      "act_type": 1, 
-      "patient": 8, 
-      "transport_type": null, 
-      "transport_company": null, 
-      "doctors": [], 
-      "date": "2012-10-30T00:00:00", 
-      "validated": false
+      "patient": 8,
+      "date": "2012-10-30T00:00:00",
+      "act_type": 1,
+      "validation_locked": false,
+      "transport_type": null,
+      "transport_company": null,
+      "doctors": [],
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "actes.act", 
+    "pk": 2,
+    "model": "actes.act",
     "fields": {
-      "act_type": 1, 
-      "patient": 9, 
-      "transport_type": null, 
-      "transport_company": null, 
-      "doctors": [], 
-      "date": "2012-10-30T00:00:00", 
-      "validated": false
+      "patient": 9,
+      "date": "2012-10-30T00:00:00",
+      "act_type": 1,
+      "validation_locked": false,
+      "transport_type": null,
+      "transport_company": null,
+      "doctors": [],
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "actes.eventact", 
+    "pk": 1,
+    "model": "actes.eventact",
     "fields": {
-      "attendance": "absent", 
+      "attendance": "absent",
       "participants": [
         5
-      ], 
-      "doctors": [], 
+      ],
+      "doctors": [],
       "services": [
         1
-      ], 
-      "event_ptr": 1, 
+      ],
+      "event_ptr": 1,
       "convocation_sent": false
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "actes.eventact", 
+    "pk": 2,
+    "model": "actes.eventact",
     "fields": {
-      "attendance": "absent", 
+      "attendance": "absent",
       "participants": [
         5
-      ], 
-      "doctors": [], 
+      ],
+      "doctors": [],
       "services": [
         1
-      ], 
-      "event_ptr": 2, 
+      ],
+      "event_ptr": 2,
       "convocation_sent": false
     }
   }
