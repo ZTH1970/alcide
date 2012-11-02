@@ -128,12 +128,16 @@ class EventActManager(EventManager):
                 label=u"Rendez-vous patient"
                 )
 
+        history = HistoryAct.objects.create(
+                date = datetime.now(),
+                event_type = 'NR')
         act_event = EventAct.objects.create(
                 title=title,
                 event_type=event_type,
                 patient=patient,
                 act_type=act_type,
                 date=start_datetime,
+                histories = [history]
                 )
         act_event.doctors = participants
         ActValidationState(act=act_event, state_name='NON_VALIDE',

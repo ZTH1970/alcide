@@ -14,7 +14,7 @@ setup(name='calebasse',
         install_requires=[
             'django >= 1.4.2, < 1.5',
             'south >= 0.7',
-            'django-reversion >= 1.6.2',
+            'django-reversion >= 1.6.4',
             'python-dateutil >=1.5, < 2.0',
             'django-model-utils < 1.2.0',
             'django-ajax-selects < 1.3.0',

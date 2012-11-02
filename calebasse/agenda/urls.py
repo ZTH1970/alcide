@@ -23,7 +23,7 @@ agenda_patterns = patterns('',
                 name='activite-du-service'),
             url(r'^validation-des-actes/$',
                 TemplateView.as_view(
-                    template_name='agenda/validation-des-actes.html'),
+                    template_name='agenda/act-validation.html'),
                 name='validation-des-actes'),
             url(r'^rendez-vous-periodiques/$',
                 TemplateView.as_view(

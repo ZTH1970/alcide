@@ -61,7 +61,8 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     contacts = models.ManyToManyField('personnes.People',
             related_name='contact_of')
     birthdate = models.DateField()
-    paper_id = models.CharField(max_length=12)
+    paper_id = models.CharField(max_length=12,
+            null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
