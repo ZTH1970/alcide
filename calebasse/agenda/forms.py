@@ -8,6 +8,7 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Event
+from calebasse.middleware.request import get_request
 
 from ajax_select import make_ajax_field
 
@@ -56,7 +57,9 @@ class NewAppointmentForm(forms.ModelForm):
         end_datetime = start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
         patient = self.cleaned_data['patient']
+        creator = get_request().user
         self.instance = EventAct.objects.create_patient_appointment(
+                creator=creator,
                 title=patient.display_name,
                 patient=patient,
                 participants=self.cleaned_data['participants'],
@@ -127,5 +130,3 @@ class NewEventForm(forms.ModelForm):
                 room=self.cleaned_data['room'],
                 note=None,)
         return self.instance
-
-
