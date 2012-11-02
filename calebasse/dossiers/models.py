@@ -242,6 +242,22 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
         except:
             pass
 
+    # START Specific to sessad healthcare
+    def get_last_notification(self):
+        return SessadHealthCareNotification.objects.filter(patient=self, ).\
+            latest('end_date')
+
+    def days_before_notification_expiration(self):
+        today = datetime.today()
+        notification = get_last_notification(self)
+        if not notification:
+            return 0
+        if notification.end_date < today:
+            return 0
+        else:
+            return notification.end_date - today
+    # END Specific to sessad healthcare
+
 
 def create_patient(first_name, last_name, service, creator,
         date_selected=None):
