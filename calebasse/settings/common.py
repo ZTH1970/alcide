@@ -172,7 +172,13 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-        }
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] %(levelname)-8s %(name)s.%(message)s',
+            'datefmt': '%Y-%m-%d %a %H:%M:%S'
+        },
     },
     'handlers': {
         'mail_admins': {
@@ -180,9 +186,20 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
+        'console': {
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'local_file': {
+            'level':'DEBUG',
+            'class':'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(PROJECT_PATH, 'calebasse.log'),
+        },
         'syslog':{
             'level':'INFO',
-            'class':'logging.handlers.SysLogHandler', 
+            'class':'logging.handlers.SysLogHandler',
             'facility': SysLogHandler.LOG_LOCAL0,
             'address': '/dev/log',
         },
@@ -193,6 +210,10 @@ LOGGING = {
             'level': 'INFO',
         },
     },
+    'root': {
+            'handlers': ['console', 'local_file'],
+            'level': 'DEBUG',
+    }
 }
 
 # AJAX Select
