@@ -28,6 +28,9 @@ class ActValidationState(models.Model):
     auto = models.BooleanField(default=False,
             verbose_name=u'Vérouillage')
 
+    def __unicode__(self):
+        return self.state_name + ' ' + str(self.created)
+
 
 class Act(models.Model):
     patient = models.ForeignKey('dossiers.PatientRecord')
@@ -72,6 +75,15 @@ class Act(models.Model):
         current_state = self.get_state()
         ActValidationState(act=self, state_name=state_name,
             author=author, previous_state=current_state).save()
+
+    # START Specific to sessad healthcare
+    def was_covered_by_notification(self):
+        notifications = \
+            SessadHealthCareNotification.objects.filter(patient=self.patient,
+            start_date__lte=self.date, end_date__gte=self.date)
+        if notifications:
+            return True
+    # END Specific to sessad healthcare
 
     def __unicode__(self):
         return '{0} le {1} pour {2} avec {3}'.format(
@@ -142,7 +154,6 @@ class EventActManager(EventManager):
         act_event.doctors = participants
         ActValidationState(act=act_event, state_name='NON_VALIDE',
             author=creator, previous_state=None).save()
-
 
         return self._set_event(act_event, participants, description,
                 services=[service], start_datetime=start_datetime,
