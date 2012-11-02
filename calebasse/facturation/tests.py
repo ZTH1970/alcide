@@ -14,7 +14,8 @@ from calebasse.dossiers.models import create_patient, \
 from calebasse.ressources.models import ActType, Service, WorkerType
 from calebasse.personnes.models import Worker
 
-from list_acts import list_acts_for_billing_CAMSP
+from list_acts import list_acts_for_billing_CAMSP, \
+    list_acts_for_billing_SESSAD
 
 
 class FacturationTest(TestCase):
@@ -134,3 +135,48 @@ class FacturationTest(TestCase):
         self.assertTrue(act9 in acts_rejected)
         self.assertTrue(act10 in acts_rejected)
         self.assertTrue(act11 in selected[patient_b])
+
+    def test_facturation_sessad(self):
+        service_sessad = Service.objects.create(name='SESSAD')
+
+        patient_a = create_patient('a', 'A', service_sessad, self.creator, date_selected=datetime(2020, 10, 5))
+        act0 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_sessad, start_datetime=datetime(2020, 10, 6, 10, 15),
+                end_datetime=datetime(2020, 10, 6, 12, 20))
+        patient_a.set_state('SESSAD_STATE_TRAITEMENT', self.creator, date_selected=datetime(2020, 10, 7))
+        act1 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 10, 15),
+                end_datetime=datetime(2020, 10, 7, 12, 20))
+        act2 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 14, 15),
+                end_datetime=datetime(2020, 10, 7, 16, 20))
+        act3 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 16, 20),
+                end_datetime=datetime(2020, 10, 7, 17, 20))
+        patient_a.set_state('SESSAD_STATE_CLOS', self.creator, date_selected=datetime(2020, 10, 8))
+        act4 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_sessad, start_datetime=datetime(2020, 10, 8, 10, 15),
+                end_datetime=datetime(2020, 10, 8, 12, 20))
+
+        automated_validation(datetime(2020, 10, 6), service_sessad, self.creator)
+        automated_validation(datetime(2020, 10, 7), service_sessad, self.creator)
+        automated_validation(datetime(2020, 10, 8), service_sessad, self.creator)
+
+        not_locked, days_not_locked, not_valide, not_billable, rejected, missing_valid_notification, selected = \
+            list_acts_for_billing_SESSAD(datetime(2020, 10, 4), datetime(2020, 10, 8), service_sessad)
+        self.assertEqual(not_locked, {})
+        self.assertEqual(not_valide, {})
+        self.assertEqual(not_billable, {})
+        self.assertEqual(len(rejected[patient_a]), 2)
+        self.assertEqual(len(missing_valid_notification[patient_a]), 3)
+        self.assertEqual(selected, {})
+
+        SessadHealthCareNotification(patient=patient_a, author=self.creator, start_date=datetime(2020,10,7), end_date=datetime(2021,10,6)).save()
+        not_locked, days_not_locked, not_valide, not_billable, rejected, missing_valid_notification, selected = \
+            list_acts_for_billing_SESSAD(datetime(2020, 10, 4), datetime(2020, 10, 8), service_sessad)
+        self.assertEqual(not_locked, {})
+        self.assertEqual(not_valide, {})
+        self.assertEqual(not_billable, {})
+        self.assertEqual(len(rejected[patient_a]), 2)
+        self.assertEqual(missing_valid_notification, {})
+        self.assertEqual(len(selected[patient_a]), 3)
