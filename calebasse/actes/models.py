@@ -1,9 +1,31 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.contrib.auth.models import User
 
 from calebasse.agenda.models import Event, EventType
 from calebasse.agenda.managers import EventManager
+
+
+class ActValidationState(models.Model):
+
+    class Meta:
+        app_label = 'actes'
+
+    act = models.ForeignKey('actes.Act',
+        verbose_name=u'Acte', editable=False)
+    state_name = models.CharField(max_length=150)
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+    author = \
+        models.ForeignKey(User,
+        verbose_name=u'Auteur', editable=False)
+    previous_state = models.ForeignKey('ActValidationState',
+        verbose_name=u'Etat précédent',
+        editable=False, blank=True, null=True)
+    # To record if the validation has be done by the automated validation
+    auto  = models.BooleanField(default=False,
+            verbose_name=u'Vérouillage')
+
 
 class Act(models.Model):
     act_type = models.ForeignKey('ressources.ActType',
@@ -21,7 +43,7 @@ class Act(models.Model):
             null=True,
             verbose_name=u'Type de transport')
     doctors = models.ManyToManyField('personnes.Worker',
-            limit_choices_to={'type__intervene': True },
+            limit_choices_to={'type__intervene': True},
             verbose_name=u'Thérapeutes')
 
     def __unicode__(self):
@@ -32,7 +54,6 @@ class Act(models.Model):
     def __repr__(self):
         return '<%s %r %r>' % (self.__class__.__name__, unicode(self), self.id)
 
-
     class Meta:
         verbose_name = u"Acte"
         verbose_name_plural = u"Actes"
@@ -41,9 +62,9 @@ class Act(models.Model):
 
 class EventActManager(EventManager):
 
-    def create_patient_appointment(self, title, patient, participants, act_type,
-            service, start_datetime, end_datetime, description='', room=None,
-            note=None, **rrule_params):
+    def create_patient_appointment(self, title, patient, participants,
+            act_type, service, start_datetime, end_datetime, description='',
+            room=None, note=None, **rrule_params):
         """
         This method allow you to create a new patient appointment quickly
 
@@ -59,7 +80,8 @@ class EventActManager(EventManager):
             follow the ``dateutils`` API (see http://labix.org/python-dateutil)
 
         Example:
-            Look at calebasse.agenda.tests.EventTest (test_create_appointments method)
+            Look at calebasse.agenda.tests.EventTest (test_create_appointments
+            method)
         """
 
         event_type, created = EventType.objects.get_or_create(
@@ -76,8 +98,9 @@ class EventActManager(EventManager):
         act_event.doctors = participants
 
         return self._set_event(act_event, participants, description,
-                services = [service], start_datetime = start_datetime, end_datetime = end_datetime,
-                room = room, note = note, **rrule_params)
+                services=[service], start_datetime=start_datetime,
+                end_datetime=end_datetime,
+                room=room, note=note, **rrule_params)
 
 
 class EventAct(Act, Event):
@@ -97,13 +120,14 @@ class EventAct(Act, Event):
     def __unicode__(self):
         return 'Rdv le {0} de {1} avec {2} pour {3}'.format(
                 self.occurrence_set.all()[0].start_time, self.patient,
-                ', '.join(map(unicode, self.participants.all())), self.act_type)
+                ', '.join(map(unicode, self.participants.all())),
+                self.act_type)
 
     def __repr__(self):
-        return '<%s %r %r>' % (self.__class__.__name__, unicode(self), self.id)
+        return '<%s %r %r>' % (self.__class__.__name__, unicode(self),
+            self.id)
 
     class Meta:
         verbose_name = 'Rendez-vous patient'
         verbose_name_plural = 'Rendez-vous patient'
         ordering = ['-date', 'patient']
-
