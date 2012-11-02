@@ -94,8 +94,8 @@ def automated_validation(date, service, user):
     for act in acts_of_the_day:
         act.validation_locked = True
         act.save()
-    """if service.name == 'CMPP':
+    if service.name == 'CMPP':
         for patient, _ in patients.items():
             patient.create_diag_healthcare(user)
-            patient.automated_switch_state(user)"""
+            patient.automated_switch_state(user)
     return (nb_acts_total, nb_acts_validated, nb_acts_absence, nb_acts_double)
