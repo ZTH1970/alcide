@@ -3,6 +3,7 @@
 import logging
 
 from datetime import datetime
+from datetime import timedelta
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -11,7 +12,99 @@ from calebasse.personnes.models import People
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 from calebasse.dossiers.states import STATES, STATE_ACCUEIL
 
+DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
+DEFAULT_ACT_NUMBER_TREATMENT = 30
+DEFAULT_ACT_NUMBER_PROLONGATION = 10
+VALIDITY_PERIOD_TREATMENT_HEALTHCARE = 365
+
 logger = logging.getLogger('calebasse.dossiers')
+
+
+class HealthCare(models.Model):
+
+    class Meta:
+        app_label = 'dossiers'
+
+    patient = models.ForeignKey('dossiers.PatientRecord',
+        verbose_name=u'Dossier patient', editable=False)
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+    author = \
+        models.ForeignKey(User,
+        verbose_name=u'Auteur', editable=False)
+    comment = models.TextField(max_length=3000, blank=True, null=True)
+    start_date = models.DateTimeField()
+
+
+class CmppHealthCareDiagnostic(HealthCare):
+
+    class Meta:
+        app_label = 'dossiers'
+
+    _act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_DIAGNOSTIC)
+
+    def get_act_number(self):
+        return self._act_number
+
+    def save(self, **kwargs):
+        self.start_date = \
+            datetime(self.start_date.year, self.start_date.month,
+                self.start_date.day)
+        super(CmppHealthCareDiagnostic, self).save(**kwargs)
+
+
+class CmppHealthCareTreatment(HealthCare):
+
+    class Meta:
+        app_label = 'dossiers'
+
+    _act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT)
+    end_date = models.DateTimeField()
+    prolongation = models.IntegerField(default=0,
+            verbose_name=u'Prolongation')
+
+    def get_act_number(self):
+        if self.is_extended():
+            return self._act_number + self.prolongation
+        return self._act_number
+
+    def is_extended(self):
+        if self.prolongation > 0:
+            return True
+        return False
+
+    def add_prolongation(self, value=None):
+        if not value:
+            value = DEFAULT_ACT_NUMBER_PROLONGATION
+        if self.is_extended():
+            raise Exception(u'Prise en charge déja prolongée')
+        self.prolongation = value
+        self.save()
+
+    def save(self, **kwargs):
+        self.start_date = \
+            datetime(self.start_date.year, self.start_date.month,
+                self.start_date.day)
+        self.end_date = self.start_date + \
+            timedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE)
+
+        super(CmppHealthCareTreatment, self).save(**kwargs)
+
+
+class SessadHealthCareNotification(HealthCare):
+
+    class Meta:
+        app_label = 'dossiers'
+
+    end_date = models.DateTimeField()
+
+    def save(self, **kwargs):
+        self.start_date = \
+            datetime(self.start_date.year, self.start_date.month,
+                self.start_date.day)
+        self.end_date = \
+            datetime(self.end_date.year, self.end_date.month,
+                self.end_date.day)
+        super(SessadHealthCareNotification, self).save(**kwargs)
 
 
 class FileState(models.Model):
