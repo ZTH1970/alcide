@@ -141,3 +141,63 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service):
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_bad_state,
         acts_accepted)
+
+
+def list_acts_for_billing_SESSAD(start_day, end_day, service):
+    """Used to sort acts billable by specific service requirements.
+
+    For the SESSAD, acts are billable if the state of the patient record at
+        the date of the act is 'SESSAD_STATE_TRAITEMENT' and there was also a
+        valid notification at that date.
+
+    acts = acts_not_locked + \
+        acts_not_valide + \
+            acts_not_billable + \
+                acts_bad_state + \
+                    acts_missing_valid_notification + \
+                        acts_accepted
+
+    :param end_day: formatted date that gives the last day when acts are taken
+        in account.
+    :type end_day: datetime
+    :param service: service in which acts are dealt with.
+    :type service: calebasse.ressources.Service
+
+    :returns: a list of dictionnaries where patients are the keys and values
+        are lists of acts. The second element of this list in not a dict but
+        a list of the days where are all days are not locked.
+    :rtype: list
+    """
+
+    acts_not_locked, days_not_locked, acts_not_valide, \
+        acts_not_billable, acts_billable = \
+            list_acts_for_billing_first_round(end_day, service,
+                start_day=start_day)
+    acts_bad_state = {}
+    acts_missing_valid_notification = {}
+    acts_accepted = {}
+    for patient, acts in acts_billable.items():
+        for act in acts:
+            if patient.was_in_state_at_day(act.date,
+                    'SESSAD_STATE_TRAITEMENT'):
+                if not act.was_covered_by_notification():
+                    if act.patient in acts_missing_valid_notification:
+                        acts_missing_valid_notification[act.patient]. \
+                            append(act)
+                    else:
+                        acts_missing_valid_notification[act.patient] = [act]
+                else:
+                    if act.patient in acts_accepted:
+                        acts_accepted[act.patient].append(act)
+                    else:
+                        acts_accepted[act.patient] = [act]
+            else:
+                if act.patient in acts_bad_state:
+                    acts_bad_state[act.patient]. \
+                        append((act, 'NOT_ACCOUNTABLE_STATE'))
+                else:
+                    acts_bad_state[act.patient] = \
+                        [(act, 'NOT_ACCOUNTABLE_STATE')]
+    return (acts_not_locked, days_not_locked, acts_not_valide,
+        acts_not_billable, acts_bad_state, acts_missing_valid_notification,
+        acts_accepted)
