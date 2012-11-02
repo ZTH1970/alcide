@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from calebasse.personnes.models import People
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 from calebasse.dossiers.states import STATES, STATE_ACCUEIL
+from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
 DEFAULT_ACT_NUMBER_TREATMENT = 30
@@ -257,6 +258,74 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
         else:
             return notification.end_date - today
     # END Specific to sessad healthcare
+
+    # START Specific to cmpp healthcare
+    def create_diag_healthcare(self, modifier):
+        """
+            Gestion de l'inscription automatique.
+
+            Si un premier acte est validé alors une prise en charge
+            diagnostique est ajoutée. Cela fera basculer le dossier dans l'état
+            en diagnostic.
+
+            A voir si auto ou manuel :
+            Si ce n'est pas le premier acte validé mais que l'acte précédement
+            facturé a plus d'un an, on peut créer une prise en charge
+            diagnostique. Même s'il y a une prise en charge de traitement
+            expirée depuis moins d'un an donc renouvelable.
+
+        """
+        acts = self.act_set.order_by('date')
+        hcs = self.healthcare_set.order_by('-start_date')
+        if not hcs:
+            # Pas de prise en charge, on recherche l'acte facturable le plus
+            # ancien, on crée une pc diag à la même date.
+            for act in acts:
+                if are_all_acts_of_the_day_locked(act.date) and \
+                        act.is_state('VALIDE') and act.is_billable():
+                    CmppHealthCareDiagnostic(patient=self, author=modifier,
+                        start_date=act.date).save()
+                    break
+        else:
+            # On recherche l'acte facturable non facturé le plus ancien et
+            # l'on regarde s'il a plus d'un an
+            try:
+                last_billed_act = self.act_set.filter(is_billed=True).\
+                    latest('date')
+                if last_billed_act:
+                    for act in acts:
+                        if are_all_acts_of_the_day_locked(act.date) and \
+                                act.is_state('VALIDE') and \
+                                act.is_billable() and \
+                                (act.date - last_billed_act.date).days >= 365:
+                            CmppHealthCareDiagnostic(patient=self,
+                                author=modifier, start_date=act.date).save()
+                            break
+            except:
+                pass
+
+    def automated_switch_state(self, modifier):
+        # Quel est le dernier acte facturable.
+        acts = self.act_set.order_by('-date')
+        # Si cet acte peut-être pris en charge en diagnostic c'est un acte de
+        # diagnostic, sinon c'est un acte de traitement.
+        for act in acts:
+            if are_all_acts_of_the_day_locked(act.date) and \
+                    act.is_state('VALIDE') and act.is_billable():
+                cared, hc = act.is_act_covered_by_diagnostic_healthcare()
+                if hc:
+                    if self.get_state().state_name == 'CMPP_STATE_ACCUEIL' \
+                            or self.get_state().state_name == \
+                                'CMPP_STATE_TRAITEMENT':
+                        self.set_state('CMPP_STATE_DIAGNOSTIC', modifier,
+                            date_selected=act.date)
+                # Sinon, si le dossier est en diag, s'il ne peut être couvert
+                # en diag, il est en traitement.
+                elif self.get_state().state_name == 'CMPP_STATE_DIAGNOSTIC':
+                    self.set_state('CMPP_STATE_TRAITEMENT', modifier,
+                        date_selected=act.date)
+                break
+    # END Specific to cmpp healthcare
 
 
 def create_patient(first_name, last_name, service, creator,
