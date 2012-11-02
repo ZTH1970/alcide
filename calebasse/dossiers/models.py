@@ -2,11 +2,14 @@
 
 import logging
 
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
 from calebasse.personnes.models import People
 from calebasse.ressources.models import ServiceLinkedAbstractModel
+from calebasse.dossiers.states import STATES, STATE_ACCUEIL
 
 logger = logging.getLogger('calebasse.dossiers')
 
