@@ -15,7 +15,7 @@ from calebasse.ressources.models import ActType, Service, WorkerType
 from calebasse.personnes.models import Worker
 
 from list_acts import list_acts_for_billing_CAMSP, \
-    list_acts_for_billing_SESSAD
+    list_acts_for_billing_SESSAD, list_acts_for_billing_CMPP
 
 
 class FacturationTest(TestCase):
@@ -180,3 +180,52 @@ class FacturationTest(TestCase):
         self.assertEqual(len(rejected[patient_a]), 2)
         self.assertEqual(missing_valid_notification, {})
         self.assertEqual(len(selected[patient_a]), 3)
+
+    def test_facturation_cmpp(self):
+        service_cmpp = Service.objects.create(name='CMPP')
+
+        patient_a = create_patient('a', 'A', service_cmpp, self.creator, date_selected=datetime(2020, 10, 1))
+        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2020, 10, i, 10, 15),
+                end_datetime=datetime(2020, 10, i, 12, 20)) for i in range (1, 32)]
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_ACCUEIL')
+        automated_validation(datetime(2020, 10, 1), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        automated_validation(datetime(2020, 10, 2), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        automated_validation(datetime(2020, 10, 3), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        automated_validation(datetime(2020, 10, 4), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        automated_validation(datetime(2020, 10, 5), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        automated_validation(datetime(2020, 10, 6), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        automated_validation(datetime(2020, 10, 7), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+        automated_validation(datetime(2020, 10, 8), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+        automated_validation(datetime(2020, 10, 9), service_cmpp, self.creator)
+        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+        for i in range(10, 32):
+            automated_validation(datetime(2020, 10, i), service_cmpp, self.creator)
+            self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+
+        acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2020, 11, i, 10, 15),
+                end_datetime=datetime(2020, 11, i, 12, 20)) for i in range (1, 31)]
+        for i in range(1, 31):
+            automated_validation(datetime(2020, 11, i), service_cmpp, self.creator)
+            self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+
+        self.assertEqual(get_days_with_acts_not_locked(datetime(2020, 10, 1), datetime(2020, 11, 30)), [])
+
+        acts = acts + acts_2
+
+        hct = CmppHealthCareTreatment(patient=patient_a, start_date=datetime(2020, 10, 7), author=self.creator)
+        hct.save()
+        hct.add_prolongation()
+        billing_cmpp = list_acts_for_billing_CMPP(datetime(2020, 11, 30), service_cmpp)
+        self.assertEqual(len(billing_cmpp[4][patient_a]), 6)
+        self.assertEqual(len(billing_cmpp[5][patient_a]), 40)
+        self.assertEqual(len(billing_cmpp[6][patient_a]), 15)
