@@ -140,10 +140,10 @@ class OccurrenceManager(models.Manager):
                     result[start_datetime.hour][3] = []
                     quater = 0
 
-                interval = IntervalSet.between(start_datetime, end_datetime)
-                if interval.issubset(occurrences_set[participant.id]):
+                interval = IntervalSet.between(start_datetime, end_datetime, False)
+                if interval.intersection(occurrences_set[participant.id]):
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
-                elif not interval.issubset(timetables_set[participant.id]):
+                elif not interval.intersection(timetables_set[participant.id]):
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'away'})
                 else:
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'free'})
