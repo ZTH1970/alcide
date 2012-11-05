@@ -112,7 +112,11 @@ $(function() {
         }
     });
     $('#agenda-date').on('change', function () {
-        window.location.href=replace_anchor('../' + $(this).datepicker('getDate').toISOString().substr(0,10), make_anchor());
+        var date = $(this).datepicker('getDate')
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        window.location.href=replace_anchor('../' + year + '-' + month + '-' + day, make_anchor());
     });
     $('.date').datepicker({showOn: 'button'});
     $('#add-intervenant-btn').click(function() {
