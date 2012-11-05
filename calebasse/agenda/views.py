@@ -54,16 +54,18 @@ class AgendaHomepageView(TemplateView):
             workers.extend(data['workers'])
 
         occurrences_workers = {}
+        time_tables_workers = {}
         for worker in workers:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
             occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
             occurrences_workers[worker.id] = occurrences_worker
+            time_tables_workers[worker.id] = time_tables_worker
             context['workers_agenda'].append({'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, occurrences_worker)})
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
-                occurrences_workers, workers)
+                occurrences_workers, workers, time_tables_workers)
         return context
 
 class AgendaServiceActivityView(TemplateView):

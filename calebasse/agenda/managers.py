@@ -7,6 +7,7 @@ from django.db import models
 from model_utils.managers import InheritanceManager
 
 from calebasse.agenda.conf import default
+from calebasse.personnes.models import TimeTable
 from calebasse.exceptions import CalebasseException
 from calebasse import agenda
 
@@ -119,12 +120,14 @@ class OccurrenceManager(models.Manager):
             qs = qs.filter(event__event_type=event_type)
         return qs
 
-    def daily_disponiblity(self, date, occurrences, participants):
+    def daily_disponiblity(self, date, occurrences, participants, time_tables):
         result = dict()
         quater = 0
         occurrences_set = {}
+        timetables_set = {}
         for participant in participants:
             occurrences_set[participant.id] = IntervalSet((o.to_interval() for o in occurrences[participant.id]))
+            timetables_set[participant.id] = IntervalSet((t.to_interval(date) for t in time_tables[participant.id]))
         start_datetime = datetime(date.year, date.month, date.day, 8, 0)
         end_datetime = datetime(date.year, date.month, date.day, 8, 15)
         while (start_datetime.hour <= 19):
@@ -138,12 +141,12 @@ class OccurrenceManager(models.Manager):
                     quater = 0
 
                 interval = IntervalSet.between(start_datetime, end_datetime)
-                delta = interval - occurrences_set[participant.id]
-                if delta and delta[0].upper_bound == interval[0].upper_bound and \
-                        delta[0].lower_bound and interval[0].upper_bound :
-                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'free'})
-                else:
+                if interval.issubset(occurrences_set[participant.id]):
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
+                elif not interval.issubset(timetables_set[participant.id]):
+                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'away'})
+                else:
+                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'free'})
             quater += 1
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
