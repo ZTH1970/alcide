@@ -94,18 +94,8 @@ class NewEventForm(forms.ModelForm):
         )
 
     def __init__(self, instance, service=None, **kwargs):
-        #self.service = None
-        if service:
-            initial['services'] = [service]
-            print "----------"
-            print service
-            print "------------"
-            kwargs['initial'] = initial
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
-        if service:
-            self.fields['participants'].queryset = \
-                    Worker.objects.for_service(service)
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
@@ -130,3 +120,4 @@ class NewEventForm(forms.ModelForm):
                 room=self.cleaned_data['room'],
                 note=None,)
         return self.instance
+

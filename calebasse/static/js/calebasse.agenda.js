@@ -125,9 +125,9 @@ $(function() {
         $(this).prev().val('').focus();
         return false;
     });
-    $('#newrdv').click(function() {
+    $('.newrdv').click(function() {
         var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
-        var qs = $.param({participants: $.makeArray(participants) }, true);
+        var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
         var new_appointment_url = $(this).data('url') + "?" + qs;
         $('#rdv').load(new_appointment_url,
             function () {
@@ -157,9 +157,9 @@ $(function() {
                         click: function() { $("#rdv form").submit(); } }]});
             });
     });
-    $('#newevent').click(function() {
+    $('.newevent').click(function() {
         var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
-        var qs = $.param({participants: $.makeArray(participants) }, true);
+        var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
         var new_appointment_url = $(this).data('url') + "?" + qs;
         $('#rdv').load(new_appointment_url,
             function () {

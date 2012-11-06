@@ -3,6 +3,7 @@
 {% block extrascripts %}
   <script src="{{ STATIC_URL }}js/calebasse.agenda.js"></script>
   <style>
+      uveau rendez-vous patient
     .person-item span { display: none; }
     .person-item.active span { display: inline; }
     #agenda-date { width: 20em; }
@@ -19,8 +20,8 @@
 {% block appbar %}
     <h2>Agenda</h2>
     <a href="../..">Retourner à l'accueil</a>
-    <button id="newevent" data-url="{% url 'new-event' service=service date=date %}">Nouvel événement (autre)</button>
-    <button id="newrdv" data-url="{% url 'nouveau-rdv' service=service date=date %}">Nouveau rendez-vous patient</button>
+    <button class="newevent" data-url="{% url 'new-event' service=service date=date %}">Nouvel événement (autre)</button>
+    <button class="newrdv" data-url="{% url 'nouveau-rdv' service=service date=date %}">Nouveau rendez-vous patient</button>
 {% endblock %}
 
 {% block beforecontent %}
@@ -123,7 +124,10 @@
            </h3>
 
            <div>
-             {% if appointment.type == 'free' %}<button class='booking' data-hour="{{ appointment.begin_hour }}">Prendre un rendez-vous</button> {% endif %}
+               {% if appointment.type == 'free' %}
+               <button class='newrdv' data-url="{% url 'nouveau-rdv' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouveau rendez-vous patient</button>
+               <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouvel évènement</button>
+               {% endif %}
              {% if appointment.event_id %}
              <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
                  <span></span>

@@ -141,11 +141,11 @@ class NewEventView(CreateView):
         initial['date'] = self.kwargs.get('date')
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
+        initial['services'] = [self.service]
         return initial
 
     def get_form_kwargs(self):
         kwargs = super(NewEventView, self).get_form_kwargs()
-        #kwargs['service'] = self.service
         return kwargs
 
     def post(self, *args, **kwargs):
