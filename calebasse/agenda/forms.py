@@ -8,6 +8,7 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Event
+from calebasse.ressources.models import ActType
 from calebasse.middleware.request import get_request
 
 from ajax_select import make_ajax_field
@@ -43,6 +44,8 @@ class NewAppointmentForm(forms.ModelForm):
                     Worker.objects.for_service(service)
             self.fields['patient'].queryset = \
                     PatientRecord.objects.for_service(service)
+            self.fields['act_type'].queryset = \
+                    ActType.objects.for_service(service)
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
@@ -93,7 +96,7 @@ class NewEventForm(forms.ModelForm):
                 'event_type'
         )
 
-    def __init__(self, instance, service=None, **kwargs):
+    def __init__(self, instance, **kwargs):
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
 

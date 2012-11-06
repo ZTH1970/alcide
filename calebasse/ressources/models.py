@@ -145,7 +145,7 @@ class Job(NamedAbstractModel):
         verbose_name_plural = u'Professions'
 
 
-class SalleManager(models.Manager):
+class RoomManager(models.Manager):
     def for_etablissement(self, etablissement):
         return self.filter(etablissement=etablissement)
 
@@ -154,7 +154,7 @@ class SalleManager(models.Manager):
 
 
 class Room(NamedAbstractModel):
-    objects = SalleManager()
+    objects = RoomManager()
     etablissement = models.ForeignKey('Office')
 
     class Meta:
@@ -177,8 +177,12 @@ class Service(NamedAbstractModel):
         verbose_name = u'Service'
         verbose_name_plural = u'Services'
 
+class ActTypeManager(models.Manager):
+    def for_service(self, service):
+        return self.filter(service=service)
 
 class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
+    objects = ActTypeManager()
     billable = models.BooleanField(default=True)
 
     class Meta:
