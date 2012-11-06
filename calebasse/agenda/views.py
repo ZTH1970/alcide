@@ -1,5 +1,4 @@
 import datetime
-import collections
 
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -106,7 +105,7 @@ class AgendaServiceActivityView(TemplateView):
             appointment['act'] = event_act.act_type.name
             appointments_times[start_time]['row'] += 1
             appointments_times[start_time]['appointments'].append(appointment)
-        context['appointments_times'] = collections.OrderedDict(sorted(appointments_times.items()))
+        context['appointments_times'] = sorted(appointments_times.items())
         return context
 
 

@@ -31,10 +31,10 @@
       <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>
     </thead>
     <tbody>
-      {% for time, row_appointments in appointments_times.items %}
+      {% for row_appointments in appointments_times %}
       <tr class="hour-change">
-        <td class="hour"  rowspan="{{ row_appointments.row }}">{{ time }}</td>
-        {% for appointment in row_appointments.appointments %}
+        <td class="hour"  rowspan="{{ row_appointments.1.row }}">{{ row_appointments.0 }}</td>
+        {% for appointment in row_appointments.1.appointments %}
         {% if forloop.counter != 1 %}
         <tr>
           {% endif %}
