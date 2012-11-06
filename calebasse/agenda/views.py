@@ -53,9 +53,11 @@ class AgendaHomepageView(TemplateView):
         context['disponnibility'] = {}
         workers = []
         for worker_type in WorkerType.objects.all():
-            data = {'type': worker_type.name, 'workers': Worker.objects.for_service(self.service, worker_type) }
-            context['workers_types'].append(data)
-            workers.extend(data['workers'])
+            workers_type = Worker.objects.for_service(self.service, worker_type)
+            if workers_type:
+                data = {'type': worker_type.name, 'workers': workers_type }
+                context['workers_types'].append(data)
+                workers.extend(data['workers'])
 
         occurrences_workers = {}
         time_tables_workers = {}
