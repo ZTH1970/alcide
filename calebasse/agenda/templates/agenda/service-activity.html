@@ -12,42 +12,40 @@
 
 {% block appbar %}
 <h2>Activité du service - {{ date|date:"DATE_FORMAT" }}</h2>
-    <a href="..">Retourner à l'agenda</a>
-    <button>Imprimer</button>
+<a href="..">Retourner à l'agenda</a>
+<button>Imprimer</button>
 {% endblock %}
 
 {% block content %}
-<div class="content">
-   <div id="datesel">
-     <a href="../../{{ previous_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">««</a>
-     <a href="../../{{ previous_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">«</a>
-     <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
-     <a href="../../{{ next_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»</a>
-     <a href="../../{{ next_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»»</a>
-   </div>
+<div id="datesel">
+  <a href="../../{{ previous_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">««</a>
+  <a href="../../{{ previous_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">«</a>
+  <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
+  <a href="../../{{ next_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»</a>
+  <a href="../../{{ next_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»»</a>
+</div>
 
-  <table class="main" id="activity">
-    <thead>
-      <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>
-    </thead>
-    <tbody>
-      {% for row_appointments in appointments_times %}
-      <tr class="hour-change">
-        <td class="hour"  rowspan="{{ row_appointments.1.row }}">{{ row_appointments.0 }}</td>
-        {% for appointment in row_appointments.1.appointments %}
-        {% if forloop.counter != 1 %}
-        <tr>
-          {% endif %}
-          <td>{{ appointment.length }}</td>
-          <td>{{ appointment.patient }}</td>
-          <td>{{ appointment.therapists }}</td>
-          <td>{{ appointment.act }}</td>
-        </tr>
-        {% endfor %}
+<table class="main" id="activity">
+  <thead>
+    <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>
+  </thead>
+  <tbody>
+    {% for row_appointments in appointments_times %}
+    <tr class="hour-change">
+      <td class="hour"  rowspan="{{ row_appointments.1.row }}">{{ row_appointments.0 }}</td>
+      {% for appointment in row_appointments.1.appointments %}
+      {% if forloop.counter != 1 %}
+      <tr>
+        {% endif %}
+        <td>{{ appointment.length }}</td>
+        <td>{{ appointment.patient }}</td>
+        <td>{{ appointment.therapists }}</td>
+        <td>{{ appointment.act }}</td>
       </tr>
       {% endfor %}
-    </tbody>
-  </table>
-</div>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
 
