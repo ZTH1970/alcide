@@ -178,7 +178,7 @@ class Service(NamedAbstractModel):
         verbose_name_plural = u'Services'
 
 
-class ActType(NamedAbstractModel):
+class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
     billable = models.BooleanField(default=True)
 
     class Meta:
