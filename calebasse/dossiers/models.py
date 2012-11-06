@@ -154,7 +154,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
         editable=False)
     contacts = models.ManyToManyField('personnes.People',
             related_name='contact_of')
-    birthdate = models.DateField()
+    birthdate = models.DateField(null=True, blank=True)
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
 
