@@ -3,7 +3,8 @@ from django.conf.urls import url, patterns, include
 from calebasse.cbv import TemplateView
 
 from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
-        NewEventView, AgendaServiceActivityView)
+        NewEventView, AgendaServiceActivityView,
+        AgendaServiceActValidationView, AutomatedValidationView, UnlockAllView)
 
 
 agenda_patterns = patterns('',
@@ -22,9 +23,15 @@ agenda_patterns = patterns('',
                     template_name='agenda/service-activity.html'),
                 name='activite-du-service'),
             url(r'^validation-des-actes/$',
-                TemplateView.as_view(
+                AgendaServiceActValidationView.as_view(
                     template_name='agenda/act-validation.html'),
                 name='validation-des-actes'),
+            url(r'^validation-des-actes/validation-all/$',
+                AutomatedValidationView.as_view(),
+                name='validation-all'),
+            url(r'^validation-des-actes/unlock-all/$',
+                UnlockAllView.as_view(),
+                name='unlock-all'),
             url(r'^rendez-vous-periodiques/$',
                 TemplateView.as_view(
                     template_name='agenda/rendez-vous-periodique.html'),
@@ -34,4 +41,3 @@ agenda_patterns = patterns('',
 urlpatterns = patterns('',
         url(r'^$', redirect_today),
         url(r'^(?P<date>[^/]*)/', include(agenda_patterns)))
-
