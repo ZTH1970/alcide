@@ -10,11 +10,10 @@ from calebasse.personnes.models import TimeTable
 from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
-from calebasse.ressources.models import Service, WorkerType
+from calebasse.ressources.models import WorkerType
 from calebasse.actes.validation import (are_all_acts_of_the_day_locked,
     get_acts_of_the_day)
 from calebasse.actes.validation_states import VALIDATION_STATES
-from calebasse.middleware.request import get_request
 
 from forms import NewAppointmentForm, NewEventForm
 
