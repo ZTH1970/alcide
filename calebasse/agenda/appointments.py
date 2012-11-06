@@ -56,7 +56,7 @@ class Appointment(object):
         if occurrence.event.room:
             self.room = occurrence.event.room.name
         self.description = occurrence.event.description
-        if occurrence.event.event_type.label == 'patient_appointment':
+        if occurrence.event.event_type.id == 1:
             event_act = occurrence.event.eventact
             workers = event_act.participants.all()
             self.convocation_sent = event_act.convocation_sent
