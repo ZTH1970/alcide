@@ -1,6 +1,23 @@
 {% extends "calebasse/base.html" %}
 {% block extrascripts %}
-<script></script>
+
+<script>
+$(function() {
+    $('#agenda-date').datepicker({
+        dateFormat: "DD d MM yy",
+        onClose: function(dateText, inst) {
+            console.log('close');
+        }
+    });
+    $('#agenda-date').on('change', function () {
+        var date = $(this).datepicker('getDate')
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        window.location.href='../../' + year + '-' + month + '-' + day + '/activite-du-service';
+    });
+});
+</script>
 {% endblock %}
 
 {% block title %}{{ block.super }} - Agenda {% endblock %}
