@@ -3,6 +3,7 @@ import collections
 
 from django.db.models import Q
 from django.shortcuts import redirect
+from django.shortcuts import render_to_response
 
 from calebasse.cbv import TemplateView, CreateView
 from calebasse.agenda.models import Occurrence, Event, EventType
@@ -11,6 +12,10 @@ from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, WorkerType
+from calebasse.actes.validation import (are_all_acts_of_the_day_locked,
+    get_acts_of_the_day)
+from calebasse.actes.validation_states import VALIDATION_STATES
+from calebasse.middleware.request import get_request
 
 from forms import NewAppointmentForm, NewEventForm
 
@@ -150,3 +155,37 @@ class NewEventView(CreateView):
 def new_appointment(request):
     pass
 
+class AgendaServiceActValidationView(TemplateView):
+
+    template_name = 'agenda/act-validation.html'
+
+    def post(self, request, *args, **kwargs):
+        return render_to_response(self.template_name, {},
+                context_instance=None)
+
+    def get_context_data(self, **kwargs):
+        context = super(AgendaServiceActValidationView, self).get_context_data(**kwargs)
+        day_locked = are_all_acts_of_the_day_locked(context['date'])
+        authorized_lock = True # is_authorized_for_locking(get_request().user)
+        validation_msg = list()
+        acts_of_the_day = get_acts_of_the_day(context['date'])
+        actes = list()
+        for act in acts_of_the_day:
+            state = act.get_state()
+            if not state.previous_state:
+                state = None
+            act.date = act.date.strftime("%H:%M")
+            actes.append((act, state))
+        context['validation_states'] = VALIDATION_STATES
+        context['actes'] = actes
+        context['validation_msg'] = validation_msg
+        context['day_locked'] = day_locked
+        context['authorized_lock'] = authorized_lock
+        return context
+
+
+class AutomatedValidationView(CreateView):
+    pass
+
+class UnlockAllView(CreateView):
+    pass
