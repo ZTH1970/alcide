@@ -194,8 +194,7 @@ class AgendaServiceActValidationView(TemplateView):
         return get_acts_of_the_day(self.date)
 
     def post(self, request, *args, **kwargs):
-        if 'validation-all' in request.POST:
-            # FIXME: Action automatique: tout le monde est valide ?
+        if 'validate-all' in request.POST:
             automated_validation(self.date,
                     self.service, request.user)
         elif 'unlock-all' in request.POST:
