@@ -250,7 +250,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
 
     def days_before_notification_expiration(self):
         today = datetime.today()
-        notification = get_last_notification(self)
+        notification = self.get_last_notification(self)
         if not notification:
             return 0
         if notification.end_date < today:
