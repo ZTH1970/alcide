@@ -1,35 +1,62 @@
 [
-  {
-    "pk": 8,
-    "model": "dossiers.patientrecord",
-    "fields": {
-      "service": 1,
-      "created": "2012-10-12T16:15:37.306",
-      "creator": "1",
-      "contacts": [
-        1,
-        2,
-        3,
-        4
-      ], 
-      "paper_id": "1024", 
-      "birthdate": "1980-10-31"
+    {
+        "fields": {
+            "author": 1,
+            "comment": "",
+            "created": "2012-11-07T18:54:59.893",
+            "date_selected": "2012-11-07T00:00:00",
+            "patient": 8,
+            "previous_state": null,
+            "state_name": "CMPP_STATE_ACCUEIL"
+        },
+        "model": "dossiers.filestate",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "author": 1,
+            "comment": "",
+            "created": "2012-11-07T18:55:09.426",
+            "date_selected": "2012-11-07T00:00:00",
+            "patient": 9,
+            "previous_state": null,
+            "state_name": "CMPP_STATE_ACCUEIL"
+        },
+        "model": "dossiers.filestate",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "birthdate": "1980-10-31",
+            "contacts": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "created": "2012-10-12T16:15:37.306",
+            "creator": 1,
+            "paper_id": "1024",
+            "service": 1
+        },
+        "model": "dossiers.patientrecord",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "birthdate": "1988-12-30",
+            "contacts": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "created": "2012-10-12T16:15:37.306",
+            "creator": 1,
+            "paper_id": null,
+            "service": 1
+        },
+        "model": "dossiers.patientrecord",
+        "pk": 9
     }
-  },
-  {
-    "pk": 9,
-    "model": "dossiers.patientrecord",
-    "fields": {
-      "service": 1,
-      "created": "2012-10-12T16:15:37.306",
-      "creator": "1",
-      "contacts": [
-        1,
-        2,
-        3,
-        4
-      ], 
-      "birthdate": "1988-12-30"
-    } 
-  }
 ]
