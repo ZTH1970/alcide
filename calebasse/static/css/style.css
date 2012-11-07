@@ -156,6 +156,8 @@ div#content {
 	position: relative;
 }
 
+
+
 div#content h2 {
 	margin-top: 0;
 	font-weight: normal;
@@ -333,6 +335,13 @@ div.content {
 	width: 82%;
 	margin-left: 8px;
 	margin-top: -10px;
+}
+
+/* For page without a left column */
+body.no-left-column div.content {
+	width: 100%;
+  float: none;
+  margin-left: 0px;
 }
 
 div#users input {
