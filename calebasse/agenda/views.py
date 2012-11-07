@@ -251,14 +251,22 @@ class AutomatedValidationView(TemplateView):
             automated_validation(self.date, self.service,
                 request.user, commit = False)
 
+        nb_acts_not_validated = nb_acts_double + \
+            nb_acts_abs_non_exc + \
+            nb_acts_abs_exc + \
+            nb_acts_annul_nous + \
+            nb_acts_annul_famille + \
+            nb_acts_abs_ess_pps + \
+            nb_acts_enf_hosp
         context.update({
             'nb_acts_total': nb_acts_total,
             'nb_acts_validated': nb_acts_validated,
+            'nb_acts_not_validated': nb_acts_not_validated,
             'nb_acts_double': nb_acts_double,
             'nb_acts_abs_non_exc': nb_acts_abs_non_exc,
-            'nb_acts_abs_exc': nb_acts_abs_exc, 
+            'nb_acts_abs_exc': nb_acts_abs_exc,
             'nb_acts_annul_nous': nb_acts_annul_nous,
-            'nb_acts_annul_famille': nb_acts_annul_famille, 
+            'nb_acts_annul_famille': nb_acts_annul_famille,
             'nb_acts_abs_ess_pps': nb_acts_abs_ess_pps,
             'nb_acts_enf_hosp': nb_acts_enf_hosp})
         return context
