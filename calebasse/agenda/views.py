@@ -227,7 +227,7 @@ class AgendaServiceActValidationView(TemplateView):
             if not state.previous_state:
                 state = None
             act.date = act.date.strftime("%H:%M")
-            actes.append((act, state))
+            actes.append((act, state, VALIDATION_STATES[state.state_name]))
         context['validation_states'] = VALIDATION_STATES
         context['actes'] = actes
         context['validation_msg'] = validation_msg

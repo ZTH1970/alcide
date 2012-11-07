@@ -30,7 +30,7 @@
 
     {% if actes %}
     <div id="actes">
-    {% for acte, last_status in actes %}
+    {% for acte, last_status, last_status_name in actes %}
     <div class="frame acte" id="acte-frame-{{ acte.id }}">
       <h3>{{ acte.date }} - <strong>{{ acte.patient.last_name }} {{ acte.patient.first_name }}</strong>
           {% if acte.patient.paper_id %} ({{ acte.patient.paper_id }}){% endif %}
@@ -38,7 +38,7 @@
           <strong>{{ acte.act_type }}</strong>
           {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
       </h3>
-      <div><span>{% if last_status %}<strong>{{ last_status.status_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
+      <div><span>{% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
            {% if last_status.auto %}(par validation automatique){% endif %}.
          {% else %}
            Non pointé.
