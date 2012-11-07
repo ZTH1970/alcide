@@ -1,0 +1,22 @@
+{% extends "calebasse/base.html" %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Gestion des ressources - {{ service_name }}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Ajouter un {{ model_verbose_name }}</h2>
+  <a href="..">Retourner au listing</a>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+      <div id="form-content">
+        {% csrf_token %}
+        {{ form.as_p }}
+      </div>
+      <button>Ajouter</button>
+      <a href="..">Retourner au listing</a>
+    </form>
+{% endblock %}

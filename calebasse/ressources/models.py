@@ -185,7 +185,7 @@ class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
     objects = ActTypeManager()
     billable = models.BooleanField(default=True)
 
-    class Meta:
+    class Meta(NamedAbstractModel.Meta):
         verbose_name = u'Type d\'actes'
         verbose_name_plural = u'Types d\'actes'
 

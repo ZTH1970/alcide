@@ -948,6 +948,19 @@ table#activity tr td.hour {
 form.inline-form {
   display: inline;
 }
+
 #dialogs {
   display: none;
+}
+
+li .delete-object-button {
+  visibility: hidden;
+}
+
+li:hover .delete-object-button {
+  visibility: visible;
+}
+
+#form-content input[type^="text"] {
+  width: 68.2%;
 }

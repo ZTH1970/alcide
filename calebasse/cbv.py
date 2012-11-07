@@ -45,14 +45,24 @@ class ServiceViewMixin(object):
 class TemplateView(ServiceViewMixin, base.TemplateView):
     pass
 
-class ListView(ServiceViewMixin, list_cbv.ListView):
+class ModelNameMixin(object):
+    def get_context_data(self, **kwargs):
+        ctx = super(ModelNameMixin, self).get_context_data(**kwargs)
+        ctx['model_verbose_name_plural'] = self.model._meta.verbose_name_plural
+        ctx['model_verbose_name'] = self.model._meta.verbose_name
+        return ctx
+
+class ListView(ModelNameMixin, ServiceViewMixin, list_cbv.ListView):
     pass
 
-class CreateView(ServiceViewMixin, edit.CreateView):
+
+class CreateView(ModelNameMixin, ServiceViewMixin, edit.CreateView):
     pass
 
-class DeleteView(ServiceViewMixin, edit.DeleteView):
+
+class DeleteView(ModelNameMixin, ServiceViewMixin, edit.DeleteView):
     pass
 
-class UpdateView(ServiceViewMixin, edit.UpdateView):
+
+class UpdateView(ModelNameMixin, ServiceViewMixin, edit.UpdateView):
     pass
