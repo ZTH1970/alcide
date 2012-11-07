@@ -201,7 +201,8 @@ class AgendaServiceActValidationView(TemplateView):
                 nb_acts_annul_famille, nb_acts_abs_ess_pps,
                 nb_acts_enf_hosp) = \
                 automated_validation(self.date, self.service,
-                    request.user)
+                    request.user, commit = False)
+            #TODO: call confirmation pop-up
         elif 'unlock-all' in request.POST:
             #TODO: check that the user is authorized
             unlock_all_acts_of_the_day(self.date)
