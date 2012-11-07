@@ -948,3 +948,6 @@ table#activity tr td.hour {
 form.inline-form {
   display: inline;
 }
+#dialogs {
+  display: none;
+}
