@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
-from calebasse.cbv import TemplateView, CreateView
+from calebasse.cbv import TemplateView, CreateView, UpdateView
 from calebasse.agenda.models import Occurrence, Event, EventType
 from calebasse.personnes.models import TimeTable
 from calebasse.actes.models import EventAct
@@ -133,6 +133,34 @@ class NewAppointmentView(CreateView):
 
     def post(self, *args, **kwargs):
         return super(NewAppointmentView, self).post(*args, **kwargs)
+
+class UpdateAppointmentView(UpdateView):
+    model = EventAct
+    form_class = NewAppointmentForm
+    template_name = 'agenda/nouveau-rdv.html'
+    success_url = '..'
+
+    def get_object(self, queryset=None):
+        self.occurrence = Occurrence.objects.get(id=self.kwargs['id'])
+        if self.occurrence.event.eventact:
+            return self.occurrence.event.eventact
+
+    def get_initial(self):
+        initial = super(UpdateView, self).get_initial()
+        initial['date'] = self.object.date.strftime("%Y-%m-%d")
+        initial['time'] = self.occurrence.start_time.strftime("%H:%M")
+        time = self.occurrence.end_time - self.occurrence.start_time
+        if time:
+            time = time.seconds / 60
+        else:
+            time = 0
+        initial['duration'] = time
+        initial['participants'] = self.object.participants.values_list('id', flat=True)
+        return initial
+
+    def post(self, *args, **kwargs):
+        return super(UpdateAppointmentView, self).post(*args, **kwargs)
+
 
 class NewEventView(CreateView):
     model = Event
