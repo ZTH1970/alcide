@@ -507,6 +507,7 @@ div#intervenants ul {
 	border: 0;
 	text-align: center;
 	color: #8c8c73;
+  width: 13em;
 }
 
 table.main {
@@ -930,3 +931,7 @@ table#activity tr td.hour {
 #rdv table td {
 	width: 30%;
 }
+
+.person-item span { display: none; }
+
+.person-item.active span { display: inline; }

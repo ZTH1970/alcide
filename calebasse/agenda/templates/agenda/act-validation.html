@@ -1,15 +1,5 @@
-{% extends "calebasse/base.html" %}
+{% extends "agenda/base.html" %}
 {% load url from future %}
-{% block extrascripts %}
-<script src="{{ STATIC_URL }}js/calebasse.agenda.js"></script>
-{% endblock %}
-
-{% block title %}{{ block.super }} - Agenda {% endblock %}
-
-{% block header %}
-  {{ block.super }}
-  <span>Agenda - {{ service_name }}</spam>
-{% endblock %}
 
 {% block appbar %}
 <h2>Validation des actes - {{ date|date:"DATE_FORMAT" }}</h2>
@@ -17,16 +7,7 @@
     {% if day_locked %}<button id="unlock-all" data-url="{% url 'unlock-all' service=service date=date %}">Tout déverrouiller</button> {% endif %}<button id="validation-all" data-url="{% url 'validation-all' service=service date=date %}">Validation automatique</button>
 {% endblock %}
 
-{% block content %}
-<div class="content">
-   <div id="datesel">
-     <a href="../../{{ previous_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">««</a>
-     <a href="../../{{ previous_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">«</a>
-     <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
-     <a href="../../{{ next_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»</a>
-     <a href="../../{{ next_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»»</a>
-   </div>
-
+{% block agenda-content %}
     {% if validation_msg %}
     <ul>
     {% for message in validation_msg %}
@@ -39,15 +20,36 @@
     {% if actes %}
     <div id="actes">
     {% for acte, last_status in actes %}
-    <div class="frame acte">
-    <h3>{{ acte.date }} - <strong>{{ acte.patient.last_name }} {{ acte.patient.first_name }}</strong>{% if acte.patient.paper_id %} ({{ acte.patient.paper_id }}){% endif %}{% if acte.doctors %}{% for doctor in acte.doctors.all %} - {{ doctor.last_name }} {{ doctor.first_name }}{% endfor %}{% endif %} - <strong>{{ acte.act_type }}</strong>{% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}<!-- <button class="acte-btn">✍</button>--></h3>
-    <p>{% if last_status %}<strong>{{ last_status.state_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}{% if last_status.auto %}(par validation automatique){% endif %}.{% else %}Non pointé.{% endif %} {% if acte.validation_locked %}{% if authorized_lock %}<button>Déverrouiller</button>{% endif %}{% else %}<select name="acte_state" id="acte_state">{% for state_name, display_state_name in validation_states.items %}<option value="{{ state_name }}">{{ display_state_name }}</option>{% endfor %}</select> <button>Modifier</button>{% if authorized_lock %}{% if last_status %} <button>Verrouiller</button>{% endif %}{% endif %}{% endif %}</p>
+    <div class="frame acte" id="acte-frame-{{ acte.id }}">
+      <h3>{{ acte.date }} - <strong>{{ acte.patient.last_name }} {{ acte.patient.first_name }}</strong>
+          {% if acte.patient.paper_id %} ({{ acte.patient.paper_id }}){% endif %}
+          {% if acte.doctors %}{% for doctor in acte.doctors.all %} - {{ doctor.last_name }} {{ doctor.first_name }}{% endfor %}{% endif %} - 
+          <strong>{{ acte.act_type }}</strong>
+          {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
+      </h3>
+      <p>{% if last_status %}<strong>{{ last_status.state_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
+           {% if last_status.auto %}(par validation automatique){% endif %}.
+         {% else %}
+           Non pointé.
+         {% endif %}
+         {% if acte.validation_locked %}
+            {% if authorized_lock %}<button>Déverrouiller</button>{% endif %}
+         {% else %}
+           <select name="acte_state" id="acte_state">
+             {% for state_name, display_state_name in validation_states.items %}
+               <option value="{{ state_name }}">{{ display_state_name }}</option>
+             {% endfor %}
+           </select>
+           <button>Modifier</button>
+           {% if authorized_lock %}
+              {% if last_status %}<button>Verrouiller</button>{% endif %}
+           {% endif %}
+         {% endif %}
+      </p>
     </div>
     {% endfor %}
     </div>
     {% else %}
     <p><strong>Il n'y a pas d'acte à valider le {{ date|date:"DATE_FORMAT" }}.</strong></p>
     {% endif %}
-
-</div>
 {% endblock %}

@@ -1,21 +1,5 @@
-{% extends "calebasse/base.html" %}
+{% extends "agenda/base.html" %}
 {% load url from future %}
-{% block extrascripts %}
-  <script src="{{ STATIC_URL }}js/calebasse.agenda.js"></script>
-  <style>
-      uveau rendez-vous patient
-    .person-item span { display: none; }
-    .person-item.active span { display: inline; }
-    #agenda-date { width: 20em; }
-  </style>
-{% endblock %}
-
-{% block title %}{{ block.super }} - Agenda {% endblock %}
-
-{% block header %}
-  {{ block.super }}
-  <span>Agenda - {{ service_name }}</spam>
-{% endblock %}
 
 {% block appbar %}
     <h2>Agenda</h2>
@@ -51,16 +35,7 @@
  </div>
 {% endblock %}
 
-{% block content %}
-<div class="content">
-   <div id="datesel">
-     <a href="../{{ previous_month|date:"SHORT_DATE_FORMAT"}}">««</a>
-     <a href="../{{ previous_day|date:"SHORT_DATE_FORMAT"}}">«</a>
-   <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
-   <a href="../{{ next_day|date:"SHORT_DATE_FORMAT"}}">»</a>
-   <a href="../{{ next_month|date:"SHORT_DATE_FORMAT"}}">»»</a>
-   </div>
-
+{% block agenda-content %}
    <table>
     <tbody>
     <tr>
@@ -153,9 +128,6 @@
     </tr>
     </tbody>
    </table>
- </div>
-
-
 {% endblock %}
 
 {% block dialogs %}

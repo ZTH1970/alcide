@@ -5,6 +5,7 @@ from django.views.generic import list as list_cbv, edit, base # ListView
 # from django.views.generic.edit import # CreateView, DeleteView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.core.urlresolvers import resolve
 
 from calebasse.ressources.models import Service
 
@@ -27,6 +28,7 @@ class ServiceViewMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(ServiceViewMixin, self).get_context_data(**kwargs)
+        context['url_name'] = resolve(self.request.path).url_name
         context['popup'] = self.popup
         if self.service is not None:
             context['service'] = self.service.slug

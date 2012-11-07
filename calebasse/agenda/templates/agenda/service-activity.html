@@ -1,47 +1,12 @@
-{% extends "calebasse/base.html" %}
-{% block extrascripts %}
-
-<script>
-$(function() {
-    $('#agenda-date').datepicker({
-        dateFormat: "DD d MM yy",
-        onClose: function(dateText, inst) {
-            console.log('close');
-        }
-    });
-    $('#agenda-date').on('change', function () {
-        var date = $(this).datepicker('getDate')
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        window.location.href='../../' + year + '-' + month + '-' + day + '/activite-du-service';
-    });
-});
-</script>
-{% endblock %}
-
-{% block title %}{{ block.super }} - Agenda {% endblock %}
-
-{% block header %}
-  {{ block.super }}
-  <span>Agenda - {{ service_name }}</spam>
-{% endblock %}
+{% extends "agenda/base.html" %}
 
 {% block appbar %}
 <h2>Activité du service - {{ date|date:"DATE_FORMAT" }}</h2>
 <a href="..">Retourner à l'agenda</a>
-<button>Imprimer</button>
+<button id='print-button'>Imprimer</button>
 {% endblock %}
 
-{% block content %}
-<div id="datesel">
-  <a href="../../{{ previous_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">««</a>
-  <a href="../../{{ previous_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">«</a>
-  <input id="agenda-date" value="{{ date|date:"DATE_FORMAT" }}"/>
-  <a href="../../{{ next_day|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»</a>
-  <a href="../../{{ next_month|date:"SHORT_DATE_FORMAT"}}/activite-du-service">»»</a>
-</div>
-
+{% block agenda-content %}
 <table class="main" id="activity">
   <thead>
     <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>
