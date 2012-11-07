@@ -224,7 +224,6 @@ class AgendaServiceActValidationView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AgendaServiceActValidationView, self).get_context_data(**kwargs)
-        day_locked = are_all_acts_of_the_day_locked(context['date'])
         authorized_lock = True # is_authorized_for_locking(get_request().user)
         validation_msg = list()
         acts_of_the_day = self.acts_of_the_day()
@@ -239,7 +238,6 @@ class AgendaServiceActValidationView(TemplateView):
         context['validation_states'] = VALIDATION_STATES
         context['actes'] = actes
         context['validation_msg'] = validation_msg
-        context['day_locked'] = day_locked
         context['authorized_lock'] = authorized_lock
         return context
 

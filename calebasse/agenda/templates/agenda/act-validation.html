@@ -5,13 +5,11 @@
 <h2>Validation des actes - {{ date|date:"DATE_FORMAT" }}</h2>
     <a href="..">Retourner à l'agenda</a>
     {% if authorized_lock %}
-        {% if day_locked %}
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="unlock-all" value="1">
           <button id="unlock-all">Tout déverrouiller</button>
         </form>
-        {% endif %}
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="validate-all" value="1">
