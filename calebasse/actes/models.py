@@ -8,7 +8,7 @@ from calebasse.dossiers.models import SessadHealthCareNotification, \
     CmppHealthCareDiagnostic, CmppHealthCareTreatment
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
-from validation_states import VALIDATION_STATES
+import validation_states
 
 
 class ActValidationState(models.Model):
@@ -32,7 +32,6 @@ class ActValidationState(models.Model):
 
     def __unicode__(self):
         return self.state_name + ' ' + str(self.created)
-
 
 class Act(models.Model):
     patient = models.ForeignKey('dossiers.PatientRecord')
@@ -79,7 +78,7 @@ class Act(models.Model):
             change_state_check=True):
         if not author:
             raise Exception('Missing author to set state')
-        if not state_name in VALIDATION_STATES.keys():
+        if not state_name in validation_states.VALIDATION_STATES.keys():
             raise Exception("Etat d'acte non existant %s")
         current_state = self.get_state()
         ActValidationState(act=self, state_name=state_name,
@@ -112,7 +111,7 @@ class Act(models.Model):
                 return (False, None)
         # L'acte doit être facturable
         if not (are_all_acts_of_the_day_locked(self.date) and \
-                self.is_state('VALIDE') and self.is_billable()):
+                self.is_state(validation_states.VALIDE) and self.is_billable()):
             return (False, None)
         # On prend la dernière prise en charge diagnostic, l'acte ne sera pas
         # pris en charge sur une prise en charge précédente
@@ -138,7 +137,7 @@ class Act(models.Model):
         acts_billable = [a for a in self.patient.act_set.\
             filter(is_billed=False).order_by('date') \
             if are_all_acts_of_the_day_locked(a.date) and \
-            a.is_state('VALIDE') and a.is_billable()]
+            a.is_state(validation_states.VALIDE) and a.is_billable()]
         count = 0
         for a in acts_billable:
             if nb_acts_billed + count >= hc.get_act_number():
@@ -161,7 +160,7 @@ class Act(models.Model):
                 return (False, None)
         # L'acte doit être facturable
         if not (are_all_acts_of_the_day_locked(self.date) and \
-                self.is_state('VALIDE') and self.is_billable()):
+                self.is_state(validation_states.VALIDE) and self.is_billable()):
             return (False, None)
         # On prend la dernière prise en charge diagnostic, l'acte ne sera pas
         # pris en charge sur une prise en charge précédente
@@ -186,7 +185,7 @@ class Act(models.Model):
         acts_billable = [a for a in self.patient.act_set.\
             filter(is_billed=False).order_by('date') \
             if are_all_acts_of_the_day_locked(a.date) and \
-            a.is_state('VALIDE') and a.is_billable()]
+            a.is_state(validation_states.VALIDE) and a.is_billable()]
         count = 0
         for a in acts_billable:
             if nb_acts_billed + count >= hc.get_act_number():
@@ -248,7 +247,7 @@ class EventActManager(EventManager):
                 date=start_datetime,
                 )
         act_event.doctors = participants
-        ActValidationState(act=act_event, state_name='NON_VALIDE',
+        ActValidationState(act=act_event, state_name=validation_states.NON_VALIDE,
             author=creator, previous_state=None).save()
 
         return self._set_event(act_event, participants, description,
