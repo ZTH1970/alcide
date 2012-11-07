@@ -114,17 +114,16 @@ class FileState(models.Model):
         app_label = 'dossiers'
 
     patient = models.ForeignKey('dossiers.PatientRecord',
-        verbose_name=u'Dossier patient', editable=False)
+        verbose_name=u'Dossier patient')
     state_name = models.CharField(max_length=150)
     created = models.DateTimeField(u'Création', auto_now_add=True)
     date_selected = models.DateTimeField()
     author = \
         models.ForeignKey(User,
-        verbose_name=u'Auteur', editable=False)
+        verbose_name=u'Auteur')
     comment = models.TextField(max_length=3000, blank=True, null=True)
     previous_state = models.ForeignKey('FileState',
-        verbose_name=u'Etat précédent',
-        editable=False, blank=True, null=True)
+        verbose_name=u'Etat précédent', blank=True, null=True)
 
     def get_next_state(self):
         try:
