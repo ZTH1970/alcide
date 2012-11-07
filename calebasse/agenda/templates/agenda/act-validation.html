@@ -13,7 +13,6 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input type="hidden" name="unlock-all" value="1">
       <input type="hidden" name="validate-all" value="1">
       <button id="validate-all">Validation automatique</button>
     </form>
@@ -35,11 +34,11 @@
     <div class="frame acte" id="acte-frame-{{ acte.id }}">
       <h3>{{ acte.date }} - <strong>{{ acte.patient.last_name }} {{ acte.patient.first_name }}</strong>
           {% if acte.patient.paper_id %} ({{ acte.patient.paper_id }}){% endif %}
-          {% if acte.doctors %}{% for doctor in acte.doctors.all %} - {{ doctor.last_name }} {{ doctor.first_name }}{% endfor %}{% endif %} - 
+          {% if acte.doctors %}{% for doctor in acte.doctors.all %} - {{ doctor.last_name }} {{ doctor.first_name }}{% endfor %}{% endif %} -
           <strong>{{ acte.act_type }}</strong>
           {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
       </h3>
-      <div><span>{% if last_status %}<strong>{{ last_status.state_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
+      <div><span>{% if last_status %}<strong>{{ last_status.status_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
            {% if last_status.auto %}(par validation automatique){% endif %}.
          {% else %}
            Non pointé.
