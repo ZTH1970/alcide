@@ -10,7 +10,7 @@
           <input type="hidden" name="unlock-all" value="1">
           <button id="unlock-all">Tout déverrouiller</button>
         </form>
-        <form method="post">
+        <form method="post" id="validate-all-form">
           {% csrf_token %}
           <input type="hidden" name="validate-all" value="1">
           <button id="validate-all">Validation automatique</button>
@@ -85,5 +85,8 @@
     $(this).next('button').prop('disabled',
       ($(this).data('previous') == $(this).val()));
   })
+  $('#validate-all-form').on('submit', function () {
+    return window.confirm('Confirmez-vous la validation automatique des actes ?');
+  });
 </script>
 {% endblock %}
