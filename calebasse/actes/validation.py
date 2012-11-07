@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from django.db import transaction
-
-
 def get_acts_of_the_day(date):
     from models import EventAct
     return EventAct.objects.filter(date__year=date.year,
@@ -11,9 +8,7 @@ def get_acts_of_the_day(date):
 
 
 def unlock_all_acts_of_the_day(date):
-    for act in get_acts_of_the_day(date):
-        act.validation_locked = False
-
+    get_acts_of_the_day(date).update(validation_locked=False)
 
 def are_all_acts_of_the_day_locked(date):
     for act in get_acts_of_the_day(date):
