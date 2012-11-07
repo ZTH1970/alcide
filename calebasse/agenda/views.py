@@ -195,15 +195,21 @@ class AgendaServiceActValidationView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if 'validate-all' in request.POST:
-            automated_validation(self.date,
-                    self.service, request.user)
+            #TODO: check that the user is authorized
+            (nb_acts_total, nb_acts_validated, nb_acts_double,
+                nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_annul_nous,
+                nb_acts_annul_famille, nb_acts_abs_ess_pps,
+                nb_acts_enf_hosp) = \
+                automated_validation(self.date, self.service, request.user)#commit = False
         elif 'unlock-all' in request.POST:
+            #TODO: check that the user is authorized
             unlock_all_acts_of_the_day(self.date)
         else:
             acte_id = request.POST.get('acte-id')
             try:
                 act = Act.objects.get(id=acte_id)
                 if 'lock' in request.POST or 'unlock' in request.POST:
+                    #TODO: check that the user is authorized
                     act.validation_locked = 'lock' in request.POST
                     act.save()
                 else:
@@ -223,10 +229,11 @@ class AgendaServiceActValidationView(TemplateView):
         actes = list()
         for act in acts_of_the_day:
             state = act.get_state()
+            display_name = VALIDATION_STATES[state.state_name]
             if not state.previous_state:
                 state = None
             act.date = act.date.strftime("%H:%M")
-            actes.append((act, state, VALIDATION_STATES[state.state_name]))
+            actes.append((act, state, display_name))
         context['validation_states'] = VALIDATION_STATES
         context['actes'] = actes
         context['validation_msg'] = validation_msg
