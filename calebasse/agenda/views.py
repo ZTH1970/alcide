@@ -194,16 +194,7 @@ class AgendaServiceActValidationView(TemplateView):
         return get_acts_of_the_day(self.date)
 
     def post(self, request, *args, **kwargs):
-        if 'validate-all' in request.POST:
-            #TODO: check that the user is authorized
-            (nb_acts_total, nb_acts_validated, nb_acts_double,
-                nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_annul_nous,
-                nb_acts_annul_famille, nb_acts_abs_ess_pps,
-                nb_acts_enf_hosp) = \
-                automated_validation(self.date, self.service,
-                    request.user, commit = False)
-            #TODO: call confirmation pop-up
-        elif 'unlock-all' in request.POST:
+        if 'unlock-all' in request.POST:
             #TODO: check that the user is authorized
             unlock_all_acts_of_the_day(self.date)
         else:
@@ -242,8 +233,35 @@ class AgendaServiceActValidationView(TemplateView):
         return context
 
 
-class AutomatedValidationView(CreateView):
-    pass
+class AutomatedValidationView(TemplateView):
+    template_name = 'agenda/automated-validation.html'
+
+    def post(self, request, *args, **kwargs):
+        automated_validation(self.date, self.service,
+            request.user)
+        return HttpResponseRedirect('..')
+
+    def get_context_data(self, **kwargs):
+        context = super(AutomatedValidationView, self).get_context_data(**kwargs)
+        request = self.request
+        (nb_acts_total, nb_acts_validated, nb_acts_double,
+            nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_annul_nous,
+            nb_acts_annul_famille, nb_acts_abs_ess_pps,
+            nb_acts_enf_hosp) = \
+            automated_validation(self.date, self.service,
+                request.user, commit = False)
+
+        context.update({
+            'nb_acts_total': nb_acts_total,
+            'nb_acts_validated': nb_acts_validated,
+            'nb_acts_double': nb_acts_double,
+            'nb_acts_abs_non_exc': nb_acts_abs_non_exc,
+            'nb_acts_abs_exc': nb_acts_abs_exc, 
+            'nb_acts_annul_nous': nb_acts_annul_nous,
+            'nb_acts_annul_famille': nb_acts_annul_famille, 
+            'nb_acts_abs_ess_pps': nb_acts_abs_ess_pps,
+            'nb_acts_enf_hosp': nb_acts_enf_hosp})
+        return context
 
 class UnlockAllView(CreateView):
     pass

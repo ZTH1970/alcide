@@ -12,11 +12,7 @@
           <input type="hidden" name="unlock-all" value="1">
           <button id="unlock-all">Tout déverrouiller</button>
         </form>
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="validate-all" value="1">
-          <button id="validate-all">Validation automatique</button>
-        </form>
+        <button id="validate-all">Validation automatique</button>
     {% endif %}
 {% endblock %}
 
@@ -81,11 +77,39 @@
     <p><strong>Il n'y a pas d'acte à valider le {{ date|date:"DATE_FORMAT" }}.</strong></p>
     {% endif %}
 {% endblock %}
+
+{% block dialogs %}
+<div id="validate-all-dialog" title="Validation">
+  <div id="validate-all-dialog-content">
+  </div>
+  <form action="{% url 'validation-all' service=service date=date %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="validate-all" value="1">
+  </form>
+</div>
+{% endblock %}
+
+
 {% block page-end %}
 <script>
   $('select[name^="act_state"]').on('change', function () {
     $(this).next('button').prop('disabled',
       ($(this).data('previous') == $(this).val()));
   })
+  $('#validate-all-dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+      "Valider": function () { $('#validate-all-dialog form').submit(); },
+      "Annuler": function () { $(this).dialog("close"); },
+    },
+  });
+  $('#validate-all').click(function () {
+    $('#validate-all-dialog-content').load('{% url 'validation-all' service=service date=date %}',
+      function () {
+        $('#validate-all-dialog').dialog('open');
+      }
+    );
+  });
 </script>
 {% endblock %}
