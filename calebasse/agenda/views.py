@@ -2,7 +2,7 @@ import datetime
 
 from django.db.models import Q
 from django.shortcuts import redirect
-from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
 
 from calebasse.cbv import TemplateView, CreateView
 from calebasse.agenda.models import Occurrence, Event, EventType
@@ -13,7 +13,10 @@ from calebasse.personnes.models import Worker
 from calebasse.ressources.models import WorkerType
 from calebasse.actes.validation import (are_all_acts_of_the_day_locked,
     get_acts_of_the_day)
-from calebasse.actes.validation_states import VALIDATION_STATES
+from calebasse.actes.validation_states import VALIDATION_STATES, VALIDE
+from calebasse.actes.models import Act
+from calebasse.actes.validation import (automated_validation,
+    unlock_all_acts_of_the_day)
 
 from forms import NewAppointmentForm, NewEventForm
 
@@ -159,16 +162,37 @@ class AgendaServiceActValidationView(TemplateView):
 
     template_name = 'agenda/act-validation.html'
 
+    def acts_of_the_day(self):
+        return get_acts_of_the_day(self.date)
+
     def post(self, request, *args, **kwargs):
-        return render_to_response(self.template_name, {},
-                context_instance=None)
+        if 'validation-all' in request.POST:
+            # FIXME: Action automatique: tout le monde est valide ?
+            automated_validation(self.date,
+                    self.service, request.user)
+        elif 'unlock-all' in request.POST:
+            unlock_all_acts_of_the_day(self.date)
+        else:
+            acte_id = request.POST.get('acte-id')
+            try:
+                act = Act.objects.get(id=acte_id)
+                if 'lock' in request.POST or 'unlock' in request.POST:
+                    act.validation_locked = 'lock' in request.POST
+                    act.save()
+                else:
+                    state_name = request.POST.get('act_state')
+                    act.set_state(state_name, request.user)
+            except Act.DoesNotExist:
+                pass
+            return HttpResponseRedirect('#acte-frame-'+acte_id)
+        return HttpResponseRedirect('')
 
     def get_context_data(self, **kwargs):
         context = super(AgendaServiceActValidationView, self).get_context_data(**kwargs)
         day_locked = are_all_acts_of_the_day_locked(context['date'])
         authorized_lock = True # is_authorized_for_locking(get_request().user)
         validation_msg = list()
-        acts_of_the_day = get_acts_of_the_day(context['date'])
+        acts_of_the_day = self.acts_of_the_day()
         actes = list()
         for act in acts_of_the_day:
             state = act.get_state()

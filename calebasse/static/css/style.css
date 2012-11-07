@@ -935,3 +935,7 @@ table#activity tr td.hour {
 .person-item span { display: none; }
 
 .person-item.active span { display: inline; }
+
+form.inline-form {
+  display: inline;
+}

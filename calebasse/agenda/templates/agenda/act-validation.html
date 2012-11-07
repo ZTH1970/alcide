@@ -4,7 +4,19 @@
 {% block appbar %}
 <h2>Validation des actes - {{ date|date:"DATE_FORMAT" }}</h2>
     <a href="..">Retourner à l'agenda</a>
-    {% if day_locked %}<button id="unlock-all" data-url="{% url 'unlock-all' service=service date=date %}">Tout déverrouiller</button> {% endif %}<button id="validation-all" data-url="{% url 'validation-all' service=service date=date %}">Validation automatique</button>
+    {% if day_locked %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="unlock-all" value="1">
+      <button id="unlock-all">Tout déverrouiller</button>
+    </form>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="unlock-all" value="1">
+      <input type="hidden" name="validate-all" value="1">
+      <button id="validate-all">Validation automatique</button>
+    </form>
 {% endblock %}
 
 {% block agenda-content %}
@@ -27,29 +39,52 @@
           <strong>{{ acte.act_type }}</strong>
           {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
       </h3>
-      <p>{% if last_status %}<strong>{{ last_status.state_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
+      <div><span>{% if last_status %}<strong>{{ last_status.state_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
            {% if last_status.auto %}(par validation automatique){% endif %}.
          {% else %}
            Non pointé.
          {% endif %}
-         {% if acte.validation_locked %}
-            {% if authorized_lock %}<button>Déverrouiller</button>{% endif %}
+         </span>
+         {% if acte.validation_locked and authorized_lock %}
+             <form method="post" class="inline-form">
+               {% csrf_token %}
+               <input type="hidden" value="{{acte.id}}" name="acte-id">
+               <input type="hidden" name="unlock" value="1">
+               <button>Déverrouiller</button>
+             </form>
          {% else %}
-           <select name="acte_state" id="acte_state">
+           <form method="post" class="inline-form">
+           {% csrf_token %}
+           <input type="hidden" value="{{acte.id}}" name="acte-id">
+           <select data-previous="{{ last_status.state_name }}" name="act_state">
              {% for state_name, display_state_name in validation_states.items %}
-               <option value="{{ state_name }}">{{ display_state_name }}</option>
+             <option value="{{ state_name }}" {% if state_name == last_status.state_name %}selected{% endif %}>{{ display_state_name }}</option>
              {% endfor %}
            </select>
-           <button>Modifier</button>
-           {% if authorized_lock %}
-              {% if last_status %}<button>Verrouiller</button>{% endif %}
+           <button {% if last_status %}disabled{% endif %}>Modifier</button>
+           </form>
+           {% if authorized_lock and last_status %}
+             <form method="post" class="inline-form">
+               {% csrf_token %}
+               <input type="hidden" value="{{acte.id}}" name="acte-id">
+               <input type="hidden" name="lock" value="1">
+               <button>Verrouiller</button>
+             </form>
            {% endif %}
          {% endif %}
-      </p>
+      </div>
     </div>
     {% endfor %}
     </div>
     {% else %}
     <p><strong>Il n'y a pas d'acte à valider le {{ date|date:"DATE_FORMAT" }}.</strong></p>
     {% endif %}
+{% endblock %}
+{% block page-end %}
+<script>
+  $('select[name^="act_state"]').on('change', function () {
+    $(this).next('button').prop('disabled',
+      ($(this).data('previous') == $(this).val()));
+  })
+</script>
 {% endblock %}
