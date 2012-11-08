@@ -3,11 +3,6 @@
 {% block extrascripts %}
 <script>
 $(function() {
-    $('#new-membre').dialogButton({
-      url: 'new/ #form-content',
-      default_button: 'Créer',
-      title: 'Créer un nouvel accés'
-    });
     $('tr').click(function () {
       var pk = $(this).data('pk');
       window.location.href=pk+'/';
@@ -40,8 +35,7 @@ $(function() {
 <h2>Gestion des personnes — Accès</h2>
 <a href="gestion-personnes.html">Retourner à la gestion des personnes</a>
 
-<button id="new-membre">Nouvel accès</button>
-<br/>&nbsp;
+<button class="dialog-button" data-url="new/ #form-content" data-default-button="Créer">Nouvel accès</button>
 {% endblock %}
 
 {% block beforecontent %}
