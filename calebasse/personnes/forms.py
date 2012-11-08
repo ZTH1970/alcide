@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 from models import Worker, UserWorker
 
 class UserForm(forms.ModelForm):
+    error_messages = {
+        'duplicate_username': _("A user with that username already exists."),
+        'password_mismatch': _("The two password fields didn't match."),
+    }
+
     worker = forms.ModelChoiceField(label=_('Personnel'),
             queryset=Worker.objects.all(), empty_label=_('None'),
             required=False)
