@@ -977,3 +977,16 @@ span.helptext {
 input:focus + span.helptext, select:focus + span.helptext {
   visibility: visible;
 }
+
+/* Clearing cross button for text input */
+.text-input-wrapper { position: relative; }
+.text-input-wrapper input { display: inline; }
+.text-input-wrapper .clear {
+  position: absolute;
+  top: 6px;
+  right: 3px;
+  display: none;
+}
+.text-input-wrapper .clear:active {
+  color: black;
+}
