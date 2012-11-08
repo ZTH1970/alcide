@@ -99,28 +99,3 @@ $(function() {
   </table>
 </div>
 {% endblock %}
-
-{% block dialogs %}
-<div id="new-membre-dlg" style="display: none;">
-  <form>
-    <p>
-    <label for="id_nom">Identifiant :</label>
-    <input id="id_nom" type="text" name="nom"/>
-    </p>
-    <p>
-    <label for="id_password">Mot de passe :</label>
-    <input id="id_password" type="text" name="password"/>
-    </p>
-    <p>
-    <label for="id_member">Membre du personnel associé :</label>
-    <select id="id_member" name="member">
-      <option>aucun</option>
-      <option>Bob Leponge</option>
-      <option>...</option>
-    </select>
-    </p>
-  </form>
-</div>
-{% endblock %}
-
-
