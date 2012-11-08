@@ -985,8 +985,10 @@ input:focus + span.helptext, select:focus + span.helptext {
   position: absolute;
   top: 6px;
   right: 3px;
-  display: none;
 }
 .text-input-wrapper .clear:active {
   color: black;
+}
+input[value=""] + .clear {
+  display: none;
 }
