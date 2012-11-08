@@ -1,4 +1,3 @@
-import ipdb
 import datetime
 
 from django.db.models import Q
