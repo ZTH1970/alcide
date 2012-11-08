@@ -146,3 +146,22 @@ class NewEventForm(forms.ModelForm):
                 note=None,)
         return self.instance
 
+class UpdateEventForm(NewEventForm):
+
+    def __init__(self, instance, occurrence=None, **kwargs):
+        super(UpdateEventForm, self).__init__(instance=instance, **kwargs)
+        self.occurrence = occurrence
+
+    def save(self):
+        self.occurrence.start_time = datetime.combine(
+                self.cleaned_data['date'],
+                self.cleaned_data['time'])
+        self.occurrence.end_time = self.occurrence.start_time + timedelta(
+                minutes=self.cleaned_data['duration'])
+        self.occurrence.save()
+        creator = get_request().user
+        self.instance.participants = self.cleaned_data['participants']
+        self.instance.services = self.cleaned_data['services']
+        self.instance.save()
+        return self.instance
+

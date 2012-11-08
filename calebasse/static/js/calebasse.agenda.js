@@ -176,5 +176,9 @@ function event_dialog(url, title, width, btn_text) {
           var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
           event_dialog($(this).data('url') + "?" + qs, 'Nouvelle événement', '850px', 'Ajouter');
       });
+      $('.edit-event').click(function() {
+          event_dialog("update-event/" + $(this).data('occurrence-id') , 'Modifier un événement', '850px', 'Modifier');
+          return false;
+      });
   });
 })(window.jQuery)

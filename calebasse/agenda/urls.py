@@ -4,8 +4,8 @@ from calebasse.cbv import TemplateView
 
 from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         NewEventView, AgendaServiceActivityView, UpdateAppointmentView,
-        AgendaServiceActValidationView, AutomatedValidationView, UnlockAllView)
-
+        UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
+        UnlockAllView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -21,6 +21,9 @@ agenda_patterns = patterns('',
             url(r'^new-event/$',
                 NewEventView.as_view(),
                 name='new-event'),
+            url(r'^update-event/(?P<id>\d+)$',
+                UpdateEventView.as_view(),
+                name='update-event'),
             url(r'^activite-du-service/$',
                 AgendaServiceActivityView.as_view(
                     template_name='agenda/service-activity.html'),

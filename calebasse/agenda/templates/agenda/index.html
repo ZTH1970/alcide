@@ -92,7 +92,11 @@
                  <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">
                  {% endif %}
                  {% if appointment.event_id %}
-                 <img title="Editer un rendez-vous" class="edit-appointment" src="{{ STATIC_URL }}images/accessories-text-editor.png" data-occurrence-id="{{ appointment.occurrence_id }}">
+                  {% if appointment.patient_record_id %}
+                    <img title="Editer un rendez-vous" class="edit-appointment" src="{{ STATIC_URL }}images/accessories-text-editor.png" data-occurrence-id="{{ appointment.occurrence_id }}">
+                  {% else %}
+                    <img title="Editer un événement" class="edit-event" src="{{ STATIC_URL }}images/accessories-text-editor.png" data-occurrence-id="{{ appointment.occurrence_id }}">
+                  {% endif %}
                  <img class="remove-appointment" title="Supprimer un rendez-vous" src="{{ STATIC_URL }}images/list-remove.png" data-occurrence-id="{{ appointment.occurrence_id }}" data-rdv="{{ appointment.title }}">
                  {% endif %}
             </span>

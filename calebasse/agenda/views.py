@@ -1,3 +1,4 @@
+import ipdb
 import datetime
 
 from django.db.models import Q
@@ -18,7 +19,8 @@ from calebasse.actes.models import Act
 from calebasse.actes.validation import (automated_validation,
     unlock_all_acts_of_the_day)
 
-from forms import NewAppointmentForm, NewEventForm, UpdateAppointmentForm
+from forms import (NewAppointmentForm, NewEventForm,
+        UpdateAppointmentForm, UpdateEventForm)
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -134,7 +136,7 @@ class NewAppointmentView(CreateView):
 class UpdateAppointmentView(UpdateView):
     model = EventAct
     form_class = UpdateAppointmentForm
-    template_name = 'agenda/nouveau-rdv.html'
+    template_name = 'agenda/update-rdv.html'
     success_url = '..'
 
     def get_object(self, queryset=None):
@@ -181,6 +183,34 @@ class NewEventView(CreateView):
 
     def post(self, *args, **kwargs):
         return super(NewEventView, self).post(*args, **kwargs)
+
+class UpdateEventView(UpdateView):
+    model = Event
+    form_class = UpdateEventForm
+    template_name = 'agenda/update-event.html'
+    success_url = '..'
+
+    def get_object(self, queryset=None):
+        self.occurrence = Occurrence.objects.get(id=self.kwargs['id'])
+        return self.occurrence.event
+
+    def get_initial(self):
+        initial = super(UpdateEventView, self).get_initial()
+        initial['date'] = self.occurrence.start_time.strftime("%Y-%m-%d")
+        initial['time'] = self.occurrence.start_time.strftime("%H:%M")
+        time = self.occurrence.end_time - self.occurrence.start_time
+        if time:
+            time = time.seconds / 60
+        else:
+            time = 0
+        initial['duration'] = time
+        initial['participants'] = self.object.participants.values_list('id', flat=True)
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateEventView, self).get_form_kwargs()
+        kwargs['occurrence'] = self.occurrence
+        return kwargs
 
 def new_appointment(request):
     pass
