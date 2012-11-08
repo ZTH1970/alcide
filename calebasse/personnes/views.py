@@ -33,6 +33,12 @@ class AccessView(ListView):
         qs = qs.prefetch_related('userworker__worker')
         return qs
 
+    def get_context_data(self, **kwargs):
+        ctx = super(AccessView, self).get_context_data(**kwargs)
+        ctx['active_list'] = ctx['object_list'].filter(is_active=True)
+        ctx['inactive_list'] = ctx['object_list'].filter(is_active=False)
+        return ctx
+
 class AccessUpdateView(UpdateView):
     model = User
     template_name = 'personnes/acces-update.html'
