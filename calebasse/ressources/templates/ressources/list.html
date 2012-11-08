@@ -8,55 +8,17 @@
 {% block appbar %}
   <h2>{{ model_verbose_name_plural }}</h2>
   <a href="..">Retourner à l'accueil</a>
-  <button id="new-object-button">Ajouter un {{ model_verbose_name|lower }}</button>
+  <button id="new-object-button" class='dialog-button' data-default-button="Ajouter" data-url="new/ #form-content">Ajouter un {{ model_verbose_name|lower }}</button>
 {% endblock %}
 
 {% block content %}
     <ul id="ressource-list">
      {% for object in object_list %}
-     <li id="ressource-{{ object.pk }}"><a href="{{ object.pk }}">{{object}}</a> <button class="delete-object-button">Supprimer</button></li>
+     <li id="ressource-{{ object.pk }}">
+       <a href="{{ object.pk }}">{{object}}</a> 
+       <button class="dialog-button delete-object-button" 
+               data-url="{{ object.pk }}/delete/ #form-content">Supprimer</button>
+     </li>
      {% endfor %}
     </ul>
-{% endblock %}
-
-{% block dialogs %}
-<div id="new-object-dialog" title="Ajouter un {{ model_verbose_name|lower }}">
-  <form id="new-object-dialog-form" action="new/" method="post">
-  </form>
-</div>
-<div id="delete-object-dialog" title="Supprimer">
-  <form id="delete-object-dialog-form" action="delete" method="post">
-  </form>
-</div>
-{% endblock %}
-
-{% block page-end %}
-<script>
-$('#new-object-button').click(function () {
-  $('#new-object-dialog-form').load('new/ #form-content', function () {
-    $('#new-object-dialog').dialog({
-      modal: true,
-      buttons: {
-        'Ajouter': function () { $('form', this).submit(); },
-        'Annuler': function () { $(this).dialog('close'); },
-      }
-    });
-  });
-  return false;
-});
-$('.delete-object-button').click(function () {
-  var pk = $(this).prev('a').attr('href');
-  $('#delete-object-dialog-form').attr('action', pk + '/delete/');
-  $('#delete-object-dialog-form').load(pk + '/delete/ #form-content', function () {
-    $('#delete-object-dialog').dialog({
-      modal: true,
-      buttons: {
-        'Supprimer': function () { $('form', this).submit(); },
-        'Annuler': function () { $(this).dialog('close'); },
-      }
-    });
-  });
-  return false;
-});
-</script>
 {% endblock %}
