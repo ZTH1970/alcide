@@ -61,32 +61,6 @@ $(function() {
     </tr>
     </thead>
     <tbody>
-   <!-- 
-    <tr>
-      <td>fdurant</td>
-      <td>fdurant@example.com</td>
-      <td><a href="un-membre.html">Durant François</a>
-	<td><button>⎅</button> <button>-</button> <button>Histo</button></td>
-    </tr>
-    <tr>
-      <td>smaurier</td>
-      <td>smaurier@example.com</td>
-      <td><a href="#">Maurier Stéphanie</a></td>
-      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
-    </tr>
-    <tr>
-      <td>mhosseini</td>
-      <td>mhosseini@example.com</td>
-      <td><a href="#">Hosseini Marcus</a></td>
-      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
-    </tr>
-    <tr>
-      <td>mates</td>
-      <td>mates@entrouvert.com</td>
-      <td>-</td>
-      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
-    </tr>
-   -->
    {% for object in object_list %}
     {% if object.is_active %}
     <tr data-pk="{{object.pk}}">
