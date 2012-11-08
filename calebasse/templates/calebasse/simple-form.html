@@ -1,0 +1,32 @@
+{% extends "calebasse/base.html" %}
+
+{% block appbar %}
+  <h2></h2>
+  <a href=".."></a>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+      <div id="form-content">
+        {% csrf_token %}
+        {{ form.as_p }}
+      </div>
+      {% block buttons %}
+      <button>Modifier</button>
+      {% endblock %}
+      <a href="..">{% block back-link %}{% endblock %}</a>
+    </form>
+{% endblock %}
+
+{% block page-end %}
+<script>
+  $('form button').prop('disabled', 'true');
+  $(function () {
+    $('form input, form select').on('change', function () {
+      $('form button').enable();
+    })
+  });
+</script>
+{% endblock %}
+
+
