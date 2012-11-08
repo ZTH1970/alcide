@@ -86,12 +86,14 @@ class UpdateAppointmentForm(NewAppointmentForm):
         self.occurrence.start_time = datetime.combine(
                 self.cleaned_data['date'],
                 self.cleaned_data['time'])
-        self.occurrence.end_time = start_datetime + timedelta(
+        self.occurrence.end_time = self.occurrence.start_time + timedelta(
                 minutes=self.cleaned_data['duration'])
         self.occurrence.save()
         patient = self.cleaned_data['patient']
         creator = get_request().user
         self.instance.title = patient.display_name
+        self.instance.participants = self.cleaned_data['participants']
+        self.instance.save()
         return self.instance
 
 

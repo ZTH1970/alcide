@@ -18,7 +18,7 @@ from calebasse.actes.models import Act
 from calebasse.actes.validation import (automated_validation,
     unlock_all_acts_of_the_day)
 
-from forms import NewAppointmentForm, NewEventForm
+from forms import NewAppointmentForm, NewEventForm, UpdateAppointmentForm
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -131,12 +131,9 @@ class NewAppointmentView(CreateView):
         kwargs['service'] = self.service
         return kwargs
 
-    def post(self, *args, **kwargs):
-        return super(NewAppointmentView, self).post(*args, **kwargs)
-
 class UpdateAppointmentView(UpdateView):
     model = EventAct
-    form_class = NewAppointmentForm
+    form_class = UpdateAppointmentForm
     template_name = 'agenda/nouveau-rdv.html'
     success_url = '..'
 
@@ -158,13 +155,10 @@ class UpdateAppointmentView(UpdateView):
         initial['participants'] = self.object.participants.values_list('id', flat=True)
         return initial
 
-#    def get_form_kwargs(self):
-#        kwargs = super(UpdateAppointmentView, self).get_form_kwargs()
-#        kwargs['service'] = self.service
-#        return kwargs
-
-#    def post(self, *args, **kwargs):
-#        return super(UpdateAppointmentView, self).post(*args, **kwargs)
+    def get_form_kwargs(self):
+        kwargs = super(UpdateAppointmentView, self).get_form_kwargs()
+        kwargs['occurrence'] = self.occurrence
+        return kwargs
 
 
 class NewEventView(CreateView):
