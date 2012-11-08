@@ -3,9 +3,11 @@
 {% block extrascripts %}
 <script>
 $(function() {
-    $('tr').click(function () {
+    $('tr').click(function (event) {
       var pk = $(this).data('pk');
-      window.location.href=pk+'/';
+      if (! $(event.target).is('button')) {
+        window.location.href=pk+'/';
+      }
     });
     if ($('input').val()) {
       $('#input-box span').show();
