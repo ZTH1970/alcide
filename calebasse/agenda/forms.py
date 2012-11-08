@@ -75,6 +75,26 @@ class NewAppointmentForm(forms.ModelForm):
                 note=None,)
         return self.instance
 
+class UpdateAppointmentForm(NewAppointmentForm):
+
+    def __init__(self, instance, service=None, occurrence=None, **kwargs):
+        super(UpdateAppointmentForm, self).__init__(instance=instance, service, **kwargs)
+        self.occurrence = occurrence
+
+
+    def save(self):
+        self.occurrence.start_time = datetime.combine(
+                self.cleaned_data['date'],
+                self.cleaned_data['time'])
+        self.occurrence.end_time = start_datetime + timedelta(
+                minutes=self.cleaned_data['duration'])
+        self.occurrence.save()
+        patient = self.cleaned_data['patient']
+        creator = get_request().user
+        self.instance.title = patient.display_name
+        return self.instance
+        
+
 class NewEventForm(forms.ModelForm):
 
     date = forms.DateField(label=u'Date')

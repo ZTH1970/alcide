@@ -158,8 +158,13 @@ class UpdateAppointmentView(UpdateView):
         initial['participants'] = self.object.participants.values_list('id', flat=True)
         return initial
 
-    def post(self, *args, **kwargs):
-        return super(UpdateAppointmentView, self).post(*args, **kwargs)
+#    def get_form_kwargs(self):
+#        kwargs = super(UpdateAppointmentView, self).get_form_kwargs()
+#        kwargs['service'] = self.service
+#        return kwargs
+
+#    def post(self, *args, **kwargs):
+#        return super(UpdateAppointmentView, self).post(*args, **kwargs)
 
 
 class NewEventView(CreateView):

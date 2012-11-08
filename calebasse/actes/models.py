@@ -256,6 +256,47 @@ class EventActManager(EventManager):
                 end_datetime=end_datetime,
                 room=room, note=note, **rrule_params)
 
+    def modify_patient_appointment(self, creator, title, patient, participants,
+            act_type, start_datetime, end_datetime, description='',
+            room=None, note=None, **rrule_params):
+        """
+        This method allow you to create a new patient appointment quickly
+
+        Args:
+            title: patient appointment title (str)
+            patient: Patient object
+            participants: List of CalebasseUser (therapists)
+            act_type: ActType object
+            service: Service object. Use session service by defaut
+            start_datetime: datetime with the start date and time
+            end_datetime: datetime with the end date and time
+            freq, count, until, byweekday, rrule_params:
+            follow the ``dateutils`` API (see http://labix.org/python-dateutil)
+
+        Example:
+            Look at calebasse.agenda.tests.EventTest (test_create_appointments
+            method)
+        """
+
+        event_type, created = EventType.objects.get_or_create(
+                label=u"Rendez-vous patient"
+                )
+
+        act_event = EventAct.objects.create(
+                title=title,
+                event_type=event_type,
+                patient=patient,
+                act_type=act_type,
+                date=start_datetime,
+                )
+        act_event.doctors = participants
+        ActValidationState(act=act_event, state_name=validation_states.NON_VALIDE,
+            author=creator, previous_state=None).save()
+
+        return self._set_event(act_event, participants, description,
+                services=[service], start_datetime=start_datetime,
+                end_datetime=end_datetime,
+                room=room, note=note, **rrule_params)
 
 class EventAct(Act, Event):
     objects = EventActManager()
