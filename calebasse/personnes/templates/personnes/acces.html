@@ -3,16 +3,6 @@
 {% block extrascripts %}
 <script>
 $(function() {
-    $('tr').click(function (event) {
-      var pk = $(this).data('pk');
-      if (! $(event.target).is('button')) {
-        window.location.href=pk+'/';
-      }
-    });
-    if ($('input').val()) {
-      $('#input-box span').show();
-    }
-    $('#input-box .clear').click(function () {
       $(this).prev('input').val('');
       $(this).closest('form').submit();
     });
