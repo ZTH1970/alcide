@@ -78,7 +78,7 @@ class NewAppointmentForm(forms.ModelForm):
 class UpdateAppointmentForm(NewAppointmentForm):
 
     def __init__(self, instance, service=None, occurrence=None, **kwargs):
-        super(UpdateAppointmentForm, self).__init__(instance=instance, service, **kwargs)
+        super(UpdateAppointmentForm, self).__init__(instance=instance, **kwargs)
         self.occurrence = occurrence
 
 
@@ -93,7 +93,7 @@ class UpdateAppointmentForm(NewAppointmentForm):
         creator = get_request().user
         self.instance.title = patient.display_name
         return self.instance
-        
+
 
 class NewEventForm(forms.ModelForm):
 
