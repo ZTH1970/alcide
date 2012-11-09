@@ -7,7 +7,7 @@ from django import forms
 from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.actes.models import EventAct
-from calebasse.agenda.models import Event
+from calebasse.agenda.models import Event, EventType
 from calebasse.ressources.models import ActType
 from calebasse.middleware.request import get_request
 
@@ -121,6 +121,9 @@ class NewEventForm(forms.ModelForm):
     def __init__(self, instance, **kwargs):
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
+        self.fields['event_type'].required = True
+        self.fields['event_type'].queryset = \
+                    EventType.objects.exclude(id=1).exclude(id=3)
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']

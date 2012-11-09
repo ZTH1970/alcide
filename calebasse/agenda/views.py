@@ -174,14 +174,8 @@ class NewEventView(CreateView):
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
         initial['services'] = [self.service]
+        initial['event_type'] = 2
         return initial
-
-    def get_form_kwargs(self):
-        kwargs = super(NewEventView, self).get_form_kwargs()
-        return kwargs
-
-    def post(self, *args, **kwargs):
-        return super(NewEventView, self).post(*args, **kwargs)
 
 class UpdateEventView(UpdateView):
     model = Event
