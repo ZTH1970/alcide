@@ -995,7 +995,8 @@ input:focus + span.helptext, select:focus + span.helptext {
 .text-input-wrapper .clear:active {
   color: black;
 }
-input[value=""] + .clear {
+
+input:not([value]) + .clear, input[value=""] + .clear {
   display: none;
 }
 
