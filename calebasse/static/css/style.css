@@ -120,7 +120,7 @@ div#wrap-large {
 span.cmpp, #service-links a.cmpp, body.cmpp #splash { background-color: #56D72B; }
 span.camsp, #service-links a.camsp, body.camsp #splash { background-color: #D72B2F; }
 span.sessad-ted, #service-links a.sessad-ted, body.sessad-ted #splash { background-color: #D72BBF; }
-span.seesad-dys, #service-links a.sessad-dys, body.sessad-dys #splash { background-color: #5D91E5; }
+span.sessad-dys, #service-links a.sessad-dys, body.sessad-dys #splash { background-color: #5D91E5; }
 
 body.cmpp #splash { background-image: url(../images/banner-green.jpg); background-repeat: repeat-x; }
 body.camsp #splash { background-image: url(../images/banner-red.jpg); background-repeat: repeat-x; }

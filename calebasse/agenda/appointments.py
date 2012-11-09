@@ -20,11 +20,11 @@ class Appointment(object):
         self.description = description
         self.room = room
         self.convocation_sent = None
-        self.service_name = None
+        self.other_services_names = []
         self.patient_record_id = None
         self.event_id = None
+        self.event_type = None
         self.occurrence_id = None
-        self.service = None
         self.workers_initial = None
         self.weight = 0
         self.act_type = None
@@ -44,14 +44,15 @@ class Appointment(object):
         self.length = delta.seconds / 60
         self.title = occurrence.title
         services = occurrence.event.services.all()
-        if services:
-            self.service = services[0].name.lower()
         self.__set_time(time(occurrence.start_time.hour, occurrence.start_time.minute))
-        if service in occurrence.event.services.all():
+        for e_service in services:
+            if e_service != service:
+                name = e_service.name.lower().replace(' ', '-')
+                self.other_services_names.append(name)
+        if service in services:
             self.type = "busy-here"
         else:
             self.type = "busy-elsewhere"
-            self.service_name = service.name
         self.event_id = occurrence.event.id
         if occurrence.event.room:
             self.room = occurrence.event.room.name
@@ -66,6 +67,8 @@ class Appointment(object):
                 self.workers_initial += " " + worker.first_name.upper()[0]
                 self.workers_initial += worker.last_name.upper()[0]
             self.act_type = event_act.act_type.name
+        else:
+            self.event_type = occurrence.event.event_type
 
     def init_free_time(self, length, begin_time):
         """ """

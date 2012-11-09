@@ -72,15 +72,16 @@
            {% for appointment in worker_agenda.appointments %}
            <h3 class="{{ appointment.type }} appointment">
              <span class="hour">{{ appointment.begin_hour }}</span>
+             {% if appointment.event_type %} — {{ appointment.event_type }}  {% endif %}
              {% if appointment.title %} — {{ appointment.title }}  {% endif %}
              {% if appointment.length %} — {{ appointment.length }}m {% endif %}
              {% if appointment.workers_initial %} —{{ appointment.workers_initial }} {% endif %}
              {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
              {% if appointment.room %} — {{ appointment.room }} {% endif %}
              <span class="right">
-                 {% if appointment.service and appointment.service != service %}
-                 <span class="box {{ appointment.service }}" title="{{ appointment.service }}"></span>
-                 {% endif %}
+                 {% for service_name in appointment.other_services_names %}
+                 <span class="box {{ service_name }}" title="{{ service_name }}"></span>
+                 {% endfor %}
                  {% if appointment.convocation_sent %}
                  <img title="Une convocation a été envoyée" src="{{ STATIC_URL }}images/emblem-mail.png">
                  {% endif %}

@@ -17,7 +17,7 @@
     "pk": 6, 
     "model": "agenda.eventtype", 
     "fields": {
-      "label": "Donne  une formation"
+      "label": "Donne une formation"
     }
   }, 
   {
@@ -94,8 +94,8 @@
     "pk": 3, 
     "model": "agenda.event", 
     "fields": {
-      "event_type": 2, 
-      "title": "Reunion", 
+      "event_type": 4, 
+      "title": "Entr'ouvert", 
       "description": "Bla bla bla", 
       "participants": [
         5, 
@@ -113,7 +113,7 @@
     "model": "agenda.event", 
     "fields": {
       "event_type": 1, 
-      "title": "rdv jack", 
+      "title": "Jack Itchan", 
       "description": "blabla bla bla", 
       "participants": [
         5
@@ -129,7 +129,7 @@
     "model": "agenda.event", 
     "fields": {
       "event_type": 1, 
-      "title": "rdv john doe", 
+      "title": "John Doe", 
       "description": "blabla", 
       "participants": [
         5
