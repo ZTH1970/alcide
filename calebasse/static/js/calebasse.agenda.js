@@ -24,6 +24,11 @@ function toggle_worker(worker_selector) {
 
     var target = $($(worker_selector).data('target'));
     target.toggle();
+    if (target.length == 1) {
+      var $parent = $(target).parent();
+      target.detach().appendTo($parent);
+      target = $($(worker_selector).data('target'));
+    }
     return target.find('a.tab');
 }
 

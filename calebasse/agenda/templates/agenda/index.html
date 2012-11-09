@@ -27,7 +27,7 @@
      <dt>{{ workers_type.type }}</dt>
      <dd><ul>
        {% for worker in workers_type.workers %}
-       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target="li.worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
        {% endfor %}
      </ul></dd>
      {% endfor %}
