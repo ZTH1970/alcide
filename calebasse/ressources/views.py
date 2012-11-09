@@ -2,7 +2,8 @@ from django.db import models
 from django.http import Http404
 from django.shortcuts import render
 
-from calebasse.cbv import ListView, CreateView, UpdateView, DeleteView
+from calebasse.cbv import (ListView, CreateView, UpdateView, DeleteView,
+        ReturnToObjectMixin)
 
 
 _models = None
@@ -38,26 +39,26 @@ def list_view(request, service, model_name):
     view = ListView.as_view(model=model, template_name='ressources/list.html')
     return view(request, service=service)
 
+class RessourceCreateView(ReturnToObjectMixin, CreateView):
+    template_name="ressources/new.html"
+    template_name_suffix='_new'
 
 def create_view(request, service, model_name):
     model = get_ressource_model(model_name)
     if model is None:
         raise Http404
-    view = CreateView.as_view(model=model,
-            success_url='../',
-            template_name="ressources/new.html",
-            template_name_suffix='_new')
+    view = RessourceCreateView.as_view(model=model)
     return view(request, service=service)
 
+class RessourceUpdateView(ReturnToObjectMixin, UpdateView):
+    template_name='ressources/update.html'
+    template_name_suffix='_update'
 
 def update_view(request, service, model_name, pk):
     model = get_ressource_model(model_name)
     if model is None:
         raise Http404
-    view = UpdateView.as_view(model=model,
-            success_url='../',
-            template_name='ressources/update.html',
-            template_name_suffix='_update')
+    view = RessourceUpdateView.as_view(model=model)
     return view(request, pk=pk, service=service)
 
 
