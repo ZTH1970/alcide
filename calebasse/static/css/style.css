@@ -943,6 +943,12 @@ table#activity tr td.hour {
 	width: 30%;
 }
 
+#services ul {
+  text-decoration: none;
+   list-style-type: none;
+   padding: 0;
+}
+
 .person-item span { display: none; }
 
 .person-item.active span { display: inline; }

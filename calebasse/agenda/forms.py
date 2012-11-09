@@ -107,6 +107,7 @@ class NewEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
+        widgets = {'services': forms.CheckboxSelectMultiple}
         fields = (
                 'title',
                 'date',
@@ -121,7 +122,6 @@ class NewEventForm(forms.ModelForm):
     def __init__(self, instance, **kwargs):
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
-        self.fields['event_type'].required = True
         self.fields['event_type'].queryset = \
                     EventType.objects.exclude(id=1).exclude(id=3)
 

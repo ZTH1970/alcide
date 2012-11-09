@@ -183,7 +183,7 @@ function event_dialog(url, title, width, btn_text) {
       $('.newevent').click(function() {
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
           var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
-          event_dialog($(this).data('url') + "?" + qs, 'Nouvelle événement', '850px', 'Ajouter');
+          event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
       });
       $('.edit-event').click(function() {
           event_dialog("update-event/" + $(this).data('occurrence-id') , 'Modifier un événement', '850px', 'Modifier');
