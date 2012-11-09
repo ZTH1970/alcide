@@ -17,6 +17,7 @@ from calebasse.actes.validation_states import VALIDATION_STATES, VALIDE
 from calebasse.actes.models import Act
 from calebasse.actes.validation import (automated_validation,
     unlock_all_acts_of_the_day)
+from calebasse import cbv
 
 from forms import (NewAppointmentForm, NewEventForm,
         UpdateAppointmentForm, UpdateEventForm)
@@ -114,7 +115,7 @@ class AgendaServiceActivityView(TemplateView):
         return context
 
 
-class NewAppointmentView(CreateView):
+class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateView):
     model = EventAct
     form_class = NewAppointmentForm
     template_name = 'agenda/nouveau-rdv.html'
@@ -127,10 +128,6 @@ class NewAppointmentView(CreateView):
         initial['time'] = self.request.GET.get('time')
         return initial
 
-    def get_form_kwargs(self):
-        kwargs = super(NewAppointmentView, self).get_form_kwargs()
-        kwargs['service'] = self.service
-        return kwargs
 
 class UpdateAppointmentView(UpdateView):
     model = EventAct
