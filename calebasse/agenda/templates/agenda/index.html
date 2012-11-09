@@ -45,19 +45,15 @@
         {% for start_time, quaters in disponibility.items %}
           <tr class="hour-mark">
               <td rowspan="4">{{ start_time }}:00</td>
-              {% for quater in quaters|slice:":1" %}
+              {% for quater in quaters %}
+                {% if forloop.counter != 1 %}
+                <tr>
+                {% endif %}
                 {% for value in quater %}
                 <td class="worker-{{ value.id }} agenda {{ value.dispo }}" style="display: none; "></td>
                 {% endfor %}
               {% endfor %}
           </tr>
-          {% for quater in quaters|slice:"1:4" %}
-            <tr>
-              {% for value in quater %}
-                <td class="worker-{{ value.id }} agenda {{ value.dispo }}" style="display: none; "></td>
-              {% endfor %}
-            </tr>
-          {% endfor %}
         {% endfor %}
       </table>
      </td>
