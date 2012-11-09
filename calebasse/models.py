@@ -3,8 +3,6 @@
 from django.db import models
 from django.contrib.localflavor.fr.forms import FRPhoneNumberField, FRZipCodeField
 
-WEEKDAYS = (u'lundi', u'mardi', u'mercredi', u'jeudi', u'vendredi')
-
 class BaseModelMixin(object):
     def __repr__(self):
         return '<%s %s %r>' % (self.__class__.__name__, self.id, unicode(self))
@@ -34,11 +32,13 @@ class ZipCodeField(models.CharField):
 
 
 class WeekdayField(models.CharField):
+    WEEKDAYS = (u'lundi', u'mardi', u'mercredi', u'jeudi', u'vendredi')
+
     WEEKDAYS_CHOICE = ((None, u'Aucun'),) \
             + tuple(zip(WEEKDAYS, map(unicode.title, WEEKDAYS)))
 
     def __init__(self, **kwargs):
         kwargs['max_length'] = 16
-        kwargs['choices'] = self.WEEKDAYS_CHOICE
+        kwargs['choices'] = WeekdayField.WEEKDAYS_CHOICE
         super(WeekdayField, self).__init__(**kwargs)
 
