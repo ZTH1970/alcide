@@ -998,3 +998,10 @@ input:focus + span.helptext, select:focus + span.helptext {
 input[value=""] + .clear {
   display: none;
 }
+
+/* Fields in sidebar takes the full width */
+#sidebar select {
+  margin-left: 0px;
+  width: 100%;
+}
+
