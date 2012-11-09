@@ -9,6 +9,16 @@ from django.core.urlresolvers import resolve
 
 from calebasse.ressources.models import Service
 
+class ReturnToObjectMixin(object):
+    def get_success_url(self):
+        return '../#object-' + str(self.get_object().pk)
+
+class ServiceFormMixin(object):
+    def get_form_kwargs(self):
+        kwargs = super(ServiceFormMixin, self).get_form_kwargs()
+        kwargs['service'] = self.service
+        return kwargs
+
 class ServiceViewMixin(object):
     service = None
     date = None
