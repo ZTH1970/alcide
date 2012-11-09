@@ -15,7 +15,7 @@
     <ul id="ressource-list">
      {% for object in object_list %}
      <li id="ressource-{{ object.pk }}">
-       <a href="{{ object.pk }}">{{object}}</a> 
+     <a href="{{ object.pk }}">{{object}} ({{object.pk}})</a> 
        <button class="dialog-button delete-object-button" 
                data-url="{{ object.pk }}/delete/ #form-content">Supprimer</button>
      </li>

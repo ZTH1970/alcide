@@ -15,7 +15,7 @@ class NamedAbstractModel(models.Model):
     name = models.CharField(max_length=80, verbose_name=u'Nom')
 
     def __unicode__(self):
-        return self.name + ' (%s)' % self.id
+        return self.name
 
     def __repr__(self):
         return '<%s %r>' % (self.__class__.__name__, unicode(self))
