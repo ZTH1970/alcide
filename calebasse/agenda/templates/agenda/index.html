@@ -66,7 +66,7 @@
        <div id="tabs">
        <ul>
         {% for worker_agenda in workers_agenda %}
-           <li><a href="#tabs-worker-{{ worker_agenda.worker.id }}" class="worker-{{ worker_agenda.worker.id }} agenda" style="display: none;">{{ worker_agenda.worker.display_name }}</a></li>
+        <li><a href="#tabs-worker-{{ worker_agenda.worker.id }}" data-id="{{ worker_agenda.worker.id }}" class="tab worker-{{ worker_agenda.worker.id }} agenda" style="display: none;">{{ worker_agenda.worker.display_name }}</a></li>
         {% endfor %}
        </ul>
        {% for worker_agenda in workers_agenda %}
