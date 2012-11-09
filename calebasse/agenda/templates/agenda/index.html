@@ -62,7 +62,10 @@
        <div id="tabs">
        <ul>
         {% for worker_agenda in workers_agenda %}
-        <li><a href="#tabs-worker-{{ worker_agenda.worker.id }}" data-id="{{ worker_agenda.worker.id }}" class="tab worker-{{ worker_agenda.worker.id }} agenda" style="display: none;">{{ worker_agenda.worker.display_name }}</a></li>
+        <li style="display: none" class="worker-{{ worker_agenda.worker.id }} agenda">
+        <a id="link-tab-worker-{{ worker_agenda.worker.id }}"  href="#tabs-worker-{{ worker_agenda.worker.id }}" class="tab" data-id="{{ worker_agenda.worker.id }}">{{ worker_agenda.worker.display_name }}</a>
+        <a href="#" style="padding: 3px;cursor: auto;" class="close-tab" data-target="selector-worker-{{ worker_agenda.worker.id }}"><span class="ui-icon ui-icon-circle-close"></span></a>
+        </li>
         {% endfor %}
        </ul>
        {% for worker_agenda in workers_agenda %}

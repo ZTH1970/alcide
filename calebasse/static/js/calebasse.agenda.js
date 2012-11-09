@@ -22,9 +22,9 @@ function toggle_worker(worker_selector) {
         $.cookie('agenda-tabs', agendatabs, { path: '/' });
     }
 
-    var target = $(worker_selector).data('target');
-    $(target).toggle();
-    return target;
+    var target = $($(worker_selector).data('target'));
+    target.toggle();
+    return target.find('a.tab');
 }
 
 function event_dialog(url, title, width, btn_text) {
@@ -76,8 +76,11 @@ function event_dialog(url, title, width, btn_text) {
           }
       });
 
-      $('.tab').click(function() {
+      $('a.tab').click(function() {
           $.cookie('active-agenda', $(this).data('id'), { path: '/' });
+      });
+      $('a.close-tab').click(function() {
+          $('#' + $(this).data('target')).click()
       });
 
       if ($.cookie('agenda-tabs')) {
@@ -86,9 +89,9 @@ function event_dialog(url, title, width, btn_text) {
           });
           if ($.cookie('active-agenda'))
           {
-              var $target = $('.worker-' + $.cookie('active-agenda') + '.agenda');
-              if ($target.is(':visible')) {
-                  $target.click();
+              var target = $('#link-tab-worker-' + $.cookie('active-agenda'));
+              if (target.is(':visible')) {
+                  target.click();
               }
           }
       }
@@ -191,3 +194,4 @@ function event_dialog(url, title, width, btn_text) {
       });
   });
 })(window.jQuery)
+
