@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -23,6 +23,9 @@ class People(BaseModelMixin, models.Model):
     def __unicode__(self):
         return self.display_name
 
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
 class WorkerManager(models.Manager):
 
     def for_service(self, service, type=None):
@@ -38,6 +41,12 @@ class Worker(People):
             verbose_name=u'Type de personnel')
     services = models.ManyToManyField('ressources.Service')
 
+    def is_away(self):
+        day = WeekdayField.WEEKDAYS[date.today().weekday()]
+        if self.timetable_set.filter(weekday=day).exists():
+            return False
+        return True
+
     class Meta:
         verbose_name = u'Personnel'
         verbose_name_plural = u'Personnels'
@@ -48,7 +57,7 @@ class UserWorker(BaseModelMixin, User):
 
     def __unicode__(self):
         return u'Lien entre la personne %s et l\'utilisateur %s' % (
-                self.people, super(UserPeople, self).__unicode__())
+                self.people, super(UserWorker, self).__unicode__())
 
 class SchoolTeacher(People):
     schools = models.ManyToManyField('ressources.School')

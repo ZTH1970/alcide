@@ -1,55 +1,24 @@
 from django.conf.urls import patterns, url, include
-from calebasse.cbv import (TemplateView, CreateView, DeleteView)
 
-from django.contrib.auth.models import User
-#from forms import CreateCongeAnnuelForm, EditCongeAnnuelForm
 
-import views
-import forms
-
-acces_patterns = patterns('',
-    url(r'^$', views.AccessView.as_view()),
-    url(r'^new/$', CreateView.as_view(model=User,
-        success_url='../',
-        form_class=forms.UserForm,
-        template_name='calebasse/simple-form.html',
-        template_name_suffix='_new.html')),
-    url(r'^(?P<pk>\d+)/$', views.AccessUpdateView.as_view()),
-    url(r'^(?P<pk>\d+)/delete/$', DeleteView.as_view(model=User)),
+user_patterns = patterns('calebasse.personnes.views',
+    url(r'^$', 'user_listing'),
+    url(r'^new/$', 'user_new'),
+    url(r'^(?P<pk>\d+)/$', 'user_update'),
+    url(r'^(?P<pk>\d+)/delete/$', 'user_delete'),
 )
 
 
-#personne_patterns = patterns('',
-#    url(r'^$', ListView.as_view(model=Worker)),
-#    url(r'^new/$', CreateView.as_view(model=Worker,
-#        form_class=CreatePersonnelForm,
-#        template_name_suffix='_new.html')),
-#    url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=Worker,
-#        form_class=EditPersonnelForm,
-#        template_name_suffix='_edit.html')),
-#    url(r'^(?P<pk>\d+)/delete/$', DeleteView.as_view(model=Worker)),
-#)
+worker_patterns = patterns('calebasse.personnes.views',
+    url(r'^$', 'worker_listing'),
+    url(r'^new/$', 'worker_new'),
+    url(r'^(?P<pk>\d+)/$', 'worker_update'),
+    url(r'^(?P<pk>\d+)/delete/$', 'worker_delete'),
+)
 
 
-#conges_annuels_patterns = patterns('',
-#    url(r'^$', ListView.as_view(model=CongeAnnuel)),
-#    url(r'^nouveau/$', CreateView.as_view(model=CongeAnnuel,
-#        form_class=CreateCongeAnnuelForm,
-#        template_name_suffix='_nouveau.html')),
-#    url(r'^(?P<pk>\d+)/$', UpdateView.as_view(model=CongeAnnuel,
-#        form_class=EditCongeAnnuelForm,
-#        template_name_suffix='_edit.html')),
-#    url(r'^(?P<pk>\d+)/supprimer/$', DeleteView.as_view(model=CongeAnnuel)),
-#)
-
-#conges_patterns = patterns('',
-#    url(r'^$', ListView.as_view(model=Conge)),
-#    url(r'^conges-annuels/', include(conges_annuels_patterns)),
-#)
-
-urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='personnes/index.html')),
-    url(r'^acces/', include(acces_patterns)),
-#    url(r'^gestion/', include(personne_patterns)),
-#    url(r'^conges/', include(personne_patterns)),
+urlpatterns = patterns('calebasse.personnes.views',
+    url(r'^$', 'homepage'),
+    url(r'^acces/', include(user_patterns)),
+    url(r'^gestion/', include(worker_patterns)),
     )

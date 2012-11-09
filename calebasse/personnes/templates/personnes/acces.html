@@ -2,7 +2,7 @@
 
 {% block appbar %}
 <h2>Gestion des personnes — Accès</h2>
-<a href="gestion-personnes.html">Retourner à la gestion des personnes</a>
+<a href="../">Retourner à la gestion des personnes</a>
 
 <button class="dialog-button" data-url="new/ #form-content" data-default-button="Créer">Nouvel accès</button>
 {% endblock %}
@@ -37,7 +37,7 @@
     </thead>
     <tbody>
    {% for object in active_list %}
-    <tr data-pk="{{object.pk}}">
+     <tr data-pk="{{object.pk}}" id="object-{{ object.pk}}">
       <td>{{object.username}}</td>
       <td>{{object.email}}</td>
       <td>{% firstof object.userworker "-" %}</td>

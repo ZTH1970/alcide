@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
+from calebasse.ressources.models import WorkerType
+
 from models import Worker, UserWorker
+
 
 class UserForm(forms.ModelForm):
     error_messages = {
@@ -77,11 +81,19 @@ class UserForm(forms.ModelForm):
             instance.save()
         return instance
 
-#class CreateCongeAnnuelForm(ModelForm):
-#    class Meta:
-#        model = CongeAnnuel
-#
-#
-#class EditCongeAnnuelForm(ModelForm):
-#    class Meta:
-#        model = CongeAnnuel
+class WorkerSearchForm(forms.Form):
+    last_name = forms.CharField(label=u'Nom', required=False)
+    first_name = forms.CharField(label=u'Prénom', required=False)
+    profession = forms.ModelChoiceField(label=u'Profession',
+            queryset=WorkerType.objects.all(), required=False)
+
+    INTERVENE_STATUS_CHOICES = {
+            'a': u'Thérapeute',
+            'b': u'Non-thérapeute'
+    }
+
+    intervene_status = forms.MultipleChoiceField(
+        choices=INTERVENE_STATUS_CHOICES.iteritems(),
+        widget=forms.CheckboxSelectMultiple,
+        initial=INTERVENE_STATUS_CHOICES.keys(),
+        required=False)
