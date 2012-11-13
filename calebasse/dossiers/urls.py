@@ -3,10 +3,12 @@ from django.conf.urls import patterns, url
 from calebasse.cbv import ListView, CreateView, DeleteView, UpdateView
 
 from models import PatientRecord
+from views import DossiersHomepageView
 from forms import CreatePatientRecordForm, EditPatientRecordForm
 
 urlpatterns = patterns('',
-    url(r'^$', ListView.as_view(model=PatientRecord)),
+    url(r'^$', DossiersHomepageView.as_view()),
+    #url(r'^$', ListView.as_view(model=PatientRecord)),
     url(r'^new/$', CreateView.as_view(model=PatientRecord,
         form_class=CreatePatientRecordForm,
         template_name_suffix='_new')),

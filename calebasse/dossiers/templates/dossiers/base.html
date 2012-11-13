@@ -1,0 +1,10 @@
+{% extends "calebasse/base.html" %}
+{% load url from future %}
+
+{% block title %}{{ block.super }} - Dossiers {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Dossiers - {{ service_name }}</spam>
+{% endblock %}
+
