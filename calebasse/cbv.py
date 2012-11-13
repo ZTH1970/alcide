@@ -1,8 +1,7 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-from django.views.generic import list as list_cbv, edit, base # ListView
-# from django.views.generic.edit import # CreateView, DeleteView, UpdateView
+from django.views.generic import list as list_cbv, edit, base
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.core.urlresolvers import resolve
