@@ -214,6 +214,17 @@ form p {
 	margin: 0 0 1em 0;
 }
 
+form.inline p label {
+  display: inline;
+}
+
+form .inline label {
+  display: inline;
+}
+form .inline li {
+  display: inline;
+}
+
 form p label {
 	display: block;
 }
