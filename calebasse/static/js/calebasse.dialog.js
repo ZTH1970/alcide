@@ -44,5 +44,17 @@
         title: $button.attr('title') || $button.text(),
       });
     });
+
+    /* Form buttons with the '.enable-on-change' class are only enabled if an
+     * input or a select of the form is modified. */
+    $('form button.enable-on-change, form input[type="submit"]').prop('disabled', 'true');
+    $('form input, form select').on('change', function () {
+      var form = $(this).closest('form');
+      $('button.enable-on-change, form input[type="submit"]', form).enable();
+    })
+    $('form input').on('keyup', function () {
+      var form = $(this).closest('form');
+      $('button.enable-on-change, form input[type="submit"]', form).enable();
+    })
   });
 })(window.jQuery)
