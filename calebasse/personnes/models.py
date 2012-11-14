@@ -4,8 +4,9 @@ from datetime import datetime, date
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
-from calebasse.ressources.models import WorkerType
+from calebasse.ressources.models import WorkerType, Service
 from calebasse.models import WeekdayField, BaseModelMixin
 
 from interval import Interval
@@ -51,6 +52,7 @@ class Worker(People):
         verbose_name = u'Personnel'
         verbose_name_plural = u'Personnels'
 
+
 class UserWorker(BaseModelMixin, User):
     worker = models.ForeignKey('Worker',
             verbose_name=u'Personnel')
@@ -63,7 +65,13 @@ class SchoolTeacher(People):
     schools = models.ManyToManyField('ressources.School')
     role = models.ForeignKey('ressources.SchoolTeacherRole')
 
+class TimeTableManager(models.Manager):
+    def current(self):
+        today = date.today()
+        return self.filter(start_date__lte=today, end_date__gte=today)
+
 class TimeTable(BaseModelMixin, models.Model):
+    objects = TimeTableManager()
     worker = models.ForeignKey(Worker,
             verbose_name=u'Intervenant')
     service = models.ForeignKey('ressources.Service')
@@ -95,3 +103,37 @@ class TimeTable(BaseModelMixin, models.Model):
     def to_interval(self, date):
         return Interval(datetime.combine(date, self.start_time),
                 datetime.combine(date, self.end_time))
+
+class HolidayManager(models.Manager):
+    def for_worker(self, worker):
+        query = models.Q(worker=worker) \
+              | models.Q(worker__isnull=True,
+                           service=worker.services.all())
+        return self.filter(query) \
+                   .filter(end_date__gte=date.today())
+
+    def for_service(self, service):
+        return self.filter(worker__isnull=True, service=service) \
+                   .filter(end_date__gte=date.today())
+
+
+class Holiday(BaseModelMixin, models.Model):
+    objects = HolidayManager()
+
+    worker = models.ForeignKey(Worker, blank=True, null=True,
+            verbose_name=u"Personnel")
+    service = models.ForeignKey(Service, blank=True, null=True,
+            verbose_name=u"Service")
+    start_date = models.DateField(verbose_name=u"Date de début")
+    end_date = models.DateField(verbose_name=u"Date de fin")
+
+    class Meta:
+        verbose_name = u'Congé'
+        verbose_name_plural = u'Congés'
+
+    def is_current(self):
+        return self.start_date <= date.today() <= self.end_date
+
+    def clean(self):
+        if not self.worker and not self.service:
+            raise ValidationError('at least one of worker or service must be set')

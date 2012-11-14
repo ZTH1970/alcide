@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8"/>
-    <title>APS42 — Gestion du personnel</title>
-    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+{% extends "calebasse/base.html" %}
 
-    <script src="js/jquery-1.7.2.min.js"></script>
-    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
-    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+{% block extrascripts %}
+{{ block.super }}
     <script>
 	$(function() {
 		$('#lundi').click(function() {
@@ -21,98 +14,110 @@
 			);
 			});
 	});
-	</script>
-  </head>
-  <body>
-  <div id="wrap-large">
-    <div id="header">
-      <h1><a href="accueil.html">APS 42</a></h1>
-      <span>Gestion - CMPP</span>
+</script>
+{% endblock %}
+
+{% block appbar %}
+<h2>Personnel - {{ object.last_name }} {{ object.first_name }}
+  {% if holiday %}<span class="en-conge">(en congé jusqu'au {{ holiday.end_date|date:"j F" }})</span>{% endif %}
+</h2>
+    <a href="..">Retourner à l'administration du personnel</a>
+    <form action="delete" method="post" data-confirmation-msg="Êtes-vous sûr de vouloir supprimer le personnel {{object.last_name}} {{object.first_name}} ?" class="form-with-confirmation">
+      <button>Supprimer</button>
+    </form>
+{% endblock %}
+
+{% block content %}
+<div id="info-membre">
+  <form method="post" class="ajax" id="id-form">
+    {% csrf_token %}
+    <div class="frame inline">
+      <h3>État civil</h3>
+      <button class="save enable-on-change">✔</button>
+      <p>
+      {% for field in forms.id %}
+      {{ field.label_tag  }} : {{ field }}
+      {% endfor %}
     </div>
-    <div id="splash" class="cmpp">
-      <div id="user-links">
-        <a href="connexion.html">Déconnexion</a>
-      </div>
+  </form>
+
+  <form method="post" class="ajax" id="services-form">
+    {% csrf_token %}
+    <div class="inline frame">
+      <h3>Services</h3>
+      <button class="save enable-on-change">✔</button>
+
+      <p class="services">
+      {{ forms.services.services }}
+      </p>
     </div>
-    <div id="content">
-
-    <div id="appbar">
-    <h2>Personnel - Durant François <span class="en-conge">(en congé jusqu'au 3 septembre)</span></h2>
-    <a href="admin-personnel.html">Retourner à l'administration du personnel</a>
-    <button>Supprimer</button>
-    </div>
-
-    <div id="info-membre">
-     <div class="frame">
-     <h3>État civil</h3>
-     <button class="save">✔</button>
-     <p><label>Nom :</label> <input value="Durant"/>
-     <label>Prénom(s) :</label> <input value="François"/>
-     <label>Genre :</label> <input value="M"/></p>
-     </div>
-
-     <div class="frame">
-     <h3>Services</h3>
-     <button class="save">✔</button>
-
-     <p class="services">
-     <input type="checkbox" checked="checked"><label>CMPP</label></input>
-     <input type="checkbox" checked="checked"><label>CAMSP</label></input>
-     <input type="checkbox"><label>SESSAD TED</label></input>
-     <input type="checkbox"><label>SESSAD DYS</label></input>
-     </p>
-
-     </div>
-
-     <div class="frame" id="schedule">
-     <h3>Horaires de travail</h3>
-
-     <table>
-     <thead><tr><th id="lundi">Lundi</th><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th><th>Samedi</th><th>Dimanche</th></tr></thead>
-     <tbody>
-      <tr>
-       <td>De 13h30 à 17h30</td>
-       <td>De 8h30 à 12h30<br/>De 13h30 à 17h30</td>
-       <td>-</td>
-       <td>De 8h30 à 12h30<br/>De 13h30 à 17h30</td>
-       <td>-</td>
-       <td>-</td>
-       <td>-</td>
-      </tr>
-     </tbody>
-     </table>
-     </div>
-
-     <div class="frame">
-     <h3>Congés</h3>
-     <button class="save">✍</button>
-     <ul>
-      <li>Du 20 août au 3 septembre 2012 (en cours)</li>
-      <li>Du 3 au 10 octobre 2012</li>
-      <li>Du 24 décembre 2012 au 4 janvier 2013 (congés annuels)</li>
-     </ul>
-     </div>
-
-    </div>
-
-    <div id="footer">
-        —
-    </div>
-  </div>
-
-  <div id="lundi-dlg" style="display: none;">
+  </form>
+  
+  <div class="frame" id="schedule">
+    <h3>Horaires de travail</h3>
+    
     <table>
-    <tr>
-    <th>Heure début</th> <th>Heure fin</th> <th>Date début</th> <th>Date fin</th> <th>Périodicité</th> <th>Services</th>
-    </tr>
-    <tr>
-    <td><input value="13h30" size="8"/></td> <td><input value="17h30" size="8"/></td> <td><input value="20/04/2012" size="12"/></td> <td><input value="-" size="12"/></td> <td><select><option>Toutes les semaines</option></select></td> <td><select><option>CAMSP</option><option>CMPP</option><option>...</option><option>+</option></select></td> <td><button>-</button></td>
-    </tr>
-
-    <tr class="expired"> <td>13h30</td> <td>15h30</td> <td>2/01/2012</td> <td>14/04/2012</td> <td>2× par mois</td> <td>CAMSP</td> <td><button>déver.</button> </tr>
+      <thead>
+        <tr>
+          {% for weekday in weekdays %}
+            <td><a href="{{weekday}}/">{{ weekday|capfirst }}</a></td>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        {% for timetable in timetables %}
+        <td>
+          {% for schedule in timetable.schedules %}
+            De {{ schedule.start_time }} à {{ schedule.end_time }}
+            {% if not forloop.last %}
+            <br/>
+            {% endif %}
+          {% empty %}
+          -
+          {% endfor %}
+        </td>
+        {% endfor %}
+      </tr>
+      </tbody>
     </table>
-    <button>+</button>
   </div>
+  <form action="holidays/" method="get">
+    <div class="frame">
+      <h3>Congés</h3>
+      <button class="save">✍</button>
+      <ul>
+        {% for holiday in holidays %}
+        <li>Du {{ holiday.start_date|date:"j F"}} au {{ holiday.end_date|date:"j F Y" }}
+            {% if holiday.is_current and holiday.service %}
+            (congés annuels, en cours)
+            {% elif holiday.is_current %}
+            (en cours)
+            {% elif holiday.service %}
+            (congés annuels)
+            {% endif %}
+        </li>
+        {% endfor %}
+<!--     <li>Du 20 août au 3 septembre 2012 (en cours)</li>
+        <li>Du 3 au 10 octobre 2012</li>
+        <li>Du 24 décembre 2012 au 4 janvier 2013 (congés annuels)</li> -->
+      </ul>
+    </div>
+  </form>
+</div>
+{% endblock %}
 
-  </body>
-</html>
+{% block dialogs %}
+<div id="lundi-dlg" style="display: none;">
+  <table>
+    <tr>
+      <th>Heure début</th> <th>Heure fin</th> <th>Date début</th> <th>Date fin</th> <th>Périodicité</th> <th>Services</th>
+    </tr>
+    <tr>
+      <td><input value="13h30" size="8"/></td> <td><input value="17h30" size="8"/></td> <td><input value="20/04/2012" size="12"/></td> <td><input value="-" size="12"/></td> <td><select><option>Toutes les semaines</option></select></td> <td><select><option>CAMSP</option><option>CMPP</option><option>...</option><option>+</option></select></td> <td><button>-</button></td>
+    </tr>
+    <tr class="expired"> <td>13h30</td> <td>15h30</td> <td>2/01/2012</td> <td>14/04/2012</td> <td>2× par mois</td> <td>CAMSP</td> <td><button>déver.</button> </tr>
+  </table>
+  <button>+</button>
+</div>
+{% endblock %}

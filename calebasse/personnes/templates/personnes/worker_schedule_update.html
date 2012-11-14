@@ -1,0 +1,88 @@
+{% extends "calebasse/simple-form.html" %}
+
+{% block appbar %}
+<h2>Horaire du {{weekday}} de {{object.last_name}} {{object.first_name}}</h2>
+  <a href="..">Retour</a>
+{% endblock %}
+
+
+{% block content %}
+    <form method="post">
+      <div id="form-content">
+        {% csrf_token %}
+        {% with formset=form %}
+        {{ formset.management_form }}
+        <table class="inline">
+          <thead>
+            <tr>
+              <td>Heure de début</td>
+              <td>Heure de fin</td>
+              <td>Date de début</td>
+              <td>Date de fin</td>
+              <td>Supprimer</td>
+            </tr>
+          </thead>
+          <tbody id="timetables">
+          {% for form in formset %}
+            <tr class="timetable">
+              <td class="timepicker">{{ form.start_time }}</td>
+              <td class="timepicker">{{ form.end_time }}</td>
+              <td>{{ form.start_date }}</td>
+              <td>{{ form.end_date }}</td>
+              <td>{% if form.id.value %}{{ form.DELETE }}{% endif %}
+                {% for field in form %}
+                {% if field.is_hidden %}
+                {{field}}
+                {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endwith %}
+      </div>
+      {% block buttons %}
+      <button class="enable-on-change">Modifier</button>
+      <button id="add-form">Ajouter une ligne</button>
+      {% endblock %}
+      <a href="..">{% block back-link %}Retour{% endblock %}</a>
+    </form>
+{% endblock %}
+
+{% block page-end %}
+{{ block.super }}
+<script>
+  $(function () {
+    var completions = [];
+    for (var i = 8*60; i < 21*60; i += 15) {
+      var completion = ''
+      var hour = Math.floor(i/60);
+      var minute = i % 60;
+      var c = function (v) {
+        if (v < 10) {
+          return '0'+v;
+        }
+        return v;
+      }
+      completions.push(''+c(hour)+':'+c(minute));
+    }
+    $('.timepicker input').autocomplete({delay:0, source: completions, minLength: 0});
+    function addForm() {
+      var count = $('.timetable').length
+      var new_row = $('.timetable:first').clone(false).get(0);
+      $('input', new_row).val('');
+      $('input, select', new_row).each(function (i, v) {
+        v.id = v.id.replace('-0-', '-' + count + '-');
+        v.name = v.name.replace('-0-', '-' + count + '-');
+      });
+      $(new_row).appendTo($('#timetables'));
+      $('#id_timetable_set-TOTAL_FORMS').val(count+1);
+      return false;
+    }
+    $('#add-form').click(addForm);
+  });
+</script>
+{% endblock %}
+
+

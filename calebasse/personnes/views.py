@@ -1,7 +1,11 @@
+from collections import defaultdict
+from datetime import date
+
+from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib.auth.models import User
 
-from calebasse import cbv
+from calebasse import cbv, models as cb_models
 
 import forms
 import models
@@ -57,6 +61,8 @@ class WorkerView(cbv.ListView):
 
     def get_queryset(self):
         qs = super(WorkerView, self).get_queryset()
+        qs = qs.select_related()
+        qs = qs.prefetch_related('services')
         form = self.get_form()
         if form.is_valid():
             cleaned_data = form.cleaned_data
@@ -72,6 +78,22 @@ class WorkerView(cbv.ListView):
                 qs = qs.filter(type=profession)
             if intervene_status and 0 < len(intervene_status) < 2:
                 qs = qs.filter(type__intervene=intervene_status[0] == 'a')
+        today = date.today()
+        if models.Holiday.objects.for_service(self.service) \
+                .filter(start_date__lte=today).exists():
+            for worker in qs:
+                worker.holiday = True
+        else:
+            qs2 = models.Holiday.objects.filter(
+                           worker__services=self.service,
+                           start_date__lte=today,
+                           end_date__gte=today)
+            worker_dict = dict(((w.id, w) for w in qs))
+            for worker in qs:
+                worker.holiday = False
+            for holiday in qs2:
+                if holiday.worker.id in worker_dict:
+                    worker_dict[holiday.worker.id].holiday = True
         return qs
 
     def get_context_data(self, **kwargs):
@@ -93,13 +115,81 @@ user_update = AccessUpdateView.as_view()
 user_delete = cbv.DeleteView.as_view(model=User)
 
 
+class WorkerUpdateView(cbv.MultiUpdateView):
+    model = models.Worker
+    forms_classes = {
+            'id': forms.WorkerIdForm, 
+            'services': forms.WorkerServiceForm
+    }
+    template_name = 'personnes/personnel_edit.html'
+    success_url = './'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(WorkerUpdateView, self).get_context_data(**kwargs)
+        _timetables = defaultdict(lambda: [])
+        for timetable in self.object.timetable_set.order_by('start_time'):
+            _timetables[timetable.weekday].append(timetable)
+        timetable = []
+        for weekday in cb_models.WeekdayField.WEEKDAYS:
+            timetable.append({
+                'weekday': weekday,
+                'schedules': _timetables[weekday]})
+        ctx['weekdays'] = cb_models.WeekdayField.WEEKDAYS
+        ctx['timetables'] = timetable
+        ctx['holidays'] = models.Holiday.objects \
+                            .for_worker(self.object) \
+                            .order_by('start_date')
+        try:
+            holiday = models.Holiday.objects.for_worker(self.object) \
+                .filter(start_date__lte=date.today())[0]
+        except IndexError:
+            holiday = None
+        ctx['holiday'] = holiday
+        return ctx
+
+class WorkerScheduleUpdateView(cbv.UpdateView):
+    model = models.Worker
+    form_class = forms.TimetableFormSet
+    success_url = '../'
+    template_name = 'personnes/worker_schedule_update.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(WorkerScheduleUpdateView, self).get_form_kwargs()
+        kwargs['weekday'] = self.kwargs['weekday']
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(WorkerScheduleUpdateView, self).get_context_data(**kwargs)
+        ctx['weekday'] = self.kwargs['weekday']
+        return ctx
+
+    def dispatch(self, *args, **kwargs):
+        if kwargs['weekday'] not in cb_models.WeekdayField.WEEKDAYS:
+            raise Http404()
+        return super(WorkerScheduleUpdateView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        instances = form.save(commit=False)
+        for instance in instances:
+            instance.weekday = self.kwargs['weekday']
+            instance.service = self.service
+            instance.save()
+        return HttpResponseRedirect('')
+
+
+class WorkerHolidaysUpdateView(cbv.UpdateView):
+    model = models.Worker
+    form_class = forms.HolidayFormSet
+    success_url = '../'
+    template_name = 'personnes/worker_holidays_update.html'
+
 worker_listing = WorkerView.as_view()
 worker_new = cbv.CreateView.as_view(model=models.Worker,
         template_name='calebasse/simple-form.html',
         success_url='../')
-worker_update = cbv.UpdateView.as_view(model=models.Worker,
-        template_name='calebasse/simple-form.html',
-        success_url='./')
+worker_update = WorkerUpdateView.as_view()
+worker_schedule_update = WorkerScheduleUpdateView.as_view()
+worker_holidays_update = WorkerHolidaysUpdateView.as_view()
 worker_delete = cbv.DeleteView.as_view(model=models.Worker,
         template_name='calebasse/simple-form.html',
         success_url='../')

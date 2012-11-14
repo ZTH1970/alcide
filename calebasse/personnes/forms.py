@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
 from calebasse.ressources.models import WorkerType
 
-from models import Worker, UserWorker
+from models import Worker, UserWorker, TimeTable, Holiday
 
 
 class UserForm(forms.ModelForm):
@@ -97,3 +98,30 @@ class WorkerSearchForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         initial=INTERVENE_STATUS_CHOICES.keys(),
         required=False)
+
+class WorkerIdForm(forms.ModelForm):
+    sex = forms.CharField(label='Genre')
+
+    class Meta:
+        model = Worker
+        fields = ('last_name', 'first_name', 'sex')
+
+class WorkerServiceForm(forms.ModelForm):
+    class Meta:
+        model = Worker
+        fields = ('services',)
+        widgets = {
+                'services': forms.CheckboxSelectMultiple,
+        }
+
+class BaseTimetableFormSet(BaseInlineFormSet):
+    def __init__(self, weekday=None, *args, **kwargs):
+        kwargs['queryset'] = kwargs.get('queryset', TimeTable.objects).filter(weekday=weekday)
+        super(BaseTimetableFormSet, self).__init__(*args, **kwargs)
+
+TimetableFormSet = inlineformset_factory(Worker, TimeTable,
+        formset=BaseTimetableFormSet,
+        fields=('start_time', 'end_time', 'start_date', 'end_date'))
+
+HolidayFormSet = inlineformset_factory(
+        Worker, Holiday, fields=('start_date', 'end_date'))
