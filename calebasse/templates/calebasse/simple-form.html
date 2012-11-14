@@ -12,21 +12,8 @@
         {{ form.as_p }}
       </div>
       {% block buttons %}
-      <button>Modifier</button>
+      <button class="enable-on-change">Modifier</button>
       {% endblock %}
       <a href="..">{% block back-link %}Retour{% endblock %}</a>
     </form>
 {% endblock %}
-
-{% block page-end %}
-<script>
-  $('form button').prop('disabled', 'true');
-  $(function () {
-    $('form input, form select').on('change', function () {
-      $('form button').enable();
-    })
-  });
-</script>
-{% endblock %}
-
-
