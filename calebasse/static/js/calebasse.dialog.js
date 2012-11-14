@@ -56,5 +56,9 @@
       var form = $(this).closest('form');
       $('button.enable-on-change, form input[type="submit"]', form).enable();
     })
+    $('form.form-with-confirmation').on('submit', function () {
+        var mesg = $(this).data('confirmation-msg') || "Êtes-vous sûr ?";
+        return window.confirm(mesg);
+    });
   });
 })(window.jQuery)
