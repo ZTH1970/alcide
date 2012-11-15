@@ -119,6 +119,9 @@ class HolidayManager(models.Manager):
                           |models.Q(service__isnull=True)) \
                    .filter(end_date__gte=date.today())
 
+    def for_service_workers(self, service):
+        return self.filter(worker__services=service,
+                end_date__gte=date.today())
 
 def time2french(time):
     if time.minute:
