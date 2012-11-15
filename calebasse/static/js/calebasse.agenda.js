@@ -21,14 +21,12 @@ function toggle_worker(worker_selector) {
         });
         $.cookie('agenda-tabs', agendatabs, { path: '/' });
     }
-
     var target = $($(worker_selector).data('target'));
     target.toggle();
-    if (target.length == 1) {
-      var $parent = $(target).parent();
-      target.detach().appendTo($parent);
-      target = $($(worker_selector).data('target'));
-    }
+
+    var tab = $('#link-tab-worker-' + $(worker_selector).data('worker-id')).parent().get(0);
+    var tab_list = $(tab).parent().get(0);
+    $(tab).detach().appendTo(tab_list);
     return target.find('a.tab');
 }
 
