@@ -114,7 +114,9 @@ class HolidayManager(models.Manager):
                    .filter(end_date__gte=date.today())
 
     def for_service(self, service):
-        return self.filter(worker__isnull=True, service=service) \
+        return self.filter(worker__isnull=True) \
+                   .filter(models.Q(service=service)
+                          |models.Q(service__isnull=True)) \
                    .filter(end_date__gte=date.today())
 
 
