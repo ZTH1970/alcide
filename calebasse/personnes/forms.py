@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.forms.models import inlineformset_factory, BaseInlineFormSet
+from django.forms.models import (inlineformset_factory, modelformset_factory,
+        BaseInlineFormSet)
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
@@ -114,10 +115,12 @@ class WorkerServiceForm(forms.ModelForm):
                 'services': forms.CheckboxSelectMultiple,
         }
 
+
 class BaseTimetableFormSet(BaseInlineFormSet):
     def __init__(self, weekday=None, *args, **kwargs):
         kwargs['queryset'] = kwargs.get('queryset', TimeTable.objects).filter(weekday=weekday)
         super(BaseTimetableFormSet, self).__init__(*args, **kwargs)
+
 
 TimetableFormSet = inlineformset_factory(Worker, TimeTable,
         formset=BaseTimetableFormSet,
@@ -126,3 +129,33 @@ TimetableFormSet = inlineformset_factory(Worker, TimeTable,
 HolidayFormSet = inlineformset_factory(
         Worker, Holiday,
         fields=('start_date', 'end_date', 'start_time', 'end_time'))
+
+class HolidaySearchForm(forms.Form):
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+
+    def clean(self):
+        cleaned_data = super(HolidaySearchForm, self).clean()
+        if cleaned_data.get('start_date') or cleaned_data.get('end_date'):
+            if not cleaned_data.get('start_date') \
+                   or not cleaned_data.get('end_date'):
+                raise forms.ValidationError(u'Vous devez fournir une date de début et de fin')
+            if cleaned_data['start_date'] > cleaned_data['end_date']:
+                raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
+        return cleaned_data
+
+class YearlyHolidayForm(forms.ModelForm):
+    for_all_services = forms.BooleanField(required=False)
+
+    def save(self, commit=True):
+        instance = super(YearlyHolidayForm, self).save(commit=commit)
+        instance.for_all_services = self.cleaned_data.get('for_all_services', False)
+        return instance
+
+    class Meta:
+        form = Holiday
+
+YearlyHolidayFormSet = modelformset_factory(Holiday,
+        can_delete=True,
+        form=YearlyHolidayForm,
+        fields=('start_date', 'end_date'))

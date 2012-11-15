@@ -1,6 +1,8 @@
 from collections import defaultdict
 from datetime import date
 
+from dateutil.relativedelta import relativedelta
+
 from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -181,6 +183,10 @@ class WorkerHolidaysUpdateView(cbv.UpdateView):
     success_url = '../'
     template_name = 'personnes/worker_holidays_update.html'
 
+    def get_success_url(self):
+        return self.success_url
+
+
 worker_listing = WorkerView.as_view()
 worker_new = cbv.CreateView.as_view(model=models.Worker,
         template_name='calebasse/simple-form.html',
@@ -191,3 +197,76 @@ worker_holidays_update = WorkerHolidaysUpdateView.as_view()
 worker_delete = cbv.DeleteView.as_view(model=models.Worker,
         template_name='calebasse/simple-form.html',
         success_url='../')
+
+
+class HolidayView(cbv.TemplateView):
+    months = 3
+    template_name='personnes/holidays.html'
+
+    def get_form(self):
+        return forms.HolidaySearchForm(data=self.request.GET)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(HolidayView, self).get_context_data(**kwargs)
+        end_date = date.today() + relativedelta(months=self.months)
+        qs = models.Holiday.objects.for_service_workers(self.service)
+        today = date.today()
+        future_qs = qs.filter(start_date__gt=today,
+                start_date__lte=end_date)
+        annual_qs = models.Holiday.objects.for_service(self.service)
+        current_qs = qs.filter(start_date__lte=today)
+        form = self.get_form()
+        if form.is_valid() and form.cleaned_data.get('start_date'):
+            cleaned_data = form.cleaned_data
+            start_date = cleaned_data['start_date']
+            end_date = cleaned_data['end_date']
+            q = Q(start_date__gte=start_date, start_date__lte=end_date)
+            q |= Q(end_date__gte=start_date, end_date__lte=end_date)
+            future_qs = models.Holiday.objects.filter(q) \
+                    .filter(worker__services=self.service)
+            annual_qs = annual_qs.filter(q)
+            current_qs = []
+        ctx['current_holidays'] = current_qs
+        future_holidays = defaultdict(lambda:[])
+        for holiday in future_qs:
+            key = (holiday.start_date.year, holiday.start_date.month, holiday.start_date.strftime('%B'))
+            future_holidays[key].append(holiday)
+        ctx['future_holidays'] = [ { 
+            'date': date(day=1, month=key[1], year=key[0]),
+            'holidays': future_holidays[key] 
+          } for key in sorted(future_holidays.keys()) ]
+        ctx['annual_holidays'] = annual_qs
+        ctx['search_form'] = form
+        return ctx
+
+
+holiday_listing = HolidayView.as_view()
+
+
+class YearlyHolidayUpdateView(cbv.FormView):
+    form_class = forms.YearlyHolidayFormSet
+    template_name = 'personnes/yearly_holiday_update.html'
+
+    def get_success_url(self):
+        return '../'
+
+    def get_form_kwargs(self):
+        kwargs = super(YearlyHolidayUpdateView, self).get_form_kwargs()
+        qs = models.Holiday.objects.for_service(self.service)
+        kwargs['queryset'] = qs
+        initial = [ { 'for_all_services': o.service is None } for o in qs ]
+        kwargs['initial'] = initial
+        return kwargs
+
+    def form_valid(self, form):
+        instances = form.save(commit=False)
+        for instance in instances:
+            if instance.for_all_services:
+                instance.service = None
+            else:
+                instance.service = self.service
+            instance.save()
+        return HttpResponseRedirect('')
+
+
+yearly_holiday_update = YearlyHolidayUpdateView.as_view()

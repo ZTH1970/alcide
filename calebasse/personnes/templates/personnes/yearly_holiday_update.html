@@ -1,0 +1,105 @@
+{% extends "calebasse/simple-form.html" %}
+
+{% block appbar %}
+<h2>Congés de {{object.last_name}} {{object.first_name}}</h2>
+  <a href="..">Retour</a>
+{% endblock %}
+
+
+{% block content %}
+    <form method="post">
+      <div id="form-content">
+        {% csrf_token %}
+        {% with formset=form %}
+        {{ formset.management_form }}
+        <table class="inline">
+          <thead>
+            <tr>
+              <td><label class="required">Date de début</label></td>
+              <td><label class="required">Date de fin</label></td>
+              <td><label>Pour tous les services</label></td>
+              <td><label>Supprimer</label></td>
+            </tr>
+          </thead>
+          <tbody id="timetables">
+          {% for form in formset %}
+            {% if form.non_field_errors %}
+            <tr><td colspan="4">{{ form.non_field_errors }}</td></tr>
+            {% endif %}
+            <tr class="timetable">
+              <td id="start-{{ forloop.counter0 }}" class="datepicker" data-before-selector="#end-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.start_date }}</td>
+              <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}</td>
+              <td>{{ form.for_all_services }}</td>
+              <td class="delete">{% if form.id.value != None %}{{ form.DELETE }}{% endif %}
+                {% for field in form %}
+                {% if field.is_hidden %}
+                {{field}}
+                {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endwith %}
+      </div>
+      {% block buttons %}
+      <button class="enable-on-change">Modifier</button>
+      <button id="add-form">Ajouter une ligne</button>
+      {% endblock %}
+      <a href="..">{% block back-link %}Retour{% endblock %}</a>
+    </form>
+{% endblock %}
+
+{% block page-end %}
+{{ block.super }}
+<script>
+  $(function () {
+    var completions = [];
+    for (var i = 8*60; i < 21*60; i += 15) {
+      var completion = ''
+      var hour = Math.floor(i/60);
+      var minute = i % 60;
+      var c = function (v) {
+        if (v < 10) {
+          return '0'+v;
+        }
+        return v;
+      }
+      completions.push(''+c(hour)+':'+c(minute));
+    }
+    $('.timepicker input').autocomplete({delay:0, source: completions, minLength: 0});
+    function addForm() {
+      var count = $('.timetable').length
+      var new_row = $('.timetable:first').clone(false).get(0);
+      $('input', new_row).val('');
+      $('input, select', new_row).each(function (i, v) {
+        v.name = v.name.replace('-0-', '-' + count + '-');
+      });
+      $('.delete input[type="checkbox"]', new_row).remove();
+      $('.hasDatepicker', new_row).removeClass('hasDatepicker');
+      $('*', new_row).each(function (i, v) {
+        if (v.id) {
+          v.id = v.id.replace('-0', '-' + count);
+          if ($(v).data('before-selector')) {
+            var old_value = $(v).data('before-selector');
+            $(v).data('before-selector', old_value.replace('-0', '-' + count));
+          }
+          if ($(v).data('after-selector')) {
+            var old_value = $(v).data('after-selector');
+            $(v).data('after-selector', old_value.replace('-0', '-' + count));
+          }
+        }
+      });
+
+      $(new_row).appendTo($('#timetables'));
+      $('#id_timetable_set-TOTAL_FORMS').val(count+1);
+      window.calebasse_dialogs();
+      return false;
+    }
+    $('#add-form').click(addForm);
+  });
+</script>
+{% endblock %}
+
+

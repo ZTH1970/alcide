@@ -12,15 +12,19 @@ user_patterns = patterns('calebasse.personnes.views',
 worker_patterns = patterns('calebasse.personnes.views',
     url(r'^$', 'worker_listing'),
     url(r'^new/$', 'worker_new'),
-    url(r'^(?P<pk>\d+)/$', 'worker_update'),
+    url(r'^(?P<pk>\d+)/$', 'worker_update', name='worker_update'),
     url(r'^(?P<pk>\d+)/delete/$', 'worker_delete'),
     url(r'^(?P<pk>\d+)/holidays/$', 'worker_holidays_update'),
     url(r'^(?P<pk>\d+)/(?P<weekday>\w+)/$', 'worker_schedule_update'),
 )
 
+holidays_patterns = patterns('calebasse.personnes.views',
+    url(r'^$', 'holiday_listing'),
+    url(r'^annuel/$', 'yearly_holiday_update'))
 
 urlpatterns = patterns('calebasse.personnes.views',
     url(r'^$', 'homepage'),
     url(r'^acces/', include(user_patterns)),
     url(r'^gestion/', include(worker_patterns)),
+    url(r'^conges/', include(holidays_patterns)),
     )
