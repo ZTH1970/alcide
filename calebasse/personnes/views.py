@@ -84,7 +84,6 @@ class WorkerView(cbv.ListView):
                 worker.holiday = True
         else:
             qs2 = models.Holiday.objects.filter(
-                           worker__services=self.service,
                            start_date__lte=today,
                            end_date__gte=today)
             worker_dict = dict(((w.id, w) for w in qs))
