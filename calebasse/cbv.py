@@ -12,7 +12,7 @@ from calebasse.ressources.models import Service
 
 class ReturnToObjectMixin(object):
     def get_success_url(self):
-        return '../#object-' + str(self.get_object().pk)
+        return '../#object-' + str(self.object.pk)
 
 class ServiceFormMixin(object):
     def get_form_kwargs(self):
