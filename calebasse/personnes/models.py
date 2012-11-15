@@ -140,6 +140,7 @@ class Holiday(BaseModelMixin, models.Model):
     class Meta:
         verbose_name = u'Congé'
         verbose_name_plural = u'Congés'
+        ordering = ('start_date', 'start_time')
 
     def is_current(self):
         return self.start_date <= date.today() <= self.end_date
