@@ -132,6 +132,10 @@ class Holiday(BaseModelMixin, models.Model):
             verbose_name=u"Service")
     start_date = models.DateField(verbose_name=u"Date de début")
     end_date = models.DateField(verbose_name=u"Date de fin")
+    start_time = models.TimeField(verbose_name=u"Horaire de début", blank=True,
+            null=True)
+    end_time = models.TimeField(verbose_name=u"Horaire de fin", blank=True,
+            null=True)
 
     class Meta:
         verbose_name = u'Congé'
