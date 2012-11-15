@@ -119,7 +119,7 @@ class WorkerUpdateView(cbv.MultiUpdateView):
             'id': forms.WorkerIdForm, 
             'services': forms.WorkerServiceForm
     }
-    template_name = 'personnes/personnel_edit.html'
+    template_name = 'personnes/worker_update.html'
     success_url = './'
 
     def get_context_data(self, **kwargs):
