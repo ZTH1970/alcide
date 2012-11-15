@@ -5,6 +5,7 @@ from datetime import datetime, date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.template.defaultfilters import date as date_filter
 
 from calebasse.ressources.models import WorkerType, Service
 from calebasse.models import WeekdayField, BaseModelMixin
@@ -117,6 +118,11 @@ class HolidayManager(models.Manager):
                    .filter(end_date__gte=date.today())
 
 
+def time2french(time):
+    if time.minute:
+        return '{0}h{1}'.format(time.hour, time.minute)
+    return '{0}h'.format(time.hour)
+
 class Holiday(BaseModelMixin, models.Model):
     objects = HolidayManager()
 
@@ -137,3 +143,16 @@ class Holiday(BaseModelMixin, models.Model):
     def clean(self):
         if not self.worker and not self.service:
             raise ValidationError('at least one of worker or service must be set')
+    def __unicode__(self):
+        ret = ''
+        if self.start_date == self.end_date:
+            ret = u'le {0}'.format(date_filter(self.start_date, 'j F Y'))
+            if self.start_time and self.end_time:
+                ret += u', de {0} à {1}'.format(time2french(self.start_time),
+                time2french(self.end_time))
+        else:
+            ret = u'du {0} au {1}'.format(
+                    date_filter(self.start_date, 'j F'),
+                    date_filter(self.end_date, 'j F Y'))
+        return ret
+
