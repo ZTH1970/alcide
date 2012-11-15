@@ -144,9 +144,6 @@ class Holiday(BaseModelMixin, models.Model):
     def is_current(self):
         return self.start_date <= date.today() <= self.end_date
 
-    def clean(self):
-        if not self.worker and not self.service:
-            raise ValidationError('at least one of worker or service must be set')
     def __unicode__(self):
         ret = ''
         if self.start_date == self.end_date:
