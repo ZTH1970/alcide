@@ -36,29 +36,64 @@
     })
   };
   $(function () {
-    $('.dialog-button').each(function (i, button) {
-      var $button = $(button);
-      $button.dialogButton({
-        url: $button.data('url') || $button.closest('a').attr('href'),
-        default_button: $button.data('default-button') || $button.text(),
-        title: $button.attr('title') || $button.text(),
-      });
-    });
+    window.calebasse_dialogs = function(base) {
 
-    /* Form buttons with the '.enable-on-change' class are only enabled if an
-     * input or a select of the form is modified. */
-    $('form button.enable-on-change, form input[type="submit"]').prop('disabled', 'true');
-    $('form input, form select').on('change', function () {
-      var form = $(this).closest('form');
-      $('button.enable-on-change, form input[type="submit"]', form).enable();
-    })
-    $('form input').on('keyup', function () {
-      var form = $(this).closest('form');
-      $('button.enable-on-change, form input[type="submit"]', form).enable();
-    })
-    $('form.form-with-confirmation').on('submit', function () {
-        var mesg = $(this).data('confirmation-msg') || "Êtes-vous sûr ?";
-        return window.confirm(mesg);
-    });
+      var base = base || $('body').get(0);
+      $('.dialog-button', base).each(function (i, button) {
+        var $button = $(button);
+        $button.dialogButton({
+          url: $button.data('url') || $button.closest('a').attr('href'),
+          default_button: $button.data('default-button') || $button.text(),
+          title: $button.attr('title') || $button.text(),
+        });
+      });
+
+      /* Form buttons with the '.enable-on-change' class are only enabled if an
+       * input or a select of the form is modified. */
+      $('form button.enable-on-change, form input[type="submit"]', base).prop('disabled', 'true');
+      $('form input, form select', base).on('change', function () {
+        var form = $(this).closest('form');
+        $('button.enable-on-change, form input[type="submit"]', form).enable();
+      })
+      $('form input', base).on('keyup', function () {
+        var form = $(this).closest('form');
+        $('button.enable-on-change, form input[type="submit"]', form).enable();
+      })
+      $('form.form-with-confirmation', base).on('submit', function () {
+          var mesg = $(this).data('confirmation-msg') || "Êtes-vous sûr ?";
+          return window.confirm(mesg);
+      });
+      $('form .datepicker', base).each(function (i, span) {
+        var $span = $(span);
+        var $input = $('input', span);
+        var months = $span.data('number-of-months');
+        var before_selector = $span.data('before-selector');
+        var after_selector = $span.data('after-selector');
+        $input.datepicker();
+        if (months) {
+          $input.datepicker("option", "numberOfMonths", months);
+        }
+        if (before_selector) {
+          var $before_target = $('input', $(before_selector));
+          $input.datepicker("option", "maxDate", $before_target.val());
+          $input.datepicker("option", "onClose", function (selectedDate) {
+            $before_target.datepicker( "option", "minDate", selectedDate );
+          });
+        }
+        if (after_selector) {
+          var $after_target = $('input', $(after_selector));
+          $input.datepicker("option", "minDate", $after_target.val());
+          $input.datepicker("option", "onClose", function (selectedDate) {
+            $after_target.datepicker( "option", "maxDate", selectedDate );
+          });
+        }
+      });
+      $('form .reset', base).on('click', function () {
+        var $this = $(this);
+        var $form = $($this.closest('form'));
+        $('input', $form).val('');
+      });
+    };
+    window.calebasse_dialogs();
   });
 })(window.jQuery)
