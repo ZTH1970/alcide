@@ -15,9 +15,11 @@
         <table class="inline">
           <thead>
             <tr>
-              <td>Date de début</td>
-              <td>Date de fin</td>
-              <td>Supprimer</td>
+              <td><label class="required">Date de début</label></td>
+              <td><label class="required">Date de fin</label></td>
+              <td><label>Heure de début</label></td>
+              <td><label>Heure de fin</label></td>
+              <td><label>Supprimer</label></td>
             </tr>
           </thead>
           <tbody id="timetables">
@@ -25,6 +27,8 @@
             <tr class="timetable">
               <td>{{ form.start_date }}</td>
               <td>{{ form.end_date }}</td>
+              <td class="timepicker">{{ form.start_time }}</td>
+              <td class="timepicker">{{ form.end_time }}</td>
               <td>{% if form.id.value %}{{ form.DELETE }}{% endif %}
                 {% for field in form %}
                 {% if field.is_hidden %}

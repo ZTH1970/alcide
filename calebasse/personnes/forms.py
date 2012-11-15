@@ -124,4 +124,5 @@ TimetableFormSet = inlineformset_factory(Worker, TimeTable,
         fields=('start_time', 'end_time', 'start_date', 'end_date'))
 
 HolidayFormSet = inlineformset_factory(
-        Worker, Holiday, fields=('start_date', 'end_date'))
+        Worker, Holiday,
+        fields=('start_date', 'end_date', 'start_time', 'end_time'))
