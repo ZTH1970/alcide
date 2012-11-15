@@ -32,7 +32,6 @@ class AccessView(cbv.ListView):
                 filters = []
                 for criteria in FILTER_CRITERIA:
                     q = Q(**{criteria+'__contains': part})
-                    print 'q', q
                     filters.append(q)
                 qs = qs.filter(reduce(Q.__or__, filters))
         qs = qs.prefetch_related('userworker__worker')
