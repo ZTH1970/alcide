@@ -78,6 +78,9 @@ class DeleteView(ModelNameMixin, ServiceViewMixin, edit.DeleteView):
 class UpdateView(ModelNameMixin, ServiceViewMixin, edit.UpdateView):
     pass
 
+class FormView(ServiceViewMixin, edit.FormView):
+    pass
+
 class ContextMixin(object):
     """
     A default context mixin that passes the keyword arguments received by
