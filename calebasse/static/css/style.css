@@ -1017,3 +1017,7 @@ input:not([value]) + .clear, input[value=""] + .clear {
   width: 100%;
 }
 
+label.required:after {
+  content: '*';
+  color: red;
+}
