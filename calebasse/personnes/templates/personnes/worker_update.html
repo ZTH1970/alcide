@@ -88,7 +88,7 @@
       <button class="save">✍</button>
       <ul>
         {% for holiday in holidays %}
-        <li>Du {{ holiday.start_date|date:"j F"}} au {{ holiday.end_date|date:"j F Y" }}
+        <li>{{ holiday|capfirst }}
             {% if holiday.is_current and holiday.service %}
             (congés annuels, en cours)
             {% elif holiday.is_current %}
