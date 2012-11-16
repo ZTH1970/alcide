@@ -1,6 +1,10 @@
 {% extends "calebasse/base.html" %}
 
+{% load url from future %}
+
 {% block extrascripts %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}js/calebasse.datesel.js"></script>
 <script>
   $(function() {
     $('.date').datepicker();
@@ -26,6 +30,9 @@
         ]}
       );
     });
+    $('#search-form input[type="checkbox"]').on('change', function () {
+      $('#search-form').submit();
+    });
 
   });
 </script>
@@ -42,38 +49,33 @@
 
 {% block content %}
 <div id="sidebar">
-  <div>
-    <h3>Rechercher dans les actes</h3>
-    <h4>Patient</h4>
-    <label>Nom: <input type="text"/></label>
-    <label>Numéro de dossier: <input type="text"/></label>
-    <label>Numéro de sécu: <input type="text"/></label>
-    <button>Rechercher</button>
-    <h4>Thérapeute</h4>
-    <label>Nom: <input type="text"/></label>
-    <button>Rechercher</button>
-  </div>
-  <div id="filtre">
-    <h3>Filtrer les actes</h3>
-    <ul>
-      <li><label><input checked="checked"  class="diag" type="checkbox"/>Non facturables</label></li>
-      <li><label><input checked="checked"  class="fin-accueil" type="checkbox"/>Absences ou annulés</label></li>
-      <li><label><input checked="checked"  class="traite" type="checkbox"/>Perdus</label></li>
-      <li><label><input checked="checked"  class="en-accueil" type="checkbox"/>Facturés</label></li>
-      <li><label><input checked="checked"  class="traite" type="checkbox"/>Dernière facturation</label></li>
-      <li><label><input checked="checked"  class="traite" type="checkbox"/>Facturation en cours</label></li>
-      <li><button>Tous</button> <button>Aucun</button></li>
-    </ul>
-  </div>
+  <form method="post" id="search-form">
+    {% csrf_token %}
+    <div>
+      <h3>Rechercher dans les actes</h3>
+      <h4>Patient</h4>
+      {{ search_form.non_field_errors }}
+      <label>Nom: {{ search_form.last_name }}</label>
+      {{ search_form.last_name.errors }}
+      <label>Numéro de dossier: {{ search_form.patient_record_id }}</label>
+      {{ search_form.patient_record_id.errors }}
+      <label>Numéro de sécu: {{ search_form.social_security_number }}</label>
+      {{ search_form.social_security_number.errors }}
+      <button>Rechercher</button>
+      <h4>Thérapeute</h4>
+      <label>Nom: {{ search_form.doctor_name }}</label>
+      {{ search_form.doctor_name.errors }}
+      <button>Rechercher</button>
+    </div>
+    <div id="filtre">
+      <h3>Filtrer les actes</h3>
+      {{ search_form.filters }}
+    </div>
+  </form>
 </div>
 
 <div class="content">
-  <div id="datesel">
-    <a href="#">««</a> <a href="#">«</a>
-    <!-- <span>Jeudi 5 juillet 2012</span> -->
-    <input id="agenda-date" value="Jeudi 5 juillet 2012"/>
-    <a href="#">»</a> <a href="#">»»</a>
-  </div>
+  {% include 'calebasse/datesel.html' %}
   <br/>
   
   <table id="actes" class="main">
@@ -84,13 +86,40 @@
       <th>Type d'acte</th>
       <th>Validation</th>
       <th>Facturation</th>
-      <th>Thérapeuts</th>
+      <th>Thérapeutes</th>
       <th>Heure</th>
       <th>Durée</th>
     </tr>
     </thead>
     <tbody>
-    
+      {% for act in object_list %}
+      {% comment %}
+      FIXME: comment mettre la classe non-factu ?
+      <tr class="non-factu">
+      {% endcomment %}
+      <tr>
+        <td>
+            {{ act.patient.id }}
+            {{ act.patient.first_name }}
+            {{ act.patient.last_name }}
+        </td>
+        <td>FIXME: c'est quoi état ?</td>
+        <td>({{ act.act_type.id }}) {{ act.act_type }}</td>
+        <td>{{ act.get_state }}</td>
+        <td>FIXME: facturation !!</td>
+        <td>
+            {% for doctor in act.doctors.all %}
+            ({{ doctor.id }}) {{ doctor }}
+            {% if not forloop.last %}
+            <br/>
+            {% endif %}
+            {% endfor %}
+        </td>
+        <td>{{ act.start_time|date:"H:i" }}</td>
+        <td>{{ act.duration }}</td>
+      </tr>
+    {% endfor %}
+    <!--
     <tr>
       <td>1234 Bob Léponge</td>
       <td>Traitement</td>
@@ -146,7 +175,7 @@
       <td>14:00</td>
       <td>01:00</td>
     </tr>
-    
+    -->
     </tbody>
   </table>
 </div>

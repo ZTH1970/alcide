@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url, include
 
 act_patterns = patterns('calebasse.actes.views',
-        url(r'^$', 'act_listing'),
+        url(r'^$', 'act_listing', name='act-listing'),
 )
 
 urlpatterns = patterns('calebasse.actes.views',
