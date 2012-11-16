@@ -4,10 +4,9 @@ from datetime import datetime, date
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.template.defaultfilters import date as date_filter
 
-from calebasse.ressources.models import WorkerType, Service
+from calebasse.ressources.models import Service
 from calebasse.models import WeekdayField, BaseModelMixin
 
 from interval import Interval
