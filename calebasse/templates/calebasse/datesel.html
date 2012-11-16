@@ -1,0 +1,9 @@
+{% load url from future %}
+
+ <div id="datesel">
+   <a href="{% url url_name date=previous_month service=service %}">««</a>
+   <a href="{% url url_name date=previous_day service=service %}">«</a>
+   <input data-url="{% url url_name date=date service=service %}" id="date-selector" value="{{ date|date:"DATE_FORMAT" }}" readonly="readonly" />
+   <a href="{% url url_name date=next_day service=service %}">»</a>
+   <a href="{% url url_name date=next_month service=service %}">»»</a>
+ </div>
