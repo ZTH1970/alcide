@@ -8,6 +8,8 @@ from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 
+import reversion
+
 from calebasse.personnes.models import People
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 from calebasse.dossiers.states import STATES, STATE_ACCUEIL
@@ -107,6 +109,9 @@ class SessadHealthCareNotification(HealthCare):
                 self.end_date.day)
         super(SessadHealthCareNotification, self).save(**kwargs)
 
+reversion.register(CmppHealthCareDiagnostic, follow=['healthcare_ptr'])
+reversion.register(CmppHealthCareTreatment, follow=['healthcare_ptr'])
+reversion.register(SessadHealthCareNotification, follow=['healthcare_ptr'])
 
 class FileState(models.Model):
 
@@ -325,6 +330,8 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
                         date_selected=act.date)
                 break
     # END Specific to cmpp healthcare
+
+reversion.register(PatientRecord, follow=['people_ptr'])
 
 
 def create_patient(first_name, last_name, service, creator,

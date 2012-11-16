@@ -7,6 +7,8 @@ from django.db.models import query
 from django.contrib.auth.models import User
 from django.template.defaultfilters import date as date_filter
 
+import reversion
+
 from calebasse.ressources.models import Service
 from calebasse.models import WeekdayField, BaseModelMixin
 
@@ -54,6 +56,7 @@ class Worker(People):
         verbose_name = u'Personnel'
         verbose_name_plural = u'Personnels'
 
+reversion.register(Worker, follow=['people_ptr'])
 
 class UserWorker(BaseModelMixin, User):
     worker = models.ForeignKey('Worker',
@@ -63,9 +66,13 @@ class UserWorker(BaseModelMixin, User):
         return u'Lien entre la personne %s et l\'utilisateur %s' % (
                 self.people, super(UserWorker, self).__unicode__())
 
+reversion.register(UserWorker, follow=['user_ptr'])
+
 class SchoolTeacher(People):
     schools = models.ManyToManyField('ressources.School')
     role = models.ForeignKey('ressources.SchoolTeacherRole')
+
+reversion.register(SchoolTeacher, follow=['user_ptr'])
 
 class TimeTableQuerySet(query.QuerySet):
     def current(self):

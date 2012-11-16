@@ -2,6 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import reversion
+
 from calebasse.agenda.models import Event, EventType
 from calebasse.agenda.managers import EventManager
 from calebasse.dossiers.models import SessadHealthCareNotification, \
@@ -329,3 +331,5 @@ class EventAct(Act, Event):
         verbose_name = 'Rendez-vous patient'
         verbose_name_plural = 'Rendez-vous patient'
         ordering = ['-date', 'patient']
+
+reversion.register(EventAct, follow=['act_ptr', 'event_ptr'])
