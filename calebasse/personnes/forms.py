@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.forms.models import (inlineformset_factory, modelformset_factory,
-        BaseInlineFormSet)
+        BaseInlineFormSet, BaseModelFormSet)
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
@@ -144,12 +144,29 @@ class HolidaySearchForm(forms.Form):
                 raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
         return cleaned_data
 
+class YearlyHolidayBaseFormSet(BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        self.service = kwargs.pop('service', None)
+        old_form = self.form
+        self.form = lambda *args, **kwargs: old_form(*args, service=self.service, **kwargs)
+        super(YearlyHolidayBaseFormSet, self).__init__(*args, **kwargs)
+
 class YearlyHolidayForm(forms.ModelForm):
     for_all_services = forms.BooleanField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        self.service = kwargs.pop('service', None)
+        super(YearlyHolidayForm, self).__init__(*args, **kwargs)
+        if self.instance and self.instance.id:
+            self.initial['for_all_services'] = self.instance.service is None
+
+
     def save(self, commit=True):
-        instance = super(YearlyHolidayForm, self).save(commit=commit)
-        instance.for_all_services = self.cleaned_data.get('for_all_services', False)
+        instance = super(YearlyHolidayForm, self).save(commit=False)
+        if not self.cleaned_data.get('for_all_services', False):
+            instance.service = self.service
+        if commit:
+            instance.save()
         return instance
 
     class Meta:
@@ -158,4 +175,5 @@ class YearlyHolidayForm(forms.ModelForm):
 YearlyHolidayFormSet = modelformset_factory(Holiday,
         can_delete=True,
         form=YearlyHolidayForm,
+        formset=YearlyHolidayBaseFormSet,
         fields=('start_date', 'end_date'))

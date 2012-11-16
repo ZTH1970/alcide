@@ -254,19 +254,8 @@ class YearlyHolidayUpdateView(cbv.FormView):
         kwargs = super(YearlyHolidayUpdateView, self).get_form_kwargs()
         qs = models.Holiday.objects.for_service(self.service)
         kwargs['queryset'] = qs
-        initial = [ { 'for_all_services': o.service is None } for o in qs ]
-        kwargs['initial'] = initial
+        kwargs['service'] = self.service
         return kwargs
-
-    def form_valid(self, form):
-        instances = form.save(commit=False)
-        for instance in instances:
-            if instance.for_all_services:
-                instance.service = None
-            else:
-                instance.service = self.service
-            instance.save()
-        return HttpResponseRedirect('')
 
 
 yearly_holiday_update = YearlyHolidayUpdateView.as_view()
