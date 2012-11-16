@@ -32,8 +32,11 @@ class ActValidationState(models.Model):
     auto = models.BooleanField(default=False,
             verbose_name=u'Vérouillage')
 
-    def __unicode__(self):
+    def __repr__(self):
         return self.state_name + ' ' + str(self.created)
+
+    def __unicode__(self):
+        return VALIDATION_STATES[self.state_name]
 
 
 class Act(models.Model):
@@ -326,6 +329,16 @@ class EventAct(Act, Event):
     def __repr__(self):
         return '<%s %r %r>' % (self.__class__.__name__, unicode(self),
             self.id)
+
+    def start_time(self):
+        return self.occurrence_set.all()[0].start_time
+
+    def duration(self):
+        o = self.occurrence_set.all()[0]
+        td = o.end_time - o.start_time
+        hours, remainder = divmod(td.seconds, 3600)
+        minutes, remainder = divmod(remainder, 60)
+        return '%02d:%02d' % (hours, minutes)
 
     class Meta:
         verbose_name = 'Rendez-vous patient'
