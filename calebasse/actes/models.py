@@ -257,12 +257,13 @@ class EventActManager(EventManager):
                 room=room, note=note, **rrule_params)
 
     def modify_patient_appointment(self, creator, title, patient, participants,
-            act_type, start_datetime, end_datetime, description='',
+            act_type, service, start_datetime, end_datetime, description='',
             room=None, note=None, **rrule_params):
         """
         This method allow you to create a new patient appointment quickly
 
         Args:
+            creator: author of the modification
             title: patient appointment title (str)
             patient: Patient object
             participants: List of CalebasseUser (therapists)
@@ -270,6 +271,8 @@ class EventActManager(EventManager):
             service: Service object. Use session service by defaut
             start_datetime: datetime with the start date and time
             end_datetime: datetime with the end date and time
+            description: description of the event
+            room: room where the event will take place
             freq, count, until, byweekday, rrule_params:
             follow the ``dateutils`` API (see http://labix.org/python-dateutil)
 
