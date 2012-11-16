@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.db.models import query
 
 from calebasse.models import PhoneNumberField, ZipCodeField
 
+from model_utils.managers import PassThroughManager
 
-class ServiceLinkedManager(models.Manager):
+
+class ServiceLinkedQuerySet(query.QuerySet):
     def for_service(self, service, allow_global=True):
         '''Allows service local and service global objects'''
         return self.filter(models.Q(service=service)
                 |models.Q(service__isnull=allow_global))
+
+ServiceLinkedManager = PassThroughManager.for_queryset_class(ServiceLinkedQuerySet)
 
 class NamedAbstractModel(models.Model):
     name = models.CharField(max_length=80, verbose_name=u'Nom')
@@ -145,7 +150,7 @@ class Job(NamedAbstractModel):
         verbose_name_plural = u'Professions'
 
 
-class RoomManager(models.Manager):
+class RoomQuerySet(query.QuerySet):
     def for_etablissement(self, etablissement):
         return self.filter(etablissement=etablissement)
 
@@ -154,7 +159,7 @@ class RoomManager(models.Manager):
 
 
 class Room(NamedAbstractModel):
-    objects = RoomManager()
+    objects = PassThroughManager.for_queryset_class(RoomQuerySet)()
     etablissement = models.ForeignKey('Office')
 
     class Meta:
@@ -177,12 +182,12 @@ class Service(NamedAbstractModel):
         verbose_name = u'Service'
         verbose_name_plural = u'Services'
 
-class ActTypeManager(models.Manager):
+class ActTypeQuerySet(query.QuerySet):
     def for_service(self, service):
         return self.filter(service=service)
 
 class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
-    objects = ActTypeManager()
+    objects = PassThroughManager.for_queryset_class(ActTypeQuerySet)()
     billable = models.BooleanField(default=True)
 
     class Meta(NamedAbstractModel.Meta):

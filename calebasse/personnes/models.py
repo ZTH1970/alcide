@@ -3,6 +3,7 @@
 from datetime import datetime, date
 
 from django.db import models
+from django.db.models import query
 from django.contrib.auth.models import User
 from django.template.defaultfilters import date as date_filter
 
@@ -10,6 +11,8 @@ from calebasse.ressources.models import Service
 from calebasse.models import WeekdayField, BaseModelMixin
 
 from interval import Interval
+
+from model_utils.managers import PassThroughManager
 
 class People(BaseModelMixin, models.Model):
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
@@ -27,8 +30,7 @@ class People(BaseModelMixin, models.Model):
     class Meta:
         ordering = ['last_name', 'first_name']
 
-class WorkerManager(models.Manager):
-
+class WorkerQuerySet(query.QuerySet):
     def for_service(self, service, type=None):
         if type:
             return self.filter(services__in=[service]).filter(type=type)
@@ -36,7 +38,7 @@ class WorkerManager(models.Manager):
             return self.filter(services__in=[service])
 
 class Worker(People):
-    objects = WorkerManager()
+    objects = PassThroughManager.for_queryset_class(WorkerQuerySet)()
     # TODO : use manytomany here ?
     type = models.ForeignKey('ressources.WorkerType',
             verbose_name=u'Type de personnel')
@@ -65,13 +67,13 @@ class SchoolTeacher(People):
     schools = models.ManyToManyField('ressources.School')
     role = models.ForeignKey('ressources.SchoolTeacherRole')
 
-class TimeTableManager(models.Manager):
+class TimeTableQuerySet(query.QuerySet):
     def current(self):
         today = date.today()
         return self.filter(start_date__lte=today, end_date__gte=today)
 
 class TimeTable(BaseModelMixin, models.Model):
-    objects = TimeTableManager()
+    objects = PassThroughManager.for_queryset_class(TimeTableQuerySet)()
     worker = models.ForeignKey(Worker,
             verbose_name=u'Intervenant')
     service = models.ForeignKey('ressources.Service')
@@ -104,12 +106,12 @@ class TimeTable(BaseModelMixin, models.Model):
         return Interval(datetime.combine(date, self.start_time),
                 datetime.combine(date, self.end_time))
 
-class HolidayManager(models.Manager):
+class HolidayQuerySet(query.QuerySet):
     def for_worker(self, worker):
-        query = models.Q(worker=worker) \
+        filter_query = models.Q(worker=worker) \
               | models.Q(worker__isnull=True,
                            service=worker.services.all())
-        return self.filter(query) \
+        return self.filter(filter_query) \
                    .filter(end_date__gte=date.today())
 
     def for_service(self, service):
@@ -128,7 +130,7 @@ def time2french(time):
     return '{0}h'.format(time.hour)
 
 class Holiday(BaseModelMixin, models.Model):
-    objects = HolidayManager()
+    objects = PassThroughManager().for_queryset_class(HolidayQuerySet)()
 
     worker = models.ForeignKey(Worker, blank=True, null=True,
             verbose_name=u"Personnel")
