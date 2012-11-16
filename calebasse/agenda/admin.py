@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from models import Event, EventType
+import reversion
 
-admin.site.register(Event)
-admin.site.register(EventType)
+from models import Event, EventType, Note, Occurrence
+
+admin.site.register(Event, reversion.VersionAdmin)
+admin.site.register(Occurrence, reversion.VersionAdmin)
+admin.site.register(EventType, reversion.VersionAdmin)
+admin.site.register(Note, reversion.VersionAdmin)

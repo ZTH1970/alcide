@@ -1,6 +1,9 @@
 from django.contrib import admin
 
-from models import Act, EventAct
+import reversion
 
-admin.site.register(Act)
-admin.site.register(EventAct)
+from models import Act, ActValidationState, EventAct
+
+admin.site.register(Act, reversion.VersionAdmin)
+admin.site.register(ActValidationState, reversion.VersionAdmin)
+admin.site.register(EventAct, reversion.VersionAdmin)

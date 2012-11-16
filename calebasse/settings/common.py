@@ -107,6 +107,8 @@ MIDDLEWARE_CLASSES = (
     'calebasse.middleware.request.GlobalRequestMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
+    'reversion.middleware.RevisionMiddleware',
 )
 
 ROOT_URLCONF = 'calebasse.urls'

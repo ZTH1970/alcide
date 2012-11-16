@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from models import PatientRecord, FileState
+import reversion
 
-admin.site.register(PatientRecord)
-admin.site.register(FileState)
+from models import (CmppHealthCareDiagnostic, CmppHealthCareTreatment,
+        FileState, HealthCare, PatientRecord, SessadHealthCareNotification)
+
+admin.site.register(CmppHealthCareDiagnostic, reversion.VersionAdmin)
+admin.site.register(CmppHealthCareTreatment, reversion.VersionAdmin)
+admin.site.register(FileState, reversion.VersionAdmin)
+admin.site.register(HealthCare, reversion.VersionAdmin)
+admin.site.register(PatientRecord, reversion.VersionAdmin)
+admin.site.register(SessadHealthCareNotification, reversion.VersionAdmin)

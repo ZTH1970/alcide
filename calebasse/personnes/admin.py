@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from calebasse.personnes.models import Worker, TimeTable
+import reversion
 
-admin.site.register(Worker)
-admin.site.register(TimeTable)
+from calebasse.personnes.models import (Holiday, People, TimeTable,
+        SchoolTeacher, UserWorker, Worker)
+
+admin.site.register(Holiday, reversion.VersionAdmin)
+admin.site.register(People, reversion.VersionAdmin)
+admin.site.register(TimeTable, reversion.VersionAdmin)
+admin.site.register(SchoolTeacher, reversion.VersionAdmin)
+admin.site.register(UserWorker, reversion.VersionAdmin)
+admin.site.register(Worker, reversion.VersionAdmin)
