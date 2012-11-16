@@ -8,7 +8,7 @@ from calebasse.dossiers.models import SessadHealthCareNotification, \
     CmppHealthCareDiagnostic, CmppHealthCareTreatment
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
-from validation_states import VALIDATION_STATES
+from validation_states import VALIDATION_STATES, NON_VALIDE
 
 
 class ActValidationState(models.Model):
@@ -293,7 +293,7 @@ class EventActManager(EventManager):
                 date=start_datetime,
                 )
         act_event.doctors = participants
-        ActValidationState(act=act_event, state_name=validation_states.NON_VALIDE,
+        ActValidationState(act=act_event, state_name=NON_VALIDE,
             author=creator, previous_state=None).save()
 
         return self._set_event(act_event, participants, description,
