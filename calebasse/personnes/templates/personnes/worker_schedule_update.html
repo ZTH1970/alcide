@@ -12,6 +12,7 @@
         {% csrf_token %}
         {% with formset=form %}
         {{ formset.management_form }}
+        <p>Le format des dates est jj/mm/aaaa.</p>
         <table class="inline">
           <thead>
             <tr>

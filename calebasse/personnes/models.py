@@ -98,9 +98,11 @@ class TimeTable(BaseModelMixin, models.Model):
     end_time = models.TimeField(
         verbose_name=u'Heure de fin')
     start_date = models.DateField(
-        verbose_name=u'Début')
+        verbose_name=u'Début',
+        help_text=u'format: jj/mm/aaaa')
     end_date = models.DateField(
-        verbose_name=u'Fin', blank=True, null=True)
+        verbose_name=u'Fin', blank=True, null=True,
+        help_text=u'format: jj/mm/aaaa')
 
     def __unicode__(self):
         s = u'%s pour le %s le %s de %s à %s' % \
@@ -158,8 +160,10 @@ class Holiday(BaseModelMixin, models.Model):
             verbose_name=u"Personnel")
     service = models.ForeignKey(Service, blank=True, null=True,
             verbose_name=u"Service")
-    start_date = models.DateField(verbose_name=u"Date de début")
-    end_date = models.DateField(verbose_name=u"Date de fin")
+    start_date = models.DateField(verbose_name=u"Date de début",
+        help_text=u'format: jj/mm/aaaa')
+    end_date = models.DateField(verbose_name=u"Date de fin",
+        help_text=u'format: jj/mm/aaaa')
     start_time = models.TimeField(verbose_name=u"Horaire de début", blank=True,
             null=True)
     end_time = models.TimeField(verbose_name=u"Horaire de fin", blank=True,
