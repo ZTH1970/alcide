@@ -152,4 +152,11 @@ class OccurrenceManager(models.Manager):
             end_datetime += timedelta(minutes=15)
         return result
 
+    def next_appoinment(self, patient_record):
+        qs = self.filter(start_time__gt=datetime.now()).order_by('start_time')
+        if qs:
+            return qs[0]
+        else:
+            return None
+
 

@@ -1,5 +1,6 @@
 
 from calebasse.cbv import ListView
+from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord
 from calebasse.dossiers.forms import SearchForm
 
@@ -25,9 +26,19 @@ class DossiersHomepageView(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(DossiersHomepageView, self).get_context_data(**kwargs)
+        ctx['patient_records'] = []
         if self.request.GET:
-            ctx['patient_records'] = ctx['object_list'].filter()
-        else:
-            ctx['patient_records'] = []
+            for patient_record in ctx['object_list'].filter():
+                next_rdv = {}
+                occurrence = Occurrence.objects.next_appoinment(patient_record)
+                next_rdv['start_datetime'] = occurrence.start_time
+                next_rdv['participants'] = occurrence.event.participants.all()
+                ctx['patient_records'].append(
+                        {
+                            'object': patient_record,
+                            'next_rdv': next_rdv
+                            }
+                        )
+
         return ctx
 

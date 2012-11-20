@@ -27,7 +27,8 @@
   </div>
   <div id="filtre">
     <h3>Filtres sur l'état</h3>
-    <ul>
+    <form>
+    <ul id="state_filters">
       <li><label><input checked="checked" class="en-accueil" type="checkbox">En accueil</label></li>
       <li><label><input checked="checked" class="fin-accueil" type="checkbox">Fin d'accueil</label></li>
       <li><label><input checked="checked" class="diag" type="checkbox">En diagnostic</label></li>
@@ -35,6 +36,7 @@
       <li><label><input checked="checked" class="clos" type="checkbox">Clos</label></li>
       <li><button>Tous</button> <button>Aucun</button></li>
     </ul>
+    </form>
     <h3>Afficher les dossiers</h3>
     <ul>
       <li><button>En pause facturation</button></li>
@@ -67,16 +69,20 @@
 
       {% for patient_record in patient_records %}
       <tr>
-        <td>{{ patient_record.paper_id|default_if_none:"" }}</td>
-        <td>{{ patient_record.id }}</td>
-        <td>{{ patient_record.last_name }}</td>
-        <td>{{ patient_record.first_name }}</td>
-        <td>{{ patient_record.birthdate|date:"d/m/Y" }}</td>
-        <td>{{ patient_record.get_state.state_name }}</td>
+        <td>{{ patient_record.object.paper_id|default_if_none:"" }}</td>
+        <td>{{ patient_record.object.id }}</td>
+        <td>{{ patient_record.object.last_name }}</td>
+        <td>{{ patient_record.object.first_name }}</td>
+        <td>{{ patient_record.object.birthdate|date:"d/m/Y" }}</td>
+        <td>{{ patient_record.object.get_state.state_name }}</td>
         <td></td>
-        {% for state in patient_record.get_states_history %}
-        <td>{{ state.date_selected|date:"d/m/Y" }}<br>{{ state.state_name }}</td>
-        {% endfor %}
+        <!-- <td>{{ state.date_selected|date:"d/m/Y" }}<br>{{ state.state_name }}</td> -->
+        <td></td>
+        <td>{{ patient_record.next_rdv.start_datetime|date:"d/m/Y h:i" }}<br>
+            {% for participant in patient_record.next_rdv.participants %}
+            - {{ participant.last_name }}
+            {% endfor %}
+        </td>
       </tr>
       {% endfor %}
 
