@@ -75,7 +75,7 @@ class Invoicing(models.Model):
     objects = InvoicingManager()
 
     class Meta:
-        unique_togeter = (('seq_id', 'service'),)
+        unique_together = (('seq_id', 'service'),)
 
     def allocate_seq_id(self):
         '''Allocate a new sequence id for a new invoicing.'''
