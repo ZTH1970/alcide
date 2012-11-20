@@ -209,11 +209,11 @@ class MultiModelFormMixin(MultiFormMixin, detail.SingleObjectMixin):
                     " a get_absolute_url method on the Model.")
         return url
 
-    def form_valid(self, forms, commit=True):
+    def form_valid(self, form, commit=True):
         """
         If the form is valid, save the associated model.
         """
-        form = forms[self.get_current_prefix()]
+        form = form[self.get_current_prefix()]
         if hasattr(form, 'save'):
             if isinstance(form, forms.ModelForm):
                 self.object = form.save(commit=commit)
