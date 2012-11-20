@@ -31,6 +31,7 @@ urlpatterns = patterns('',
 
     (r'^$', redirect_to, { 'url': '/cmpp/' }),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/logout/', 'django.contrib.auth.views.logout_then_login'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^api/',
         decorated_includes(login_required, include(event_resource.urls))),
