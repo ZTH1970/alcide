@@ -80,14 +80,12 @@ class WorkerView(cbv.ListView):
             if intervene_status and 0 < len(intervene_status) < 2:
                 qs = qs.filter(type__intervene=intervene_status[0] == 'a')
         today = date.today()
-        if models.Holiday.objects.for_service(self.service) \
+        if models.Holiday.objects.for_service(self.service).future() \
                 .filter(start_date__lte=today).exists():
             for worker in qs:
                 worker.holiday = True
         else:
-            qs2 = models.Holiday.objects.filter(
-                           start_date__lte=today,
-                           end_date__gte=today)
+            qs2 = models.Holiday.objects.today()
             worker_dict = dict(((w.id, w) for w in qs))
             for worker in qs:
                 worker.holiday = False
@@ -138,10 +136,12 @@ class WorkerUpdateView(cbv.MultiUpdateView):
         ctx['timetables'] = timetable
         ctx['holidays'] = models.Holiday.objects \
                             .for_worker(self.object) \
+                            .future() \
                             .order_by('start_date')
         try:
-            holiday = models.Holiday.objects.for_worker(self.object) \
-                .filter(start_date__lte=date.today())[0]
+            holiday = models.Holiday.objects \
+                    .for_worker(self.object) \
+                    .today()[0]
         except IndexError:
             holiday = None
         ctx['holiday'] = holiday
@@ -209,22 +209,20 @@ class HolidayView(cbv.TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(HolidayView, self).get_context_data(**kwargs)
         end_date = date.today() + relativedelta(months=self.months)
-        qs = models.Holiday.objects.for_service_workers(self.service)
+        qs = models.Holiday.objects.for_service_workers(self.service).future()
         today = date.today()
-        future_qs = qs.filter(start_date__gt=today,
-                start_date__lte=end_date)
+        future_qs = qs.for_period(today, end_date)
         annual_qs = models.Holiday.objects.for_service(self.service)
-        current_qs = qs.filter(start_date__lte=today)
+        current_qs = qs.today()
         form = self.get_form()
         if form.is_valid() and form.cleaned_data.get('start_date'):
             cleaned_data = form.cleaned_data
             start_date = cleaned_data['start_date']
             end_date = cleaned_data['end_date']
-            q = Q(start_date__gte=start_date, start_date__lte=end_date)
-            q |= Q(end_date__gte=start_date, end_date__lte=end_date)
-            future_qs = models.Holiday.objects.filter(q) \
-                    .filter(worker__services=self.service)
-            annual_qs = annual_qs.filter(q)
+            future_qs = models.Holiday.objects \
+                    .for_period(start_date, end_date) \
+                    .for_service_workers(self.service)
+            annual_qs = annual_qs.for_period(start_date, end_date)
             current_qs = []
         ctx['current_holidays'] = current_qs
         future_holidays = defaultdict(lambda:[])

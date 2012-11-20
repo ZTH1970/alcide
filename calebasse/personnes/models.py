@@ -118,18 +118,26 @@ class HolidayQuerySet(query.QuerySet):
         filter_query = models.Q(worker=worker) \
               | models.Q(worker__isnull=True,
                            service=worker.services.all())
-        return self.filter(filter_query) \
-                   .filter(end_date__gte=date.today())
+        return self.filter(filter_query)
 
     def for_service(self, service):
         return self.filter(worker__isnull=True) \
                    .filter(models.Q(service=service)
                           |models.Q(service__isnull=True)) \
-                   .filter(end_date__gte=date.today())
 
     def for_service_workers(self, service):
-        return self.filter(worker__services=service,
-                end_date__gte=date.today())
+        return self.filter(worker__services=service)
+
+    def future(self):
+        return self.filter(end_date__gte=date.today())
+
+    def today(self):
+        today = date.today()
+        return self.filter(start_date__lte=today,
+                end_date__gte=today)
+
+    def for_period(self, start_date, end_date):
+        return self.filter(start_date__lte=end_date, end_date__gte=start_date)
 
 def time2french(time):
     if time.minute:
