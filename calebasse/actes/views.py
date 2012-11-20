@@ -3,6 +3,7 @@ import datetime
 from django.shortcuts import redirect
 
 from calebasse.cbv import ListView
+from calebasse.agenda import views as agenda_views
 
 import models
 import forms
@@ -65,3 +66,4 @@ class ActListingView(ListView):
         return ctx
 
 act_listing = ActListingView.as_view()
+act_new = agenda_views.NewAppointmentView.as_view()

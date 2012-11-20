@@ -42,7 +42,10 @@
 <div id="appbar">
   <h2>Saisie des actes</h2>
   <a href="../">Retourner à l'accueil</a>
-  <button id="new-acte">Ajouter un acte</button>
+  <button class="dialog-button"
+          data-url="nouvel-acte/"
+          data-default-button="Ajouter"
+      >Ajouter un acte</button>
 </div>
 {% endblock %}
 
@@ -182,56 +185,6 @@
 {% endblock %}
 
 {% block dialogs %}
-<div id="new-acte-dlg" style="display: none;">
-  <form>
-    <p>
-    <label for="id_date">Date:</label>
-    <input id="id_date" class="date" name="date" value="5/7/2012"/>
-    </p>
-    <table>
-      <tr>
-        <td>
-          <p>
-          <label for="id_debut">Heure de début :</label>
-          <input id="id_debut" type="text" name="debut" maxlength="10"/>
-          </p>
-        </td>
-        <td>
-          <p>
-          <label for="id_fin">Heure de fin :</label>
-          <input id="id_fin" type="text" name="fin" maxlength="10"/>
-          </p>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <h4>Intervenants</h4>
-          <div id="intervenants">
-            <ul>
-              <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
-              <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
-            </ul>
-            <a href="#">Ajouter</a><br/>
-            <a href="#">Tout le monde</a>
-          </div>
-        </td>
-        <td>
-          <h4>Patient</h4>
-          <input name="patient"/>
-          <a href="#">rechercher</a>
-
-          <h4>Type d'acte</h4>
-          <select>
-            <option>Analyse</option>
-            <option>Bla bla bla bla bla bla</option>
-          </select>
-        </td>
-      </tr>
-    </table>
-
-  </form>
-</div>
 
 <div id="acte-dlg" style="display: none;">
   <p>1234 Bob Leponge (Traitement)</p>
