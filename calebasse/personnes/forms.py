@@ -20,10 +20,11 @@ class UserForm(forms.ModelForm):
             queryset=Worker.objects.all(), empty_label=_('None'),
             required=False)
     password1 = forms.CharField(label=_("Password"),
-        widget=forms.PasswordInput)
+        widget=forms.PasswordInput, required=False)
     password2 = forms.CharField(label=_("Password confirmation"),
         widget=forms.PasswordInput,
-        help_text=_("Enter the same password as above, for verification."))
+        help_text=_("Enter the same password as above, for verification."),
+        required=False)
 
     def __init__(self, service=None, *args, **kwargs):
         self.service = service
@@ -62,6 +63,8 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password1', 'password2', 'worker')
 
     def save(self, commit=True):
+        import pdb
+        pdb.set_trace()
         instance = super(UserForm, self).save(commit=False)
         if self.cleaned_data['password1']:
             instance.set_password(self.cleaned_data['password1'])
@@ -69,18 +72,19 @@ class UserForm(forms.ModelForm):
         if worker is not None:
             self.first_name = worker.first_name
             self.last_name = worker.last_name
-            def save_m2m(self):
-                try:
+            def save_m2m():
+                if UserWorker.objects.filter(user_ptr=self.instance):
                     userworker = self.instance.userworker
                     userworker.worker = worker
                     userworker.save()
-                except UserWorker.DoesNotExist:
-                    UserWorker.objects.create(id=self.id, worker=worker)
+                else:
+                    UserWorker.objects.create(id=self.instance.id, worker=worker)
             self.save_m2m = save_m2m
         else:
-            self.save_m2m = lambda self: None
+            self.save_m2m = lambda: None
         if commit:
             instance.save()
+            self.save_m2m()
         return instance
 
 class WorkerSearchForm(forms.Form):

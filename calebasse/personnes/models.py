@@ -52,11 +52,18 @@ class Worker(People):
             return False
         return True
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('worker_update', (), {
+            'service': self.services.all()[0].name.lower(),
+            'pk': self.pk })
+
     class Meta:
         verbose_name = u'Personnel'
         verbose_name_plural = u'Personnels'
 
 reversion.register(Worker, follow=['people_ptr'])
+reversion.register(User)
 
 class UserWorker(BaseModelMixin, User):
     worker = models.ForeignKey('Worker',

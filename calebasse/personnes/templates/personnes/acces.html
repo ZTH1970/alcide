@@ -40,7 +40,9 @@
      <tr data-pk="{{object.pk}}" id="object-{{ object.pk}}">
       <td>{{object.username}}</td>
       <td>{{object.email}}</td>
-      <td>{% firstof object.userworker "-" %}</td>
+      {% with worker=object.userworker.worker %}
+      <td>{% if worker %}<a href="{{ worker.get_absolute_url }}">{{ worker }}</a>{% else %}-{% endif %}</td>
+      {% endwith %}
       <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
     </tr>
    {% endfor %}
