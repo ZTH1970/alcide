@@ -507,11 +507,11 @@ div.agenda p a {
 	float: right;
 }
 
-#rdv table {
+#new-appointment-table table {
 	margin-bottom: 15px;
 }
 
-#rdv td {
+#new-appointment-table td {
 	vertical-align: top;
 }
 
@@ -944,11 +944,11 @@ table#activity tr td.hour {
 	width: 6em;
 }
 
-#rdv table {
+table#new-appointment-table {
 	width: 100%;
 }
 
-#rdv table td {
+table#new-appointment-table td {
 	width: 30%;
 }
 

@@ -25,7 +25,7 @@
       $form.load(opts.url, function () {
         $dialog.dialog({
           modal: opts.modal == undefined ? true : opts.modal,
-          width: 700,
+          width: 900,
           maxHeight: $(window).height() - 100,
           buttons: buttons,
           close: function () {
@@ -92,6 +92,31 @@
         var $this = $(this);
         var $form = $($this.closest('form'));
         $('input', $form).val('');
+      });
+      $('body').on('focus', 'form .datepicker input', function (e) {
+        var $input = $(e.target);
+        var $span = $($input.closest('.datepicker'));
+        var months = $span.data('number-of-months');
+        var before_selector = $span.data('before-selector');
+        var after_selector = $span.data('after-selector');
+        $input.datepicker();
+        if (months) {
+          $input.datepicker("option", "numberOfMonths", months);
+        }
+        if (before_selector) {
+          var $before_target = $('input', $(before_selector));
+          $input.datepicker("option", "maxDate", $before_target.val());
+          $input.datepicker("option", "onClose", function (selectedDate) {
+            $before_target.datepicker( "option", "minDate", selectedDate );
+          });
+        }
+        if (after_selector) {
+          var $after_target = $('input', $(after_selector));
+          $input.datepicker("option", "minDate", $after_target.val());
+          $input.datepicker("option", "onClose", function (selectedDate) {
+            $after_target.datepicker( "option", "maxDate", selectedDate );
+          });
+        }
       });
     };
     window.calebasse_dialogs();
