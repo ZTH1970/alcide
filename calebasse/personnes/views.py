@@ -104,11 +104,17 @@ homepage = cbv.TemplateView.as_view(template_name='personnes/index.html')
 
 
 user_listing = AccessView.as_view()
-user_new = cbv.CreateView.as_view(model=User,
-        success_url='../',
-        form_class=forms.UserForm,
-        template_name='calebasse/simple-form.html',
-        template_name_suffix='_new.html')
+
+
+class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
+    model=User
+    success_url='../'
+    form_class=forms.UserForm
+    template_name='calebasse/simple-form.html'
+    template_name_suffix='_new.html'
+
+
+user_new = UserCreateView.as_view()
 user_update = AccessUpdateView.as_view()
 user_delete = cbv.DeleteView.as_view(model=User)
 
