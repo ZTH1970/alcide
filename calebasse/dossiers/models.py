@@ -161,6 +161,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     birthdate = models.DateField(null=True, blank=True)
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
+    social_security_id = models.CharField(max_length=13)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)

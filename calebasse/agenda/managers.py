@@ -152,3 +152,4 @@ class OccurrenceManager(models.Manager):
             end_datetime += timedelta(minutes=15)
         return result
 
+

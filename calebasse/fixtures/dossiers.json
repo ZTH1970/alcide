@@ -37,6 +37,7 @@
             "created": "2012-10-12T16:15:37.306",
             "creator": 1,
             "paper_id": "1024",
+            "social_security_id": "169054958815780",
             "service": 1
         },
         "model": "dossiers.patientrecord",
@@ -54,6 +55,7 @@
             "created": "2012-10-12T16:15:37.306",
             "creator": 1,
             "paper_id": null,
+            "social_security_id": "118054958815782",
             "service": 1
         },
         "model": "dossiers.patientrecord",
