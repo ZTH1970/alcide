@@ -116,6 +116,5 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences):
         appointment.weight = 1
         appointments.append(appointment)
 
-    s = sorted(appointments, key=lambda app: app.weight)
-    return sorted(s, key=lambda app: app.begin_time)
+    return sorted(appointments, key=lambda app: (app.begin_time, app.weight))
 
