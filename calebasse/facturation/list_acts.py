@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
 
-def list_acts_for_billing_first_round(end_day, service, start_day=None):
+def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=None):
     """Used to sort acts and extract acts billable before specific service
         requirements.
 
@@ -39,8 +39,9 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None):
     """
 
     from calebasse.actes.models import EventAct
-    acts = EventAct.objects.filter(is_billed=False,
-        patient__service=service).order_by('-date')
+    if acts is None:
+        acts = EventAct.objects.filter(is_billed=False,
+            patient__service=service).order_by('-date')
     # Filter acts according to the date
     i = 0
     for act in acts:
@@ -94,7 +95,7 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None):
         acts_not_billable, acts_billable)
 
 
-def list_acts_for_billing_CAMSP(start_day, end_day, service):
+def list_acts_for_billing_CAMSP(start_day, end_day, service, acts=None):
     """Used to sort acts billable by specific service requirements.
 
     For the CAMSP, only the state of the patient record 'CAMSP_STATE_SUIVI'
@@ -121,7 +122,7 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service):
     acts_not_locked, days_not_locked, acts_not_valide, \
         acts_not_billable, acts_billable = \
             list_acts_for_billing_first_round(end_day, service,
-                start_day=start_day)
+                start_day, acts=acts)
     acts_bad_state = {}
     acts_accepted = {}
     for patient, acts in acts_billable.items():
@@ -143,7 +144,7 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service):
         acts_accepted)
 
 
-def list_acts_for_billing_SESSAD(start_day, end_day, service):
+def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
     """Used to sort acts billable by specific service requirements.
 
     For the SESSAD, acts are billable if the state of the patient record at
@@ -172,7 +173,7 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service):
     acts_not_locked, days_not_locked, acts_not_valide, \
         acts_not_billable, acts_billable = \
             list_acts_for_billing_first_round(end_day, service,
-                start_day=start_day)
+                start_day=start_day, acts=acts)
     acts_bad_state = {}
     acts_missing_valid_notification = {}
     acts_accepted = {}
@@ -203,7 +204,7 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service):
         acts_accepted)
 
 
-def list_acts_for_billing_CMPP(end_day, service):
+def list_acts_for_billing_CMPP(end_day, service, acts=None):
     """Used to sort acts billable by specific service requirements.
 
     For the CMPP, acts are billable if
@@ -229,7 +230,7 @@ def list_acts_for_billing_CMPP(end_day, service):
 
     acts_not_locked, days_not_locked, acts_not_valide, \
         acts_not_billable, acts_billable = \
-            list_acts_for_billing_first_round(end_day, service)
+            list_acts_for_billing_first_round(end_day, service, acts=acts)
     acts_diagnostic = {}
     acts_treatment = {}
     acts_losts = {}
