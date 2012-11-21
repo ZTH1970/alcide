@@ -174,7 +174,7 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "service": 1, 
+      "services": [1], 
       "start_time": "08:00:00", 
       "worker": 5, 
       "weekday": "lundi", 
@@ -187,7 +187,7 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "service": 1, 
+      "services": [1], 
       "start_time": "08:30:00", 
       "worker": 6, 
       "weekday": "lundi", 
@@ -200,7 +200,7 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "service": 1, 
+      "services": [1], 
       "start_time": "13:00:00", 
       "worker": 6, 
       "weekday": "lundi", 
@@ -213,7 +213,7 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "service": 1, 
+      "services": [1], 
       "start_time": "08:00:00", 
       "worker": 5, 
       "weekday": "mardi", 
