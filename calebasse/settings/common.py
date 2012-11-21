@@ -226,3 +226,6 @@ AJAX_LOOKUP_CHANNELS = {
     'worker'  : {'model':'personnes.Worker', 'search_field':'display_name'},
     'patientrecord'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
 }
+
+# Default URL after login
+LOGIN_REDIRECT_URL = '/'
