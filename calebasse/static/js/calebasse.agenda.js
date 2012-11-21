@@ -164,10 +164,10 @@ function event_dialog(url, title, width, btn_text) {
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
           var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
           var new_appointment_url = $(this).data('url') + "?" + qs;
-          event_dialog(new_appointment_url, 'Nouveau rendez-vous', '820px', 'Ajouter');
+          event_dialog(new_appointment_url, 'Nouveau rendez-vous', '935px', 'Ajouter');
       });
       $('.edit-appointment').click(function() {
-          event_dialog("update-rdv/" + $(this).data('occurrence-id') , 'Modifier rendez-vous', '820px', 'Modifier');
+          event_dialog("update-rdv/" + $(this).data('occurrence-id') , 'Modifier rendez-vous', '935px', 'Modifier');
           return false;
       });
       $('.newevent').click(function() {
