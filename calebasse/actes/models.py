@@ -204,7 +204,7 @@ class Act(models.Model):
     # END Specific to cmpp healthcare
 
     def __unicode__(self):
-        return '{0} le {1} pour {2} avec {3}'.format(
+        return u'{0} le {1} pour {2} avec {3}'.format(
                 self.act_type, self.date, self.patient,
                 ', '.join(map(unicode, self.doctors.all())))
 
