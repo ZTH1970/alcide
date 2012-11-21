@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.db.models import Q
-from datetime import datetime, time
+from datetime import time
 
 from interval import IntervalSet
 
-from calebasse.actes.models import EventAct
-from calebasse.agenda.models import Occurrence
-from calebasse.personnes.models import TimeTable
 
 class Appointment(object):
 

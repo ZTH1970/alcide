@@ -1,14 +1,11 @@
 
 from datetime import datetime, timedelta
-from dateutil import rrule
-from interval import IntervalSet, Interval
+from interval import IntervalSet
 
 from django.db import models
 from model_utils.managers import InheritanceManager
 
 from calebasse.agenda.conf import default
-from calebasse.personnes.models import TimeTable
-from calebasse.exceptions import CalebasseException
 from calebasse import agenda
 
 __all__ = (
