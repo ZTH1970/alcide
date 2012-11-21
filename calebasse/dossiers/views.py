@@ -27,6 +27,7 @@ class DossiersHomepageView(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(DossiersHomepageView, self).get_context_data(**kwargs)
+        ctx['search_form'] = SearchForm(data=self.request.GET or None)
         ctx['patient_records'] = []
         ctx['stats'] = {"dossiers": 0,
                 "En_contact": 0,

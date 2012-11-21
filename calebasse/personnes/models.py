@@ -18,13 +18,17 @@ from model_utils import Choices
 from model_utils.managers import PassThroughManager
 
 class People(BaseModelMixin, models.Model):
-    GENDERS = Choices('', 'homme', 'femme')
+    GENDERS =  Choices(
+            (1, 'homme'),
+            (2, 'femme'),
+            )
+
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
     first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
     display_name = models.CharField(max_length=256,
             verbose_name=u'Nom complet', editable=False)
     gender = models.IntegerField(verbose_name=u"Genre", choices=GENDERS,
-            max_length=2, default=0)
+            max_length=1, default=0, blank=True)
 
     def save(self, **kwargs):
         self.display_name = self.first_name + ' ' + self.last_name

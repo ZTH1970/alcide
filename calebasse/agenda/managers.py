@@ -152,6 +152,7 @@ class OccurrenceManager(models.Manager):
     def next_appoinment(self, patient_record):
         qs = self.filter(start_time__gt=datetime.now()).\
                 filter(event__event_type__id=1).\
+                filter(event__eventact__patient=patient_record).\
                 prefetch_related('event__eventact').\
                 order_by('start_time')
         if qs:
@@ -162,6 +163,7 @@ class OccurrenceManager(models.Manager):
     def last_appoinment(self, patient_record):
         qs = self.filter(start_time__lt=datetime.now()).\
                 filter(event__event_type__id=1).\
+                filter(event__eventact__patient=patient_record).\
                 prefetch_related('event__eventact').\
                 order_by('-start_time')
         if qs:

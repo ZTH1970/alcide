@@ -11,3 +11,4 @@ admin.site.register(FileState, reversion.VersionAdmin)
 admin.site.register(HealthCare, reversion.VersionAdmin)
 admin.site.register(PatientRecord, reversion.VersionAdmin)
 admin.site.register(SessadHealthCareNotification, reversion.VersionAdmin)
+

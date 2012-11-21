@@ -155,7 +155,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     creator = \
         models.ForeignKey(User,
         verbose_name=u'Créateur dossier patient',
-        editable=False)
+        editable=True)
     contacts = models.ManyToManyField('personnes.People',
             related_name='contact_of')
     birthdate = models.DateField(null=True, blank=True)

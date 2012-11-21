@@ -1,64 +1,190 @@
 [
-    {
-        "fields": {
-            "author": 1,
-            "comment": "",
-            "created": "2012-11-07T18:54:59.893",
-            "date_selected": "2012-11-07T00:00:00",
-            "patient": 8,
-            "previous_state": null,
-            "state_name": "CMPP_STATE_ACCUEIL"
-        },
-        "model": "dossiers.filestate",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "author": 1,
-            "comment": "",
-            "created": "2012-11-07T18:55:09.426",
-            "date_selected": "2012-11-07T00:00:00",
-            "patient": 9,
-            "previous_state": null,
-            "state_name": "CMPP_STATE_ACCUEIL"
-        },
-        "model": "dossiers.filestate",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "birthdate": "1980-10-31",
-            "contacts": [
-                1,
-                2,
-                3,
-                4
-            ],
-            "created": "2012-10-12T16:15:37.306",
-            "creator": 1,
-            "paper_id": "1024",
-            "social_security_id": "169054958815780",
-            "service": 1
-        },
-        "model": "dossiers.patientrecord",
-        "pk": 8
-    },
-    {
-        "fields": {
-            "birthdate": "1988-12-30",
-            "contacts": [
-                1,
-                2,
-                3,
-                4
-            ],
-            "created": "2012-10-12T16:15:37.306",
-            "creator": 1,
-            "paper_id": null,
-            "social_security_id": "118054958815782",
-            "service": 1
-        },
-        "model": "dossiers.patientrecord",
-        "pk": 9
+  {
+    "pk": 1, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 8, 
+      "state_name": "CMPP_STATE_ACCUEIL", 
+      "author": 1, 
+      "created": "2012-11-07T18:54:59.893", 
+      "previous_state": null, 
+      "date_selected": "2012-11-07T00:00:00"
     }
+  }, 
+  {
+    "pk": 2, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 9, 
+      "state_name": "CMPP_STATE_ACCUEIL", 
+      "author": 1, 
+      "created": "2012-11-07T18:55:09.426", 
+      "previous_state": null, 
+      "date_selected": "2012-11-07T00:00:00"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 10, 
+      "state_name": "CAMSP_STATE_FIN_ACCUEIL", 
+      "author": 1, 
+      "created": "2012-11-21T14:27:19.671", 
+      "previous_state": null, 
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 11, 
+      "state_name": "SESSAD_STATE_TRAITEMENT", 
+      "author": 1, 
+      "created": "2012-11-21T14:27:50.036", 
+      "previous_state": null, 
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 12, 
+      "state_name": "CMPP_STATE_CLOS", 
+      "author": 1, 
+      "created": "2012-11-21T14:28:20.773", 
+      "previous_state": null, 
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 13, 
+      "state_name": "CAMSP_STATE_SURVEILLANCE", 
+      "author": 1, 
+      "created": "2012-11-21T14:28:43.228", 
+      "previous_state": null, 
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "comment": "", 
+      "patient": 9, 
+      "state_name": "CMPP_STATE_DIAGNOSTIC", 
+      "author": 1, 
+      "created": "2012-11-21T14:30:05.626", 
+      "previous_state": null, 
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 1, 
+      "creator": 1, 
+      "created": "2012-10-12T16:15:37.306", 
+      "social_security_id": "169054958815780", 
+      "contacts": [
+        1, 
+        2, 
+        4, 
+        3
+      ], 
+      "birthdate": "1980-10-31", 
+      "paper_id": "1024"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 1, 
+      "creator": 1, 
+      "created": "2012-10-12T16:15:37.306", 
+      "social_security_id": "118054958815782", 
+      "contacts": [
+        1, 
+        2, 
+        4, 
+        3
+      ], 
+      "birthdate": "1988-12-30", 
+      "paper_id": null
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 1, 
+      "creator": 1, 
+      "created": "2012-11-21T14:20:54.571", 
+      "social_security_id": "2420910236578", 
+      "contacts": [
+        2
+      ], 
+      "birthdate": "1995-11-21", 
+      "paper_id": "4243"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 2, 
+      "creator": 1, 
+      "created": "2012-11-21T14:22:18.974", 
+      "social_security_id": "2540913236578", 
+      "contacts": [
+        2
+      ], 
+      "birthdate": "1998-01-21", 
+      "paper_id": "424243"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 1, 
+      "creator": 1, 
+      "created": "2012-11-21T14:24:48.775", 
+      "social_security_id": "1841853654541", 
+      "contacts": [
+        7, 
+        6
+      ], 
+      "birthdate": "1984-11-21", 
+      "paper_id": "424546"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "service": 3, 
+      "creator": 1, 
+      "created": "2012-11-21T14:26:07.387", 
+      "social_security_id": "1006895123654", 
+      "contacts": [
+        5
+      ], 
+      "birthdate": "2000-11-21", 
+      "paper_id": "425874"
+    }
+  }
 ]
