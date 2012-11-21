@@ -73,15 +73,16 @@ class Worker(People):
 reversion.register(Worker, follow=['people_ptr'])
 reversion.register(User)
 
-class UserWorker(BaseModelMixin, User):
+class UserWorker(BaseModelMixin, models.Model):
+    user = models.OneToOneField('auth.User')
     worker = models.ForeignKey('Worker',
             verbose_name=u'Personnel')
 
     def __unicode__(self):
-        return u'Lien entre la personne %s et l\'utilisateur %s' % (
-                self.worker, super(UserWorker, self).__unicode__())
+        return u'Lien entre la personne {0} et l\'utilisateur {1}'.format(
+                self.worker, self.user)
 
-reversion.register(UserWorker, follow=['user_ptr'])
+reversion.register(UserWorker)
 
 class SchoolTeacher(People):
     schools = models.ManyToManyField('ressources.School')

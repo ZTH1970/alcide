@@ -68,18 +68,15 @@ class UserForm(forms.ModelForm):
             instance.set_password(self.cleaned_data['password1'])
         worker = self.cleaned_data.get('worker')
         if worker is not None:
-            self.first_name = worker.first_name
-            self.last_name = worker.last_name
+            instance.first_name = worker.first_name
+            instance.last_name = worker.last_name
             def save_m2m():
-                if UserWorker.objects.filter(user_ptr=self.instance):
-                    userworker = self.instance.userworker
-                    userworker.worker = worker
-                    userworker.save()
+                qs = UserWorker.objects.filter(user=instance)
+                if qs.exists():
+                    qs.update(worker=worker)
                 else:
-                    UserWorker.objects.create(id=self.instance.id, worker=worker)
+                    UserWorker.objects.create(user=instance, worker=worker)
             self.save_m2m = save_m2m
-        else:
-            self.save_m2m = lambda: None
         if commit:
             instance.save()
             self.save_m2m()
