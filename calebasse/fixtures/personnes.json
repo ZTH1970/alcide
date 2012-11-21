@@ -1,92 +1,132 @@
 [
   {
-    "pk": 1, 
+    "pk": 10, 
     "model": "personnes.people", 
     "fields": {
-      "first_name": "Gloria", 
-      "last_name": "Dupond", 
-      "display_name": "Gloria Dupond",
-      "gender": 2
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "personnes.people", 
-    "fields": {
-      "first_name": "Fran\u00e7ois", 
-      "last_name": "Durant", 
-      "display_name": "Fran\u00e7ois Durant",
-      "gender": 1
-    }
-  }, 
-  {
-    "pk": 3, 
-    "model": "personnes.people", 
-    "fields": {
-      "first_name": "St\u00e9phanie", 
-      "last_name": "Maurier", 
-      "display_name": "St\u00e9phanie Maurier",
-      "gender": 2
-    }
-  }, 
-  {
-    "pk": 4, 
-    "model": "personnes.people", 
-    "fields": {
-      "first_name": "Marcus", 
-      "last_name": "Hosseini", 
-      "display_name": "Marcus Hosseini",
-      "gender": 1
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "personnes.people", 
-    "fields": {
-      "first_name": "Sandy", 
-      "last_name": "Kilo", 
-      "display_name": "Sandy Kilo",
-      "gender": 2
-    }
-  }, 
-  {
-    "pk": 6, 
-    "model": "personnes.people", 
-    "fields": {
-      "first_name": "Bob", 
-      "last_name": "L\u00e9ponge", 
-      "display_name": "Bob L\u00e9ponge",
-      "gender": 1
-    }
-  }, 
-  {
-    "pk": 7, 
-    "model": "personnes.people", 
-    "fields": {
-      "first_name": "Pol", 
-      "last_name": "Lepoulpe", 
-      "display_name": "Pol Lepoulpe",
-      "gender": 1
+      "gender": 2, 
+      "first_name": "Jeanne", 
+      "last_name": "D'Arc", 
+      "display_name": "Jeanne D'Arc"
     }
   }, 
   {
     "pk": 8, 
     "model": "personnes.people", 
     "fields": {
+      "gender": 1, 
       "first_name": "John", 
       "last_name": "Doe", 
-      "display_name": "John Doe",
-      "gender": 1
+      "display_name": "John Doe"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Gloria", 
+      "last_name": "Dupond", 
+      "display_name": "Gloria Dupond"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Fran\u00e7ois", 
+      "last_name": "Durant", 
+      "display_name": "Fran\u00e7ois Durant"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Bouclier", 
+      "last_name": "Guillaume", 
+      "display_name": "Bouclier Guillaume"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Andr\u00e9", 
+      "last_name": "Hendrickx", 
+      "display_name": "Andr\u00e9 Hendrickx"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Marcus", 
+      "last_name": "Hosseini", 
+      "display_name": "Marcus Hosseini"
     }
   }, 
   {
     "pk": 9, 
     "model": "personnes.people", 
     "fields": {
+      "gender": 1, 
       "first_name": "Jack", 
       "last_name": "Itchan", 
-      "display_name": "Jack Itchan",
-      "gender": 1
+      "display_name": "Jack Itchan"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Sandy", 
+      "last_name": "Kilo", 
+      "display_name": "Sandy Kilo"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Pol", 
+      "last_name": "Lepoulpe", 
+      "display_name": "Pol Lepoulpe"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Bob", 
+      "last_name": "L\u00e9ponge", 
+      "display_name": "Bob L\u00e9ponge"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "St\u00e9phanie", 
+      "last_name": "Maurier", 
+      "display_name": "St\u00e9phanie Maurier"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Claudia", 
+      "last_name": "Schiffer", 
+      "display_name": "Claudia Schiffer"
     }
   }, 
   {
@@ -111,16 +151,6 @@
     }
   }, 
   {
-    "pk": 3, 
-    "model": "personnes.worker", 
-    "fields": {
-      "services": [
-        2
-      ], 
-      "type": 3
-    }
-  }, 
-  {
     "pk": 4, 
     "model": "personnes.worker", 
     "fields": {
@@ -132,19 +162,6 @@
   }, 
   {
     "pk": 5, 
-    "model": "personnes.worker", 
-    "fields": {
-      "services": [
-        1, 
-        2, 
-        3, 
-        4
-      ], 
-      "type": 4
-    }
-  }, 
-  {
-    "pk": 6, 
     "model": "personnes.worker", 
     "fields": {
       "services": [
@@ -170,14 +187,39 @@
     }
   }, 
   {
+    "pk": 6, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "type": 3
+    }
+  }, 
+  {
     "pk": 1, 
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "services": [1], 
       "start_time": "08:00:00", 
       "worker": 5, 
       "weekday": "lundi", 
+      "services": [
+        1
+      ], 
       "start_date": "2012-10-18", 
       "end_time": "12:30:00"
     }
@@ -187,10 +229,12 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "services": [1], 
       "start_time": "08:30:00", 
       "worker": 6, 
       "weekday": "lundi", 
+      "services": [
+        1
+      ], 
       "start_date": "2012-10-18", 
       "end_time": "12:30:00"
     }
@@ -200,10 +244,12 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "services": [1], 
       "start_time": "13:00:00", 
       "worker": 6, 
       "weekday": "lundi", 
+      "services": [
+        1
+      ], 
       "start_date": "2012-10-18", 
       "end_time": "17:30:00"
     }
@@ -213,10 +259,12 @@
     "model": "personnes.timetable", 
     "fields": {
       "end_date": null, 
-      "services": [1], 
       "start_time": "08:00:00", 
       "worker": 5, 
       "weekday": "mardi", 
+      "services": [
+        1
+      ], 
       "start_date": "2012-10-24", 
       "end_time": "12:30:00"
     }
