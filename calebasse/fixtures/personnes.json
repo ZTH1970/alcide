@@ -5,7 +5,8 @@
     "fields": {
       "first_name": "Gloria", 
       "last_name": "Dupond", 
-      "display_name": "Gloria Dupond"
+      "display_name": "Gloria Dupond",
+      "gender": 2
     }
   }, 
   {
@@ -14,7 +15,8 @@
     "fields": {
       "first_name": "Fran\u00e7ois", 
       "last_name": "Durant", 
-      "display_name": "Fran\u00e7ois Durant"
+      "display_name": "Fran\u00e7ois Durant",
+      "gender": 1
     }
   }, 
   {
@@ -23,7 +25,8 @@
     "fields": {
       "first_name": "St\u00e9phanie", 
       "last_name": "Maurier", 
-      "display_name": "St\u00e9phanie Maurier"
+      "display_name": "St\u00e9phanie Maurier",
+      "gender": 2
     }
   }, 
   {
@@ -32,7 +35,8 @@
     "fields": {
       "first_name": "Marcus", 
       "last_name": "Hosseini", 
-      "display_name": "Marcus Hosseini"
+      "display_name": "Marcus Hosseini",
+      "gender": 1
     }
   }, 
   {
@@ -41,7 +45,8 @@
     "fields": {
       "first_name": "Sandy", 
       "last_name": "Kilo", 
-      "display_name": "Sandy Kilo"
+      "display_name": "Sandy Kilo",
+      "gender": 2
     }
   }, 
   {
@@ -50,7 +55,8 @@
     "fields": {
       "first_name": "Bob", 
       "last_name": "L\u00e9ponge", 
-      "display_name": "Bob L\u00e9ponge"
+      "display_name": "Bob L\u00e9ponge",
+      "gender": 1
     }
   }, 
   {
@@ -59,7 +65,8 @@
     "fields": {
       "first_name": "Pol", 
       "last_name": "Lepoulpe", 
-      "display_name": "Pol Lepoulpe"
+      "display_name": "Pol Lepoulpe",
+      "gender": 1
     }
   }, 
   {
@@ -68,7 +75,8 @@
     "fields": {
       "first_name": "John", 
       "last_name": "Doe", 
-      "display_name": "John Doe"
+      "display_name": "John Doe",
+      "gender": 1
     }
   }, 
   {
@@ -77,7 +85,8 @@
     "fields": {
       "first_name": "Jack", 
       "last_name": "Itchan", 
-      "display_name": "Jack Itchan"
+      "display_name": "Jack Itchan",
+      "gender": 1
     }
   }, 
   {
