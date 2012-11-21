@@ -69,7 +69,7 @@
         var months = $span.data('number-of-months');
         var before_selector = $span.data('before-selector');
         var after_selector = $span.data('after-selector');
-        $input.datepicker();
+        $input.datepicker({dateFormat: 'd/m/yy' });
         if (months) {
           $input.datepicker("option", "numberOfMonths", months);
         }
@@ -102,7 +102,7 @@
         if ($input.is('.hasDatepicker')) {
           return true;
         }
-        $input.datepicker();
+        $input.datepicker({dateFormat: 'd/m/yy' });
         if (months) {
           $input.datepicker("option", "numberOfMonths", months);
         }
