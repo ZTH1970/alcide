@@ -79,7 +79,7 @@ class UserWorker(BaseModelMixin, User):
 
     def __unicode__(self):
         return u'Lien entre la personne %s et l\'utilisateur %s' % (
-                self.people, super(UserWorker, self).__unicode__())
+                self.worker, super(UserWorker, self).__unicode__())
 
 reversion.register(UserWorker, follow=['user_ptr'])
 
