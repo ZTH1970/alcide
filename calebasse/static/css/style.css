@@ -1033,3 +1033,10 @@ table.inline td {
 .ui-dialog table td {
   vertical-align: top;
 }
+
+/* limit act type select length */
+#id_act_type {
+    width: 300px;
+    font-size: 16px;
+    margin-left: 0px;
+}
