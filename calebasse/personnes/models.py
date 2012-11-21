@@ -90,7 +90,7 @@ class TimeTable(BaseModelMixin, models.Model):
     objects = PassThroughManager.for_queryset_class(TimeTableQuerySet)()
     worker = models.ForeignKey(Worker,
             verbose_name=u'Intervenant')
-    service = models.ForeignKey('ressources.Service')
+    services = models.ManyToManyField('ressources.Service')
     weekday = WeekdayField(
             verbose_name=u'Jour')
     start_time = models.TimeField(
@@ -105,8 +105,8 @@ class TimeTable(BaseModelMixin, models.Model):
         help_text=u'format: jj/mm/aaaa')
 
     def __unicode__(self):
-        s = u'%s pour le %s le %s de %s à %s' % \
-                (self.worker, self.service, self.weekday, self.start_time,
+        s = u'%s pour au %s le %s de %s à %s' % \
+                (self.worker, ', '.join(map(unicode, self.services.all())), self.weekday, self.start_time,
                         self.end_time)
         if self.end_time:
             s += u' à partir du %s' % self.start_date

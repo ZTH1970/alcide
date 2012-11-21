@@ -178,8 +178,8 @@ class WorkerScheduleUpdateView(cbv.UpdateView):
         instances = form.save(commit=False)
         for instance in instances:
             instance.weekday = self.kwargs['weekday']
-            instance.service = self.service
             instance.save()
+        form.save_m2m()
         return HttpResponseRedirect('')
 
 

@@ -16,6 +16,7 @@
         <table class="inline">
           <thead>
             <tr>
+              <td>Services</td>
               <td>Heure de début</td>
               <td>Heure de fin</td>
               <td>Date de début</td>
@@ -25,11 +26,18 @@
           </thead>
           <tbody id="timetables">
           {% for form in formset %}
+            {% if form.non_field_errors %}
+            <tr>
+              <td colspan="6">
+                <p class="error">{{ form.non_field_errors }}</p>
+              </td>
+             {% endif %}
             <tr class="timetable">
-              <td class="timepicker">{{ form.start_time }}</td>
-              <td class="timepicker">{{ form.end_time }}</td>
-              <td id="start-{{ forloop.counter0 }}" class="datepicker" data-before-selector="#end-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.start_date }}</td>
-              <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}</td>
+              <td class="service">{{ form.services }}{{ form.services.errors }}</td>
+              <td class="timepicker">{{ form.start_time }}{{ form.start_time.errors }}</td>
+              <td class="timepicker">{{ form.end_time }}{{ form.end_time.errors }}</td>
+              <td id="start-{{ forloop.counter0 }}" class="datepicker" data-before-selector="#end-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.start_date }}{{ form.start_date.errors }}</td>
+              <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}{{ form.end_date.errors }}</td>
               <td>{% if form.id.value %}{{ form.DELETE }}{% endif %}
                 {% for field in form %}
                 {% if field.is_hidden %}

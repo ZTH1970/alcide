@@ -45,7 +45,7 @@ class AgendaHomepageView(TemplateView):
                 }
         weekday = weekday_mapping[context['date'].strftime("%w")]
         time_tables = TimeTable.objects.select_related('worker').\
-                filter(service=self.service).\
+                filter(services=self.service).\
                 filter(weekday=weekday).\
                 filter(start_date__lte=context['date']).\
                 filter(Q(end_date=None) |Q(end_date__gte=context['date'])).\

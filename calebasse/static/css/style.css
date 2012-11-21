@@ -1019,3 +1019,8 @@ label.required:after {
   content: '*';
   color: red;
 }
+
+/* personnes/worker_schedule_update.html */
+#timetables .service ul {
+  padding-left: 0px;
+}

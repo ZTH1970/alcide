@@ -5,7 +5,7 @@ from django.forms.models import (inlineformset_factory, modelformset_factory,
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
-from calebasse.ressources.models import WorkerType
+from calebasse.ressources.models import WorkerType, Service
 
 from models import Worker, UserWorker, TimeTable, Holiday
 
@@ -123,12 +123,21 @@ class WorkerServiceForm(forms.ModelForm):
 class BaseTimetableFormSet(BaseInlineFormSet):
     def __init__(self, weekday=None, *args, **kwargs):
         kwargs['queryset'] = kwargs.get('queryset', TimeTable.objects).filter(weekday=weekday)
+        kwargs['initial'] = [{ 'services': Service.objects.all().values_list('pk', flat=True) }] * 3
         super(BaseTimetableFormSet, self).__init__(*args, **kwargs)
 
 
+class BaseTimeTableForm(forms.ModelForm):
+    class Meta:
+        model = TimeTable
+        widgets = {
+                'services': forms.CheckboxSelectMultiple,
+        }
+
 TimetableFormSet = inlineformset_factory(Worker, TimeTable,
         formset=BaseTimetableFormSet,
-        fields=('start_time', 'end_time', 'start_date', 'end_date'))
+        form=BaseTimeTableForm,
+        fields=('start_time', 'end_time', 'start_date', 'end_date', 'services'))
 
 HolidayFormSet = inlineformset_factory(
         Worker, Holiday,
