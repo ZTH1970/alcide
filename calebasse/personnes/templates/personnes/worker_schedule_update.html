@@ -1,5 +1,51 @@
 {% extends "calebasse/simple-form.html" %}
 
+{% block extrascripts %}
+{{ block.super }}
+<script>
+  $(function () {
+    $('td.service ul').checkboxwidget({allCaption: "Tous"});
+    $('td.periodicity').each(function (i, e) {
+      var $divmenu = $('> div', e).divmenu();
+      var $inputs = $('input, select', $divmenu);
+      var f = function () {
+        $('div .eo-divmenu-element', e).each(function (i, v) {
+          if ($('select, input', v).val()) {
+            console.log(i);
+            $divmenu.divmenu('select', i);
+          }
+        });
+      };
+      f();
+      $divmenu.on('change', 'select', function () {
+        f();
+      });
+      var timeout;
+      $divmenu.on('mouseenter', function () {
+        $divmenu.divmenu('open');
+      });
+      $divmenu.on('mouseleave', function (e) {
+        if ((typeof e.fromElement != 'undefined' && !e.fromElement.length) ||
+          (typeof e.fromElement == 'undefined' && e.target.tagName != 'SELECT')) {
+          $divmenu.divmenu('close');
+        }
+      });
+      $inputs.focusin(function () {
+        clearTimeout(timeout);
+        $divmenu.divmenu('open');
+      });
+      $inputs.focusout(function () {
+        timeout = setTimeout(function () {
+          $divmenu.divmenu('close');
+        }, 300);
+      });
+    });
+  });
+</script>
+<style>
+</style>
+{% endblock %}
+
 {% block appbar %}
 <h2>Horaire du {{weekday}} de {{object.last_name}} {{object.first_name}}</h2>
   <a href="..">Retour</a>
@@ -13,7 +59,7 @@
         {% with formset=form %}
         {{ formset.management_form }}
         <p>Le format des dates est jj/mm/aaaa.</p>
-        <table class="inline">
+        <table id="schedules" class="inline">
           <thead>
             <tr>
               <td><label class="required">Services</label></td>
@@ -21,6 +67,7 @@
               <td><label class="required">Heure de fin</label></td>
               <td><label class="required">Date de début</label></td>
               <td><label>Date de fin</label></td>
+              <td><label>Périodicité</label></td>
               <td><label>Supprimer</label></td>
             </tr>
           </thead>
@@ -38,6 +85,13 @@
               <td class="timepicker">{{ form.end_time }}{{ form.end_time.errors }}</td>
               <td id="start-{{ forloop.counter0 }}" class="datepicker" data-before-selector="#end-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.start_date }}{{ form.start_date.errors }}</td>
               <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}{{ form.end_date.errors }}</td>
+              <td class="periodicity">
+                <div>
+                  <div>{{ form.week_period }}{{ form.week_period.errors }}</div>
+                  <div>{{ form.week_parity }}{{ form.week_parity.errors }}</div>
+                  <div>{{ form.week_rank }}{{ form.week_rank.errors }}</div>
+                </div>
+              </td>
               <td>{% if form.id.value %}{{ form.DELETE }}{% endif %}
                 {% for field in form %}
                 {% if field.is_hidden %}

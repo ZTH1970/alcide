@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 
 from calebasse import cbv, models as cb_models
+from calebasse.ressources.models import Service
 
 import forms
 import models
@@ -134,11 +135,11 @@ class WorkerUpdateView(cbv.MultiUpdateView):
         for timetable in self.object.timetable_set.order_by('start_time'):
             _timetables[timetable.weekday].append(timetable)
         timetable = []
-        for weekday in cb_models.WeekdayField.WEEKDAYS:
+        for weekday, name in models.TimeTable.WEEKDAYS:
             timetable.append({
-                'weekday': weekday,
+                'weekday': name,
                 'schedules': _timetables[weekday]})
-        ctx['weekdays'] = cb_models.WeekdayField.WEEKDAYS
+        ctx['weekdays'] = list(models.TimeTable.WEEKDAYS)
         ctx['timetables'] = timetable
         ctx['holidays'] = models.Holiday.objects \
                             .for_worker(self.object) \
@@ -161,23 +162,25 @@ class WorkerScheduleUpdateView(cbv.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(WorkerScheduleUpdateView, self).get_form_kwargs()
-        kwargs['weekday'] = self.kwargs['weekday']
+        kwargs['queryset'] = models.TimeTable.objects.filter(weekday=self.weekday).prefetch_related('services')
+        kwargs['initial'] = [{ 'services': Service.objects.all().values_list('pk', flat=True) }] * 3
         return kwargs
 
     def get_context_data(self, **kwargs):
         ctx = super(WorkerScheduleUpdateView, self).get_context_data(**kwargs)
-        ctx['weekday'] = self.kwargs['weekday']
+        ctx['weekday'] = models.TimeTable.WEEKDAYS[self.weekday][1]
         return ctx
 
     def dispatch(self, *args, **kwargs):
-        if kwargs['weekday'] not in cb_models.WeekdayField.WEEKDAYS:
+        self.weekday = int(kwargs['weekday'])
+        if self.weekday > 6:
             raise Http404()
         return super(WorkerScheduleUpdateView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         instances = form.save(commit=False)
         for instance in instances:
-            instance.weekday = self.kwargs['weekday']
+            instance.weekday = self.weekday
             instance.save()
         form.save_m2m()
         return HttpResponseRedirect('')

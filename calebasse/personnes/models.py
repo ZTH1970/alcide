@@ -6,11 +6,13 @@ from django.db import models
 from django.db.models import query
 from django.contrib.auth.models import User
 from django.template.defaultfilters import date as date_filter
+from django import forms
 
 import reversion
 
 from calebasse.ressources.models import Service
-from calebasse.models import WeekdayField, BaseModelMixin
+from calebasse.models import BaseModelMixin, WeekRankField
+from calebasse.utils import weeks_since_epoch, weekday_ranks
 
 from interval import Interval
 
@@ -21,7 +23,7 @@ class People(BaseModelMixin, models.Model):
     GENDERS =  Choices(
             (1, 'homme'),
             (2, 'femme'),
-            )
+    )
 
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
     first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
@@ -55,8 +57,7 @@ class Worker(People):
     services = models.ManyToManyField('ressources.Service')
 
     def is_away(self):
-        day = WeekdayField.WEEKDAYS[date.today().weekday()]
-        if self.timetable_set.filter(weekday=day).exists():
+        if self.timetable_set.filter(weekday=date.today().weekday()).exists():
             return False
         return True
 
@@ -91,17 +92,41 @@ class SchoolTeacher(People):
 reversion.register(SchoolTeacher, follow=['user_ptr'])
 
 class TimeTableQuerySet(query.QuerySet):
-    def current(self):
-        today = date.today()
+    def current(self, today=None):
+        if today is None:
+            today = date.today()
         return self.filter(start_date__lte=today, end_date__gte=today)
+
+    def for_today(self, today=None):
+        if today is None:
+            today = date.today()
+        qs = self.current(today)
+        qs = self.filter(weekday=today.weekday())
+        filters = []
+        # week periods
+        for week_period in range(1,5):
+            filters.append(models.Q(week_period=week_period,
+                week_offset=weeks_since_epoch(today) % week_period))
+        # week parity
+        parity = (today.isocalendar()[1]-1) % 2
+        filters.append(models.Q(week_parity=parity))
+        # week ranks
+        filters.append(models.Q(week_rank__in=weekday_ranks(today)))
+        qs = qs.filter(reduce(models.Q.__or__, filters))
+        return qs
+
 
 class TimeTable(BaseModelMixin, models.Model):
     objects = PassThroughManager.for_queryset_class(TimeTableQuerySet)()
     worker = models.ForeignKey(Worker,
             verbose_name=u'Intervenant')
     services = models.ManyToManyField('ressources.Service')
-    weekday = WeekdayField(
-            verbose_name=u'Jour')
+    WEEKDAYS = Choices(*enumerate(('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi',
+        'samedi', 'dimanche')))
+ 
+    weekday = models.PositiveIntegerField(
+        verbose_name=u"Jour de la semaine",
+        choices=WEEKDAYS)
     start_time = models.TimeField(
         verbose_name=u'Heure de début')
     end_time = models.TimeField(
@@ -112,6 +137,55 @@ class TimeTable(BaseModelMixin, models.Model):
     end_date = models.DateField(
         verbose_name=u'Fin', blank=True, null=True,
         help_text=u'format: jj/mm/aaaa')
+
+    PERIODS = (
+            (1, u'Toutes les semaines'),
+            (2, u'Une semaine sur deux'),
+            (3, u'Une semaine sur trois'),
+            (4, 'Une semaine sur quatre'),
+            (4, 'Une semaine sur cinq')
+    )
+    OFFSET = range(0,4)
+    week_offset = models.PositiveIntegerField(
+            choices=zip(OFFSET, OFFSET),
+            verbose_name=u"Décalage en semaines par rapport au 1/1/1970 pour le calcul de période", 
+            default=0)
+    week_period = models.PositiveIntegerField(
+            choices=PERIODS,
+            verbose_name=u"Période en semaines", 
+            default=1,
+            blank=True,
+            null=True)
+
+    PARITIES = (
+            (0, 'Les semaines paires'),
+            (1, 'Les semaines impaires')
+    )
+    week_parity = models.PositiveIntegerField(
+            choices=PARITIES,
+            verbose_name=u"Parité des semaines",
+            default=None,
+            blank=True, null=True)
+
+    WEEK_RANKS = (
+            (0, u'La première semaine du mois'),
+            (1, u'La deuxième semaine du mois'),
+            (2, u'La troisième semaine du mois'),
+            (3, u'La quatrième semaine du mois'),
+            (4, u'La dernière semaine du mois')
+    )
+
+    week_rank = WeekRankField(
+            verbose_name=u"Rang de la semaine dans le mois",
+            choices=WEEK_RANKS,
+            default=None)
+
+    def clean(self):
+        if (self.week_period is None) + (self.week_parity is None) + \
+                (self.week_rank is None) != 2:
+            raise forms.ValidationError('only one periodicity criteria can be used')
+        if self.week_period and self.start_date:
+            self.week_offset = weeks_since_epoch(self.start_date) % self.week_period
 
     def __unicode__(self):
         s = u'%s pour au %s le %s de %s à %s' % \

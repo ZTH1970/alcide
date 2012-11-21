@@ -1021,18 +1021,27 @@ label.required:after {
 }
 
 /* personnes/worker_schedule_update.html */
-#timetables .service ul {
-  padding-left: 0px;
+#schedules .periodicity > * {
+  display: inline-block;
 }
-
-table.inline td {
-  vertical-align: top;
+table#schedules {
+  border-collapse: collapse;
+}
+#schedules td {
+  vertical-align: middle;
+}
+#schedules tbody tr:nth-child(2n+1) {
+  background: #F5F5F5;
+}
+#schedules .service {
+  font-size: small;
 }
 
 /* tables in dialogs */
 .ui-dialog table td {
   vertical-align: top;
 }
+
 
 /* limit act type select length */
 #id_act_type {

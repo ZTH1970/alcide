@@ -113,24 +113,18 @@ class WorkerServiceForm(forms.ModelForm):
         }
 
 
-class BaseTimetableFormSet(BaseInlineFormSet):
-    def __init__(self, weekday=None, *args, **kwargs):
-        kwargs['queryset'] = kwargs.get('queryset', TimeTable.objects).filter(weekday=weekday)
-        kwargs['initial'] = [{ 'services': Service.objects.all().values_list('pk', flat=True) }] * 3
-        super(BaseTimetableFormSet, self).__init__(*args, **kwargs)
-
-
 class BaseTimeTableForm(forms.ModelForm):
     class Meta:
         model = TimeTable
         widgets = {
                 'services': forms.CheckboxSelectMultiple,
+                'week_rank': forms.SelectMultiple,
         }
 
 TimetableFormSet = inlineformset_factory(Worker, TimeTable,
-        formset=BaseTimetableFormSet,
         form=BaseTimeTableForm,
-        fields=('start_time', 'end_time', 'start_date', 'end_date', 'services'))
+        fields=('start_time', 'end_time', 'start_date', 'end_date',
+            'services', 'week_period', 'week_parity', 'week_rank'))
 
 class BaseHolidayForm(forms.ModelForm):
     class Meta:

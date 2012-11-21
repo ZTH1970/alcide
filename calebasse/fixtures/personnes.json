@@ -216,7 +216,7 @@
       "end_date": null, 
       "start_time": "08:00:00", 
       "worker": 5, 
-      "weekday": "lundi", 
+      "weekday": 0, 
       "services": [
         1
       ], 
@@ -231,7 +231,7 @@
       "end_date": null, 
       "start_time": "08:30:00", 
       "worker": 6, 
-      "weekday": "lundi", 
+      "weekday": 0, 
       "services": [
         1
       ], 
@@ -246,7 +246,7 @@
       "end_date": null, 
       "start_time": "13:00:00", 
       "worker": 6, 
-      "weekday": "lundi", 
+      "weekday": 0, 
       "services": [
         1
       ], 
@@ -261,7 +261,7 @@
       "end_date": null, 
       "start_time": "08:00:00", 
       "worker": 5, 
-      "weekday": "mardi", 
+      "weekday": 1, 
       "services": [
         1
       ], 

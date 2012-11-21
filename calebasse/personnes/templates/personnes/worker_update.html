@@ -59,8 +59,8 @@
     <table>
       <thead>
         <tr>
-          {% for weekday in weekdays %}
-            <td><a href="{{weekday}}/">{{ weekday|capfirst }}</a></td>
+          {% for weekday, name in weekdays %}
+            <td><a href="{{weekday}}/">{{ name|capfirst }}</a></td>
           {% endfor %}
         </tr>
       </thead>

@@ -33,21 +33,9 @@ class AgendaHomepageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
-        weekday_mapping = {
-                '0': u'dimanche',
-                '1': u'lundi',
-                '2': u'mardi',
-                '3': u'mercredi',
-                '4': u'jeudi',
-                '5': u'vendredi',
-                '6': u'samedi'
-                }
-        weekday = weekday_mapping[context['date'].strftime("%w")]
-        time_tables = TimeTable.objects.select_related('worker').\
-                filter(services=self.service).\
-                filter(weekday=weekday).\
-                filter(start_date__lte=context['date']).\
-                filter(Q(end_date=None) |Q(end_date__gte=context['date'])).\
+        time_tables = TimeTable.objects.select_related('worker'). \
+                filter(services=self.service). \
+                for_today(self.date). \
                 order_by('start_date')
         occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
 
