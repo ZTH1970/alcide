@@ -31,12 +31,22 @@ class DossiersHomepageView(ListView):
             for patient_record in ctx['object_list'].filter():
                 next_rdv = {}
                 occurrence = Occurrence.objects.next_appoinment(patient_record)
-                next_rdv['start_datetime'] = occurrence.start_time
-                next_rdv['participants'] = occurrence.event.participants.all()
+                if occurrence:
+                    next_rdv['start_datetime'] = occurrence.start_time
+                    next_rdv['participants'] = occurrence.event.participants.all()
+                    next_rdv['act_type'] = occurrence.event.eventact.act_type
+                occurrence = Occurrence.objects.last_appoinment(patient_record)
+                last_rdv = {}
+                if occurrence:
+                    last_rdv['start_datetime'] = occurrence.start_time
+                    last_rdv['participants'] = occurrence.event.participants.all()
+                    last_rdv['act_type'] = occurrence.event.eventact.act_type
+                occurrence = Occurrence.objects.next_appoinment(patient_record)
                 ctx['patient_records'].append(
                         {
                             'object': patient_record,
-                            'next_rdv': next_rdv
+                            'next_rdv': next_rdv,
+                            'last_rdv': last_rdv
                             }
                         )
 
