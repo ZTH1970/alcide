@@ -134,9 +134,10 @@ class MultiFormMixin(ContextMixin):
         Returns the current prefix by parsing first keys in POST
         """
         keys = self.request.POST.keys() or self.request.FILES.keys()
-        if not keys:
-            return None
-        return keys[0].split('-', 1)[0]
+        for key in keys:
+            if '-' in key:
+                return key.split('-', 1)[0]
+        return None
 
     def get_forms(self):
         """
