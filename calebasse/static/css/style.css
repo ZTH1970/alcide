@@ -1028,3 +1028,8 @@ label.required:after {
 table.inline td {
   vertical-align: top;
 }
+
+/* tables in dialogs */
+.ui-dialog table td {
+  vertical-align: top;
+}
