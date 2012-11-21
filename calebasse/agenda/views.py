@@ -11,9 +11,8 @@ from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import WorkerType
-from calebasse.actes.validation import (are_all_acts_of_the_day_locked,
-    get_acts_of_the_day)
-from calebasse.actes.validation_states import VALIDATION_STATES, VALIDE
+from calebasse.actes.validation import get_acts_of_the_day
+from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.actes.models import Act
 from calebasse.actes.validation import (automated_validation,
     unlock_all_acts_of_the_day)
