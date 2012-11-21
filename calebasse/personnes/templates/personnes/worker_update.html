@@ -96,11 +96,11 @@
             {% elif holiday.service %}
             (congés annuels)
             {% endif %}
+            {% if holiday.comment %}
+            « {{ holiday.comment }} »
+            {% endif %}
         </li>
         {% endfor %}
-<!--     <li>Du 20 août au 3 septembre 2012 (en cours)</li>
-        <li>Du 3 au 10 octobre 2012</li>
-        <li>Du 24 décembre 2012 au 4 janvier 2013 (congés annuels)</li> -->
       </ul>
     </div>
   </form>

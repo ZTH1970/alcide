@@ -20,6 +20,7 @@
               <td><label class="required">Date de fin</label></td>
               <td><label>Heure de début</label></td>
               <td><label>Heure de fin</label></td>
+              <td><label>Commentaire</label></td>
               <td><label>Supprimer</label></td>
             </tr>
           </thead>
@@ -30,6 +31,7 @@
               <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}</td>
               <td class="timepicker">{{ form.start_time }}</td>
               <td class="timepicker">{{ form.end_time }}</td>
+              <td>{{ form.comment }}{{ form.comment.errors }}</td>
               <td>{% if form.id.value %}{{ form.DELETE }}{% endif %}
                 {% for field in form %}
                 {% if field.is_hidden %}

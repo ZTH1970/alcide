@@ -1024,3 +1024,7 @@ label.required:after {
 #timetables .service ul {
   padding-left: 0px;
 }
+
+table.inline td {
+  vertical-align: top;
+}

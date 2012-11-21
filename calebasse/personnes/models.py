@@ -168,6 +168,7 @@ class Holiday(BaseModelMixin, models.Model):
             null=True)
     end_time = models.TimeField(verbose_name=u"Horaire de fin", blank=True,
             null=True)
+    comment = models.TextField(verbose_name=u'Commentaire', blank=True)
 
     class Meta:
         verbose_name = u'Congé'

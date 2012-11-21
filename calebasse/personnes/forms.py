@@ -139,9 +139,16 @@ TimetableFormSet = inlineformset_factory(Worker, TimeTable,
         form=BaseTimeTableForm,
         fields=('start_time', 'end_time', 'start_date', 'end_date', 'services'))
 
+class BaseHolidayForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+                'comment': forms.Textarea(attrs={'rows': 3}),
+        }
+
 HolidayFormSet = inlineformset_factory(
         Worker, Holiday,
-        fields=('start_date', 'end_date', 'start_time', 'end_time'))
+        form=BaseHolidayForm,
+        fields=('start_date', 'end_date', 'start_time', 'end_time', 'comment'))
 
 class HolidaySearchForm(forms.Form):
     start_date = forms.DateField(required=False)
