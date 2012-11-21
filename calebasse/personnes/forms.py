@@ -63,8 +63,6 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password1', 'password2', 'worker')
 
     def save(self, commit=True):
-        import pdb
-        pdb.set_trace()
         instance = super(UserForm, self).save(commit=False)
         if self.cleaned_data['password1']:
             instance.set_password(self.cleaned_data['password1'])
