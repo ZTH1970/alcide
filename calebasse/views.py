@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.defaultfilters import slugify
 
-SERVICES = ( u'CMPP', u'CAMSP', u'SESSAD TED', u'SESSAD DYS' )
+from cbv import HOME_SERVICE_COOKIE, TemplateView
 
-SERVICES_MAP = dict(((slugify(s), s) for s in SERVICES))
+from calebasse.ressources.models import Service
 
 APPLICATIONS = (
         (u'Gestion des dossiers', 'dossiers'),
@@ -16,14 +16,21 @@ APPLICATIONS = (
         (u'Gestion des ressources', 'ressources'),
 )
 
-def homepage(request, service, services=SERVICES, applications=APPLICATIONS,
-        template_name='calebasse/homepage.html'):
-    services = [ (s, slugify(s)) for s in services]
-    services_map = dict(((b, a) for a, b in services ))
-    return render(request, template_name, {
-        'applications': applications,
-        'services': services,
-        'service': service,
-        'service_name': services_map.get(service),
-    })
+def redirect_to_homepage(request):
+    service_name = request.COOKIES.get(HOME_SERVICE_COOKIE, 'cmpp').lower()
+    return redirect('homepage', service=service_name)
 
+class Homepage(TemplateView):
+    template_name='calebasse/homepage.html'
+
+    def get_context_data(self, **kwargs):
+        services = Service.objects.values_list('name', 'slug')
+        ctx = super(Homepage, self).get_context_data(**kwargs)
+        ctx.update({
+            'applications': APPLICATIONS,
+            'services': services,
+            'service_name': self.service.name,
+        })
+        return ctx
+
+homepage = Homepage.as_view()

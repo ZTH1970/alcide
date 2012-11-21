@@ -10,6 +10,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 from calebasse.ressources.models import Service
 
+HOME_SERVICE_COOKIE = 'home-service'
+
 class ReturnToObjectMixin(object):
     def get_success_url(self):
         return '../#object-' + str(self.object.pk)
@@ -35,7 +37,11 @@ class ServiceViewMixin(object):
                         '%Y-%m-%d').date()
             except (TypeError, ValueError):
                 raise Http404
-        return super(ServiceViewMixin, self).dispatch(request, **kwargs)
+        result = super(ServiceViewMixin, self).dispatch(request, **kwargs)
+        if self.service:
+            result.set_cookie(HOME_SERVICE_COOKIE, self.service.slug,
+                    max_age=3600*24*365, httponly=True)
+        return result
 
     def get_context_data(self, **kwargs):
         context = super(ServiceViewMixin, self).get_context_data(**kwargs)

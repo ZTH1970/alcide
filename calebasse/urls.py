@@ -29,7 +29,7 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    (r'^$', redirect_to, { 'url': '/cmpp/' }),
+    (r'^$', 'calebasse.views.redirect_to_homepage'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/logout/', 'django.contrib.auth.views.logout_then_login'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
