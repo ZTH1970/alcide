@@ -40,14 +40,14 @@ function event_dialog(url, title, width, btn_text) {
                           $('#rdv form').ajaxForm({
                               success: onsuccess,
                           });
-                          $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
+                          $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                           console.log('error');
                       } else {
                           console.log('success');
                           window.location.reload(true);
                       }
                   }
-                  $('#rdv .datepicker-date').datepicker({dateFormat: 'yy-m-d', showOn: 'button'});
+                  $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                   $('#id_description').attr('rows', '3');
                   $('#id_description').attr('cols', '30');
                   $('form', this).ajaxForm({

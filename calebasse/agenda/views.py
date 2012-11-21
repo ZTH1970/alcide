@@ -123,7 +123,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
 
     def get_initial(self):
         initial = super(NewAppointmentView, self).get_initial()
-        initial['date'] = self.kwargs.get('date')
+        initial['date'] = self.date
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
         return initial
@@ -142,7 +142,7 @@ class UpdateAppointmentView(UpdateView):
 
     def get_initial(self):
         initial = super(UpdateView, self).get_initial()
-        initial['date'] = self.object.date.strftime("%Y-%m-%d")
+        initial['date'] = self.object.date
         initial['time'] = self.occurrence.start_time.strftime("%H:%M")
         time = self.occurrence.end_time - self.occurrence.start_time
         if time:
@@ -167,7 +167,7 @@ class NewEventView(CreateView):
 
     def get_initial(self):
         initial = super(NewEventView, self).get_initial()
-        initial['date'] = self.kwargs.get('date')
+        initial['date'] = self.date
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
         initial['services'] = [self.service]

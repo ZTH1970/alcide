@@ -14,6 +14,7 @@ from calebasse.middleware.request import get_request
 from ajax_select import make_ajax_field
 
 class NewAppointmentForm(forms.ModelForm):
+    date = forms.DateField(label=u'Date')
     time = forms.TimeField(label=u'Heure de début')
     duration = forms.CharField(label=u'Durée',
             help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
