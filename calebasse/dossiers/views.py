@@ -3,6 +3,7 @@ from calebasse.cbv import ListView
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord
 from calebasse.dossiers.forms import SearchForm
+from calebasse.dossiers.states import STATES_MAPPING
 
 class DossiersHomepageView(ListView):
     model = PatientRecord
@@ -27,8 +28,15 @@ class DossiersHomepageView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(DossiersHomepageView, self).get_context_data(**kwargs)
         ctx['patient_records'] = []
+        ctx['stats'] = {"dossiers": 0,
+                "En_contact": 0,
+                "Fin_daccueil": 0,
+                "Diagnostic": 0,
+                "Traitement": 0,
+                "Clos": 0}
         if self.request.GET:
             for patient_record in ctx['object_list'].filter():
+                ctx['stats']['dossiers'] += 1
                 next_rdv = {}
                 occurrence = Occurrence.objects.next_appoinment(patient_record)
                 if occurrence:
@@ -42,13 +50,20 @@ class DossiersHomepageView(ListView):
                     last_rdv['participants'] = occurrence.event.participants.all()
                     last_rdv['act_type'] = occurrence.event.eventact.act_type
                 occurrence = Occurrence.objects.next_appoinment(patient_record)
+                state = STATES_MAPPING[patient_record.get_state().state_name]
                 ctx['patient_records'].append(
                         {
                             'object': patient_record,
                             'next_rdv': next_rdv,
-                            'last_rdv': last_rdv
+                            'last_rdv': last_rdv,
+                            'state': state
                             }
                         )
+                state = state.replace(' ', '_')
+                state = state.replace("'", '')
+                if not ctx['stats'].has_key(state):
+                    ctx['stats'][state] = 0
+                ctx['stats'][state] += 1
 
         return ctx
 

@@ -5,8 +5,12 @@
     <h2>Dossiers</h2>
     <a href="../..">Retourner à l'accueil</a>
     <button id="new-dossier">Nouveau dossier</button>
-    <span>Dossiers: <span class="num">1032</span> - En accueil: <span class="num">28</span> - Fin d'accueil: <span class="num">8</span> -
-        <span>En diagnostic: <span class="num">322</span> - En traitement: <span class="num">485</span> - Clos: <span class="num">193</span></span>
+    <span>Dossiers: <span class="num">{{ stats.dossiers }}</span> -
+        En contact: <span class="num">{{ stats.En_contact }}</span> - 
+        Fin d'accueil: <span class="num">{{ stats.Fin_daccueil }}</span> -
+        <span>En diagnostic: <span class="num">{{ stats.Diagnostic }}</span> - 
+            En traitement: <span class="num">{{ stats.Traitement }}</span> - 
+            Clos: <span class="num">{{ stats.Clos }}</span></span>
         <br>
         <br>&nbsp;
     </span>
@@ -74,7 +78,7 @@
         <td>{{ patient_record.object.last_name }}</td>
         <td>{{ patient_record.object.first_name }}</td>
         <td>{{ patient_record.object.birthdate|date:"d/m/Y" }}</td>
-        <td>{{ patient_record.object.get_state.state_name }}</td>
+        <td>{{ patient_record.state }}</td>
         <td></td>
         <td>
             {% if patient_record.last_rdv %}
