@@ -99,7 +99,7 @@ def automated_validation(date, service, user, commit=True):
                             act.set_state('ACT_DOUBLE', author=user, auto=True)
                         nb_acts_double = nb_acts_double + 1
             else:
-                if acts[0].is_state('NON_VALIDE') and commit:
+                if not acts[0].is_state('VALIDE') and commit:
                     acts[0].set_state('VALIDE', author=user, auto=True)
                 nb_acts_validated = nb_acts_validated + 1
     else:
