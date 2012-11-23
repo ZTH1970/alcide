@@ -51,5 +51,104 @@
     "fields": {
       "label": "Vacances"
     }
+  },
+  {
+    "pk": 1, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "name": "En contact",
+      "type": "ACCUEIL"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "name": "Fin d'accueil",
+      "type": "FIN_ACCUEIL"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        1
+      ], 
+      "name": "Diagnostic",
+      "type": "DIAGNOSTIC"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        1, 
+        3, 
+        4
+      ], 
+      "name": "Traitement",
+      "type": "TRAITMENT"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "name": "Clos",
+      "type": "CLOS"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "name": "Bilan",
+      "type": "BILAN"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "name": "Surveillance",
+      "type": "SURVEILLANCE"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "dossiers.status", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "name": "Suivi",
+      "type": "SUIVI"
+    }
   }
 ]

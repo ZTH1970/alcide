@@ -11,8 +11,8 @@ from django.contrib.auth.models import User
 import reversion
 
 from calebasse.personnes.models import People
-from calebasse.ressources.models import ServiceLinkedAbstractModel
-from calebasse.dossiers.states import STATES, STATE_ACCUEIL
+from calebasse.ressources.models import ServiceLinkedAbstractModel, NamedAbstractModel
+#from calebasse.dossiers.states import STATES, STATE_ACCUEIL
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
@@ -113,14 +113,26 @@ reversion.register(CmppHealthCareDiagnostic, follow=['healthcare_ptr'])
 reversion.register(CmppHealthCareTreatment, follow=['healthcare_ptr'])
 reversion.register(SessadHealthCareNotification, follow=['healthcare_ptr'])
 
+class Status(NamedAbstractModel):
+
+    class Meta:
+        app_label = 'dossiers'
+        verbose_name = u'Etat'
+        verbose_name_plural = u'Etats'
+
+    type = models.CharField(max_length=80)
+    services = models.ManyToManyField('ressources.Service')
+
 class FileState(models.Model):
 
     class Meta:
         app_label = 'dossiers'
+        verbose_name = u'Etat du dossier patient'
+        verbose_name_plural = u'Etats du dossier patient'
 
     patient = models.ForeignKey('dossiers.PatientRecord',
         verbose_name=u'Dossier patient')
-    state_name = models.CharField(max_length=150)
+    status = models.ForeignKey('dossiers.Status')
     created = models.DateTimeField(u'Création', auto_now_add=True)
     date_selected = models.DateTimeField()
     author = \
@@ -162,6 +174,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
     social_security_id = models.CharField(max_length=13)
+    last_state = models.ForeignKey(FileState, related_name='+')
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
@@ -169,12 +182,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
             raise Exception('The field service is mandatory.')
 
     def get_state(self):
-        last_state = self.filestate_set.latest('date_selected')
-        multiple = self.filestate_set.\
-            filter(date_selected=last_state.date_selected)
-        if len(multiple) > 1:
-            last_state = multiple.latest('created')
-        return last_state
+        return self.last_state
 
     def get_state_at_day(self, date):
         state = self.get_state()
@@ -195,12 +203,9 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     def get_states_history(self):
         return self.filestate_set.order_by('date_selected')
 
-    def set_state(self, state_name, author, date_selected=None, comment=None):
+    def set_state(self, status, author, date_selected=None, comment=None):
         if not author:
             raise Exception('Missing author to set state')
-        if not state_name in STATES[self.service.name].keys():
-            raise Exception('Etat de dossier '
-                'non existant dans le service %s.' % self.service.name)
         if not date_selected:
             date_selected = datetime.now()
         current_state = self.get_state()
@@ -211,9 +216,11 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
             raise Exception('You cannot set a state starting the %s that '
                 'is before the previous state starting at day %s.' % \
                 (str(date_selected), str(current_state.date_selected)))
-        FileState(patient=self, state_name=state_name,
+        filestate = FileState.objects.create(patient=self, status=status,
             date_selected=date_selected, author=author, comment=comment,
-            previous_state=current_state).save()
+            previous_state=current_state)
+        self.last_state = filestate
+        self.save()
 
     def change_day_selected_of_state(self, state, new_date):
         if state.previous_state:
@@ -314,21 +321,29 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
         acts = self.act_set.order_by('-date')
         # Si cet acte peut-être pris en charge en diagnostic c'est un acte de
         # diagnostic, sinon c'est un acte de traitement.
+        last_state_services = self.last_state.status.\
+                services.values_list('name', flat=True)
+        cmpp = Service.objects.get(name='CMPP')
         for act in acts:
             if are_all_acts_of_the_day_locked(act.date) and \
                     act.is_state('VALIDE') and act.is_billable():
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
-                    if self.get_state().state_name == 'CMPP_STATE_ACCUEIL' \
-                            or self.get_state().state_name == \
-                                'CMPP_STATE_TRAITEMENT':
-                        self.set_state('CMPP_STATE_DIAGNOSTIC', modifier,
+                    if (self.last_state.status.type == "ACCEUIL" \
+                            or self.last_state.status.type == "TRAITMENT") \
+                            and "CMPP" in last_state_services:
+                        status = Status.objects.filter(type="DIAGNOSTIC").\
+                                filter(services__name='CMPP')[0]
+                        self.set_state(status, modifier,
                             date_selected=act.date)
                 # Sinon, si le dossier est en diag, s'il ne peut être couvert
                 # en diag, il est en traitement.
-                elif self.get_state().state_name == 'CMPP_STATE_DIAGNOSTIC':
-                    self.set_state('CMPP_STATE_TRAITEMENT', modifier,
-                        date_selected=act.date)
+                elif self.last_state.status.type == "DIAGNOSTIC" and \
+                        "CMPP" in last_state_services:
+                    status = Status.objects.filter(type="TRAITMENT").\
+                            filter(services__name='CMPP')[0]
+                    self.set_state(status, modifier,
+                            date_selected=act.date)
                 break
     # END Specific to cmpp healthcare
 
@@ -346,7 +361,10 @@ def create_patient(first_name, last_name, service, creator,
     patient.save()
     if not date_selected:
         date_selected = patient.created
-    FileState(patient=patient, state_name=STATE_ACCUEIL[service.name],
+    status = Status.object.filter(type="ACCUEIL").filter(services__name=service)
+    if not status:
+        raise Exception('%s has no ACCEUIL status' % service.name)
+    FileState(patient=patient, status=status[0],
         date_selected=date_selected, author=creator,
         previous_state=None).save()
     return patient

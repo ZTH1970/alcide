@@ -1,6 +1,10 @@
 {% extends "calebasse/base.html" %}
 {% load url from future %}
 
+{% block extrascripts %}
+<script src="{{ STATIC_URL }}js/calebasse.dossiers.js"></script>
+{% endblock %}
+
 {% block title %}{{ block.super }} - Dossiers {% endblock %}
 
 {% block header %}

@@ -5,7 +5,7 @@
     "fields": {
       "comment": "", 
       "patient": 8, 
-      "state_name": "CMPP_STATE_ACCUEIL", 
+      "status": 1, 
       "author": 1, 
       "created": "2012-11-07T18:54:59.893", 
       "previous_state": null, 
@@ -18,7 +18,7 @@
     "fields": {
       "comment": "", 
       "patient": 9, 
-      "state_name": "CMPP_STATE_ACCUEIL", 
+      "status": 1, 
       "author": 1, 
       "created": "2012-11-07T18:55:09.426", 
       "previous_state": null, 
@@ -31,7 +31,7 @@
     "fields": {
       "comment": "", 
       "patient": 10, 
-      "state_name": "CAMSP_STATE_FIN_ACCUEIL", 
+      "status": 2, 
       "author": 1, 
       "created": "2012-11-21T14:27:19.671", 
       "previous_state": null, 
@@ -44,7 +44,7 @@
     "fields": {
       "comment": "", 
       "patient": 11, 
-      "state_name": "SESSAD_STATE_TRAITEMENT", 
+      "status": 4, 
       "author": 1, 
       "created": "2012-11-21T14:27:50.036", 
       "previous_state": null, 
@@ -57,7 +57,7 @@
     "fields": {
       "comment": "", 
       "patient": 12, 
-      "state_name": "CMPP_STATE_CLOS", 
+      "status": 5, 
       "author": 1, 
       "created": "2012-11-21T14:28:20.773", 
       "previous_state": null, 
@@ -70,7 +70,7 @@
     "fields": {
       "comment": "", 
       "patient": 13, 
-      "state_name": "CAMSP_STATE_SURVEILLANCE", 
+      "status": 7, 
       "author": 1, 
       "created": "2012-11-21T14:28:43.228", 
       "previous_state": null, 
@@ -83,7 +83,7 @@
     "fields": {
       "comment": "", 
       "patient": 9, 
-      "state_name": "CMPP_STATE_DIAGNOSTIC", 
+      "status": 3, 
       "author": 1, 
       "created": "2012-11-21T14:30:05.626", 
       "previous_state": null, 
@@ -105,7 +105,8 @@
         3
       ], 
       "birthdate": "1980-10-31", 
-      "paper_id": "1024"
+      "paper_id": "1024", 
+      "last_state": 1
     }
   }, 
   {
@@ -123,7 +124,8 @@
         3
       ], 
       "birthdate": "1988-12-30", 
-      "paper_id": null
+      "paper_id": null, 
+      "last_state": 7
     }
   }, 
   {
@@ -138,7 +140,8 @@
         2
       ], 
       "birthdate": "1995-11-21", 
-      "paper_id": "4243"
+      "paper_id": "4243", 
+      "last_state": 3
     }
   }, 
   {
@@ -153,7 +156,8 @@
         2
       ], 
       "birthdate": "1998-01-21", 
-      "paper_id": "424243"
+      "paper_id": "424243", 
+      "last_state": 4
     }
   }, 
   {
@@ -169,7 +173,8 @@
         6
       ], 
       "birthdate": "1984-11-21", 
-      "paper_id": "424546"
+      "paper_id": "424546", 
+      "last_state": 5
     }
   }, 
   {
@@ -184,7 +189,8 @@
         5
       ], 
       "birthdate": "2000-11-21", 
-      "paper_id": "425874"
+      "paper_id": "425874", 
+      "last_state": 6
     }
   }
 ]
