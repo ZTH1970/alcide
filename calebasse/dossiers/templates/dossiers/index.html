@@ -30,14 +30,16 @@
   </div>
   <div id="filtre">
     <h3>Filtres sur l'état</h3>
-    <ul id="state_filters">
+    {{ search_form.states }}
+    <button id="btn_all_state" type="button">Tous</button>
+    <button id="btn_none_state" type="button">Aucun</button>
+    <!-- <ul id="state_filters">
         <li><label for="id_states_0"><input checked="checked" type="checkbox" name="states" value="0" id="id_states_0" class="checkbox_state"> En contact</label></li>
         <li><label for="id_states_1"><input checked="checked" type="checkbox" name="states" value="1" id="id_states_1" class="checkbox_state"> Fin d'accueil</label></li>
         <li><label for="id_states_2"><input checked="checked" type="checkbox" name="states" value="2" id="id_states_2" class="checkbox_state"> En diagnostic</label></li>
         <li><label for="id_states_3"><input checked="checked" type="checkbox" name="states" value="3" id="id_states_3" class="checkbox_state"> En traitement</label></li>
         <li><label for="id_states_4"><input checked="checked" type="checkbox" name="states" value="4" id="id_states_4" class="checkbox_state"> Clos</label></li>
-        <li><button id="btn_all_state" type="button">Tous</button> <button id="btn_none_state" type="button">Aucun</button></li>
-    </ul>
+    </ul> -->
     <h3>Afficher les dossiers</h3>
     <ul>
       <li><button>En pause facturation</button></li>

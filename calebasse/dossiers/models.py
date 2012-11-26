@@ -13,7 +13,6 @@ import reversion
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
     NamedAbstractModel, Service)
-#from calebasse.dossiers.states import STATES, STATE_ACCUEIL
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
@@ -118,8 +117,8 @@ class Status(NamedAbstractModel):
 
     class Meta:
         app_label = 'dossiers'
-        verbose_name = u'Etat'
-        verbose_name_plural = u'Etats'
+        verbose_name = u"Statut d'un état"
+        verbose_name_plural = u"Statuts d'un état"
 
     type = models.CharField(max_length=80)
     services = models.ManyToManyField('ressources.Service')

@@ -13,6 +13,14 @@ STATE_CHOICES = (
         (4, 'Clos'),
 )
 
+STATE_CHOICES_TYPE = {
+        '0': 'ACCUEIL',
+        '1': 'FIN_ACCUEIL',
+        '2': 'DIAGNOSTIC',
+        '3': 'TRAITMENT',
+        '4': 'CLOS',
+        }
+
 # Map Status type with a generic state name
 STATES_MAPPING = {
     'ACCUEIL': STATE_CHOICES[0][1],
@@ -21,6 +29,7 @@ STATES_MAPPING = {
     'TRAITMENT': STATE_CHOICES[3][1],
     'CLOS': STATE_CHOICES[4][1]
 }
+
 
 # OLD MAPPERS now manage in databases with dossiers.Status table
 

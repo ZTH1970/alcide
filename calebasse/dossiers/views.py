@@ -3,7 +3,7 @@ from calebasse.cbv import ListView
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord
 from calebasse.dossiers.forms import SearchForm
-from calebasse.dossiers.states import STATES_MAPPING
+from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 
 class DossiersHomepageView(ListView):
     model = PatientRecord
@@ -25,7 +25,10 @@ class DossiersHomepageView(ListView):
         if social_security_id:
             qs = qs.filter(social_security_id__contains=social_security_id)
         if states:
-            pass
+            status_types = []
+            for state in states:
+                status_types.append(STATE_CHOICES_TYPE[state])
+            qs = qs.filter(last_state__status__type__in=status_types)
         return qs
 
     def get_context_data(self, **kwargs):
