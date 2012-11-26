@@ -1,48 +1,52 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-def get_acts_of_the_day(date):
+def get_acts_of_the_day(date, service=None):
     from models import EventAct
+    if service:
+        return EventAct.objects.filter(date__year=date.year,
+            date__month=date.month, date__day=date.day,
+            services__pk__icontains=service.pk).order_by('date')
     return EventAct.objects.filter(date__year=date.year,
         date__month=date.month, date__day=date.day).order_by('date')
 
 
-def unlock_all_acts_of_the_day(date):
-    get_acts_of_the_day(date).update(validation_locked=False)
+def unlock_all_acts_of_the_day(date, service=None):
+    get_acts_of_the_day(date, service).update(validation_locked=False)
 
-def are_all_acts_of_the_day_locked(date):
-    for act in get_acts_of_the_day(date):
+def are_all_acts_of_the_day_locked(date, service=None):
+    for act in get_acts_of_the_day(date, service):
         if not act.validation_locked:
             return False
     return True
 
 
-def get_acts_not_locked_of_the_day(date):
+def get_acts_not_locked_of_the_day(date, service=None):
     acts = []
-    for act in get_acts_of_the_day(date):
+    for act in get_acts_of_the_day(date, service):
         if not act.validation_locked:
             acts.append(act)
     return acts
 
 
-def get_days_with_acts_not_locked(start_day, end_day):
+def get_days_with_acts_not_locked(start_day, end_day, service=None):
     num_days = abs((start_day - end_day).days) + 1
     days_list = [start_day + datetime.timedelta(days=x) \
         for x in range(0, num_days)]
     result = []
     for day in days_list:
-        if not are_all_acts_of_the_day_locked(day):
+        if not are_all_acts_of_the_day_locked(day, service):
             result.append(day)
     return result
 
 
-def get_days_with_all_acts_locked(start_day, end_day):
+def get_days_with_all_acts_locked(start_day, end_day, service=None):
     num_days = abs((start_day - end_day).days) + 1
     days_list = [start_day + datetime.timedelta(days=x) \
         for x in range(0, num_days)]
     result = []
     for day in days_list:
-        if are_all_acts_of_the_day_locked(day):
+        if are_all_acts_of_the_day_locked(day, service):
             result.append(day)
     return result
 
@@ -56,7 +60,7 @@ def automated_validation(date, service, user, commit=True):
     nb_acts_annul_famille = 0
     nb_acts_abs_ess_pps = 0
     nb_acts_enf_hosp = 0
-    acts_of_the_day = get_acts_of_the_day(date)
+    acts_of_the_day = get_acts_of_the_day(date, service)
     for act in acts_of_the_day:
         if act.is_state('ABS_NON_EXC'):
             nb_acts_abs_non_exc = nb_acts_abs_non_exc + 1

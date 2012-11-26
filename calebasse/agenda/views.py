@@ -197,12 +197,12 @@ class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
 
     def acts_of_the_day(self):
-        return get_acts_of_the_day(self.date)
+        return get_acts_of_the_day(self.date, self.service)
 
     def post(self, request, *args, **kwargs):
         if 'unlock-all' in request.POST:
             #TODO: check that the user is authorized
-            unlock_all_acts_of_the_day(self.date)
+            unlock_all_acts_of_the_day(self.date, self.service)
         else:
             acte_id = request.POST.get('acte-id')
             try:
