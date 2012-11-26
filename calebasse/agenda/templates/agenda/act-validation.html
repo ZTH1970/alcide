@@ -10,7 +10,7 @@
         <form method="post">
           {% csrf_token %}
           <input type="hidden" name="unlock-all" value="1">
-          <button id="unlock-all">Tout déverrouiller</button>
+          <button id="unlock-all">Déverrouiller</button>
         </form>
         <button id="validate-all">Validation automatique</button>
     {% endif %}
@@ -42,14 +42,7 @@
            Non pointé.
          {% endif %}
          </span>
-         {% if acte.validation_locked and authorized_lock %}
-             <form method="post" class="inline-form">
-               {% csrf_token %}
-               <input type="hidden" value="{{acte.id}}" name="acte-id">
-               <input type="hidden" name="unlock" value="1">
-               <button>Déverrouiller</button>
-             </form>
-         {% else %}
+         {% if not acte.validation_locked %}
            <form method="post" class="inline-form">
            {% csrf_token %}
            <input type="hidden" value="{{acte.id}}" name="acte-id">
@@ -60,14 +53,6 @@
            </select>
            <button {% if last_status %}disabled{% endif %}>Modifier</button>
            </form>
-           {% if authorized_lock and last_status %}
-             <form method="post" class="inline-form">
-               {% csrf_token %}
-               <input type="hidden" value="{{acte.id}}" name="acte-id">
-               <input type="hidden" name="lock" value="1">
-               <button>Verrouiller</button>
-             </form>
-           {% endif %}
          {% endif %}
       </div>
     </div>
