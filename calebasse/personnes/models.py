@@ -10,7 +10,7 @@ from django import forms
 
 import reversion
 
-from calebasse.ressources.models import Service
+from calebasse.ressources.models import Service, NamedAbstractModel
 from calebasse.models import BaseModelMixin, WeekRankField
 from calebasse.utils import weeks_since_epoch, weekday_ranks
 
@@ -18,6 +18,10 @@ from interval import Interval
 
 from model_utils import Choices
 from model_utils.managers import PassThroughManager
+
+class Role(NamedAbstractModel):
+    users = models.ManyToManyField(User,
+                verbose_name=u'Utilisateurs', blank=True)
 
 class People(BaseModelMixin, models.Model):
     GENDERS =  Choices(
@@ -123,7 +127,7 @@ class TimeTable(BaseModelMixin, models.Model):
     services = models.ManyToManyField('ressources.Service')
     WEEKDAYS = Choices(*enumerate(('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi',
         'samedi', 'dimanche')))
- 
+
     weekday = models.PositiveIntegerField(
         verbose_name=u"Jour de la semaine",
         choices=WEEKDAYS)
@@ -148,11 +152,11 @@ class TimeTable(BaseModelMixin, models.Model):
     OFFSET = range(0,4)
     week_offset = models.PositiveIntegerField(
             choices=zip(OFFSET, OFFSET),
-            verbose_name=u"Décalage en semaines par rapport au 1/1/1970 pour le calcul de période", 
+            verbose_name=u"Décalage en semaines par rapport au 1/1/1970 pour le calcul de période",
             default=0)
     week_period = models.PositiveIntegerField(
             choices=PERIODS,
-            verbose_name=u"Période en semaines", 
+            verbose_name=u"Période en semaines",
             default=1,
             blank=True,
             null=True)
@@ -273,4 +277,3 @@ class Holiday(BaseModelMixin, models.Model):
                     date_filter(self.start_date, 'j F'),
                     date_filter(self.end_date, 'j F Y'))
         return ret
-
