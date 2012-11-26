@@ -11,7 +11,8 @@ from django.contrib.auth.models import User
 import reversion
 
 from calebasse.personnes.models import People
-from calebasse.ressources.models import ServiceLinkedAbstractModel, NamedAbstractModel
+from calebasse.ressources.models import ServiceLinkedAbstractModel,
+    NamedAbstractModel, Service
 #from calebasse.dossiers.states import STATES, STATE_ACCUEIL
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
