@@ -188,7 +188,7 @@ class ActTypeQuerySet(query.QuerySet):
 
 class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
     objects = PassThroughManager.for_queryset_class(ActTypeQuerySet)()
-    billable = models.BooleanField(default=True)
+    billable = models.BooleanField(default=True, verbose_name=u"Facturable")
 
     class Meta(NamedAbstractModel.Meta):
         verbose_name = u'Type d\'actes'
@@ -232,4 +232,3 @@ class WorkerType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de personnel'
         verbose_name_plural = u'Types de personnel'
-
