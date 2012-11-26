@@ -149,9 +149,9 @@ class FileState(models.Model):
             return None
 
     def save(self, **kwargs):
-        self.date_selected = \
-            datetime(self.date_selected.year,
-                self.date_selected.month, self.date_selected.day)
+#        self.date_selected = \
+#            datetime(self.date_selected.year,
+#                self.date_selected.month, self.date_selected.day)
         super(FileState, self).save(**kwargs)
 
     def __unicode__(self):
@@ -174,7 +174,8 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
     social_security_id = models.CharField(max_length=13)
-    last_state = models.ForeignKey(FileState, related_name='+')
+    last_state = models.ForeignKey(FileState, related_name='+',
+            null=True)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
@@ -356,15 +357,19 @@ def create_patient(first_name, last_name, service, creator,
         'by %s' % (first_name, last_name, service, creator))
     if not (first_name and last_name and service and creator):
         raise Exception('Missing parameter to create a patient record.')
-    patient = PatientRecord(first_name=first_name, last_name=last_name,
-        service=service, creator=creator)
+    status = Status.objects.filter(type="ACCUEIL").filter(services=service)
+    if not status:
+        raise Exception('%s has no ACCEUIL status' % service.name)
+    patient = PatientRecord(first_name=first_name,
+            last_name=last_name, service=service,
+            creator=creator)
+    fs = FileState(status=status[0], author=creator, previous_state=None)
+    patient.last_state = fs
     patient.save()
     if not date_selected:
         date_selected = patient.created
-    status = Status.object.filter(type="ACCUEIL").filter(services__name=service)
-    if not status:
-        raise Exception('%s has no ACCEUIL status' % service.name)
-    FileState(patient=patient, status=status[0],
-        date_selected=date_selected, author=creator,
-        previous_state=None).save()
+    fs.patient = patient
+    fs.date_selected = date_selected
+    fs.save()
     return patient
+
