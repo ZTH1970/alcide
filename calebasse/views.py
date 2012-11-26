@@ -25,6 +25,7 @@ class Homepage(TemplateView):
 
     def get_context_data(self, **kwargs):
         services = Service.objects.values_list('name', 'slug')
+        services = sorted(services, key=lambda tup: tup[0])
         ctx = super(Homepage, self).get_context_data(**kwargs)
         ctx.update({
             'applications': APPLICATIONS,
