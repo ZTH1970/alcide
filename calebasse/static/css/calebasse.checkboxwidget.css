@@ -1,0 +1,25 @@
+.eo-checkboxwidget-menu {
+  border: solid 1px black;
+  border-radius: 5px;
+}
+.eo-checkboxwidget-menu-element {
+  padding-left: 3ex;
+  color: grey;
+}
+.eo-checkboxwidget-menu {
+  z-index: 1;
+  padding: 1ex;
+  background: white;
+}
+.eo-checkboxwidget-menu-element:before {
+  content: "";
+}
+.eo-checkboxwidget-menu-element-selected {
+  padding-left: 0ex;
+  color: black;
+}
+.eo-checkboxwidget-menu-element-selected:before {
+  content: "x";
+  margin-left: 1ex;
+  margin-right: 1ex;
+}
