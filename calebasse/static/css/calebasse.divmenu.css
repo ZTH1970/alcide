@@ -1,0 +1,11 @@
+.eo-divmenu-container {
+  overflow: hidden;
+  display: block;
+  padding-left: 10px;
+  height: 1.5em;
+  margin: auto;
+  width: auto;
+}
+.eo-divmenu-element {
+  position: relative;
+}
