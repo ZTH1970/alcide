@@ -9,6 +9,7 @@ from calebasse.agenda.managers import EventManager
 from calebasse.dossiers.models import SessadHealthCareNotification, \
     CmppHealthCareDiagnostic, CmppHealthCareTreatment
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
+from calebasse.ressources.models import ServiceLinkedAbstractModel
 
 from validation_states import VALIDATION_STATES, NON_VALIDE
 
@@ -346,3 +347,9 @@ class EventAct(Act, Event):
         ordering = ['-date', 'patient']
 
 reversion.register(EventAct, follow=['act_ptr', 'event_ptr'])
+
+class ValidationMessage(ServiceLinkedAbstractModel):
+    validation_date = models.DateTimeField()
+    what = models.CharField(max_length=256)
+    who = models.ForeignKey(User)
+    when = models.DateTimeField(auto_now_add=True)

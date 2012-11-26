@@ -20,7 +20,7 @@
     {% if validation_msg %}
     <ul>
     {% for message in validation_msg %}
-     <li>message</li>
+     <li>{{ message.what }} ({{ message.when }})</li>
     {% endfor %}
     </ul>
     {% endif %}

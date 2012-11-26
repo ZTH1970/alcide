@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.db.models import Q
@@ -13,7 +15,7 @@ from calebasse.personnes.models import Worker
 from calebasse.ressources.models import WorkerType
 from calebasse.actes.validation import get_acts_of_the_day
 from calebasse.actes.validation_states import VALIDATION_STATES
-from calebasse.actes.models import Act
+from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation,
     unlock_all_acts_of_the_day)
 from calebasse import cbv
@@ -203,6 +205,9 @@ class AgendaServiceActValidationView(TemplateView):
         if 'unlock-all' in request.POST:
             #TODO: check that the user is authorized
             unlock_all_acts_of_the_day(self.date, self.service)
+            ValidationMessage(validation_date=self.date,
+                who=request.user, what='Déverrouillage',
+                service=self.service).save()
         else:
             acte_id = request.POST.get('acte-id')
             try:
@@ -222,7 +227,9 @@ class AgendaServiceActValidationView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AgendaServiceActValidationView, self).get_context_data(**kwargs)
         authorized_lock = True # is_authorized_for_locking(get_request().user)
-        validation_msg = list()
+        validation_msg = ValidationMessage.objects.\
+            filter(validation_date=self.date, service=self.service).\
+            order_by('-when')[:3]
         acts_of_the_day = self.acts_of_the_day()
         actes = list()
         for act in acts_of_the_day:
@@ -245,6 +252,9 @@ class AutomatedValidationView(TemplateView):
     def post(self, request, *args, **kwargs):
         automated_validation(self.date, self.service,
             request.user)
+        ValidationMessage(validation_date=self.date,
+            who=request.user, what='Validation automatique',
+            service=self.service).save()
         return HttpResponseRedirect('..')
 
     def get_context_data(self, **kwargs):
