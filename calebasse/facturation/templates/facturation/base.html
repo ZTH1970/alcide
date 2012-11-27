@@ -1,0 +1,13 @@
+{% extends "calebasse/base.html" %}
+{% load url from future %}
+
+{% block extrascripts %}
+<script src="{{ STATIC_URL }}js/calebasse.facturation.js"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }} - {% if service_name == "CMPP" %}Facturation{% else %}Décompte{% endif %} {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>{% if service_name == "CMPP" %}Facturation{% else %}Décompte{% endif %} - {{ service_name }}</spam>
+{% endblock %}

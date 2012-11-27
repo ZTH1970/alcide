@@ -1,0 +1,99 @@
+{% extends "facturation/base.html" %}
+{% load url from future %}
+
+{% block appbar %}
+    <h2>
+
+    {% if service_name == "CMPP" %}
+        Facturation {{ invoicing.seq_id }}
+        {% if invoicing.status == "open" %}
+            ouverte et ayant débuté le {{ invoicing.start_date }}
+        {% else %}
+            {% if invoicing.status == "closed" %}
+            fermée
+            {% else %}
+            validée
+            {% endif %}
+            couvrant la période du {{ invoicing.start_date }} au {{ invoicing.end_date }}
+        {% endif %}
+    {% else %}
+        Décompte {{ invoicing.seq_id }}
+        {% if invoicing.status == "validated" %}
+        validé
+        {% endif %}
+        pour le trimestre allant du {{ invoicing.start_date }} au {{ invoicing.end_date }}
+    {% endif %}</h2>
+    <a href="..">Retourner à la liste</a>
+    {% if service_name == "CMPP" %}
+        {% if invoicing.status == "open" %}<button id="close"">Clôre cette facturation</button>{% endif %}
+        {% if invoicing.status == "closed" %}<button id="valider-btn"">Valider cette facturation</button>{% endif %}
+        {% if invoicing.status == "validated" %}
+            <button id="teletrans-btn" style="display: none;">Télétransmission à l'assurance maladie</button>
+            <button id="expcompt-btn" style="display: none;">Export comptabilité</button>
+        {% endif %}
+    {% else %}
+        {% if invoicing.status == "closed" %}<button id="valider-btn" style="display: none;">Valider ce décompte</button>{% endif %}
+        {% if invoicing.status == "validated" %}<button id="print-btn" style="display: none;">Imprimer</button>{% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="facturation-contents">
+    <h3>Résumé</h3>
+    <ul>
+     <li>Actes facturables : 652
+      <ul>
+       <li>Actes facturés : 602
+        <ul>
+         <li>Dossiers concernés : 125</li>
+         <li>Nombre de factures : 305</li>
+        </ul></li>
+       <li>Actes non facturés : 50
+        <ul>
+         <li>Dossiers concernés : 12
+          <ul>
+           <li>Pause facturation : 7</li>
+           <li>Quota des actes pris en charge dépassé : 2</li>
+           <li>Prises en charge expirées : 2</li>
+           <li>Pas de prise en charge : 1</li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    </div>
+{% endblock %}
+
+{% block dialogs %}
+<div id="close-dialog" title="Clôture">
+  <div id="close-dialog-content">
+  </div>
+  <form method="post" action="clore/">
+    {% csrf_token %}
+    <input type="hidden" name="Close" value="1">
+  </form>
+</div>
+{% endblock %}
+
+{% block page-end %}
+<script>
+  $('#close-dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+      "Valider": function () { $('#close-dialog form').submit(); },
+      "Annuler": function () { $(this).dialog("close"); },
+    },
+  });
+    $('#close').click(function () {
+        $('#close-dialog-content').load('clore/',
+              function () {
+                $('#close-dialog').dialog('open');
+              }
+            );
+      });
+</script>
+{% endblock %}

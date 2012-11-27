@@ -1,0 +1,9 @@
+<div id="close-dlg">
+    {% if service_name == "CMPP" and invoicing.status == "open" %}
+        Etes-vous sûr de vouloir clôre la facturation {{ invoicing.seq_id }} débutée le {{ invoicing.start_date }} en date du
+        <input type="text" value="{{ date }}"/>
+         ?
+    {% else %}
+        Opération refusée.
+    {% endif %}
+</div>

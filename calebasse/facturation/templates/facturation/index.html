@@ -1,0 +1,53 @@
+{% extends "facturation/base.html" %}
+{% load url from future %}
+
+{% block appbar %}
+    <h2>{% if service_name == "CMPP" %}Facturation{% else %}Décompte{% endif %}</h2>
+    <a href="../..">Retourner à l'accueil</a>
+    <button id="new-dossier">Jours non vérouillés</button>
+{% endblock %}
+
+{% block content %}
+    <ul>
+    {% if current %}
+        <li><label>
+            {% if service_name == "CMPP" %}Facturation{% else %}Décompte{% endif %}
+            en cours :
+            </label>
+            <a href="{{ current.pk }}">{{ current.seq_id }}</a> -
+            {% if service_name == "CMPP" %}
+            à partir du {{ current.start_date }}
+            {% else %}
+            trimestre du {{ current.start_date }} au {{ current.end_date }}
+            {% endif %}
+        </li>
+    {% endif %}
+    {% if last %}
+        <li><label>
+            {% if service_name == "CMPP" %}Dernière facturation{% else %}Dernier décompte{% endif %} :
+            </label>
+            <a href="{{ last.pk }}">{{ last.seq_id }}</a> -
+            {% if service_name == "CMPP" %}
+            période du {{ last.start_date }} au {{ last.end_date }}
+            {% else %}
+            trimestre du {{ last.start_date }} au {{ last.end_date }}
+            {% endif %}
+            ({% if last.status != "validated" %}
+                {% if service_name == "CMPP" %}
+                Non validée
+                {% else %}
+                Non validé
+                {% endif %}
+            {% else %}
+                {% if service_name == "CMPP" %}
+                Validée
+                {% else %}
+                Validé
+                {% endif %}
+            {% endif %})
+        </li>
+    {% endif %}
+    </ul>
+
+    <h3>Récapitulatif des {% if service_name == "CMPP" %}facturations{% else %}décomptes{% endif %}</h3>
+{% endblock %}
