@@ -1,16 +1,31 @@
 
-from calebasse.cbv import ListView
+from calebasse.cbv import ListView, MultiUpdateView
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord
-from calebasse.dossiers.forms import SearchForm
+from calebasse.dossiers.forms import SearchForm, CivilStatusForm
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 
-class DossiersHomepageView(ListView):
+
+class PatientRecordView(MultiUpdateView):
+    """
+    """
+    model = PatientRecord
+    forms_classes = {'civil_status': CivilStatusForm}
+    template_name = 'dossiers/patientrecord_update.html'
+    success_url = './'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordView, self).get_context_data(**kwargs)
+        return ctx
+
+patient_record = PatientRecordView.as_view()
+
+class PatientRecordsHomepageView(ListView):
     model = PatientRecord
     template_name = 'dossiers/index.html'
 
     def get_queryset(self):
-        qs = super(DossiersHomepageView, self).get_queryset()
+        qs = super(PatientRecordsHomepageView, self).get_queryset()
         first_name = self.request.GET.get('first_name')
         last_name = self.request.GET.get('last_name')
         paper_id = self.request.GET.get('paper_id')
@@ -32,7 +47,7 @@ class DossiersHomepageView(ListView):
         return qs
 
     def get_context_data(self, **kwargs):
-        ctx = super(DossiersHomepageView, self).get_context_data(**kwargs)
+        ctx = super(PatientRecordsHomepageView, self).get_context_data(**kwargs)
         ctx['search_form'] = SearchForm(data=self.request.GET or None)
         ctx['patient_records'] = []
         ctx['stats'] = {"dossiers": 0,

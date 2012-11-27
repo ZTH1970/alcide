@@ -149,9 +149,9 @@ class FileState(models.Model):
             return None
 
     def save(self, **kwargs):
-#        self.date_selected = \
-#            datetime(self.date_selected.year,
-#                self.date_selected.month, self.date_selected.day)
+        self.date_selected = \
+                datetime(self.date_selected.year,
+                        self.date_selected.month, self.date_selected.day)
         super(FileState, self).save(**kwargs)
 
     def __unicode__(self):
@@ -171,6 +171,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     contacts = models.ManyToManyField('personnes.People',
             related_name='contact_of')
     birthdate = models.DateField(null=True, blank=True)
+    nationality = models.CharField(max_length=70, null=True, blank=True)
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
     social_security_id = models.CharField(max_length=13)

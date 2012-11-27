@@ -6,11 +6,6 @@ from django.forms import ModelForm, Form
 from models import PatientRecord
 from states import STATE_CHOICES
 
-class CreatePatientRecordForm(ModelForm):
-    class Meta:
-        model = PatientRecord
-
-
 class EditPatientRecordForm(ModelForm):
     class Meta:
         model = PatientRecord
@@ -25,3 +20,7 @@ class SearchForm(Form):
             label=u"test",
             choices=STATE_CHOICES, initial=(0,1,2,3,4))
 
+class CivilStatusForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('first_name', 'last_name', 'birthdate', 'gender', 'nationality')
