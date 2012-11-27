@@ -1,0 +1,326 @@
+{% extends "dossiers/base.html" %}
+{% load url from future %}
+
+{% block appbar %}
+<h2>{{ object.last_name }} {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
+<a href="..">Retourner aux dossiers</a>
+<button>Supprimer</button>
+{% endblock %}
+
+{% block content %}
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Général</a></li>
+    <li><a href="#tabs-2">Fiche administrative</a></li>
+    <li><a href="#tabs-3">Adresses / contacts</a></li>
+    <li><a href="#tabs-4">Prise en charge</a></li>
+    <!--<li><a href="#tabs-5">Liste des actes</a>-->
+    <li><a href="#tabs-6">Prochains rendez-vous</a>
+    <li><a href="#tabs-7">Socialisation</a>
+    <li><a href="#tabs-8">Données à caractère médical</a>
+  </ul>
+  <div id="tabs-1"> <!-- Général -->
+    <div class="left">
+      <ul>
+        <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Aucun" }} <button>✍</button></li>
+        <li><label>N° dossier informatique :</label>{{ object.id }}</li>
+        <li><label>Nom :</label> {{ object.last_name }}</li>
+        <li><label>Prénom :</label> {{ object.first_name }}</li>
+        <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
+        <li><label>Lieux de vie :</label>
+        <ul>
+          <li>Adresse A - Téléphone A</li>
+          <li>Adresse B - Téléphone B</li>
+        </ul></li>
+        <li><label>Date d'inscription :</label> 01/06/2012</li>
+        <li><label>Lieu de socialisation :</label> École Truc</li>
+        <li><label>Commentaire :</label><br/><textarea cols="50" rows="5"></textarea> <button>Mettre à jour</button></li>
+      </ul>
+    </div>
+    <div class="right">
+      <ul>
+        <li><label>Dernier acte :</label> 28/06/2012 - T - absence excusée</li>
+        <li><label>Prochain rendez-vous :</label> 18/08/2012 - Roudon - mini synthèse.</li>
+      </ul>
+      <div class="etat">
+          <h4>État du dossier :  {{ object.last_state.status.name.lower }}</h4>
+        <p>depuis le 20/05/2012</p>
+        <p><label>Commentaire :</label> bla bla bla bla</p>
+        <button id="clore-dossier">Clore</button>
+        <button id="reaccueillir-dossier">Ré-accueillir</button>
+        <button id="historique-dossier">Historique</button><br/>
+        <hr/>
+        3/6 diagnostics
+      </div>
+
+      <div class="notifs">
+        <h4>Notifications</h4>
+        <ul>
+          <li>Dossier en pause facturation <button>Sortir</button></li>
+        </ul>
+      </div>
+
+    </div>
+    <br style="clear:both"/>
+  </div>
+
+  <div id="tabs-2"> <!-- Fiche administrative -->
+    <div class="frame">
+      <h3>État civil</h3>
+      <button class="save">✔</button>
+      <p><label>Nom :</label> <input value="Bouclier"/>
+      <label>Prénom(s) :</label> <input value="Guillaume"/></p>
+      <p><label>Date de naissance :</label> <input value="1/1/2005"/>
+      <label>Genre :</label> <input value="M"/>
+      <label>Nationalité :</label> <input value="française"/></p>
+    </div>
+
+    <div class="frame">
+      <h3>Physiologie</h3>
+      <button class="save">✔</button>
+      <p><label>Taille (cm) :</label> <input value="176"/>
+      <label>Poids (kg) :</label> <input value="68"/>
+      <label>Terme en semaines :</label> <input/></p>
+    </div>
+
+    <div class="frame">
+      <h3>Inscription</h3>
+      <button class="save">✔</button>
+      <p>
+      <label>Motif (analysé) :</label> <select><option>Indéfini</option></select> <button>+</button>
+      <label>Motif (famille) :</label> <select><option>Indéfini</option></select> <button>+</button>
+      <label>Conseilleur :</label> <select><option>Indéfini</option></select> <button>+</button>
+      </p>
+
+    </div>
+
+    <div class="frame">
+      <h3>Famille</h3>
+      <button class="save">✔</button>
+      <p><label>Place dans la fratrie :</label> <input size="4"/>
+      <label>Nombre d'enfants dans la fratrie :</label> <input size="4"/>
+      <label>Rang (gémellité) :</label> <input size="4"/>
+      </p>
+      <p>
+      <label>Autorité parentale :</label> <select><option>Indéfini</option></select> <button>+</button>
+      <label>Situation familiale :</label> <select><option>Indéfini</option></select> <button>+</button>
+      <label>Garde parentale :</label> <select><option>Indéfini</option></select> <button>+</button>
+      </p>
+
+    </div>
+
+    <div class="frame">
+      <h3>Transport</h3>
+      <button class="save">✔</button>
+      <p>
+      <label>Type de transport :</label> <select><option>Indéfini</option></select> <button>+</button>
+      <label>Compagnie de transport :</label> <select><option>Indéfini</option></select> <button>+</button>
+      </p>
+      <table>
+        <tr><td><button>Attestation</button></td> <td><button>Prescription</td></tr>
+          <tr><td>Dernière attestation le 25/07/2012 <button>Historique</button></td>
+            <td>Dernière prescription le 25/07/2012 <button>Historique</button></td></tr>
+        </table>
+      </div>
+
+      <div class="frame">
+        <h3>Suivi du patient</h3>
+        <button class="save">✔</button>
+        <p>
+        <label>Coordinateur I :</label> <select><option>Indéfini</option></select> <button>+</button>
+        <label>Coordinateur II :</label> <select><option>Indéfini</option></select> <button>+</button>
+        <label>Coordinateur III :</label> <select><option>Indéfini</option></select> <button>+</button>
+        </p>
+        <p>
+        <label>Médecin extérieur :</label> <select><option>Indéfini</option></select> <button>+</button>
+        <label>Intervenant extérieur :</label> <select><option>Indéfini</option></select> <button>+</button>
+        </p>
+      </div>
+
+    </div>
+
+    <div id="tabs-3"> <!-- Adresses / Contacts -->
+      <button id="new-address-btn">Nouvelle adresse</button> <button>Nouveau contact</button>
+      <div class="frame">
+        <h3>16 rue du Clocher</h3>
+        <div class="buttons"><button>➖</button> <button>✍</button></div>
+        <div class="right">
+          <input type="checkbox" checked>Lieu de vie</input>
+        </div>
+        <p>13004 Marseille</p>
+        <p>04 91 12 34 56</p>
+        <div class="contact">
+          <h4>Mme Marie Carmarie</h4>
+          <div class="right">
+            <input type="radio" name="radio-assure" checked="checked">Assuré</input>
+            <button>➖</button> <button>✍</button>
+          </div>
+          <p>2 70 12 34 567 890 12</p>
+          <p>06 12 34 56 78</p>
+        </div>
+        <div class="contact patient">
+          <h4>M. Guillaume Bouclier (PATIENT)</h4>
+          <div class="right">
+            <input type="radio" name="radio-assure" >Assuré</input>
+            <button>➖</button> <button>✍</button>
+          </div>
+          <p>1 04 12 34 567 890 12</p>
+        </div>
+      </div>
+
+      <div class="frame">
+        <h3>2 rue du Château</h3>
+        <div class="buttons"><button>➖</button> <button>✍</button></div>
+        <div class="right">
+          <input type="checkbox">Lieu de vie</input>
+        </div>
+        <p>42000 Saint-Etienne</p>
+        <p>04 77 12 34 56</p>
+        <div class="contact">
+          <h4>M. John Leponge</h4>
+          <div class="right">
+            <input type="radio" name="radio-assure">Assuré</input>
+            <button>➖</button> <button>✍</button>
+          </div>
+          <p>1 70 12 34 567 890 12</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="tabs-4"> <!-- Prise en charge -->
+      <div id="patient-diag">
+        <div class="frame">
+          <h3>En diagnostic depuis le 11 juin 2012</h3>
+          <ul>
+            <li><input size="4" value="6"/> actes prévus</li>
+            <li><strong>3</strong> actes réalisés dont <strong>2</strong> facturés <button class="blind">détails</button>
+            <ul>
+              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>2</strong> actes
+              <ul>
+                <li>Accueil le 11 juin 2012 - 9h00 - 45 minutes - Bob Leponge</li>
+                <li>Dialogue le 12 juin 2012 - 10h00 - 30 minutes - Bob Leponge</li>
+              </ul></li>
+              <li>Non facturé - <strong>1 acte</strong>
+              <ul>
+                <li>Dialogue le 13 juin 2012 - 11h00 - 45 minutes - Sandy Kilo</li>
+              </ul></li>
+            </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="patient-traitement" style="display: none;">
+        <div class="frame">
+          <h3>En diagnostic depuis le 6 mars 2012</h3>
+          <ul>
+            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
+            <ul>
+              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
+              <ul>
+                <li>...</li>
+              </ul></li>
+            </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="frame">
+          <h3>En traitement depuis le 11 juin 2012</h3>
+          <ul>
+            <li><strong>4</strong> actes réalisés <button class="blind">détails</button>
+            <ul><li>...</li></ul>
+            </li>
+            <li>Pas de prise en charge - <button id="add-prise-en-charge-btn">Ajouter une prise en charge</button></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div id="patient-traitement-charge" style="display: none;">
+
+        <div class="frame">
+          <h3>En diagnostic depuis le 2 avril 2008</h3>
+          <ul>
+            <li><strong>3</strong> actes réalisés et facturés <button class="blind">détails</button>
+            <ul>
+              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>3</strong> actes
+              <ul>
+                <li>...</li>
+              </ul></li>
+            </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="frame">
+          <h3>En diagnostic depuis le 5 octobre 2010</h3>
+          <ul>
+            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
+            <ul>
+              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
+              <ul>
+                <li>...</li>
+              </ul></li>
+            </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="frame">
+          <h3>En traitement depuis le 12 décembre 2010</h3>
+          <ul>
+            <li>Prise en charge depuis le 12 décembre 2010
+            <ul>
+              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>
+              <ul><li>...</li></ul></li>
+              <li><strong>10</strong> actes réalisés et facturés en prolongation <button class="blind">détails</button>
+              <ul><li>...</li></ul></li>
+              <li><strong>6</strong> actes réalisés et non pris en charge <button class="blind">détails</button>
+              <ul><li>...</li></ul></li>
+            </ul>
+            </li>
+            <li>Prise en charge depuis le 15 décembre 2011
+            <ul>
+              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>
+              <ul><li>...</li></ul></li>
+              <li><strong>6</strong> actes réalisés non facturés <button class="blind">détails</button>
+              <ul><li>...</li></ul></li>
+              <li><button id="add-prolongation-btn">Ajouter une prolongation</button></li>
+            </ul>
+            </li>
+          </ul>
+        </div>
+
+
+      </div>
+
+      <div id="overlay">
+        <p>
+        Exemples pour cet onglet :
+        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a> -
+        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a> -
+        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>
+        </p>
+      </div>
+
+    </div>
+
+    <!--
+    <div id="tabs-5">
+    </div>
+    -->
+
+    <div id="tabs-6">
+    </div>
+
+    <div id="tabs-7">
+    </div>
+
+    <div id="tabs-8">
+    </div>
+  </div>
+</div>
+{% endblock %}
+
