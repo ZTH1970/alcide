@@ -16,8 +16,8 @@ def quarter_start_and_end_dates(today=None):
     '''Returns the first and last day of the current quarter'''
     if today is None:
         today = date.today()
-    quarter = (today.month - 1) % 3
-    start_date = date(day=1, month=(quarter*3)+1, year=today.year),
+    quarter = today.month / 3
+    start_date = date(day=1, month=(quarter*3)+1, year=today.year)
     end_date = start_date + relativedelta(months=3) + relativedelta(days=-1)
     return start_date, end_date
 
@@ -31,11 +31,23 @@ class InvoicingManager(ServiceLinkedManager):
         else:
             try:
                 invoicing = self.get(service=service,
-                        end_date__gte=date.today())
-            except Invoicing.DoesNotExist:
-                invoicing, created = self.get_or_create(service=service,
                         status=Invoicing.STATUS.open)
+            except Invoicing.DoesNotExist:
+                today = date.today()
+                start_date = date(day=today.day, month=today.month, year=today.year)
+                invoicing, created = self.get_or_create(service=service,
+                    start_date = start_date,
+                    status=Invoicing.STATUS.open)
         return invoicing
+
+    def last_for_service(self, service):
+        current = self.current_for_service(service)
+        last_seq_id = current.seq_id - 1
+        try:
+            return self.get(service=service,
+                seq_id=last_seq_id)
+        except:
+            return None
 
 class Invoicing(models.Model):
     '''Represent a batch of invoices:
@@ -48,7 +60,7 @@ class Invoicing(models.Model):
         - open, the invoicing is open for new acts
         - closed, invoicing has been closed, no new acts will be accepted after
           the end_date,
-        - validated, 
+        - validated,
     '''
     STATUS = Choices('open', 'closed', 'validated', 'sent')
 
@@ -79,8 +91,12 @@ class Invoicing(models.Model):
 
     def allocate_seq_id(self):
         '''Allocate a new sequence id for a new invoicing.'''
-        return Invoicing.objects.for_service(self.service) \
-                .aggregate(Max('seq_id')) + 1
+        seq_id = 1
+        max_seq_id = Invoicing.objects.for_service(self.service) \
+                .aggregate(Max('seq_id'))['seq_id__max']
+        if max_seq_id:
+            seq_id = seq_id + max_seq_id
+        return seq_id
 
     def list_for_billing(self):
         '''Return list of acts for billing'''
@@ -88,7 +104,11 @@ class Invoicing(models.Model):
         if self.acts.exists():
             acts = self.acts.all()
         if self.service.name == 'CMPP':
-            return list_acts.list_acts_for_billing_CMPP(self.end_date,
+            end_date = self.end_date
+            if not end_date:
+                today = date.today()
+                end_date = date(day=today.day, month=today.month, year=today.year)
+            return list_acts.list_acts_for_billing_CMPP(end_date,
                     service=self.service, acts=acts)
         elif self.service.name == 'CAMSP':
             return list_acts.list_acts_for_billing_CAMSP(self.start_date,
@@ -102,18 +122,19 @@ class Invoicing(models.Model):
     def save(self, *args, **kwargs):
         if not self.seq_id:
             self.seq_id = self.allocate_seq_id()
-            self.start_date, self.end_date = quarter_start_and_end_dates()
-            if self.service.name != 'CMPP':
-                self.start_date, self.end_date = quarter_start_and_end_dates()
-                self.status = Invoicing.STATUS.validated
-                self.end_date = None
         super(Invoicing, self).save(*args, **kwargs)
 
-    def close(self):
+    def close(self, end_date=None):
         '''Close an open invoicing'''
+        if self.service.name != 'CMPP':
+            raise RuntimeError('closing Invoicing is only for the CMPP')
         if self.status != Invoicing.STATUS.open:
             raise RuntimeError('closing an un-opened Invoicing')
-        self.seq_id = self.allocate_seq_id()
+        if not end_date:
+            today = date.today()
+            end_date = date(day=today.day, month=today.month, year=today.year)
+        self.status = Invoicing.STATUS.closed
+        self.end_date = end_date
         self.save()
 
     def validate(self):
@@ -135,5 +156,3 @@ class Invoicing(models.Model):
         self.acts = acts
         self.status = Invoicing.STATUS.closed
         self.save()
-
-
