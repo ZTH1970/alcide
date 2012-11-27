@@ -6,6 +6,9 @@
     $('#btn_none_state').click(function() {
       $('.checkbox_state').attr('checked', false);
     });
+    $('.pr-line').click(function() {
+        window.location.href = $(this).data('link');
+    });
     $('#tabs').tabs();
     $('#clore-dossier').click(function() {
       $('#dossier-change').dialog({title: 'Changement - Clôture',

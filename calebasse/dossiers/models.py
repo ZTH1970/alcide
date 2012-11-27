@@ -332,7 +332,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
                     if (self.last_state.status.type == "ACCEUIL" \
-                            or self.last_state.status.type == "TRAITMENT") \
+                            or self.last_state.status.type == "TRAITEMENT") \
                             and "CMPP" in last_state_services:
                         status = Status.objects.filter(type="DIAGNOSTIC").\
                                 filter(services__name='CMPP')[0]
@@ -342,7 +342,7 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
                 # en diag, il est en traitement.
                 elif self.last_state.status.type == "DIAGNOSTIC" and \
                         "CMPP" in last_state_services:
-                    status = Status.objects.filter(type="TRAITMENT").\
+                    status = Status.objects.filter(type="TRAITEMENT").\
                             filter(services__name='CMPP')[0]
                     self.set_state(status, modifier,
                             date_selected=act.date)

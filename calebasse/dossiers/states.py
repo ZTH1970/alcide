@@ -17,7 +17,7 @@ STATE_CHOICES_TYPE = {
         '0': 'ACCUEIL',
         '1': 'FIN_ACCUEIL',
         '2': 'DIAGNOSTIC',
-        '3': 'TRAITMENT',
+        '3': 'TRAITEMENT',
         '4': 'CLOS',
         }
 
@@ -26,7 +26,7 @@ STATES_MAPPING = {
     'ACCUEIL': STATE_CHOICES[0][1],
     'FIN_ACCUEIL': STATE_CHOICES[1][1],
     'DIAGNOSTIC': STATE_CHOICES[2][1],
-    'TRAITMENT': STATE_CHOICES[3][1],
+    'TRAITEMENT': STATE_CHOICES[3][1],
     'CLOS': STATE_CHOICES[4][1]
 }
 

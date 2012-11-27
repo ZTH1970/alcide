@@ -76,12 +76,14 @@ class PatientRecordsHomepageView(ListView):
                     state = STATES_MAPPING[patient_record.last_state.status.type]
                 else:
                     state = patient_record.last_state.status.name
+                state_class = patient_record.last_state.status.type.lower()
                 ctx['patient_records'].append(
                         {
                             'object': patient_record,
                             'next_rdv': next_rdv,
                             'last_rdv': last_rdv,
-                            'state': state
+                            'state': state,
+                            'state_class': state_class
                             }
                         )
                 state = state.replace(' ', '_')

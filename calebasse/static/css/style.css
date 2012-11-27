@@ -558,11 +558,11 @@ table#actes tr.non-factu td {
   background: #ccc;
 }
 
-td.traite {
+td.traitement {
 	color: blue;
 }
 
-td.diag {
+td.diagnostic {
 	color: red;
 }
 
