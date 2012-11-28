@@ -1,3 +1,4 @@
+import ipdb
 # -*- coding: utf-8 -*-
 
 import logging
@@ -394,16 +395,16 @@ def create_patient(first_name, last_name, service, creator,
     status = Status.objects.filter(type="ACCUEIL").filter(services=service)
     if not status:
         raise Exception('%s has no ACCEUIL status' % service.name)
-    patient = PatientRecord(first_name=first_name,
+    patient = PatientRecord.objects.create(first_name=first_name,
             last_name=last_name, service=service,
             creator=creator)
     fs = FileState(status=status[0], author=creator, previous_state=None)
-    patient.last_state = fs
-    patient.save()
     if not date_selected:
         date_selected = patient.created
     fs.patient = patient
     fs.date_selected = date_selected
     fs.save()
+    patient.last_state = fs
+    patient.save()
     return patient
 
