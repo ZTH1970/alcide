@@ -1,0 +1,11 @@
+<form action="{{ request.get_full_path }}" method="post">
+  {% csrf_token %}
+   <p>
+   <label for="id_date">Date :</label>
+   <input id="id_date" class="date" name="date" value="{% now "d/m/Y" %}"/>
+   </p>
+   <p>
+    <label for="id_comment">Commentaire :</label>
+    <textarea id="id_comment" style="width: 90%;"></textarea>
+   </p>
+ </form>

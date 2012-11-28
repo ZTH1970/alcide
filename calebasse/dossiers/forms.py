@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date
+
 from django import forms
 from django.forms import ModelForm, Form
 
@@ -19,6 +21,13 @@ class SearchForm(Form):
             widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}),
             label=u"test",
             choices=STATE_CHOICES, initial=(0,1,2,3,4))
+
+class StateForm(Form):
+    patient_id = forms.IntegerField()
+    new_state_name = forms.CharField(max_length=40)
+    date = forms.DateField(label=u'Date')
+    comment = forms.CharField(label='Commentaire',
+            required=False, widget=forms.Textarea)
 
 class CivilStatusForm(ModelForm):
     class Meta:

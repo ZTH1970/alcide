@@ -67,7 +67,7 @@
     <tbody>
 
       {% for patient_record in patient_records %}
-      <tr style="display: table-row;" class="pr-line {{ patient_record.state_class }}" data-link="{{ patient_record.object.id }}">
+      <tr style="display: table-row;" class="pr-line {{ patient_record.state_class }}" data-link="{{ patient_record.object.id }}/view">
           <td>{{ patient_record.object.paper_id|default_if_none:"" }}</td>
           <td>{{ patient_record.object.id }}</td>
           <td>{{ patient_record.object.last_name }}</td>

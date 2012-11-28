@@ -1,8 +1,7 @@
-
-from calebasse.cbv import ListView, MultiUpdateView
+from calebasse.cbv import ListView, MultiUpdateView, FormView
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord
-from calebasse.dossiers.forms import SearchForm, CivilStatusForm
+from calebasse.dossiers.forms import SearchForm, CivilStatusForm, StateForm
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 
 
@@ -23,6 +22,21 @@ def get_last_rdv(patient_record):
         last_rdv['participants'] = occurrence.event.participants.all()
         last_rdv['act_type'] = occurrence.event.eventact.act_type
     return last_rdv
+
+class StateFormView(FormView):
+    template_name = 'dossiers/state.html'
+    form_class = StateForm
+    success_url = '..'
+
+    def form_valid(self, form):
+        """
+<QueryDict: {u'new_state_name': [u'test'], u'date': [u'5/7/2012'], u'csrfmiddlewaretoken': [u'dLTuqeVteRJ4YxVQONFD9X6TqzzAuKqM'], u'patient_id': [u'4242']}>
+        """
+        # TODO: update status here
+        return super(StateFormView, self).form_valid(form)
+
+state_form = StateFormView.as_view()
+
 
 class PatientRecordView(MultiUpdateView):
     """
@@ -103,3 +117,4 @@ class PatientRecordsHomepageView(ListView):
 
         return ctx
 
+patientrecord_home = PatientRecordsHomepageView.as_view()
