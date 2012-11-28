@@ -20,7 +20,7 @@ class ActTest(TestCase):
         therapist2 = Worker.objects.create(first_name='Jean', last_name='Valjean', type=wtype)
         therapist3 = Worker.objects.create(first_name='Pierre', last_name='PaulJacques', type=wtype)
         act_type = ActType.objects.create(name='trepanation')
-        service = Service.objects.create(name='CMPP')
+        service = Service.objects.get(name='CMPP')
 
         creator = User.objects.create(username='John')
         patient = create_patient('John', 'Doe', service, creator)
