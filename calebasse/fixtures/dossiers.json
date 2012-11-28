@@ -3,9 +3,9 @@
     "pk": 1, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 1, 
       "comment": "", 
       "patient": 8, 
-      "status": 1, 
       "author": 1, 
       "created": "2012-11-07T18:54:59.893", 
       "previous_state": null, 
@@ -16,9 +16,9 @@
     "pk": 2, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 1, 
       "comment": "", 
       "patient": 9, 
-      "status": 1, 
       "author": 1, 
       "created": "2012-11-07T18:55:09.426", 
       "previous_state": null, 
@@ -29,9 +29,9 @@
     "pk": 3, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 2, 
       "comment": "", 
       "patient": 10, 
-      "status": 2, 
       "author": 1, 
       "created": "2012-11-21T14:27:19.671", 
       "previous_state": null, 
@@ -42,9 +42,9 @@
     "pk": 4, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 4, 
       "comment": "", 
       "patient": 11, 
-      "status": 4, 
       "author": 1, 
       "created": "2012-11-21T14:27:50.036", 
       "previous_state": null, 
@@ -55,9 +55,9 @@
     "pk": 5, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 5, 
       "comment": "", 
       "patient": 12, 
-      "status": 5, 
       "author": 1, 
       "created": "2012-11-21T14:28:20.773", 
       "previous_state": null, 
@@ -68,9 +68,9 @@
     "pk": 6, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 7, 
       "comment": "", 
       "patient": 13, 
-      "status": 7, 
       "author": 1, 
       "created": "2012-11-21T14:28:43.228", 
       "previous_state": null, 
@@ -81,9 +81,9 @@
     "pk": 7, 
     "model": "dossiers.filestate", 
     "fields": {
+      "status": 3, 
       "comment": "", 
       "patient": 9, 
-      "status": 3, 
       "author": 1, 
       "created": "2012-11-21T14:30:05.626", 
       "previous_state": null, 
@@ -92,12 +92,138 @@
   }, 
   {
     "pk": 8, 
+    "model": "dossiers.filestate", 
+    "fields": {
+      "status": 1, 
+      "comment": "ceci est un test", 
+      "patient": 14, 
+      "author": 1, 
+      "created": "2012-11-28T11:28:25.717", 
+      "previous_state": null, 
+      "date_selected": "2012-11-28T00:00:00"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "dossiers.patientaddress", 
+    "fields": {
+      "city": "Saint Etienne", 
+      "fax": "04 77 49 28 91", 
+      "address_complement": "", 
+      "phone": "04 77 49 28 90", 
+      "address": "30 rue de la libert\u00e9", 
+      "zip_code": "4200"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "dossiers.patientaddress", 
+    "fields": {
+      "city": "Saint-\u00c9tienne", 
+      "fax": "", 
+      "address_complement": "", 
+      "phone": "04 24 42 52 36", 
+      "address": "42 avenue John Doe", 
+      "zip_code": "42000"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0642121674", 
+      "social_security_id": "2420910236578", 
+      "email": "jeanne.darc@gmail.com", 
+      "addresses": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0654123654", 
+      "social_security_id": "1424868464768", 
+      "email": "john.doe@gmail.com", 
+      "addresses": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0654123654", 
+      "social_security_id": "1544868464768", 
+      "email": "jean.dupond@gmail.com", 
+      "addresses": [
+        2
+      ]
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0644452130", 
+      "social_security_id": "1841853654541", 
+      "email": "guillaume.bouclier@yahoo.com", 
+      "addresses": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0608451237", 
+      "social_security_id": "1006895123654", 
+      "email": "andre.hendrickx@toto.com", 
+      "addresses": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0654123654", 
+      "social_security_id": "1180549588157", 
+      "email": "jack.itchan@hotmail.com", 
+      "addresses": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "dossiers.patientcontact", 
+    "fields": {
+      "mobile": "0728452130", 
+      "social_security_id": "2540913236578", 
+      "email": "claudia.schiffer@yahoo.com", 
+      "addresses": [
+        1, 
+        2
+      ]
+    }
+  }, 
+  {
+    "pk": 8, 
     "model": "dossiers.patientrecord", 
     "fields": {
+      "last_state": 1, 
+      "school": 1, 
+      "addresses": [
+        1
+      ], 
       "service": 1, 
       "creator": 1, 
-      "created": "2012-10-12T16:15:37.306", 
-      "social_security_id": "1690549588157", 
+      "created": "2012-11-28T11:02:06.292", 
       "contacts": [
         1, 
         2, 
@@ -106,17 +232,21 @@
       ], 
       "birthdate": "1980-10-31", 
       "paper_id": "1024", 
-      "last_state": 1
+      "nationality": "Fran\u00e7ais"
     }
   }, 
   {
     "pk": 9, 
     "model": "dossiers.patientrecord", 
     "fields": {
+      "last_state": 7, 
+      "school": 1, 
+      "addresses": [
+        1
+      ], 
       "service": 1, 
       "creator": 1, 
-      "created": "2012-10-12T16:15:37.306", 
-      "social_security_id": "1180549588157", 
+      "created": "2012-11-28T11:02:06.292", 
       "contacts": [
         1, 
         2, 
@@ -124,73 +254,110 @@
         3
       ], 
       "birthdate": "1988-12-30", 
-      "paper_id": null, 
-      "last_state": 7
+      "paper_id": "45789", 
+      "nationality": "Fran\u00e7ais"
     }
   }, 
   {
     "pk": 10, 
     "model": "dossiers.patientrecord", 
     "fields": {
+      "last_state": 3, 
+      "school": 1, 
+      "addresses": [
+        1
+      ], 
       "service": 1, 
       "creator": 1, 
-      "created": "2012-11-21T14:20:54.571", 
-      "social_security_id": "2420910236578", 
+      "created": "2012-11-28T11:02:06.292", 
       "contacts": [
         2
       ], 
       "birthdate": "1995-11-21", 
       "paper_id": "4243", 
-      "last_state": 3
+      "nationality": "Fran\u00e7ais"
     }
   }, 
   {
     "pk": 11, 
     "model": "dossiers.patientrecord", 
     "fields": {
-      "service": 2, 
+      "last_state": 4, 
+      "school": null, 
+      "addresses": [
+        1, 
+        2
+      ], 
+      "service": 1, 
       "creator": 1, 
-      "created": "2012-11-21T14:22:18.974", 
-      "social_security_id": "2540913236578", 
+      "created": "2012-11-28T11:02:06.292", 
       "contacts": [
         2
       ], 
       "birthdate": "1998-01-21", 
-      "paper_id": "424243", 
-      "last_state": 4
+      "paper_id": "424243L", 
+      "nationality": "Fran\u00e7ais"
     }
   }, 
   {
     "pk": 12, 
     "model": "dossiers.patientrecord", 
     "fields": {
+      "last_state": 4, 
+      "school": 1, 
+      "addresses": [
+        1
+      ], 
       "service": 1, 
       "creator": 1, 
-      "created": "2012-11-21T14:24:48.775", 
-      "social_security_id": "1841853654541", 
+      "created": "2012-11-28T11:02:06.292", 
       "contacts": [
         7, 
         6
       ], 
       "birthdate": "1984-11-21", 
       "paper_id": "424546", 
-      "last_state": 5
+      "nationality": "Fran\u00e7ais"
     }
   }, 
   {
     "pk": 13, 
     "model": "dossiers.patientrecord", 
     "fields": {
+      "last_state": 6, 
+      "school": 1, 
+      "addresses": [
+        1
+      ], 
       "service": 3, 
       "creator": 1, 
-      "created": "2012-11-21T14:26:07.387", 
-      "social_security_id": "1006895123654", 
+      "created": "2012-11-28T11:02:06.292", 
       "contacts": [
         5
       ], 
       "birthdate": "2000-11-21", 
       "paper_id": "425874", 
-      "last_state": 6
+      "nationality": "Fran\u00e7ais"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "dossiers.patientrecord", 
+    "fields": {
+      "last_state": 8, 
+      "school": null, 
+      "addresses": [
+        2
+      ], 
+      "service": 3, 
+      "creator": 1, 
+      "created": "2012-11-28T11:02:06.292", 
+      "contacts": [
+        2
+      ], 
+      "birthdate": "1989-11-28", 
+      "paper_id": "123456", 
+      "nationality": "Fran\u00e7ais"
     }
   }
 ]

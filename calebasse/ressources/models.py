@@ -114,7 +114,7 @@ class School(models.Model):
         return self.name
 
     name = models.CharField(max_length=70, blank=False)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True, default=None)
     address = models.CharField(max_length=120)
     address_complement = models.CharField(max_length=120,
             blank=True,
@@ -123,9 +123,11 @@ class School(models.Model):
     zip_code = ZipCodeField(verbose_name=u"Code postal")
     city = models.CharField(max_length=80)
     phone = PhoneNumberField(verbose_name=u"Téléphone")
-    fax = models.CharField(max_length=30)
-    email = models.EmailField()
-    director_name = models.CharField(max_length=70)
+    fax = models.CharField(max_length=30,
+            blank=True, null=True, default=None)
+    email = models.EmailField(blank=True, null=True)
+    director_name = models.CharField(max_length=70,
+            blank=True, null=True, default=None)
 
 class SchoolTeacherRole(NamedAbstractModel):
     class Meta:

@@ -156,13 +156,17 @@ class FileState(models.Model):
         super(FileState, self).save(**kwargs)
 
     def __unicode__(self):
-        return self.state_name + ' ' + str(self.date_selected)
+        return self.status.name + ' ' + str(self.date_selected)
 
 class PatientAddress(models.Model):
 
-    # Address
+    def __unicode__(self):
+        return self.address + ', ' + self.city
+
+    phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
+    fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
     address = models.CharField(max_length=120,
-            verbose_name=u"Addresse")
+            verbose_name=u"Adresse")
     address_complement = models.CharField(max_length=120,
             blank=True,
             null=True,
@@ -177,11 +181,11 @@ class PatientContact(People):
         verbose_name = u'Contact patient'
         verbose_name_plural = u'Contacts patient'
 
-    phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
-    fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
+    mobile = PhoneNumberField(verbose_name=u"Téléphone mobile", blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    social_security_id = models.CharField(max_length=13)
-    addresses = models.ManyToManyField('PatientAddress')
+    social_security_id = models.CharField(max_length=13, verbose_name=u"Numéro de sécurité sociale")
+    addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses",
+            blank=True, null=True)
 
 
 class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
@@ -202,6 +206,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True)
     last_state = models.ForeignKey(FileState, related_name='+',
             null=True)
+    school = models.ForeignKey('ressources.School',
+            null=True, blank=True, default=None)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)

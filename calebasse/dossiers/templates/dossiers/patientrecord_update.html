@@ -29,8 +29,10 @@
         <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
         <li><label>Lieux de vie :</label>
         <ul>
-          <li>Adresse A - Téléphone A</li>
-          <li>Adresse B - Téléphone B</li>
+          {% for address in object.addresses.all %}
+          <li>{{ address.address }}, {{ address.city }} - {{ address.phone }} </li>
+          {% endfor %}
+
         </ul></li>
         <li><label>Date d'inscription :</label> 01/06/2012</li>
         <li><label>Lieu de socialisation :</label> École Truc</li>

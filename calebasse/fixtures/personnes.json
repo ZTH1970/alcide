@@ -1,304 +1,314 @@
 [
-    {
-        "fields": {
-            "name": "admin_access",
-            "users": []
-        },
-        "model": "personnes.role",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "name": "validator",
-            "users": []
-        },
-        "model": "personnes.role",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "display_name": "Jeanne D'Arc",
-            "first_name": "Jeanne",
-            "gender": 2,
-            "last_name": "D'Arc"
-        },
-        "model": "personnes.people",
-        "pk": 10
-    },
-    {
-        "fields": {
-            "display_name": "John Doe",
-            "first_name": "John",
-            "gender": 1,
-            "last_name": "Doe"
-        },
-        "model": "personnes.people",
-        "pk": 8
-    },
-    {
-        "fields": {
-            "display_name": "Gloria Dupond",
-            "first_name": "Gloria",
-            "gender": 2,
-            "last_name": "Dupond"
-        },
-        "model": "personnes.people",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "display_name": "Fran\u00e7ois Durant",
-            "first_name": "Fran\u00e7ois",
-            "gender": 1,
-            "last_name": "Durant"
-        },
-        "model": "personnes.people",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "display_name": "Bouclier Guillaume",
-            "first_name": "Bouclier",
-            "gender": 1,
-            "last_name": "Guillaume"
-        },
-        "model": "personnes.people",
-        "pk": 12
-    },
-    {
-        "fields": {
-            "display_name": "Andr\u00e9 Hendrickx",
-            "first_name": "Andr\u00e9",
-            "gender": 1,
-            "last_name": "Hendrickx"
-        },
-        "model": "personnes.people",
-        "pk": 13
-    },
-    {
-        "fields": {
-            "display_name": "Marcus Hosseini",
-            "first_name": "Marcus",
-            "gender": 1,
-            "last_name": "Hosseini"
-        },
-        "model": "personnes.people",
-        "pk": 4
-    },
-    {
-        "fields": {
-            "display_name": "Jack Itchan",
-            "first_name": "Jack",
-            "gender": 1,
-            "last_name": "Itchan"
-        },
-        "model": "personnes.people",
-        "pk": 9
-    },
-    {
-        "fields": {
-            "display_name": "Sandy Kilo",
-            "first_name": "Sandy",
-            "gender": 2,
-            "last_name": "Kilo"
-        },
-        "model": "personnes.people",
-        "pk": 5
-    },
-    {
-        "fields": {
-            "display_name": "Pol Lepoulpe",
-            "first_name": "Pol",
-            "gender": 1,
-            "last_name": "Lepoulpe"
-        },
-        "model": "personnes.people",
-        "pk": 7
-    },
-    {
-        "fields": {
-            "display_name": "Bob L\u00e9ponge",
-            "first_name": "Bob",
-            "gender": 1,
-            "last_name": "L\u00e9ponge"
-        },
-        "model": "personnes.people",
-        "pk": 6
-    },
-    {
-        "fields": {
-            "display_name": "St\u00e9phanie Maurier",
-            "first_name": "St\u00e9phanie",
-            "gender": 2,
-            "last_name": "Maurier"
-        },
-        "model": "personnes.people",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "display_name": "Claudia Schiffer",
-            "first_name": "Claudia",
-            "gender": 2,
-            "last_name": "Schiffer"
-        },
-        "model": "personnes.people",
-        "pk": 11
-    },
-    {
-        "fields": {
-            "services": [
-                4
-            ],
-            "type": 1
-        },
-        "model": "personnes.worker",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "services": [
-                1,
-                2
-            ],
-            "type": 2
-        },
-        "model": "personnes.worker",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "services": [
-                2
-            ],
-            "type": 3
-        },
-        "model": "personnes.worker",
-        "pk": 4
-    },
-    {
-        "fields": {
-            "services": [
-                1,
-                2,
-                3,
-                4
-            ],
-            "type": 4
-        },
-        "model": "personnes.worker",
-        "pk": 5
-    },
-    {
-        "fields": {
-            "services": [
-                1,
-                2,
-                3,
-                4
-            ],
-            "type": 4
-        },
-        "model": "personnes.worker",
-        "pk": 7
-    },
-    {
-        "fields": {
-            "services": [
-                1,
-                2,
-                3,
-                4
-            ],
-            "type": 4
-        },
-        "model": "personnes.worker",
-        "pk": 6
-    },
-    {
-        "fields": {
-            "services": [
-                2
-            ],
-            "type": 3
-        },
-        "model": "personnes.worker",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "end_date": null,
-            "end_time": "12:30:00",
-            "services": [
-                1
-            ],
-            "start_date": "2012-10-18",
-            "start_time": "08:00:00",
-            "week_offset": 0,
-            "week_parity": null,
-            "week_period": 1,
-            "week_rank": null,
-            "weekday": 0,
-            "worker": 5
-        },
-        "model": "personnes.timetable",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "end_date": null,
-            "end_time": "12:30:00",
-            "services": [
-                1
-            ],
-            "start_date": "2012-10-18",
-            "start_time": "08:30:00",
-            "week_offset": 0,
-            "week_parity": null,
-            "week_period": 1,
-            "week_rank": null,
-            "weekday": 0,
-            "worker": 6
-        },
-        "model": "personnes.timetable",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "end_date": null,
-            "end_time": "17:30:00",
-            "services": [
-                1
-            ],
-            "start_date": "2012-10-18",
-            "start_time": "13:00:00",
-            "week_offset": 0,
-            "week_parity": null,
-            "week_period": 1,
-            "week_rank": null,
-            "weekday": 0,
-            "worker": 6
-        },
-        "model": "personnes.timetable",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "end_date": null,
-            "end_time": "12:30:00",
-            "services": [
-                1
-            ],
-            "start_date": "2012-10-24",
-            "start_time": "08:00:00",
-            "week_offset": 0,
-            "week_parity": null,
-            "week_period": 1,
-            "week_rank": null,
-            "weekday": 1,
-            "worker": 5
-        },
-        "model": "personnes.timetable",
-        "pk": 4
+  {
+    "pk": 1, 
+    "model": "personnes.role", 
+    "fields": {
+      "name": "admin_access", 
+      "users": []
     }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.role", 
+    "fields": {
+      "name": "validator", 
+      "users": []
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Jeanne", 
+      "last_name": "D'Arc", 
+      "display_name": "Jeanne D'Arc"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "John", 
+      "last_name": "Doe", 
+      "display_name": "John Doe"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Gloria", 
+      "last_name": "Dupond", 
+      "display_name": "Gloria Dupond"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Jean", 
+      "last_name": "Dupond", 
+      "display_name": "Jean Dupond"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Fran\u00e7ois", 
+      "last_name": "Durant", 
+      "display_name": "Fran\u00e7ois Durant"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Bouclier", 
+      "last_name": "Guillaume", 
+      "display_name": "Bouclier Guillaume"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Andr\u00e9", 
+      "last_name": "Hendrickx", 
+      "display_name": "Andr\u00e9 Hendrickx"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Marcus", 
+      "last_name": "Hosseini", 
+      "display_name": "Marcus Hosseini"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Jack", 
+      "last_name": "Itchan", 
+      "display_name": "Jack Itchan"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Sandy", 
+      "last_name": "Kilo", 
+      "display_name": "Sandy Kilo"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Pol", 
+      "last_name": "Lepoulpe", 
+      "display_name": "Pol Lepoulpe"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Bob", 
+      "last_name": "L\u00e9ponge", 
+      "display_name": "Bob L\u00e9ponge"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "St\u00e9phanie", 
+      "last_name": "Maurier", 
+      "display_name": "St\u00e9phanie Maurier"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Claudia", 
+      "last_name": "Schiffer", 
+      "display_name": "Claudia Schiffer"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        4
+      ], 
+      "type": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2
+      ], 
+      "type": 2
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "type": 3
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "type": 4
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.worker", 
+    "fields": {
+      "services": [
+        2
+      ], 
+      "type": 3
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "week_parity": null, 
+      "end_date": null, 
+      "week_rank": null, 
+      "start_time": "08:00:00", 
+      "worker": 5, 
+      "weekday": 0, 
+      "services": [
+        1
+      ], 
+      "week_offset": 0, 
+      "week_period": 1, 
+      "start_date": "2012-10-18", 
+      "end_time": "12:30:00"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "week_parity": null, 
+      "end_date": null, 
+      "week_rank": null, 
+      "start_time": "08:30:00", 
+      "worker": 6, 
+      "weekday": 0, 
+      "services": [
+        1
+      ], 
+      "week_offset": 0, 
+      "week_period": 1, 
+      "start_date": "2012-10-18", 
+      "end_time": "12:30:00"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "week_parity": null, 
+      "end_date": null, 
+      "week_rank": null, 
+      "start_time": "13:00:00", 
+      "worker": 6, 
+      "weekday": 0, 
+      "services": [
+        1
+      ], 
+      "week_offset": 0, 
+      "week_period": 1, 
+      "start_date": "2012-10-18", 
+      "end_time": "17:30:00"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "personnes.timetable", 
+    "fields": {
+      "week_parity": null, 
+      "end_date": null, 
+      "week_rank": null, 
+      "start_time": "08:00:00", 
+      "worker": 5, 
+      "weekday": 1, 
+      "services": [
+        1
+      ], 
+      "week_offset": 0, 
+      "week_period": 1, 
+      "start_date": "2012-10-24", 
+      "end_time": "12:30:00"
+    }
+  }
 ]
