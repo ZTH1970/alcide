@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 
 import reversion
 
+from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
     NamedAbstractModel, Service)
@@ -157,8 +158,33 @@ class FileState(models.Model):
     def __unicode__(self):
         return self.state_name + ' ' + str(self.date_selected)
 
+class PatientAddress(models.Model):
 
-class PatientRecord(ServiceLinkedAbstractModel, People):
+    # Address
+    address = models.CharField(max_length=120,
+            verbose_name=u"Addresse")
+    address_complement = models.CharField(max_length=120,
+            blank=True,
+            null=True,
+            default=None,
+            verbose_name=u"Complément d'addresse")
+    zip_code = ZipCodeField(verbose_name=u"Code postal")
+    city = models.CharField(max_length=80,
+            verbose_name=u"Ville")
+
+class PatientContact(People):
+    class Meta:
+        verbose_name = u'Contact patient'
+        verbose_name_plural = u'Contacts patient'
+
+    phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
+    fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    social_security_id = models.CharField(max_length=13)
+    addresses = models.ManyToManyField('PatientAddress')
+
+
+class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     class Meta:
         verbose_name = u'Dossier'
         verbose_name_plural = u'Dossiers'
@@ -174,7 +200,6 @@ class PatientRecord(ServiceLinkedAbstractModel, People):
     nationality = models.CharField(max_length=70, null=True, blank=True)
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
-    social_security_id = models.CharField(max_length=13)
     last_state = models.ForeignKey(FileState, related_name='+',
             null=True)
 
