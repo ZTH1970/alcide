@@ -197,11 +197,8 @@ class FacturationTest(TestCase):
         status_diagnostic = Status.objects.filter(services__name='CMPP').filter(type='DIAGNOSTIC')[0]
         status_traitement = Status.objects.filter(services__name='CMPP').filter(type='TRAITEMENT')[0]
 
-        print "A : " + str(patient_a.get_state())
-
         self.assertEqual(patient_a.get_state().status, status_accueil)
         automated_validation(datetime(2020, 10, 1), service_cmpp, self.creator)
-        print "A : " + str(patient_a.get_state())
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 2), service_cmpp, self.creator)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)

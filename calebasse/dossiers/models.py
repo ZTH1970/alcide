@@ -256,9 +256,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             previous_state=current_state)
         self.last_state = filestate
         self.save()
-        print self.last_state
-        self.save()
-        print self.last_state
 
     def change_day_selected_of_state(self, state, new_date):
         if state.previous_state:
@@ -372,8 +369,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                             and "CMPP" in last_state_services:
                         status = Status.objects.filter(type="DIAGNOSTIC").\
                                 filter(services__name='CMPP')[0]
-                        print "Set state : " + str(status)
-                        print self.id
                         self.set_state(status, modifier,
                             date_selected=act.date)
                 # Sinon, si le dossier est en diag, s'il ne peut être couvert
@@ -382,7 +377,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                         "CMPP" in last_state_services:
                     status = Status.objects.filter(type="TRAITEMENT").\
                             filter(services__name='CMPP')[0]
-                    print "Set state : " + str(status)
                     self.set_state(status, modifier,
                             date_selected=act.date)
                 break
