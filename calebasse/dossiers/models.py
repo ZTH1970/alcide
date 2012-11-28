@@ -1,4 +1,3 @@
-import ipdb
 # -*- coding: utf-8 -*-
 
 import logging
@@ -230,9 +229,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             state = state.previous_state
         return None
 
-    def was_in_state_at_day(self, date, state_name):
+    def was_in_state_at_day(self, date, status_type):
         state_at_day = self.get_state_at_day(date)
-        if state_at_day and state_at_day.state_name == state_name:
+        if state_at_day and state_at_day.status.type == status_type:
             return True
         return False
 
@@ -255,6 +254,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         filestate = FileState.objects.create(patient=self, status=status,
             date_selected=date_selected, author=author, comment=comment,
             previous_state=current_state)
+        filestate.save()
         self.last_state = filestate
         self.save()
 
@@ -365,7 +365,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     act.is_state('VALIDE') and act.is_billable():
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
-                    if (self.last_state.status.type == "ACCEUIL" \
+                    if (self.last_state.status.type == "ACCUEIL" \
                             or self.last_state.status.type == "TRAITEMENT") \
                             and "CMPP" in last_state_services:
                         status = Status.objects.filter(type="DIAGNOSTIC").\
@@ -407,4 +407,3 @@ def create_patient(first_name, last_name, service, creator,
     patient.last_state = fs
     patient.save()
     return patient
-
