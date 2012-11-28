@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from models import create_patient
 from calebasse.dossiers.models import Status
-from calebasse.ressources.models import Service, Service
+from calebasse.ressources.models import Service
 
 
 class PatientRecordTest(TestCase):
