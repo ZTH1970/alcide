@@ -127,7 +127,7 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service, acts=None):
     acts_accepted = {}
     for patient, acts in acts_billable.items():
         for act in acts:
-            if patient.was_in_state_at_day(act.date, 'CAMSP_STATE_SUIVI'):
+            if patient.was_in_state_at_day(act.date, 'SUIVI'):
                 if act.patient in acts_accepted:
                     acts_accepted[act.patient].append(act)
                 else:
@@ -180,7 +180,7 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
     for patient, acts in acts_billable.items():
         for act in acts:
             if patient.was_in_state_at_day(act.date,
-                    'SESSAD_STATE_TRAITEMENT'):
+                    'TRAITEMENT'):
                 if not act.was_covered_by_notification():
                     if act.patient in acts_missing_valid_notification:
                         acts_missing_valid_notification[act.patient]. \
