@@ -11,6 +11,7 @@ from calebasse.actes.validation import automated_validation, \
 from calebasse.actes.models import EventAct
 from calebasse.dossiers.models import create_patient, \
     SessadHealthCareNotification, CmppHealthCareTreatment, CmppHealthCareDiagnostic
+from calebasse.dossiers.models import Status
 from calebasse.ressources.models import ActType, Service, WorkerType
 from calebasse.personnes.models import Worker
 
@@ -29,13 +30,14 @@ class FacturationTest(TestCase):
         self.act_type = ActType.objects.create(name='trepanation')
 
     def test_facturation_camsp(self):
-        service_camsp = Service.objects.create(name='CAMSP')
+        service_camsp = Service.objects.get(name='CAMSP')
 
         patient_a = create_patient('a', 'A', service_camsp, self.creator, date_selected=datetime(2020, 10, 5))
         act0 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 6, 10, 15),
                 end_datetime=datetime(2020, 10, 6, 12, 20))
-        patient_a.set_state('CAMSP_STATE_SUIVI', self.creator, date_selected=datetime(2020, 10, 7))
+        status_suivi = Status.objects.filter(services__name='CAMSP').filter(type='SUIVI')[0]
+        patient_a.set_state(status_suivi, self.creator, date_selected=datetime(2020, 10, 7))
         act1 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 10, 15),
                 end_datetime=datetime(2020, 10, 7, 12, 20))
@@ -45,7 +47,8 @@ class FacturationTest(TestCase):
         act3 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 16, 20),
                 end_datetime=datetime(2020, 10, 7, 17, 20))
-        patient_a.set_state('CAMSP_STATE_CLOS', self.creator, date_selected=datetime(2020, 10, 8))
+        status_clos = Status.objects.filter(services__name='CAMSP').filter(type='CLOS')[0]
+        patient_a.set_state(status_clos, self.creator, date_selected=datetime(2020, 10, 8))
         act4 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 8, 10, 15),
                 end_datetime=datetime(2020, 10, 8, 12, 20))
@@ -63,7 +66,7 @@ class FacturationTest(TestCase):
                 end_datetime=datetime(2020, 10, 5, 12, 20))
         act7.switch_billable = True
         act7.save()
-        patient_b.set_state('CAMSP_STATE_SUIVI', self.creator, date_selected=datetime(2020, 10, 6))
+        patient_b.set_state(status_suivi, self.creator, date_selected=datetime(2020, 10, 6))
         act8 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 10, 15),
                 end_datetime=datetime(2020, 10, 7, 12, 20))
@@ -76,7 +79,7 @@ class FacturationTest(TestCase):
         act11 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 8, 10, 15),
                 end_datetime=datetime(2020, 10, 8, 12, 20))
-        patient_b.set_state('CAMSP_STATE_CLOS', self.creator, date_selected=datetime(2020, 10, 9))
+        patient_b.set_state(status_clos, self.creator, date_selected=datetime(2020, 10, 9))
 
         automated_validation(datetime(2020, 10, 5), service_camsp, self.creator)
         automated_validation(datetime(2020, 10, 6), service_camsp, self.creator)
@@ -137,13 +140,14 @@ class FacturationTest(TestCase):
         self.assertTrue(act11 in selected[patient_b])
 
     def test_facturation_sessad(self):
-        service_sessad = Service.objects.create(name='SESSAD')
+        service_sessad = Service.objects.get(name='SESSAD DYS')
 
         patient_a = create_patient('a', 'A', service_sessad, self.creator, date_selected=datetime(2020, 10, 5))
         act0 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 6, 10, 15),
                 end_datetime=datetime(2020, 10, 6, 12, 20))
-        patient_a.set_state('SESSAD_STATE_TRAITEMENT', self.creator, date_selected=datetime(2020, 10, 7))
+        status_traitement = Status.objects.filter(services__name='SESSAD DYS').filter(type='TRAITEMENT')[0]
+        patient_a.set_state(status_traitement, self.creator, date_selected=datetime(2020, 10, 7))
         act1 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 10, 15),
                 end_datetime=datetime(2020, 10, 7, 12, 20))
@@ -153,7 +157,8 @@ class FacturationTest(TestCase):
         act3 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 16, 20),
                 end_datetime=datetime(2020, 10, 7, 17, 20))
-        patient_a.set_state('SESSAD_STATE_CLOS', self.creator, date_selected=datetime(2020, 10, 8))
+        status_clos = Status.objects.filter(services__name='SESSAD DYS').filter(type='CLOS')[0]
+        patient_a.set_state(status_clos, self.creator, date_selected=datetime(2020, 10, 8))
         act4 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 8, 10, 15),
                 end_datetime=datetime(2020, 10, 8, 12, 20))
@@ -182,41 +187,45 @@ class FacturationTest(TestCase):
         self.assertEqual(len(selected[patient_a]), 3)
 
     def test_facturation_cmpp(self):
-        service_cmpp = Service.objects.create(name='CMPP')
+        service_cmpp = Service.objects.get(name='CMPP')
 
         patient_a = create_patient('a', 'A', service_cmpp, self.creator, date_selected=datetime(2020, 10, 1))
         acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2020, 10, i, 10, 15),
                 end_datetime=datetime(2020, 10, i, 12, 20)) for i in range (1, 32)]
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_ACCUEIL')
+        status_accueil = Status.objects.filter(services__name='CMPP').filter(type='ACCUEIL')[0]
+        status_diagnostic = Status.objects.filter(services__name='CMPP').filter(type='DIAGNOSTIC')[0]
+        status_traitement = Status.objects.filter(services__name='CMPP').filter(type='TRAITEMENT')[0]
+
+        self.assertEqual(patient_a.get_state().status, status_accueil)
         automated_validation(datetime(2020, 10, 1), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 2), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 3), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 4), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 5), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 6), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_DIAGNOSTIC')
+        self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 7), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+        self.assertEqual(patient_a.get_state().status, status_traitement)
         automated_validation(datetime(2020, 10, 8), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+        self.assertEqual(patient_a.get_state().status, status_traitement)
         automated_validation(datetime(2020, 10, 9), service_cmpp, self.creator)
-        self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+        self.assertEqual(patient_a.get_state().status, status_traitement)
         for i in range(10, 32):
             automated_validation(datetime(2020, 10, i), service_cmpp, self.creator)
-            self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+            self.assertEqual(patient_a.get_state().status, status_traitement)
 
         acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2020, 11, i, 10, 15),
                 end_datetime=datetime(2020, 11, i, 12, 20)) for i in range (1, 31)]
         for i in range(1, 31):
             automated_validation(datetime(2020, 11, i), service_cmpp, self.creator)
-            self.assertEqual(patient_a.get_state().state_name, 'CMPP_STATE_TRAITEMENT')
+            self.assertEqual(patient_a.get_state().status, status_traitement)
 
         self.assertEqual(get_days_with_acts_not_locked(datetime(2020, 10, 1), datetime(2020, 11, 30)), [])
 
@@ -229,3 +238,6 @@ class FacturationTest(TestCase):
         self.assertEqual(len(billing_cmpp[4][patient_a]), 6)
         self.assertEqual(len(billing_cmpp[5][patient_a]), 40)
         self.assertEqual(len(billing_cmpp[6][patient_a]), 15)
+
+    def test_prices(self):
+        pass
