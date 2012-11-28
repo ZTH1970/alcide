@@ -283,7 +283,7 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "last_state": 4, 
-      "school": null, 
+      "school": 1, 
       "addresses": [
         1, 
         2

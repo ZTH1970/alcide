@@ -208,6 +208,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True)
     school = models.ForeignKey('ressources.School',
             null=True, blank=True, default=None)
+    comment = models.TextField(verbose_name=u"Commentaire",
+            null=True, blank=True, default=None)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
