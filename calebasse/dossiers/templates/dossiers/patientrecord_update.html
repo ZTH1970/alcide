@@ -43,8 +43,24 @@
     </div>
     <div class="right">
       <ul>
-        <li><label>Dernier acte :</label> 28/06/2012 - T - absence excusée</li>
-        <li><label>Prochain rendez-vous :</label> 18/08/2012 - Roudon - mini synthèse.</li>
+          <li><label>Dernier acte :</label>
+          {% if last_rdv %}
+          {{ last_rdv.start_datetime|date:"d/m/Y" }} - 
+          {% for participant in last_rdv.participants %}
+          {{ participant.last_name }} - 
+          {% endfor %}
+          {{ last_rdv.act_type }}
+          {% endif %}
+          </li>
+          <li><label>Prochain rendez-vous :</label>
+          {% if next_rdv %}
+          {{ next_rdv.start_datetime|date:"d/m/Y" }} - 
+          {% for participant in next_rdv.participants %}
+          {{ participant.next_name }} - 
+          {% endfor %}
+          {{ next_rdv.act_type }}
+          {% endif %}
+          </li>
       </ul>
       <div class="etat">
           <h4>État du dossier :  {{ object.last_state.status.name.lower }}</h4>

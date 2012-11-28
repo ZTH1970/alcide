@@ -6,6 +6,24 @@ from calebasse.dossiers.forms import SearchForm, CivilStatusForm
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 
 
+def get_next_rdv(patient_record):
+    next_rdv = {}
+    occurrence = Occurrence.objects.next_appoinment(patient_record)
+    if occurrence:
+        next_rdv['start_datetime'] = occurrence.start_time
+        next_rdv['participants'] = occurrence.event.participants.all()
+        next_rdv['act_type'] = occurrence.event.eventact.act_type
+    return next_rdv
+
+def get_last_rdv(patient_record):
+    last_rdv = {}
+    occurrence = Occurrence.objects.last_appoinment(patient_record)
+    if occurrence:
+        last_rdv['start_datetime'] = occurrence.start_time
+        last_rdv['participants'] = occurrence.event.participants.all()
+        last_rdv['act_type'] = occurrence.event.eventact.act_type
+    return last_rdv
+
 class PatientRecordView(MultiUpdateView):
     """
     """
@@ -16,6 +34,8 @@ class PatientRecordView(MultiUpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
+        ctx['next_rdv'] = get_next_rdv(ctx['object'])
+        ctx['last_rdv'] = get_last_rdv(ctx['object'])
         return ctx
 
 patient_record = PatientRecordView.as_view()
@@ -59,19 +79,8 @@ class PatientRecordsHomepageView(ListView):
         if self.request.GET:
             for patient_record in ctx['object_list'].filter():
                 ctx['stats']['dossiers'] += 1
-                next_rdv = {}
-                occurrence = Occurrence.objects.next_appoinment(patient_record)
-                if occurrence:
-                    next_rdv['start_datetime'] = occurrence.start_time
-                    next_rdv['participants'] = occurrence.event.participants.all()
-                    next_rdv['act_type'] = occurrence.event.eventact.act_type
-                occurrence = Occurrence.objects.last_appoinment(patient_record)
-                last_rdv = {}
-                if occurrence:
-                    last_rdv['start_datetime'] = occurrence.start_time
-                    last_rdv['participants'] = occurrence.event.participants.all()
-                    last_rdv['act_type'] = occurrence.event.eventact.act_type
-                occurrence = Occurrence.objects.next_appoinment(patient_record)
+                next_rdv = get_next_rdv(patient_record)
+                last_rdv = get_last_rdv(patient_record)
                 if STATES_MAPPING.has_key(patient_record.last_state.status.type):
                     state = STATES_MAPPING[patient_record.last_state.status.type]
                 else:
