@@ -3,7 +3,7 @@ from datetime import datetime
 
 from calebasse.cbv import ListView, MultiUpdateView, FormView, ServiceViewMixin
 from calebasse.agenda.models import Occurrence
-from calebasse.dossiers.models import PatientRecord, Status
+from calebasse.dossiers.models import PatientRecord, Status, FileState
 from calebasse.dossiers.forms import SearchForm, CivilStatusForm, StateForm
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 from calebasse.ressources.models import Service
@@ -60,6 +60,7 @@ class PatientRecordView(ServiceViewMixin, MultiUpdateView):
         ctx['next_rdv'] = get_next_rdv(ctx['object'])
         ctx['last_rdv'] = get_last_rdv(ctx['object'])
         ctx['service_id'] = self.service.id
+        ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
         return ctx
 
 patient_record = PatientRecordView.as_view()
@@ -128,3 +129,4 @@ class PatientRecordsHomepageView(ListView):
         return ctx
 
 patientrecord_home = PatientRecordsHomepageView.as_view()
+

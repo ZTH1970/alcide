@@ -350,16 +350,13 @@
 
   <div id="dossier-histo-dlg" style="display: none;">
    <dl>
-    <dt><b>20/05/2012</b> <small>(date info: 22/05/2012)</small></dt>
+    {% for state in states %}
+    <dt><b>{{ state.created|date:"d/m/Y" }}</b> <small>(date info: {{ state.date_selected|date:"d/m/Y" }})</small></dt>
     <dd>
-     <p><b>en diagnostic</b>; <label>commentaire:</label> bla bla bla bla</p>
-     <p>changement manuel (par M. Tom)</p>
+    <p><b>{{ state.status.name }}</b>; <label>commentaire:</label> {{ state.comment }}</p>
+    <p>changement par {{ state.author }}</p>
     </dd>
-    <dt><b>10/05/2012</b></dt>
-    <dd>
-     <p><b>accueil</b>; <label>commentaire:</label> bla bla bla bla</p>
-     <p>changement manuel (par M. Tom)</p>
-    </dd>
+    {% endfor%}
    </dl>
   </div>
 
