@@ -9,7 +9,7 @@ from calebasse.actes.validation import automated_validation, \
     are_all_acts_of_the_day_locked, \
     get_days_with_acts_not_locked
 from calebasse.actes.models import EventAct
-from calebasse.dossiers.models import create_patient, \
+from calebasse.dossiers.models import create_patient, PatientRecord, \
     SessadHealthCareNotification, CmppHealthCareTreatment, CmppHealthCareDiagnostic
 from calebasse.dossiers.models import Status
 from calebasse.ressources.models import ActType, Service, WorkerType
@@ -199,25 +199,35 @@ class FacturationTest(TestCase):
 
         self.assertEqual(patient_a.get_state().status, status_accueil)
         automated_validation(datetime(2020, 10, 1), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 2), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 3), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 4), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 5), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 6), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_diagnostic)
         automated_validation(datetime(2020, 10, 7), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_traitement)
         automated_validation(datetime(2020, 10, 8), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_traitement)
         automated_validation(datetime(2020, 10, 9), service_cmpp, self.creator)
+        patient_a = PatientRecord.objects.get(id=patient_a.id)
         self.assertEqual(patient_a.get_state().status, status_traitement)
         for i in range(10, 32):
             automated_validation(datetime(2020, 10, i), service_cmpp, self.creator)
+            patient_a = PatientRecord.objects.get(id=patient_a.id)
             self.assertEqual(patient_a.get_state().status, status_traitement)
 
         acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
@@ -225,6 +235,7 @@ class FacturationTest(TestCase):
                 end_datetime=datetime(2020, 11, i, 12, 20)) for i in range (1, 31)]
         for i in range(1, 31):
             automated_validation(datetime(2020, 11, i), service_cmpp, self.creator)
+            patient_a = PatientRecord.objects.get(id=patient_a.id)
             self.assertEqual(patient_a.get_state().status, status_traitement)
 
         self.assertEqual(get_days_with_acts_not_locked(datetime(2020, 10, 1), datetime(2020, 11, 30)), [])
