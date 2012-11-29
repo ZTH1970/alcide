@@ -200,8 +200,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         editable=True)
     contacts = models.ManyToManyField('personnes.People',
             related_name='contact_of')
-    birthdate = models.DateField(null=True, blank=True)
-    nationality = models.CharField(max_length=70, null=True, blank=True)
+    birthdate = models.DateField(verbose_name=u"Date de naissance",
+            null=True, blank=True)
+    nationality = models.CharField(verbose_name=u"Nationalité",
+            max_length=70, null=True, blank=True)
     paper_id = models.CharField(max_length=12,
             null=True, blank=True)
     last_state = models.ForeignKey(FileState, related_name='+',
@@ -210,6 +212,15 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
+
+    # Physiology
+    size = models.IntegerField(verbose_name=u"Taille (cm)",
+            null=True, blank=True, default=None)
+    weight = models.IntegerField(verbose_name=u"Poids (kg)",
+            null=True, blank=True, default=None)
+    pregnancy_term = models.IntegerField(verbose_name=u"Terme en semaines",
+            null=True, blank=True, default=None)
+
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)

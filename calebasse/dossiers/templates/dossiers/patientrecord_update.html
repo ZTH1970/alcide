@@ -85,23 +85,39 @@
   </div>
 
   <div id="tabs-2"> <!-- Fiche administrative -->
-    <div class="frame">
+    <form method="post" id="services-form">
+    {% csrf_token %}
+    <div class="frame inline">
       <h3>État civil</h3>
       <button class="save">✔</button>
-      <p><label>Nom :</label> <input value="Bouclier"/>
-      <label>Prénom(s) :</label> <input value="Guillaume"/></p>
-      <p><label>Date de naissance :</label> <input value="1/1/2005"/>
-      <label>Genre :</label> <input value="M"/>
-      <label>Nationalité :</label> <input value="française"/></p>
+      <p>
+      {{ forms.id.last_name.label_tag }} : {{ forms.id.last_name }}
+      {{ forms.id.first_name.label_tag }} : {{ forms.id.first_name }}
+      </p>
+      <p>
+      {{ forms.id.birthdate.label_tag }} : {{ forms.id.birthdate }}
+      {{ forms.id.gender.label_tag }} : {{ forms.id.gender }}
+      {{ forms.id.nationality.label_tag }} : {{ forms.id.nationality }}
+      </p>
     </div>
+  </form>
 
-    <div class="frame">
+
+    <form method="post" id="services-form">
+    {% csrf_token %}
+    <div class="frame inline">
       <h3>Physiologie</h3>
       <button class="save">✔</button>
-      <p><label>Taille (cm) :</label> <input value="176"/>
+      <p>
+      {% for field in forms.physiology %}
+      {{ field.label_tag  }} : {{ field }}
+      {% endfor %}
+      </p>
+      <!-- <label>Taille (cm) :</label> <input value="176"/>
       <label>Poids (kg) :</label> <input value="68"/>
-      <label>Terme en semaines :</label> <input/></p>
+      <label>Terme en semaines :</label> <input/></p> -->
     </div>
+  </form>
 
     <div class="frame">
       <h3>Inscription</h3>

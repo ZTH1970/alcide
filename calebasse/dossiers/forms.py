@@ -35,3 +35,7 @@ class CivilStatusForm(ModelForm):
         model = PatientRecord
         fields = ('first_name', 'last_name', 'birthdate', 'gender', 'nationality')
 
+class PhysiologyForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('size', 'weight', 'pregnancy_term')
