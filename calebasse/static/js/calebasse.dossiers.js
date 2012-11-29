@@ -1,5 +1,5 @@
 
-function state_dialog(url, state_name) {
+function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
             function () {
                 function onsuccess(response, status, xhr, form) {
@@ -16,12 +16,12 @@ function state_dialog(url, state_name) {
                         window.location.reload(true);
                     }
                 }
-                $('#change-record .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+                // $('#change-record .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                 $('form', this).ajaxForm({
                     success: onsuccess,
-                    data: { patient_id: $(this).data('id'),  new_state_name: state_name }
+                    data: { patient_id: $(this).data('id'),  state_type: state_type, service_id: $(this).data('service-id') }
                 });
-                $(this).dialog({title: "Changement - " + state_name,
+                $(this).dialog({title: "Changement - " + state_title,
                     width: '500px',
                     buttons: [ { text: "Annuler",
                         click: function() { $(this).dialog("close"); } },
@@ -32,6 +32,8 @@ function state_dialog(url, state_name) {
 
 (function($) {
   $(function() {
+    $('#tabs').tabs();
+
     $('#btn_all_state').click(function() {
       $('.checkbox_state').attr('checked', true);
     });
@@ -43,19 +45,12 @@ function state_dialog(url, state_name) {
     });
 
     $('#close-patientrecord').click(function() {
-        state_dialog('update-state', 'Clore');
+        state_dialog('update-state', 'Clore', 'CLOS');
     });
-    $('#tabs').tabs();
-    $('#reaccueillir-dossier').click(function() {
-      $('#dossier-change').dialog({title: 'Changement - Réaccueil',
-        width: '500px',
-        buttons: [ { text: "Annuler",
-          click: function() { $(this).dialog("close"); } },
-        { text: "Valider",
-          click: function() { $(this).dialog("close"); } }]}
-        );
+    $('#reopen-patientrecord').click(function() {
+        state_dialog('update-state', 'Réaccueil', 'ACCUEIL');
     });
-    $('#historique-dossier').click(function() {
+    $('#patientrecord-history').click(function() {
       $('#dossier-histo-dlg').dialog({title: 'Historique dossier',
         width: '500px',
         buttons: [ { text: "Fermer",

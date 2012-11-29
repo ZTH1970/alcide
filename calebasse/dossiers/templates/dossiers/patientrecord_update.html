@@ -67,8 +67,8 @@
           <p>depuis le {{ object.last_state.created|date:"d/m/Y" }}</p>
           <p><label>Commentaire :</label>{{ object.last_state.comment }}</p>
         <button id="close-patientrecord">Clore</button>
-        <button id="reaccueillir-dossier">Ré-accueillir</button>
-        <button id="historique-dossier">Historique</button><br/>
+        <button id="reopen-patientrecord">Ré-accueillir</button>
+        <button id="patientrecord-history">Historique</button><br/>
         <hr/>
         3/6 diagnostics
       </div>
@@ -345,7 +345,7 @@
 {% endblock %}
 
 {% block dialogs %}
- <div id="change-record" style="display: none;" data-id="{{ object.id }}">
+<div id="change-record" style="display: none;" data-id="{{ object.id }}" data-service-id="{{ service_id }}">
  </div>
 
   <div id="dossier-histo-dlg" style="display: none;">

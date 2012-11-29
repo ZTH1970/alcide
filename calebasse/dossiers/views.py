@@ -1,8 +1,12 @@
-from calebasse.cbv import ListView, MultiUpdateView, FormView
+
+from datetime import datetime
+
+from calebasse.cbv import ListView, MultiUpdateView, FormView, ServiceViewMixin
 from calebasse.agenda.models import Occurrence
-from calebasse.dossiers.models import PatientRecord
+from calebasse.dossiers.models import PatientRecord, Status
 from calebasse.dossiers.forms import SearchForm, CivilStatusForm, StateForm
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
+from calebasse.ressources.models import Service
 
 
 def get_next_rdv(patient_record):
@@ -28,17 +32,22 @@ class StateFormView(FormView):
     form_class = StateForm
     success_url = '..'
 
+    def post(self, request, *args, **kwarg):
+        self.user = request.user
+        return super(StateFormView, self).post(request, *args, **kwarg)
+
     def form_valid(self, form):
-        """
-<QueryDict: {u'new_state_name': [u'test'], u'date': [u'5/7/2012'], u'csrfmiddlewaretoken': [u'dLTuqeVteRJ4YxVQONFD9X6TqzzAuKqM'], u'patient_id': [u'4242']}>
-        """
-        # TODO: update status here
+        service = Service.objects.get(id=form.data['service_id'])
+        status = Status.objects.filter(services=service).filter(type=form.data['state_type'])
+        patient = PatientRecord.objects.get(id=form.data['patient_id'])
+        date_selected = datetime.strptime(form.data['date'], "%d/%m/%Y")
+        patient.set_state(status[0], self.user, date_selected, form.data['comment'])
         return super(StateFormView, self).form_valid(form)
 
 state_form = StateFormView.as_view()
 
 
-class PatientRecordView(MultiUpdateView):
+class PatientRecordView(ServiceViewMixin, MultiUpdateView):
     """
     """
     model = PatientRecord
@@ -50,6 +59,7 @@ class PatientRecordView(MultiUpdateView):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
         ctx['next_rdv'] = get_next_rdv(ctx['object'])
         ctx['last_rdv'] = get_last_rdv(ctx['object'])
+        ctx['service_id'] = self.service.id
         return ctx
 
 patient_record = PatientRecordView.as_view()

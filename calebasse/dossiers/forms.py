@@ -24,7 +24,8 @@ class SearchForm(Form):
 
 class StateForm(Form):
     patient_id = forms.IntegerField()
-    new_state_name = forms.CharField(max_length=40)
+    service_id = forms.IntegerField()
+    state_type = forms.CharField(max_length=40)
     date = forms.DateField(label=u'Date')
     comment = forms.CharField(label='Commentaire',
             required=False, widget=forms.Textarea)
@@ -33,3 +34,4 @@ class CivilStatusForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('first_name', 'last_name', 'birthdate', 'gender', 'nationality')
+
