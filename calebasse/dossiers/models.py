@@ -219,7 +219,13 @@ class PatientContact(People):
             blank=True, null=True)
 
 
+class PatientRecordManager(models.Manager):
+    def for_service(self, service):
+        return self.filter(service=service)
+
 class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
+    objects = PatientRecordManager()
+
     class Meta:
         verbose_name = u'Dossier'
         verbose_name_plural = u'Dossiers'
