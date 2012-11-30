@@ -26,13 +26,13 @@
     <a href="..">Retourner à la liste</a>
     {% if service_name == "CMPP" %}
         {% if invoicing.status == "open" %}<button id="close"">Clôre cette facturation</button>{% endif %}
-        {% if invoicing.status == "closed" %}<button id="valider-btn"">Valider cette facturation</button>{% endif %}
+        {% if invoicing.status == "closed" %}<button id="validate"">Valider cette facturation</button>{% endif %}
         {% if invoicing.status == "validated" %}
             <button id="teletrans-btn" style="display: none;">Télétransmission à l'assurance maladie</button>
             <button id="expcompt-btn" style="display: none;">Export comptabilité</button>
         {% endif %}
     {% else %}
-        {% if invoicing.status == "closed" %}<button id="valider-btn" style="display: none;">Valider ce décompte</button>{% endif %}
+        {% if invoicing.status == "closed" %}<button id="validate" style="display: none;">Valider ce décompte</button>{% endif %}
         {% if invoicing.status == "validated" %}<button id="print-btn" style="display: none;">Imprimer</button>{% endif %}
     {% endif %}
 {% endblock %}
@@ -49,9 +49,9 @@
         </ul>
     {% endif %}
     <h3>Résumé</h3>
-        {% if service_name == "CMPP" %}
-            {% if invoicing.status == "open" or invoicing.status == "closed" %}
-            <ul>
+    {% if service_name == "CMPP" %}
+        {% if invoicing.status == "open" or invoicing.status == "closed" %}
+        <ul>
             {% if len_acts_invoiced_hors_pause %}
               <li>Actes facturables hors dossiers en pause: {{ len_acts_invoiced_hors_pause }}
                 <ul>
@@ -86,9 +86,22 @@
             {% else %}
               <li>Pas d'actes facturables mais non pris en charge.</li>
             {% endif %}
-            </ul>
+        </ul>
+        {% else %}
+        <ul>
+            {% if len_acts_invoiced %}
+              <li>Actes facturés: {{ len_acts_invoiced }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_invoiced }}</li>
+                  <li>Nombre de factures : {{ len_invoices }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturés pour cette facturation.</li>
             {% endif %}
-        {% endif %}
+        </ul>
+      {% endif %}
+    {% endif %}
     </div>
 {% endblock %}
 
@@ -99,6 +112,15 @@
   <form method="post" action="clore/">
     {% csrf_token %}
     <input type="hidden" name="Close" value="1">
+  </form>
+</div>
+
+<div id="validate-dialog" title="Validation de la facturation">
+  <div id="validate-dialog-content">
+  </div>
+  <form method="post" action="validate/">
+    {% csrf_token %}
+    <input type="hidden" name="Valider" value="1">
   </form>
 </div>
 {% endblock %}
@@ -117,6 +139,21 @@
         $('#close-dialog-content').load('clore/',
               function () {
                 $('#close-dialog').dialog('open');
+              }
+            );
+      });
+  $('#validate-dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+      "Valider": function () { $('#validate-dialog form').submit(); },
+      "Annuler": function () { $(this).dialog("validate"); },
+    },
+  });
+    $('#validate').click(function () {
+        $('#close-dialog-content').load('validate/',
+              function () {
+                $('#validate-dialog').dialog('open');
               }
             );
       });
