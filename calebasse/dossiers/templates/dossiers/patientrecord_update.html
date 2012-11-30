@@ -13,7 +13,8 @@
     <li><a href="#tabs-1">Général</a></li>
     <li><a href="#tabs-2">Fiche administrative</a></li>
     <li><a href="#tabs-3">Adresses / contacts</a></li>
-    <li><a href="#tabs-4">Prise en charge</a></li>
+    {% if object.service.name == "CMPP" %}<li><a href="#tabs-4">Prise en charge</a></li>{% endif %}
+    {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}<li><a href="#tabs-4">Notifications</a></li>{% endif %}
     <!--<li><a href="#tabs-5">Liste des actes</a>-->
     <li><a href="#tabs-6">Prochains rendez-vous</a>
     <li><a href="#tabs-7">Socialisation</a>
@@ -47,18 +48,18 @@
       <ul>
           <li><label>Dernier acte :</label>
           {% if last_rdv %}
-          {{ last_rdv.start_datetime|date:"d/m/Y" }} - 
+          {{ last_rdv.start_datetime|date:"d/m/Y" }} -
           {% for participant in last_rdv.participants %}
-          {{ participant.last_name }} - 
+          {{ participant.last_name }} -
           {% endfor %}
           {{ last_rdv.act_type }}
           {% endif %}
           </li>
           <li><label>Prochain rendez-vous :</label>
           {% if next_rdv %}
-          {{ next_rdv.start_datetime|date:"d/m/Y" }} - 
+          {{ next_rdv.start_datetime|date:"d/m/Y" }} -
           {% for participant in next_rdv.participants %}
-          {{ participant.next_name }} - 
+          {{ participant.next_name }} -
           {% endfor %}
           {{ next_rdv.act_type }}
           {% endif %}
@@ -360,14 +361,14 @@
 
       </div>
 
-      <div id="overlay">
-        <p>
-        Exemples pour cet onglet :
-        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a> -
-        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a> -
-        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>
-        </p>
-      </div>
+<!--      <div id="overlay">-->
+<!--        <p>-->
+<!--        Exemples pour cet onglet :-->
+<!--        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a> --->
+<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a> --->
+<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>-->
+<!--        </p>-->
+<!--      </div>-->
 
     </div>
 
@@ -458,4 +459,3 @@
    </div>
   </div>
 {% endblock %}
-
