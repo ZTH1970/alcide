@@ -55,13 +55,9 @@ class FacturationDetailView(UpdateView):
             context['patients_stats'] = patients_stats
             context['days_not_locked'] = days_not_locked
         elif self.service.name == 'CAMSP':
-            (acts_not_locked, days_not_locked, acts_not_valide,
-            acts_not_billable, acts_diagnostic, acts_treatment,
-            acts_losts) = context['invoicing'].invoicing.get_stats_or_validate()
+            context['invoicing'].get_stats_or_validate()
         elif 'SESSAD' in self.service.name:
-            (acts_not_locked, days_not_locked, acts_not_valide,
-            acts_not_billable, acts_bad_state, acts_missing_valid_notification,
-            acts_accepted) = context['invoicing'].invoicing.get_stats_or_validate()
+            context['invoicing'].get_stats_or_validate()
         return context
 
 #TODO: Invoicing summary
