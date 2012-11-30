@@ -437,8 +437,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                 services.values_list('name', flat=True)
         cmpp = Service.objects.get(name='CMPP')
         for act in acts:
-            if are_all_acts_of_the_day_locked(act.date) and \
-                    act.is_state('VALIDE') and act.is_billable():
+            if act.is_state('VALIDE') and act.is_billable() and \
+                    are_all_acts_of_the_day_locked(act.date):
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
                     if (self.last_state.status.type == "ACCUEIL" \
@@ -483,4 +483,3 @@ def create_patient(first_name, last_name, service, creator,
     patient.last_state = fs
     patient.save()
     return patient
-
