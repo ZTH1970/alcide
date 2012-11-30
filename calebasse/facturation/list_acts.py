@@ -2,6 +2,8 @@
 from datetime import datetime, timedelta
 
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
+from calebasse.dossiers.models import (CmppHealthCareDiagnostic,
+    CmppHealthCareTreatment)
 
 
 def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=None):
@@ -41,7 +43,7 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     from calebasse.actes.models import EventAct
     if acts is None:
         acts = EventAct.objects.filter(is_billed=False,
-            patient__service=service).order_by('-date')
+            patient__service=service).order_by('date')
     # Filter acts according to the date
     i = 0
     for act in acts:
@@ -257,6 +259,97 @@ def list_acts_for_billing_CMPP(end_day, service, acts=None):
                             append(act)
                     else:
                         acts_losts[act.patient] = [act]
+    return (acts_not_locked, days_not_locked, acts_not_valide,
+        acts_not_billable, acts_diagnostic, acts_treatment,
+        acts_losts)
+
+def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
+    """Used to sort acts billable by specific service requirements.
+
+    For the CMPP, acts are billable if
+
+    acts = acts_not_locked + \
+        acts_not_valide + \
+            acts_not_billable + \
+                acts_diagnostic + \
+                    acts_treatment + \
+                        acts_losts
+
+    :param end_day: formatted date that gives the last day when acts are taken
+        in account.
+    :type end_day: datetime
+    :param service: service in which acts are dealt with.
+    :type service: calebasse.ressources.Service
+
+    :returns: a list of dictionnaries where patients are the keys and values
+        are lists of acts. The second element of this list in not a dict but
+        a list of the days where are all days are not locked.
+    :rtype: list
+    """
+
+    acts_not_locked, days_not_locked, acts_not_valide, \
+        acts_not_billable, acts_billable = \
+            list_acts_for_billing_first_round(end_day, service, acts=acts)
+
+    acts_diagnostic = {}
+    acts_treatment = {}
+    acts_losts = {}
+    for patient, acts in acts_billable.items():
+        hcd = None
+        len_acts_cared_diag = 0
+        try:
+            hcd = CmppHealthCareDiagnostic.objects.\
+                filter(patient=patient).latest('start_date')
+            # actes prise en charge par ce hc
+            len_acts_cared_diag = len(hcd.act_set.all())
+        except:
+            pass
+        hct = None
+        len_acts_cared_trait = 0
+        try:
+            hct = CmppHealthCareTreatment.objects.\
+                filter(patient=patient).latest('start_date')
+            len_acts_cared_trait = len(hct.act_set.all())
+        except:
+            pass
+        # acts are all billable and chronologically ordered
+        count_hcd = 0
+        count_hct = 0
+        for act in acts:
+            cared = False
+            if hcd and hcd.start_date <= act.date:
+                # Ce qui seraient prise en charge
+                nb_acts_cared = len_acts_cared_diag + count_hcd
+                # Ne doit pas dépasser la limite de prise en charge du hc
+                if nb_acts_cared < hcd.get_act_number() :
+                    if nb_acts_cared < hcd.get_act_number():
+                        if act.patient in acts_diagnostic:
+                            acts_diagnostic[act.patient]. \
+                                append((act, hcd))
+                        else:
+                            acts_diagnostic[act.patient] = [(act, hcd)]
+                        count_hcd = count_hcd + 1
+                        cared = True
+            if not cared and hct and hct.start_date <= act.date and hct.end_date >= act.date:
+                # Ce qui seraient prise en charge
+                nb_acts_cared = len_acts_cared_trait + count_hct
+                # Ne doit pas dépasser la limite de prise en charge du hc
+                if nb_acts_cared < hct.get_act_number() :
+                    if nb_acts_cared < hct.get_act_number():
+                        if act.patient in acts_treatment:
+                            acts_treatment[act.patient]. \
+                                append((act, hct))
+                        else:
+                            acts_treatment[act.patient] = [(act, hct)]
+                        count_hct = count_hct + 1
+                        cared = True
+            if not cared:
+                if act.patient in acts_losts:
+                    acts_losts[act.patient]. \
+                        append(act)
+                else:
+                    # TODO: give details about rejection
+                    acts_losts[act.patient] = [act]
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_diagnostic, acts_treatment,
         acts_losts)
