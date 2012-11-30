@@ -54,7 +54,7 @@ class Act(models.Model):
     healthcare = models.ForeignKey('dossiers.HealthCare',
             blank=True,
             null=True,
-            verbose_name=u'Prise en charge utilisée pour facturée (CMPP)')
+            verbose_name=u'Prise en charge utilisée pour facturer (CMPP)')
     transport_company = models.ForeignKey('ressources.TransportCompany',
             blank=True,
             null=True,
