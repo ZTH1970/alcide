@@ -1,0 +1,7 @@
+<div id="validate-dlg">
+    {% if invoicing.status == "closed" %}
+        Etes-vous sûr de vouloir valider {% if service_name == "CMPP" %}la facturation{% else %}le décompte{% endif %} {{ invoicing.seq_id }} ?
+    {% else %}
+        Opération refusée.
+    {% endif %}
+</div>
