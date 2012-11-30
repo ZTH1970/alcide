@@ -1,4 +1,32 @@
 
+function generic_form_dialog(url, title, id, width, btn_submit_name) {
+    $(id).load(url,
+            function () {
+                function onsuccess(response, status, xhr, form) {
+                    var parse = $(response);
+                    if ($('.errorlist', parse).length != 0) {
+                        $(id).html(response);
+                        $(id + ' form').ajaxForm({
+                            success: onsuccess,
+                        });
+                        console.log('error');
+                    } else {
+                        console.log('success');
+                        window.location.reload(true);
+                    }
+                }
+                $('form', this).ajaxForm({
+                    success: onsuccess,
+                });
+                $(this).dialog({title: title,
+                    width: width,
+                    buttons: [ { text: "Annuler",
+                        click: function() { $(this).dialog("close"); } },
+                    { text: btn_submit_name,
+                        click: function() { $(id + " form").submit(); } }]});
+            });
+}
+
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
             function () {
@@ -9,14 +37,12 @@ function state_dialog(url, state_title, state_type) {
                         $('#change-record form').ajaxForm({
                             success: onsuccess,
                         });
-                        // $('#change-record .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                         console.log('error');
                     } else {
                         console.log('success');
                         window.location.reload(true);
                     }
                 }
-                // $('#change-record .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                 $('form', this).ajaxForm({
                     success: onsuccess,
                     data: { patient_id: $(this).data('id'),  state_type: state_type, service_id: $(this).data('service-id') }
@@ -62,6 +88,11 @@ function state_dialog(url, state_title, state_type) {
         buttons: [ { text: "Fermer",
           click: function() { $(this).dialog("close"); } }]}
         );
+    });
+
+    $('#new-patientrecord').click(function() {
+        generic_form_dialog('new', 'Nouveau dossier',
+            '#dossier-dlg', '500px', 'Ajouter');
     });
 
     $('#new-address-btn').click(function() {

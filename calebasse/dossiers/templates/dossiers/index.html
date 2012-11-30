@@ -4,7 +4,7 @@
 {% block appbar %}
     <h2>Dossiers</h2>
     <a href="../..">Retourner à l'accueil</a>
-    <button id="new-dossier">Nouveau dossier</button>
+    <button id="new-patientrecord">Nouveau dossier</button>
     <span>
       Dossiers: <span class="num">{{ stats.dossiers }}</span> -
       En contact: <span class="num">{{ stats.En_contact }}</span> - 
@@ -110,5 +110,18 @@
   {% endif %}
 
 </div>
+{% endblock %}
+
+{% block dialogs %}
+  <div id="dossier-dlg" style="display: none;">
+
+  <div id="homonyms" style="display: none;">
+   <p>Attention, il existe des homonymes; cliquez sur le bouton pour consulter
+      le dossier correspondant. Si vous voulez confirmer la création d'un nouveau
+      dossier, cliquez sur le bouton 'Ajouter'.</p>
+   <button>Doe James</button><br/>
+   <button>Doe Dolassaumure</button>
+  </div>
+  </div>
 {% endblock %}
 

@@ -1,11 +1,12 @@
 
 from datetime import datetime
 
-from calebasse.cbv import ListView, MultiUpdateView, FormView, ServiceViewMixin
+from calebasse import cbv
 from calebasse.agenda.models import Occurrence
-from calebasse.dossiers.models import PatientRecord, Status, FileState
+from calebasse.dossiers.models import PatientRecord, Status, FileState, create_patient
 from calebasse.dossiers.forms import (SearchForm, CivilStatusForm, StateForm,
-        PhysiologyForm, FamillyForm, InscriptionForm, GeneralForm)
+        PhysiologyForm, FamillyForm, InscriptionForm, GeneralForm,
+        NewPatientRecordForm)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 from calebasse.ressources.models import Service
 
@@ -28,7 +29,23 @@ def get_last_rdv(patient_record):
         last_rdv['act_type'] = occurrence.event.eventact.act_type
     return last_rdv
 
-class StateFormView(FormView):
+class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin,):
+    form_class = NewPatientRecordForm
+    template_name = 'dossiers/patientrecord_new.html'
+    success_url = '..'
+
+    def post(self, request, *args, **kwarg):
+        self.user = request.user
+        return super(NewPatientRecordView, self).post(request, *args, **kwarg)
+
+    def form_valid(self, form):
+        create_patient(form.data['first_name'], form.data['last_name'], self.service,
+                self.user)
+        return super(NewPatientRecordView, self).form_valid(form)
+
+new_patient_record = NewPatientRecordView.as_view()
+
+class StateFormView(cbv.FormView):
     template_name = 'dossiers/state.html'
     form_class = StateForm
     success_url = '..'
@@ -48,7 +65,7 @@ class StateFormView(FormView):
 state_form = StateFormView.as_view()
 
 
-class PatientRecordView(ServiceViewMixin, MultiUpdateView):
+class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
     model = PatientRecord
     forms_classes = {
             'general': GeneralForm,
@@ -76,7 +93,7 @@ class PatientRecordView(ServiceViewMixin, MultiUpdateView):
 
 patient_record = PatientRecordView.as_view()
 
-class PatientRecordsHomepageView(ListView):
+class PatientRecordsHomepageView(cbv.ListView):
     model = PatientRecord
     template_name = 'dossiers/index.html'
 
