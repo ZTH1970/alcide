@@ -85,16 +85,6 @@ class FacturationDetailView(UpdateView):
             context['days_not_locked'] = days_not_locked
         return context
 
-#TODO: Invoicing summary
-# Missing function to generate bill from acts grouped
-# Prepare stats
-
-#TODO: Validate facturation
-# generate bills
-
-#TODO: Display the invoicing display
-
-#TODO: Summary tab on module index
 
 class CloseFacturationView(UpdateView):
 
