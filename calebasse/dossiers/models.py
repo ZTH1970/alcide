@@ -446,16 +446,22 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                             and "CMPP" in last_state_services:
                         status = Status.objects.filter(type="DIAGNOSTIC").\
                                 filter(services__name='CMPP')[0]
-                        self.set_state(status, modifier,
-                            date_selected=act.date)
+                        try:
+                            self.set_state(status, modifier,
+                                date_selected=act.date)
+                        except:
+                            pass
                 # Sinon, si le dossier est en diag, s'il ne peut être couvert
                 # en diag, il est en traitement.
                 elif self.last_state.status.type == "DIAGNOSTIC" and \
                         "CMPP" in last_state_services:
                     status = Status.objects.filter(type="TRAITEMENT").\
                             filter(services__name='CMPP')[0]
-                    self.set_state(status, modifier,
-                            date_selected=act.date)
+                    try:
+                        self.set_state(status, modifier,
+                                date_selected=act.date)
+                    except:
+                        pass
                 break
     # END Specific to cmpp healthcare
 
