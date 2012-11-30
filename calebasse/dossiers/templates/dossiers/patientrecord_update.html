@@ -69,8 +69,96 @@
           <h4>État du dossier :  {{ object.last_state.status.name.lower }}</h4>
           <p>depuis le {{ object.last_state.created|date:"d/m/Y" }}</p>
           <p><label>Commentaire :</label>{{ object.last_state.comment }}</p>
-        <button id="close-patientrecord">Clore</button>
-        <button id="reopen-patientrecord">Ré-accueillir</button>
+        {% if object.service.name == "CMPP" %}
+            {% if object.last_state.status.type == "ACCUEIL" %}
+                <button id="finaccueil-patientrecord">Fin d'accueil</button>
+                <button id="diagnostic-patientrecord">En diagnostic</button>
+                <button id="traitement-patientrecord">En traitement</button>
+                <!-- Insciption automatique au premier acte facturable validé -->
+            {% endif %}
+            {% if object.last_state.status.type == "FIN_ACCUEIL" %}
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="diagnostic-patientrecord">En diagnostic</button>
+                <button id="traitement-patientrecord">En traitement</button>
+                <!-- Passage automatique en diagnostic ou traitement -->
+            {% endif %}
+            {% if object.last_state.status.type == "DIAGNOSTIC" %}
+                <button id="traitement-patientrecord">En traitement</button>
+                <button id="close-patientrecord">Clore</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <!-- Passage automatique en traitement -->
+            {% endif %}
+            {% if object.last_state.status.type == "TRAITEMENT" %}
+                <button id="diagnostic-patientrecord">En diagnostic</button>
+                <button id="close-patientrecord">Clore</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <!-- Passage automatique en diagnostic si on ajoute une prise en charge diagnostic, ce qui est faisable dans l'onglet prise en charge par un bouton visible sous conditions -->
+            {% endif %}
+            {% if object.last_state.status.type == "CLOS" %}
+                <button id="diagnostic-patientrecord">En diagnostic</button>
+                <button id="traitement-patientrecord">En traitement</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <!-- Passage automatique en diagnostic ou traitement -->
+            {% endif %}
+        {% endif %}
+        {% if object.service.name == "CAMSP" %}
+            {% if object.last_state.status.type == "ACCUEIL" %}
+                <button id="finaccueil-patientrecord">Fin d'accueil</button>
+                <button id="bilan-patientrecord">En bilan</button>
+            {% endif %}
+            {% if object.last_state.status.type == "FIN_ACCUEIL" %}
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="bilan-patientrecord">En bilan</button>
+                <button id="surveillance-patientrecord">En surveillance</button>
+                <button id="suivi-patientrecord">En suivi</button>
+                <button id="close-patientrecord">Clore</button>
+            {% endif %}
+            {% if object.last_state.status.type == "BILAN" %}
+                <button id="surveillance-patientrecord">En surveillance</button>
+                <button id="suivi-patientrecord">En suivi</button>
+                <button id="close-patientrecord">Clore</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+            {% endif %}
+            {% if object.last_state.status.type == "SURVEILLANCE" %}
+                <button id="suivi-patientrecord">En suivi</button>
+                <button id="close-patientrecord">Clore</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="bilan-patientrecord">En bilan</button>
+            {% endif %}
+            {% if object.last_state.status.type == "SUIVI" %}
+                <button id="close-patientrecord">Clore</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="bilan-patientrecord">En bilan</button>
+                <button id="surveillance-patientrecord">En surveillance</button>
+            {% endif %}
+            {% if object.last_state.status.type == "CLOS" %}
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="bilan-patientrecord">En bilan</button>
+                <button id="surveillance-patientrecord">En surveillance</button>
+                <button id="suivi-patientrecord">En suivi</button>
+            {% endif %}
+        {% endif %}
+        {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
+            {% if object.last_state.status.type == "ACCUEIL" %}
+                <button id="finaccueil-patientrecord">Fin d'accueil</button>
+                <button id="traitement-patientrecord">En traitement</button>
+            {% endif %}
+            {% if object.last_state.status.type == "FIN_ACCUEIL" %}
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="traitement-patientrecord">En traitement</button>
+                <button id="close-patientrecord">Clore</button>
+            {% endif %}
+            {% if object.last_state.status.type == "TRAITEMENT" %}
+                <button id="close-patientrecord">Clore</button>
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+            {% endif %}
+            {% if object.last_state.status.type == "CLOS" %}
+                <button id="reaccueil-patientrecord">Ré-accueillir</button>
+                <button id="traitement-patientrecord">En traitement</button>
+            {% endif %}
+        {% endif %}
+<!--        <button id="close-patientrecord">Clore</button>-->
+<!--        <button id="reopen-patientrecord">Ré-accueillir</button>-->
         <button id="patientrecord-history">Historique</button><br/>
         <hr/>
         <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
@@ -458,4 +546,34 @@
     <input id="id_pour" class="pour" name="pour" size="4" value="10"/> actes
    </div>
   </div>
+
+<div id="finaccueil-patientrecord-dialog" title="Patient en fin d'accueil">
+  <div id="finaccueil-patientrecord-dialog-content">
+  </div>
+  <form method="post" action="finaccueil-patientrecord/">
+    {% csrf_token %}
+    <input type="hidden" name="Close" value="1">
+  </form>
+</div>
+
+{% endblock %}
+
+{% block page-end %}
+<script>
+  $('#finaccueil-patientrecord-dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+      "Valider": function () { $('#finaccueil-patientrecord-dialog form').submit(); },
+      "Annuler": function () { $(this).dialog("close"); },
+    },
+  });
+    $('#finaccueil-patientrecord').click(function () {
+        $('#finaccueil-patientrecord-dialog-content').load('finaccueil-patientrecord/',
+              function () {
+                $('#finaccueil-patientrecord-dialog').dialog('open');
+              }
+            );
+      });
+</script>
 {% endblock %}

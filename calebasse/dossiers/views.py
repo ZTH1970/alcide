@@ -159,3 +159,27 @@ class PatientRecordsHomepageView(cbv.ListView):
 
 patientrecord_home = PatientRecordsHomepageView.as_view()
 
+
+class FinaccueilPatientRecordView(cbv.UpdateView):
+
+    context_object_name = "patient"
+    model = PatientRecord
+    template_name = 'dossiers/state_change.html'
+
+    def post(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk', None)
+        patient = None
+        if pk is not None:
+            patient = PatientRecord.objects.get(pk=pk, service=self.service)
+        if not patient:
+            return HttpResponseRedirect('..')
+        status = Status.objects.filter(type="FIN_ACCUEIL").\
+                filter(services__name=self.service.name)[0]
+        # TODO: grab date
+        patient.set_state(status, modifier,
+            date_selected=date.today())
+        return HttpResponseRedirect('..')
+
+    def get_context_data(self, **kwargs):
+        context = super(FinaccueilPatientRecordView, self).get_context_data(**kwargs)
+        return context
