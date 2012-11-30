@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+import time
+from datetime import datetime, date
 from dateutil import rrule
+from dateutil.relativedelta import relativedelta
 
 from django.test import TestCase
 from django.contrib.auth.models import User
@@ -15,8 +17,11 @@ from calebasse.dossiers.models import Status
 from calebasse.ressources.models import ActType, Service, WorkerType
 from calebasse.personnes.models import Worker
 
-from list_acts import list_acts_for_billing_CAMSP, \
-    list_acts_for_billing_SESSAD, list_acts_for_billing_CMPP
+from list_acts import (list_acts_for_billing_CAMSP,
+    list_acts_for_billing_SESSAD, list_acts_for_billing_CMPP,
+    list_acts_for_billing_CMPP_2)
+
+from models import add_price, PricePerAct, Invoicing
 
 
 class FacturationTest(TestCase):
@@ -245,10 +250,111 @@ class FacturationTest(TestCase):
         hct = CmppHealthCareTreatment(patient=patient_a, start_date=datetime(2020, 10, 7), author=self.creator)
         hct.save()
         hct.add_prolongation()
-        billing_cmpp = list_acts_for_billing_CMPP(datetime(2020, 11, 30), service_cmpp)
+
+        billing_cmpp = list_acts_for_billing_CMPP_2(datetime(2020, 11, 30), service_cmpp)
+
         self.assertEqual(len(billing_cmpp[4][patient_a]), 6)
         self.assertEqual(len(billing_cmpp[5][patient_a]), 40)
         self.assertEqual(len(billing_cmpp[6][patient_a]), 15)
 
+
     def test_prices(self):
-        pass
+        price_o = add_price(120)
+        self.assertEqual(PricePerAct.get_price(), 120)
+        price_o = add_price(130, date.today())
+        self.assertEqual(PricePerAct.get_price(date.today() + relativedelta(days=-1)), 120)
+        self.assertEqual(PricePerAct.get_price(date.today()), 130)
+        self.assertEqual(PricePerAct.get_price(date.today() + relativedelta(days=1)), 130)
+#        price_o = add_price(140, date(day=27, month=11, year=2012))
+        price_o = add_price(140, date.today() + relativedelta(days=1))
+        self.assertEqual(PricePerAct.get_price(date.today() + relativedelta(days=-1)), 120)
+        self.assertEqual(PricePerAct.get_price(date.today()), 130)
+        self.assertEqual(PricePerAct.get_price(date.today() + relativedelta(days=1)), 140)
+        self.assertEqual(PricePerAct.get_price(date.today() + relativedelta(days=2)), 140)
+
+    def test_invoicing(self):
+        service_cmpp = Service.objects.get(name='CMPP')
+        price_o = add_price(120)
+
+
+        patients = []
+        for j in range(2):
+            patients.append(create_patient(str(j), str(j), service_cmpp, self.creator, date_selected=datetime(2020, 10, 1)))
+            acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
+                    self.act_type, service_cmpp, start_datetime=datetime(2020, 10, i, 10, 15),
+                    end_datetime=datetime(2020, 10, i, 12, 20)) for i in range (1, 32)]
+            acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
+                    self.act_type, service_cmpp, start_datetime=datetime(2020, 11, i, 10, 15),
+                    end_datetime=datetime(2020, 11, i, 12, 20)) for i in range (1, 31)]
+            hct = CmppHealthCareTreatment(patient=patients[j], start_date=datetime(2020, 10, 7), author=self.creator)
+            hct.save()
+            hct.add_prolongation()
+
+        for i in range(1, 32):
+            automated_validation(datetime(2020, 10, i), service_cmpp, self.creator)
+        for i in range(1, 31):
+            automated_validation(datetime(2020, 11, i), service_cmpp, self.creator)
+
+        self.assertEqual(get_days_with_acts_not_locked(datetime(2020, 10, 1), datetime(2020, 11, 30)), [])
+        invoicing = Invoicing.objects.create(service=service_cmpp, seq_id=666, start_date=date.today())
+        (len_patients, len_invoices, len_invoices_hors_pause,
+        len_acts_invoiced, len_acts_invoiced_hors_pause,
+        len_patient_invoiced, len_patient_invoiced_hors_pause,
+        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate()
+
+        self.assertEqual(len_patients, 2)
+        self.assertEqual(len_invoices, 4)
+        self.assertEqual(len_invoices_hors_pause, 4)
+        self.assertEqual(len_acts_invoiced, 92) # tous les actes billed
+        self.assertEqual(len_acts_invoiced_hors_pause, 92) # tous les actes billed - les acts qui ne seront pas billed à cause de la pause facturation
+        self.assertEqual(len_patient_invoiced, 2)
+        self.assertEqual(len_patient_invoiced_hors_pause, 2)
+        self.assertEqual(len_acts_lost, 30)
+        self.assertEqual(len_patient_with_lost_acts, 2)
+
+        patients[1].pause = True
+        patients[1].save()
+
+        (len_patients, len_invoices, len_invoices_hors_pause,
+        len_acts_invoiced, len_acts_invoiced_hors_pause,
+        len_patient_invoiced, len_patient_invoiced_hors_pause,
+        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate()
+
+        self.assertEqual(len_patients, 2)
+        self.assertEqual(len_invoices, 4)
+        self.assertEqual(len_invoices_hors_pause, 2)
+        self.assertEqual(len_acts_invoiced, 92) # tous les actes billed
+        self.assertEqual(len_acts_invoiced_hors_pause, 46) # tous les actes billed - les acts qui ne seront pas billed à cause de la pause facturation
+        self.assertEqual(len_patient_invoiced, 2)
+        self.assertEqual(len_patient_invoiced_hors_pause, 1)
+        self.assertEqual(len_acts_lost, 30)
+        self.assertEqual(len_patient_with_lost_acts, 2)
+
+        invoicing_next = invoicing.close(date(day=30, month=11, year=2020))
+
+        (len_patients, len_invoices, len_invoices_hors_pause,
+        len_acts_invoiced, len_acts_invoiced_hors_pause,
+        len_patient_invoiced, len_patient_invoiced_hors_pause,
+        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate(commit=True)
+
+        (len_patients, len_invoices, len_invoices_hors_pause,
+        len_acts_invoiced, len_acts_invoiced_hors_pause,
+        len_patient_invoiced, len_patient_invoiced_hors_pause,
+        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate()
+
+        self.assertEqual(len_patients, 1)
+        self.assertEqual(len_invoices, 2)
+        self.assertEqual(len_acts_invoiced, 46)
+
+        patients[1].pause = False
+        patients[1].save()
+        invoicing_next.close(date(day=2, month=12, year=2020))
+
+        (len_patients, len_invoices, len_invoices_hors_pause,
+        len_acts_invoiced, len_acts_invoiced_hors_pause,
+        len_patient_invoiced, len_patient_invoiced_hors_pause,
+        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing_next.get_stats_or_validate()
+
+        self.assertEqual(len_patients, 2)
+        self.assertEqual(len_invoices, 2)
+        self.assertEqual(len_acts_invoiced, 46)
