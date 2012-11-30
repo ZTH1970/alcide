@@ -77,7 +77,7 @@
                 <!-- Insciption automatique au premier acte facturable validé -->
             {% endif %}
             {% if object.last_state.status.type == "FIN_ACCUEIL" %}
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="diagnostic-patientrecord">En diagnostic</button>
                 <button type="button" id="traitement-patientrecord">En traitement</button>
                 <!-- Passage automatique en diagnostic ou traitement -->
@@ -85,19 +85,19 @@
             {% if object.last_state.status.type == "DIAGNOSTIC" %}
                 <button type="button" id="traitement-patientrecord">En traitement</button>
                 <button type="button" id="close-patientrecord">Clore</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <!-- Passage automatique en traitement -->
             {% endif %}
             {% if object.last_state.status.type == "TRAITEMENT" %}
                 <button type="button" id="diagnostic-patientrecord">En diagnostic</button>
                 <button type="button" id="close-patientrecord">Clore</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <!-- Passage automatique en diagnostic si on ajoute une prise en charge diagnostic, ce qui est faisable dans l'onglet prise en charge par un bouton visible sous conditions -->
             {% endif %}
             {% if object.last_state.status.type == "CLOS" %}
                 <button type="button" id="diagnostic-patientrecord">En diagnostic</button>
                 <button type="button" id="traitement-patientrecord">En traitement</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <!-- Passage automatique en diagnostic ou traitement -->
             {% endif %}
         {% endif %}
@@ -107,7 +107,7 @@
                 <button type="button" id="bilan-patientrecord">En bilan</button>
             {% endif %}
             {% if object.last_state.status.type == "FIN_ACCUEIL" %}
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="bilan-patientrecord">En bilan</button>
                 <button type="button" id="surveillance-patientrecord">En surveillance</button>
                 <button type="button" id="suivi-patientrecord">En suivi</button>
@@ -117,22 +117,22 @@
                 <button type="button" id="surveillance-patientrecord">En surveillance</button>
                 <button type="button" id="suivi-patientrecord">En suivi</button>
                 <button type="button" id="close-patientrecord">Clore</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
             {% endif %}
             {% if object.last_state.status.type == "SURVEILLANCE" %}
                 <button type="button" id="suivi-patientrecord">En suivi</button>
                 <button type="button" id="close-patientrecord">Clore</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="bilan-patientrecord">En bilan</button>
             {% endif %}
             {% if object.last_state.status.type == "SUIVI" %}
                 <button type="button" id="close-patientrecord">Clore</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="bilan-patientrecord">En bilan</button>
                 <button type="button" id="surveillance-patientrecord">En surveillance</button>
             {% endif %}
             {% if object.last_state.status.type == "CLOS" %}
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="bilan-patientrecord">En bilan</button>
                 <button type="button" id="surveillance-patientrecord">En surveillance</button>
                 <button type="button" id="suivi-patientrecord">En suivi</button>
@@ -144,16 +144,16 @@
                 <button type="button" id="traitement-patientrecord">En traitement</button>
             {% endif %}
             {% if object.last_state.status.type == "FIN_ACCUEIL" %}
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="traitement-patientrecord">En traitement</button>
                 <button type="button" id="close-patientrecord">Clore</button>
             {% endif %}
             {% if object.last_state.status.type == "TRAITEMENT" %}
                 <button type="button" id="close-patientrecord">Clore</button>
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
             {% endif %}
             {% if object.last_state.status.type == "CLOS" %}
-                <button type="button" id="reopoen-patientrecord">Ré-accueillir</button>
+                <button type="button" id="reopen-patientrecord">Ré-accueillir</button>
                 <button type="button" id="traitement-patientrecord">En traitement</button>
             {% endif %}
         {% endif %}
@@ -558,22 +558,3 @@
 
 {% endblock %}
 
-{% block page-end %}
-<script>
-  $('#finaccueil-patientrecord-dialog').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons: {
-      "Valider": function () { $('#finaccueil-patientrecord-dialog form').submit(); },
-      "Annuler": function () { $(this).dialog("close"); },
-    },
-  });
-    $('#finaccueil-patientrecord').click(function () {
-        $('#finaccueil-patientrecord-dialog-content').load('finaccueil-patientrecord/',
-              function () {
-                $('#finaccueil-patientrecord-dialog').dialog('open');
-              }
-            );
-      });
-</script>
-{% endblock %}

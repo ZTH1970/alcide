@@ -82,6 +82,24 @@ function state_dialog(url, state_title, state_type) {
     $('#reopen-patientrecord').click(function() {
         state_dialog('update-state', 'Réaccueil', 'ACCUEIL');
     });
+    $('#diagnostic-patientrecord').click(function() {
+        state_dialog('update-state', 'Diagnostic', 'DIAGNOSTIC');
+    });
+    $('#traitement-patientrecord').click(function() {
+        state_dialog('update-state', 'Traitement', 'TRAITEMENT');
+    });
+    $('#finaccueil-patientrecord').click(function() {
+        state_dialog('update-state', "Fin d'accueil", 'FIN_ACCUEIL');
+    });
+    $('#bilan-patientrecord').click(function() {
+        state_dialog('update-state', 'Bilan', 'BILAN');
+    });
+    $('#surveillance-patientrecord').click(function() {
+        state_dialog('update-state', 'Surveillance', 'SURVEILLANCE');
+    });
+    $('#suivi-patientrecord').click(function() {
+        state_dialog('update-state', 'Suivi', 'SUIVI');
+    });
     $('#patientrecord-history').click(function() {
       $('#dossier-histo-dlg').dialog({title: 'Historique dossier',
         width: '500px',
