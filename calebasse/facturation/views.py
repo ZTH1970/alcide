@@ -55,7 +55,15 @@ class FacturationDetailView(UpdateView):
             context['patients_stats'] = patients_stats
             context['days_not_locked'] = days_not_locked
         elif self.service.name == 'CAMSP':
-            context['invoicing'].get_stats_or_validate()
+            (len_patient_pause, len_patient_hors_pause,
+                len_acts_pause, len_acts_hors_pause, acts_accepted,
+                days_not_locked) = context['invoicing'].get_stats_or_validate()
+            context['len_patient_pause'] = len_patient_pause
+            context['len_patient_hors_pause'] = len_patient_hors_pause
+            context['len_acts_pause'] = len_acts_pause
+            context['len_acts_hors_pause'] = len_acts_hors_pause
+            context['acts_accepted'] = acts_accepted
+            context['days_not_locked'] = days_not_locked
         elif 'SESSAD' in self.service.name:
             context['invoicing'].get_stats_or_validate()
         return context

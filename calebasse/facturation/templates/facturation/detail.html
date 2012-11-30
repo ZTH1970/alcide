@@ -101,6 +101,46 @@
             {% endif %}
         </ul>
       {% endif %}
+    {% else %}
+        {% if service_name == "CAMSP" %}
+            {% if invoicing.status == "closed" %}
+            <ul>
+                {% if len_patient_hors_pause %}
+                  <li>Actes décomptés hors dossiers en pause: {{ len_acts_hors_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables pour les dossiers hors pause.</li>
+                {% endif %}
+
+                {% if len_patient_pause %}
+                  <li>Actes décomptés des dossiers en pause: {{ len_acts_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables pour les dossiers en pause.</li>
+                {% endif %}
+
+            </ul>
+            {% else %}
+            <ul>
+                {% if len_patient_hors_pause %}
+                  <li>Actes décomptés: {{ len_acts_hors_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptés pour ce décompte.</li>
+                {% endif %}
+            </ul>
+          {% endif %}
+
+        {% endif %}
     {% endif %}
     </div>
 {% endblock %}

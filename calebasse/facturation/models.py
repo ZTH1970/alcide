@@ -272,6 +272,7 @@ class Invoicing(models.Model):
                 len_invoices = 0
                 len_acts_invoiced = 0
                 patients_stats = {}
+                days_not_locked = []
                 invoices = self.invoice_set.all()
                 for invoice in invoices:
                     len_invoices = len_invoices + 1
@@ -294,9 +295,48 @@ class Invoicing(models.Model):
                 len_acts_invoiced, len_acts_invoiced_hors_pause,
                 len_patient_invoiced, len_patient_invoiced_hors_pause,
                 len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked)
-        elif 'SESSAD' in self.service.name:
-            pass
+        elif self.service.name == 'CAMSP':
+            if self.status in Invoicing.STATUS.closed:
+                (acts_not_locked, days_not_locked, acts_not_valide,
+                acts_not_billable, acts_bad_state,
+                acts_accepted) = self.list_for_billing()
+                len_patient_pause = 0
+                len_patient_hors_pause = 0
+                len_acts_pause = 0
+                len_acts_hors_pause = 0
+                for patient, acts in acts_accepted.items():
+                    if patient.pause:
+                        len_patient_pause = len_patient_pause + 1
+                        len_acts_pause = len_acts_pause + len(acts)
+                    else:
+                        len_patient_hors_pause = len_patient_hors_pause + 1
+                        len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                        if commit:
+                            for act in acts:
+                                self.acts.add(act)
+                if commit:
+                    self.status = Invoicing.STATUS.validated
+                    self.save()
+            else:
+                acts_accepted = {}
+                len_patient_pause = 0
+                len_patient_hors_pause = 0
+                len_acts_pause = 0
+                len_acts_hors_pause = 0
+                days_not_locked = []
+                for act in self.acts.all():
+                    if act.patient in acts_accepted:
+                        acts_accepted[patient].append(act)
+                        len_acts_hors_pause = len_acts_hors_pause + 1
+                    else:
+                        len_patient_hors_pause = len_patient_hors_pause + 1
+                        len_acts_hors_pause = len_acts_hors_pause + 1
+                        acts_accepted[patient] = [act]
+            return (len_patient_pause, len_patient_hors_pause,
+                len_acts_pause, len_acts_hors_pause, acts_accepted,
+                days_not_locked)
         else:
+            #SESSAD
             pass
 
     def save(self, *args, **kwargs):
