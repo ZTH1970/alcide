@@ -257,7 +257,7 @@ class Invoicing(models.Model):
                             pass
                     if patient in acts_losts.keys():
                         # TODO: More details about healthcare
-                        patients_stats[patient]['losts'] = acts_losts
+                        patients_stats[patient]['losts'] = acts_losts[patient]
                         len_patient_with_lost_acts = len_patient_with_lost_acts + 1
                         len_acts_lost = len_acts_lost + len(acts_losts[patient])
                 len_patients = len(patients_stats.keys())
