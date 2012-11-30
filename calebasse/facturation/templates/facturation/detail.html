@@ -140,7 +140,6 @@
             </ul>
             {% endif %}
         {% else %}
-
             {% if invoicing.status == "closed" %}
             <ul>
                 {% if len_patient_hors_pause %}
@@ -191,6 +190,118 @@
         {% endif %}
     {% endif %}
     </div>
+
+    {% if service_name == "CMPP" and patients_stats %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        {% if invoicing.status == "open" or invoicing.status == "closed" %}
+        <p id="filtre-dossiers">
+         <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou
+         avec des actes facturables mais non prise en charge.</label></input>
+        </p>
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats.items %}
+            {% if patient.pause or "losts" in detail.keys %}
+             <div class="frame dossier facturable">
+            {% else %}
+            <div class="frame dossier">
+            {% endif %}
+                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                <div class="info">
+                </div>
+                {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
+                {% if "losts" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "invoices" %}
+                  <li>Actes facturables <button class="blind">détails</button>
+                    <ul>
+                        {% for invoice in value %}
+                        {% for k, v in invoice.items %}
+                            {% if k == "acts" %}
+                              {% for act, hc in v %}
+                                <li>{{ act.date }} {{ act.act_type }}</li>
+                              {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "losts" %}
+                  <li>Actes facturables non pris en charge <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% else %}
+
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats.items %}
+            <div class="frame dossier" id="to-hide">
+                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                <div class="info">
+                </div>
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "invoices" %}
+                  <li>Actes facturables <button class="blind">détails</button>
+                    <ul>
+                        {% for invoice in value %}
+                        <li>Facture {{ invoice.number }}
+                          <ul>
+                          {% for act in invoice.acts.all %}
+                            <li>{{ act.date }} {{ act.act_type }}</li>
+                          {% endfor %}
+                          </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if service_name == "CAMSP" and acts_accepted %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        <p id="filtre-dossiers">
+         <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation.</label></input>
+        </p>
+        <div id="dossiers-concernes">
+        </div>
+    </div>
+    {% endif %}
+    {% if service_name == "SESSAD DYS" or service_name == "SESSAD TED" %}
+        {% if acts_accepted %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        <p id="filtre-dossiers">
+         <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou
+         avec des actes décomptables mais sans notification valide.</label></input>
+        </p>
+        <div id="dossiers-concernes">
+        </div>
+    </div>
+        {% endif %}
+    {% endif %}
+
 {% endblock %}
 
 {% block dialogs %}
@@ -245,5 +356,12 @@
               }
             );
       });
+    $('button.blind').next().hide();
+    $('button.blind').click(function() {
+            $(this).next().toggle('blind');
+    });
+    $('#hide-dossiers-cb').click(function() {
+        $('#to-hide').toggle('fold');
+    });
 </script>
 {% endblock %}
