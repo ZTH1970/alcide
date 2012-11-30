@@ -1,172 +1,172 @@
 [
   {
-    "pk": 4, 
-    "model": "agenda.eventtype", 
+    "pk": 4,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union \u00e0 l'ext\u00e9rieur"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "agenda.eventtype", 
+    "pk": 5,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "En formation"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "agenda.eventtype", 
+    "pk": 6,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Donne une formation"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "agenda.eventtype", 
+    "pk": 7,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Equipe pluridisciplinaire MLA"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "agenda.eventtype", 
+    "pk": 8,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Supervision"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "agenda.eventtype", 
+    "pk": 9,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union de service"
     }
-  }, 
+  },
   {
-    "pk": 10, 
-    "model": "agenda.eventtype", 
+    "pk": 10,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union de direction"
     }
-  }, 
+  },
   {
-    "pk": 11, 
-    "model": "agenda.eventtype", 
+    "pk": 11,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union administratifs"
     }
-  }, 
+  },
   {
-    "pk": 12, 
-    "model": "agenda.eventtype", 
+    "pk": 12,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union agents de service"
     }
-  }, 
+  },
   {
-    "pk": 13, 
-    "model": "agenda.eventtype", 
+    "pk": 13,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Concertation direction"
     }
-  }, 
+  },
   {
-    "pk": 14, 
-    "model": "agenda.eventtype", 
+    "pk": 14,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "P\u00e9rinatalit\u00e9"
     }
-  }, 
+  },
   {
-    "pk": 15, 
-    "model": "agenda.eventtype", 
+    "pk": 15,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union des parents"
     }
-  }, 
+  },
   {
-    "pk": 16, 
-    "model": "agenda.eventtype", 
+    "pk": 16,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Temps de trajet"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "agenda.event", 
+    "pk": 3,
+    "model": "agenda.event",
     "fields": {
-      "event_type": 4, 
-      "title": "Entr'ouvert", 
-      "description": "Bla bla bla", 
+      "event_type": 4,
+      "title": "Entr'ouvert",
+      "description": "Bla bla bla",
       "participants": [
-        5, 
+        5,
         6
-      ], 
+      ],
       "services": [
-        1, 
+        1,
         2
-      ], 
+      ],
       "room": 2
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "agenda.event", 
+    "pk": 2,
+    "model": "agenda.event",
     "fields": {
-      "event_type": 1, 
-      "title": "Jack Itchan", 
-      "description": "blabla bla bla", 
+      "event_type": 1,
+      "title": "Jack Itchan",
+      "description": "blabla bla bla",
       "participants": [
         5
-      ], 
-      "services": [
-        2
-      ], 
-      "room": 1
-    }
-  }, 
-  {
-    "pk": 1, 
-    "model": "agenda.event", 
-    "fields": {
-      "event_type": 1, 
-      "title": "John Doe", 
-      "description": "blabla", 
-      "participants": [
-        5
-      ], 
+      ],
       "services": [
         1
-      ], 
+      ],
+      "room": 1
+    }
+  },
+  {
+    "pk": 1,
+    "model": "agenda.event",
+    "fields": {
+      "event_type": 1,
+      "title": "John Doe",
+      "description": "blabla",
+      "participants": [
+        5
+      ],
+      "services": [
+        1
+      ],
       "room": 2
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "agenda.occurrence", 
+    "pk": 1,
+    "model": "agenda.occurrence",
     "fields": {
-      "notes": [], 
-      "start_time": "2012-10-30T10:00:00", 
-      "end_time": "2012-10-30T10:45:00", 
+      "notes": [],
+      "start_time": "2012-10-30T10:00:00",
+      "end_time": "2012-10-30T10:45:00",
       "event": 1
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "agenda.occurrence", 
+    "pk": 2,
+    "model": "agenda.occurrence",
     "fields": {
-      "notes": [], 
-      "start_time": "2012-10-30T10:45:00", 
-      "end_time": "2012-10-30T11:30:00", 
+      "notes": [],
+      "start_time": "2012-10-30T10:45:00",
+      "end_time": "2012-10-30T11:30:00",
       "event": 2
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "agenda.occurrence", 
+    "pk": 3,
+    "model": "agenda.occurrence",
     "fields": {
-      "notes": [], 
-      "start_time": "2012-10-30T11:30:00", 
-      "end_time": "2012-10-30T12:00:00", 
+      "notes": [],
+      "start_time": "2012-10-30T11:30:00",
+      "end_time": "2012-10-30T12:00:00",
       "event": 3
     }
   }

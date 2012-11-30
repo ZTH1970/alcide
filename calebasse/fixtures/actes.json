@@ -1,56 +1,80 @@
 [
-  {
-    "pk": 1,
-    "model": "actes.act",
-    "fields": {
-      "patient": 8,
-      "date": "2012-10-30T00:00:00",
-      "act_type": 1,
-      "validation_locked": false,
-      "transport_type": null,
-      "transport_company": null
+    {
+        "fields": {
+            "act_type": 1,
+            "date": "2012-10-30T12:00:00",
+            "patient": 8,
+            "transport_company": null,
+            "transport_type": null,
+            "validation_locked": false
+        },
+        "model": "actes.act",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "act_type": 10,
+            "date": "2012-10-30T00:00:00",
+            "patient": 9,
+            "transport_company": null,
+            "transport_type": null,
+            "validation_locked": false
+        },
+        "model": "actes.act",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "attendance": "absent",
+            "convocation_sent": false,
+            "event_ptr": 1,
+            "participants": [
+                5
+            ],
+            "services": [
+                1
+            ]
+        },
+        "model": "actes.eventact",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "attendance": "absent",
+            "convocation_sent": false,
+            "event_ptr": 2,
+            "participants": [
+                5
+            ],
+            "services": [
+                1
+            ]
+        },
+        "model": "actes.eventact",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "act": 1,
+            "author": 1,
+            "auto": false,
+            "created": "2012-10-30T00:00:00",
+            "previous_state": null,
+            "state_name": "NON_VALIDE"
+        },
+        "model": "actes.actvalidationstate",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "act": 2,
+            "author": 1,
+            "auto": false,
+            "created": "2012-10-30T00:00:00",
+            "previous_state": null,
+            "state_name": "NON_VALIDE"
+        },
+        "model": "actes.actvalidationstate",
+        "pk": 2
     }
-  },
-  {
-    "pk": 2,
-    "model": "actes.act",
-    "fields": {
-      "patient": 9,
-      "date": "2012-10-30T00:00:00",
-      "act_type": 10,
-      "validation_locked": false,
-      "transport_type": null,
-      "transport_company": null
-    }
-  },
-  {
-    "pk": 1,
-    "model": "actes.eventact",
-    "fields": {
-      "attendance": "absent",
-      "participants": [
-        5
-      ],
-      "services": [
-        1
-      ],
-      "event_ptr": 1,
-      "convocation_sent": false
-    }
-  },
-  {
-    "pk": 2,
-    "model": "actes.eventact",
-    "fields": {
-      "attendance": "absent",
-      "participants": [
-        5
-      ],
-      "services": [
-        1
-      ],
-      "event_ptr": 2,
-      "convocation_sent": false
-    }
-  }
 ]
