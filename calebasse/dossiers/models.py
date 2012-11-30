@@ -242,6 +242,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
+    pause = models.BooleanField(verbose_name=u"Pause facturation",
+            default=False)
 
     # Physiology
     size = models.IntegerField(verbose_name=u"Taille (cm)",
@@ -474,3 +476,4 @@ def create_patient(first_name, last_name, service, creator,
     patient.last_state = fs
     patient.save()
     return patient
+
