@@ -28,8 +28,10 @@ class InvoicingManager(ServiceLinkedManager):
             start_date, end_date = quarter_start_and_end_dates()
             invoicing, created = \
                 self.get_or_create(start_date=start_date,
-                end_date=end_date, service=service,
-                status=Invoicing.STATUS.closed)
+                end_date=end_date, service=service)
+            if created:
+                invoicing.status = Invoicing.STATUS.closed
+                invoicing.save()
         else:
             try:
                 invoicing = self.get(service=service,
