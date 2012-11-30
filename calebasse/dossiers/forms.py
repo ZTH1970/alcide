@@ -19,7 +19,6 @@ class SearchForm(Form):
     social_security_id = forms.CharField(label=u"Numéro d'assuré social", required=False)
     states = forms.MultipleChoiceField(
             widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}),
-            label=u"test",
             choices=STATE_CHOICES, initial=(0,1,2,3,4))
 
 class StateForm(Form):
@@ -39,3 +38,16 @@ class PhysiologyForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('size', 'weight', 'pregnancy_term')
+
+class InscriptionForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('analyse_motive', 'familly_motive', 'advice_giver')
+
+class FamillyForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('sibship_place', 'nb_children_family', 'twinning_rank',
+                'parental_authority', 'familly_situation', 'child_custody')
+
+

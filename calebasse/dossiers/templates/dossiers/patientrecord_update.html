@@ -85,7 +85,7 @@
   </div>
 
   <div id="tabs-2"> <!-- Fiche administrative -->
-    <form method="post" id="services-form">
+    <form method="post" id="id-form">
     {% csrf_token %}
     <div class="frame inline">
       <h3>État civil</h3>
@@ -109,7 +109,7 @@
   </form>
 
 
-    <form method="post" id="services-form">
+    <form method="post" id="physiology-form" class="patientrecordform">
     {% csrf_token %}
     <div class="frame inline">
       <h3>Physiologie</h3>
@@ -128,33 +128,43 @@
     </div>
   </form>
 
-    <div class="frame">
+    <form method="post" id="inscription-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
       <h3>Inscription</h3>
       <button class="save">✔</button>
       <p>
-      <label>Motif (analysé) :</label> <select><option>Indéfini</option></select> <button>+</button>
-      <label>Motif (famille) :</label> <select><option>Indéfini</option></select> <button>+</button>
-      <label>Conseilleur :</label> <select><option>Indéfini</option></select> <button>+</button>
+      {% for field in forms.inscription %}
+      {{ field.label_tag  }} : {{ field }} <button>+</button>
+      {% endfor %}
       </p>
       <input type="hidden"  name="tab"  value="1">
-
     </div>
+  </form>
 
-    <div class="frame">
-      <h3>Famille</h3>
+    <form method="post" id="inscription-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
+        <h3>Famille</h3>
       <button class="save">✔</button>
-      <p><label>Place dans la fratrie :</label> <input size="4"/>
-      <label>Nombre d'enfants dans la fratrie :</label> <input size="4"/>
-      <label>Rang (gémellité) :</label> <input size="4"/>
+      <p>
+      {% for field in forms.familly %}
+      {{ field.errors }}
+      {% endfor %}
       </p>
       <p>
-      <label>Autorité parentale :</label> <select><option>Indéfini</option></select> <button>+</button>
-      <label>Situation familiale :</label> <select><option>Indéfini</option></select> <button>+</button>
-      <label>Garde parentale :</label> <select><option>Indéfini</option></select> <button>+</button>
+      {{ forms.familly.sibship_place.label_tag  }} : {{ forms.familly.sibship_place }}
+      {{ forms.familly.nb_children_family.label_tag  }} : {{ forms.familly.nb_children_family }}
+      {{ forms.familly.twinning_rank.label_tag  }} : {{ forms.familly.twinning_rank }}
+      </p>
+      <p>
+      {{ forms.familly.parental_authority.label_tag  }} : {{ forms.familly.parental_authority }} <button>+</button>
+      {{ forms.familly.familly_situation.label_tag  }} : {{ forms.familly.familly_situation }} <button>+</button>
+      {{ forms.familly.child_custody.label_tag  }} : {{ forms.familly.child_custody }} <button>+</button>
       </p>
       <input type="hidden"  name="tab"  value="1">
-
     </div>
+    </form>
 
     <div class="frame">
       <h3>Transport</h3>

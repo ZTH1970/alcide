@@ -4,7 +4,8 @@ from datetime import datetime
 from calebasse.cbv import ListView, MultiUpdateView, FormView, ServiceViewMixin
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord, Status, FileState
-from calebasse.dossiers.forms import SearchForm, CivilStatusForm, StateForm, PhysiologyForm
+from calebasse.dossiers.forms import (SearchForm, CivilStatusForm, StateForm,
+        PhysiologyForm, FamillyForm, InscriptionForm)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 from calebasse.ressources.models import Service
 
@@ -48,12 +49,12 @@ state_form = StateFormView.as_view()
 
 
 class PatientRecordView(ServiceViewMixin, MultiUpdateView):
-    """
-    """
     model = PatientRecord
     forms_classes = {
             'id': CivilStatusForm,
-            'physiology': PhysiologyForm
+            'physiology': PhysiologyForm,
+            'inscription': InscriptionForm,
+            'familly': FamillyForm,
             }
     template_name = 'dossiers/patientrecord_update.html'
     success_url = './view'

@@ -1042,6 +1042,15 @@ table#schedules {
   vertical-align: top;
 }
 
+#id_familly-sibship_place, #id_familly-nb_children_family, #id_familly-twinning_rank {
+    width: 4em;
+}
+
+.patientrecordform p input {
+    margin-left: 0;
+    margin-right: 6px;
+}
+
 
 /* limit act type select length */
 #id_act_type {

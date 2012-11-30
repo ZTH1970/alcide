@@ -124,6 +124,36 @@ class Status(NamedAbstractModel):
     type = models.CharField(max_length=80)
     services = models.ManyToManyField('ressources.Service')
 
+class AnalyseMotive(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Motif analysé"
+        verbose_name_plural = u"Motifs analysés"
+
+class FamillyMotive(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Motif familiale"
+        verbose_name_plural = u"Motifs familiaux"
+
+class AdviceGiver(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Conseilleur"
+        verbose_name_plural = u"Conseilleurs"
+
+class ParentalAuthority(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Autorité parentale"
+        verbose_name_plural = u"Autorités parentales"
+
+class FamillySituation(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Situation familiale"
+        verbose_name_plural = u"Situations familiales"
+
+class ChildCustody(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Garde parentale"
+        verbose_name_plural = u"Gardes parentales"
+
 class FileState(models.Model):
 
     class Meta:
@@ -212,8 +242,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
-    pause = models.BooleanField(verbose_name=u"Pause facturation",
-        default=False)
 
     # Physiology
     size = models.IntegerField(verbose_name=u"Taille (cm)",
@@ -223,6 +251,33 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     pregnancy_term = models.IntegerField(verbose_name=u"Terme en semaines",
             null=True, blank=True, default=None)
 
+    # Inscription motive
+    analyse_motive = models.ForeignKey('AnalyseMotive',
+            verbose_name=u"Motif (analysé)",
+            null=True, blank=True, default=None)
+    familly_motive = models.ForeignKey('FamillyMotive',
+            verbose_name=u"Motif (famille)",
+            null=True, blank=True, default=None)
+    advice_giver = models.ForeignKey('AdviceGiver',
+            verbose_name=u"Conseilleur",
+            null=True, blank=True, default=None)
+
+    # Familly
+    sibship_place = models.IntegerField(verbose_name=u"Place dans la fratrie",
+            null=True, blank=True, default=None)
+    nb_children_family = models.IntegerField(verbose_name=u"Nombre d'enfants dans la fratrie",
+            null=True, blank=True, default=None)
+    twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
+            null=True, blank=True, default=None)
+    parental_authority = models.ForeignKey('ParentalAuthority',
+            verbose_name=u"Autorité parentale",
+            null=True, blank=True, default=None)
+    familly_situation = models.ForeignKey('FamillySituation',
+            verbose_name=u"Situation familiale",
+            null=True, blank=True, default=None)
+    child_custody = models.ForeignKey('ChildCustody',
+            verbose_name=u"Garde parentale",
+            null=True, blank=True, default=None)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
@@ -336,8 +391,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
 
         """
         acts = self.act_set.order_by('date')
-        hcs = CmppHealthCareDiagnostic.objects.filter(patient=self).\
-            order_by('-start_date')
+        hcs = self.healthcare_set.order_by('-start_date')
         if not hcs:
             # Pas de prise en charge, on recherche l'acte facturable le plus
             # ancien, on crée une pc diag à la même date.
@@ -374,8 +428,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                 services.values_list('name', flat=True)
         cmpp = Service.objects.get(name='CMPP')
         for act in acts:
-            if act.is_state('VALIDE') and act.is_billable() and \
-                    are_all_acts_of_the_day_locked(act.date):
+            if are_all_acts_of_the_day_locked(act.date) and \
+                    act.is_state('VALIDE') and act.is_billable():
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
                     if (self.last_state.status.type == "ACCUEIL" \
