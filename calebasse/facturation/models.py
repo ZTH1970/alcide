@@ -203,6 +203,7 @@ class Invoicing(models.Model):
             len_patient_with_lost_acts: Nombre de patients concernés par des actes facturables mais qui ne peuvent être facturés pour une autre raison que la pause.
             patients_stats: Par patients, factures et actes facturables qui ne peuvent être facturés pour une autre raison que la pause.
         '''
+        days_not_locked = 0
         if self.service.name == 'CMPP':
             if self.status in (Invoicing.STATUS.open,
                     Invoicing.STATUS.closed):
