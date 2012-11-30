@@ -40,6 +40,9 @@ function state_dialog(url, state_title, state_type) {
     $('#btn_none_state').click(function() {
       $('.checkbox_state').attr('checked', false);
     });
+    $('.checkbox_state').click(function() {
+        $("#search").click();
+    });
     $('.pr-line').click(function() {
         window.location.href = $(this).data('link');
     });
