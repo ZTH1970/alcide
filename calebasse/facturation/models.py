@@ -178,7 +178,7 @@ class Invoicing(models.Model):
         elif self.service.name == 'CAMSP':
             return list_acts.list_acts_for_billing_CAMSP(self.start_date,
                     self.end_date, service=self.service)
-        elif 'SESSAD' in self.service_name:
+        elif 'SESSAD' in self.service.name:
             return list_acts.list_acts_for_billing_SESSAD(self.start_date,
                     self.end_date, service=self.service)
         else:
@@ -336,8 +336,53 @@ class Invoicing(models.Model):
                 len_acts_pause, len_acts_hors_pause, acts_accepted,
                 days_not_locked)
         else:
-            #SESSAD
-            pass
+            if self.status in Invoicing.STATUS.closed:
+                (acts_not_locked, days_not_locked, acts_not_valide,
+                acts_not_billable, acts_bad_state, acts_missing_valid_notification,
+                acts_accepted) = self.list_for_billing()
+                len_patient_pause = 0
+                len_patient_hors_pause = 0
+                len_acts_pause = 0
+                len_acts_hors_pause = 0
+                for patient, acts in acts_accepted.items():
+                    if patient.pause:
+                        len_patient_pause = len_patient_pause + 1
+                        len_acts_pause = len_acts_pause + len(acts)
+                    else:
+                        len_patient_hors_pause = len_patient_hors_pause + 1
+                        len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                        if commit:
+                            for act in acts:
+                                self.acts.add(act)
+                len_patient_missing_notif = 0
+                len_acts_missing_notif = 0
+                for patient, acts in acts_missing_valid_notification.items():
+                    len_patient_missing_notif = len_patient_hors_pause + 1
+                    len_acts_missing_notif = len_acts_missing_notif + len(acts)
+                if commit:
+                    self.status = Invoicing.STATUS.validated
+                    self.save()
+            else:
+                acts_accepted = {}
+                len_patient_pause = 0
+                len_patient_hors_pause = 0
+                len_acts_pause = 0
+                len_acts_hors_pause = 0
+                len_patient_missing_notif = 0
+                len_acts_missing_notif = 0
+                days_not_locked = []
+                for act in self.acts.all():
+                    if act.patient in acts_accepted:
+                        acts_accepted[patient].append(act)
+                        len_acts_hors_pause = len_acts_hors_pause + 1
+                    else:
+                        len_patient_hors_pause = len_patient_hors_pause + 1
+                        len_acts_hors_pause = len_acts_hors_pause + 1
+                        acts_accepted[patient] = [act]
+            return (len_patient_pause, len_patient_hors_pause,
+                len_acts_pause, len_acts_hors_pause,
+                len_patient_missing_notif, len_acts_missing_notif,
+                acts_accepted, days_not_locked)
 
     def save(self, *args, **kwargs):
         if not self.seq_id:
