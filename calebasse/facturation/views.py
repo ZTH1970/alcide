@@ -21,6 +21,7 @@ class FacturationHomepageView(TemplateView):
         context['last'] = last
         return context
 
+
 class FacturationDetailView(UpdateView):
 
     context_object_name = "invoicing"
@@ -32,18 +33,35 @@ class FacturationDetailView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(FacturationDetailView, self).get_context_data(**kwargs)
-        if self.service.name == 'CAMSP':
-            (acts_not_locked, days_not_locked, acts_not_valide,
-            acts_not_billable, acts_bad_state,
-            acts_accepted) = context['invoicing'].list_for_billing()
-        elif self.service.name == 'CMPP':
+        if self.service.name == 'CMPP':
+            (len_patients, len_invoices, len_invoices_hors_pause,
+            len_acts_invoiced, len_acts_invoiced_hors_pause,
+            len_patient_invoiced, len_patient_invoiced_hors_pause,
+            len_acts_lost, len_patient_with_lost_acts,
+            patients_stats, days_not_locked) = \
+            context['invoicing'].get_stats_or_validate()
+            context['len_patients'] = len_patients
+            context['len_invoices'] = len_invoices
+            context['len_invoices_hors_pause'] = len_invoices_hors_pause
+            context['len_invoices_pause'] = len_invoices - len_invoices_hors_pause
+            context['len_acts_invoiced'] = len_acts_invoiced
+            context['len_acts_invoiced_hors_pause'] = len_acts_invoiced_hors_pause
+            context['len_acts_invoiced_pause'] = len_acts_invoiced - len_acts_invoiced_hors_pause
+            context['len_patient_invoiced'] = len_patient_invoiced
+            context['len_patient_invoiced_hors_pause'] = len_patient_invoiced_hors_pause
+            context['len_patient_invoiced_pause'] = len_patient_invoiced - len_patient_invoiced_hors_pause
+            context['len_acts_lost'] = len_acts_lost
+            context['len_patient_with_lost_acts'] = len_patient_with_lost_acts
+            context['patients_stats'] = patients_stats
+            context['days_not_locked'] = days_not_locked
+        elif self.service.name == 'CAMSP':
             (acts_not_locked, days_not_locked, acts_not_valide,
             acts_not_billable, acts_diagnostic, acts_treatment,
-            acts_losts) = context['invoicing'].list_for_billing()
+            acts_losts) = context['invoicing'].invoicing.get_stats_or_validate()
         elif 'SESSAD' in self.service.name:
             (acts_not_locked, days_not_locked, acts_not_valide,
             acts_not_billable, acts_bad_state, acts_missing_valid_notification,
-            acts_accepted) = context['invoicing'].list_for_billing()
+            acts_accepted) = context['invoicing'].invoicing.get_stats_or_validate()
         return context
 
 #TODO: Invoicing summary
