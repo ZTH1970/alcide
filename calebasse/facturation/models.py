@@ -26,8 +26,10 @@ class InvoicingManager(ServiceLinkedManager):
         '''Return the currently open invoicing'''
         if service.name != 'CMPP':
             start_date, end_date = quarter_start_and_end_dates()
-            invoicing, created = self.get_or_create(start_date=start_date,
-                    end_date=end_date, service=service)
+            invoicing, created = \
+                self.get_or_create(start_date=start_date,
+                end_date=end_date, service=service,
+                status=Invoicing.STATUS.closed)
         else:
             try:
                 invoicing = self.get(service=service,
