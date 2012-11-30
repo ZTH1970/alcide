@@ -212,6 +212,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
+    pause = models.BooleanField(verbose_name=u"Pause facturation",
+        default=False)
 
     # Physiology
     size = models.IntegerField(verbose_name=u"Taille (cm)",
@@ -334,7 +336,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
 
         """
         acts = self.act_set.order_by('date')
-        hcs = self.healthcare_set.order_by('-start_date')
+        hcs = CmppHealthCareDiagnostic.objects.filter(patient=self).\
+            order_by('-start_date')
         if not hcs:
             # Pas de prise en charge, on recherche l'acte facturable le plus
             # ancien, on crée une pc diag à la même date.
@@ -371,8 +374,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                 services.values_list('name', flat=True)
         cmpp = Service.objects.get(name='CMPP')
         for act in acts:
-            if are_all_acts_of_the_day_locked(act.date) and \
-                    act.is_state('VALIDE') and act.is_billable():
+            if act.is_state('VALIDE') and act.is_billable() and \
+                    are_all_acts_of_the_day_locked(act.date):
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
                     if (self.last_state.status.type == "ACCUEIL" \
