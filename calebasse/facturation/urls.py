@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from views import (FacturationHomepageView, FacturationDetailView,
-    CloseFacturationView)
+    CloseFacturationView, ValidationFacturationView)
 
 urlpatterns = patterns('calebasse.facturation.views',
     url(r'^$', FacturationHomepageView.as_view()),
@@ -9,4 +9,7 @@ urlpatterns = patterns('calebasse.facturation.views',
     url(r'^(?P<pk>\d+)/clore/$',
         CloseFacturationView.as_view(),
         name='close-facturation'),
+    url(r'^(?P<pk>\d+)/validate/$',
+        ValidationFacturationView.as_view(),
+        name='validate-facturation'),
 )
