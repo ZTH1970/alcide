@@ -1,154 +1,163 @@
 [
   {
-    "pk": 1, 
-    "model": "ressources.service", 
+    "pk": 1,
+    "model": "ressources.service",
     "fields": {
       "name": "CMPP",
       "slug": "cmpp"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "ressources.service", 
+    "pk": 2,
+    "model": "ressources.service",
     "fields": {
       "name": "CAMSP",
       "slug": "camsp"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "ressources.service", 
+    "pk": 3,
+    "model": "ressources.service",
     "fields": {
       "name": "SESSAD DYS",
       "slug": "sessad-dys"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "ressources.service", 
+    "pk": 4,
+    "model": "ressources.service",
     "fields": {
       "name": "SESSAD TED",
       "slug": "sessad-ted"
     }
   },
   {
-    "pk": 1, 
-    "model": "agenda.eventtype", 
+    "pk": 1,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Rendez-vous patient"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "agenda.eventtype", 
+    "pk": 2,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "agenda.eventtype", 
+    "pk": 3,
+    "model": "agenda.eventtype",
     "fields": {
       "label": "Vacances"
     }
   },
   {
-    "pk": 1, 
-    "model": "dossiers.status", 
+    "pk": 1,
+    "model": "dossiers.status",
     "fields": {
       "services": [
-        1, 
-        2, 
-        3, 
+        1,
+        2,
+        3,
         4
-      ], 
+      ],
       "name": "En contact",
       "type": "ACCUEIL"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "dossiers.status", 
+    "pk": 2,
+    "model": "dossiers.status",
     "fields": {
       "services": [
-        1, 
-        2, 
-        3, 
+        1,
+        2,
+        3,
         4
-      ], 
+      ],
       "name": "Fin d'accueil",
       "type": "FIN_ACCUEIL"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "dossiers.status", 
+    "pk": 3,
+    "model": "dossiers.status",
     "fields": {
       "services": [
         1
-      ], 
+      ],
       "name": "Diagnostic",
       "type": "DIAGNOSTIC"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "dossiers.status", 
+    "pk": 4,
+    "model": "dossiers.status",
     "fields": {
       "services": [
-        1, 
-        3, 
+        1,
+        3,
         4
-      ], 
+      ],
       "name": "Traitement",
       "type": "TRAITEMENT"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "dossiers.status", 
+    "pk": 5,
+    "model": "dossiers.status",
     "fields": {
       "services": [
-        1, 
-        2, 
-        3, 
+        1,
+        2,
+        3,
         4
-      ], 
+      ],
       "name": "Clos",
       "type": "CLOS"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "dossiers.status", 
+    "pk": 6,
+    "model": "dossiers.status",
     "fields": {
       "services": [
         2
-      ], 
+      ],
       "name": "Bilan",
       "type": "BILAN"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "dossiers.status", 
+    "pk": 7,
+    "model": "dossiers.status",
     "fields": {
       "services": [
         2
-      ], 
+      ],
       "name": "Surveillance",
       "type": "SURVEILLANCE"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "dossiers.status", 
+    "pk": 8,
+    "model": "dossiers.status",
     "fields": {
       "services": [
         2
-      ], 
+      ],
       "name": "Suivi",
       "type": "SUIVI"
     }
+  },
+  {
+    "fields": {
+        "end_date": null,
+        "price": 100,
+        "start_date": "1970-01-05"
+    },
+    "model": "facturation.priceperact",
+    "pk": 1
   }
 ]
