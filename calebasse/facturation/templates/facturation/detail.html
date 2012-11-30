@@ -40,30 +40,55 @@
 {% block content %}
 
     <div id="facturation-contents">
-    <h3>Résumé</h3>
-    <ul>
-     <li>Actes facturables : 652
-      <ul>
-       <li>Actes facturés : 602
+    {% if days_not_locked %}
+    <h3>Jours non vérouillés</h3>
         <ul>
-         <li>Dossiers concernés : 125</li>
-         <li>Nombre de factures : 305</li>
-        </ul></li>
-       <li>Actes non facturés : 50
-        <ul>
-         <li>Dossiers concernés : 12
-          <ul>
-           <li>Pause facturation : 7</li>
-           <li>Quota des actes pris en charge dépassé : 2</li>
-           <li>Prises en charge expirées : 2</li>
-           <li>Pas de prise en charge : 1</li>
-          </ul>
-         </li>
+        {% for day in days_not_locked %}
+            <li><a href="../../agenda/{{ day.year }}-{{ day.month }}-{{ day.day }}/validation-des-actes">{{ day.day }}/{{ day.month }}/{{ day.year }}</a></li>
+        {% endfor %}
         </ul>
-       </li>
-      </ul>
-     </li>
-    </ul>
+    {% endif %}
+    <h3>Résumé</h3>
+        {% if service_name == "CMPP" %}
+            {% if invoicing.status == "open" or invoicing.status == "closed" %}
+            <ul>
+            {% if len_acts_invoiced_hors_pause %}
+              <li>Actes facturables hors dossiers en pause: {{ len_acts_invoiced_hors_pause }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_invoiced_hors_pause }}</li>
+                  <li>Nombre de factures : {{ len_invoices_hors_pause }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables pour les dossiers hors pause.</li>
+            {% endif %}
+
+            {% if len_acts_invoiced_pause %}
+              <li>Actes facturables des dossiers en pause: {{ len_acts_invoiced_pause }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_invoiced_pause }}</li>
+                  <li>Nombre de factures : {{ len_invoices_pause }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables pour les dossiers en pause.</li>
+            {% endif %}
+
+            {% if len_acts_lost %}
+              <li>Actes facturables mais non pris en charge: {{ len_acts_lost }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_with_lost_acts }}</li>
+        <!--          <li>Quota des actes pris en charge dépassé : 2</li>-->
+        <!--          <li>Prises en charge expirées : 2</li>-->
+        <!--          <li>Pas de prise en charge : 1</li>-->
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables mais non pris en charge.</li>
+            {% endif %}
+            </ul>
+            {% endif %}
+        {% endif %}
     </div>
 {% endblock %}
 
