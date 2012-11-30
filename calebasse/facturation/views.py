@@ -99,3 +99,24 @@ class CloseFacturationView(UpdateView):
         today = date.today()
         context['date'] = date(day=today.day, month=today.month, year=today.year)
         return context
+
+class ValidationFacturationView(UpdateView):
+
+    context_object_name = "invoicing"
+    model = Invoicing
+    template_name = 'facturation/validation.html'
+
+    def post(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk', None)
+        invoicing = None
+        if pk is not None:
+            invoicing = Invoicing.objects.get(pk=pk, service=self.service)
+        if not invoicing or self.service.name != 'CMPP' or \
+                invoicing.status != Invoicing.STATUS.closed:
+            return HttpResponseRedirect('..')
+        invoicing.get_stats_or_validate(commit=True)
+        return HttpResponseRedirect('..')
+
+    def get_context_data(self, **kwargs):
+        context = super(CloseFacturationView, self).get_context_data(**kwargs)
+        return context
