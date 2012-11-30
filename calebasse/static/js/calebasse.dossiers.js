@@ -32,7 +32,7 @@ function state_dialog(url, state_title, state_type) {
 
 (function($) {
   $(function() {
-    $('#tabs').tabs();
+    var $tabs = $('#tabs').tabs();
 
     $('#btn_all_state').click(function() {
       $('.checkbox_state').attr('checked', true);
@@ -57,6 +57,7 @@ function state_dialog(url, state_title, state_type) {
           click: function() { $(this).dialog("close"); } }]}
         );
     });
+
     $('#new-address-btn').click(function() {
       $('#new-address-dlg').dialog({title: 'Nouvelle adresse',
         width: '500px',
@@ -91,6 +92,10 @@ function state_dialog(url, state_title, state_type) {
     $('button.blind').click(function() {
       $(this).next().toggle('blind');
     });
+    var tabid = $.url($(location).attr('href')).fparam('tab');
+    if (tabid) {
+        $tabs.tabs('select',  parseInt(tabid));
+    }
   });
 })(window.jQuery)
 

@@ -58,6 +58,9 @@ class PatientRecordView(ServiceViewMixin, MultiUpdateView):
     template_name = 'dossiers/patientrecord_update.html'
     success_url = './view'
 
+    def get_success_url(self):
+        return self.success_url + '#tab=' + self.request.POST['tab']
+
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
         ctx['next_rdv'] = get_next_rdv(ctx['object'])
