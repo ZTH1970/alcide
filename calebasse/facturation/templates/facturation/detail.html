@@ -28,12 +28,12 @@
         {% if invoicing.status == "open" %}<button id="close"">Clôre cette facturation</button>{% endif %}
         {% if invoicing.status == "closed" %}<button id="validate"">Valider cette facturation</button>{% endif %}
         {% if invoicing.status == "validated" %}
-            <button id="teletrans-btn" style="display: none;">Télétransmission à l'assurance maladie</button>
-            <button id="expcompt-btn" style="display: none;">Export comptabilité</button>
+            <button id="teletrans-btn">Télétransmission à l'assurance maladie</button>
+            <button id="expcompt-btn">Export comptabilité</button>
         {% endif %}
     {% else %}
-        {% if invoicing.status == "closed" %}<button id="validate" style="display: none;">Valider ce décompte</button>{% endif %}
-        {% if invoicing.status == "validated" %}<button id="print-btn" style="display: none;">Imprimer</button>{% endif %}
+        {% if invoicing.status == "closed" %}<button id="validate">Valider ce décompte</button>{% endif %}
+        {% if invoicing.status == "validated" %}<button id="print-btn">Imprimer</button>{% endif %}
     {% endif %}
 {% endblock %}
 
