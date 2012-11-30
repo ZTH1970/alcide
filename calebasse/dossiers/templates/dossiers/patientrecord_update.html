@@ -91,6 +91,11 @@
       <h3>État civil</h3>
       <button class="save">✔</button>
       <p>
+      {% for field in forms.id %}
+      {{ field.errors }}
+      {% endfor %}
+      </p>
+      <p>
       {{ forms.id.last_name.label_tag }} : {{ forms.id.last_name }}
       {{ forms.id.first_name.label_tag }} : {{ forms.id.first_name }}
       </p>
@@ -109,6 +114,11 @@
     <div class="frame inline">
       <h3>Physiologie</h3>
       <button class="save">✔</button>
+      <p>
+      {% for field in forms.physiology %}
+      {{ field.errors }}
+      {% endfor %}
+      </p>
       <p>
       {% for field in forms.physiology %}
       {{ field.label_tag  }} : {{ field }}
