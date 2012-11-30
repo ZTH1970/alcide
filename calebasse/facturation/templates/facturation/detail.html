@@ -32,7 +32,7 @@
             <button id="expcompt-btn">Export comptabilité</button>
         {% endif %}
     {% else %}
-        {% if invoicing.status == "closed" %}<button id="validate">Valider ce décompte</button>{% endif %}
+        {% if show_validation_btn %}<button id="validate">Valider ce décompte</button>{% endif %}
         {% if invoicing.status == "validated" %}<button id="print-btn">Imprimer</button>{% endif %}
     {% endif %}
 {% endblock %}
@@ -203,12 +203,12 @@
   </form>
 </div>
 
-<div id="validate-dialog" title="Validation de la facturation">
+<div id="validate-dialog" title="Validation {% if service_name == "CMPP" %}de la facturation{% else %}du décompte{% endif %}">
   <div id="validate-dialog-content">
   </div>
   <form method="post" action="validate/">
     {% csrf_token %}
-    <input type="hidden" name="Valider" value="1">
+    <input type="hidden" name="Close" value="1">
   </form>
 </div>
 {% endblock %}
@@ -235,11 +235,11 @@
     modal: true,
     buttons: {
       "Valider": function () { $('#validate-dialog form').submit(); },
-      "Annuler": function () { $(this).dialog("validate"); },
+      "Annuler": function () { $(this).dialog("close"); },
     },
   });
     $('#validate').click(function () {
-        $('#close-dialog-content').load('validate/',
+        $('#validate-dialog-content').load('validate/',
               function () {
                 $('#validate-dialog').dialog('open');
               }

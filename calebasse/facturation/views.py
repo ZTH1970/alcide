@@ -58,6 +58,9 @@ class FacturationDetailView(UpdateView):
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, acts_accepted,
                 days_not_locked) = context['invoicing'].get_stats_or_validate()
+            if context['invoicing'].status == Invoicing.STATUS.closed and \
+                    date.today() > context['invoicing'].end_date:
+                context['show_validation_btn'] = True
             context['len_patient_pause'] = len_patient_pause
             context['len_patient_hors_pause'] = len_patient_hors_pause
             context['len_acts_pause'] = len_acts_pause
@@ -69,6 +72,9 @@ class FacturationDetailView(UpdateView):
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
                 acts_accepted, days_not_locked) = context['invoicing'].get_stats_or_validate()
+            if context['invoicing'].status == Invoicing.STATUS.closed and \
+                    date.today() > context['invoicing'].end_date:
+                context['show_validation_btn'] = True
             context['len_patient_pause'] = len_patient_pause
             context['len_patient_hors_pause'] = len_patient_hors_pause
             context['len_acts_pause'] = len_acts_pause
@@ -126,12 +132,12 @@ class ValidationFacturationView(UpdateView):
         invoicing = None
         if pk is not None:
             invoicing = Invoicing.objects.get(pk=pk, service=self.service)
-        if not invoicing or self.service.name != 'CMPP' or \
+        if not invoicing or \
                 invoicing.status != Invoicing.STATUS.closed:
             return HttpResponseRedirect('..')
         invoicing.get_stats_or_validate(commit=True)
         return HttpResponseRedirect('..')
 
     def get_context_data(self, **kwargs):
-        context = super(CloseFacturationView, self).get_context_data(**kwargs)
+        context = super(ValidationFacturationView, self).get_context_data(**kwargs)
         return context
