@@ -20,9 +20,11 @@
     <li><a href="#tabs-8">Données à caractère médical</a>
   </ul>
   <div id="tabs-1"> <!-- Général -->
+    <form method="post" id="general-form" class="patientrecordform">
+    {% csrf_token %}
     <div class="left">
       <ul>
-        <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Aucun" }} <button>✍</button></li>
+          <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Aucun" }} <button>✍</button></li>
         <li><label>N° dossier informatique :</label>{{ object.id }}</li>
         <li><label>Nom :</label> {{ object.last_name }}</li>
         <li><label>Prénom :</label> {{ object.first_name }}</li>
@@ -37,8 +39,8 @@
         <li><label>Date d'inscription :</label> {{ object.created|date:"d/m/Y" }}</li>
         <li><label>Lieu de socialisation :</label> {{ object.school }}</li>
         <li><label>Commentaire :</label><br/>
-        <textarea cols="50" rows="5">{{ object.comment|default_if_none:"" }}</textarea>
-        <button>Mettre à jour</button></li>
+        {{ forms.general.comment }}
+        <button id="btn-maj">Mettre à jour</button></li>
       </ul>
     </div>
     <div class="right">
@@ -70,15 +72,18 @@
         <button id="reopen-patientrecord">Ré-accueillir</button>
         <button id="patientrecord-history">Historique</button><br/>
         <hr/>
-        3/6 diagnostics
+        <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
+        {{ forms.general.pause.label_tag }} : {{ forms.general.pause }}
+        <!-- 3/6 diagnostics -->
       </div>
+        </form>
 
-      <div class="notifs">
+      <!-- <div class="notifs">
         <h4>Notifications</h4>
         <ul>
           <li>Dossier en pause facturation <button>Sortir</button></li>
-        </ul>
-      </div>
+      </ul>
+  </div> -->
 
     </div>
     <br style="clear:both"/>

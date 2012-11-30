@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from datetime import timedelta
 
+from django import forms
 from django.db import models
 from django.contrib.auth.models import User
 

@@ -29,6 +29,14 @@ class StateForm(Form):
     comment = forms.CharField(label='Commentaire',
             required=False, widget=forms.Textarea)
 
+class GeneralForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('comment', 'pause')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+                }
+
 class CivilStatusForm(ModelForm):
     class Meta:
         model = PatientRecord

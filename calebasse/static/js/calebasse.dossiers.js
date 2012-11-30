@@ -43,6 +43,9 @@ function state_dialog(url, state_title, state_type) {
     $('.checkbox_state').click(function() {
         $("#search").click();
     });
+    $('#id_general-pause').click(function() {
+        $('#btn-maj').click();
+    });
     $('.pr-line').click(function() {
         window.location.href = $(this).data('link');
     });
@@ -98,6 +101,7 @@ function state_dialog(url, state_title, state_type) {
     var tabid = $.url($(location).attr('href')).fparam('tab');
     if (tabid) {
         $tabs.tabs('select',  parseInt(tabid));
+        location.hash = '';
     }
   });
 })(window.jQuery)

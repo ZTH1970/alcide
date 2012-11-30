@@ -5,7 +5,7 @@ from calebasse.cbv import ListView, MultiUpdateView, FormView, ServiceViewMixin
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord, Status, FileState
 from calebasse.dossiers.forms import (SearchForm, CivilStatusForm, StateForm,
-        PhysiologyForm, FamillyForm, InscriptionForm)
+        PhysiologyForm, FamillyForm, InscriptionForm, GeneralForm)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 from calebasse.ressources.models import Service
 
@@ -51,6 +51,7 @@ state_form = StateFormView.as_view()
 class PatientRecordView(ServiceViewMixin, MultiUpdateView):
     model = PatientRecord
     forms_classes = {
+            'general': GeneralForm,
             'id': CivilStatusForm,
             'physiology': PhysiologyForm,
             'inscription': InscriptionForm,
@@ -60,7 +61,10 @@ class PatientRecordView(ServiceViewMixin, MultiUpdateView):
     success_url = './view'
 
     def get_success_url(self):
-        return self.success_url + '#tab=' + self.request.POST['tab']
+        if self.request.POST.has_key('tab'):
+            return self.success_url + '#tab=' + self.request.POST['tab']
+        else:
+            return self.success_url
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
