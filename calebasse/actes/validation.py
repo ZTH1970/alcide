@@ -14,7 +14,8 @@ def get_acts_of_the_day(date, service=None):
 def unlock_all_acts_of_the_day(date, service=None):
     for act in get_acts_of_the_day(date, service):
         if not act.is_billed:
-            act.update(validation_locked=False)
+            act.validation_locked = False
+            act.save()
 
 def are_all_acts_of_the_day_locked(date, service=None):
     for act in get_acts_of_the_day(date, service):
