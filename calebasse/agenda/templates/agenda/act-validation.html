@@ -37,7 +37,7 @@
           {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
       </h3>
       <div><span>{% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
-           {% if last_status.auto %}(par validation automatique){% endif %}.
+           {% if last_status.auto %}(par validation automatique){% endif %}. {% if acte.is_billed %}<strong>Acte facturé</strong>{% endif %}
          {% else %}
            Non pointé.
          {% endif %}
