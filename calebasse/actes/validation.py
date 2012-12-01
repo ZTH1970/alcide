@@ -12,7 +12,9 @@ def get_acts_of_the_day(date, service=None):
 
 
 def unlock_all_acts_of_the_day(date, service=None):
-    get_acts_of_the_day(date, service).update(validation_locked=False)
+    for act in get_acts_of_the_day(date, service):
+        if not act.is_billed:
+            act.update(validation_locked=False)
 
 def are_all_acts_of_the_day_locked(date, service=None):
     for act in get_acts_of_the_day(date, service):
@@ -92,7 +94,13 @@ def automated_validation(date, service, user, commit=True):
                 # On valide le premier, s'il n'est pas déja validé.
                 # Les autres sont marqués actes en double
                 found_one = False
+                acts_t = []
                 for act in acts:
+                    if act.is_billed:
+                        found_one = True
+                    else:
+                        acts_t.append(act)
+                for act in acts_t:
                     if not found_one:
                         if not act.is_state('VALIDE') and commit:
                             act.set_state('VALIDE', author=user, auto=True)
