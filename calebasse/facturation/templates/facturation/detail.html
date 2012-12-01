@@ -261,7 +261,7 @@
                         <li>Facture {{ invoice.number }}
                           <ul>
                           {% for act in invoice.acts.all %}
-                            <li>{{ act.date }} {{ act.act_type }}</li>
+                            <li>{{ act.date }} {{ act.act_type }}<button>Refacturer</button></li>
                           {% endfor %}
                           </ul>
                         </li>
