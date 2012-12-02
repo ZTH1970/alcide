@@ -38,6 +38,11 @@
 </script>
 {% endblock %}
 
+{% block header %}
+  {{ block.super }}
+  <span>Actes - {{ service_name }}</spam>
+{% endblock %}
+
 {% block appbar %}
 <div id="appbar">
   <h2>Saisie des actes</h2>
