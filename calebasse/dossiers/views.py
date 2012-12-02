@@ -119,7 +119,7 @@ class PatientRecordsHomepageView(cbv.ListView):
         if social_security_id:
             qs = qs.filter(social_security_id__contains=social_security_id)
         if states:
-            status_types = []
+            status_types = ['BILAN', 'SURVEILLANCE', 'SUIVI']
             for state in states:
                 status_types.append(STATE_CHOICES_TYPE[state])
             qs = qs.filter(last_state__status__type__in=status_types)
