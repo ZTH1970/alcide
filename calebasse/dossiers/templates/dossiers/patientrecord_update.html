@@ -25,7 +25,7 @@
     {% csrf_token %}
     <div class="left">
       <ul>
-          <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Aucun" }} <button>✍</button></li>
+          <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }} <button>✍</button></li>
         <li><label>N° dossier informatique :</label>{{ object.id }}</li>
         <li><label>Nom :</label> {{ object.last_name }}</li>
         <li><label>Prénom :</label> {{ object.first_name }}</li>
@@ -38,7 +38,7 @@
 
         </ul></li>
         <li><label>Date d'inscription :</label> {{ object.created|date:"d/m/Y" }}</li>
-        <li><label>Lieu de socialisation :</label> {{ object.school }}</li>
+        <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"" }}</li>
         <li><label>Commentaire :</label><br/>
         {{ forms.general.comment }}
         <button id="btn-maj">Mettre à jour</button></li>
