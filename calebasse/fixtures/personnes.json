@@ -16,6 +16,26 @@
     }
   }, 
   {
+    "pk": 15, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "Alfred", 
+      "last_name": "Beer", 
+      "display_name": "Alfred Beer"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Jeanne", 
+      "last_name": "Calmant", 
+      "display_name": "Jeanne Calmant"
+    }
+  }, 
+  {
     "pk": 10, 
     "model": "personnes.people", 
     "fields": {
@@ -53,6 +73,16 @@
       "first_name": "Jean", 
       "last_name": "Dupond", 
       "display_name": "Jean Dupond"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 2, 
+      "first_name": "Sophie", 
+      "last_name": "Dupond", 
+      "display_name": "Sophie Dupond"
     }
   }, 
   {
@@ -116,6 +146,26 @@
     }
   }, 
   {
+    "pk": 19, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 0, 
+      "first_name": "Jacqueline", 
+      "last_name": "Lancelot", 
+      "display_name": "Jacqueline Lancelot"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 1, 
+      "first_name": "John", 
+      "last_name": "Lennon", 
+      "display_name": "John Lennon"
+    }
+  }, 
+  {
     "pk": 7, 
     "model": "personnes.people", 
     "fields": {
@@ -136,6 +186,16 @@
     }
   }, 
   {
+    "pk": 21, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 0, 
+      "first_name": "Bob", 
+      "last_name": "Marley", 
+      "display_name": "Bob Marley"
+    }
+  }, 
+  {
     "pk": 3, 
     "model": "personnes.people", 
     "fields": {
@@ -146,6 +206,16 @@
     }
   }, 
   {
+    "pk": 18, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 0, 
+      "first_name": "Edmont", 
+      "last_name": "Picard", 
+      "display_name": "Edmont Picard"
+    }
+  }, 
+  {
     "pk": 11, 
     "model": "personnes.people", 
     "fields": {
@@ -153,6 +223,16 @@
       "first_name": "Claudia", 
       "last_name": "Schiffer", 
       "display_name": "Claudia Schiffer"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "personnes.people", 
+    "fields": {
+      "gender": 0, 
+      "first_name": "Oscar", 
+      "last_name": "Wild", 
+      "display_name": "Oscar Wild"
     }
   }, 
   {
