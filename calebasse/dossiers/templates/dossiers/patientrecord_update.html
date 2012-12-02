@@ -68,7 +68,7 @@
       <div class="etat">
           <h4>État courant du dossier :  {{ current_state.status.name.lower }}</h4>
           <p>depuis le : {{ current_state.date_selected|date:"d/m/Y" }}</p>
-          <p><label>Commentaire :</label>{{ object.last_state.comment }}</p>
+          <p><label>Commentaire :</label>{{ object.last_state.comment|default_if_none:"" }}</p>
         {% if object.service.name == "CMPP" %}
             {% if object.last_state.status.type == "ACCUEIL" %}
                 <button type="button" id="finaccueil-patientrecord">Fin d'accueil</button>
