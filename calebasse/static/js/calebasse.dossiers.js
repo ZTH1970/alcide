@@ -80,6 +80,10 @@ function state_dialog(url, state_title, state_type) {
     $('.pr-line').click(function() {
         window.location.href = $(this).data('link');
     });
+    $('button#reset').click(function() {
+        window.location.href = window.location.pathname;
+        return false;
+    });
 
     $('#close-patientrecord').click(function() {
         state_dialog('update-state', 'Clore', 'CLOS');

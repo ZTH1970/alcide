@@ -27,7 +27,14 @@
         <label>Prénom <input name="first_name" type="text" value="{{ request.GET.first_name }}"></label>
         <label>Numéro de dossier <input name="paper_id" type="text" value="{{ request.GET.id }}"></label>
         <label>Numéro d'assuré social <input name="social_security_id" value="{{ request.GET.social_security_id }}" type="text"></label>
+    {% if request.GET %}
+    <div class="search-reset">
     <button id="search">Rechercher</button>
+    <button id="reset"><img src="{{ STATIC_URL }}/images/edit-clear-all-symbolic.png" alt="Réinitialiser"/></button>
+    </div>
+    {% else %}
+    <button id="search">Rechercher</button>
+    {% endif %}
     <p id="search-results" style="display: none; "></p>
   </div>
   <div id="filtre">

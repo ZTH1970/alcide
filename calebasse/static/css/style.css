@@ -319,6 +319,19 @@ div#sidebar button {
        width: 100%;
 }
 
+div#sidebar div.search-reset {
+       width: 100%;
+}
+
+div#sidebar div.search-reset button#search {
+	width: 80%;
+}
+
+div#sidebar div.search-reset button#reset {
+	width: 16%;
+	float: right;
+}
+
 select {
 	background: white url(../images/button-next-down.png) no-repeat 98% 50%;
 	color: black;
