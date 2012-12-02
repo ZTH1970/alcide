@@ -366,6 +366,7 @@ class Invoicing(models.Model):
                     self.save()
             else:
                 acts_accepted = {}
+                acts_missing_valid_notification = {}
                 len_patient_pause = 0
                 len_patient_hors_pause = 0
                 len_acts_pause = 0
@@ -384,7 +385,7 @@ class Invoicing(models.Model):
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
-                acts_accepted, days_not_locked)
+                acts_accepted, acts_missing_valid_notification, days_not_locked)
 
     def save(self, *args, **kwargs):
         if not self.seq_id:
