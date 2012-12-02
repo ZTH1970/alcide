@@ -67,7 +67,7 @@
       </ul>
       <div class="etat">
           <h4>État du dossier :  {{ object.last_state.status.name.lower }}</h4>
-          <p>depuis le {{ object.last_state.created|date:"d/m/Y" }}</p>
+          <p>depuis le {{ object.last_state.date_selected|date:"d/m/Y" }}</p>
           <p><label>Commentaire :</label>{{ object.last_state.comment }}</p>
         {% if object.service.name == "CMPP" %}
             {% if object.last_state.status.type == "ACCUEIL" %}
@@ -484,7 +484,7 @@
   <div id="dossier-histo-dlg" style="display: none;">
    <dl>
     {% for state in states %}
-    <dt><b>{{ state.created|date:"d/m/Y" }}</b> <small>(date info: {{ state.date_selected|date:"d/m/Y" }})</small></dt>
+    <dt><b>{{ state.date_selected|date:"d/m/Y" }}</b> <small>(date info: {{ state.created|date:"d/m/Y" }})</small></dt>
     <dd>
     <p><b>{{ state.status.name }}</b>; <label>commentaire:</label> {{ state.comment }}</p>
     <p>changement par {{ state.author }}</p>
@@ -557,4 +557,3 @@
 </div>
 
 {% endblock %}
-
