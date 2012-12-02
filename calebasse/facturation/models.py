@@ -16,8 +16,8 @@ def quarter_start_and_end_dates(today=None):
     '''Returns the first and last day of the current quarter'''
     if today is None:
         today = date.today()
-    quarter = today.month / 3
-    start_date = date(day=1, month=(quarter*3)+1, year=today.year)
+    quarter = (today.month - 1) / 3
+    start_date = date(day=1, month=((quarter*3) + 1), year=today.year)
     end_date = start_date + relativedelta(months=3) + relativedelta(days=-1)
     return start_date, end_date
 
