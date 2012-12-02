@@ -2,7 +2,7 @@
 
 import logging
 
-from datetime import datetime
+from datetime import datetime, date
 from datetime import timedelta
 
 from django import forms
@@ -295,6 +295,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
 
     def get_state(self):
         return self.last_state
+
+    def get_current_state(self):
+        today = date.today()
+        return self.get_state_at_day(today)
 
     def get_state_at_day(self, date):
         state = self.get_state()
