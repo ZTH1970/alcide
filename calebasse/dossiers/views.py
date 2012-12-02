@@ -123,6 +123,8 @@ class PatientRecordsHomepageView(cbv.ListView):
             for state in states:
                 status_types.append(STATE_CHOICES_TYPE[state])
             qs = qs.filter(last_state__status__type__in=status_types)
+        else:
+            qs = qs.filter(last_state__status__type__in="")
         qs = qs.filter(service=self.service)
         return qs
 
