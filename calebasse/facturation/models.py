@@ -118,6 +118,7 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
     return (invoices, len_invoices, len_invoices_hors_pause,
         len_acts_invoiced, len_acts_invoiced_hors_pause)
 
+INVOICING_OFFSET = 666
 
 class Invoicing(models.Model):
     '''Represent a batch of invoices:
@@ -164,8 +165,11 @@ class Invoicing(models.Model):
         seq_id = 1
         max_seq_id = Invoicing.objects.for_service(self.service) \
                 .aggregate(Max('seq_id'))['seq_id__max']
-        if max_seq_id:
-            seq_id = seq_id + max_seq_id
+        if not max_seq_id:
+            if self.service.name == 'CMPP':
+                seq_id = INVOICING_OFFSET
+        else:
+            seq_id = max_seq_id + 1
         return seq_id
 
     def list_for_billing(self):
@@ -464,10 +468,6 @@ def add_price(price, start_date=None):
     return price_o
 
 
-# Last invoice from the previous software
-INVOICE_OFFSET = 10000
-
-
 class Invoice(models.Model):
     number = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(u'Création', auto_now_add=True)
@@ -478,18 +478,12 @@ class Invoice(models.Model):
     amount = models.IntegerField()
     ppa = models.IntegerField()
 
-    def allocate_number(self):
-        number = 1
-        max_number = Invoice.objects.all() \
-                .aggregate(Max('number'))['number__max']
-        if max_number:
-            number = number + max_number
-        number = number + INVOICE_OFFSET
-        return number
-
     def save(self, *args, **kwargs):
-        if not self.number:
-            self.number = self.allocate_number()
+        invoicing = self.invoicing
+        self.number = invoicing.seq_id * 100000 + 1
+        max_number = invoicing.invoice_set.aggregate(Max('number'))['number__max']
+        if max_number:
+            self.number = max_number + 1
         super(Invoice, self).save(*args, **kwargs)
 
     def __unicode__(self):
