@@ -308,7 +308,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     datetime(date.year, date.month, date.day):
                 return state
             state = state.previous_state
-        return None
+        return self.get_state()
 
     def was_in_state_at_day(self, date, status_type):
         state_at_day = self.get_state_at_day(date)
