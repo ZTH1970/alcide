@@ -48,9 +48,9 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     i = 0
     for act in acts:
         # On enlève tous les acts sup au jour de l'end_date
-        if datetime(act.date.year, act.date.month, act.date.day) <= \
+        if datetime(act.date.year, act.date.month, act.date.day) > \
                 datetime(end_day.year, end_day.month, end_day.day):
-            acts = acts[i:]
+            acts = acts[:i]
             break
         i = i + 1
     if start_day:
