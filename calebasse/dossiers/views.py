@@ -1,6 +1,9 @@
 
 from datetime import datetime
 
+from django.views.generic.edit import DeleteView
+from django.core.urlresolvers import reverse_lazy
+
 from calebasse import cbv
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord, Status, FileState, create_patient
@@ -167,3 +170,11 @@ class PatientRecordsHomepageView(cbv.ListView):
         return ctx
 
 patientrecord_home = PatientRecordsHomepageView.as_view()
+
+class PatientRecordDeleteView(DeleteView):
+    model = PatientRecord
+    success_url = ".."
+    template_name = 'dossiers/patientrecord_confirm_delete.html'
+
+patientrecord_delete = PatientRecordDeleteView.as_view()
+

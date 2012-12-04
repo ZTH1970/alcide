@@ -1,5 +1,5 @@
 
-function generic_form_dialog(url, title, id, width, btn_submit_name) {
+function generic_form_dialog(url, title, id, width, btn_submit_name, redirectToUrl) {
     $(id).load(url,
             function () {
                 function onsuccess(response, status, xhr, form) {
@@ -12,7 +12,12 @@ function generic_form_dialog(url, title, id, width, btn_submit_name) {
                         console.log('error');
                     } else {
                         console.log('success');
-                        window.location.reload(true);
+                        if (redirectToUrl) {
+                          window.location = redirectToUrl;
+                        }
+                        else {
+                          window.location.reload(true);
+                        }
                     }
                 }
                 $('form', this).ajaxForm({
@@ -111,6 +116,10 @@ function state_dialog(url, state_title, state_type) {
     $('#new-patientrecord').click(function() {
         generic_form_dialog('new', 'Nouveau dossier',
             '#dossier-dlg', '500px', 'Ajouter');
+    });
+    $('#patientrecord-delete').click(function() {
+        generic_form_dialog('delete', 'Supprimer le dossier',
+            '#delete-record', '500px', 'Oui', '..');
     });
 
     $('#new-address-btn').click(function() {

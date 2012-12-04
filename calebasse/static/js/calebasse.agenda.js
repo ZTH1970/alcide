@@ -124,17 +124,17 @@ function event_dialog(url, title, width, btn_text) {
       $('.remove-appointment').on('click', function() {
           var r = confirm("Etes-vous sûr de vouloir supprimer le rendez-vous " + $(this).data('rdv') + " ?");
           if (r == true)
-      {
-          $.ajax({
+          {
+            $.ajax({
               url: '/api/occurrence/' + $(this).data('occurrence-id') + '/',
               type: 'DELETE',
               success: function(data) {
                   window.location.reload(true);
                   return false;
               }
-          });
-      }
-      return false;
+            });
+           }
+        return false;
       });
 
       /* Gestion du filtre sur les utilisateurs */

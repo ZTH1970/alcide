@@ -1,1 +1,8 @@
-{% extends "calebasse/popup.html" %}
+{% load widget_tweaks %}
+
+{% if error_message %}
+<p><strong>{{ error_message }}</strong></p>
+{% endif %}
+<form action="{{ request.get_full_path }}" method="post">{% csrf_token %}
+  <p>Etes vous sur de vouloir supprimer le dossier de {{ object.first_name }} {{ object.last_name }} ?</p>
+</form>

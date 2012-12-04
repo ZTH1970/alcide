@@ -4,7 +4,7 @@
 {% block appbar %}
 <h2>{{ object.last_name }} {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
 <a href="..">Retourner aux dossiers</a>
-<button>Supprimer</button>
+<button id="patientrecord-delete">Supprimer</button>
 {% endblock %}
 
 {% block content %}
@@ -481,6 +481,8 @@
 <div id="change-record" style="display: none;" data-id="{{ object.id }}" data-service-id="{{ service_id }}">
  </div>
 
+ <div id="delete-record" style="display: none;">
+  </div>
   <div id="dossier-histo-dlg" style="display: none;">
    <dl>
     {% for state in states %}
