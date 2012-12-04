@@ -71,7 +71,7 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     locked = False
     for act in acts:
         current_day = datetime(act.date.year, act.date.month, act.date.day)
-        locked = are_all_acts_of_the_day_locked(current_day)
+        locked = are_all_acts_of_the_day_locked(current_day, service)
         if not locked:
             if not current_day in days_not_locked:
                 days_not_locked.append(current_day)
