@@ -314,20 +314,22 @@
       </div>
     </form>
 
-      <div class="frame">
+    <form method="post" id="followup-form" class="patientrecordform">{% csrf_token %}
+      <div class="frame inline">
         <h3>Suivi du patient</h3>
         <button class="save">✔</button>
         <p>
-        <label>Coordinateur I :</label> <select><option>Indéfini</option></select> <button>+</button>
-        <label>Coordinateur II :</label> <select><option>Indéfini</option></select> <button>+</button>
-        <label>Coordinateur III :</label> <select><option>Indéfini</option></select> <button>+</button>
+        {{ forms.followup.coordinators.label_tag  }} : {{ forms.followup.coordinators }}
         </p>
         <p>
-        <label>Médecin extérieur :</label> <select><option>Indéfini</option></select> <button>+</button>
-        <label>Intervenant extérieur :</label> <select><option>Indéfini</option></select> <button>+</button>
+        {{ forms.followup.externaldoctor.label_tag  }} : {{ forms.followup.externaldoctor }}
+        <button type="button">+</button>
+        {{ forms.followup.externalintervener.label_tag  }} : {{ forms.followup.externalintervener }}
+        <button type="button">+</button>
         </p>
       <input type="hidden"  name="tab"  value="1">
       </div>
+    </form>
 
     </div>
 

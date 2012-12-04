@@ -289,3 +289,4 @@ class AutomatedValidationView(TemplateView):
 
 class UnlockAllView(CreateView):
     pass
+

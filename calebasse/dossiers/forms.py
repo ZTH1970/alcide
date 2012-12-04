@@ -8,6 +8,8 @@ from django.forms import ModelForm, Form
 from calebasse.dossiers.models import PatientRecord
 from calebasse.dossiers.states import STATE_CHOICES
 
+from ajax_select import make_ajax_field
+
 class EditPatientRecordForm(ModelForm):
     class Meta:
         model = PatientRecord
@@ -70,6 +72,7 @@ class TransportFrom(ModelForm):
         fields = ('transporttype', 'transportcompany')
 
 class FollowUpForm(ModelForm):
+    coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)
     class Meta:
         model = PatientRecord
         fields = ('coordinators', 'externaldoctor', 'externalintervener')
