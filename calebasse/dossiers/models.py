@@ -14,7 +14,7 @@ import reversion
 from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
-    NamedAbstractModel, Service)
+        NamedAbstractModel, Service)
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
@@ -125,35 +125,6 @@ class Status(NamedAbstractModel):
     type = models.CharField(max_length=80)
     services = models.ManyToManyField('ressources.Service')
 
-class AnalyseMotive(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Motif analysé"
-        verbose_name_plural = u"Motifs analysés"
-
-class FamillyMotive(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Motif familiale"
-        verbose_name_plural = u"Motifs familiaux"
-
-class AdviceGiver(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Conseilleur"
-        verbose_name_plural = u"Conseilleurs"
-
-class ParentalAuthority(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Autorité parentale"
-        verbose_name_plural = u"Autorités parentales"
-
-class FamillySituation(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Situation familiale"
-        verbose_name_plural = u"Situations familiales"
-
-class ChildCustody(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Garde parentale"
-        verbose_name_plural = u"Gardes parentales"
 
 class FileState(models.Model):
 
@@ -261,13 +232,13 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
 
     # Inscription motive
-    analyse_motive = models.ForeignKey('AnalyseMotive',
+    analyse_motive = models.ForeignKey('ressources.AnalyseMotive',
             verbose_name=u"Motif (analysé)",
             null=True, blank=True, default=None)
-    familly_motive = models.ForeignKey('FamillyMotive',
+    familly_motive = models.ForeignKey('ressources.FamillyMotive',
             verbose_name=u"Motif (famille)",
             null=True, blank=True, default=None)
-    advice_giver = models.ForeignKey('AdviceGiver',
+    advice_giver = models.ForeignKey('ressources.AdviceGiver',
             verbose_name=u"Conseilleur",
             null=True, blank=True, default=None)
 
@@ -278,14 +249,22 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
             null=True, blank=True, default=None)
-    parental_authority = models.ForeignKey('ParentalAuthority',
+    parental_authority = models.ForeignKey('ressources.ParentalAuthorityType',
             verbose_name=u"Autorité parentale",
             null=True, blank=True, default=None)
-    familly_situation = models.ForeignKey('FamillySituation',
+    familly_situation = models.ForeignKey('ressources.FamilySituationType',
             verbose_name=u"Situation familiale",
             null=True, blank=True, default=None)
-    child_custody = models.ForeignKey('ChildCustody',
+    child_custody = models.ForeignKey('ressources.ParentalCustodyType',
             verbose_name=u"Garde parentale",
+            null=True, blank=True, default=None)
+
+    # Transport
+    transport_type = models.ForeignKey('ressources.TransportType',
+            verbose_name=u"Type de transport",
+            null=True, blank=True, default=None)
+    transport_company = models.ForeignKey('ressources.TransportCompany',
+            verbose_name=u"Compagnie de transport",
             null=True, blank=True, default=None)
 
     def __init__(self, *args, **kwargs):

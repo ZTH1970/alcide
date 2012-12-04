@@ -5,8 +5,8 @@ from datetime import date
 from django import forms
 from django.forms import ModelForm, Form
 
-from models import PatientRecord
-from states import STATE_CHOICES
+from calebasse.dossiers.models import PatientRecord
+from calebasse.dossiers.states import STATE_CHOICES
 
 class EditPatientRecordForm(ModelForm):
     class Meta:
@@ -56,11 +56,11 @@ class InscriptionForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('analyse_motive', 'familly_motive', 'advice_giver')
+        widgets = {}
 
 class FamillyForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('sibship_place', 'nb_children_family', 'twinning_rank',
                 'parental_authority', 'familly_situation', 'child_custody')
-
 

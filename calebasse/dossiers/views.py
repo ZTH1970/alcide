@@ -32,7 +32,7 @@ def get_last_rdv(patient_record):
         last_rdv['act_type'] = occurrence.event.eventact.act_type
     return last_rdv
 
-class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin,):
+class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
     form_class = NewPatientRecordForm
     template_name = 'dossiers/patientrecord_new.html'
     success_url = '..'

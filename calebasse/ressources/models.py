@@ -168,6 +168,20 @@ class Room(NamedAbstractModel):
         verbose_name = u'Salle'
         verbose_name_plural = u'Salles'
 
+class AnalyseMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
+    class Meta:
+        verbose_name = u"Motif analysé"
+        verbose_name_plural = u"Motifs analysés"
+
+class FamillyMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
+    class Meta:
+        verbose_name = u"Motif familiale"
+        verbose_name_plural = u"Motifs familiaux"
+
+class AdviceGiver(NamedAbstractModel, ServiceLinkedAbstractModel):
+    class Meta:
+        verbose_name = u"Conseilleur"
+        verbose_name_plural = u"Conseilleurs"
 
 class Service(NamedAbstractModel):
     admin_only = True
