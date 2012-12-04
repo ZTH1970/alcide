@@ -510,7 +510,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "1024", 
       "size": null, 
@@ -526,7 +526,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
@@ -534,7 +534,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "1980-10-31", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -547,7 +547,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "45789", 
       "size": null, 
@@ -563,7 +563,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
@@ -571,7 +571,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "1988-12-30", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -584,7 +584,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "4243", 
       "size": null, 
@@ -597,7 +597,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
@@ -605,7 +605,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "1995-11-21", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -619,7 +619,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "424243L", 
       "size": null, 
@@ -632,7 +632,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
@@ -640,7 +640,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "1998-01-21", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -653,7 +653,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "424546", 
       "size": null, 
@@ -667,7 +667,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
@@ -675,7 +675,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "1984-11-21", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -688,7 +688,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "425874", 
       "size": null, 
@@ -701,7 +701,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
@@ -709,7 +709,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "2000-11-21", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -722,7 +722,7 @@
       ], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": "123456", 
       "size": null, 
@@ -735,7 +735,7 @@
       ], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": null, 
@@ -743,7 +743,7 @@
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
       "birthdate": "1989-11-28", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -754,7 +754,7 @@
       "addresses": [], 
       "weight": 45, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": 150, 
@@ -765,7 +765,7 @@
       "contacts": [], 
       "nb_children_family": 5, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "FR", 
       "parental_authority": null, 
       "school": null, 
@@ -773,7 +773,7 @@
       "created": "2012-12-02T16:40:53.544", 
       "child_custody": null, 
       "birthdate": "2000-10-25", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -784,7 +784,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -795,7 +795,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
@@ -803,7 +803,7 @@
       "created": "2012-12-02T22:41:13.098", 
       "child_custody": null, 
       "birthdate": null, 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -814,7 +814,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -825,7 +825,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7aise", 
       "parental_authority": null, 
       "school": null, 
@@ -833,7 +833,7 @@
       "created": "2012-12-02T22:41:24.918", 
       "child_custody": null, 
       "birthdate": "1900-01-01", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -844,7 +844,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -855,7 +855,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
@@ -863,7 +863,7 @@
       "created": "2012-12-02T22:42:31.043", 
       "child_custody": null, 
       "birthdate": null, 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -874,7 +874,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -885,7 +885,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
@@ -893,7 +893,7 @@
       "created": "2012-12-02T22:43:43.853", 
       "child_custody": null, 
       "birthdate": null, 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -904,7 +904,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -915,7 +915,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7aise", 
       "parental_authority": null, 
       "school": null, 
@@ -923,7 +923,7 @@
       "created": "2012-12-02T22:48:39.378", 
       "child_custody": null, 
       "birthdate": null, 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -934,7 +934,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -945,7 +945,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
@@ -953,7 +953,7 @@
       "created": "2012-12-02T22:52:43.130", 
       "child_custody": null, 
       "birthdate": null, 
-      "advice_giver": null
+      "advicegiver": null
     }
   }, 
   {
@@ -964,7 +964,7 @@
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analyse_motive": null, 
+      "analysemotive": null, 
       "twinning_rank": null, 
       "paper_id": null, 
       "size": null, 
@@ -975,7 +975,7 @@
       "contacts": [], 
       "nb_children_family": null, 
       "familly_situation": null, 
-      "familly_motive": null, 
+      "famillymotive": null, 
       "nationality": "Fran\u00e7aise", 
       "parental_authority": null, 
       "school": null, 
@@ -983,7 +983,7 @@
       "created": "2012-12-02T22:53:16.302", 
       "child_custody": null, 
       "birthdate": "1990-10-12", 
-      "advice_giver": null
+      "advicegiver": null
     }
   }
 ]

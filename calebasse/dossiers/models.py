@@ -232,13 +232,13 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
 
     # Inscription motive
-    analyse_motive = models.ForeignKey('ressources.AnalyseMotive',
+    analysemotive = models.ForeignKey('ressources.AnalyseMotive',
             verbose_name=u"Motif (analysé)",
             null=True, blank=True, default=None)
-    familly_motive = models.ForeignKey('ressources.FamillyMotive',
+    famillymotive = models.ForeignKey('ressources.FamillyMotive',
             verbose_name=u"Motif (famille)",
             null=True, blank=True, default=None)
-    advice_giver = models.ForeignKey('ressources.AdviceGiver',
+    advicegiver = models.ForeignKey('ressources.AdviceGiver',
             verbose_name=u"Conseilleur",
             null=True, blank=True, default=None)
 

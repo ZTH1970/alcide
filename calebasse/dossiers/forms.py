@@ -55,7 +55,7 @@ class PhysiologyForm(ModelForm):
 class InscriptionForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('analyse_motive', 'familly_motive', 'advice_giver')
+        fields = ('analysemotive', 'famillymotive', 'advicegiver')
         widgets = {}
 
 class FamillyForm(ModelForm):
