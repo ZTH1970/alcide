@@ -173,7 +173,7 @@ class AnalyseMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
         verbose_name = u"Motif analysé"
         verbose_name_plural = u"Motifs analysés"
 
-class FamillyMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
+class FamilyMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
     class Meta:
         verbose_name = u"Motif familiale"
         verbose_name_plural = u"Motifs familiaux"
@@ -248,3 +248,4 @@ class WorkerType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de personnel'
         verbose_name_plural = u'Types de personnel'
+

@@ -159,8 +159,6 @@
                 <button type="button" id="traitement-patientrecord">En traitement</button>
             {% endif %}
         {% endif %}
-<!--        <button id="close-patientrecord">Clore</button>-->
-<!--        <button id="reopen-patientrecord">Ré-accueillir</button>-->
         <button type="button" id="patientrecord-history">Historique</button><br/>
         <hr/>
         <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
@@ -232,7 +230,8 @@
       <p>
       {% for field in forms.inscription %}
       {{ field.label_tag  }} : {{ field }}
-      <button class="dialog-button"
+      <button type="button"
+          class="dialog-button"
           data-url="../../ressources/{{ field.name }}/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
@@ -244,38 +243,41 @@
     </div>
   </form>
 
-    <form method="post" id="inscription-form" class="patientrecordform">
+    <form method="post" id="family-form" class="patientrecordform">
     {% csrf_token %}
     <div class="frame inline">
         <h3>Famille</h3>
       <button class="save">✔</button>
       <p>
-      {% for field in forms.familly %}
+      {% for field in forms.family %}
       {{ field.errors }}
       {% endfor %}
       </p>
       <p>
-      {{ forms.familly.sibship_place.label_tag  }} : {{ forms.familly.sibship_place }}
-      {{ forms.familly.nb_children_family.label_tag  }} : {{ forms.familly.nb_children_family }}
-      {{ forms.familly.twinning_rank.label_tag  }} : {{ forms.familly.twinning_rank }}
+      {{ forms.family.sibship_place.label_tag  }} : {{ forms.family.sibship_place }}
+      {{ forms.family.nb_children_family.label_tag  }} : {{ forms.family.nb_children_family }}
+      {{ forms.family.twinning_rank.label_tag  }} : {{ forms.family.twinning_rank }}
       </p>
       <p>
-      {{ forms.familly.parental_authority.label_tag  }} : {{ forms.familly.parental_authority }}
-      <button class="dialog-button"
+      {{ forms.family.parental_authority.label_tag  }} : {{ forms.family.parental_authority }}
+      <button type="button"
+          class="dialog-button"
           data-url="../../ressources/parentalauthoritytype/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
           title="Ajouter un type d'autorité parentale"
           type="button">+</button>
-      {{ forms.familly.familly_situation.label_tag  }} : {{ forms.familly.familly_situation }}
-      <button class="dialog-button"
+      {{ forms.family.family_situation.label_tag  }} : {{ forms.family.family_situation }}
+      <button type="button"
+          class="dialog-button"
           data-url="../../ressources/familysituationtype/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
           title="Ajouter un type de situation familiale"
           type="button">+</button>
-      {{ forms.familly.child_custody.label_tag  }} : {{ forms.familly.child_custody }}
-      <button class="dialog-button"
+      {{ forms.family.child_custody.label_tag  }} : {{ forms.family.child_custody }}
+      <button type="button"
+          class="dialog-button"
           data-url="../../ressources/parentalcustodytype/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
@@ -286,20 +288,31 @@
     </div>
     </form>
 
-    <div class="frame">
+    <form method="post" id="transport-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
       <h3>Transport</h3>
       <button class="save">✔</button>
       <p>
-      <label>Type de transport :</label> <select><option>Indéfini</option></select> <button>+</button>
-      <label>Compagnie de transport :</label> <select><option>Indéfini</option></select> <button>+</button>
+      {% for field in forms.transport %}
+      {{ field.label_tag  }} : {{ field }}
+      <button type="button"
+          class="dialog-button"
+          data-url="../../ressources/{{ field.name }}/new/ #form-content"
+          data-default-button="Ajouter"
+          data-next-url="{{ request.get_full_path }}#tab=1"
+          title="Ajouter un {{ field.label.lower }}"
+          type="button">+</button>
+      {% endfor %}
       </p>
       <table>
-        <tr><td><button>Attestation</button></td> <td><button>Prescription</td></tr>
+        <tr><td><button type="button">Attestation</button></td> <td><button type="button">Prescription</td></tr>
           <tr><td>Dernière attestation le 25/07/2012 <button>Historique</button></td>
             <td>Dernière prescription le 25/07/2012 <button>Historique</button></td></tr>
         </table>
       <input type="hidden"  name="tab"  value="1">
       </div>
+    </form>
 
       <div class="frame">
         <h3>Suivi du patient</h3>

@@ -8,8 +8,8 @@ from calebasse import cbv
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import PatientRecord, Status, FileState, create_patient
 from calebasse.dossiers.forms import (SearchForm, CivilStatusForm, StateForm,
-        PhysiologyForm, FamillyForm, InscriptionForm, GeneralForm,
-        NewPatientRecordForm)
+        PhysiologyForm, FamilyForm, InscriptionForm, GeneralForm,
+        NewPatientRecordForm, TransportFrom, FollowUpForm)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
 from calebasse.ressources.models import Service
 
@@ -75,7 +75,9 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             'id': CivilStatusForm,
             'physiology': PhysiologyForm,
             'inscription': InscriptionForm,
-            'familly': FamillyForm,
+            'family': FamilyForm,
+            'transport': TransportFrom,
+            'followup': FollowUpForm
             }
     template_name = 'dossiers/patientrecord_update.html'
     success_url = './view'

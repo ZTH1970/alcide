@@ -55,12 +55,22 @@ class PhysiologyForm(ModelForm):
 class InscriptionForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('analysemotive', 'famillymotive', 'advicegiver')
+        fields = ('analysemotive', 'familymotive', 'advicegiver')
         widgets = {}
 
-class FamillyForm(ModelForm):
+class FamilyForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('sibship_place', 'nb_children_family', 'twinning_rank',
-                'parental_authority', 'familly_situation', 'child_custody')
+                'parental_authority', 'family_situation', 'child_custody')
+
+class TransportFrom(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('transporttype', 'transportcompany')
+
+class FollowUpForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('coordinators', 'externaldoctor', 'externalintervener')
 

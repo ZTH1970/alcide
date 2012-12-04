@@ -277,3 +277,14 @@ class Holiday(BaseModelMixin, models.Model):
                     date_filter(self.start_date, 'j F'),
                     date_filter(self.end_date, 'j F Y'))
         return ret
+
+class ExternalDoctor(People):
+    class Meta:
+        verbose_name = u'Médecin extérieur'
+        verbose_name_plural = u'Médecins extérieurs'
+
+class ExternalIntervener(People):
+    class Meta:
+        verbose_name = u'Intervenant extérieur'
+        verbose_name_plural = u'Intervenants extérieurs'
+

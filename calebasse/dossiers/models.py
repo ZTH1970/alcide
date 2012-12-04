@@ -235,14 +235,14 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     analysemotive = models.ForeignKey('ressources.AnalyseMotive',
             verbose_name=u"Motif (analysé)",
             null=True, blank=True, default=None)
-    famillymotive = models.ForeignKey('ressources.FamillyMotive',
+    familymotive = models.ForeignKey('ressources.FamilyMotive',
             verbose_name=u"Motif (famille)",
             null=True, blank=True, default=None)
     advicegiver = models.ForeignKey('ressources.AdviceGiver',
             verbose_name=u"Conseilleur",
             null=True, blank=True, default=None)
 
-    # Familly
+    # Family
     sibship_place = models.IntegerField(verbose_name=u"Place dans la fratrie",
             null=True, blank=True, default=None)
     nb_children_family = models.IntegerField(verbose_name=u"Nombre d'enfants dans la fratrie",
@@ -252,7 +252,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     parental_authority = models.ForeignKey('ressources.ParentalAuthorityType',
             verbose_name=u"Autorité parentale",
             null=True, blank=True, default=None)
-    familly_situation = models.ForeignKey('ressources.FamilySituationType',
+    family_situation = models.ForeignKey('ressources.FamilySituationType',
             verbose_name=u"Situation familiale",
             null=True, blank=True, default=None)
     child_custody = models.ForeignKey('ressources.ParentalCustodyType',
@@ -260,11 +260,22 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
 
     # Transport
-    transport_type = models.ForeignKey('ressources.TransportType',
+    transporttype = models.ForeignKey('ressources.TransportType',
             verbose_name=u"Type de transport",
             null=True, blank=True, default=None)
-    transport_company = models.ForeignKey('ressources.TransportCompany',
+    transportcompany = models.ForeignKey('ressources.TransportCompany',
             verbose_name=u"Compagnie de transport",
+            null=True, blank=True, default=None)
+
+    # FollowUp
+    coordinators = models.ManyToManyField('personnes.Worker',
+            verbose_name=u"Coordinateurs",
+            null=True, blank=True, default=None)
+    externaldoctor = models.ForeignKey('personnes.ExternalDoctor',
+            verbose_name=u"Médecin extérieur",
+            null=True, blank=True, default=None)
+    externalintervener = models.ForeignKey('personnes.ExternalIntervener',
+            verbose_name=u"Intervenant extérieur",
             null=True, blank=True, default=None)
 
     def __init__(self, *args, **kwargs):
