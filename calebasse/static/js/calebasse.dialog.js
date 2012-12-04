@@ -8,7 +8,11 @@
       var form_action = opts.url.split(' ')[0];
       var $form = $('form', $dialog);
       $dialog.appendTo('#dialogs');
-      $form.attr('action', form_action);
+      if (opts.next_url) {
+          $form.attr('action', form_action + '?next_url=' + opts.next_url);
+      } else {
+          $form.attr('action', form_action);
+      }
       var buttons = [{
           text: default_button,
           click: function () {
@@ -45,6 +49,7 @@
           url: $button.data('url') || $button.closest('a').attr('href'),
           default_button: $button.data('default-button') || $button.text(),
           title: $button.attr('title') || $button.text(),
+          next_url: $button.data('next-url') || false
         });
       });
 

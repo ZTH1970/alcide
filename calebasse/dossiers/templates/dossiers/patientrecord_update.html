@@ -254,7 +254,13 @@
       {{ forms.familly.twinning_rank.label_tag  }} : {{ forms.familly.twinning_rank }}
       </p>
       <p>
-      {{ forms.familly.parental_authority.label_tag  }} : {{ forms.familly.parental_authority }} <button>+</button>
+      {{ forms.familly.parental_authority.label_tag  }} : {{ forms.familly.parental_authority }}
+      <button class="dialog-button"
+          data-url="../../ressources/parentalauthoritytype/new/ #form-content"
+          data-default-button="Ajouter"
+          data-next-url="{{ request.get_full_path }}"
+          title="Ajouter un type d'autorité parentale"
+          type="button">+</button>
       {{ forms.familly.familly_situation.label_tag  }} : {{ forms.familly.familly_situation }} <button>+</button>
       {{ forms.familly.child_custody.label_tag  }} : {{ forms.familly.child_custody }} <button>+</button>
       </p>

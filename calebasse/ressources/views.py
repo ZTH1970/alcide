@@ -48,6 +48,12 @@ class RessourceCreateView(ReturnToObjectMixin, CreateView):
         initial['service'] = self.service
         return initial
 
+    def get_success_url(self):
+        if self.request.GET.has_key('next_url'):
+            return self.request.GET['next_url']
+        else:
+            return super(RessourceCreateView, self).get_success_url()
+
 def create_view(request, service, model_name):
     model = get_ressource_model(model_name)
     if model is None:
