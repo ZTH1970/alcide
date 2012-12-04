@@ -43,6 +43,11 @@ class RessourceCreateView(ReturnToObjectMixin, CreateView):
     template_name="ressources/new.html"
     template_name_suffix='_new'
 
+    def get_initial(self):
+        initial = super(RessourceCreateView, self).get_initial()
+        initial['service'] = self.service
+        return initial
+
 def create_view(request, service, model_name):
     model = get_ressource_model(model_name)
     if model is None:
