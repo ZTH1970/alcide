@@ -4,7 +4,9 @@
 {% block appbar %}
 <h2>{{ object.last_name }} {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
 <a href="..">Retourner aux dossiers</a>
+{% if not object.act_set.all %}
 <button id="patientrecord-delete">Supprimer</button>
+{% endif %}
 {% endblock %}
 
 {% block content %}
