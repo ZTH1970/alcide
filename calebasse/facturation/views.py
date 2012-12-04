@@ -38,7 +38,8 @@ class FacturationDetailView(UpdateView):
             len_acts_invoiced, len_acts_invoiced_hors_pause,
             len_patient_invoiced, len_patient_invoiced_hors_pause,
             len_acts_lost, len_patient_with_lost_acts,
-            patients_stats, days_not_locked) = \
+            patients_stats, days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = \
             context['invoicing'].get_stats_or_validate()
             context['len_patients'] = len_patients
             context['len_invoices'] = len_invoices
@@ -54,10 +55,13 @@ class FacturationDetailView(UpdateView):
             context['len_patient_with_lost_acts'] = len_patient_with_lost_acts
             context['patients_stats'] = patients_stats
             context['days_not_locked'] = days_not_locked
+            context['len_patient_acts_paused'] = len_patient_acts_paused
+            context['len_acts_paused'] = len_acts_paused
         elif self.service.name == 'CAMSP':
             (len_patient_pause, len_patient_hors_pause,
-                len_acts_pause, len_acts_hors_pause, acts_accepted,
-                days_not_locked) = context['invoicing'].get_stats_or_validate()
+                len_acts_pause, len_acts_hors_pause, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = context['invoicing'].get_stats_or_validate()
             if context['invoicing'].status == Invoicing.STATUS.closed and \
                     date.today() > context['invoicing'].end_date:
                 context['show_validation_btn'] = True
@@ -65,26 +69,32 @@ class FacturationDetailView(UpdateView):
             context['len_patient_hors_pause'] = len_patient_hors_pause
             context['len_acts_pause'] = len_acts_pause
             context['len_acts_hors_pause'] = len_acts_hors_pause
-            context['acts_accepted'] = acts_accepted
+            context['patients_stats'] = patients_stats
             context['days_not_locked'] = days_not_locked
+            context['len_patient_acts_paused'] = len_patient_acts_paused
+            context['len_acts_paused'] = len_acts_paused
         elif 'SESSAD' in self.service.name:
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
-                acts_accepted, acts_missing_valid_notification,
-                days_not_locked) = context['invoicing'].get_stats_or_validate()
+                patients_stats, days_not_locked,
+                len_patient_acts_paused, len_acts_paused) = \
+                    context['invoicing'].get_stats_or_validate()
             if context['invoicing'].status == Invoicing.STATUS.closed and \
                     date.today() > context['invoicing'].end_date:
                 context['show_validation_btn'] = True
+            #XXX: Supressimer ligne suivante
+            context['show_validation_btn'] = True
             context['len_patient_pause'] = len_patient_pause
             context['len_patient_hors_pause'] = len_patient_hors_pause
             context['len_acts_pause'] = len_acts_pause
             context['len_acts_hors_pause'] = len_acts_hors_pause
             context['len_patient_missing_notif'] = len_patient_missing_notif
             context['len_acts_missing_notif'] = len_acts_missing_notif
-            context['acts_accepted'] = acts_accepted
-            context['acts_missing_valid_notification'] = acts_missing_valid_notification
+            context['patients_stats'] = patients_stats
             context['days_not_locked'] = days_not_locked
+            context['len_patient_acts_paused'] = len_patient_acts_paused
+            context['len_acts_paused'] = len_acts_paused
         return context
 
 

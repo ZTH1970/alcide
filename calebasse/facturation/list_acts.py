@@ -66,6 +66,7 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     days_not_locked = []
     acts_not_valide = {}
     acts_not_billable = {}
+    acts_pause = {}
     acts_billable = {}
     locked = False
     for act in acts:
@@ -88,13 +89,18 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
                 acts_not_billable[act.patient].append(act)
             else:
                 acts_not_billable[act.patient] = [act]
+        elif act.pause:
+            if act.patient in acts_pause:
+                acts_pause[act.patient].append(act)
+            else:
+                acts_pause[act.patient] = [act]
         else:
             if act.patient in acts_billable:
                 acts_billable[act.patient].append(act)
             else:
                 acts_billable[act.patient] = [act]
     return (acts_not_locked, days_not_locked, acts_not_valide,
-        acts_not_billable, acts_billable)
+        acts_not_billable, acts_pause, acts_billable)
 
 
 def list_acts_for_billing_CAMSP(start_day, end_day, service, acts=None):
@@ -122,7 +128,7 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service, acts=None):
     """
 
     acts_not_locked, days_not_locked, acts_not_valide, \
-        acts_not_billable, acts_billable = \
+        acts_not_billable, acts_pause, acts_billable = \
             list_acts_for_billing_first_round(end_day, service,
                 start_day, acts=acts)
     acts_bad_state = {}
@@ -142,7 +148,7 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service, acts=None):
                     acts_bad_state[act.patient] = \
                         [(act, 'NOT_ACCOUNTABLE_STATE')]
     return (acts_not_locked, days_not_locked, acts_not_valide,
-        acts_not_billable, acts_bad_state,
+        acts_not_billable, acts_pause, acts_bad_state,
         acts_accepted)
 
 
@@ -173,7 +179,7 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
     """
 
     acts_not_locked, days_not_locked, acts_not_valide, \
-        acts_not_billable, acts_billable = \
+        acts_not_billable, acts_pause, acts_billable = \
             list_acts_for_billing_first_round(end_day, service,
                 start_day=start_day, acts=acts)
     acts_bad_state = {}
@@ -202,8 +208,8 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
                     acts_bad_state[act.patient] = \
                         [(act, 'NOT_ACCOUNTABLE_STATE')]
     return (acts_not_locked, days_not_locked, acts_not_valide,
-        acts_not_billable, acts_bad_state, acts_missing_valid_notification,
-        acts_accepted)
+        acts_not_billable, acts_pause, acts_bad_state,
+        acts_missing_valid_notification, acts_accepted)
 
 
 def list_acts_for_billing_CMPP(end_day, service, acts=None):
@@ -231,7 +237,7 @@ def list_acts_for_billing_CMPP(end_day, service, acts=None):
     """
 
     acts_not_locked, days_not_locked, acts_not_valide, \
-        acts_not_billable, acts_billable = \
+        acts_not_billable, acts_pause, acts_billable = \
             list_acts_for_billing_first_round(end_day, service, acts=acts)
     acts_diagnostic = {}
     acts_treatment = {}
@@ -260,8 +266,8 @@ def list_acts_for_billing_CMPP(end_day, service, acts=None):
                     else:
                         acts_losts[act.patient] = [act]
     return (acts_not_locked, days_not_locked, acts_not_valide,
-        acts_not_billable, acts_diagnostic, acts_treatment,
-        acts_losts)
+        acts_not_billable, acts_pause, acts_diagnostic,
+        acts_treatment, acts_losts)
 
 def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
     """Used to sort acts billable by specific service requirements.
@@ -288,7 +294,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
     """
 
     acts_not_locked, days_not_locked, acts_not_valide, \
-        acts_not_billable, acts_billable = \
+        acts_not_billable, acts_pause, acts_billable = \
             list_acts_for_billing_first_round(end_day, service, acts=acts)
 
     acts_diagnostic = {}
@@ -351,5 +357,5 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                     # TODO: give details about rejection
                     acts_losts[act.patient] = [act]
     return (acts_not_locked, days_not_locked, acts_not_valide,
-        acts_not_billable, acts_diagnostic, acts_treatment,
-        acts_losts)
+        acts_not_billable, acts_pause, acts_diagnostic,
+        acts_treatment, acts_losts)

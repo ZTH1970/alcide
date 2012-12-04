@@ -220,8 +220,9 @@ class Invoicing(models.Model):
                     acts billable and the healthcares
                 '''
                 (acts_not_locked, days_not_locked, acts_not_valide,
-                    acts_not_billable, acts_diagnostic, acts_treatment,
-                    acts_losts) = self.list_for_billing()
+                    acts_not_billable, acts_pause, acts_diagnostic,
+                    acts_treatment, acts_losts) = \
+                        self.list_for_billing()
 
                 (invoices, len_invoices, len_invoices_hors_pause,
                     len_acts_invoiced, len_acts_invoiced_hors_pause) = \
@@ -234,11 +235,13 @@ class Invoicing(models.Model):
 
                 patients = set(acts_not_locked.keys() + acts_not_valide.keys() + \
                     acts_not_billable.keys() + acts_diagnostic.keys() + acts_treatment.keys() + \
-                    acts_losts.keys())
+                    acts_losts.keys() + acts_pause.keys())
 
                 patients_stats = {}
                 len_patient_with_lost_acts = 0
                 len_acts_lost = 0
+                len_patient_acts_paused = 0
+                len_acts_paused = 0
                 for patient in patients:
                     patients_stats[patient] = {}
                     if patient in invoices.keys():
@@ -264,6 +267,12 @@ class Invoicing(models.Model):
                         patients_stats[patient]['losts'] = acts_losts[patient]
                         len_patient_with_lost_acts = len_patient_with_lost_acts + 1
                         len_acts_lost = len_acts_lost + len(acts_losts[patient])
+                    if patient in acts_pause.keys():
+                        patients_stats[patient]['acts_paused'] = acts_pause[patient]
+                        len_patient_acts_paused = len_patient_acts_paused + 1
+                        len_acts_paused = len_acts_paused + len(acts_pause[patient])
+
+
                 len_patients = len(patients_stats.keys())
 
                 if commit:
@@ -297,99 +306,144 @@ class Invoicing(models.Model):
                 len_patient_invoiced_hors_pause = 0
                 len_acts_lost = 0
                 len_patient_with_lost_acts = 0
+                len_patient_acts_paused = 0
+                len_acts_paused = 0
             return (len_patients, len_invoices, len_invoices_hors_pause,
                 len_acts_invoiced, len_acts_invoiced_hors_pause,
                 len_patient_invoiced, len_patient_invoiced_hors_pause,
-                len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked)
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused)
         elif self.service.name == 'CAMSP':
             if self.status in Invoicing.STATUS.closed:
                 (acts_not_locked, days_not_locked, acts_not_valide,
-                acts_not_billable, acts_bad_state,
+                acts_not_billable, acts_pause, acts_bad_state,
                 acts_accepted) = self.list_for_billing()
                 len_patient_pause = 0
                 len_patient_hors_pause = 0
                 len_acts_pause = 0
                 len_acts_hors_pause = 0
-                for patient, acts in acts_accepted.items():
-                    if patient.pause:
-                        len_patient_pause = len_patient_pause + 1
-                        len_acts_pause = len_acts_pause + len(acts)
-                    else:
-                        len_patient_hors_pause = len_patient_hors_pause + 1
-                        len_acts_hors_pause = len_acts_hors_pause + len(acts)
-                        if commit:
-                            for act in acts:
-                                self.acts.add(act)
+                len_patient_acts_paused = 0
+                len_acts_paused = 0
+                patients = set(acts_accepted.keys() + acts_pause.keys())
+                patients_stats = {}
+                for patient in patients:
+                    patients_stats[patient] = {}
+                    if patient in acts_accepted.keys():
+                        acts = acts_accepted[patient]
+                        patients_stats[patient]['accepted'] = acts
+                        if patient.pause:
+                            len_patient_pause = len_patient_pause + 1
+                            len_acts_pause = len_acts_pause + len(acts)
+                        else:
+                            len_patient_hors_pause = len_patient_hors_pause + 1
+                            len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                            if commit:
+                                for act in acts:
+                                    self.acts.add(act)
+                    if patient in acts_pause.keys():
+                        patients_stats[patient]['acts_paused'] = acts_pause[patient]
+                        len_patient_acts_paused = len_patient_acts_paused + 1
+                        len_acts_paused = len_acts_paused + len(acts_pause[patient])
                 if commit:
                     self.status = Invoicing.STATUS.validated
                     self.save()
             else:
-                acts_accepted = {}
+                patients_stats = {}
                 len_patient_pause = 0
                 len_patient_hors_pause = 0
                 len_acts_pause = 0
                 len_acts_hors_pause = 0
+                len_patient_acts_paused = 0
+                len_acts_paused = 0
                 days_not_locked = []
                 for act in self.acts.all():
-                    if act.patient in acts_accepted:
-                        acts_accepted[patient].append(act)
+                    if act.patient in patients_stats.keys():
+                        patients_stats[act.patient]['accepted'].append(act)
                         len_acts_hors_pause = len_acts_hors_pause + 1
                     else:
                         len_patient_hors_pause = len_patient_hors_pause + 1
                         len_acts_hors_pause = len_acts_hors_pause + 1
-                        acts_accepted[patient] = [act]
+                        patients_stats[act.patient] = {}
+                        patients_stats[act.patient]['accepted'] = [act]
             return (len_patient_pause, len_patient_hors_pause,
-                len_acts_pause, len_acts_hors_pause, acts_accepted,
-                days_not_locked)
+                len_acts_pause, len_acts_hors_pause, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused)
         else:
             if self.status in Invoicing.STATUS.closed:
                 (acts_not_locked, days_not_locked, acts_not_valide,
-                acts_not_billable, acts_bad_state, acts_missing_valid_notification,
-                acts_accepted) = self.list_for_billing()
+                acts_not_billable, acts_pause, acts_bad_state,
+                acts_missing_valid_notification, acts_accepted) = \
+                    self.list_for_billing()
+
                 len_patient_pause = 0
                 len_patient_hors_pause = 0
                 len_acts_pause = 0
                 len_acts_hors_pause = 0
-                for patient, acts in acts_accepted.items():
-                    if patient.pause:
-                        len_patient_pause = len_patient_pause + 1
-                        len_acts_pause = len_acts_pause + len(acts)
-                    else:
-                        len_patient_hors_pause = len_patient_hors_pause + 1
-                        len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                len_patient_acts_paused = 0
+                len_acts_paused = 0
+                len_patient_missing_notif = 0
+                len_acts_missing_notif = 0
+                patients = set(acts_accepted.keys() + acts_pause.keys())
+                patients_stats = {}
+                for patient in patients:
+                    patients_stats[patient] = {}
+                    if patient in acts_accepted.keys():
+                        acts = acts_accepted[patient]
+                        patients_stats[patient]['accepted'] = acts
+                        if patient.pause:
+                            len_patient_pause = len_patient_pause + 1
+                            len_acts_pause = len_acts_pause + len(acts)
+                        else:
+                            len_patient_hors_pause = len_patient_hors_pause + 1
+                            len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                            if commit:
+                                for act in acts:
+                                    self.acts.add(act)
+                    if patient in acts_missing_valid_notification.keys():
+                        acts = acts_missing_valid_notification[patient]
+                        patients_stats[patient]['missings'] = acts
+                        len_patient_missing_notif = len_patient_missing_notif + 1
+                        len_acts_missing_notif = len_acts_missing_notif + len(acts)
+                        if not 'accepted' in patients_stats[patient]:
+                            len_patient_hors_pause = len_patient_hors_pause + 1
                         if commit:
                             for act in acts:
                                 self.acts.add(act)
-                len_patient_missing_notif = 0
-                len_acts_missing_notif = 0
-                for patient, acts in acts_missing_valid_notification.items():
-                    len_patient_missing_notif = len_patient_hors_pause + 1
-                    len_acts_missing_notif = len_acts_missing_notif + len(acts)
+                    if patient in acts_pause.keys():
+                        patients_stats[patient]['acts_paused'] = acts_pause[patient]
+                        len_patient_acts_paused = len_patient_acts_paused + 1
+                        len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                len_acts_hors_pause = len_acts_hors_pause + len_acts_missing_notif
                 if commit:
                     self.status = Invoicing.STATUS.validated
                     self.save()
             else:
-                acts_accepted = {}
-                acts_missing_valid_notification = {}
+                patients_stats = {}
                 len_patient_pause = 0
                 len_patient_hors_pause = 0
                 len_acts_pause = 0
                 len_acts_hors_pause = 0
+                len_patient_acts_paused = 0
+                len_acts_paused = 0
                 len_patient_missing_notif = 0
                 len_acts_missing_notif = 0
                 days_not_locked = []
                 for act in self.acts.all():
-                    if act.patient in acts_accepted:
-                        acts_accepted[patient].append(act)
+                    if act.patient in patients_stats.keys():
+                        patients_stats[act.patient]['accepted'].append(act)
                         len_acts_hors_pause = len_acts_hors_pause + 1
                     else:
                         len_patient_hors_pause = len_patient_hors_pause + 1
                         len_acts_hors_pause = len_acts_hors_pause + 1
-                        acts_accepted[patient] = [act]
+                        patients_stats[act.patient] = {}
+                        patients_stats[act.patient]['accepted'] = [act]
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
-                acts_accepted, acts_missing_valid_notification, days_not_locked)
+                patients_stats, days_not_locked,
+                len_patient_acts_paused, len_acts_paused)
 
     def save(self, *args, **kwargs):
         if not self.seq_id:

@@ -53,7 +53,7 @@
         {% if invoicing.status == "open" or invoicing.status == "closed" %}
         <ul>
             {% if len_acts_invoiced_hors_pause %}
-              <li>Actes facturables hors dossiers en pause: {{ len_acts_invoiced_hors_pause }}
+              <li>Actes facturables hors dossiers en pause : {{ len_acts_invoiced_hors_pause }}
                 <ul>
                   <li>Dossiers concernés : {{ len_patient_invoiced_hors_pause }}</li>
                   <li>Nombre de factures : {{ len_invoices_hors_pause }}</li>
@@ -64,7 +64,7 @@
             {% endif %}
 
             {% if len_acts_invoiced_pause %}
-              <li>Actes facturables des dossiers en pause: {{ len_acts_invoiced_pause }}
+              <li>Actes facturables des dossiers en pause : {{ len_acts_invoiced_pause }}
                 <ul>
                   <li>Dossiers concernés : {{ len_patient_invoiced_pause }}</li>
                   <li>Nombre de factures : {{ len_invoices_pause }}</li>
@@ -75,7 +75,7 @@
             {% endif %}
 
             {% if len_acts_lost %}
-              <li>Actes facturables mais non pris en charge: {{ len_acts_lost }}
+              <li>Actes facturables mais non pris en charge : {{ len_acts_lost }}
                 <ul>
                   <li>Dossiers concernés : {{ len_patient_with_lost_acts }}</li>
         <!--          <li>Quota des actes pris en charge dépassé : 2</li>-->
@@ -86,11 +86,22 @@
             {% else %}
               <li>Pas d'actes facturables mais non pris en charge.</li>
             {% endif %}
+
+            {% if len_acts_paused %}
+              <li>Actes facturables en pause facturation : {{ len_acts_paused }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_acts_paused }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables en pause facturation.</li>
+            {% endif %}
+
         </ul>
         {% else %}
         <ul>
             {% if len_acts_invoiced %}
-              <li>Actes facturés: {{ len_acts_invoiced }}
+              <li>Actes facturés : {{ len_acts_invoiced }}
                 <ul>
                   <li>Dossiers concernés : {{ len_patients }}</li>
                   <li>Nombre de factures : {{ len_invoices }}</li>
@@ -106,7 +117,7 @@
             {% if invoicing.status == "closed" %}
             <ul>
                 {% if len_patient_hors_pause %}
-                  <li>Actes décomptables hors dossiers en pause: {{ len_acts_hors_pause }}
+                  <li>Actes décomptables hors dossiers en pause : {{ len_acts_hors_pause }}
                     <ul>
                       <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
                     </ul>
@@ -116,13 +127,23 @@
                 {% endif %}
 
                 {% if len_patient_pause %}
-                  <li>Actes décomptables des dossiers en pause: {{ len_acts_pause }}
+                  <li>Actes décomptables des dossiers en pause : {{ len_acts_pause }}
                     <ul>
                       <li>Dossiers concernés : {{ len_patient_pause }}</li>
                     </ul>
                   </li>
                 {% else %}
                   <li>Pas d'actes décomptables pour les dossiers en pause.</li>
+                {% endif %}
+
+                {% if len_acts_paused %}
+                  <li>Actes décomptables en pause facturation : {{ len_acts_paused }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_acts_paused }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables en pause facturation.</li>
                 {% endif %}
 
             </ul>
@@ -143,7 +164,7 @@
             {% if invoicing.status == "closed" %}
             <ul>
                 {% if len_patient_hors_pause %}
-                  <li>Actes décomptables hors dossiers en pause: {{ len_acts_hors_pause }}
+                  <li>Actes décomptables hors dossiers en pause : {{ len_acts_hors_pause }}
                     <ul>
                       <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
                     </ul>
@@ -152,8 +173,18 @@
                   <li>Pas d'actes décomptables pour les dossiers hors pause.</li>
                 {% endif %}
 
+                {% if len_patient_missing_notif %}
+                  <li>Actes décomptables mais non couverts par une notification : {{ len_acts_missing_notif }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_missing_notif }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables avec une notification manquante.</li>
+                {% endif %}
+
                 {% if len_patient_pause %}
-                  <li>Actes décomptables des dossiers en pause: {{ len_acts_pause }}
+                  <li>Actes décomptables des dossiers en pause : {{ len_acts_pause }}
                     <ul>
                       <li>Dossiers concernés : {{ len_patient_pause }}</li>
                     </ul>
@@ -162,21 +193,21 @@
                   <li>Pas d'actes décomptables pour les dossiers en pause.</li>
                 {% endif %}
 
-                {% if len_patient_missing_notif %}
-                  <li>Actes non décomptables pour une notification manquante: {{ len_acts_missing_notif }}
+                {% if len_acts_paused %}
+                  <li>Actes décomptables en pause facturation : {{ len_acts_paused }}
                     <ul>
-                      <li>Dossiers concernés : {{ len_patient_missing_notif }}</li>
+                      <li>Dossiers concernés : {{ len_patient_acts_paused }}</li>
                     </ul>
                   </li>
                 {% else %}
-                  <li>Pas d'actes non décomptables pour une notification manquante.</li>
+                  <li>Pas d'actes décomptables en pause facturation.</li>
                 {% endif %}
 
             </ul>
             {% else %}
             <ul>
                 {% if len_patient_hors_pause %}
-                  <li>Actes décomptés: {{ len_acts_hors_pause }}
+                  <li>Actes décomptés : {{ len_acts_hors_pause }}
                     <ul>
                       <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
                     </ul>
@@ -201,7 +232,7 @@
         </p>
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats.items %}
-            {% if patient.pause or "losts" in detail.keys %}
+            {% if patient.pause or "losts" in detail.keys or "acts_paused" in detail.keys %}
              <div class="frame dossier facturable">
             {% else %}
             <div class="frame dossier">
@@ -212,6 +243,7 @@
                 </div>
                 {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
                 {% if "losts" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
+                {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
                 <ul>
                 {% for key, value in detail.items %}
                   {% if key == "invoices" %}
@@ -238,6 +270,15 @@
                     </ul>
                   </li>
                   {% endif %}
+                  {% if key == "acts_paused" %}
+                  <li>Actes facturables en pause facturation <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
                 {% endfor %}
                 </ul>
             </div>
@@ -254,7 +295,7 @@
                 <ul>
                 {% for key, value in detail.items %}
                   {% if key == "invoices" %}
-                  <li>Actes facturables <button class="blind">détails</button>
+                  <li>Actes facturés <button class="blind">détails</button>
                     <ul>
                         {% for invoice in value %}
                         <li>Facture {{ invoice.number }}
@@ -276,133 +317,159 @@
         {% endif %}
     </div>
     {% endif %}
-    {% if service_name == "CAMSP" and acts_accepted %}
+    {% if service_name == "CAMSP" and patients_stats %}
     <div id="dossiers">
         <h3>Dossiers concernés</h3>
         {% if invoicing.status == "closed" %}
             <p id="filtre-dossiers">
-             <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation.</label></input>
+             <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou avec un acte en pause.</label></input>
             </p>
-            <div id="dossiers-concernes">
-            {% for patient, acts in acts_accepted.items %}
-                {% if patient.pause %}
-                 <div class="frame dossier facturable">
-                {% else %}
-                <div class="frame dossier">
-                {% endif %}
-                    <h3><a href="../../dossiers/{{ patient.pk }}/view">
-                    {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
-                    <div class="info">
-                    </div>
-                    {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
-                    <ul>
-                          <li>Actes décomptés <button class="blind">détails</button>
-                            <ul>
-                          {% for act in acts %}
-                            <li>{{ act.date }} {{ act.act_type }}</li>
-                          {% endfor %}
-                          </ul>
-                          </li>
-                    </ul>
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats.items %}
+            {% if patient.pause or "acts_paused" in detail.keys %}
+             <div class="frame dossier facturable">
+            {% else %}
+            <div class="frame dossier">
+            {% endif %}
+                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                <div class="info">
                 </div>
-            {% endfor %}
-            </div>
-        {% else %}
-            <div id="dossiers-concernes">
-            {% for patient, acts in acts_accepted.items %}
-                <div class="frame dossier">
-                    <h3><a href="../../dossiers/{{ patient.pk }}/view">
-                    {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
+                {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptables <button class="blind">détails</button>
                     <ul>
-                      <li>Actes décomptés <button class="blind">détails</button>
-                        <ul>
-                      {% for act in acts %}
+                      {% for act in value %}
                         <li>{{ act.date }} {{ act.act_type }}</li>
                       {% endfor %}
-                      </ul>
-                      </li>
                     </ul>
-                </div>
-            {% endfor %}
+                  </li>
+                  {% endif %}
+                  {% if key == "acts_paused" %}
+                  <li>Actes décomptables en pause facturation <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
             </div>
+        {% endfor %}
+        </div>
+        {% else %}
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats.items %}
+            <div class="frame dossier" id="to-hide">
+                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                <div class="info">
+                </div>
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptés <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
         {% endif %}
     </div>
     {% endif %}
     {% if service_name == "SESSAD DYS" or service_name == "SESSAD TED" %}
-        {% if acts_accepted %}
-        <div id="dossiers">
-            <h3>Dossiers concernés</h3>
-            {% if invoicing.status == "open" or invoicing.status == "closed" %}
+        {% if patients_stats %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        {% if invoicing.status == "closed" %}
             <p id="filtre-dossiers">
-             <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou
-                 avec des actes décomptables mais sans notification valide.</label></input>
+             <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou avec un acte en pause.</label></input>
             </p>
-            <div id="dossiers-concernes">
-            {% for patient, acts in acts_accepted.items %}
-                {% if patient.pause or patient in acts_missing_valid_notification.keys %}
-                 <div class="frame dossier facturable">
-                {% else %}
-                <div class="frame dossier">
-                {% endif %}
-                    <h3><a href="../../dossiers/{{ patient.pk }}/view">
-                    {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
-                    <div class="info">
-                    </div>
-                    {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
-                    {% if patient in acts_missing_valid_notification.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
-                    <ul>
-                      <li>Actes décomptés <button class="blind">détails</button>
-                        <ul>
-                      {% for act in acts %}
-                        <li>{{ act.date }} {{ act.act_type }}</li>
-                      {% endfor %}
-                      </ul>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li>Actes non pris en charge <button class="blind">détails</button>
-                        <ul>
-                            {% for p, missings in acts_missing_valid_notification %}
-                                {% if p.id == patient.id %}
-                                  {% for act in missings %}
-                                    <li>{{ act.date }} {{ act.act_type }}</li>
-                                  {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                      </ul>
-                      </li>
-                    </ul>
-                </div>
-            {% endfor %}
-            </div>
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats.items %}
+            {% if patient.pause or "acts_paused" in detail.keys %}
+             <div class="frame dossier facturable">
             {% else %}
-            <div id="dossiers-concernes">
-            {% for patient, acts in acts_accepted.items %}
-                {% if patient.pause or patient in acts_missing_valid_notification.keys %}
-                 <div class="frame dossier facturable">
-                {% else %}
-                <div class="frame dossier">
-                {% endif %}
-                    <h3><a href="../../dossiers/{{ patient.pk }}/view">
-                    {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
-                    <div class="info">
-                    </div>
-                    {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
-                    {% if patient in acts_missing_valid_notification.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
+            <div class="frame dossier">
+            {% endif %}
+                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                <div class="info">
+                </div>
+                {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
+                {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptables <button class="blind">détails</button>
                     <ul>
-                      <li>Actes décomptés <button class="blind">détails</button>
-                        <ul>
-                      {% for act in acts %}
+                      {% for act in value %}
                         <li>{{ act.date }} {{ act.act_type }}</li>
                       {% endfor %}
-                      </ul>
-                      </li>
                     </ul>
-                </div>
-            {% endfor %}
+                  </li>
+                  {% endif %}
+                  {% if key == "missings" %}
+                  <li>Actes décomptables non couverts par une notification <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "acts_paused" %}
+                  <li>Actes décomptables en pause facturation <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
             </div>
-            {% endif %}
+        {% endfor %}
         </div>
+        {% else %}
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats.items %}
+            <div class="frame dossier" id="to-hide">
+                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                {% if patient.paper_id %}{{ patient.paper_id }}/{% endif %}{{ patient.pk }} {{ patient.first_name }} <strong>{{ patient.last_name }}</strong></a></h3>
+                <div class="info">
+                </div>
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptés <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+    </div>
         {% endif %}
     {% endif %}
 

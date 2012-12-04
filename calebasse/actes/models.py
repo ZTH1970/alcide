@@ -66,6 +66,8 @@ class Act(models.Model):
     doctors = models.ManyToManyField('personnes.Worker',
             limit_choices_to={'type__intervene': True},
             verbose_name=u'Thérapeutes')
+    pause = models.BooleanField(default=False,
+            verbose_name=u'Pause facturation')
 
     def is_absent(self):
         if self.get_state() in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
