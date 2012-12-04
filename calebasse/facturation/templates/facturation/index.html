@@ -19,7 +19,7 @@
             à partir du {{ current.start_date }}
             {% else %}
             trimestre du {{ current.start_date }} au {{ current.end_date }}
-                ({% if current.status == "validated" %}Validé{% endif %})
+                {% if current.status == "validated" %}(Validé){% endif %}
             {% endif %}
         </li>
     {% endif %}
