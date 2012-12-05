@@ -66,6 +66,7 @@ div#wrap-large {
 	height: 92px;
 	color: #fff;
 	padding-left: 10px;
+	z-index: 14;
 }
 
 #header h1
@@ -99,6 +100,7 @@ div#wrap-large {
 	height: 87px;
 	-moz-border-radius: 0 6px 6px 0;
 	-webkit-border-radius: 0 6px 6px 0;
+	z-index: 10;
 
 	color: white;
 	font-weight: bold;
