@@ -30,6 +30,17 @@ STATES_MAPPING = {
     'CLOS': STATE_CHOICES[4][1]
 }
 
+# Use to map status type with change state buttons
+STATES_BTN_MAPPER = {
+        'ACCUEIL': ('reopen-patientrecord', 'Ré-accueillir'),
+        'FIN_ACCUEIL': ('finaccueil-patientrecord', "Fin d'accueil"),
+        'DIAGNOSTIC': ('diagnostic-patientrecord', 'En diagnostic'),
+        'TRAITEMENT': ('traitement-patientrecord', 'En traitement'),
+        'CLOS': ('close-patientrecord', 'Clore'),
+        'BILAN': ('bilan-patientrecord', 'En bilan'),
+        'SURVEILLANCE': ('surveillance-patientrecord', 'En surveillance'),
+        'SUIVI': ('suivi-patientrecord', 'En suivi'),
+}
 
 # OLD MAPPERS now manage in databases with dossiers.Status table
 

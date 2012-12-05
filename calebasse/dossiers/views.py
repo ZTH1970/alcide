@@ -10,7 +10,7 @@ from calebasse.dossiers.models import PatientRecord, Status, FileState, create_p
 from calebasse.dossiers.forms import (SearchForm, CivilStatusForm, StateForm,
         PhysiologyForm, FamilyForm, InscriptionForm, GeneralForm,
         NewPatientRecordForm, TransportFrom, FollowUpForm)
-from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE
+from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import Service
 
 
@@ -100,6 +100,78 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['current_state'] = current_state
         ctx['service_id'] = self.service.id
         ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
+        ctx['status'] = []
+        if ctx['object'].service.name == "CMPP":
+            if ctx['object'].last_state.status.type == "ACCUEIL":
+                # Insciption automatique au premier acte facturable valide
+                ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
+                        STATES_BTN_MAPPER['DIAGNOSTIC'],
+                        STATES_BTN_MAPPER['TRAITEMENT']]
+            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
+                # Passage automatique en diagnostic ou traitement
+                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['DIAGNOSTIC'],
+                        STATES_BTN_MAPPER['TRAITEMENT']]
+            elif ctx['object'].last_state.status.type == "DIAGNOSTIC":
+                # Passage automatique en traitement
+                ctx['status'] = [STATES_BTN_MAPPER['TRAITEMENT'],
+                        STATES_BTN_MAPPER['CLOS'],
+                        STATES_BTN_MAPPER['ACCUEIL']]
+            elif ctx['object'].last_state.status.type == "TRAITEMENT":
+                # Passage automatique en diagnostic si on ajoute une prise en charge diagnostic, 
+                # ce qui est faisable dans l'onglet prise en charge par un bouton visible sous conditions
+                ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
+                        STATES_BTN_MAPPER['CLOS'],
+                        STATES_BTN_MAPPER['ACCUEIL']]
+            elif ctx['object'].last_state.status.type == "CLOS":
+                # Passage automatique en diagnostic ou traitement
+                ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
+                        STATES_BTN_MAPPER['TRAITEMENT'],
+                        STATES_BTN_MAPPER['ACCUEIL']]
+        elif ctx['object'].service.name == "CAMSP":
+            if ctx['object'].last_state.status.type == "ACCUEIL":
+                ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
+                        STATES_BTN_MAPPER['BILAN']]
+            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
+                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['BILAN'],
+                        STATES_BTN_MAPPER['SURVEILLANCE'],
+                        STATES_BTN_MAPPER['SUIVI'],
+                        STATES_BTN_MAPPER['CLOS']]
+            elif ctx['object'].last_state.status.type == "BILAN":
+                ctx['status'] = [STATES_BTN_MAPPER['SURVEILLANCE'],
+                        STATES_BTN_MAPPER['SUIVI'],
+                        STATES_BTN_MAPPER['CLOS'],
+                        STATES_BTN_MAPPER['ACCUEIL']]
+            elif ctx['object'].last_state.status.type == "SURVEILLANCE":
+                ctx['status'] = [STATES_BTN_MAPPER['SUIVI'],
+                        STATES_BTN_MAPPER['CLOS'],
+                        STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['BILAN']]
+            elif ctx['object'].last_state.status.type == "SUIVI":
+                ctx['status'] = [STATES_BTN_MAPPER['CLOS'],
+                        STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['BILAN'],
+                        STATES_BTN_MAPPER['SURVEILLANCE']]
+            elif ctx['object'].last_state.status.type == "CLOS":
+                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['BILAN'],
+                        STATES_BTN_MAPPER['SURVEILLANCE'],
+                        STATES_BTN_MAPPER['SUIVI']]
+        elif ctx['object'].service.name == "SESSAD TED" or ctx['object'].service.name == "SESSAD DYS":
+            if ctx['object'].last_state.status.type == "ACCUEIL":
+                ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
+                        STATES_BTN_MAPPER['TRAITEMENT']]
+            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
+                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['TRAITEMENT'],
+                        STATES_BTN_MAPPER['CLOS']]
+            elif ctx['object'].last_state.status.type == "TRAITEMENT":
+                ctx['status'] = [STATES_BTN_MAPPER['CLOS'],
+                        STATES_BTN_MAPPER['ACCUEIL']]
+            elif ctx['object'].last_state.status.type == "CLOS":
+                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
+                        STATES_BTN_MAPPER['TRAITEMENT']]
         return ctx
 
 patient_record = PatientRecordView.as_view()
