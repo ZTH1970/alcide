@@ -17,13 +17,6 @@
           {{ form.last_name }}
           {{ form.last_name.errors }}
         </td>
-      </tr>
-      <tr>
-        <td>
-          {{ form.social_security_id.label_tag }} :<br>
-          {{ form.social_security_id }}
-          {{ form.social_security_id.errors }}
-        </td>
         <td>
           {{ form.gender.label_tag }} :<br>
           {{ form.gender }}
@@ -42,6 +35,51 @@
           {{ form.email.errors }}
         </td>
       </tr>
+      <tr>
+        <td>
+          {{ form.birthdate.label_tag }} :<br>
+          {{ form.birthdate }}
+          {{ form.birthdate.errors }}
+        </td>
+        <td>
+          {{ form.social_security_id.label_tag }} :<br>
+          {{ form.social_security_id }}
+          {{ form.social_security_id.errors }}
+        </td>
+        <td>
+          {{ form.key.label_tag }} :<br>
+          {{ form.key }}
+          {{ form.key.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.begin_rights.label_tag }} :<br>
+          {{ form.begin_rights }}
+          {{ form.begin_rights.errors }}
+        </td>
+        <td>
+          {{ form.end_rights.label_tag }} :<br>
+          {{ form.end_rights }}
+          {{ form.end_rights.errors }}
+        </td>
+        <td>
+          {{ form.twinning_rank.label_tag }} :<br>
+          {{ form.twinning_rank }}
+          {{ form.twinning_rank.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.healt_fund.label_tag }} :<br>
+          {{ form.healt_fund }}
+          {{ form.healt_fund.errors }}
+        </td>
+        <td>
+          {{ form.healt_center.label_tag }} :<br>
+          {{ form.healt_center }}
+          {{ form.healt_center.errors }}
+        </td>
     </tbody>
   </table>
   <p>

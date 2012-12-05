@@ -42,6 +42,7 @@ class HealthFund(NamedAbstractModel):
         verbose_name = u'Caisse d\'assurances maladie'
         verbose_name_plural = u'Caisses d\'assurances maladie'
 
+    number = models.IntegerField(verbose_name=u"Numéro de la caisse")
     abbreviation = models.CharField(max_length=8)
     active = models.BooleanField(default=True)
     address = models.CharField(max_length=120)

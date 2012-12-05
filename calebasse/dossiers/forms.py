@@ -63,8 +63,8 @@ class InscriptionForm(ModelForm):
 class FamilyForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('sibship_place', 'nb_children_family', 'twinning_rank',
-                'parental_authority', 'family_situation', 'child_custody')
+        fields = ('sibship_place', 'nb_children_family', 'parental_authority',
+                'family_situation', 'child_custody')
 
 class TransportFrom(ModelForm):
     class Meta:
@@ -82,6 +82,8 @@ class PatientContactForm(ModelForm):
         model = PatientContact
         widgets = {
                 'contact_comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
+                'key': forms.TextInput(attrs={'size': 4}),
+                'twinning_rank': forms.TextInput(attrs={'size': 4}),
                 }
 
 class PatientAddressForm(ModelForm):

@@ -188,7 +188,27 @@ class PatientContact(People):
 
     mobile = PhoneNumberField(verbose_name=u"Téléphone mobile", blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    social_security_id = models.CharField(max_length=13, verbose_name=u"Numéro de sécurité sociale")
+    # carte vitale
+    social_security_id = models.CharField(max_length=13, verbose_name=u"NRI")
+    birthdate = models.DateField(verbose_name=u"Date de naissance",
+            null=True, blank=True)
+    key = models.IntegerField(verbose_name=u'Clé',
+            null=True, blank=True)
+    twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
+            null=True, blank=True)
+    thirdparty_payer = models.BooleanField(verbose_name=u'Tiers-payant',
+            default=False)
+    begin_rights = models.DateField(verbose_name=u"Début de droits",
+            null=True, blank=True)
+    end_rights = models.DateField(verbose_name=u"Fin de droits",
+            null=True, blank=True)
+    healt_fund = models.ForeignKey('ressources.HealthFund',
+            verbose_name=u"Caisse d'assurance maladie",
+            null=True, blank=True)
+    # TODO : use ressource object for healt center ?
+    healt_center = models.IntegerField(verbose_name=u"Centre d'assurance maladie",
+            null=True, blank=True)
+
     addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses")
     contact_comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True)
@@ -210,10 +230,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         models.ForeignKey(User,
         verbose_name=u'Créateur dossier patient',
         editable=True)
-    contacts = models.ManyToManyField('personnes.People',
+    contacts = models.ManyToManyField('PatientContact',
             related_name='contact_of')
-    birthdate = models.DateField(verbose_name=u"Date de naissance",
-            null=True, blank=True)
     nationality = models.CharField(verbose_name=u"Nationalité",
             max_length=70, null=True, blank=True)
     paper_id = models.CharField(max_length=12,
@@ -250,8 +268,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     sibship_place = models.IntegerField(verbose_name=u"Place dans la fratrie",
             null=True, blank=True, default=None)
     nb_children_family = models.IntegerField(verbose_name=u"Nombre d'enfants dans la fratrie",
-            null=True, blank=True, default=None)
-    twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
             null=True, blank=True, default=None)
     parental_authority = models.ForeignKey('ressources.ParentalAuthorityType',
             verbose_name=u"Autorité parentale",
