@@ -171,6 +171,7 @@
       <p>
       {{ forms.family.sibship_place.label_tag  }} : {{ forms.family.sibship_place }}
       {{ forms.family.nb_children_family.label_tag  }} : {{ forms.family.nb_children_family }}
+      <label>Rang (gémellité) :  </label> {{ object.twinning_rank|default_if_none:"Aucun" }}
       </p>
       <p>
       {{ forms.family.parental_authority.label_tag  }} : {{ forms.family.parental_authority }}
