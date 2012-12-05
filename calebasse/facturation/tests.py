@@ -91,7 +91,7 @@ class FacturationTest(TestCase):
         automated_validation(datetime(2020, 10, 7), service_camsp, self.creator)
         automated_validation(datetime(2020, 10, 8), service_camsp, self.creator)
 
-        not_locked, days_not_locked, not_valide, not_billable, rejected, selected = \
+        not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, selected = \
             list_acts_for_billing_CAMSP(datetime(2020, 10, 4), datetime(2020, 10, 8), service_camsp)
 
         self.assertEqual(len(days_not_locked), 1)
@@ -115,7 +115,7 @@ class FacturationTest(TestCase):
 
         states = patient_b.get_states_history()
         patient_b.change_day_selected_of_state(states[2], datetime(2020, 10, 7))
-        not_locked, days_not_locked, not_valide, not_billable, rejected, selected = \
+        not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, selected = \
             list_acts_for_billing_CAMSP(datetime(2020, 10, 4), datetime(2020, 10, 8), service_camsp)
         acts_not_locked = [x[0] for x in not_locked[patient_b]]
         self.assertTrue(act5 in acts_not_locked)
@@ -131,7 +131,7 @@ class FacturationTest(TestCase):
         states = patient_b.get_states_history()
         patient_b.change_day_selected_of_state(states[2], datetime(2020, 10, 9))
         patient_b.change_day_selected_of_state(states[1], datetime(2020, 10, 8))
-        not_locked, days_not_locked, not_valide, not_billable, rejected, selected = \
+        not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, selected = \
             list_acts_for_billing_CAMSP(datetime(2020, 10, 4), datetime(2020, 10, 8), service_camsp)
         acts_not_locked = [x[0] for x in not_locked[patient_b]]
         self.assertTrue(act5 in acts_not_locked)
@@ -172,7 +172,7 @@ class FacturationTest(TestCase):
         automated_validation(datetime(2020, 10, 7), service_sessad, self.creator)
         automated_validation(datetime(2020, 10, 8), service_sessad, self.creator)
 
-        not_locked, days_not_locked, not_valide, not_billable, rejected, missing_valid_notification, selected = \
+        not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, missing_valid_notification, selected = \
             list_acts_for_billing_SESSAD(datetime(2020, 10, 4), datetime(2020, 10, 8), service_sessad)
         self.assertEqual(not_locked, {})
         self.assertEqual(not_valide, {})
@@ -182,7 +182,7 @@ class FacturationTest(TestCase):
         self.assertEqual(selected, {})
 
         SessadHealthCareNotification(patient=patient_a, author=self.creator, start_date=datetime(2020,10,7), end_date=datetime(2021,10,6)).save()
-        not_locked, days_not_locked, not_valide, not_billable, rejected, missing_valid_notification, selected = \
+        not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, missing_valid_notification, selected = \
             list_acts_for_billing_SESSAD(datetime(2020, 10, 4), datetime(2020, 10, 8), service_sessad)
         self.assertEqual(not_locked, {})
         self.assertEqual(not_valide, {})
@@ -253,13 +253,13 @@ class FacturationTest(TestCase):
 
         billing_cmpp = list_acts_for_billing_CMPP_2(datetime(2020, 11, 30), service_cmpp)
 
-        self.assertEqual(len(billing_cmpp[4][patient_a]), 6)
-        self.assertEqual(len(billing_cmpp[5][patient_a]), 40)
-        self.assertEqual(len(billing_cmpp[6][patient_a]), 15)
+        self.assertEqual(len(billing_cmpp[5][patient_a]), 6)
+        self.assertEqual(len(billing_cmpp[6][patient_a]), 40)
+        self.assertEqual(len(billing_cmpp[7][patient_a]), 15)
 
 
     def test_prices(self):
-        price_o = add_price(120)
+        price_o = add_price(120, date(2012, 10, 1))
         self.assertEqual(PricePerAct.get_price(), 120)
         price_o = add_price(130, date.today())
         self.assertEqual(PricePerAct.get_price(date.today() + relativedelta(days=-1)), 120)
@@ -274,33 +274,35 @@ class FacturationTest(TestCase):
 
     def test_invoicing(self):
         service_cmpp = Service.objects.get(name='CMPP')
-        price_o = add_price(120)
+        price_o = add_price(120, date(2012, 10, 1))
 
 
         patients = []
         for j in range(2):
-            patients.append(create_patient(str(j), str(j), service_cmpp, self.creator, date_selected=datetime(2020, 10, 1)))
+            patients.append(create_patient(str(j), str(j), service_cmpp, self.creator, date_selected=datetime(2012, 10, 1)))
             acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
-                    self.act_type, service_cmpp, start_datetime=datetime(2020, 10, i, 10, 15),
-                    end_datetime=datetime(2020, 10, i, 12, 20)) for i in range (1, 32)]
+                    self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
+                    end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (1, 32)]
             acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
-                    self.act_type, service_cmpp, start_datetime=datetime(2020, 11, i, 10, 15),
-                    end_datetime=datetime(2020, 11, i, 12, 20)) for i in range (1, 31)]
-            hct = CmppHealthCareTreatment(patient=patients[j], start_date=datetime(2020, 10, 7), author=self.creator)
+                    self.act_type, service_cmpp, start_datetime=datetime(2012, 11, i, 10, 15),
+                    end_datetime=datetime(2012, 11, i, 12, 20)) for i in range (1, 31)]
+            hct = CmppHealthCareTreatment(patient=patients[j], start_date=datetime(2012, 10, 7), author=self.creator)
             hct.save()
             hct.add_prolongation()
 
         for i in range(1, 32):
-            automated_validation(datetime(2020, 10, i), service_cmpp, self.creator)
+            automated_validation(datetime(2012, 10, i), service_cmpp, self.creator)
         for i in range(1, 31):
-            automated_validation(datetime(2020, 11, i), service_cmpp, self.creator)
+            automated_validation(datetime(2012, 11, i), service_cmpp, self.creator)
 
-        self.assertEqual(get_days_with_acts_not_locked(datetime(2020, 10, 1), datetime(2020, 11, 30)), [])
+        self.assertEqual(get_days_with_acts_not_locked(datetime(2012, 10, 1), datetime(2012, 11, 30)), [])
         invoicing = Invoicing.objects.create(service=service_cmpp, seq_id=666, start_date=date.today())
         (len_patients, len_invoices, len_invoices_hors_pause,
-        len_acts_invoiced, len_acts_invoiced_hors_pause,
-        len_patient_invoiced, len_patient_invoiced_hors_pause,
-        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate()
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate()
 
         self.assertEqual(len_patients, 2)
         self.assertEqual(len_invoices, 4)
@@ -316,9 +318,11 @@ class FacturationTest(TestCase):
         patients[1].save()
 
         (len_patients, len_invoices, len_invoices_hors_pause,
-        len_acts_invoiced, len_acts_invoiced_hors_pause,
-        len_patient_invoiced, len_patient_invoiced_hors_pause,
-        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate()
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate()
 
         self.assertEqual(len_patients, 2)
         self.assertEqual(len_invoices, 4)
@@ -330,17 +334,21 @@ class FacturationTest(TestCase):
         self.assertEqual(len_acts_lost, 30)
         self.assertEqual(len_patient_with_lost_acts, 2)
 
-        invoicing_next = invoicing.close(date(day=30, month=11, year=2020))
+        invoicing_next = invoicing.close(date(day=30, month=11, year=2012))
 
         (len_patients, len_invoices, len_invoices_hors_pause,
-        len_acts_invoiced, len_acts_invoiced_hors_pause,
-        len_patient_invoiced, len_patient_invoiced_hors_pause,
-        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate(commit=True)
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate(commit=True)
 
         (len_patients, len_invoices, len_invoices_hors_pause,
-        len_acts_invoiced, len_acts_invoiced_hors_pause,
-        len_patient_invoiced, len_patient_invoiced_hors_pause,
-        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing.get_stats_or_validate()
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate()
 
         self.assertEqual(len_patients, 1)
         self.assertEqual(len_invoices, 2)
@@ -348,12 +356,14 @@ class FacturationTest(TestCase):
 
         patients[1].pause = False
         patients[1].save()
-        invoicing_next.close(date(day=2, month=12, year=2020))
+        invoicing_next.close(date(day=2, month=12, year=2012))
 
         (len_patients, len_invoices, len_invoices_hors_pause,
-        len_acts_invoiced, len_acts_invoiced_hors_pause,
-        len_patient_invoiced, len_patient_invoiced_hors_pause,
-        len_acts_lost, len_patient_with_lost_acts, patients_stats, days_not_locked) = invoicing_next.get_stats_or_validate()
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing_next.get_stats_or_validate()
 
         self.assertEqual(len_patients, 2)
         self.assertEqual(len_invoices, 2)
