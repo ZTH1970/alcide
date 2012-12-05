@@ -394,8 +394,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
 
         """
         acts = self.act_set.order_by('date')
-        hcs = self.healthcare_set.order_by('-start_date')
-        if not hcs:
+        hcds = CmppHealthCareDiagnostic.objects.filter(patient=self).order_by('-start_date')
+        if not hcds:
             # Pas de prise en charge, on recherche l'acte facturable le plus
             # ancien, on crée une pc diag à la même date.
             for act in acts:
