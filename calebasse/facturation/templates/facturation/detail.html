@@ -41,7 +41,7 @@
 
     <div id="facturation-contents">
     {% if days_not_locked %}
-    <h3>Jours non vérouillés</h3>
+    <h3>Jours non verrouillés</h3>
         <ul>
         {% for day in days_not_locked %}
             <li><a href="../../agenda/{{ day.year }}-{{ day.month }}-{{ day.day }}/validation-des-actes">{{ day.day }}/{{ day.month }}/{{ day.year }}</a></li>
