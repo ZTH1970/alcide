@@ -195,21 +195,10 @@ class Invoicing(models.Model):
             If the invoicing is in state open or closed and commit is False
                 Return the stats of the billing
             If the invoicing is in state open or closed and commit is True
-                Proceed to invoices creation, healthcare charging, acts a billed
+                Proceed to invoices creation, healthcare charging, acts as billed
                 Return the stats of the billing
             If the invoicing is in state validated or sent
                 Return the stats of the billing
-
-            len_patients: Tous les patients concernés, c'est à dire ayant au moins un acte sur la période, même si absent ou verouillé
-            len_invoices: Nombre de factures avec les dossiers en pause qui seraient facturés
-            len_invoices_hors_pause: Nombre de factures sans les dossiers en pause
-            len_acts_invoiced: Nombre d'actes concernés par les factures avec les dossiers en pause qui seraient facturés
-            len_acts_invoiced_hors_pause: Nombre d'actes concernés par les factures sans les dossiers en pause
-            len_patient_invoiced: Nombre de patients concernés par les factures avec les dossiers en pause qui seraient facturés
-            len_patient_invoiced_hors_pause: Nombre de patients concernés par les factures sans les dossiers en pause
-            len_acts_lost: Nombre d'actes facturables mais qui ne peuvent être facturés pour une autre raison que la pause.
-            len_patient_with_lost_acts: Nombre de patients concernés par des actes facturables mais qui ne peuvent être facturés pour une autre raison que la pause.
-            patients_stats: Par patients, factures et actes facturables qui ne peuvent être facturés pour une autre raison que la pause.
         '''
         days_not_locked = 0
         if self.service.name == 'CMPP':
