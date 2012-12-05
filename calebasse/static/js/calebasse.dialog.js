@@ -1,3 +1,37 @@
+
+function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl) {
+  $(id).load(url,
+      function () {
+        function onsuccess(response, status, xhr, form) {
+          var parse = $(response);
+          if ($('.errorlist', parse).length != 0) {
+            $(id).html(response);
+            $(id + ' form').ajaxForm({
+              success: onsuccess,
+            });
+            console.log('error');
+          } else {
+            console.log('success');
+            if (redirectToUrl) {
+              window.location = redirectToUrl;
+            }
+            else {
+              window.location.reload(true);
+            }
+          }
+        }
+        $('form', this).ajaxForm({
+          success: onsuccess,
+        });
+        $(this).dialog({title: title,
+          width: width,
+          buttons: [ { text: "Annuler",
+            click: function() { $(this).dialog("close"); } },
+          { text: btn_submit_name,
+            click: function() { $(id + " form").submit(); } }]});
+      });
+}
+
 (function ($) {
   $.fn.dialogButton = function (opts) {
     var id = $(this).attr('id');

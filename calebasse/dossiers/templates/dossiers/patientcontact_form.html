@@ -1,0 +1,57 @@
+{% load widget_tweaks %}
+
+<form action="{{ request.get_full_path }}" method="post">
+  {% csrf_token %}
+  <table>
+    <tbody>
+      <tr>
+        <p>
+        </p>
+        <td>
+          {{ form.first_name.label_tag }} :<br>
+          {{ form.first_name }}
+          {{ form.first_name.errors }}
+        </td>
+        <td>
+          {{ form.last_name.label_tag }} :<br>
+          {{ form.last_name }}
+          {{ form.last_name.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.social_security_id.label_tag }} :<br>
+          {{ form.social_security_id }}
+          {{ form.social_security_id.errors }}
+        </td>
+        <td>
+          {{ form.gender.label_tag }} :<br>
+          {{ form.gender }}
+          {{ form.gender.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.mobile.label_tag }} :<br>
+          {{ form.mobile }}
+          {{ form.mobile.errors }}
+        </td>
+        <td>
+          {{ form.email.label_tag }} :<br>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+  {{ form.addresses.label_tag }}
+  {{ form.addresses }}
+  {{ form.addresses.errors }}
+  </p>
+  <p>
+  {{ form.contact_comment.label_tag }}
+  {{ form.contact_comment }}
+  {{ form.contact_comment.errors }}
+  </p>
+ </form>

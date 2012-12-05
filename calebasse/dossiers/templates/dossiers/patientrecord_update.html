@@ -249,7 +249,8 @@
     </div>
 
     <div id="tabs-3"> <!-- Adresses / Contacts -->
-      <button id="new-address-btn">Nouvelle adresse</button> <button>Nouveau contact</button>
+        <button id="new-address-btn">Nouvelle adresse</button>
+        <button id="new-contact-btn">Nouveau contact</button>
       <div class="frame">
         <h3>16 rue du Clocher</h3>
         <div class="buttons"><button>➖</button> <button>✍</button></div>
@@ -451,41 +452,8 @@
    </dl>
   </div>
 
-  <div id="new-address-dlg" style="display: none;">
-   <form>
-   <table>
-   <tr>
-   <td>
-   <label for="id_numero">Numéro :</label><br/>
-   <input id="id_numero" class="numero" name="numero" size="10"/>
-   </td>
-   <td>
-   <label for="id_rue">Rue :</label><br/>
-   <input id="id_rue" class="rue" name="rue" size="35"/>
-   </td>
-   </tr>
-   <tr>
-   <td>
-   <label for="id_cp">Code postal :</label><br/>
-   <input id="id_cp" class="cp" name="cp" size="10"/>
-   </td>
-   <td>
-   <label for="id_ville">Ville :</label><br/>
-   <input id="id_ville" class="ville" name="ville" size="35"/>
-   </td>
-   </tr>
-   </table>
-   <p>
-   <br/>
-   <label for="id_tel">Téléphone :</label>
-   <input id="id_tel" class="tel" name="tel" size="35"/>
-   <button>+</button>
-   <p>
-   <input type="checkbox">Lieu de vie</input>
-   </p>
-   </form>
-
-  </div>
+  <div id="new-address-dlg" style="display: none;"></div>
+  <div id="new-contact-dlg" style="display: none;"></div>
 
   <div id="add-prise-en-charge-dlg" style="display: none;">
    <div>

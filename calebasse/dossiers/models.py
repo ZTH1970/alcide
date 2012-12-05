@@ -167,6 +167,7 @@ class PatientAddress(models.Model):
 
     phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
     fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
+    place_of_life = models.BooleanField()
     address = models.CharField(max_length=120,
             verbose_name=u"Adresse")
     address_complement = models.CharField(max_length=120,
@@ -177,6 +178,8 @@ class PatientAddress(models.Model):
     zip_code = ZipCodeField(verbose_name=u"Code postal")
     city = models.CharField(max_length=80,
             verbose_name=u"Ville")
+    comment = models.TextField(verbose_name=u"Commentaire",
+            null=True, blank=True)
 
 class PatientContact(People):
     class Meta:
@@ -186,8 +189,9 @@ class PatientContact(People):
     mobile = PhoneNumberField(verbose_name=u"Téléphone mobile", blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     social_security_id = models.CharField(max_length=13, verbose_name=u"Numéro de sécurité sociale")
-    addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses",
-            blank=True, null=True)
+    addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses")
+    contact_comment = models.TextField(verbose_name=u"Commentaire",
+            null=True, blank=True)
 
 
 class PatientRecordManager(models.Manager):

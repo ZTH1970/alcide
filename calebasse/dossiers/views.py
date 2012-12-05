@@ -5,11 +5,9 @@ from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 
 from calebasse import cbv
+from calebasse.dossiers import forms
 from calebasse.agenda.models import Occurrence
-from calebasse.dossiers.models import PatientRecord, Status, FileState, create_patient
-from calebasse.dossiers.forms import (SearchForm, CivilStatusForm, StateForm,
-        PhysiologyForm, FamilyForm, InscriptionForm, GeneralForm,
-        NewPatientRecordForm, TransportFrom, FollowUpForm)
+from calebasse.dossiers.models import PatientRecord, PatientContact, Status, FileState, create_patient
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import Service
 
@@ -33,7 +31,7 @@ def get_last_rdv(patient_record):
     return last_rdv
 
 class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
-    form_class = NewPatientRecordForm
+    form_class = forms.NewPatientRecordForm
     template_name = 'dossiers/patientrecord_new.html'
     success_url = '..'
 
@@ -48,9 +46,17 @@ class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
 
 new_patient_record = NewPatientRecordView.as_view()
 
+class PatientContactView(cbv.FormView):
+    model = PatientContact
+    form_class = forms.PatientContactForm
+    template_name = 'dossiers/patientcontact_form.html'
+    success_url = '..'
+
+new_patient_contact = PatientContactView.as_view()
+
 class StateFormView(cbv.FormView):
     template_name = 'dossiers/state.html'
-    form_class = StateForm
+    form_class = forms.StateForm
     success_url = '..'
 
     def post(self, request, *args, **kwarg):
@@ -71,13 +77,13 @@ state_form = StateFormView.as_view()
 class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
     model = PatientRecord
     forms_classes = {
-            'general': GeneralForm,
-            'id': CivilStatusForm,
-            'physiology': PhysiologyForm,
-            'inscription': InscriptionForm,
-            'family': FamilyForm,
-            'transport': TransportFrom,
-            'followup': FollowUpForm
+            'general': forms.GeneralForm,
+            'id': forms.CivilStatusForm,
+            'physiology': forms.PhysiologyForm,
+            'inscription': forms.InscriptionForm,
+            'family': forms.FamilyForm,
+            'transport': forms.TransportFrom,
+            'followup': forms.FollowUpForm
             }
     template_name = 'dossiers/patientrecord_update.html'
     success_url = './view'
@@ -207,7 +213,7 @@ class PatientRecordsHomepageView(cbv.ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordsHomepageView, self).get_context_data(**kwargs)
-        ctx['search_form'] = SearchForm(data=self.request.GET or None)
+        ctx['search_form'] = forms.SearchForm(data=self.request.GET or None)
         ctx['patient_records'] = []
         ctx['stats'] = {"dossiers": 0,
                 "En_contact": 0,

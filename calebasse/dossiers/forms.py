@@ -5,7 +5,7 @@ from datetime import date
 from django import forms
 from django.forms import ModelForm, Form
 
-from calebasse.dossiers.models import PatientRecord
+from calebasse.dossiers.models import PatientRecord, PatientAddress, PatientContact
 from calebasse.dossiers.states import STATE_CHOICES
 
 from ajax_select import make_ajax_field
@@ -76,4 +76,15 @@ class FollowUpForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('coordinators', 'externaldoctor', 'externalintervener')
+
+class PatientContactForm(ModelForm):
+    class Meta:
+        model = PatientContact
+        widgets = {
+                'contact_comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
+                }
+
+class PatientAddressForm(ModelForm):
+    class Meta:
+        model = PatientAddress
 

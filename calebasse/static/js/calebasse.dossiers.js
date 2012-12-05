@@ -1,37 +1,4 @@
 
-function generic_form_dialog(url, title, id, width, btn_submit_name, redirectToUrl) {
-    $(id).load(url,
-            function () {
-                function onsuccess(response, status, xhr, form) {
-                    var parse = $(response);
-                    if ($('.errorlist', parse).length != 0) {
-                        $(id).html(response);
-                        $(id + ' form').ajaxForm({
-                            success: onsuccess,
-                        });
-                        console.log('error');
-                    } else {
-                        console.log('success');
-                        if (redirectToUrl) {
-                          window.location = redirectToUrl;
-                        }
-                        else {
-                          window.location.reload(true);
-                        }
-                    }
-                }
-                $('form', this).ajaxForm({
-                    success: onsuccess,
-                });
-                $(this).dialog({title: title,
-                    width: width,
-                    buttons: [ { text: "Annuler",
-                        click: function() { $(this).dialog("close"); } },
-                    { text: btn_submit_name,
-                        click: function() { $(id + " form").submit(); } }]});
-            });
-}
-
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
             function () {
@@ -118,22 +85,20 @@ function state_dialog(url, state_title, state_type) {
     });
 
     $('#new-patientrecord').click(function() {
-        generic_form_dialog('new', 'Nouveau dossier',
+        generic_ajaxform_dialog('new', 'Nouveau dossier',
             '#dossier-dlg', '500px', 'Ajouter');
     });
     $('#patientrecord-delete').click(function() {
-        generic_form_dialog('delete', 'Supprimer le dossier',
+        generic_ajaxform_dialog('delete', 'Supprimer le dossier',
             '#delete-record', '500px', 'Oui', '..');
     });
 
     $('#new-address-btn').click(function() {
-      $('#new-address-dlg').dialog({title: 'Nouvelle adresse',
-        width: '500px',
-        buttons: [ { text: "Annuler",
-          click: function() { $(this).dialog("close"); } },
-        { text: "Valider",
-          click: function() { $(this).dialog("close"); } }]}
-        );
+    });
+
+    $('#new-contact-btn').click(function() {
+        generic_ajaxform_dialog('new-contact', 'Ajouter un contact',
+            '#new-contact-dlg', '800px', 'Ajouter');
     });
 
     $('#add-prise-en-charge-btn').click(function() {
