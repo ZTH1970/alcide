@@ -45,8 +45,10 @@ div#wrap {
 	margin: 3em auto;
 	margin-bottom: 0;
 	padding: 15px;
+	border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius:6px;
+	box-shadow: 0 0 4px rgba(0,0,0,0.75);
 	-moz-box-shadow: 0 0 4px rgba(0,0,0,0.75);
 	-webkit-box-shadow: 0 0 4px rgba(0,0,0,0.75);
 	position: relative;
@@ -60,6 +62,7 @@ div#wrap-large {
 {
 	position: absolute;
 	background: #FF7800 url(../images/a8.gif) repeat-x;
+	border-radius: 6px 0 0 6px;
 	-moz-border-radius: 6px 0 0 6px;
 	-webkit-border-radius: 6px 0 0 6px;
 	width: 212px;
@@ -98,6 +101,7 @@ div#wrap-large {
 	background: #5D91E5 url(../images/sky-birds.jpg) no-repeat top right;
 	width: 90%;
 	height: 87px;
+	border-radius: 0 6px 6px 0;
 	-moz-border-radius: 0 6px 6px 0;
 	-webkit-border-radius: 0 6px 6px 0;
 	z-index: 10;
