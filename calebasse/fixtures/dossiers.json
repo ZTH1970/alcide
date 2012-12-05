@@ -319,8 +319,10 @@
       "fax": "04 77 49 28 91", 
       "address_complement": "", 
       "phone": "04 77 49 28 90", 
-      "address": "30 rue de la libert\u00e9", 
-      "zip_code": "4200"
+      "number": "30",
+      "street": "rue de la libert\u00e9", 
+      "zip_code": "4200", 
+      "display_name": "30 rue de la libert\u00e9, 4200 Saint Etienne"
     }
   }, 
   {
@@ -331,8 +333,10 @@
       "fax": "", 
       "address_complement": "", 
       "phone": "04 24 42 52 36", 
-      "address": "42 avenue John Doe", 
-      "zip_code": "42000"
+      "number": "42",
+      "street": "avenue John Doe", 
+      "zip_code": "42000", 
+      "display_name": "42 avenue John Doe, 4200 Saint-\u00c9tienne"
     }
   }, 
   {

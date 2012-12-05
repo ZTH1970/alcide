@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse_lazy
 from calebasse import cbv
 from calebasse.dossiers import forms
 from calebasse.agenda.models import Occurrence
-from calebasse.dossiers.models import PatientRecord, PatientContact, Status, FileState, create_patient
+from calebasse.dossiers.models import (PatientRecord, PatientContact,
+        PatientAddress, Status, FileState, create_patient)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import Service
 
@@ -53,6 +54,15 @@ class PatientContactView(cbv.FormView):
     success_url = '..'
 
 new_patient_contact = PatientContactView.as_view()
+
+class PatientAddressView(cbv.FormView):
+    model = PatientAddress
+    form_class = forms.PatientAddressForm
+    template_name = 'dossiers/patientaddress_form.html'
+    success_url = '..'
+
+
+new_patient_address = PatientAddressView.as_view()
 
 class StateFormView(cbv.FormView):
     template_name = 'dossiers/state.html'
@@ -257,4 +267,5 @@ class PatientRecordDeleteView(DeleteView):
     template_name = 'dossiers/patientrecord_confirm_delete.html'
 
 patientrecord_delete = PatientRecordDeleteView.as_view()
+
 

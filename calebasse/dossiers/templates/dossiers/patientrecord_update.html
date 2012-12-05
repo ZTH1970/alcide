@@ -35,7 +35,7 @@
         <li><label>Lieux de vie :</label>
         <ul>
           {% for address in object.addresses.all %}
-          <li>{{ address.address }}, {{ address.city }} - {{ address.phone }} </li>
+          <li>{{ address.number }} {{ address.street }}, {{ address.city }} - {{ address.phone }} </li>
           {% endfor %}
 
         </ul></li>
@@ -179,24 +179,21 @@
           data-url="../../ressources/parentalauthoritytype/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un type d'autorité parentale"
-          type="button">+</button>
+          title="Ajouter un type d'autorité parentale">+</button>
       {{ forms.family.family_situation.label_tag  }} : {{ forms.family.family_situation }}
       <button type="button"
           class="dialog-button"
           data-url="../../ressources/familysituationtype/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un type de situation familiale"
-          type="button">+</button>
+          title="Ajouter un type de situation familiale">+</button>
       {{ forms.family.child_custody.label_tag  }} : {{ forms.family.child_custody }}
       <button type="button"
           class="dialog-button"
           data-url="../../ressources/parentalcustodytype/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un type de garde parentale"
-          type="button">+</button>
+          title="Ajouter un type de garde parentale">+</button>
       </p>
       <input type="hidden"  name="tab"  value="1">
     </div>
@@ -215,8 +212,7 @@
           data-url="../../ressources/{{ field.name }}/new/ #form-content"
           data-default-button="Ajouter"
           data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un {{ field.label.lower }}"
-          type="button">+</button>
+          title="Ajouter un {{ field.label.lower }}">+</button>
       {% endfor %}
       </p>
       <table>

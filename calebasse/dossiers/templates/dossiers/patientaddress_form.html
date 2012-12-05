@@ -1,0 +1,66 @@
+
+{% load widget_tweaks %}
+
+<form action="{{ request.get_full_path }}" method="post">
+  {% csrf_token %}
+  <table>
+    <tbody>
+      <tr>
+        <p>
+        </p>
+        <td>
+          {{ form.number.label_tag }} :<br>
+          {{ form.number }}
+          {{ form.number.errors }}
+        </td>
+        <td>
+          {{ form.street.label_tag }} :<br>
+          {{ form.street }}
+          {{ form.street.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          {{ form.address_complement.label_tag }} :<br>
+          {{ form.address_complement }}
+          {{ form.address_complement.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.zip_code.label_tag }} :<br>
+          {{ form.zip_code }}
+          {{ form.zip_code.errors }}
+        </td>
+        <td>
+          {{ form.city.label_tag }} :<br>
+          {{ form.city }}
+          {{ form.city.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.phone.label_tag }} :<br>
+          {{ form.phone }}
+          {{ form.phone.errors }}
+        </td>
+        <td>
+          {{ form.fax.label_tag }} :<br>
+          {{ form.fax }}
+          {{ form.fax.errors }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <p>
+  {{ form.place_of_life.label_tag }}
+  {{ form.place_of_life }}
+  {{ form.place_of_life.errors }}
+  </p>
+  <p>
+  {{ form.comment.label_tag }} {{ form.comment }}
+  {{ form.comment.errors }}
+  </p>
+</form>

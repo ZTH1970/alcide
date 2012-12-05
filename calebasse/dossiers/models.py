@@ -162,24 +162,31 @@ class FileState(models.Model):
 
 class PatientAddress(models.Model):
 
-    def __unicode__(self):
-        return self.address + ', ' + self.city
-
+    display_name = models.CharField(max_length=276,
+            verbose_name=u'Adresse complète', editable=False)
     phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
     fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
-    place_of_life = models.BooleanField()
-    address = models.CharField(max_length=120,
-            verbose_name=u"Adresse")
-    address_complement = models.CharField(max_length=120,
-            blank=True,
-            null=True,
-            default=None,
+    place_of_life = models.BooleanField(verbose_name=u"Lieu de vie")
+    number = models.CharField(max_length=12,
+            verbose_name=u"Numéro", blank=True, null=True)
+    street = models.CharField(max_length=100,
+            verbose_name=u"Rue")
+    address_complement = models.CharField(max_length=100,
+            blank=True, null=True,
             verbose_name=u"Complément d'addresse")
     zip_code = ZipCodeField(verbose_name=u"Code postal")
-    city = models.CharField(max_length=80,
+    city = models.CharField(max_length=60,
             verbose_name=u"Ville")
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True)
+
+    def __unicode__(self):
+        return self.display_name
+
+    def save(self, **kwargs):
+        self.display_name = "%s %s, %s %s" % (self.number, self.street,  self.zip_code, self.city)
+        super(PatientAddress, self).save(**kwargs)
+
 
 class PatientContact(People):
     class Meta:

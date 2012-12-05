@@ -78,6 +78,7 @@ class FollowUpForm(ModelForm):
         fields = ('coordinators', 'externaldoctor', 'externalintervener')
 
 class PatientContactForm(ModelForm):
+    addresses = make_ajax_field(PatientContact, 'addresses', 'addresses', True)
     class Meta:
         model = PatientContact
         widgets = {
@@ -87,6 +88,12 @@ class PatientContactForm(ModelForm):
                 }
 
 class PatientAddressForm(ModelForm):
+
     class Meta:
         model = PatientAddress
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 40, 'rows': 3}),
+                'zip_code': forms.TextInput(attrs={'size': 10}),
+                'number': forms.TextInput(attrs={'size': 10}),
+                }
 
