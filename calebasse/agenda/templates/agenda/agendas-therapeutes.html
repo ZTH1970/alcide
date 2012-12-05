@@ -1,0 +1,60 @@
+{% extends "agenda/base.html" %}
+
+{% block body-class %}{{ block.super }} no-left-column{% endblock %}
+
+{% block appbar %}
+<h2>Tous les agendas thérapeutes du service - {{ date|date:"DATE_FORMAT" }}</h2>
+<a href="..">Retourner à l'agenda</a>
+<button id='print-button'>Imprimer</button>
+{% endblock %}
+
+{% block agenda-content %}
+{% for worker_agenda in workers_agenda %}
+{% if worker_agenda.appointments %}
+<div class="worker-agenda">
+<h2>Planning de {{ worker_agenda.worker.display_name }}</h2>
+<h3>{{ date|date:"DATE_FORMAT" }}</h3>
+
+<span class="remarque">Remarque :</span>
+
+<table>
+ <thead>
+  <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Absence</th>
+       <th>Type d'acte</th> <th>Commentaire</th> <th>Thérapeutes</th> </tr>
+ </thead>
+ <tbody>
+   {% for appointment in worker_agenda.appointments %}
+   <tr>
+    <td class="col-time">{{ appointment.begin_hour }}</td>
+    <td class="col-duration">{% if appointment.length %}{{ appointment.length }}min{% endif %}</td>
+    <td class="col-record-id">{% if appointment.patient_record_id %}
+      {{ appointment.patient_record_paper_id }}<br/>
+      ({{ appointment.patient_record_id }}){% endif %}
+    </td>
+    <td> {% if appointment.act_absence %}{{ appointment.act_absence }}{% endif %}</td>
+    <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
+    <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
+    <td> {% for worker_code in appointment.workers_code %}
+          {{ worker_code }}<br/>
+         {% endfor %}
+    </td>
+   </tr>
+   {% endfor %}
+ </tbody>
+</table>
+
+<div class="summary">
+RDV :      {{ worker_agenda.summary.rdv }} —
+Présence : {{ worker_agenda.summary.presence }} —
+Absence :  {{ worker_agenda.summary.absence }} —
+Doubles :  {{ worker_agenda.summary.doubles }} —
+Validés :  {{ worker_agenda.summary.valides }}
+</div>
+
+</div> <!-- .worker-agenda -->
+
+{% endif %}
+{% endfor %}
+
+{% endblock %}
+

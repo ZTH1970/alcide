@@ -1,0 +1,55 @@
+@page {
+  size: landscape;
+}
+
+html {
+  background: none;
+  color: black;
+}
+
+div#header, div#splash, div#footer, div#appbar, div#datesel,
+div#djDebugToolbarHandle {
+  display: none;
+}
+
+div#wrap-large {
+  width: 98%;
+}
+
+div#content {
+  margin: 0;
+  padding: 0;
+}
+
+div#content div.worker-agenda h2 {
+  border: 0;
+  padding: 0;
+  margin-bottom: 1ex;
+  color: black;
+  background: none;
+}
+
+div.worker-agenda {
+  clear: both;
+  page-break-after: always;
+}
+
+div.worker-agenda h3 {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+div.worker-agenda .remarque {
+  display: block;
+  position: relative;
+  left: 70%;
+  top: -3em;
+}
+
+div.summary {
+  float: right;
+  margin-top: 5em;
+  margin-right: 3em;
+}
+

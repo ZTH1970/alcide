@@ -290,3 +290,23 @@ class AutomatedValidationView(TemplateView):
 class UnlockAllView(CreateView):
     pass
 
+
+class AgendasTherapeutesView(AgendaHomepageView):
+
+    template_name = 'agenda/agendas-therapeutes.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
+        for worker_agenda in context.get('workers_agenda', []):
+            patient_appointments = [x for x in worker_agenda['appointments'] if x.patient_record_id]
+            worker_agenda['summary'] = {
+              'rdv': len(patient_appointments),
+              'presence': len([x for x in patient_appointments if x.act_absence is None]),
+              'absence': len([x for x in patient_appointments if x.act_absence is not None]),
+              'doubles': len([x for x in patient_appointments if x.act_type == 'ACT_DOUBLE']),
+              'valides': len([x for x in patient_appointments if x.act_type == 'ACT_VALIDE']),
+            }
+
+        return context
+
+

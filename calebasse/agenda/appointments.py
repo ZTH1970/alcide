@@ -18,10 +18,14 @@ class Appointment(object):
         self.convocation_sent = None
         self.other_services_names = []
         self.patient_record_id = None
+        self.patient_record_paper_id = None
         self.event_id = None
         self.event_type = None
         self.occurrence_id = None
         self.workers_initial = None
+        self.workers_codes = None
+        self.act_state = None
+        self.act_absence = None
         self.weight = 0
         self.act_type = None
         self.__set_time(begin_time)
@@ -58,11 +62,18 @@ class Appointment(object):
             workers = event_act.participants.all()
             self.convocation_sent = event_act.convocation_sent
             self.patient_record_id = event_act.patient.id
+            self.patient_record_paper_id = event_act.patient.paper_id
             self.workers_initial = ""
+            self.workers_code = []
             for worker in workers:
                 self.workers_initial += " " + worker.first_name.upper()[0]
                 self.workers_initial += worker.last_name.upper()[0]
+                self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
             self.act_type = event_act.act_type.name
+            self.act_state = event_act.get_state().state_name
+            if self.act_state not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
+                from calebasse.actes.validation_states import VALIDATION_STATES
+                self.act_absence = VALIDATION_STATES.get(self.act_state)
         else:
             self.event_type = occurrence.event.event_type
 

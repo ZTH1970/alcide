@@ -1077,3 +1077,36 @@ table#schedules {
     font-size: 16px;
     margin-left: 0px;
 }
+
+
+div.worker-agenda h3,
+div.worker-agenda .remarque {
+  display: none;
+}
+
+div.worker-agenda td.col-time,
+div.worker-agenda td.col-duration,
+div.worker-agenda td.col-record-id {
+  text-align: center;
+}
+
+div.worker-agenda table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+div.worker-agenda th {
+  background: #ccc;
+  border: 1px solid #ccc;
+}
+
+div.worker-agenda td {
+  border: 1px solid #ccc;
+  padding: 0.5ex 1ex;
+}
+
+div.summary {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  text-align: right;
+}
