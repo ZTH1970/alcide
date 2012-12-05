@@ -9,6 +9,9 @@
 {% endblock %}
 
 {% block agenda-content %}
+
+<h2 class="print-only">Activité du service - {{ date|date:"DATE_FORMAT" }}</h2>
+
 <table class="main" id="activity">
   <thead>
     <tr> <th>Heure</th> <th>Durée</th> <th>Patient</th> <th>Thérapeute(s)</th> <th>Acte</th> </tr>

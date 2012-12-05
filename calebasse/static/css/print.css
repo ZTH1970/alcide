@@ -14,6 +14,12 @@ div#djDebugToolbarHandle {
 
 div#wrap-large {
   width: 98%;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
 div#content {
@@ -53,3 +59,6 @@ div.summary {
   margin-right: 3em;
 }
 
+.print-only {
+  display: inherit;
+}
