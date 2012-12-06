@@ -1119,3 +1119,7 @@ div.summary {
 span.lastname {
     text-transform: uppercase;
 }
+
+input#date-selector {
+    cursor: pointer;
+}
