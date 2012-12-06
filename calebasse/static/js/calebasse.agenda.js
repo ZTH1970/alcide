@@ -179,6 +179,7 @@ function event_dialog(url, title, width, btn_text) {
           event_dialog("update-event/" + $(this).data('occurrence-id') , 'Modifier un événement', '850px', 'Modifier');
           return false;
       });
+      $('#print-button').click(function() { window.print(); });
   });
 })(window.jQuery)
 
