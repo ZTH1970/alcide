@@ -71,10 +71,10 @@ class TransportFrom(ModelForm):
         model = PatientRecord
         fields = ('transporttype', 'transportcompany')
 
-class PapperIDForm(ModelForm):
+class PaperIDForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('papper_id')
+        fields = ['paper_id']
 
 class FollowUpForm(ModelForm):
     coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)
