@@ -71,6 +71,11 @@ class TransportFrom(ModelForm):
         model = PatientRecord
         fields = ('transporttype', 'transportcompany')
 
+class PapperIDForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('papper_id')
+
 class FollowUpForm(ModelForm):
     coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)
     class Meta:
