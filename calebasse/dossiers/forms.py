@@ -34,7 +34,7 @@ class StateForm(Form):
 class NewPatientRecordForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('first_name', 'last_name')
+        fields = ('last_name', 'first_name')
 
 class GeneralForm(ModelForm):
     class Meta:
