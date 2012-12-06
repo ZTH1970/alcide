@@ -1,6 +1,6 @@
 <div id="close-dlg">
     {% if service_name == "CMPP" and invoicing.status == "open" %}
-        Etes-vous sûr de vouloir clôre la facturation {{ invoicing.seq_id }} débutée le {{ invoicing.start_date }} en date du
+        Êtes-vous sûr de vouloir clôre la facturation {{ invoicing.seq_id }} débutée le {{ invoicing.start_date }} en date du
         <input type="text" value="{{ date|date:"d/m/Y" }}" id="close-date" readonly="readonly" size="10"/>
         <script type="text/javascript">
         $('#close-date').datepicker({showOn: 'button'});

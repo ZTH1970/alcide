@@ -4,5 +4,5 @@
 <p><strong>{{ error_message }}</strong></p>
 {% endif %}
 <form action="{{ request.get_full_path }}" method="post">{% csrf_token %}
-  <p>Etes vous sur de vouloir supprimer le dossier de {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> ?</p>
+  <p>Êtes-vous sûr de vouloir supprimer le dossier de {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> ?</p>
 </form>
