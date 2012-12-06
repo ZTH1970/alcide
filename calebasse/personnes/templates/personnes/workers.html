@@ -99,7 +99,7 @@
 
     {% for object in object_list %}
     <tr data-pk="{{ object.pk }}" id="object-{{ object.pk }}">
-      <td class="last_name">{{ object.last_name }}</td>
+      <td class="last_name"><span class="lastname">{{ object.last_name }}</span></td>
       <td class="first_name">{{ object.first_name }}</td>
       <td class="profession">{{ object.type }}</td>
       <td class="services">

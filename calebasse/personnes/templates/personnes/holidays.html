@@ -16,7 +16,7 @@
   <ul>
     {% for holiday in current_holidays %}
     <li><a href="{% url 'worker_update' service=service pk=holiday.worker.pk %}">
-        {{ holiday.worker.last_name }} {{holiday.worker.first_name }}
+        <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}
         </a>, {{ holiday }}</li>
     {% endfor %}
   </ul>
@@ -40,7 +40,7 @@
             <ul>
               {% for holiday in month.holidays %}
               <li><a href="{% url 'worker_update' service=service pk=holiday.worker.pk %}">
-                  {{ holiday.worker.last_name }} {{holiday.worker.first_name }}
+                  <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}
                   </a>, {{ holiday }}</li>
               {% endfor %}
             </ul>

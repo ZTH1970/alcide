@@ -2,7 +2,7 @@
 {% load url from future %}
 
 {% block appbar %}
-<h2>{{ object.last_name }} {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
+<h2><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
 <a href="..">Retourner aux dossiers</a>
 {% if not object.act_set.all %}
 <button id="patientrecord-delete">Supprimer</button>
@@ -29,7 +29,7 @@
       <ul>
           <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }} <button>✍</button></li>
         <li><label>N° dossier informatique :</label>{{ object.id }}</li>
-        <li><label>Nom :</label> {{ object.last_name }}</li>
+        <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
         <li><label>Prénom :</label> {{ object.first_name }}</li>
         <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
         <li><label>Lieux de vie :</label>
@@ -52,7 +52,7 @@
           {% if last_rdv %}
           {{ last_rdv.start_datetime|date:"d/m/Y" }} -
           {% for participant in last_rdv.participants %}
-          {{ participant.last_name }} -
+          <span class="lastname">{{ participant.last_name }}</span> -
           {% endfor %}
           {{ last_rdv.act_type }}
           {% endif %}
@@ -105,11 +105,11 @@
       {% endfor %}
       </p>
       <p>
-      {{ forms.id.last_name.label_tag }} : {{ forms.id.last_name }}
+      {{ forms.id.last_name.label_tag }} : <span class="lastname">{{ forms.id.last_name }}</span>
       {{ forms.id.first_name.label_tag }} : {{ forms.id.first_name }}
       </p>
       <p>
-      {{ forms.id.birthdate.label_tag }} : {{ forms.id.birthdate }}
+      {{ forms.id.birthdate.label_tag }} : {{ forms.id.birthdate }}
       {{ forms.id.gender.label_tag }} : {{ forms.id.gender }}
       {{ forms.id.nationality.label_tag }} : {{ forms.id.nationality }}
       </p>

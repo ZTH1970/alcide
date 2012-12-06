@@ -77,7 +77,7 @@
       <tr style="display: table-row;" class="pr-line {{ patient_record.state_class }}" data-link="{{ patient_record.object.id }}/view">
           <td>{{ patient_record.object.paper_id|default_if_none:"" }}</td>
           <td>{{ patient_record.object.id }}</td>
-          <td>{{ patient_record.object.last_name }}</td>
+          <td><span class="lastname">{{ patient_record.object.last_name }}</span></td>
           <td>{{ patient_record.object.first_name }}</td>
           <td>{{ patient_record.object.birthdate|date:"d/m/Y" }}</td>
           <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>
@@ -86,7 +86,7 @@
               {% if patient_record.last_rdv %}
               {{ patient_record.last_rdv.start_datetime|date:"d/m/Y h:i" }}<br>
               {% for participant in patient_record.last_rdv.participants %}
-              {{ participant.last_name }} -
+              <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.last_rdv.act_type }}
               {% endif %}
@@ -95,7 +95,7 @@
               {% if patient_record.next_rdv %}
               {{ patient_record.next_rdv.start_datetime|date:"d/m/Y h:i" }}<br>
               {% for participant in patient_record.next_rdv.participants %}
-              {{ participant.last_name }} -
+              <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.next_rdv.act_type }}
               {% endif %}

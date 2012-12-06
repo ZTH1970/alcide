@@ -30,9 +30,9 @@
     <div id="actes">
     {% for acte, last_status, last_status_name in actes %}
     <div class="frame acte" id="acte-frame-{{ acte.id }}">
-      <h3>{{ acte.date }} - <strong>{{ acte.patient.last_name }} {{ acte.patient.first_name }}</strong>
+      <h3>{{ acte.date }} - <strong><span class="lastname">{{ acte.patient.last_name }}</span> {{ acte.patient.first_name }}</strong>
           {% if acte.patient.paper_id %} ({{ acte.patient.paper_id }}){% endif %}
-          {% if acte.doctors %}{% for doctor in acte.doctors.all %} - {{ doctor.last_name }} {{ doctor.first_name }}{% endfor %}{% endif %} -
+          {% if acte.doctors %}{% for doctor in acte.doctors.all %} - <span class="lastname">{{ doctor.last_name }}</span> {{ doctor.first_name }}{% endfor %}{% endif %} -
           <strong>{{ acte.act_type }}</strong>
           {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
       </h3>

@@ -1078,6 +1078,7 @@ table#schedules {
     margin-left: 0px;
 }
 
+<<<<<<< HEAD
 
 div.worker-agenda h3,
 div.worker-agenda .remarque {
@@ -1113,4 +1114,8 @@ div.summary {
 
 .print-only {
   display: none;
+}
+
+span.lastname {
+    text-transform: uppercase;
 }
