@@ -247,50 +247,28 @@
     <div id="tabs-3"> <!-- Adresses / Contacts -->
         <button id="new-address-btn">Nouvelle adresse</button>
         <button id="new-contact-btn">Nouveau contact</button>
+      {% for address in object.addresses.all %}
       <div class="frame">
-        <h3>16 rue du Clocher</h3>
+          <h3>{{ address.number }} {{ address.street }}</h3>
         <div class="buttons"><button>➖</button> <button>✍</button></div>
         <div class="right">
           <input type="checkbox" checked>Lieu de vie</input>
         </div>
-        <p>13004 Marseille</p>
-        <p>04 91 12 34 56</p>
-        <div class="contact">
-          <h4>Mme Marie Carmarie</h4>
+        <p>{{ address.zip_code }} {{ address.city }}</p>
+        <p>{{ address.phone }}</p>
+        {% for contact in address.patientcontact_set.all  %}
+        <div class="contact{% if contact.id == object.id %} patient{% endif %}">
+            <h4>{% if contact.gender == 1 %}M.{% else %}Mme{% endif %}
+                {{ contact.display_name }} {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
           <div class="right">
             <input type="radio" name="radio-assure" checked="checked">Assuré</input>
             <button>➖</button> <button>✍</button>
           </div>
-          <p>2 70 12 34 567 890 12</p>
-          <p>06 12 34 56 78</p>
-        </div>
-        <div class="contact patient">
-          <h4>M. Guillaume Bouclier (PATIENT)</h4>
-          <div class="right">
-            <input type="radio" name="radio-assure" >Assuré</input>
-            <button>➖</button> <button>✍</button>
-          </div>
-          <p>1 04 12 34 567 890 12</p>
-        </div>
+          <p>{{ contact.social_security_id }}</p>
+          <p>{{ contact.mobile }}</p>
       </div>
-
-      <div class="frame">
-        <h3>2 rue du Château</h3>
-        <div class="buttons"><button>➖</button> <button>✍</button></div>
-        <div class="right">
-          <input type="checkbox">Lieu de vie</input>
-        </div>
-        <p>42000 Saint-Etienne</p>
-        <p>04 77 12 34 56</p>
-        <div class="contact">
-          <h4>M. John Leponge</h4>
-          <div class="right">
-            <input type="radio" name="radio-assure">Assuré</input>
-            <button>➖</button> <button>✍</button>
-          </div>
-          <p>1 70 12 34 567 890 12</p>
-        </div>
-      </div>
+      {% endfor %}
+      {% endfor %}
 
     </div>
 
