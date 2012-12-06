@@ -130,7 +130,6 @@ function state_dialog(url, state_title, state_type) {
     var tabid = $.url($(location).attr('href')).fparam('tab');
     if (tabid) {
         $tabs.tabs('select',  parseInt(tabid));
-        location.hash = '';
     }
   });
 })(window.jQuery)

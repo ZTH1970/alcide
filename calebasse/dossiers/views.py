@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.views.generic.edit import DeleteView, FormMixin
 
 from calebasse import cbv
 from calebasse.dossiers import forms
@@ -46,27 +47,35 @@ class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
 
 new_patient_record = NewPatientRecordView.as_view()
 
-class PatientContactView(cbv.FormView):
+class NewPatientContactView(cbv.CreateView):
     model = PatientContact
     form_class = forms.PatientContactForm
     template_name = 'dossiers/patientcontact_form.html'
-    success_url = '..'
+    success_url = './view#tab=2'
 
     def get(self, request, *args, **kwargs):
         if kwargs.has_key('patientrecord_id'):
             request.session['patientrecord_id'] = kwargs['patientrecord_id']
-        return super(PatientContactView, self).get(request, *args, **kwargs)
+        return super(NewPatientContactView, self).get(request, *args, **kwargs)
 
-new_patient_contact = PatientContactView.as_view()
+new_patient_contact = NewPatientContactView.as_view()
 
-class PatientAddressView(cbv.FormView):
+class NewPatientAddressView(cbv.CreateView):
     model = PatientAddress
     form_class = forms.PatientAddressForm
     template_name = 'dossiers/patientaddress_form.html'
-    success_url = '..'
+    success_url = './view#tab=2'
 
+    def get_success_url(self):
+        return self.success_url
 
-new_patient_address = PatientAddressView.as_view()
+    def form_valid(self, form):
+        patientaddress = form.save()
+        patientrecord = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        patientrecord.addresses.add(patientaddress)
+        return HttpResponseRedirect(self.get_success_url())
+
+new_patient_address = NewPatientAddressView.as_view()
 
 class StateFormView(cbv.FormView):
     template_name = 'dossiers/state.html'

@@ -34,7 +34,7 @@ class People(BaseModelMixin, models.Model):
     display_name = models.CharField(max_length=256,
             verbose_name=u'Nom complet', editable=False)
     gender = models.IntegerField(verbose_name=u"Genre", choices=GENDERS,
-            max_length=1, default=0, blank=True)
+            max_length=1, blank=True, null=True)
 
     def save(self, **kwargs):
         self.display_name = self.first_name + ' ' + self.last_name
