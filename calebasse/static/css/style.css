@@ -1123,3 +1123,7 @@ span.lastname {
 input#date-selector {
     cursor: pointer;
 }
+
+.ui-datepicker {
+    z-index: 9999 !important;
+}
