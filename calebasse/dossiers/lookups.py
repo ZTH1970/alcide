@@ -1,6 +1,6 @@
 
 from ajax_select import LookupChannel
-from calebasse.dossiers.models import PatientRecord
+from calebasse.dossiers.models import PatientRecord, PatientAddress
 
 class PatientRecordLookup(LookupChannel):
 
@@ -14,3 +14,14 @@ class PatientRecordLookup(LookupChannel):
             qs = qs.filter(service__name=service)
         return qs
 
+
+class PatientAddressLookup(LookupChannel):
+
+    model = PatientAddress
+    search_field = 'display_name'
+
+    def get_query(self, q, request):
+        qs = super(PatientAddressLookup, self).get_query(q, request)
+        if request.session.has_key('patientrecord_id'):
+            qs = qs.filter(patientcontact__id=request.session['patientrecord_id'])
+        return qs

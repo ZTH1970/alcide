@@ -1,3 +1,4 @@
+#import ipdb
 
 from datetime import datetime
 
@@ -52,6 +53,11 @@ class PatientContactView(cbv.FormView):
     form_class = forms.PatientContactForm
     template_name = 'dossiers/patientcontact_form.html'
     success_url = '..'
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(PatientContactView, self).get(request, *args, **kwargs)
 
 new_patient_contact = PatientContactView.as_view()
 
