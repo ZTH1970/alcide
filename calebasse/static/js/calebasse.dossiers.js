@@ -32,6 +32,10 @@ function state_dialog(url, state_title, state_type) {
   $(function() {
     var $tabs = $('#tabs').tabs();
 
+    $('.atabs').click(function() {
+        location.hash = 'tab=' + $(this).data('id');
+    });
+
     $('#btn_all_state').click(function() {
       $('.checkbox_state').attr('checked', true);
     });
@@ -94,13 +98,22 @@ function state_dialog(url, state_title, state_type) {
     });
 
     $('#new-address-btn').click(function() {
-        generic_ajaxform_dialog('new-address', 'Ajouter une adresse',
+        generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
             '#new-address-dlg', '600px', 'Ajouter');
     });
 
     $('#new-contact-btn').click(function() {
-        generic_ajaxform_dialog('new-contact', 'Ajouter un contact',
+        generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
             '#new-contact-dlg', '750px', 'Ajouter');
+    });
+
+    $('.del-address').click(function() {
+        generic_ajaxform_dialog('address/' + $(this).data('id') + '/del', 'Supprimer une addresse',
+            '#del-address-dlg', '500px', 'Supprimer');
+    });
+    $('.del-contact').click(function() {
+        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del', 'Supprimer un contact',
+            '#del-contact-dlg', '500px', 'Supprimer');
     });
 
     $('#add-prise-en-charge-btn').click(function() {

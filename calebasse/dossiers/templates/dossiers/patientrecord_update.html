@@ -12,15 +12,19 @@
 {% block content %}
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Général</a></li>
-    <li><a href="#tabs-2">Fiche administrative</a></li>
-    <li><a href="#tabs-3">Adresses / contacts</a></li>
-    {% if object.service.name == "CMPP" %}<li><a href="#tabs-4">Prise en charge</a></li>{% endif %}
-    {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}<li><a href="#tabs-4">Notifications</a></li>{% endif %}
-    <li><a href="#tabs-5">Actes passés</a>
-    <li><a href="#tabs-6">Prochains rendez-vous</a>
-    <li><a href="#tabs-7">Socialisation</a>
-    <li><a href="#tabs-8">Données à caractère médical</a>
+    <li><a data-id="0" class="atabs" href="#tabs-1">Général</a></li>
+    <li><a data-id="1" class="atabs" href="#tabs-2">Fiche administrative</a></li>
+    <li><a data-id="2" class="atabs" href="#tabs-3">Adresses / contacts</a></li>
+    {% if object.service.name == "CMPP" %}
+    <li><a data-id="3"  class="atabs" href="#tabs-4">Prise en charge</a></li>
+    {% endif %}
+    {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
+    <li><a data-id="3" class="atabs" href="#tabs-4">Notifications</a></li>
+    {% endif %}
+    <li><a data-id="4" class="atabs" href="#tabs-5">Actes passés</a>
+    <li><a data-id="5" class="atabs" href="#tabs-6">Prochains rendez-vous</a>
+    <li><a data-id="6" class="atabs" href="#tabs-7">Socialisation</a>
+    <li><a data-id="7" class="atabs" href="#tabs-8">Données à caractère médical</a>
   </ul>
   <div id="tabs-1"> <!-- Général -->
     <form method="post" id="general-form" class="patientrecordform">
@@ -251,7 +255,7 @@
         {% for address in object.addresses.all %}
         <div class="frame">
             <h3>{{ address.number }} {{ address.street }}</h3>
-            <div class="buttons"><button>➖</button> <button>✍</button></div>
+            <div class="buttons"><button data-id="{{ address.id }}" class="del-address">➖</button> <button>✍</button></div>
             <div class="right">
                 <input type="checkbox" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
             </div>
@@ -259,11 +263,11 @@
             <p>{{ address.phone }}</p>
             {% for contact in address.patientcontact_set.all  %}
             <div class="contact{% if contact.id == object.id %} patient{% endif %}">
-                <h4>{% if contact.gender == 1 %}M.{% else %}Mme{% endif %}
+                <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
                     {{ contact.display_name }} {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
                 <div class="right">
                     <input type="radio" name="radio-assure" checked="checked">Assuré</input>
-                    <button>➖</button> <button>✍</button>
+                    <button data-id="{{ contact.id }}" class="del-contact">➖</button> <button>✍</button>
                 </div>
                 <p>{{ contact.social_security_id }}</p>
                 <p>{{ contact.mobile }}</p>
@@ -427,7 +431,9 @@
   </div>
 
   <div id="new-address-dlg" style="display: none;"></div>
+  <div id="del-address-dlg" style="display: none;"></div>
   <div id="new-contact-dlg" style="display: none;"></div>
+  <div id="del-contact-dlg" style="display: none;"></div>
 
   <div id="add-prise-en-charge-dlg" style="display: none;">
    <div>

@@ -50,8 +50,8 @@ new_patient_record = NewPatientRecordView.as_view()
 class NewPatientContactView(cbv.CreateView):
     model = PatientContact
     form_class = forms.PatientContactForm
-    template_name = 'dossiers/patientcontact_form.html'
-    success_url = './view#tab=2'
+    template_name = 'dossiers/patientcontact_new.html'
+    success_url = '../view#tab=2'
 
     def get(self, request, *args, **kwargs):
         if kwargs.has_key('patientrecord_id'):
@@ -60,11 +60,19 @@ class NewPatientContactView(cbv.CreateView):
 
 new_patient_contact = NewPatientContactView.as_view()
 
+class DeletePatientContactView(cbv.DeleteView):
+    model = PatientContact
+    form_class = forms.PatientContactForm
+    template_name = 'dossiers/patientcontact_confirm_delete.html'
+    success_url = '../../view#tab=2'
+
+delete_patient_contact = DeletePatientContactView.as_view()
+
 class NewPatientAddressView(cbv.CreateView):
     model = PatientAddress
     form_class = forms.PatientAddressForm
-    template_name = 'dossiers/patientaddress_form.html'
-    success_url = './view#tab=2'
+    template_name = 'dossiers/patientaddress_new.html'
+    success_url = '../view#tab=2'
 
     def get_success_url(self):
         return self.success_url
@@ -77,10 +85,18 @@ class NewPatientAddressView(cbv.CreateView):
 
 new_patient_address = NewPatientAddressView.as_view()
 
+class DeletePatientAddressView(cbv.DeleteView):
+    model = PatientAddress
+    form_class = forms.PatientAddressForm
+    template_name = 'dossiers/patientaddress_confirm_delete.html'
+    success_url = '../../view#tab=2'
+
+delete_patient_address = DeletePatientAddressView.as_view()
+
 class StateFormView(cbv.FormView):
     template_name = 'dossiers/state.html'
     form_class = forms.StateForm
-    success_url = '..'
+    success_url = './view#tab=0'
 
     def post(self, request, *args, **kwarg):
         self.user = request.user
