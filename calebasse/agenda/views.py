@@ -17,7 +17,7 @@ from calebasse.actes.validation import get_acts_of_the_day
 from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation,
-    unlock_all_acts_of_the_day)
+    unlock_all_acts_of_the_day, are_all_acts_of_the_day_locked)
 from calebasse import cbv
 
 from forms import (NewAppointmentForm, NewEventForm,
@@ -309,4 +309,20 @@ class AgendasTherapeutesView(AgendaHomepageView):
 
         return context
 
+class JoursNonVerouillesView(TemplateView):
 
+    template_name = 'agenda/days-not-locked.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(JoursNonVerouillesView, self).get_context_data(**kwargs)
+        acts = EventAct.objects.filter(is_billed=False,
+            patient__service=self.service).order_by('date')
+        days_not_locked = []
+        for act in acts:
+            current_day = datetime.datetime(act.date.year, act.date.month, act.date.day)
+            if not current_day in days_not_locked:
+                locked = are_all_acts_of_the_day_locked(current_day, self.service)
+                if not locked:
+                    days_not_locked.append(current_day)
+        context['days_not_locked'] = days_not_locked
+        return context

@@ -5,7 +5,7 @@ from calebasse.cbv import TemplateView
 from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         NewEventView, AgendaServiceActivityView, UpdateAppointmentView,
         UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
-        UnlockAllView, AgendasTherapeutesView)
+        UnlockAllView, AgendasTherapeutesView, JoursNonVerouillesView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -46,6 +46,10 @@ agenda_patterns = patterns('',
                 AgendasTherapeutesView.as_view(
                     template_name='agenda/agendas-therapeutes.html'),
                 name='agendas-therapeutes'),
+            url(r'^jours-non-verouilles/$',
+                JoursNonVerouillesView.as_view(
+                    template_name='agenda/days-not-locked.html'),
+                name='days-not-locked'),
             )
 
 urlpatterns = patterns('',

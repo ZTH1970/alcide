@@ -1,0 +1,19 @@
+{% extends "agenda/base.html" %}
+{% load url from future %}
+
+{% block body-class %}{{ block.super }} no-left-column{% endblock %}
+
+{% block appbar %}
+<h2>Jours non vérouillés</h2>
+    <a href="..">Retourner à l'agenda</a>
+{% endblock %}
+
+{% block content %}
+{% if days_not_locked %}
+<ul>
+{% for day in days_not_locked %}
+    <li><a href="../../{{ day.year }}-{{ day.month }}-{{ day.day }}/validation-des-actes">{{ day.day }}/{{ day.month }}/{{ day.year }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

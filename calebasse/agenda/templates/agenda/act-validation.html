@@ -16,6 +16,12 @@
     {% endif %}
 {% endblock %}
 
+{% block beforecontent %}
+    <div id="extra-top-links">
+     <a href="../jours-non-verouilles">Jours non vérouillés</a>
+    </div>
+{% endblock %}
+
 {% block agenda-content %}
     {% if validation_msg %}
     <ul>
