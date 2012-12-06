@@ -31,6 +31,7 @@
         <li><label>N° dossier informatique :</label>{{ object.id }}</li>
         <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
         <li><label>Prénom :</label> {{ object.first_name }}</li>
+        <li><label>Genre :</label> {{ object.get_gender_display }}</li>
         <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
         <li><label>Lieux de vie :</label>
         <ul>
