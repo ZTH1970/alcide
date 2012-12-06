@@ -1,5 +1,9 @@
 {% extends "calebasse/base.html" %}
 
+{% block extrascripts %}
+<script src="{{ STATIC_URL }}js/calebasse.reset-button.js"></script>
+{% endblock %}
+
 {% block appbar %}
 <h2>Gestion des personnes — Accès</h2>
 <a href="../">Retourner à la gestion des personnes</a>
@@ -13,12 +17,16 @@
     <h3>Rechercher dans les comptes</h3>
     <form>
       <label>Identifiant : 
-        <div class="text-input-wrapper">
-          <input type="text"/ name='identifier' value="{{ request.GET.identifier }}">
-          <span class="clear">&#x2716;</span>
-        </div>
+        <input type="text"/ name='identifier' value="{{ request.GET.identifier }}">
       </label>
-      <button>Rechercher</button>
+      {% if request.GET %}
+      <div class="search-reset">
+        <button id="search">Rechercher</button>
+        <button id="reset"><img src="{{ STATIC_URL }}/images/edit-clear-all-symbolic.png" alt="Réinitialiser"/></button>
+      </div>
+      {% else %}
+        <button id="search">Rechercher</button>
+      {% endif %}
     </form>
   </div>
 </div>
