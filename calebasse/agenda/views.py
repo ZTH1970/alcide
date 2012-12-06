@@ -43,7 +43,7 @@ class AgendaHomepageView(TemplateView):
 
         context['workers_types'] = []
         context['workers_agenda'] = []
-        context['disponnibility'] = {}
+        context['disponibility'] = {}
         workers = []
         for worker_type in WorkerType.objects.all():
             workers_type = Worker.objects.for_service(self.service, worker_type)
