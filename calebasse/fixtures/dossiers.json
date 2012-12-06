@@ -315,193 +315,332 @@
     "pk": 1, 
     "model": "dossiers.patientaddress", 
     "fields": {
+      "comment": null, 
       "city": "Saint Etienne", 
       "fax": "04 77 49 28 91", 
+      "display_name": "30 rue de la libert\u00e9, 4200 Saint Etienne", 
       "address_complement": "", 
+      "number": "30", 
       "phone": "04 77 49 28 90", 
-      "number": "30",
       "street": "rue de la libert\u00e9", 
-      "zip_code": "4200", 
-      "display_name": "30 rue de la libert\u00e9, 4200 Saint Etienne"
+      "place_of_life": false, 
+      "zip_code": "4200"
     }
   }, 
   {
     "pk": 2, 
     "model": "dossiers.patientaddress", 
     "fields": {
+      "comment": null, 
       "city": "Saint-\u00c9tienne", 
       "fax": "", 
+      "display_name": "42 avenue John Doe, 4200 Saint-\u00c9tienne", 
       "address_complement": "", 
+      "number": "42", 
       "phone": "04 24 42 52 36", 
-      "number": "42",
       "street": "avenue John Doe", 
-      "zip_code": "42000", 
-      "display_name": "42 avenue John Doe, 4200 Saint-\u00c9tienne"
+      "place_of_life": false, 
+      "zip_code": "42000"
     }
   }, 
   {
     "pk": 15, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 17, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 10, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0642121674", 
-      "social_security_id": "2420910236578", 
-      "email": "jeanne.darc@gmail.com", 
+      "healt_fund": null, 
       "addresses": [
         1
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0642121674", 
+      "healt_center": null, 
+      "social_security_id": "2420910236578", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "jeanne.darc@gmail.com"
     }
   }, 
   {
     "pk": 8, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0654123654", 
-      "social_security_id": "1424868464768", 
-      "email": "john.doe@gmail.com", 
+      "healt_fund": null, 
       "addresses": [
         1
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0654123654", 
+      "healt_center": null, 
+      "social_security_id": "1424868464768", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "john.doe@gmail.com"
     }
   }, 
   {
     "pk": 14, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0654123654", 
-      "social_security_id": "1544868464768", 
-      "email": "jean.dupond@gmail.com", 
+      "healt_fund": null, 
       "addresses": [
         2
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0654123654", 
+      "healt_center": null, 
+      "social_security_id": "1544868464768", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "jean.dupond@gmail.com"
     }
   }, 
   {
     "pk": 22, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 12, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0644452130", 
-      "social_security_id": "1841853654541", 
-      "email": "guillaume.bouclier@yahoo.com", 
+      "healt_fund": null, 
       "addresses": [
         1
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0644452130", 
+      "healt_center": null, 
+      "social_security_id": "1841853654541", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "guillaume.bouclier@yahoo.com"
     }
   }, 
   {
     "pk": 13, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0608451237", 
-      "social_security_id": "1006895123654", 
-      "email": "andre.hendrickx@toto.com", 
+      "healt_fund": null, 
       "addresses": [
         1
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0608451237", 
+      "healt_center": null, 
+      "social_security_id": "1006895123654", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "andre.hendrickx@toto.com"
     }
   }, 
   {
     "pk": 9, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0654123654", 
-      "social_security_id": "1180549588157", 
-      "email": "jack.itchan@hotmail.com", 
+      "healt_fund": null, 
       "addresses": [
         1
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0654123654", 
+      "healt_center": null, 
+      "social_security_id": "1180549588157", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "jack.itchan@hotmail.com"
     }
   }, 
   {
     "pk": 19, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 20, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 21, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 18, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
     "pk": 11, 
     "model": "dossiers.patientcontact", 
     "fields": {
-      "mobile": "0728452130", 
-      "social_security_id": "2540913236578", 
-      "email": "claudia.schiffer@yahoo.com", 
+      "healt_fund": null, 
       "addresses": [
         1, 
         2
-      ]
+      ], 
+      "thirdparty_payer": false, 
+      "mobile": "0728452130", 
+      "healt_center": null, 
+      "social_security_id": "2540913236578", 
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": "claudia.schiffer@yahoo.com"
     }
   }, 
   {
     "pk": 16, 
     "model": "dossiers.patientcontact", 
     "fields": {
+      "healt_fund": null, 
+      "addresses": [], 
+      "thirdparty_payer": false, 
       "mobile": null, 
+      "healt_center": null, 
       "social_security_id": "", 
-      "email": null, 
-      "addresses": []
+      "birthdate": null, 
+      "end_rights": null, 
+      "contact_comment": null, 
+      "twinning_rank": null, 
+      "key": null, 
+      "begin_rights": null, 
+      "email": null
     }
   }, 
   {
@@ -509,36 +648,34 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         1
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "1024", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 1, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 1, 
-      "contacts": [
-        1, 
-        2, 
-        4, 
-        3
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "1980-10-31", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -546,36 +683,34 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         1
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "45789", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 7, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 1, 
-      "contacts": [
-        1, 
-        2, 
-        4, 
-        3
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "1988-12-30", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -583,33 +718,34 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         1
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "4243", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 3, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 1, 
-      "contacts": [
-        2
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "1995-11-21", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -617,34 +753,35 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         1, 
         2
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "424243L", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 4, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 1, 
-      "contacts": [
-        2
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "1998-01-21", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -652,34 +789,34 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         1
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "424546", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 4, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 1, 
-      "contacts": [
-        7, 
-        6
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "1984-11-21", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -687,33 +824,34 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         1
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "425874", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 6, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 3, 
-      "contacts": [
-        5
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": 1, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "2000-11-21", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -721,33 +859,34 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [
         2
       ], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": "123456", 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 8, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 3, 
-      "contacts": [
-        2
-      ], 
+      "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7ais", 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-11-28T11:02:06.292", 
       "child_custody": null, 
-      "birthdate": "1989-11-28", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -755,29 +894,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": "test de commentaire", 
+      "transporttype": null, 
       "addresses": [], 
       "weight": 45, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": 150, 
       "last_state": 10, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 3, 
       "contacts": [], 
       "nb_children_family": 5, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "FR", 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": 3, 
       "created": "2012-12-02T16:40:53.544", 
       "child_custody": null, 
-      "birthdate": "2000-10-25", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -785,29 +927,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 11, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 2, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:41:13.098", 
       "child_custody": null, 
-      "birthdate": null, 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -815,29 +960,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 13, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 2, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7aise", 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:41:24.918", 
       "child_custody": null, 
-      "birthdate": "1900-01-01", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -845,29 +993,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": "Test", 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 15, 
+      "externaldoctor": null, 
       "pause": true, 
       "pregnancy_term": null, 
       "service": 2, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:42:31.043", 
       "child_custody": null, 
-      "birthdate": null, 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -875,29 +1026,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 18, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 2, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:43:43.853", 
       "child_custody": null, 
-      "birthdate": null, 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -905,29 +1059,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": "Chanteur", 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 21, 
+      "externaldoctor": null, 
       "pause": true, 
       "pregnancy_term": null, 
       "service": 3, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7aise", 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:48:39.378", 
       "child_custody": null, 
-      "birthdate": null, 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -935,29 +1092,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": null, 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 22, 
+      "externaldoctor": null, 
       "pause": false, 
       "pregnancy_term": null, 
       "service": 4, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": null, 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:52:43.130", 
       "child_custody": null, 
-      "birthdate": null, 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }, 
   {
@@ -965,29 +1125,32 @@
     "model": "dossiers.patientrecord", 
     "fields": {
       "comment": "", 
+      "transporttype": null, 
       "addresses": [], 
       "weight": null, 
       "creator": 1, 
-      "analysemotive": null, 
-      "twinning_rank": null, 
       "paper_id": null, 
+      "familymotive": null, 
+      "externalintervener": null, 
       "size": null, 
       "last_state": 24, 
+      "externaldoctor": null, 
       "pause": true, 
       "pregnancy_term": null, 
       "service": 4, 
       "contacts": [], 
       "nb_children_family": null, 
-      "family_situation": null, 
-      "familymotive": null, 
+      "coordinators": [], 
+      "transportcompany": null, 
+      "advicegiver": null, 
       "nationality": "Fran\u00e7aise", 
       "parental_authority": null, 
       "school": null, 
       "sibship_place": null, 
       "created": "2012-12-02T22:53:16.302", 
       "child_custody": null, 
-      "birthdate": "1990-10-12", 
-      "advicegiver": null
+      "family_situation": null, 
+      "analysemotive": null
     }
   }
 ]
