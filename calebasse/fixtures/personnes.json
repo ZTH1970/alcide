@@ -100,9 +100,9 @@
     "model": "personnes.people", 
     "fields": {
       "gender": 1, 
-      "first_name": "Bouclier", 
-      "last_name": "Guillaume", 
-      "display_name": "Bouclier Guillaume"
+      "first_name": "Guillaume", 
+      "last_name": "Bouclier", 
+      "display_name": "Guillaume Bouclier"
     }
   }, 
   {
