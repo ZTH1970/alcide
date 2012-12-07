@@ -1,0 +1,71 @@
+<div class="left">
+  <ul>
+    <li>
+    <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }}
+    <button id="update-paper-id-btn">✍</button>
+    </li>
+    <li><label>N° dossier informatique :</label>{{ object.id }}</li>
+    <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
+    <li><label>Prénom :</label> {{ object.first_name }}</li>
+    <li><label>Genre :</label> {{ object.get_gender_display }}</li>
+    <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
+    <li><label>Lieux de vie :</label>
+    <ul>
+      {% for address in object.addresses.all %}
+      <li>{{ address.number }} {{ address.street }}, {{ address.city }} - {{ address.phone }} </li>
+      {% endfor %}
+
+    </ul></li>
+    <li><label>Date d'inscription :</label> {{ object.created|date:"d/m/Y" }}</li>
+    <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"" }}</li>
+    <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
+      <li><label>Commentaire :</label><br/>
+      {{ forms.general.comment }}
+      <button id="btn-maj">Mettre à jour</button></li>
+    </ul>
+  </div>
+  <div class="right">
+    <ul>
+      <li><label>Dernier acte :</label>
+      {% if last_rdv %}
+      {{ last_rdv.start_datetime|date:"d/m/Y" }} -
+      {% for participant in last_rdv.participants %}
+      <span class="lastname">{{ participant.last_name }}</span> -
+      {% endfor %}
+      {{ last_rdv.act_type }}
+      {% endif %}
+      </li>
+      <li><label>Prochain rendez-vous :</label>
+      {% if next_rdv %}
+      {{ next_rdv.start_datetime|date:"d/m/Y" }} -
+      {% for participant in next_rdv.participants %}
+      {{ participant.next_name }} -
+      {% endfor %}
+      {{ next_rdv.act_type }}
+      {% endif %}
+      </li>
+    </ul>
+    <div class="etat">
+      <h4>État courant du dossier :  {{ current_state.status.name.lower }}</h4>
+      <p>depuis le : {{ current_state.date_selected|date:"d/m/Y" }}</p>
+      <p><label>Commentaire :</label>{{ object.last_state.comment|default_if_none:"" }}</p>
+      {% for state in status %}
+      <button type="button" id="{{ state.0 }}">{{ state.1 }}</button>
+      {% endfor %}
+      <button type="button" id="patientrecord-history">Historique</button><br/>
+      <hr/>
+      <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
+      {{ forms.general.pause.label_tag }} : {{ forms.general.pause }}
+      <!-- 3/6 diagnostics -->
+    </div>
+  </form>
+
+  <!-- <div class="notifs">
+    <h4>Notifications</h4>
+    <ul>
+      <li>Dossier en pause facturation <button>Sortir</button></li>
+    </ul>
+  </div> -->
+
+</div>
+<br style="clear:both"/>

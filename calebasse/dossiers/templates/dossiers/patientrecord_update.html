@@ -27,229 +27,12 @@
     <li><a data-id="7" class="atabs" href="#tabs-8">Données à caractère médical</a>
   </ul>
   <div id="tabs-1"> <!-- Général -->
-    <div class="left">
-      <ul>
-        <li>
-          <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }}
-          <button id="update-paper-id-btn">✍</button>
-        </li>
-        <li><label>N° dossier informatique :</label>{{ object.id }}</li>
-        <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
-        <li><label>Prénom :</label> {{ object.first_name }}</li>
-        <li><label>Genre :</label> {{ object.get_gender_display }}</li>
-        <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
-        <li><label>Lieux de vie :</label>
-        <ul>
-          {% for address in object.addresses.all %}
-          <li>{{ address.number }} {{ address.street }}, {{ address.city }} - {{ address.phone }} </li>
-          {% endfor %}
-
-        </ul></li>
-        <li><label>Date d'inscription :</label> {{ object.created|date:"d/m/Y" }}</li>
-        <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"" }}</li>
-        <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
-        <li><label>Commentaire :</label><br/>
-        {{ forms.general.comment }}
-        <button id="btn-maj">Mettre à jour</button></li>
-      </ul>
-    </div>
-    <div class="right">
-      <ul>
-          <li><label>Dernier acte :</label>
-          {% if last_rdv %}
-          {{ last_rdv.start_datetime|date:"d/m/Y" }} -
-          {% for participant in last_rdv.participants %}
-          <span class="lastname">{{ participant.last_name }}</span> -
-          {% endfor %}
-          {{ last_rdv.act_type }}
-          {% endif %}
-          </li>
-          <li><label>Prochain rendez-vous :</label>
-          {% if next_rdv %}
-          {{ next_rdv.start_datetime|date:"d/m/Y" }} -
-          {% for participant in next_rdv.participants %}
-          {{ participant.next_name }} -
-          {% endfor %}
-          {{ next_rdv.act_type }}
-          {% endif %}
-          </li>
-      </ul>
-      <div class="etat">
-          <h4>État courant du dossier :  {{ current_state.status.name.lower }}</h4>
-          <p>depuis le : {{ current_state.date_selected|date:"d/m/Y" }}</p>
-          <p><label>Commentaire :</label>{{ object.last_state.comment|default_if_none:"" }}</p>
-          {% for state in status %}
-          <button type="button" id="{{ state.0 }}">{{ state.1 }}</button>
-          {% endfor %}
-        <button type="button" id="patientrecord-history">Historique</button><br/>
-        <hr/>
-        <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
-        {{ forms.general.pause.label_tag }} : {{ forms.general.pause }}
-        <!-- 3/6 diagnostics -->
-      </div>
-        </form>
-
-      <!-- <div class="notifs">
-        <h4>Notifications</h4>
-        <ul>
-          <li>Dossier en pause facturation <button>Sortir</button></li>
-      </ul>
-  </div> -->
-
-    </div>
-    <br style="clear:both"/>
+      {% include "dossiers/patientrecord_tab1.html" %}
   </div>
 
   <div id="tabs-2"> <!-- Fiche administrative -->
-    <form method="post" id="id-form">
-    {% csrf_token %}
-    <div class="frame inline">
-      <h3>État civil</h3>
-      <button class="save">✔</button>
-      <p>
-      {% for field in forms.id %}
-      {{ field.errors }}
-      {% endfor %}
-      </p>
-      <p>
-      {{ forms.id.last_name.label_tag }} : <span class="lastname">{{ forms.id.last_name }}</span>
-      {{ forms.id.first_name.label_tag }} : {{ forms.id.first_name }}
-      </p>
-      <p>
-      {{ forms.id.birthdate.label_tag }} : {{ forms.id.birthdate }}
-      {{ forms.id.gender.label_tag }} : {{ forms.id.gender }}
-      {{ forms.id.nationality.label_tag }} : {{ forms.id.nationality }}
-      </p>
-      <input type="hidden"  name="tab"  value="1">
-    </div>
-  </form>
-
-
-    <form method="post" id="physiology-form" class="patientrecordform">
-    {% csrf_token %}
-    <div class="frame inline">
-      <h3>Physiologie</h3>
-      <button class="save">✔</button>
-      <p>
-      {% for field in forms.physiology %}
-      {{ field.errors }}
-      {% endfor %}
-      </p>
-      <p>
-      {% for field in forms.physiology %}
-      {{ field.label_tag  }} : {{ field }}
-      {% endfor %}
-      </p>
-      <input type="hidden"  name="tab"  value="1">
-    </div>
-  </form>
-
-    <form method="post" id="inscription-form" class="patientrecordform">
-    {% csrf_token %}
-    <div class="frame inline">
-      <h3>Inscription</h3>
-      <button class="save">✔</button>
-      <p>
-      {% for field in forms.inscription %}
-      {{ field.label_tag  }} : {{ field }}
-      <button type="button"
-          class="dialog-button"
-          data-url="../../ressources/{{ field.name }}/new/ #form-content"
-          data-default-button="Ajouter"
-          data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un {{ field.label.lower }}"
-          type="button">+</button>
-      {% endfor %}
-      </p>
-      <input type="hidden"  name="tab"  value="1">
-    </div>
-  </form>
-
-    <form method="post" id="family-form" class="patientrecordform">
-    {% csrf_token %}
-    <div class="frame inline">
-        <h3>Famille</h3>
-      <button class="save">✔</button>
-      <p>
-      {% for field in forms.family %}
-      {{ field.errors }}
-      {% endfor %}
-      </p>
-      <p>
-      {{ forms.family.sibship_place.label_tag  }} : {{ forms.family.sibship_place }}
-      {{ forms.family.nb_children_family.label_tag  }} : {{ forms.family.nb_children_family }}
-      <label>Rang (gémellité) :  </label> {{ object.twinning_rank|default_if_none:"Aucun" }}
-      </p>
-      <p>
-      {{ forms.family.parental_authority.label_tag  }} : {{ forms.family.parental_authority }}
-      <button type="button"
-          class="dialog-button"
-          data-url="../../ressources/parentalauthoritytype/new/ #form-content"
-          data-default-button="Ajouter"
-          data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un type d'autorité parentale">+</button>
-      {{ forms.family.family_situation.label_tag  }} : {{ forms.family.family_situation }}
-      <button type="button"
-          class="dialog-button"
-          data-url="../../ressources/familysituationtype/new/ #form-content"
-          data-default-button="Ajouter"
-          data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un type de situation familiale">+</button>
-      {{ forms.family.child_custody.label_tag  }} : {{ forms.family.child_custody }}
-      <button type="button"
-          class="dialog-button"
-          data-url="../../ressources/parentalcustodytype/new/ #form-content"
-          data-default-button="Ajouter"
-          data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un type de garde parentale">+</button>
-      </p>
-      <input type="hidden"  name="tab"  value="1">
-    </div>
-    </form>
-
-    <form method="post" id="transport-form" class="patientrecordform">
-    {% csrf_token %}
-    <div class="frame inline">
-      <h3>Transport</h3>
-      <button class="save">✔</button>
-      <p>
-      {% for field in forms.transport %}
-      {{ field.label_tag  }} : {{ field }}
-      <button type="button"
-          class="dialog-button"
-          data-url="../../ressources/{{ field.name }}/new/ #form-content"
-          data-default-button="Ajouter"
-          data-next-url="{{ request.get_full_path }}#tab=1"
-          title="Ajouter un {{ field.label.lower }}">+</button>
-      {% endfor %}
-      </p>
-      <table>
-        <tr><td><button type="button">Attestation</button></td> <td><button type="button">Prescription</td></tr>
-          <tr><td>Dernière attestation le 25/07/2012 <button>Historique</button></td>
-            <td>Dernière prescription le 25/07/2012 <button>Historique</button></td></tr>
-        </table>
-      <input type="hidden"  name="tab"  value="1">
-      </div>
-    </form>
-
-    <form method="post" id="followup-form" class="patientrecordform">{% csrf_token %}
-      <div class="frame inline">
-        <h3>Suivi du patient</h3>
-        <button class="save">✔</button>
-        <p>
-        {{ forms.followup.coordinators.label_tag  }} : {{ forms.followup.coordinators }}
-        </p>
-        <p>
-        {{ forms.followup.externaldoctor.label_tag  }} : {{ forms.followup.externaldoctor }}
-        <button type="button">+</button>
-        {{ forms.followup.externalintervener.label_tag  }} : {{ forms.followup.externalintervener }}
-        <button type="button">+</button>
-        </p>
-      <input type="hidden"  name="tab"  value="1">
-      </div>
-    </form>
-
-    </div>
+      {% include "dossiers/patientrecord_tab2.html" %}
+  </div>
 
     <div id="tabs-3"> <!-- Adresses / Contacts -->
         <button id="new-address-btn">Nouvelle adresse</button>
@@ -388,14 +171,14 @@
 
       </div>
 
-<!--      <div id="overlay">-->
-<!--        <p>-->
-<!--        Exemples pour cet onglet :-->
-<!--        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a> --->
-<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a> --->
-<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>-->
-<!--        </p>-->
-<!--      </div>-->
+      <div id="overlay">
+       <p>
+       Exemples pour cet onglet :
+        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a>
+        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a>
+        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>
+        </p>
+      </div>
 
     </div>
 

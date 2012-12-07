@@ -1,0 +1,147 @@
+<form method="post" id="id-form">
+  {% csrf_token %}
+  <div class="frame inline">
+    <h3>État civil</h3>
+    <button class="save">✔</button>
+    <p>
+    {% for field in forms.id %}
+    {{ field.errors }}
+    {% endfor %}
+    </p>
+    <p>
+    {{ forms.id.last_name.label_tag }} : <span class="lastname">{{ forms.id.last_name }}</span>
+    {{ forms.id.first_name.label_tag }} : {{ forms.id.first_name }}
+    </p>
+    <p>
+    {{ forms.id.birthdate.label_tag }} : {{ forms.id.birthdate }}
+    {{ forms.id.gender.label_tag }} : {{ forms.id.gender }}
+    {{ forms.id.nationality.label_tag }} : {{ forms.id.nationality }}
+    </p>
+    <input type="hidden"  name="tab"  value="1">
+  </div>
+</form>
+
+
+<form method="post" id="physiology-form" class="patientrecordform">
+  {% csrf_token %}
+  <div class="frame inline">
+    <h3>Physiologie</h3>
+    <button class="save">✔</button>
+    <p>
+    {% for field in forms.physiology %}
+    {{ field.errors }}
+    {% endfor %}
+    </p>
+    <p>
+    {% for field in forms.physiology %}
+    {{ field.label_tag  }} : {{ field }}
+    {% endfor %}
+    </p>
+    <input type="hidden"  name="tab"  value="1">
+  </div>
+</form>
+
+<form method="post" id="inscription-form" class="patientrecordform">
+  {% csrf_token %}
+  <div class="frame inline">
+    <h3>Inscription</h3>
+    <button class="save">✔</button>
+    <p>
+    {% for field in forms.inscription %}
+    {{ field.label_tag  }} : {{ field }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/{{ field.name }}/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un {{ field.label.lower }}"
+      type="button">+</button>
+    {% endfor %}
+    </p>
+    <input type="hidden"  name="tab"  value="1">
+  </div>
+</form>
+
+<form method="post" id="family-form" class="patientrecordform">
+  {% csrf_token %}
+  <div class="frame inline">
+    <h3>Famille</h3>
+    <button class="save">✔</button>
+    <p>
+    {% for field in forms.family %}
+    {{ field.errors }}
+    {% endfor %}
+    </p>
+    <p>
+    {{ forms.family.sibship_place.label_tag  }} : {{ forms.family.sibship_place }}
+    {{ forms.family.nb_children_family.label_tag  }} : {{ forms.family.nb_children_family }}
+    <label>Rang (gémellité) :  </label> {{ object.twinning_rank|default_if_none:"Aucun" }}
+    </p>
+    <p>
+    {{ forms.family.parental_authority.label_tag  }} : {{ forms.family.parental_authority }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/parentalauthoritytype/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un type d'autorité parentale">+</button>
+    {{ forms.family.family_situation.label_tag  }} : {{ forms.family.family_situation }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/familysituationtype/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un type de situation familiale">+</button>
+    {{ forms.family.child_custody.label_tag  }} : {{ forms.family.child_custody }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/parentalcustodytype/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un type de garde parentale">+</button>
+    </p>
+    <input type="hidden"  name="tab"  value="1">
+  </div>
+</form>
+
+<form method="post" id="transport-form" class="patientrecordform">
+  {% csrf_token %}
+  <div class="frame inline">
+    <h3>Transport</h3>
+    <button class="save">✔</button>
+    <p>
+    {% for field in forms.transport %}
+    {{ field.label_tag  }} : {{ field }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/{{ field.name }}/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un {{ field.label.lower }}">+</button>
+    {% endfor %}
+    </p>
+    <table>
+      <tr><td><button type="button">Attestation</button></td> <td><button type="button">Prescription</td></tr>
+        <tr><td>Dernière attestation le 25/07/2012 <button>Historique</button></td>
+          <td>Dernière prescription le 25/07/2012 <button>Historique</button></td></tr>
+      </table>
+      <input type="hidden"  name="tab"  value="1">
+    </div>
+  </form>
+
+  <form method="post" id="followup-form" class="patientrecordform">{% csrf_token %}
+    <div class="frame inline">
+      <h3>Suivi du patient</h3>
+      <button class="save">✔</button>
+      <p>
+      {{ forms.followup.coordinators.label_tag  }} : {{ forms.followup.coordinators }}
+      </p>
+      <p>
+      {{ forms.followup.externaldoctor.label_tag  }} : {{ forms.followup.externaldoctor }}
+      <button type="button">+</button>
+      {{ forms.followup.externalintervener.label_tag  }} : {{ forms.followup.externalintervener }}
+      <button type="button">+</button>
+      </p>
+      <input type="hidden"  name="tab"  value="1">
+    </div>
+  </form>
