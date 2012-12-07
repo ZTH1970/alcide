@@ -25,7 +25,7 @@
     {% endif %}</h2>
     <a href="..">Retourner à la liste</a>
     {% if service_name == "CMPP" %}
-        {% if invoicing.status == "open" %}<button id="close"">Clôre cette facturation</button>{% endif %}
+        {% if invoicing.status == "open" %}<button id="close-invoicing">Clôre cette facturation</button>{% endif %}
         {% if invoicing.status == "closed" %}<button id="validate"">Valider cette facturation</button>{% endif %}
         {% if invoicing.status == "validated" %}
             <button id="teletrans-btn">Télétransmission à l'assurance maladie</button>
@@ -476,14 +476,8 @@
 {% endblock %}
 
 {% block dialogs %}
-<div id="close-dialog" title="Clôture">
-  <div id="close-dialog-content">
-  </div>
-  <form method="post" action="clore/">
-    {% csrf_token %}
-    <input type="hidden" name="Close" value="1">
-  </form>
-</div>
+<div id="change-record" style="display: none;" data-id="{{ invoicing.id }}" data-service-name="{{ service_name }}">
+ </div>
 
 <div id="validate-dialog" title="Validation {% if service_name == "CMPP" %}de la facturation{% else %}du décompte{% endif %}">
   <div id="validate-dialog-content">
@@ -493,43 +487,4 @@
     <input type="hidden" name="Close" value="1">
   </form>
 </div>
-{% endblock %}
-
-{% block page-end %}
-<script>
-  $('#close-dialog').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons: {
-      "Valider": function () { $('#close-dialog form').submit(); },
-      "Annuler": function () { $(this).dialog("close"); },
-    },
-  });
-    $('#close').click(function () {
-        $('#close-dialog-content').load('clore/',
-              function () {
-                $('#close-dialog').dialog('open');
-              }
-            );
-      });
-  $('#validate-dialog').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons: {
-      "Valider": function () { $('#validate-dialog form').submit(); },
-      "Annuler": function () { $(this).dialog("close"); },
-    },
-  });
-    $('#validate').click(function () {
-        $('#validate-dialog-content').load('validate/',
-              function () {
-                $('#validate-dialog').dialog('open');
-              }
-            );
-      });
-    $('button.blind').next().hide();
-    $('button.blind').click(function() {
-            $(this).next().toggle('blind');
-    });
-</script>
 {% endblock %}

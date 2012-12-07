@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date
+from calebasse import cbv
+from calebasse.facturation import forms
+
+from datetime import date, datetime
 
 from django.http import HttpResponseRedirect
 
 from calebasse.cbv import TemplateView, UpdateView
 
 from models import Invoicing
-
+from calebasse.ressources.models import Service
 
 class FacturationHomepageView(TemplateView):
 
@@ -98,30 +101,24 @@ class FacturationDetailView(UpdateView):
         return context
 
 
-class CloseFacturationView(UpdateView):
-
-    context_object_name = "invoicing"
-    model = Invoicing
+class CloseInvoicingView(cbv.FormView):
     template_name = 'facturation/close.html'
+    form_class = forms.CloseInvoicingForm
+    success_url = '..'
 
-    def post(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk', None)
-        #TODO: grab the date
-        invoicing = None
-        if pk is not None:
-            invoicing = Invoicing.objects.get(pk=pk, service=self.service)
-        if not invoicing or self.service.name != 'CMPP' or \
-                invoicing.status != Invoicing.STATUS.open:
-            return HttpResponseRedirect('..')
-        #TODO: give the closing date
-        invoicing.close()
-        return HttpResponseRedirect('..')
+    def post(self, request, *args, **kwarg):
+        return super(CloseInvoicingView, self).post(request, *args, **kwarg)
 
-    def get_context_data(self, **kwargs):
-        context = super(CloseFacturationView, self).get_context_data(**kwargs)
-        today = date.today()
-        context['date'] = date(day=today.day, month=today.month, year=today.year)
-        return context
+    def form_valid(self, form):
+        print form.data
+        service = Service.objects.get(name=form.data['service_name'])
+        invoicing = Invoicing.objects.get(id=form.data['invoicing_id'])
+        date_selected = datetime.strptime(form.data['date'], "%d/%m/%Y")
+        invoicing.close(end_date=date_selected)
+        return super(CloseInvoicingView, self).form_valid(form)
+
+close_form = CloseInvoicingView.as_view()
+
 
 class ValidationFacturationView(UpdateView):
 
