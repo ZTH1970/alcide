@@ -42,7 +42,8 @@ class HealthFund(NamedAbstractModel):
         verbose_name = u'Caisse d\'assurances maladie'
         verbose_name_plural = u'Caisses d\'assurances maladie'
 
-    number = models.IntegerField(verbose_name=u"Numéro de la caisse")
+    number = models.IntegerField(verbose_name=u"Numéro de la caisse",
+            max_length=3)
     abbreviation = models.CharField(max_length=8)
     active = models.BooleanField(default=True)
     address = models.CharField(max_length=120)
@@ -55,6 +56,14 @@ class HealthFund(NamedAbstractModel):
     email = models.EmailField()
     accounting_number = models.CharField(max_length=30)
     correspondant = models.CharField(max_length=80)
+
+class HealthCenter(NamedAbstractModel):
+    class Meta:
+        verbose_name = u'Centre d\'assurance maladie'
+        verbose_name_plural = u'Centres d\'assurances maladie'
+
+    number = models.IntegerField(verbose_name=u"Numéro du centre",
+            max_length=4)
 
 
 class TransportCompany(NamedAbstractModel):

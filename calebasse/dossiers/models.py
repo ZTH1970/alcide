@@ -214,8 +214,8 @@ class PatientContact(People):
     healt_fund = models.ForeignKey('ressources.HealthFund',
             verbose_name=u"Caisse d'assurance maladie",
             null=True, blank=True)
-    # TODO : use ressource object for healt center ?
-    healt_center = models.IntegerField(verbose_name=u"Centre d'assurance maladie",
+    healt_center = models.ForeignKey('ressources.HealthCenter',
+            verbose_name=u"Centre d'assurance maladie",
             null=True, blank=True)
 
     addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses")
