@@ -108,7 +108,7 @@ function state_dialog(url, state_title, state_type) {
     });
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
-            '#new-contact-dlg', '750px', 'Ajouter');
+            '#new-contact-dlg', '800px', 'Ajouter');
     });
 
     $('.del-address').click(function() {

@@ -25,6 +25,11 @@
       </tr>
       <tr>
         <td>
+          {{ form.birthdate.label_tag }} :<br>
+          {{ form.birthdate }}
+          {{ form.birthdate.errors }}
+        </td>
+        <td>
           {{ form.mobile.label_tag }} :<br>
           {{ form.mobile }}
           {{ form.mobile.errors }}
@@ -37,22 +42,10 @@
       </tr>
       <tr>
         <td>
-          {{ form.birthdate.label_tag }} :<br>
-          {{ form.birthdate }}
-          {{ form.birthdate.errors }}
-        </td>
-        <td>
           {{ form.social_security_id.label_tag }} :<br>
           {{ form.social_security_id }}
           {{ form.social_security_id.errors }}
         </td>
-        <td>
-          {{ form.key.label_tag }} :<br>
-          {{ form.key }}
-          {{ form.key.errors }}
-        </td>
-      </tr>
-      <tr>
         <td>
           {{ form.begin_rights.label_tag }} :<br>
           {{ form.begin_rights }}
@@ -62,11 +55,6 @@
           {{ form.end_rights.label_tag }} :<br>
           {{ form.end_rights }}
           {{ form.end_rights.errors }}
-        </td>
-        <td>
-          {{ form.twinning_rank.label_tag }} :<br>
-          {{ form.twinning_rank }}
-          {{ form.twinning_rank.errors }}
         </td>
       </tr>
       <tr>
@@ -80,13 +68,25 @@
           {{ form.healt_center }}
           {{ form.healt_center.errors }}
         </td>
+        <td>
+          {{ form.large_regime.label_tag }} :<br>
+          {{ form.large_regime }}
+          {{ form.large_regime.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.twinning_rank.label_tag }} :<br>
+          {{ form.twinning_rank }}
+          {{ form.twinning_rank.errors }}
+        </td>
+        <td>
+          {{ form.addresses.label_tag }} :
+          {{ form.addresses }}
+          {{ form.addresses.errors }}
+        </td>
     </tbody>
   </table>
-  <p>
-  {{ form.addresses.label_tag }}
-  {{ form.addresses }}
-  {{ form.addresses.errors }}
-  </p>
   <p>
   {{ form.contact_comment.label_tag }}
   {{ form.contact_comment }}

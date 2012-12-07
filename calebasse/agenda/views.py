@@ -326,3 +326,4 @@ class JoursNonVerrouillesView(TemplateView):
                     days_not_locked.append(current_day)
         context['days_not_locked'] = days_not_locked
         return context
+

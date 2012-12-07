@@ -1078,8 +1078,6 @@ table#schedules {
     margin-left: 0px;
 }
 
-<<<<<<< HEAD
-
 div.worker-agenda h3,
 div.worker-agenda .remarque {
   display: none;
@@ -1127,3 +1125,5 @@ input#date-selector {
 .ui-datepicker {
     z-index: 9999 !important;
 }
+
+#id_large_regime { width: 240px; }

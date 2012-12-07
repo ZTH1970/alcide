@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 
 import reversion
 
+from calebasse.choices import LARGE_REGIME_CHOICES
 from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
@@ -199,8 +200,6 @@ class PatientContact(People):
     social_security_id = models.CharField(max_length=13, verbose_name=u"NRI")
     birthdate = models.DateField(verbose_name=u"Date de naissance",
             null=True, blank=True)
-    key = models.IntegerField(verbose_name=u'Clé',
-            null=True, blank=True)
     twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
             null=True, blank=True)
     thirdparty_payer = models.BooleanField(verbose_name=u'Tiers-payant',
@@ -209,6 +208,9 @@ class PatientContact(People):
             null=True, blank=True)
     end_rights = models.DateField(verbose_name=u"Fin de droits",
             null=True, blank=True)
+    large_regime = models.CharField(verbose_name=u'Grand régime',
+            null=True, blank=True, max_length=2,
+            choices=LARGE_REGIME_CHOICES)
     healt_fund = models.ForeignKey('ressources.HealthFund',
             verbose_name=u"Caisse d'assurance maladie",
             null=True, blank=True)

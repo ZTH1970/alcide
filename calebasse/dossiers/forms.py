@@ -87,7 +87,7 @@ class PatientContactForm(ModelForm):
     class Meta:
         model = PatientContact
         widgets = {
-                'contact_comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
+                'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 'key': forms.TextInput(attrs={'size': 4}),
                 'twinning_rank': forms.TextInput(attrs={'size': 4}),
                 }
@@ -97,7 +97,7 @@ class PatientAddressForm(ModelForm):
     class Meta:
         model = PatientAddress
         widgets = {
-                'comment': forms.Textarea(attrs={'cols': 40, 'rows': 3}),
+                'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
                 'zip_code': forms.TextInput(attrs={'size': 10}),
                 'number': forms.TextInput(attrs={'size': 10}),
                 }
