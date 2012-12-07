@@ -12,6 +12,19 @@ from calebasse.cbv import TemplateView, UpdateView
 from models import Invoicing
 from calebasse.ressources.models import Service
 
+
+def display_invoicing(request, *args, **kwargs):
+    if request.method == 'POST':
+        try:
+            seq_id = request.POST.get('id', None)
+            service_name = kwargs['service']
+            service = Service.objects.get(slug=service_name)
+            invoicing = Invoicing.objects.get(seq_id=seq_id, service=service)
+            return HttpResponseRedirect('%s' % invoicing.id)
+        except:
+            pass
+    return HttpResponseRedirect('.')
+
 class FacturationHomepageView(TemplateView):
 
     template_name = 'facturation/index.html'

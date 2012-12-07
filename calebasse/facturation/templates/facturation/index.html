@@ -49,5 +49,12 @@
     {% endif %}
     </ul>
 
-    <h3>Récapitulatif des {% if service_name == "CMPP" %}facturations{% else %}décomptes{% endif %}</h3>
+    <form method="post" action="display_invoicing">
+    {% csrf_token %}
+     Afficher la facturation :
+     <input size="4" name="id"/>
+     <input type="submit" value="OK"/>
+    </form>
+
+    <!--<h3>Récapitulatif des {% if service_name == "CMPP" %}facturations{% else %}décomptes{% endif %}</h3>-->
 {% endblock %}
