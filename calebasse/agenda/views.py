@@ -309,12 +309,12 @@ class AgendasTherapeutesView(AgendaHomepageView):
 
         return context
 
-class JoursNonVerouillesView(TemplateView):
+class JoursNonVerrouillesView(TemplateView):
 
     template_name = 'agenda/days-not-locked.html'
 
     def get_context_data(self, **kwargs):
-        context = super(JoursNonVerouillesView, self).get_context_data(**kwargs)
+        context = super(JoursNonVerrouillesView, self).get_context_data(**kwargs)
         acts = EventAct.objects.filter(is_billed=False,
             patient__service=self.service).order_by('date')
         days_not_locked = []
