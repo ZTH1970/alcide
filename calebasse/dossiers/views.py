@@ -85,6 +85,14 @@ class NewPatientAddressView(cbv.CreateView):
 
 new_patient_address = NewPatientAddressView.as_view()
 
+class UpdatePatientAddressView(cbv.UpdateView):
+    model = PatientAddress
+    form_class = forms.PatientAddressForm
+    template_name = 'dossiers/patientaddress_new.html'
+    success_url = '../../view#tab=2'
+
+update_patient_address = UpdatePatientAddressView.as_view()
+
 class DeletePatientAddressView(cbv.DeleteView):
     model = PatientAddress
     form_class = forms.PatientAddressForm

@@ -94,30 +94,35 @@ function state_dialog(url, state_title, state_type) {
     });
     $('#patientrecord-delete').click(function() {
         generic_ajaxform_dialog('delete', 'Supprimer le dossier',
-            '#delete-record', '500px', 'Oui', '..');
+            '#ajax-dlg', '500px', 'Oui', '..');
     });
 
     $('#new-address-btn').click(function() {
         generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
-            '#new-address-dlg', '600px', 'Ajouter');
+            '#ajax-dlg', '600px', 'Ajouter');
+    });
+    $('.update-address-btn').click(function() {
+        generic_ajaxform_dialog('address/' + $(this).data('id') + '/update', 'Modifier une adresse',
+            '#ajax-dlg', '600px', 'Modifier');
+    });
+    $('.del-address').click(function() {
+        generic_ajaxform_dialog('address/' + $(this).data('id') + '/del', 'Supprimer une addresse',
+            '#ajax-dlg', '500px', 'Supprimer');
     });
 
     $('#update-paper-id-btn').click(function() {
         generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
-            '#update-paper-id-dlg', '500px', 'Modifier');
+            '#ajax-dlg', '500px', 'Modifier');
     });
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
-            '#new-contact-dlg', '800px', 'Ajouter');
+            '#ajax-dlg', '800px', 'Ajouter');
     });
 
-    $('.del-address').click(function() {
-        generic_ajaxform_dialog('address/' + $(this).data('id') + '/del', 'Supprimer une addresse',
-            '#del-address-dlg', '500px', 'Supprimer');
-    });
+
     $('.del-contact').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del', 'Supprimer un contact',
-            '#del-contact-dlg', '500px', 'Supprimer');
+            '#ajax-dlg', '500px', 'Supprimer');
     });
 
     $('#add-prise-en-charge-btn').click(function() {

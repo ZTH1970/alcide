@@ -40,7 +40,10 @@
         {% for address in object.addresses.all %}
         <div class="frame">
             <h3>{{ address.number }} {{ address.street }}</h3>
-            <div class="buttons"><button data-id="{{ address.id }}" class="del-address">➖</button> <button>✍</button></div>
+            <div class="buttons">
+                <button data-id="{{ address.id }}" class="del-address">➖</button>
+                <button data-id="{{ address.id }}" class="update-address-btn">✍</button>
+            </div>
             <div class="right">
                 <input type="checkbox" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
             </div>
@@ -198,11 +201,10 @@
 {% endblock %}
 
 {% block dialogs %}
+<div id="ajax-dlg" style="display: none;"></div>
 <div id="change-record" style="display: none;" data-id="{{ object.id }}" data-service-id="{{ service_id }}">
  </div>
 
- <div id="delete-record" style="display: none;">
-  </div>
   <div id="dossier-histo-dlg" style="display: none;">
    <dl>
     {% for state in states %}
@@ -215,11 +217,7 @@
    </dl>
   </div>
 
-  <div id="new-address-dlg" style="display: none;"></div>
-  <div id="del-address-dlg" style="display: none;"></div>
-  <div id="new-contact-dlg" style="display: none;"></div>
-  <div id="del-contact-dlg" style="display: none;"></div>
-  <div id="update-paper-id-dlg" style="display: none;"></div>
+
 
   <div id="add-prise-en-charge-dlg" style="display: none;">
    <div>
