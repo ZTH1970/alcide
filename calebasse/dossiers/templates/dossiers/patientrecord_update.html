@@ -27,11 +27,12 @@
     <li><a data-id="7" class="atabs" href="#tabs-8">Données à caractère médical</a>
   </ul>
   <div id="tabs-1"> <!-- Général -->
-    <form method="post" id="general-form" class="patientrecordform">
-    {% csrf_token %}
     <div class="left">
       <ul>
-          <li><label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }} <button>✍</button></li>
+        <li>
+          <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }}
+          <button id="update-paper-id-btn">✍</button>
+        </li>
         <li><label>N° dossier informatique :</label>{{ object.id }}</li>
         <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
         <li><label>Prénom :</label> {{ object.first_name }}</li>
@@ -46,6 +47,7 @@
         </ul></li>
         <li><label>Date d'inscription :</label> {{ object.created|date:"d/m/Y" }}</li>
         <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"" }}</li>
+        <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
         <li><label>Commentaire :</label><br/>
         {{ forms.general.comment }}
         <button id="btn-maj">Mettre à jour</button></li>
@@ -434,6 +436,7 @@
   <div id="del-address-dlg" style="display: none;"></div>
   <div id="new-contact-dlg" style="display: none;"></div>
   <div id="del-contact-dlg" style="display: none;"></div>
+  <div id="update-paper-id-dlg" style="display: none;"></div>
 
   <div id="add-prise-en-charge-dlg" style="display: none;">
    <div>

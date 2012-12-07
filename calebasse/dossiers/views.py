@@ -298,3 +298,13 @@ class PatientRecordDeleteView(DeleteView):
 patientrecord_delete = PatientRecordDeleteView.as_view()
 
 
+class PatientRecordPaperIDUpdateView(cbv.UpdateView):
+    model = PatientRecord
+    form_class = forms.PaperIDForm
+    template_name = 'dossiers/generic_form.html'
+    success_url = '../..'
+
+update_paper_id = PatientRecordPaperIDUpdateView.as_view()
+
+
+

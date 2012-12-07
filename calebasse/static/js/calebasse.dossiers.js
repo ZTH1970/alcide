@@ -102,6 +102,10 @@ function state_dialog(url, state_title, state_type) {
             '#new-address-dlg', '600px', 'Ajouter');
     });
 
+    $('#update-paper-id-btn').click(function() {
+        generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
+            '#update-paper-id-dlg', '500px', 'Modifier');
+    });
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
             '#new-contact-dlg', '750px', 'Ajouter');
