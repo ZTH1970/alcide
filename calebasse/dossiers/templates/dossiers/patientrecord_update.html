@@ -55,7 +55,8 @@
                     {{ contact.display_name }} {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
                 <div class="right">
                     <input type="radio" name="radio-assure" checked="checked">Assuré</input>
-                    <button data-id="{{ contact.id }}" class="del-contact">➖</button> <button>✍</button>
+                    <button data-id="{{ contact.id }}" class="del-contact">➖</button>
+                    <button data-id="{{ contact.id }}" class='update-contact-btn'>✍</button>
                 </div>
                 <p>{{ contact.social_security_id }}</p>
                 <p>{{ contact.mobile }}</p>

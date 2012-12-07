@@ -114,12 +114,15 @@ function state_dialog(url, state_title, state_type) {
         generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
             '#ajax-dlg', '500px', 'Modifier');
     });
+
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
             '#ajax-dlg', '800px', 'Ajouter');
     });
-
-
+    $('.update-contact-btn').click(function() {
+        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
     $('.del-contact').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del', 'Supprimer un contact',
             '#ajax-dlg', '500px', 'Supprimer');

@@ -6,7 +6,7 @@ from models import PatientRecord
 from views import (patientrecord_home, patient_record, state_form,
         new_patient_record, patientrecord_delete, new_patient_contact,
         new_patient_address, delete_patient_contact, delete_patient_address,
-        update_paper_id, update_patient_address)
+        update_paper_id, update_patient_address, update_patient_contact)
 from forms import EditPatientRecordForm
 
 urlpatterns = patterns('',
@@ -20,5 +20,6 @@ urlpatterns = patterns('',
         url(r'^(?P<patientrecord_id>\d+)/address/(?P<pk>\d+)/update$', update_patient_address),
         url(r'^(?P<patientrecord_id>\d+)/address/(?P<pk>\d+)/del$', delete_patient_address),
         url(r'^(?P<patientrecord_id>\d+)/contact/new$', new_patient_contact),
+        url(r'^(?P<patientrecord_id>\d+)/contact/(?P<pk>\d+)/update$', update_patient_contact),
         url(r'^(?P<patientrecord_id>\d+)/contact/(?P<pk>\d+)/del$', delete_patient_contact),
 )

@@ -60,6 +60,19 @@ class NewPatientContactView(cbv.CreateView):
 
 new_patient_contact = NewPatientContactView.as_view()
 
+class UpdatePatientContactView(cbv.UpdateView):
+    model = PatientContact
+    form_class = forms.PatientContactForm
+    template_name = 'dossiers/patientcontact_new.html'
+    success_url = '../../view#tab=2'
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(UpdatePatientContactView, self).get(request, *args, **kwargs)
+
+update_patient_contact = UpdatePatientContactView.as_view()
+
 class DeletePatientContactView(cbv.DeleteView):
     model = PatientContact
     form_class = forms.PatientContactForm
