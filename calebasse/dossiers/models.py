@@ -42,6 +42,9 @@ class HealthCare(models.Model):
     comment = models.TextField(max_length=3000, blank=True, null=True)
     start_date = models.DateTimeField()
 
+    def get_nb_acts_cared(self):
+        return len(self.act_set.all())
+
 
 class CmppHealthCareDiagnostic(HealthCare):
 
