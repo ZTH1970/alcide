@@ -23,10 +23,14 @@ html {
 a, #tab-personnes a, #tab-ressources a {
 	color: #FF7800;
 	text-decoration: underline;
+	transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
 }
 
 a:hover, #tab-personnes a:hover, #tab-ressources a:hover {
 	text-decoration: none;
+	color: #D76500;
 }
 
 div#user-links {
