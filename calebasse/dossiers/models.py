@@ -3,7 +3,7 @@
 import logging
 
 from datetime import datetime, date
-from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.db import models
@@ -21,7 +21,9 @@ from calebasse.actes.validation import are_all_acts_of_the_day_locked
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
 DEFAULT_ACT_NUMBER_TREATMENT = 30
 DEFAULT_ACT_NUMBER_PROLONGATION = 10
-VALIDITY_PERIOD_TREATMENT_HEALTHCARE = 365
+VALIDITY_PERIOD_TREATMENT_HEALTHCARE_DAYS = 0
+VALIDITY_PERIOD_TREATMENT_HEALTHCARE_MONTHS = 0
+VALIDITY_PERIOD_TREATMENT_HEALTHCARE_YEARS = 1
 
 logger = logging.getLogger('calebasse.dossiers')
 
@@ -91,8 +93,9 @@ class CmppHealthCareTreatment(HealthCare):
             datetime(self.start_date.year, self.start_date.month,
                 self.start_date.day)
         self.end_date = self.start_date + \
-            timedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE)
-
+            relativedelta(years=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_YEARS) + \
+            relativedelta(months=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_MONTHS) + \
+            relativedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_DAYS)
         super(CmppHealthCareTreatment, self).save(**kwargs)
 
 
