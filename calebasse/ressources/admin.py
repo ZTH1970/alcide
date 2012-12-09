@@ -6,12 +6,13 @@ from models import (ActType, CFTMEACode, FamilySituationType, HealthFund,
         InscriptionMotive, Job, Nationality, Office, ParentalAuthorityType,
         ParentalCustodyType, Room, School, SchoolTeacherRole,
         Service, SessionType, TransportCompany, TransportType,
-        UninvoicableCode, WorkerType)
+        UninvoicableCode, WorkerType, LargeRegime)
 
 admin.site.register(ActType, reversion.VersionAdmin)
 admin.site.register(CFTMEACode, reversion.VersionAdmin)
 admin.site.register(FamilySituationType, reversion.VersionAdmin)
 admin.site.register(HealthFund, reversion.VersionAdmin)
+admin.site.register(LargeRegime, reversion.VersionAdmin)
 admin.site.register(InscriptionMotive, reversion.VersionAdmin)
 admin.site.register(Job, reversion.VersionAdmin)
 admin.site.register(Nationality, reversion.VersionAdmin)

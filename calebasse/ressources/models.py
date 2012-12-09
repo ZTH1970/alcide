@@ -36,14 +36,17 @@ class ServiceLinkedAbstractModel(models.Model):
     class Meta:
         abstract = True
 
-# Caisse d'assurance maladie
-class HealthFund(NamedAbstractModel):
+class HealthCenter(NamedAbstractModel):
     class Meta:
-        verbose_name = u'Caisse d\'assurances maladie'
-        verbose_name_plural = u'Caisses d\'assurances maladie'
+        verbose_name = u'Centre d\'assurance maladie'
+        verbose_name_plural = u'Centres d\'assurances maladie'
 
-    number = models.IntegerField(verbose_name=u"Numéro de la caisse",
-            max_length=3)
+    number = models.IntegerField(verbose_name=u"Numéro du centre",
+            max_length=4,
+            null=True, blank=True)
+    large_regime = models.ForeignKey('LargeRegime',
+            verbose_name=u"Grand régime")
+    healt_fund = models.ManyToManyField('HealthFund')
     abbreviation = models.CharField(max_length=8)
     active = models.BooleanField(default=True)
     address = models.CharField(max_length=120)
@@ -53,17 +56,33 @@ class HealthFund(NamedAbstractModel):
     city = models.CharField(max_length=80)
     phone = models.CharField(max_length=30)
     fax = models.CharField(max_length=30)
-    email = models.EmailField()
-    accounting_number = models.CharField(max_length=30)
+    email = models.EmailField(
+            null=True, blank=True)
+    accounting_number = models.CharField(max_length=30,
+             null=True, blank=True)
     correspondant = models.CharField(max_length=80)
 
-class HealthCenter(NamedAbstractModel):
+class HealthFund(NamedAbstractModel):
     class Meta:
-        verbose_name = u'Centre d\'assurance maladie'
-        verbose_name_plural = u'Centres d\'assurances maladie'
+        verbose_name = u'Caisse d\'assurances maladie'
+        verbose_name_plural = u'Caisses d\'assurances maladie'
 
-    number = models.IntegerField(verbose_name=u"Numéro du centre",
-            max_length=4)
+    def __unicode__(self):
+        return str(self.number) + ' ' + self.name
+
+    number = models.IntegerField(verbose_name=u"Numéro de la caisse",
+            max_length=3)
+
+class LargeRegime(NamedAbstractModel):
+    class Meta:
+        verbose_name = u'Grand régime'
+        verbose_name_plural = u'Grands régimes'
+
+    def __unicode__(self):
+        return str(self.number) + ' ' + self.name
+
+    number = models.IntegerField(verbose_name=u"Code",
+            max_length=2)
 
 
 class TransportCompany(NamedAbstractModel):
