@@ -41,8 +41,8 @@
         <div class="frame">
             <h3>{{ address.number }} {{ address.street }}</h3>
             <div class="buttons">
-                <button data-id="{{ address.id }}" class="del-address">➖</button>
-                <button data-id="{{ address.id }}" class="update-address-btn">✍</button>
+                <button data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
+                <button data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
             </div>
             <div class="right">
                 <input type="checkbox" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
@@ -55,8 +55,8 @@
                     {{ contact.display_name }} {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
                 <div class="right">
                     <input type="radio" name="radio-assure" checked="checked">Assuré</input>
-                    <button data-id="{{ contact.id }}" class="del-contact">➖</button>
-                    <button data-id="{{ contact.id }}" class='update-contact-btn'>✍</button>
+                    <button data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
+                    <button data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
                 </div>
                 <p>{{ contact.social_security_id }}</p>
                 <p>{{ contact.mobile }}</p>

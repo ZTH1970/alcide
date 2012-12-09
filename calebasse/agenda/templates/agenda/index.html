@@ -88,18 +88,18 @@
                  <span class="box {{ service_name }}" title="{{ service_name }}"></span>
                  {% endfor %}
                  {% if appointment.convocation_sent %}
-                 <img title="Une convocation a été envoyée" src="{{ STATIC_URL }}images/emblem-mail.png">
+                 <span title="Une convocation a été envoyée" class="icon-envelope"></span>
                  {% endif %}
                  {% if appointment.description %}
-                 <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">
+                 <span title="Un commentaire existe" class="icon-comment"></span>
                  {% endif %}
                  {% if appointment.event_id %}
                   {% if appointment.patient_record_id %}
-                    <img title="Editer un rendez-vous" class="edit-appointment" src="{{ STATIC_URL }}images/accessories-text-editor.png" data-occurrence-id="{{ appointment.occurrence_id }}">
+                    <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-occurrence-id="{{ appointment.occurrence_id }}"></button>
                   {% else %}
-                    <img title="Editer un événement" class="edit-event" src="{{ STATIC_URL }}images/accessories-text-editor.png" data-occurrence-id="{{ appointment.occurrence_id }}">
+                    <button title="Éditer un événement" class="edit-event icon-edit" data-occurrence-id="{{ appointment.occurrence_id }}">
                   {% endif %}
-                 <img class="remove-appointment" title="Supprimer un rendez-vous" src="{{ STATIC_URL }}images/list-remove.png" data-occurrence-id="{{ appointment.occurrence_id }}" data-rdv="{{ appointment.title }}">
+                 <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-occurrence-id="{{ appointment.occurrence_id }}" data-rdv="{{ appointment.title }}"></button>
                  {% endif %}
             </span>
            </h3>

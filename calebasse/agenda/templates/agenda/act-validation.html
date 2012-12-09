@@ -40,7 +40,7 @@
           {% if acte.patient.paper_id %} ({{ acte.patient.paper_id }}){% endif %}
           {% if acte.doctors %}{% for doctor in acte.doctors.all %} - <span class="lastname">{{ doctor.last_name }}</span> {{ doctor.first_name }}{% endfor %}{% endif %} -
           <strong>{{ acte.act_type }}</strong>
-          {% if acte.description %} <img title="Un commentaire existe" src="{{ STATIC_URL }}images/emblem-documents.png">{% endif%}
+          {% if acte.description %} <span title="Un commentaire existe" class="icon-comment"></span>{% endif%}
       </h3>
       <div><span>{% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
            {% if last_status.auto %}(par validation automatique){% endif %}. {% if acte.is_billed %}<strong>Acte facturé</strong>{% endif %}

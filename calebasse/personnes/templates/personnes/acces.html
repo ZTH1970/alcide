@@ -22,7 +22,7 @@
       {% if request.GET %}
       <div class="search-reset">
         <button id="search">Rechercher</button>
-        <button id="reset"><img src="{{ STATIC_URL }}/images/edit-clear-all-symbolic.png" alt="Réinitialiser"/></button>
+        <button id="reset" class="icon-remove-sign" title="Réinitialiser"></button>
       </div>
       {% else %}
         <button id="search">Rechercher</button>
@@ -51,7 +51,7 @@
       {% with worker=object.userworker.worker %}
       <td>{% if worker %}<a href="{{ worker.get_absolute_url }}">{{ worker }}</a>{% else %}-{% endif %}</td>
       {% endwith %}
-      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
+      <td><button class="icon-edit"></button> <button class="icon-minus"></button> <button>Histo</button></td>
     </tr>
    {% endfor %}
     </tbody>
@@ -78,7 +78,7 @@
       <td>{{object.username}}</td>
       <td>{{object.email}}</td>
       <td>{% firstof object.userworker.worker "-" %}</td>
-      <td><button>⎅</button> <button>-</button> <button>Histo</button></td>
+      <td><button class="icon-edit"></button> <button class="icon-minus"></button> <button>Histo</button></td>
     </tr>
     {% endif %}
    {% endfor %}
