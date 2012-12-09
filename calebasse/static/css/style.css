@@ -597,6 +597,23 @@ td.diagnostic {
 	color: red;
 }
 
+table#ressource-list .col-id {
+	width: 10ex;
+}
+
+table#ressource-list .col-action {
+	width: 20ex;
+}
+
+table#ressource-list .col-label {
+	text-align: left;
+	padding-left: 1ex;
+}
+
+table#ressource-list .col-label a {
+	display: block;
+}
+
 div#tabs div.left {
         float: left;
         width: 35%;
@@ -999,14 +1016,6 @@ form.inline-form {
 
 #dialogs {
   display: none;
-}
-
-li .delete-object-button {
-  visibility: hidden;
-}
-
-li:hover .delete-object-button {
-  visibility: visible;
 }
 
 #form-content input[type^="text"] {

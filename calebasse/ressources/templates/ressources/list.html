@@ -7,18 +7,35 @@
 
 {% block appbar %}
   <h2>{{ model_verbose_name_plural }}</h2>
-  <a href="..">Retourner à l'accueil</a>
+  <a href="..">Retourner aux ressources</a>
   <button id="new-object-button" class='dialog-button' data-default-button="Ajouter" data-url="new/ #form-content">Ajouter « {{ model_verbose_name }} »</button>
 {% endblock %}
 
 {% block content %}
-    <ul id="ressource-list">
+    {% if object_list %}
+    <table id="ressource-list" class="main">
+    <thead>
+     <th class="col-id">Identifiant</th>
+     <th class="col-label">Libellé</th>
+     <th class="col-action"></th>
+    </thead>
+    <tbody>
      {% for object in object_list %}
-     <li id="ressource-{{ object.pk }}">
-     <a href="{{ object.pk }}">{{object}} ({{object.pk}})</a> 
-       <button class="dialog-button delete-object-button" 
-               data-url="{{ object.pk }}/delete/ #form-content">Supprimer</button>
-     </li>
+     <tr id="ressource-{{ object.pk }}">
+     <td class="col-id">{{object.pk}}</td>
+     <td class="col-label"><a href="{{ object.pk }}">{{object}}</a></td>
+     <td class="col-action"><button class="dialog-button delete-object-button"
+               data-url="{{ object.pk }}/delete/ #form-content">Supprimer</button></td>
+     </tr>
      {% endfor %}
-    </ul>
+    </tbody>
+    </table>
+    {% else %}
+    <div class="big-msg-info">
+    <p>
+     Cliquez sur le bouton « Ajouter » en haut à droite pour ajouter un
+     élément.
+    </p>
+    </div>
+    {% endif %}
 {% endblock %}
