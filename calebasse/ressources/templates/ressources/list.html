@@ -8,7 +8,7 @@
 {% block appbar %}
   <h2>{{ model_verbose_name_plural }}</h2>
   <a href="..">Retourner à l'accueil</a>
-  <button id="new-object-button" class='dialog-button' data-default-button="Ajouter" data-url="new/ #form-content">Ajouter un {{ model_verbose_name|lower }}</button>
+  <button id="new-object-button" class='dialog-button' data-default-button="Ajouter" data-url="new/ #form-content">Ajouter « {{ model_verbose_name }} »</button>
 {% endblock %}
 
 {% block content %}
