@@ -435,3 +435,66 @@ class FacturationTest(TestCase):
         self.assertEqual(len_patient_invoiced_hors_pause, 1)
         self.assertEqual(len_acts_lost, 0)
         self.assertEqual(len_patient_with_lost_acts, 0)
+
+
+    def test_change_state(self):
+        service_cmpp = Service.objects.get(name='CMPP')
+        price_o = add_price(120, date(2012, 10, 1))
+
+
+        patient = create_patient('A', 'a', service_cmpp, self.creator, date_selected=datetime(2012, 10, 1))
+
+        self.assertEqual(patient.last_state.status.type, "ACCUEIL")
+
+        EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 10, 1, 10, 15),
+                end_datetime=datetime(2012, 10, 1, 12, 20))
+
+        automated_validation(datetime(2012, 10, 1), service_cmpp, self.creator)
+        patient =  PatientRecord.objects.get(id=patient.id)
+
+        self.assertEqual(patient.last_state.status.type, "DIAGNOSTIC")
+        self.assertEqual(patient.last_state.date_selected, datetime(2012, 10, 1, 0, 0))
+
+        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
+                end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (2, 32)]
+
+        for i in range(2, 32):
+            automated_validation(datetime(2012, 10, i), service_cmpp, self.creator)
+
+        patient =  PatientRecord.objects.get(id=patient.id)
+        self.assertEqual(patient.last_state.status.type, "TRAITEMENT")
+        self.assertEqual(patient.last_state.date_selected, datetime(2012, 10, 7, 0, 0))
+
+        patient = create_patient('B', 'b', service_cmpp, self.creator, date_selected=datetime(2012, 10, 1))
+
+        self.assertEqual(patient.last_state.status.type, "ACCUEIL")
+
+        EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 10, 1, 10, 15),
+                end_datetime=datetime(2012, 10, 1, 12, 20))
+
+        automated_validation(datetime(2012, 10, 1), service_cmpp, self.creator)
+        patient =  PatientRecord.objects.get(id=patient.id)
+
+        self.assertEqual(patient.last_state.status.type, "DIAGNOSTIC")
+        self.assertEqual(patient.last_state.date_selected, datetime(2012, 10, 1, 0, 0))
+
+        status = Status.objects.filter(type="CLOS").\
+                filter(services__name='CMPP')[0]
+        patient.set_state(status, self.creator, date_selected=datetime(2012, 12, 9, 0, 0))
+
+        self.assertEqual(patient.last_state.status.type, "CLOS")
+        self.assertEqual(patient.last_state.date_selected, datetime(2012, 12, 9, 0, 0))
+
+        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
+                end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (2, 32)]
+
+        for i in range(2, 32):
+            automated_validation(datetime(2012, 10, i), service_cmpp, self.creator)
+
+        patient =  PatientRecord.objects.get(id=patient.id)
+        self.assertEqual(patient.last_state.status.type, "CLOS")
+        self.assertEqual(patient.last_state.date_selected, datetime(2012, 12, 9, 0, 0))

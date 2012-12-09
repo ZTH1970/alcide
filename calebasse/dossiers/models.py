@@ -468,6 +468,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         cmpp = Service.objects.get(name='CMPP')
         for act in acts:
             if act.is_state('VALIDE') and act.is_billable() and \
+                    act.date >= self.get_state().date_selected and \
                     are_all_acts_of_the_day_locked(act.date):
                 cared, hc = act.is_act_covered_by_diagnostic_healthcare()
                 if hc:
