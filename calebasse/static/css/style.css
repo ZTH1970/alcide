@@ -1149,6 +1149,13 @@ input#date-selector {
 
 #id_large_regime { width: 240px; }
 
+div.agenda p.workers {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 80%;
+}
+
 [class^="icon-"]:before, [class*=" icon-"]:before {
   font-family: FontAwesome;
   font-weight: normal;

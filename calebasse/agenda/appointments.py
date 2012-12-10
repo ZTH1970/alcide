@@ -22,6 +22,7 @@ class Appointment(object):
         self.event_id = None
         self.event_type = None
         self.occurrence_id = None
+        self.workers = None
         self.workers_initial = None
         self.workers_codes = None
         self.act_state = None
@@ -65,6 +66,7 @@ class Appointment(object):
             self.patient_record_paper_id = event_act.patient.paper_id
             self.workers_initial = ""
             self.workers_code = []
+            self.workers = workers
             for worker in workers:
                 self.workers_initial += " " + worker.first_name.upper()[0]
                 self.workers_initial += worker.last_name.upper()[0]

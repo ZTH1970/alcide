@@ -110,6 +110,14 @@
                <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouvel événement</button>
                {% endif %}
              {% if appointment.event_id %}
+             {% if appointment.workers %}
+               <p class="workers">
+               Thérapeutes :
+               {% for worker in appointment.workers %}
+                 {{ worker.first_name }} <span class="last-name">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+               {% endfor %}
+               </p>
+             {% endif %}
              <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
                  <span></span>
                  <textarea>{{ appointment.description }}</textarea>
