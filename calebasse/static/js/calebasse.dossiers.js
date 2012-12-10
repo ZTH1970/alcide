@@ -48,6 +48,9 @@ function state_dialog(url, state_title, state_type) {
     $('#id_general-pause').click(function() {
         $('#btn-maj').click();
     });
+    $('.policyholder-radio').click(function() {
+        $("#submit-policyholder").click();
+    });
     $('.pr-line').click(function() {
         window.location.href = $(this).data('link');
     });

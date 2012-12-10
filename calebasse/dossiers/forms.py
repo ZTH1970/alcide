@@ -74,7 +74,13 @@ class TransportFrom(ModelForm):
 class PaperIDForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ['paper_id']
+        fields = ('paper_id', )
+
+class PolicyHolderForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('policyholder', )
+        widgets = { 'policyholder': forms.RadioSelect() }
 
 class FollowUpForm(ModelForm):
     coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)

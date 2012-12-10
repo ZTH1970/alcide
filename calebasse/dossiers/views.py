@@ -143,7 +143,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             'inscription': forms.InscriptionForm,
             'family': forms.FamilyForm,
             'transport': forms.TransportFrom,
-            'followup': forms.FollowUpForm
+            'followup': forms.FollowUpForm,
+            'policyholder': forms.PolicyHolderForm
             }
     template_name = 'dossiers/patientrecord_update.html'
     success_url = './view'
@@ -271,7 +272,7 @@ class PatientRecordsHomepageView(cbv.ListView):
             qs = qs.filter(last_state__status__type__in=status_types)
         else:
             qs = qs.filter(last_state__status__type__in="")
-        qs = qs.filter(service=self.service)
+        qs = qs.filter(service=self.service).order_by('last_name')
         return qs
 
     def get_context_data(self, **kwargs):
