@@ -56,6 +56,13 @@ class CmppHealthCareDiagnostic(HealthCare):
     def get_act_number(self):
         return self._act_number
 
+    def set_act_number(self, value):
+        if value < self.get_nb_acts_cared():
+            raise Exception("La valeur doit être supérieur au "
+                "nombre d'actes déjà pris en charge")
+        self._act_number = value
+        self.save()
+
     def save(self, **kwargs):
         self.start_date = \
             datetime(self.start_date.year, self.start_date.month,
@@ -77,6 +84,13 @@ class CmppHealthCareTreatment(HealthCare):
         if self.is_extended():
             return self._act_number + self.prolongation
         return self._act_number
+
+    def set_act_number(self, value):
+        if value < self.get_nb_acts_cared():
+            raise Exception("La valeur doit être supérieur au "
+                "nombre d'actes déjà pris en charge")
+        self._act_number = value
+        self.save()
 
     def is_extended(self):
         if self.prolongation > 0:
