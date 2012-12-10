@@ -127,7 +127,7 @@
              {% endif %}
              {% if appointment.patient_record_id %}
              <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view" target="_blank">Dossier patient</a> -
-             <a href="#">Prochains rendez-vous</a> -
+             <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view#tab=5" target="_blank">Prochains rendez-vous</a> -
              <a href="#">Convoquer patient</a>
              {% endif %}
            </div>
