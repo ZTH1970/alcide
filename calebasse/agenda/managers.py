@@ -90,6 +90,8 @@ class OccurrenceManager(models.Manager):
             date: may be either a datetime.datetime, datetime.date object, or
             ``None``. If ``None``, default to the current day.
             participants: a list of CalebasseUser
+            services: a list of services
+            event_type: a single, or a list of, event types
         '''
         date = date or datetime.now()
         start = datetime(date.year, date.month, date.day)
@@ -114,7 +116,10 @@ class OccurrenceManager(models.Manager):
         if services:
             qs = qs.filter(event__services__in=services)
         if event_type:
-            qs = qs.filter(event__event_type=event_type)
+            if type(event_type) is list:
+                qs = qs.filter(event__event_type__in=event_type)
+            else:
+                qs = qs.filter(event__event_type=event_type)
         return qs
 
     def daily_disponiblity(self, date, occurrences, participants, time_tables):

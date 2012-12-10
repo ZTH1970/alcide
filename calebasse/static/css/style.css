@@ -981,6 +981,16 @@ div.textedit button {
         top: 0px;
 }
 
+table#activity td {
+  text-align: left;
+  padding-left: 1ex;
+}
+
+table#activity td.hour {
+  padding: 0;
+  text-align: center;
+}
+
 table#activity tr:nth-child(odd) td {
 }
 

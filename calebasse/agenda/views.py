@@ -76,9 +76,10 @@ class AgendaServiceActivityView(TemplateView):
 
         appointments_times = dict()
         appoinment_type = EventType.objects.get(id=1)
+        meeting_type = EventType.objects.get(id=2)
         occurrences = Occurrence.objects.daily_occurrences(context['date'],
                 services=[self.service],
-                event_type=appoinment_type)
+                event_type=[appoinment_type, meeting_type])
         for occurrence in occurrences:
             start_time = occurrence.start_time.strftime("%H:%M")
             if not appointments_times.has_key(start_time):
@@ -90,14 +91,23 @@ class AgendaServiceActivityView(TemplateView):
             if length.seconds:
                 length = length.seconds / 60
                 appointment['length'] = "%sm" % length
-            event_act = occurrence.event.eventact
-            appointment['patient'] = event_act.patient.display_name
+            if occurrence.event.event_type == EventType.objects.get(id=1):
+                appointment['type'] = 1
+                event_act = occurrence.event.eventact
+                appointment['label'] = event_act.patient.display_name
+                appointment['act'] = event_act.act_type.name
+            elif occurrence.event.event_type == EventType.objects.get(id=2):
+                appointment['type'] = 2
+                appointment['label'] = '%s - %s' % (occurrence.event.event_type.label,
+                                                    occurrence.event.title)
+            else:
+                appointment['type'] = 0
+                appointment['label'] = '???'
             appointment['therapists'] = ""
             for participant in occurrence.event.participants.all():
                 appointment['therapists'] += participant.display_name + "; "
             if appointment['therapists']:
                 appointment['therapists'] = appointment['therapists'][:-2]
-            appointment['act'] = event_act.act_type.name
             appointments_times[start_time]['row'] += 1
             appointments_times[start_time]['appointments'].append(appointment)
         context['appointments_times'] = sorted(appointments_times.items())
