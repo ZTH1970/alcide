@@ -41,21 +41,30 @@ class HealthCenter(NamedAbstractModel):
         verbose_name = u'Centre d\'assurance maladie'
         verbose_name_plural = u'Centres d\'assurances maladie'
 
-    number = models.IntegerField(verbose_name=u"Numéro du centre",
+    code = models.CharField(verbose_name=u"Code du centre",
             max_length=4,
             null=True, blank=True)
     large_regime = models.ForeignKey('LargeRegime',
             verbose_name=u"Grand régime")
-    healt_fund = models.ManyToManyField('HealthFund')
-    abbreviation = models.CharField(max_length=8)
+    dest_organism = models.CharField(max_length=8,
+            verbose_name=u"Organisme destinataire")
+    computer_center_code = models.CharField(max_length=8,
+            verbose_name=u"Code centre informatique",
+            null=True, default=True)
+    abbreviation = models.CharField(verbose_name=u'Abbrévation',
+            max_length=8,
+            null=True, default=True)
+    healt_funds = models.ManyToManyField('HealthFund',
+            verbose_name=u'Caisses d\'assurances maladie')
     active = models.BooleanField(default=True)
     address = models.CharField(max_length=120)
     address_complement = models.CharField(max_length=120, blank=True,
             null=True, default=None)
-    zip_code = models.IntegerField(max_length=8)
+    zip_code = models.CharField(max_length=8)
     city = models.CharField(max_length=80)
     phone = models.CharField(max_length=30)
-    fax = models.CharField(max_length=30)
+    fax = models.CharField(max_length=30,
+            null=True, blank=True)
     email = models.EmailField(
             null=True, blank=True)
     accounting_number = models.CharField(max_length=30,
@@ -68,9 +77,9 @@ class HealthFund(NamedAbstractModel):
         verbose_name_plural = u'Caisses d\'assurances maladie'
 
     def __unicode__(self):
-        return str(self.number) + ' ' + self.name
+        return self.number + ' ' + self.name
 
-    number = models.IntegerField(verbose_name=u"Numéro de la caisse",
+    number = models.CharField(verbose_name=u"Numéro de la caisse",
             max_length=3)
 
 class LargeRegime(NamedAbstractModel):
@@ -79,9 +88,9 @@ class LargeRegime(NamedAbstractModel):
         verbose_name_plural = u'Grands régimes'
 
     def __unicode__(self):
-        return str(self.number) + ' ' + self.name
+        return self.code + ' ' + self.name
 
-    number = models.IntegerField(verbose_name=u"Code",
+    code = models.CharField(verbose_name=u"Code grand régime",
             max_length=2)
 
 

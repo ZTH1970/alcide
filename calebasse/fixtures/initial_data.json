@@ -164,192 +164,192 @@
     "pk": 1, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " REGIME GENERAL", 
-      "number": 1
+      "name": "REGIME GENERAL", 
+      "code": "01"
     }
   }, 
   {
     "pk": 2, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " REGIME AGRICOLE", 
-      "number": 2
+      "name": "REGIME AGRICOLE", 
+      "code": "02"
     }
   }, 
   {
     "pk": 3, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " ASSURANCE MALADIE DES PROFESSIONS INDEPENDANTES (AMPI)", 
-      "number": 3
+      "name": "ASSURANCE MALADIE DES PROFESSIONS INDEPENDANTES (AMPI)", 
+      "code": "03"
     }
   }, 
   {
     "pk": 4, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " S.N.C.F", 
-      "number": 4
+      "name": "S.N.C.F", 
+      "code": "04"
     }
   }, 
   {
     "pk": 5, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " R.A.T.P", 
-      "number": 5
+      "name": "R.A.T.P", 
+      "code": "05"
     }
   }, 
   {
     "pk": 6, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " ETABLISSEMENT NATIONAL DES INVALIDES DE LA MARINE (ENIM)", 
-      "number": 6
+      "name": "ETABLISSEMENT NATIONAL DES INVALIDES DE LA MARINE (ENIM)", 
+      "code": "06"
     }
   }, 
   {
     "pk": 7, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MINEURS ET ASSIMILES", 
-      "number": 7
+      "name": "MINEURS ET ASSIMILES", 
+      "code": "07"
     }
   }, 
   {
     "pk": 8, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MILITAIRES DE CARRIERE", 
-      "number": 8
+      "name": "MILITAIRES DE CARRIERE", 
+      "code": "08"
     }
   }, 
   {
     "pk": 9, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " PERSONNEL DE LA BANQUE DE FRANCE", 
-      "number": 9
+      "name": "PERSONNEL DE LA BANQUE DE FRANCE", 
+      "code": "09"
     }
   }, 
   {
     "pk": 10, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " CLERS ET EMPLOYES DE NOTAIRES", 
-      "number": 10
+      "name": "CLERS ET EMPLOYES DE NOTAIRES", 
+      "code": "10"
     }
   }, 
   {
     "pk": 11, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " CHAMBRE DE COMMERCE ET D'INDUSTRIE DE PARIS", 
-      "number": 12
+      "name": "CHAMBRE DE COMMERCE ET D'INDUSTRIE DE PARIS", 
+      "code": "12"
     }
   }, 
   {
     "pk": 12, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " ASSEMBLEE NATIONALE", 
-      "number": 14
+      "name": "ASSEMBLEE NATIONALE", 
+      "code": "14"
     }
   }, 
   {
     "pk": 13, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " SENAT", 
-      "number": 15
+      "name": "SENAT", 
+      "code": "15"
     }
   }, 
   {
     "pk": 14, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " PORT AUTONOME DE BORDEAUX", 
-      "number": 16
+      "name": "PORT AUTONOME DE BORDEAUX", 
+      "code": "16"
     }
   }, 
   {
     "pk": 15, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " CAISSE DES FRANCAIS A L'ETRANGER", 
-      "number": 17
+      "name": "CAISSE DES FRANCAIS A L'ETRANGER", 
+      "code": "17"
     }
   }, 
   {
     "pk": 16, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MINISTERE DES ANCIENS COMBATTANTS", 
-      "number": 80
+      "name": "MINISTERE DES ANCIENS COMBATTANTS", 
+      "code": "80"
     }
   }, 
   {
     "pk": 17, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " CAISSE D'ASSURANCE VIEILLESSE, INVALIDITE ET MALADIE DES CULTES", 
-      "number": 90
+      "name": "CAISSE D'ASSURANCE VIEILLESSE, INVALIDITE ET MALADIE DES CULTES", 
+      "code": "90"
     }
   }, 
   {
     "pk": 18, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MUTUELLE GENERALE DE L'EDUCATION NATIONALE - M.G.E.N -", 
-      "number": 91
+      "name": "MUTUELLE GENERALE DE L'EDUCATION NATIONALE - M.G.E.N -", 
+      "code": "91"
     }
   }, 
   {
     "pk": 19, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MUTUELLE GENERALE - M.G - (ex PTT)", 
-      "number": 92
+      "name": "MUTUELLE GENERALE - M.G - (ex PTT)", 
+      "code": "92"
     }
   }, 
   {
     "pk": 20, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MUTUELLE GENERALE DE LA POLICE", 
-      "number": 93
+      "name": "MUTUELLE GENERALE DE LA POLICE", 
+      "code": "93"
     }
   }, 
   {
     "pk": 21, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MUTUELLES DES FONCTIONNAIRES - SLI -", 
-      "number": 94
+      "name": "MUTUELLES DES FONCTIONNAIRES - SLI -", 
+      "code": "94"
     }
   }, 
   {
     "pk": 22, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " M.N. HOSPITALIERS", 
-      "number": 95
+      "name": "M.N. HOSPITALIERS", 
+      "code": "95"
     }
   }, 
   {
     "pk": 23, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " MUTUELLE NATIONALE DE L'AVIATION ET DE LA MARINE", 
-      "number": 96
+      "name": "MUTUELLE NATIONALE DE L'AVIATION ET DE LA MARINE", 
+      "code": "96"
     }
   }, 
   {
     "pk": 24, 
     "model": "ressources.largeregime", 
     "fields": {
-      "name": " AUTRES MUTUELLES", 
-      "number": 99
+      "name": "AUTRES MUTUELLES", 
+      "code": "99"
     }
   }
 ]
