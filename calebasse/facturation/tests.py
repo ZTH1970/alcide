@@ -498,3 +498,130 @@ class FacturationTest(TestCase):
         patient =  PatientRecord.objects.get(id=patient.id)
         self.assertEqual(patient.last_state.status.type, "CLOS")
         self.assertEqual(patient.last_state.date_selected, datetime(2012, 12, 9, 0, 0))
+
+    def test_change_hc_number(self):
+
+        service_cmpp = Service.objects.get(name='CMPP')
+        price_o = add_price(120, date(2012, 10, 1))
+
+        patient = create_patient('A', 'a', service_cmpp, self.creator, date_selected=datetime(2012, 10, 1))
+        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
+                end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (1, 4)]
+
+        for i in range(1, 4):
+            automated_validation(datetime(2012, 10, i), service_cmpp, self.creator)
+
+        invoicing = Invoicing.objects.create(service=service_cmpp, seq_id=666, start_date=date.today())
+        invoicing_next = invoicing.close(date(day=4, month=10, year=2012))
+        (len_patients, len_invoices, len_invoices_hors_pause,
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate(commit=True)
+
+        self.assertEqual(len_patients, 1)
+        self.assertEqual(len_invoices, 1)
+        self.assertEqual(len_invoices_hors_pause, 1)
+        self.assertEqual(len_acts_invoiced, 3) # tous les actes billed
+        self.assertEqual(len_acts_invoiced_hors_pause, 3) # tous les actes billed - les acts qui ne seront pas billed à cause de la pause facturation
+        self.assertEqual(len_patient_invoiced, 1)
+        self.assertEqual(len_patient_invoiced_hors_pause, 1)
+        self.assertEqual(len_acts_lost, 0)
+        self.assertEqual(len_patient_with_lost_acts, 0)
+
+        hcd = CmppHealthCareDiagnostic.objects.\
+            filter(patient=patient).latest('start_date')
+
+        self.assertEqual(hcd.get_nb_acts_cared(), 3)
+
+        try:
+            hcd.set_act_number(2)
+            raise
+        except:
+            pass
+
+        hcd.set_act_number(5)
+
+        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
+                end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (4, 32)]
+
+        for i in range(4, 32):
+            automated_validation(datetime(2012, 10, i), service_cmpp, self.creator)
+
+        invoicing = Invoicing.objects.create(service=service_cmpp, start_date=date.today())
+        invoicing_next = invoicing.close(date(day=1, month=11, year=2012))
+        (len_patients, len_invoices, len_invoices_hors_pause,
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate(commit=True)
+
+        self.assertEqual(len_patients, 1)
+        self.assertEqual(len_invoices, 1)
+        self.assertEqual(len_invoices_hors_pause, 1)
+        self.assertEqual(len_acts_invoiced, 2) # tous les actes billed
+        self.assertEqual(len_acts_invoiced_hors_pause, 2) # tous les actes billed - les acts qui ne seront pas billed à cause de la pause facturation
+        self.assertEqual(len_patient_invoiced, 1)
+        self.assertEqual(len_patient_invoiced_hors_pause, 1)
+        self.assertEqual(len_acts_lost, 26)
+        self.assertEqual(len_patient_with_lost_acts, 1)
+
+        hct = CmppHealthCareTreatment(patient=patient, start_date=datetime(2012, 10, 1), author=self.creator)
+        hct.save()
+
+        invoicing = Invoicing.objects.create(service=service_cmpp, start_date=date.today())
+        invoicing_next = invoicing.close(date(day=2, month=11, year=2012))
+        (len_patients, len_invoices, len_invoices_hors_pause,
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate(commit=True)
+
+        self.assertEqual(len_patients, 1)
+        self.assertEqual(len_invoices, 1)
+        self.assertEqual(len_invoices_hors_pause, 1)
+        self.assertEqual(len_acts_invoiced, 26) # tous les actes billed
+        self.assertEqual(len_acts_invoiced_hors_pause, 26) # tous les actes billed - les acts qui ne seront pas billed à cause de la pause facturation
+        self.assertEqual(len_patient_invoiced, 1)
+        self.assertEqual(len_patient_invoiced_hors_pause, 1)
+        self.assertEqual(len_acts_lost, 0)
+        self.assertEqual(len_patient_with_lost_acts, 0)
+
+        try:
+            hct.set_act_number(24)
+            raise
+        except:
+            pass
+
+        hct.set_act_number(28)
+
+        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+                self.act_type, service_cmpp, start_datetime=datetime(2012, 11, i, 10, 15),
+                end_datetime=datetime(2012, 11, i, 12, 20)) for i in range (1, 4)]
+
+        for i in range(1, 4):
+            automated_validation(datetime(2012, 11, i), service_cmpp, self.creator)
+
+        invoicing = Invoicing.objects.create(service=service_cmpp, start_date=date.today())
+        invoicing_next = invoicing.close(date(day=3, month=11, year=2012))
+        (len_patients, len_invoices, len_invoices_hors_pause,
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused) = invoicing.get_stats_or_validate(commit=True)
+
+        self.assertEqual(len_patients, 1)
+        self.assertEqual(len_invoices, 1)
+        self.assertEqual(len_invoices_hors_pause, 1)
+        self.assertEqual(len_acts_invoiced, 2) # tous les actes billed
+        self.assertEqual(len_acts_invoiced_hors_pause, 2) # tous les actes billed - les acts qui ne seront pas billed à cause de la pause facturation
+        self.assertEqual(len_patient_invoiced, 1)
+        self.assertEqual(len_patient_invoiced_hors_pause, 1)
+        self.assertEqual(len_acts_lost, 1)
+        self.assertEqual(len_patient_with_lost_acts, 1)
