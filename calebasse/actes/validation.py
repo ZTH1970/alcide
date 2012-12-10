@@ -99,6 +99,7 @@ def automated_validation(date, service, user, commit=True):
                 for act in acts:
                     if act.is_billed:
                         found_one = True
+                        nb_acts_validated = nb_acts_validated + 1
                     else:
                         acts_t.append(act)
                 for act in acts_t:
