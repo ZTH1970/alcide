@@ -1165,7 +1165,7 @@ input#date-selector {
     z-index: 9999 !important;
 }
 
-#id_large_regime { width: 240px; }
+.small_select { width: 240px; }
 
 div.agenda p.workers {
   margin: 0;

@@ -41,6 +41,9 @@ class HealthCenter(NamedAbstractModel):
         verbose_name = u'Centre d\'assurance maladie'
         verbose_name_plural = u'Centres d\'assurances maladie'
 
+    def __unicode__(self):
+        return self.code + ' ' + self.name
+
     code = models.CharField(verbose_name=u"Code du centre",
             max_length=4,
             null=True, blank=True)

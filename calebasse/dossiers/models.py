@@ -259,6 +259,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         models.ForeignKey(User,
         verbose_name=u'Créateur dossier patient',
         editable=True)
+    policyholder = models.ForeignKey('PatientContact',
+            null=True, blank=True,
+            verbose_name="Assuré", related_name="+")
     contacts = models.ManyToManyField('PatientContact',
             related_name='contact_of')
     nationality = models.CharField(verbose_name=u"Nationalité",

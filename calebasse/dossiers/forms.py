@@ -90,6 +90,9 @@ class PatientContactForm(ModelForm):
                 'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 'key': forms.TextInput(attrs={'size': 4}),
                 'twinning_rank': forms.TextInput(attrs={'size': 4}),
+                'large_regime': forms.Select(attrs={'class': 'small_select'}),
+                'healt_fund': forms.Select(attrs={'class': 'small_select'}),
+                'healt_center': forms.Select(attrs={'class': 'small_select'}),
                 }
 
 class PatientAddressForm(ModelForm):
