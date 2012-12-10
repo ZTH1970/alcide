@@ -62,6 +62,20 @@ class ServiceViewMixin(object):
 class TemplateView(ServiceViewMixin, base.TemplateView):
     pass
 
+class AppTemplateFirstMixin(object):
+    def get_template_names(self):
+        names = []
+        model = getattr(self, 'model', None)
+        if not model:
+            model = self.queryset.model
+        if model is not None:
+           opts = model._meta
+           names.append("%s/%s%s.html" % (opts.app_label, opts.object_name.lower(), self.template_name_suffix))
+           names.append("%s/%s.html" % (opts.app_label, self.template_name_suffix.strip('_')))
+        if getattr(self, 'template_name', None):
+            names.append(self.template_name)
+        return names
+
 class ModelNameMixin(object):
     def get_context_data(self, **kwargs):
         ctx = super(ModelNameMixin, self).get_context_data(**kwargs)
@@ -69,19 +83,23 @@ class ModelNameMixin(object):
         ctx['model_verbose_name'] = self.model._meta.verbose_name
         return ctx
 
-class ListView(ModelNameMixin, ServiceViewMixin, list_cbv.ListView):
+class ListView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
+        list_cbv.ListView):
     pass
 
 
-class CreateView(ModelNameMixin, ServiceViewMixin, edit.CreateView):
+class CreateView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
+        edit.CreateView):
     pass
 
 
-class DeleteView(ModelNameMixin, ServiceViewMixin, edit.DeleteView):
+class DeleteView(AppTemplateFirstMixin,
+        ModelNameMixin, ServiceViewMixin, edit.DeleteView):
     pass
 
 
-class UpdateView(ModelNameMixin, ServiceViewMixin, edit.UpdateView):
+class UpdateView(AppTemplateFirstMixin,
+        ModelNameMixin, ServiceViewMixin, edit.UpdateView):
     pass
 
 class FormView(ServiceViewMixin, edit.FormView):
@@ -294,7 +312,8 @@ class BaseMultiUpdateView(MultiModelFormMixin, ProcessMultiFormView):
         self.object = self.get_object()
         return super(BaseMultiUpdateView, self).post(request, *args, **kwargs)
 
-class MultiUpdateView(detail.SingleObjectTemplateResponseMixin, BaseMultiUpdateView):
+class MultiUpdateView(AppTemplateFirstMixin,
+        detail.SingleObjectTemplateResponseMixin, BaseMultiUpdateView):
     """
     View for updating an object,
     with a response rendered by template.
