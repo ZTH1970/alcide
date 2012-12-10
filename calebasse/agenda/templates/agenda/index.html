@@ -75,7 +75,8 @@
          <a class="print" href="#">Imprimer</a>
          <div>
            {% for appointment in worker_agenda.appointments %}
-           <h3 class="{{ appointment.type }} appointment">
+           <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
+               {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
              <span class="hour">{{ appointment.begin_hour }}</span>
              {% if appointment.event_type %} — {{ appointment.event_type }}  {% endif %}
              {% if appointment.title %} — {{ appointment.title }}  {% endif %}

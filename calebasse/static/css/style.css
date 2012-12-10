@@ -502,6 +502,14 @@ div.agenda h3.busy-elsewhere {
 	border: 1px solid red;
 }
 
+div.agenda h3.act-absence {
+	color: #888;
+}
+
+div.agenda h3.act-absence span.hour {
+	text-decoration: line-through;
+}
+
 tr.hour-mark td {
 	border-top: 4px solid white;
 }
