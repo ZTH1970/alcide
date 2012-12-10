@@ -69,6 +69,25 @@ class Act(models.Model):
     pause = models.BooleanField(default=False,
             verbose_name=u'Pause facturation')
 
+    def get_hc_tag(self):
+        if self.healthcare:
+            try:
+                self.healthcare.cmpphealthcaretreatment
+                return 'T'
+            except:
+                pass
+            try:
+                self.healthcare.cmpphealthcarediagnostic
+                acts = self.healthcare.act_set.order_by('date')
+                i = 0
+                for act in acts:
+                    if act.id == self.id:
+                        return 'D' + str(i)
+                    i = i + 1
+            except:
+                pass
+        return None
+
     def is_absent(self):
         if self.get_state() in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
                 'ANNUL_FAMILLE', 'ABS_ESS_PPS', 'ENF_HOSP'):
