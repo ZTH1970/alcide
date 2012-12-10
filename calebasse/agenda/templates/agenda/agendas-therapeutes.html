@@ -19,7 +19,8 @@
 
 <table>
  <thead>
-  <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Absence</th>
+  <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Libellé</th>
+       <th>Absence</th>
        <th>Type d'acte</th> <th>Commentaire</th> <th>Thérapeutes</th> </tr>
  </thead>
  <tbody>
@@ -31,6 +32,7 @@
       {{ appointment.patient_record_paper_id }}<br/>
       ({{ appointment.patient_record_id }}){% endif %}
     </td>
+    <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
     <td> {% if appointment.act_absence %}{{ appointment.act_absence }}{% endif %}</td>
     <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
     <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
