@@ -251,6 +251,7 @@ class PatientRecordsHomepageView(cbv.ListView):
         first_name = self.request.GET.get('first_name')
         last_name = self.request.GET.get('last_name')
         paper_id = self.request.GET.get('paper_id')
+        id = self.request.GET.get('id')
         states = self.request.GET.getlist('states')
         social_security_id = self.request.GET.get('social_security_id')
         if last_name:
@@ -259,6 +260,8 @@ class PatientRecordsHomepageView(cbv.ListView):
             qs = qs.filter(first_name__icontains=first_name)
         if paper_id:
             qs = qs.filter(paper_id__contains=paper_id)
+        if id:
+            qs = qs.filter(id__contains=id)
         if social_security_id:
             qs = qs.filter(social_security_id__contains=social_security_id)
         if states:
