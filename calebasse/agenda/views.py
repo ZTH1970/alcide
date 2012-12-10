@@ -46,7 +46,7 @@ class AgendaHomepageView(TemplateView):
         context['disponibility'] = {}
         workers = []
         for worker_type in WorkerType.objects.all():
-            workers_type = Worker.objects.for_service(self.service, worker_type)
+            workers_type = Worker.objects.filter(type=worker_type)
             if workers_type:
                 data = {'type': worker_type.name, 'workers': workers_type }
                 context['workers_types'].append(data)
@@ -336,4 +336,3 @@ class JoursNonVerrouillesView(TemplateView):
                     days_not_locked.append(current_day)
         context['days_not_locked'] = days_not_locked
         return context
-

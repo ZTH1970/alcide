@@ -180,6 +180,13 @@ function event_dialog(url, title, width, btn_text) {
           return false;
       });
       $('#print-button').click(function() { window.print(); });
+    $('#hide-workers').change(function() {
+      var val = $(this).is(':checked');
+      if ($(this).is(':checked')) {
+        $('.person-item:not(.in_service)').hide('fold');
+      } else {
+        $('.person-item').show('fold');
+      }
+    });
   });
 })(window.jQuery)
-
