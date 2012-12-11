@@ -8,7 +8,7 @@ from calebasse import cbv
 from calebasse.dossiers import forms
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import (PatientRecord, PatientContact,
-        PatientAddress, Status, FileState, create_patient)
+        PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import Service
 
@@ -114,29 +114,20 @@ class DeletePatientAddressView(cbv.DeleteView):
 
 delete_patient_address = DeletePatientAddressView.as_view()
 
-
-
-
-
-class NewCmppHealthCareTreatmentView(cbv.FormView):
+class NewCmppHealthCareTreatmentView(cbv.CreateView):
+    model = CmppHealthCareTreatment
     form_class = forms.CmppHealthCareTreatmentForm
-    template_name = 'dossiers/patientpctrait_new.html'
+    template_name = 'dossiers/generic_form.html'
     success_url = '../view#tab=3'
 
     def get_success_url(self):
         return self.success_url
 
-    def post(self, request, *args, **kwarg):
-        self.author = request.user
-        return super(NewCmppHealthCareTreatmentView, self).post(request, *args, **kwarg)
-
-    def form_valid(self, form):
-        start_date = datetime.strptime(form.data['start_date'], "%d/%m/%Y")
-        act_number = int(form.data['act_number'])
-        patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
-        comment = form.data['comment']
-        CmppHealthCareTreatment(patient=patient, start_date=start_date, author=self.author, comment=comment, _act_number=act_number)
-        return super(NewCmppHealthCareTreatmentView, self).form_valid(form)
+    def get_initial(self):
+        initial = super(NewCmppHealthCareTreatmentView, self).get_initial()
+        initial['author'] = self.request.user.id
+        initial['patient'] = self.kwargs['patientrecord_id']
+        return initial
 
 new_healthcare_treatment = NewCmppHealthCareTreatmentView.as_view()
 

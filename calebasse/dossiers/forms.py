@@ -6,7 +6,8 @@ from django import forms
 from django.forms import ModelForm, Form
 
 from calebasse.dossiers.models import (PatientRecord,
-    PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT)
+    PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
+    CmppHealthCareTreatment)
 from calebasse.dossiers.states import STATE_CHOICES
 
 from ajax_select import make_ajax_field
@@ -113,9 +114,18 @@ class PatientAddressForm(ModelForm):
                 'number': forms.TextInput(attrs={'size': 10}),
                 }
 
-class CmppHealthCareTreatmentForm(Form):
-    start_date = forms.DateField(label=u'Date de début')
-    patient_id = forms.IntegerField()
-    act_number = forms.IntegerField(label=u"Nombre d'actes couverts", initial=DEFAULT_ACT_NUMBER_TREATMENT)
-    comment = forms.CharField(label=u"Commentaire",
-            required=False, widget=forms.Textarea)
+class CmppHealthCareTreatmentForm(ModelForm):
+    class Meta:
+        model = CmppHealthCareTreatment
+        fields = ('start_date', 'end_date', '_act_number',
+                'prolongation', 'comment', 'patient', 'author')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
+                'patient': forms.HiddenInput(),
+                'author': forms.HiddenInput(),
+                }
+#    start_date = forms.DateField(label=u'Date de début')
+#    patient_id = forms.IntegerField()
+#    act_number = forms.IntegerField(label=u"Nombre d'actes couverts", initial=DEFAULT_ACT_NUMBER_TREATMENT)
+#    comment = forms.CharField(label=u"Commentaire",
+#            required=False, widget=forms.Textarea)

@@ -33,14 +33,14 @@ class HealthCare(models.Model):
     class Meta:
         app_label = 'dossiers'
 
+    start_date = models.DateField(verbose_name=u"Date de début")
     patient = models.ForeignKey('dossiers.PatientRecord',
-        verbose_name=u'Dossier patient', editable=False)
+        verbose_name=u'Dossier patient')
     created = models.DateTimeField(u'Création', auto_now_add=True)
     author = \
         models.ForeignKey(User,
-        verbose_name=u'Auteur', editable=False)
+        verbose_name=u'Auteur')
     comment = models.TextField(max_length=3000, blank=True, null=True, verbose_name=u"Commentaire")
-    start_date = models.DateTimeField(verbose_name=u"Date de début")
 
     def get_nb_acts_cared(self):
         return len(self.act_set.all())
@@ -75,8 +75,9 @@ class CmppHealthCareTreatment(HealthCare):
     class Meta:
         app_label = 'dossiers'
 
-    _act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT, verbose_name=u"Nombre d'actes couverts")
-    end_date = models.DateTimeField(verbose_name=u"Date de fin")
+    _act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT,
+            verbose_name=u"Nombre d'actes couverts")
+    end_date = models.DateField(verbose_name=u"Date de fin")
     prolongation = models.IntegerField(default=0,
             verbose_name=u'Prolongation')
 
