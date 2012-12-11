@@ -79,7 +79,8 @@ class NewAppointmentForm(forms.ModelForm):
 class UpdateAppointmentForm(NewAppointmentForm):
 
     def __init__(self, instance, service=None, occurrence=None, **kwargs):
-        super(UpdateAppointmentForm, self).__init__(instance=instance, **kwargs)
+        super(UpdateAppointmentForm, self).__init__(instance=instance,
+                                                    service=service, **kwargs)
         self.occurrence = occurrence
 
 

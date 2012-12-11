@@ -166,6 +166,7 @@ class UpdateAppointmentView(UpdateView):
     def get_form_kwargs(self):
         kwargs = super(UpdateAppointmentView, self).get_form_kwargs()
         kwargs['occurrence'] = self.occurrence
+        kwargs['service'] = self.service
         return kwargs
 
 
