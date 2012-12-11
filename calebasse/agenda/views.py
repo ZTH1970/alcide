@@ -76,7 +76,6 @@ class AgendaHomepageView(TemplateView):
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
                 occurrences_workers, workers, time_tables_workers)
-        context['validation_states'] = VALIDATION_STATES
         return context
 
 class AgendaServiceActivityView(TemplateView):
@@ -261,7 +260,10 @@ class AgendaServiceActValidationView(TemplateView):
                 state = None
             act.date = act.date.strftime("%H:%M")
             actes.append((act, state, display_name))
-        context['validation_states'] = VALIDATION_STATES
+        context['validation_states'] = dict(VALIDATION_STATES)
+        if self.service.name != 'CMPP' and \
+                'ACT_DOUBLE' in context['validation_states']:
+            context['validation_states'].pop('ACT_DOUBLE')
         context['actes'] = actes
         context['validation_msg'] = validation_msg
         context['authorized_lock'] = authorized_lock

@@ -81,7 +81,13 @@ class Appointment(object):
             display_name = VALIDATION_STATES[state.state_name]
             if not state.previous_state:
                 state = None
-            self.validation = (event_act, state, display_name)
+            validation_states = None
+            if service in services:
+                validation_states = dict(VALIDATION_STATES)
+                if not 'CMPP' in [s.name for s in services] and \
+                        'ACT_DOUBLE' in validation_states:
+                    validation_states.pop('ACT_DOUBLE')
+            self.validation = (event_act, state, display_name, validation_states)
         else:
             self.event_type = occurrence.event.event_type
 
