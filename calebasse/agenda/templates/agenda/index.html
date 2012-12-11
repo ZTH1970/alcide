@@ -138,6 +138,27 @@
              <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view#tab=5" target="_blank">Prochains rendez-vous</a> -
              <a href="#">Convoquer patient</a>
              {% endif %}
+             {% if appointment.validation %}
+               <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong>, le {{ appointment.validation.1.created }} par {{ appointment.validation.1.author }}
+                   {% if appointment.validation.1.auto %}(par validation automatique){% endif %}. {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
+                 {% else %}
+                   Non pointé.
+                 {% endif %}
+                 </span>
+                 {% if not appointment.validation.0.validation_locked %}
+                   <form method="post" class="inline-form">
+                   {% csrf_token %}
+                   <input type="hidden" value="{{appointment.validation.0.id}}" name="acte-id">
+                   <select data-previous="{{ last_status.state_name }}" name="act_state">
+                     {% for state_name, display_state_name in validation_states.items %}
+                     <option value="{{ state_name }}" {% if state_name == appointment.validation.1.state_name %}selected{% endif %}>{{ display_state_name }}</option>
+                     {% endfor %}
+                   </select>
+                   <button {% if appointment.validation.1 %}disabled{% endif %}>Modifier</button>
+                   </form>
+                 {% endif %}
+              </div>
+              {% endif %}
            </div>
            {% endfor %}
          </div>

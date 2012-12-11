@@ -32,6 +32,17 @@ class AgendaHomepageView(TemplateView):
 
     template_name = 'agenda/index.html'
 
+    def post(self, request, *args, **kwargs):
+        acte_id = request.POST.get('acte-id')
+        try:
+            act = Act.objects.get(id=acte_id)
+            if not act.validation_locked:
+                state_name = request.POST.get('act_state')
+                act.set_state(state_name, request.user)
+        except Act.DoesNotExist:
+            pass
+        return HttpResponseRedirect('#acte-frame-'+acte_id)
+
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
@@ -65,6 +76,7 @@ class AgendaHomepageView(TemplateView):
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
                 occurrences_workers, workers, time_tables_workers)
+        context['validation_states'] = VALIDATION_STATES
         return context
 
 class AgendaServiceActivityView(TemplateView):

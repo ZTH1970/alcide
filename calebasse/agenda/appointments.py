@@ -4,6 +4,7 @@ from datetime import time
 
 from interval import IntervalSet
 
+from calebasse.actes.validation_states import VALIDATION_STATES
 
 class Appointment(object):
 
@@ -29,6 +30,7 @@ class Appointment(object):
         self.act_absence = None
         self.weight = 0
         self.act_type = None
+        self.validation = None
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -74,8 +76,12 @@ class Appointment(object):
             self.act_type = event_act.act_type.name
             self.act_state = event_act.get_state().state_name
             if self.act_state not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
-                from calebasse.actes.validation_states import VALIDATION_STATES
                 self.act_absence = VALIDATION_STATES.get(self.act_state)
+            state = event_act.get_state()
+            display_name = VALIDATION_STATES[state.state_name]
+            if not state.previous_state:
+                state = None
+            self.validation = (event_act, state, display_name)
         else:
             self.event_type = occurrence.event.event_type
 
@@ -126,4 +132,3 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences):
         appointments.append(appointment)
 
     return sorted(appointments, key=lambda app: (app.begin_time, app.weight))
-
