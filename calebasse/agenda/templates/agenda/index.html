@@ -123,7 +123,7 @@
                <p class="workers">
                Thérapeutes :
                {% for worker in appointment.workers %}
-                 {{ worker.first_name }} <span class="last-name">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+                 {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
                {% endfor %}
                </p>
              {% endif %}
