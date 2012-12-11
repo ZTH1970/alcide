@@ -167,6 +167,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['current_state'] = current_state
         ctx['service_id'] = self.service.id
         ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
+        ctx['next_rdvs'] = Occurrence.objects.next_appoinments(ctx['object'])
+        ctx['last_rdvs'] = Occurrence.objects.last_appoinments(ctx['object'])
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":

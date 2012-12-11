@@ -195,22 +195,62 @@
     </div>
 
     <div id="tabs-5"> <!-- Actes passés -->
+        {% for last_rdv in last_rdvs %}
         <div class="frame">
-          <h3>En diagnostic depuis le 6 mars 2012</h3>
-          <ul>
-            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
+            <h3>{{ last_rdv.start_time|date:"d/m/y H:m" }} {{ last_rdv.event.eventact.act_type }}</h3>
             <ul>
-              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
-              <ul>
-                <li>...</li>
-              </ul></li>
-            </ul>
+            <li>
+            {% for doctor in last_rdv.event.eventact.doctors.all %}
+            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} - 
+            {% endfor %}
             </li>
-          </ul>
+            {% if last_rdv.event.eventact.attendance %}
+            <li>Présence : {{ last_rdv.event.eventact.attendance }}</li>
+            {% endif %}
+            {% if last_rdv.event.room %}
+            <li>
+            Salle : {{ last_rdv.event.room }}
+            </li>
+            {% endif %}
+            <li>
+            {% if last_rdv.event.eventact.convocation_sent %}
+            Convocation envoyé
+            {% else %}
+            Convocation non envoyé
+            {% endif %}
+            </li>
+        </ul>
         </div>
+        {% endfor %}
     </div>
 
-    <div id="tabs-6">
+    <div id="tabs-6"> <!-- Prochains rendez-vous -->
+        {% for next_rdv in next_rdvs %}
+        <div class="frame">
+            <h3>{{ next_rdv.start_time|date:"d/m/y H:m" }} {{ next_rdv.event.eventact.act_type }}</h3>
+            <ul>
+            {% if next_rdv.event.eventact.doctors.all %}
+            <li>
+            {% for doctor in next_rdv.event.eventact.doctors.all %}
+            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} - 
+            {% endfor %}
+            </li>
+            {% endif %}
+            {% if next_rdv.event.room %}
+            <li>
+            Salle : {{ next_rdv.event.room }}
+            </li>
+            {% endif %}
+            <li>
+            {% if next_rdv.event.eventact.convocation_sent %}
+            Convocation envoyé
+            {% else %}
+            Convocation non envoyé
+            {% endif %}
+            </li>
+        </ul>
+        </div>
+        {% endfor %}
     </div>
 
     <div id="tabs-7">
