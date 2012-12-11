@@ -69,13 +69,14 @@ function event_dialog(url, title, width, btn_text) {
       $('div.agenda > div').accordion({active: false, autoHeight: false});
 
       $('.person-item').on('click', function() {
-          $('#filtre input').val('')
-          $('#users li').each(function() {
-              $(this).show();
-          });
           var target = toggle_worker(this);
           if ($(target).is(':visible')) {
               $(target).click();
+          }
+          if ($('#filtre input').val()) {
+              $('#filtre input').val('');
+              $('#filtre input').keyup();
+              $('#filtre input').focus();
           }
       });
 
@@ -140,7 +141,9 @@ function event_dialog(url, title, width, btn_text) {
       /* Gestion du filtre sur les utilisateurs */
       $('#filtre input').keyup(function() {
           var filtre = $(this).val();
+          var service_only = $('#hide-workers').is(':checked');
           if (filtre) {
+              $('#hide-workers').attr('checked', false);
               $('#users li').each(function() {
                   if ($(this).text().match(new RegExp(filtre, "i"))) {
                       $(this).show();
@@ -150,9 +153,15 @@ function event_dialog(url, title, width, btn_text) {
               });
           } else {
               $('#users li').show();
+              if (service_only) {
+                  $('.person-item:not(.in_service)').hide();
+              }
           }
-
+          /* hide worker type titles that do not have a single visible person */
+          $("#users ul:has(*):has(:visible)").parent().prev().show();
+          $("#users ul:has(*):not(:has(:visible))").parent().prev().hide();
       });
+
       $('.date').datepicker({showOn: 'button'});
       $('#add-intervenant-btn').click(function() {
           var text = $(this).prev().val();
@@ -181,16 +190,16 @@ function event_dialog(url, title, width, btn_text) {
       });
       $('#print-button').click(function() { window.print(); });
     $('#hide-workers').change(function() {
-      var val = $(this).is(':checked');
       if ($(this).is(':checked')) {
-        $('.person-item:not(.in_service)').hide('fold');
-      } else {
-        $('.person-item').show('fold');
+        $('#filtre input').val('');
       }
+      $('#filtre input').keyup();
+      return;
     });
     $('select[name^="act_state"]').on('change', function () {
     $(this).next('button').prop('disabled',
       ($(this).data('previous') == $(this).val()));
     })
+    $('#filtre input').keyup();
   });
 })(window.jQuery)

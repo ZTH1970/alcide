@@ -388,6 +388,10 @@ div#users input {
 	width: 10em;
 }
 
+div#users input#hide-workers {
+	width: auto;
+}
+
 div#users dt {
 	font-weight: bold;
 }
