@@ -64,6 +64,7 @@ class Appointment(object):
             event_act = occurrence.event.eventact
             workers = event_act.participants.all()
             self.convocation_sent = event_act.convocation_sent
+            self.patient = event_act.patient
             self.patient_record_id = event_act.patient.id
             self.patient_record_paper_id = event_act.patient.paper_id
             self.workers_initial = ""

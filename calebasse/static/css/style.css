@@ -1178,6 +1178,16 @@ div.agenda p.workers {
   font-size: 80%;
 }
 
+div.agenda p.phones {
+  margin: 10px 0;
+  padding: 0;
+}
+
+div.agenda p.phones span {
+  padding: 0 1ex;
+  cursor: help;
+}
+
 [class^="icon-"]:before, [class*=" icon-"]:before {
   font-family: FontAwesome;
   font-weight: normal;
@@ -1202,3 +1212,5 @@ a [class^="icon-"], a [class*=" icon-"] {
 .icon-minus:before                { content: "\f068"; }
 .icon-envelope:before             { content: "\f003"; }
 .icon-comment:before              { content: "\f075"; }
+.icon-home-space:before           { content: "\f015 "; }
+.icon-user-space:before           { content: "\f007 "; }
