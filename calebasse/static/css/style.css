@@ -1028,9 +1028,9 @@ table#new-appointment-table td {
    padding: 0;
 }
 
-.person-item span { display: none; }
+.person-item span.toggle { display: none; }
 
-.person-item.active span { display: inline; }
+.person-item.active span.toggle { display: inline; }
 
 form.inline-form {
   display: inline;

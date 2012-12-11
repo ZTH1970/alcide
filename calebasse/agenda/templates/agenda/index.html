@@ -34,9 +34,9 @@
      <dd><ul>
        {% for worker in workers_type.workers %}
        {% if worker|is_worker_in_service:service_name %}
-       <li id="selector-worker-{{worker.id}}" class="person-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% else %}
-       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.display_name }} <span title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% endif %}
        {% endfor %}
      </ul></dd>
@@ -73,7 +73,7 @@
        <ul>
         {% for worker_agenda in workers_agenda %}
         <li style="display: none" class="worker-{{ worker_agenda.worker.id }} agenda">
-        <a id="link-tab-worker-{{ worker_agenda.worker.id }}"  href="#tabs-worker-{{ worker_agenda.worker.id }}" class="tab" data-id="{{ worker_agenda.worker.id }}">{{ worker_agenda.worker.display_name }}</a>
+        <a id="link-tab-worker-{{ worker_agenda.worker.id }}"  href="#tabs-worker-{{ worker_agenda.worker.id }}" class="tab" data-id="{{ worker_agenda.worker.id }}">{{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span></a>
         <a href="#" style="padding: 3px;cursor: auto;" class="close-tab" data-target="selector-worker-{{ worker_agenda.worker.id }}"><span class="ui-icon ui-icon-circle-close"></span></a>
         </li>
         {% endfor %}

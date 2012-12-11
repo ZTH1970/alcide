@@ -53,7 +53,7 @@
             {% for contact in address.patientcontact_set.all  %}
             <div class="contact{% if contact.id == object.id %} patient{% endif %}">
                 <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
-                    {{ contact.display_name }} {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
+                    {{ contact.first_name }} <span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
                 <div class="right">
                     <input type="radio"
                     {% if object.policyholder.id == contact.id %} checked="checked" {% endif %}
