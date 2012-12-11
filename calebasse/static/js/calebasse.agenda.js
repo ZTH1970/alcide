@@ -188,5 +188,9 @@ function event_dialog(url, title, width, btn_text) {
         $('.person-item').show('fold');
       }
     });
+    $('select[name^="act_state"]').on('change', function () {
+    $(this).next('button').prop('disabled',
+      ($(this).data('previous') == $(this).val()));
+    })
   });
 })(window.jQuery)
