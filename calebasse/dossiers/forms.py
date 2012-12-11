@@ -5,10 +5,12 @@ from datetime import date
 from django import forms
 from django.forms import ModelForm, Form
 
-from calebasse.dossiers.models import PatientRecord, PatientAddress, PatientContact
+from calebasse.dossiers.models import (PatientRecord,
+    PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT)
 from calebasse.dossiers.states import STATE_CHOICES
 
 from ajax_select import make_ajax_field
+
 
 class EditPatientRecordForm(ModelForm):
     class Meta:
@@ -111,3 +113,9 @@ class PatientAddressForm(ModelForm):
                 'number': forms.TextInput(attrs={'size': 10}),
                 }
 
+class CmppHealthCareTreatmentForm(Form):
+    start_date = forms.DateField(label=u'Date de début')
+    patient_id = forms.IntegerField()
+    act_number = forms.IntegerField(label=u"Nombre d'actes couverts", initial=DEFAULT_ACT_NUMBER_TREATMENT)
+    comment = forms.CharField(label=u"Commentaire",
+            required=False, widget=forms.Textarea)

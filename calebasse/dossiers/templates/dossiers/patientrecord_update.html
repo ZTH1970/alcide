@@ -76,121 +76,131 @@
     </div>
 
     <div id="tabs-4"> <!-- Prise en charge -->
-      <div id="patient-diag">
-        <div class="frame">
-          <h3>En diagnostic depuis le 11 juin 2012</h3>
-          <ul>
-            <li><input size="4" value="6"/> actes prévus</li>
-            <li><strong>3</strong> actes réalisés dont <strong>2</strong> facturés <button class="blind">détails</button>
-            <ul>
-              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>2</strong> actes
-              <ul>
-                <li>Accueil le 11 juin 2012 - 9h00 - 45 minutes - Bob Leponge</li>
-                <li>Dialogue le 12 juin 2012 - 10h00 - 30 minutes - Bob Leponge</li>
-              </ul></li>
-              <li>Non facturé - <strong>1 acte</strong>
-              <ul>
-                <li>Dialogue le 13 juin 2012 - 11h00 - 45 minutes - Sandy Kilo</li>
-              </ul></li>
-            </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
 
-      <div id="patient-traitement">
-        <div class="frame">
-          <h3>En diagnostic depuis le 6 mars 2012</h3>
-          <ul>
-            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
-            <ul>
-              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
-              <ul>
-                <li>...</li>
-              </ul></li>
-            </ul>
-            </li>
-          </ul>
-        </div>
-
-        <div class="frame">
-          <h3>En traitement depuis le 11 juin 2012</h3>
-          <ul>
-            <li><strong>4</strong> actes réalisés <button class="blind">détails</button>
-            <ul><li>...</li></ul>
-            </li>
-            <li>Pas de prise en charge - <button id="add-prise-en-charge-btn">Ajouter une prise en charge</button></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <div id="patient-traitement-charge" style="display: none;">
-
-        <div class="frame">
-          <h3>En diagnostic depuis le 2 avril 2008</h3>
-          <ul>
-            <li><strong>3</strong> actes réalisés et facturés <button class="blind">détails</button>
-            <ul>
-              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>3</strong> actes
-              <ul>
-                <li>...</li>
-              </ul></li>
-            </ul>
-            </li>
-          </ul>
-        </div>
-
-        <div class="frame">
-          <h3>En diagnostic depuis le 5 octobre 2010</h3>
-          <ul>
-            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>
-            <ul>
-              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes
-              <ul>
-                <li>...</li>
-              </ul></li>
-            </ul>
-            </li>
-          </ul>
-        </div>
-
-        <div class="frame">
-          <h3>En traitement depuis le 12 décembre 2010</h3>
-          <ul>
-            <li>Prise en charge depuis le 12 décembre 2010
-            <ul>
-              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>
-              <ul><li>...</li></ul></li>
-              <li><strong>10</strong> actes réalisés et facturés en prolongation <button class="blind">détails</button>
-              <ul><li>...</li></ul></li>
-              <li><strong>6</strong> actes réalisés et non pris en charge <button class="blind">détails</button>
-              <ul><li>...</li></ul></li>
-            </ul>
-            </li>
-            <li>Prise en charge depuis le 15 décembre 2011
-            <ul>
-              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>
-              <ul><li>...</li></ul></li>
-              <li><strong>6</strong> actes réalisés non facturés <button class="blind">détails</button>
-              <ul><li>...</li></ul></li>
-              <li><button id="add-prolongation-btn">Ajouter une prolongation</button></li>
-            </ul>
-            </li>
-          </ul>
-        </div>
+    {% if object.service.name == "CMPP" %}
+        {% if object.can_rediag %}<button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>{% endif %}
+        <button id="new-pctrait-btn">Nouvelle PC traitement</button>
+    {% endif %}
+    {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
+        <button id="new-pctrait-btn">Nouvelle notification</button>
+    {% endif %}
 
 
-      </div>
+<!--      <div id="patient-diag">-->
+<!--        <div class="frame">-->
+<!--          <h3>En diagnostic depuis le 11 juin 2012</h3>-->
+<!--          <ul>-->
+<!--            <li><input size="4" value="6"/> actes prévus</li>-->
+<!--            <li><strong>3</strong> actes réalisés dont <strong>2</strong> facturés <button class="blind">détails</button>-->
+<!--            <ul>-->
+<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>2</strong> actes-->
+<!--              <ul>-->
+<!--                <li>Accueil le 11 juin 2012 - 9h00 - 45 minutes - Bob Leponge</li>-->
+<!--                <li>Dialogue le 12 juin 2012 - 10h00 - 30 minutes - Bob Leponge</li>-->
+<!--              </ul></li>-->
+<!--              <li>Non facturé - <strong>1 acte</strong>-->
+<!--              <ul>-->
+<!--                <li>Dialogue le 13 juin 2012 - 11h00 - 45 minutes - Sandy Kilo</li>-->
+<!--              </ul></li>-->
+<!--            </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <div id="overlay">
-       <p>
-       Exemples pour cet onglet :
-        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a>
-        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a>
-        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>
-        </p>
-      </div>
+<!--      <div id="patient-traitement">-->
+<!--        <div class="frame">-->
+<!--          <h3>En diagnostic depuis le 6 mars 2012</h3>-->
+<!--          <ul>-->
+<!--            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>-->
+<!--            <ul>-->
+<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes-->
+<!--              <ul>-->
+<!--                <li>...</li>-->
+<!--              </ul></li>-->
+<!--            </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+<!--        <div class="frame">-->
+<!--          <h3>En traitement depuis le 11 juin 2012</h3>-->
+<!--          <ul>-->
+<!--            <li><strong>4</strong> actes réalisés <button class="blind">détails</button>-->
+<!--            <ul><li>...</li></ul>-->
+<!--            </li>-->
+<!--            <li>Pas de prise en charge - <button id="add-prise-en-charge-btn">Ajouter une prise en charge</button></li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+<!--      </div>-->
+
+<!--      <div id="patient-traitement-charge" style="display: none;">-->
+
+<!--        <div class="frame">-->
+<!--          <h3>En diagnostic depuis le 2 avril 2008</h3>-->
+<!--          <ul>-->
+<!--            <li><strong>3</strong> actes réalisés et facturés <button class="blind">détails</button>-->
+<!--            <ul>-->
+<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>3</strong> actes-->
+<!--              <ul>-->
+<!--                <li>...</li>-->
+<!--              </ul></li>-->
+<!--            </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+<!--        <div class="frame">-->
+<!--          <h3>En diagnostic depuis le 5 octobre 2010</h3>-->
+<!--          <ul>-->
+<!--            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>-->
+<!--            <ul>-->
+<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes-->
+<!--              <ul>-->
+<!--                <li>...</li>-->
+<!--              </ul></li>-->
+<!--            </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+<!--        <div class="frame">-->
+<!--          <h3>En traitement depuis le 12 décembre 2010</h3>-->
+<!--          <ul>-->
+<!--            <li>Prise en charge depuis le 12 décembre 2010-->
+<!--            <ul>-->
+<!--              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>-->
+<!--              <ul><li>...</li></ul></li>-->
+<!--              <li><strong>10</strong> actes réalisés et facturés en prolongation <button class="blind">détails</button>-->
+<!--              <ul><li>...</li></ul></li>-->
+<!--              <li><strong>6</strong> actes réalisés et non pris en charge <button class="blind">détails</button>-->
+<!--              <ul><li>...</li></ul></li>-->
+<!--            </ul>-->
+<!--            </li>-->
+<!--            <li>Prise en charge depuis le 15 décembre 2011-->
+<!--            <ul>-->
+<!--              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>-->
+<!--              <ul><li>...</li></ul></li>-->
+<!--              <li><strong>6</strong> actes réalisés non facturés <button class="blind">détails</button>-->
+<!--              <ul><li>...</li></ul></li>-->
+<!--              <li><button id="add-prolongation-btn">Ajouter une prolongation</button></li>-->
+<!--            </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+
+<!--      </div>-->
+
+<!--      <div id="overlay">-->
+<!--       <p>-->
+<!--       Exemples pour cet onglet :-->
+<!--        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a>-->
+<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a>-->
+<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>-->
+<!--        </p>-->
+<!--      </div>-->
 
     </div>
 

@@ -114,6 +114,36 @@ class DeletePatientAddressView(cbv.DeleteView):
 
 delete_patient_address = DeletePatientAddressView.as_view()
 
+
+
+
+
+class NewCmppHealthCareTreatmentView(cbv.FormView):
+    form_class = forms.CmppHealthCareTreatmentForm
+    template_name = 'dossiers/patientpctrait_new.html'
+    success_url = '../view#tab=3'
+
+    def get_success_url(self):
+        return self.success_url
+
+    def post(self, request, *args, **kwarg):
+        self.author = request.user
+        return super(NewCmppHealthCareTreatmentView, self).post(request, *args, **kwarg)
+
+    def form_valid(self, form):
+        start_date = datetime.strptime(form.data['start_date'], "%d/%m/%Y")
+        act_number = int(form.data['act_number'])
+        patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        comment = form.data['comment']
+        CmppHealthCareTreatment(patient=patient, start_date=start_date, author=self.author, comment=comment, _act_number=act_number)
+        return super(NewCmppHealthCareTreatmentView, self).form_valid(form)
+
+new_healthcare_treatment = NewCmppHealthCareTreatmentView.as_view()
+
+
+
+
+
 class StateFormView(cbv.FormView):
     template_name = 'dossiers/state.html'
     form_class = forms.StateForm
@@ -187,7 +217,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                         STATES_BTN_MAPPER['CLOS'],
                         STATES_BTN_MAPPER['ACCUEIL']]
             elif ctx['object'].last_state.status.type == "TRAITEMENT":
-                # Passage automatique en diagnostic si on ajoute une prise en charge diagnostic, 
+                # Passage automatique en diagnostic si on ajoute une prise en charge diagnostic,
                 # ce qui est faisable dans l'onglet prise en charge par un bouton visible sous conditions
                 ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
                         STATES_BTN_MAPPER['CLOS'],
@@ -332,6 +362,3 @@ class PatientRecordPaperIDUpdateView(cbv.UpdateView):
     success_url = '../..'
 
 update_paper_id = PatientRecordPaperIDUpdateView.as_view()
-
-
-

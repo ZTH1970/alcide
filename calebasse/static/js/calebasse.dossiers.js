@@ -150,6 +150,10 @@ function state_dialog(url, state_title, state_type) {
           click: function() { $(this).dialog("close"); } }]}
         );
     });
+    $('#new-pctrait-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
+            '#ajax-dlg', '600px', 'Ajouter');
+    });
 
     $('button.blind').next().hide();
     $('button.blind').click(function() {
@@ -161,4 +165,3 @@ function state_dialog(url, state_title, state_type) {
     }
   });
 })(window.jQuery)
-
