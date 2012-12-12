@@ -128,6 +128,7 @@ class NewHealthCareView(cbv.CreateView):
         initial['patient'] = self.kwargs['patientrecord_id']
         return initial
 
+
 new_healthcare_treatment = NewHealthCareView.as_view(model=CmppHealthCareTreatment,
         form_class=forms.CmppHealthCareTreatmentForm)
 new_healthcare_diagnostic = NewHealthCareView.as_view(model=CmppHealthCareDiagnostic,
