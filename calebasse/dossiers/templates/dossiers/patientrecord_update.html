@@ -286,17 +286,16 @@
     </div>
 
     <div id="tabs-5"> <!-- Actes passés -->
-        {% for last_rdv in last_rdvs %}
+        {% for last_rdv, state in last_rdvs %}
         <div class="frame">
             <h3>{{ last_rdv.start_time|date:"d/m/y H:m" }} {{ last_rdv.event.eventact.act_type }}</h3>
             <ul>
-            <li>
+            {% if last_rdv.event.eventact.doctors.all %}
+            <li><label>Praticiens :</label>
             {% for doctor in last_rdv.event.eventact.doctors.all %}
-            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} -
+            {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}
             </li>
-            {% if last_rdv.event.eventact.attendance %}
-            <li>Présence : {{ last_rdv.event.eventact.attendance }}</li>
             {% endif %}
             {% if last_rdv.event.room %}
             <li>
@@ -310,20 +309,25 @@
             Convocation non envoyé
             {% endif %}
             </li>
+            <li>{% if state %}<strong>{{ state.state_name }}</strong>, le {{ state.created }} par {{ state.author }}
+            {% else %}
+              Non pointé.
+            {% endif %}
+            </li>
         </ul>
         </div>
         {% endfor %}
     </div>
 
     <div id="tabs-6"> <!-- Prochains rendez-vous -->
-        {% for next_rdv in next_rdvs %}
+        {% for next_rdv, state in next_rdvs %}
         <div class="frame">
             <h3>{{ next_rdv.start_time|date:"d/m/y H:m" }} {{ next_rdv.event.eventact.act_type }}</h3>
             <ul>
-            {% if next_rdv.event.eventact.doctors.all %}
-            <li>
-            {% for doctor in next_rdv.event.eventact.doctors.all %}
-            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} -
+            {% if last_rdv.event.eventact.doctors.all %}
+            <li><label>Praticiens :</label>
+            {% for doctor in last_rdv.event.eventact.doctors.all %}
+            {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}
             </li>
             {% endif %}
@@ -337,6 +341,11 @@
             Convocation envoyé
             {% else %}
             Convocation non envoyé
+            {% endif %}
+            </li>
+            <li>{% if state %}<strong>{{ state.state_name }}</strong>, le {{ state.created }} par {{ state.author }}
+            {% else %}
+              Non pointé.
             {% endif %}
             </li>
         </ul>

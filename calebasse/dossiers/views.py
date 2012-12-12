@@ -190,8 +190,18 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['current_state'] = current_state
         ctx['service_id'] = self.service.id
         ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
-        ctx['next_rdvs'] = Occurrence.objects.next_appoinments(ctx['object'])
-        ctx['last_rdvs'] = Occurrence.objects.last_appoinments(ctx['object'])
+        ctx['next_rdvs'] = []
+        for rdv in Occurrence.objects.next_appoinments(ctx['object']):
+            state = rdv.event.eventact.get_state()
+            if not state.previous_state:
+                state = None
+            ctx['next_rdvs'].append((rdv, state))
+        ctx['last_rdvs'] = []
+        for rdv in Occurrence.objects.last_appoinments(ctx['object']):
+            state = rdv.event.eventact.get_state()
+            if not state.previous_state:
+                state = None
+            ctx['last_rdvs'].append((rdv, state))
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
