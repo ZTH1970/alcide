@@ -2,7 +2,7 @@ from django.contrib import admin
 
 import reversion
 
-from models import (ActType, CFTMEACode, FamilySituationType, HealthFund,
+from models import (ActType, CFTMEACode, FamilySituationType, HealthCenter,
         InscriptionMotive, Job, Nationality, Office, ParentalAuthorityType,
         ParentalCustodyType, Room, School, SchoolTeacherRole,
         Service, SessionType, TransportCompany, TransportType,
@@ -11,7 +11,7 @@ from models import (ActType, CFTMEACode, FamilySituationType, HealthFund,
 admin.site.register(ActType, reversion.VersionAdmin)
 admin.site.register(CFTMEACode, reversion.VersionAdmin)
 admin.site.register(FamilySituationType, reversion.VersionAdmin)
-admin.site.register(HealthFund, reversion.VersionAdmin)
+admin.site.register(HealthCenter, reversion.VersionAdmin)
 admin.site.register(LargeRegime, reversion.VersionAdmin)
 admin.site.register(InscriptionMotive, reversion.VersionAdmin)
 admin.site.register(Job, reversion.VersionAdmin)
