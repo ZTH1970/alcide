@@ -10,6 +10,7 @@ from calebasse.dossiers.models import (PatientRecord,
     CmppHealthCareTreatment, CmppHealthCareDiagnostic,
     SessadHealthCareNotification)
 from calebasse.dossiers.states import STATE_CHOICES
+from calebasse.ressources.models import (HealthCenter, LargeRegime)
 
 from ajax_select import make_ajax_field
 
@@ -94,16 +95,63 @@ class FollowUpForm(ModelForm):
 
 class PatientContactForm(ModelForm):
     addresses = make_ajax_field(PatientContact, 'addresses', 'addresses', True)
+    health_org = forms.CharField(label=u"Numéro de l'organisme destinataire", required=False)
+
     class Meta:
         model = PatientContact
         widgets = {
                 'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 'key': forms.TextInput(attrs={'size': 4}),
                 'twinning_rank': forms.TextInput(attrs={'size': 4}),
-                'large_regime': forms.Select(attrs={'class': 'small_select'}),
-                'healt_fund': forms.Select(attrs={'class': 'small_select'}),
-                'healt_center': forms.Select(attrs={'class': 'small_select'}),
+                'health_org': forms.TextInput(attrs={'size': 9}),
                 }
+
+    def __init__(self, *args, **kwargs):
+        super(PatientContactForm, self).__init__(*args,**kwargs)
+        if self.instance and self.instance.health_center:
+            print self.instance.health_center
+            self.fields['health_org'].initial = self.instance.health_center.large_regime.code + self.instance.health_center.health_fund + self.instance.health_center.code
+
+    def clean(self):
+        cleaned_data = super(PatientContactForm, self).clean()
+        health_org = cleaned_data.get('health_org')
+        if health_org:
+            msg = None
+            lr = None
+            hc = None
+            if len(health_org) < 5:
+                msg = u"Numéro inférieur à 5 chiffres."
+            else:
+                try:
+                    lr = LargeRegime.objects.get(code=health_org[:2])
+                except:
+                    msg = u"Grand régime %s inconnu." % health_org[:2]
+                else:
+                    hcs = HealthCenter.objects.filter(health_fund=health_org[2:5], large_regime=lr)
+                    if not hcs:
+                        msg = u"Caisse %s inconnue." % health_org[2:5]
+                    elif len(hcs) == 1:
+                        hc = hcs[0]
+                    else:
+                        if len(health_org) == 9:
+                            hcs = hcs.filter(code=health_org[5:9])
+                            if not hcs:
+                                msg = u"Centre %s inconnu." % health_org[5:9]
+                            elif len(hcs) == 1:
+                                hc = hcs[0]
+                            else:
+                                msg = u"Ceci ne devrait pas arriver, %s n'est pas unique." % health_org
+                        else:
+                            msg = "Plusieurs centres possibles, précisez parmis :"
+                            for hc in hcs:
+                                msg += " %s" % str(hc)
+            if msg:
+                self._errors["health_org"] = self.error_class([msg])
+            else:
+                cleaned_data['large_regime'] = lr.code
+                cleaned_data['health_center'] = hc
+        return cleaned_data
+
 
 class PatientAddressForm(ModelForm):
 
