@@ -154,6 +154,14 @@ function state_dialog(url, state_title, state_type) {
         generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
             '#ajax-dlg', '600px', 'Ajouter');
     });
+    $('#new-pcdiag-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_diagnostic/new', 'Ajouter une prise en charge de diagnostic',
+            '#ajax-dlg', '600px', 'Ajouter');
+    });
+    $('#new-notification-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_notification/new', 'Ajouter une nouvelle notification',
+            '#ajax-dlg', '600px', 'Ajouter');
+    });
 
     $('button.blind').next().hide();
     $('button.blind').click(function() {

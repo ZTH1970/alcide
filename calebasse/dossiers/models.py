@@ -122,7 +122,7 @@ class SessadHealthCareNotification(HealthCare):
     class Meta:
         app_label = 'dossiers'
 
-    end_date = models.DateTimeField()
+    end_date = models.DateField()
 
     def save(self, **kwargs):
         self.start_date = \
@@ -538,3 +538,4 @@ def create_patient(first_name, last_name, service, creator,
     patient.last_state = fs
     patient.save()
     return patient
+

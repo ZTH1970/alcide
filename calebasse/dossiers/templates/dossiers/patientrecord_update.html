@@ -79,10 +79,11 @@
 
     {% if object.service.name == "CMPP" %}
         {% if object.can_rediag %}<button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>{% endif %}
+        <button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>
         <button id="new-pctrait-btn">Nouvelle PC traitement</button>
     {% endif %}
     {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
-        <button id="new-pctrait-btn">Nouvelle notification</button>
+        <button id="new-notification-btn">Nouvelle notification</button>
     {% endif %}
 
 

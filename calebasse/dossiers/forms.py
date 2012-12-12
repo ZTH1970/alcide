@@ -7,7 +7,8 @@ from django.forms import ModelForm, Form
 
 from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
-    CmppHealthCareTreatment)
+    CmppHealthCareTreatment, CmppHealthCareDiagnostic,
+    SessadHealthCareNotification)
 from calebasse.dossiers.states import STATE_CHOICES
 
 from ajax_select import make_ajax_field
@@ -124,8 +125,26 @@ class CmppHealthCareTreatmentForm(ModelForm):
                 'patient': forms.HiddenInput(),
                 'author': forms.HiddenInput(),
                 }
-#    start_date = forms.DateField(label=u'Date de début')
-#    patient_id = forms.IntegerField()
-#    act_number = forms.IntegerField(label=u"Nombre d'actes couverts", initial=DEFAULT_ACT_NUMBER_TREATMENT)
-#    comment = forms.CharField(label=u"Commentaire",
-#            required=False, widget=forms.Textarea)
+
+class CmppHealthCareDiagnosticForm(ModelForm):
+    class Meta:
+        model = CmppHealthCareDiagnostic
+        fields = ('start_date', '_act_number',
+                'comment', 'patient', 'author')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
+                'patient': forms.HiddenInput(),
+                'author': forms.HiddenInput(),
+                }
+
+class SessadHealthCareNotificationForm(ModelForm):
+    class Meta:
+        model = SessadHealthCareNotification
+        fields = ('start_date', 'end_date',
+                'comment', 'patient', 'author')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
+                'patient': forms.HiddenInput(),
+                'author': forms.HiddenInput(),
+                }
+
