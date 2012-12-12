@@ -218,7 +218,8 @@ class PatientContact(People):
     mobile = PhoneNumberField(verbose_name=u"Téléphone mobile", blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     # carte vitale
-    social_security_id = models.CharField(max_length=13, verbose_name=u"NRI")
+    social_security_id = models.CharField(max_length=13, verbose_name=u"NRI",
+            null=True, blank=True)
     birthdate = models.DateField(verbose_name=u"Date de naissance",
             null=True, blank=True)
     twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
@@ -229,13 +230,7 @@ class PatientContact(People):
             null=True, blank=True)
     end_rights = models.DateField(verbose_name=u"Fin de droits",
             null=True, blank=True)
-    large_regime = models.CharField(verbose_name=u'Grand régime',
-            null=True, blank=True, max_length=2,
-            choices=LARGE_REGIME_CHOICES)
-    healt_fund = models.ForeignKey('ressources.HealthFund',
-            verbose_name=u"Caisse d'assurance maladie",
-            null=True, blank=True)
-    healt_center = models.ForeignKey('ressources.HealthCenter',
+    health_center = models.ForeignKey('ressources.HealthCenter',
             verbose_name=u"Centre d'assurance maladie",
             null=True, blank=True)
 
