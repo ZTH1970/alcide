@@ -9,7 +9,7 @@ from calebasse.dossiers import forms
 from calebasse.agenda.models import Occurrence
 from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
-        CmppHealthCareDiagnostic, SessadHealthCareNotification)
+        CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import Service
 
@@ -274,6 +274,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             elif ctx['object'].last_state.status.type == "CLOS":
                 ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
                         STATES_BTN_MAPPER['TRAITEMENT']]
+        ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
+        ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
         return ctx
 
 patient_record = PatientRecordView.as_view()

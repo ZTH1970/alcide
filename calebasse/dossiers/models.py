@@ -51,16 +51,16 @@ class CmppHealthCareDiagnostic(HealthCare):
     class Meta:
         app_label = 'dossiers'
 
-    _act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_DIAGNOSTIC, verbose_name=u"Nombre d'actes couverts")
+    act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_DIAGNOSTIC, verbose_name=u"Nombre d'actes couverts")
 
     def get_act_number(self):
-        return self._act_number
+        return self.act_number
 
     def set_act_number(self, value):
         if value < self.get_nb_acts_cared():
             raise Exception("La valeur doit être supérieur au "
                 "nombre d'actes déjà pris en charge")
-        self._act_number = value
+        self.act_number = value
         self.save()
 
     def save(self, **kwargs):
@@ -75,7 +75,7 @@ class CmppHealthCareTreatment(HealthCare):
     class Meta:
         app_label = 'dossiers'
 
-    _act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT,
+    act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT,
             verbose_name=u"Nombre d'actes couverts")
     end_date = models.DateField(verbose_name=u"Date de fin")
     prolongation = models.IntegerField(default=0,
@@ -83,14 +83,14 @@ class CmppHealthCareTreatment(HealthCare):
 
     def get_act_number(self):
         if self.is_extended():
-            return self._act_number + self.prolongation
-        return self._act_number
+            return self.act_number + self.prolongation
+        return self.act_number
 
     def set_act_number(self, value):
         if value < self.get_nb_acts_cared():
             raise Exception("La valeur doit être supérieur au "
                 "nombre d'actes déjà pris en charge")
-        self._act_number = value
+        self.act_number = value
         self.save()
 
     def is_extended(self):
@@ -448,8 +448,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             # Pas de prise en charge, on recherche l'acte facturable le plus
             # ancien, on crée une pc diag à la même date.
             for act in acts:
-                if are_all_acts_of_the_day_locked(act.date) and \
-                        act.is_state('VALIDE') and act.is_billable():
+                if act.is_state('VALIDE') and act.is_billable():
                     CmppHealthCareDiagnostic(patient=self, author=modifier,
                         start_date=act.date).save()
                     break
@@ -461,15 +460,13 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     latest('date')
                 if last_billed_act:
                     for act in acts:
-                        if are_all_acts_of_the_day_locked(act.date) and \
-                                act.is_state('VALIDE') and \
+                        if act.is_state('VALIDE') and \
                                 act.is_billable() and \
                                 (act.date - last_billed_act.date).days >= 365:
-                            CmppHealthCareDiagnostic(patient=self,
-                                author=modifier, start_date=act.date).save()
-                            break
+                            return True
             except:
                 pass
+        return False
 
     def automated_switch_state(self, modifier):
         # Quel est le dernier acte facturable.
@@ -533,4 +530,3 @@ def create_patient(first_name, last_name, service, creator,
     patient.last_state = fs
     patient.save()
     return patient
-

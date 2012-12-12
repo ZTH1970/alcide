@@ -166,7 +166,7 @@ class PatientAddressForm(ModelForm):
 class CmppHealthCareTreatmentForm(ModelForm):
     class Meta:
         model = CmppHealthCareTreatment
-        fields = ('start_date', 'end_date', '_act_number',
+        fields = ('start_date', 'act_number',
                 'prolongation', 'comment', 'patient', 'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
@@ -177,7 +177,7 @@ class CmppHealthCareTreatmentForm(ModelForm):
 class CmppHealthCareDiagnosticForm(ModelForm):
     class Meta:
         model = CmppHealthCareDiagnostic
-        fields = ('start_date', '_act_number',
+        fields = ('start_date', 'act_number',
                 'comment', 'patient', 'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
@@ -195,4 +195,3 @@ class SessadHealthCareNotificationForm(ModelForm):
                 'patient': forms.HiddenInput(),
                 'author': forms.HiddenInput(),
                 }
-

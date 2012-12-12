@@ -158,9 +158,35 @@
     <div id="tabs-4"> <!-- Prise en charge -->
 
     {% if object.service.name == "CMPP" %}
-        {% if object.can_rediag %}<button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>{% endif %}
-        <button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>
+        <p>
+        {% if can_rediag %}<button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>{% endif %}
         <button id="new-pctrait-btn">Nouvelle PC traitement</button>
+        </p>
+        {% if hcs %}
+            {% for hc in hcs %}
+                {% if hc.cmpphealthcarediagnostic %}
+                  <div id="patient-diag">
+                    <div class="frame">
+                      <h3>En diagnostic depuis le {{ hc.start_date }}</h3>
+                      <ul>
+                        <li><input size="4" value="{{ hc.cmpphealthcarediagnostic.act_number }}"/> actes prévus</li>
+                        <li>{% if hc.get_nb_acts_cared %}<strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés.{% else %}Aucun acte facturé.{% endif %}</li>
+                      </ul>
+                    </div>
+                  </div>
+                {% else %}
+                  <div id="patient-traitement">
+                    <div class="frame">
+                      <h3>En traitement depuis le {{ hc.start_date }} jusqu'au {{ hc.end_date }}</h3>
+                      <ul>
+                        <li><input size="4" value="{{ hc.cmpphealthcaretreatment.act_number }}"/> actes prévus</li>
+                        <li>{% if hc.get_nb_acts_cared %}<strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés.{% else %}Aucun acte facturé.{% endif %}</li>
+                      </ul>
+                    </div>
+                  </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     {% endif %}
     {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
         <button id="new-notification-btn">Nouvelle notification</button>
