@@ -54,7 +54,7 @@
             <div class="contact{% if contact.id == object.id %} patient{% endif %}">
                 <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
                     {{ contact.first_name }} <span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
-                <div class="right">
+                <div class="right">Assuré
                     <input type="radio"
                     {% if object.policyholder.id == contact.id %} checked="checked" {% endif %}
                     id="id_policyholder-policyholder_{{ contact.id }}"
@@ -64,8 +64,88 @@
                     <button type="button" data-id="{{ contact.id }}" class="del-contact icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
                 </div>
-                <p>{{ contact.social_security_id }}</p>
-                <p>{{ contact.mobile }}</p>
+                <div>
+                    <ul>
+                        {% if contact.email %}
+                            <li>
+                            <label>Courriel :</label>
+                            {{ contact.email }}
+                            </li>
+                        {% endif %}
+                        {% if contact.mobile %}
+                            <li>
+                            <label>Téléphone mobile :</label>
+                            {{ contact.mobile }}
+                            </li>
+                        {% endif %}
+                        {% if contact.contact_comment %}
+                            <li>
+                            <label>Commentaire :</label>
+                            {{ contact.contact_comment }}
+                            </li>
+                        {% endif %}
+                        <li><label>Données d'assuré social</label>
+<!--                            <button class="blind">détails</button>-->
+                            <ul>
+                            <li>
+                                {% if contact.social_security_id %}
+                                    <label>Numéro d'assuré social :</label>
+                                    {{ contact.social_security_id }}
+                                {% else %}
+                                    <label>Aucun numéro d'assuré social renseigné.</label>
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if contact.birthdate %}
+                                    <label>Date de naissance :</label>
+                                    {{ contact.birthdate }}
+                                {% else %}
+                                    <label>Aucune date de naissance renseignée.</label>
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if contact.begin_rights %}
+                                    <label>Début de droits :</label>
+                                    {{ contact.begin_rights }}
+                                {% else %}
+                                    <label>Aucun début de droits renseigné.</label>
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if contact.end_rights %}
+                                    <label>Fin de droits :</label>
+                                    {{ contact.end_rights }}
+                                {% else %}
+                                    <label>Aucune fin de droits renseignée.</label>
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if contact.health_center %}
+                                    <label>Centre de santé :</label>
+                                    {{ contact.health_center }}
+                                {% else %}
+                                    <label>Aucun centre de santé renseigné.</label>
+                                {% endif %}
+                            </li>
+                            <li><label>Tiers-payant :</label>
+                                {% if contact.thirdparty_payer %}
+                                    Oui
+                                {% else %}
+                                    Non
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if contact.twinning_rank %}
+                                    <label>Rang (gémellité) :</label>
+                                    {{ contact.twinning_rank }}
+                                {% else %}
+                                    <label>Pas de gémellité.</label>
+                                {% endif %}
+                            </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
             {% endfor %}
         </div>
