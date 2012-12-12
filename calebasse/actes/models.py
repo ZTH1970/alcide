@@ -153,7 +153,7 @@ class Act(models.Model):
         if not hc:
             # On pourrait ici créer une prise en charge de diagnostic
             return (False, None)
-        if self.date < hc.start_date:
+        if self.date.date() < hc.start_date:
             return (False, None)
         # Les acts facturés déja couvert par la prise en charge sont pointés
         # dans hc.act_set.all()
@@ -170,59 +170,59 @@ class Act(models.Model):
         for a in acts_billable:
             if nb_acts_billed + count >= hc.get_act_number():
                 return (False, None)
-            if a.date >= hc.start_date:
+            if a.date.date() >= hc.start_date:
                 if a.id == self.id:
                     return (True, hc)
                 count = count + 1
         return (False, None)
 
-    def is_act_covered_by_treatment_healthcare(self):
-        # L'acte est déja pointé par une prise en charge
-        if self.is_billed:
-            # Sinon ce peut une refacturation, donc ne pas tenir compte qu'il
-            # y est une healthcare non vide
-            if self.healthcare and isinstance(self.healthcare,
-                    CmppHealthCareTreatment):
-                return (False, self.healthcare)
-            elif self.healthcare:
-                return (False, None)
-        # L'acte doit être facturable
-        if not (are_all_acts_of_the_day_locked(self.date) and \
-                self.is_state('VALIDE') and self.is_billable()):
-            return (False, None)
-        # On prend la dernière prise en charge diagnostic, l'acte ne sera pas
-        # pris en charge sur une prise en charge précédente
-        # Il peut arriver que l'on ait ajouté une prise en charge de
-        # traitement alors que tous les actes pour le diag ne sont pas encore facturés
-        try:
-            hc = CmppHealthCareTreatment.objects.\
-                filter(patient=self.patient).latest('start_date')
-        except:
-            return (False, None)
-        if not hc:
-            return (False, None)
-        if self.date < hc.start_date or self.date > hc.end_date:
-            return (False, None)
-        # Les acts facturés déja couvert par la prise en charge sont pointés
-        # dans hc.act_set.all()
-        nb_acts_billed = len(hc.act_set.all())
-        if nb_acts_billed >= hc.get_act_number():
-            return (False, None)
-        # Il faut ajouter les actes facturables non encore facturés qui précède cet
-        # acte
-        acts_billable = [a for a in self.patient.act_set.\
-            filter(is_billed=False).order_by('date') \
-            if are_all_acts_of_the_day_locked(a.date) and \
-            a.is_state('VALIDE') and a.is_billable()]
-        count = 0
-        for a in acts_billable:
-            if nb_acts_billed + count >= hc.get_act_number():
-                return (False, None)
-            if a.date >= hc.start_date and a.date <= hc.end_date:
-                if a.id == self.id:
-                    return (True, hc)
-                count = count + 1
-        return (False, None)
+#    def is_act_covered_by_treatment_healthcare(self):
+#        # L'acte est déja pointé par une prise en charge
+#        if self.is_billed:
+#            # Sinon ce peut une refacturation, donc ne pas tenir compte qu'il
+#            # y est une healthcare non vide
+#            if self.healthcare and isinstance(self.healthcare,
+#                    CmppHealthCareTreatment):
+#                return (False, self.healthcare)
+#            elif self.healthcare:
+#                return (False, None)
+#        # L'acte doit être facturable
+#        if not (are_all_acts_of_the_day_locked(self.date) and \
+#                self.is_state('VALIDE') and self.is_billable()):
+#            return (False, None)
+#        # On prend la dernière prise en charge diagnostic, l'acte ne sera pas
+#        # pris en charge sur une prise en charge précédente
+#        # Il peut arriver que l'on ait ajouté une prise en charge de
+#        # traitement alors que tous les actes pour le diag ne sont pas encore facturés
+#        try:
+#            hc = CmppHealthCareTreatment.objects.\
+#                filter(patient=self.patient).latest('start_date')
+#        except:
+#            return (False, None)
+#        if not hc:
+#            return (False, None)
+#        if self.date < hc.start_date or self.date > hc.end_date:
+#            return (False, None)
+#        # Les acts facturés déja couvert par la prise en charge sont pointés
+#        # dans hc.act_set.all()
+#        nb_acts_billed = len(hc.act_set.all())
+#        if nb_acts_billed >= hc.get_act_number():
+#            return (False, None)
+#        # Il faut ajouter les actes facturables non encore facturés qui précède cet
+#        # acte
+#        acts_billable = [a for a in self.patient.act_set.\
+#            filter(is_billed=False).order_by('date') \
+#            if are_all_acts_of_the_day_locked(a.date) and \
+#            a.is_state('VALIDE') and a.is_billable()]
+#        count = 0
+#        for a in acts_billable:
+#            if nb_acts_billed + count >= hc.get_act_number():
+#                return (False, None)
+#            if a.date >= hc.start_date and a.date <= hc.end_date:
+#                if a.id == self.id:
+#                    return (True, hc)
+#                count = count + 1
+#        return (False, None)
     # END Specific to cmpp healthcare
 
     def __unicode__(self):
