@@ -61,8 +61,8 @@
                     value="{{ contact.id }}"
                     class="policyholder-radio"
                     name="policyholder-policyholder">
-                    <button type="button" data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
-                    <button type="button" data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
+                    <button type="button" data-id="{{ contact.id }}" class="del-contact icon-minus" title="Supprimer"></button>
+                    <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
                 </div>
                 <p>{{ contact.social_security_id }}</p>
                 <p>{{ contact.mobile }}</p>
@@ -211,7 +211,7 @@
             <ul>
             <li>
             {% for doctor in last_rdv.event.eventact.doctors.all %}
-            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} - 
+            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} -
             {% endfor %}
             </li>
             {% if last_rdv.event.eventact.attendance %}
@@ -242,7 +242,7 @@
             {% if next_rdv.event.eventact.doctors.all %}
             <li>
             {% for doctor in next_rdv.event.eventact.doctors.all %}
-            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} - 
+            Praticiens : {{ doctor.first_name }} {{ doctor.last_name }} -
             {% endfor %}
             </li>
             {% endif %}
