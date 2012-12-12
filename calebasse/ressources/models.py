@@ -42,7 +42,7 @@ class HealthCenter(NamedAbstractModel):
         verbose_name_plural = u'Centres d\'assurances maladie'
 
     def __unicode__(self):
-        return self.code + ' ' + self.name
+        return self.large_regime.code + ' ' + self.health_fund + ' ' + self.code + ' ' + self.name
 
     code = models.CharField(verbose_name=u"Code du centre",
             max_length=4,
@@ -57,8 +57,8 @@ class HealthCenter(NamedAbstractModel):
     abbreviation = models.CharField(verbose_name=u'Abbrévation',
             max_length=8,
             null=True, default=True)
-    healt_funds = models.ManyToManyField('HealthFund',
-            verbose_name=u'Caisses d\'assurances maladie')
+    health_fund = models.CharField(verbose_name=u"Numéro de la caisse",
+            max_length=3)
     active = models.BooleanField(default=True)
     address = models.CharField(max_length=120)
     address_complement = models.CharField(max_length=120, blank=True,
@@ -74,16 +74,6 @@ class HealthCenter(NamedAbstractModel):
              null=True, blank=True)
     correspondant = models.CharField(max_length=80)
 
-class HealthFund(NamedAbstractModel):
-    class Meta:
-        verbose_name = u'Caisse d\'assurances maladie'
-        verbose_name_plural = u'Caisses d\'assurances maladie'
-
-    def __unicode__(self):
-        return self.number + ' ' + self.name
-
-    number = models.CharField(verbose_name=u"Numéro de la caisse",
-            max_length=3)
 
 class LargeRegime(NamedAbstractModel):
     class Meta:
@@ -289,4 +279,3 @@ class WorkerType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de personnel'
         verbose_name_plural = u'Types de personnel'
-
