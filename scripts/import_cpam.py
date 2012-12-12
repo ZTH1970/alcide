@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 import csv
@@ -8,9 +9,9 @@ import django.core.management
 
 
 django.core.management.setup_environ(calebasse.settings)
-from calebasse.ressources.models import HealthFund, HealthCenter, LargeRegime
+from calebasse.ressources.models import HealthCenter, LargeRegime
 
-db="./CPAM.csv"
+db="./scripts/CPAM.csv"
 
 class UTF8Recoder:
     """
@@ -49,31 +50,32 @@ def main():
     i = 2
     for line in csvlines:
         print i
-        regime = LargeRegime.objects.get(code=line[0])
-        cpam, created = HealthFund.objects.get_or_create(number=line[1],
-                name=line[3])
-        if len(line) != 14:
-            print "Error check your csv file"
-        city = line[9]
-        if line[11]:
-            city += ' ' + line[11]
-        center = HealthCenter.objects.create(
-                large_regime=regime,
-                code=line[2],
-                name=line[3],
-                dest_organism=line[5],
-                computer_center_code=line[6],
-                address=line[7],
-                address_complement=line[8],
-                city=city,
-                zip_code=line[10],
-                phone=line[12],
-                fax=line[13])
-        center.healt_funds.add(cpam)
+        try:
+            regime = LargeRegime.objects.get(code=line[0])
+        except Exception, e:
+            print "%s for %s in %s" % (str(e), line[0], str(line))
+        else:
+            if len(line) != 14:
+                print "Error check your csv file"
+            city = line[9]
+            if line[11]:
+                city += ' ' + line[11]
+            center, created = HealthCenter.objects.get_or_create(
+                    large_regime=regime,
+                    code=line[2],
+                    name=line[3],
+                    dest_organism=line[5],
+                    computer_center_code=line[6],
+                    address=line[7],
+                    address_complement=line[8],
+                    city=city,
+                    zip_code=line[10],
+                    phone=line[12],
+                    fax=line[13],
+                    health_fund=line[1])
         i += 1
     csvfile.close()
 
 
 if __name__ == "__main__":
     main()
-
