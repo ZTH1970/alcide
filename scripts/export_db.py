@@ -119,13 +119,24 @@ for db in dbs:
                 '+ column_name from %s.INFORMATION_SCHEMA.COLUMNS ' % db + \
                 " where TABLE_NAME='%s'; select @colnames;\" " % table + \
                 '-o "%s-title.csv"' % os.path.join(db_dir, table))
-        os.system('bcp %s.dbo.%s out %s-data.csv -c -t"\\",\\"" -r "\\"\\n\\"" -T -SSRVAPS' % (db, table, os.path.join(db_dir, table)))
+        os.system('bcp %s.dbo.%s out %s-data.csv -w  -t"\\",\\"" -T -SSRVAPS' % (db, table, os.path.join(db_dir, table)))
         title = open("%s-title.csv" % os.path.join(db_dir, table), 'r')
         data = open("%s-data.csv" % os.path.join(db_dir, table), 'r')
-        res = open("%s.csv" % os.path.join(db_dir, table), "a+")
+	res = open("%s.csv" % os.path.join(db_dir, table), "a+")
         title_content = re.sub(r'\s+$', '\n', title.readline())
         res.write(title_content)
-        res.write(data.read().replace('\0', ''))
+        lines = data.readlines()
+	for i, line in enumerate(lines):
+	    line = unicode(line, 'cp1252')
+	    line = line.replace('\0', '').replace('\r', '')
+	    if i == 0:
+		line = re.sub('^', '"', line[2:])
+	    else:
+                line = re.sub('^', '"', line)
+	    if line and line != "\n":
+                line = re.sub('\n', '"\n', line)
+	    if line != '"' and line != '"\n' and line != '""\n':
+                res.write(line.encode('utf-8'))
         title.close()
         data.close()
         res.close()
