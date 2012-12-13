@@ -18,7 +18,7 @@
         </ul>
         {% else %}Aucun{% endif %}
     </li>
-    <li><label>Date d'inscription :</label> {{ initial_state.date_selected|date:"d/m/Y" }}</li>
+    <li><label>Date de contact :</label> {{ initial_state.date_selected|date:"d/m/Y" }}</li>
     <li><label>Date de création :</label> {{ object.created|date:"d/m/Y" }}</li>
     <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"Non renseigné" }}</li>
     <li><label>Coordinateurs :</label>
