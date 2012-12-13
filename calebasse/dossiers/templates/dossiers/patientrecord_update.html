@@ -349,9 +349,9 @@
         <div class="frame">
             <h3>{{ next_rdv.start_time|date:"d/m/y H:m" }} {{ next_rdv.event.eventact.act_type }}</h3>
             <ul>
-            {% if last_rdv.event.eventact.doctors.all %}
+            {% if next_rdv.event.eventact.doctors.all %}
             <li><label>Praticiens :</label>
-            {% for doctor in last_rdv.event.eventact.doctors.all %}
+            {% for doctor in next_rdv.event.eventact.doctors.all %}
             {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}
             </li>
