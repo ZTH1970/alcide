@@ -37,7 +37,7 @@ class People(BaseModelMixin, models.Model):
             max_length=1, blank=True, null=True)
 
     def save(self, **kwargs):
-        self.display_name = self.first_name + ' ' + self.last_name
+        self.display_name = self.first_name + ' ' + self.last_name.upper()
         super(People, self).save(**kwargs)
 
     def __unicode__(self):
