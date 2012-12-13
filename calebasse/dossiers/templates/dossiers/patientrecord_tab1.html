@@ -21,6 +21,15 @@
     <li><label>Date d'inscription :</label> {{ initial_state.date_selected|date:"d/m/Y" }}</li>
     <li><label>Date de création :</label> {{ object.created|date:"d/m/Y" }}</li>
     <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"Non renseigné" }}</li>
+    <li><label>Coordinateurs :</label>
+        {% if object.coordinators.all %}
+        <ul>
+          {% for coordinator in object.coordinators.all %}
+          <li>{{ coordinator.first_name }} <span class="lastname">{{ coordinator.last_name }}</span></li>
+          {% endfor %}
+        </ul>
+        {% else %}Aucun{% endif %}
+    </li>
     <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
       <li><label>Commentaire :</label><br/>
       {{ forms.general.comment }}
