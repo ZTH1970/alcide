@@ -65,7 +65,7 @@ class Act(models.Model):
             verbose_name=u'Type de transport')
     doctors = models.ManyToManyField('personnes.Worker',
             limit_choices_to={'type__intervene': True},
-            verbose_name=u'Thérapeutes')
+            verbose_name=u'Intervenants')
     pause = models.BooleanField(default=False,
             verbose_name=u'Pause facturation')
 

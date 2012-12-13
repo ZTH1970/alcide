@@ -17,7 +17,7 @@
      —
      <a href="rendez-vous-periodiques">Rendez-vous périodiques</a>
      —
-     <a href="agendas-therapeutes">Tous les agendas thérapeutes</a>
+     <a href="agendas-therapeutes">Tous les agendas des intervenants</a>
     </div>
 
 
@@ -121,7 +121,7 @@
              {% if appointment.event_id %}
              {% if appointment.workers %}
                <p class="workers">
-               Thérapeutes :
+               Intervenants :
                {% for worker in appointment.workers %}
                  {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
                {% endfor %}

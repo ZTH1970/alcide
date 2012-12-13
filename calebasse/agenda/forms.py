@@ -169,4 +169,3 @@ class UpdateEventForm(NewEventForm):
         self.instance.services = self.cleaned_data['services']
         self.instance.save()
         return self.instance
-
