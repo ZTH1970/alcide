@@ -335,6 +335,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     def get_state(self):
         return self.last_state
 
+    def get_initial_state(self):
+        return self.filestate_set.order_by('date_selected')[0]
+
     def get_current_state(self):
         today = date.today()
         return self.get_state_at_day(today)

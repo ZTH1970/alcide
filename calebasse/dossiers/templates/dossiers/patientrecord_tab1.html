@@ -1,23 +1,26 @@
 <div class="left">
   <ul>
     <li>
-    <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"" }}
+    <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Non renseigné" }}
     <button id="update-paper-id-btn" class="icon-edit" title="Modifier"></button>
     </li>
     <li><label>N° dossier informatique :</label>{{ object.id }}</li>
     <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
     <li><label>Prénom :</label> {{ object.first_name }}</li>
-    <li><label>Genre :</label> {{ object.get_gender_display }}</li>
-    <li><label>Date de naissance :</label> {{ object.birthdate|date:"d/m/Y" }}</li>
+    <li><label>Genre :</label> {{ object.get_gender_display|default_if_none:"Non renseigné" }}</li>
+    <li><label>Date de naissance :</label> {% if object.birthdate %}{{ object.birthdate|date:"d/m/Y" }}{% else %}Non renseignée{% endif %}</li>
     <li><label>Lieux de vie :</label>
-    <ul>
-      {% for address in object.addresses.all %}
-      <li>{{ address.number }} {{ address.street }}, {{ address.city }} - {{ address.phone }} </li>
-      {% endfor %}
-
-    </ul></li>
-    <li><label>Date d'inscription :</label> {{ object.created|date:"d/m/Y" }}</li>
-    <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"" }}</li>
+        {% if object.addresses.all %}
+        <ul>
+          {% for address in object.addresses.all %}
+          {% if address.place_of_life %}<li>{{ address.number }} {{ address.street }} {{ address.zip_code }} {{ address.city }}</li>{% endif %}
+          {% endfor %}
+        </ul>
+        {% else %}Aucun{% endif %}
+    </li>
+    <li><label>Date d'inscription :</label> {{ initial_state.date_selected|date:"d/m/Y" }}</li>
+    <li><label>Date de création :</label> {{ object.created|date:"d/m/Y" }}</li>
+    <li><label>Lieu de socialisation :</label> {{ object.school|default_if_none:"Non renseigné" }}</li>
     <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
       <li><label>Commentaire :</label><br/>
       {{ forms.general.comment }}
@@ -33,22 +36,26 @@
       <span class="lastname">{{ participant.last_name }}</span> -
       {% endfor %}
       {{ last_rdv.act_type }}
+      {% else %}
+      Aucun
       {% endif %}
       </li>
       <li><label>Prochain rendez-vous :</label>
       {% if next_rdv %}
       {{ next_rdv.start_datetime|date:"d/m/Y" }} -
       {% for participant in next_rdv.participants %}
-      {{ participant.next_name }} -
+      <span class="lastname">{{ participant.last_name }}</span> -
       {% endfor %}
       {{ next_rdv.act_type }}
+      {% else %}
+      Aucun
       {% endif %}
       </li>
     </ul>
     <div class="etat">
       <h4>État courant du dossier :  {{ current_state.status.name.lower }}</h4>
       <p>depuis le : {{ current_state.date_selected|date:"d/m/Y" }}</p>
-      <p><label>Commentaire :</label>{{ object.last_state.comment|default_if_none:"" }}</p>
+      {% if current_state.comment %}<p><label>Commentaire :</label>{{ current_state.comment }}</p>{% endif %}
       {% for state in status %}
       <button type="button" id="{{ state.0 }}">{{ state.1 }}</button>
       {% endfor %}

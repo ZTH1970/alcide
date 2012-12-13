@@ -182,6 +182,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
         ctx['next_rdv'] = get_next_rdv(ctx['object'])
         ctx['last_rdv'] = get_last_rdv(ctx['object'])
+        ctx['initial_state'] = ctx['object'].get_initial_state()
         current_state = ctx['object'].get_current_state()
         if STATES_MAPPING.has_key(current_state.status.type):
             state = STATES_MAPPING[current_state.status.type]
