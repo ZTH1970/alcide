@@ -25,8 +25,8 @@ class Role(NamedAbstractModel):
 
 class People(BaseModelMixin, models.Model):
     GENDERS =  Choices(
-            (1, 'homme'),
-            (2, 'femme'),
+            (1, 'Masculin'),
+            (2, 'Féminin'),
     )
 
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
@@ -287,4 +287,3 @@ class ExternalIntervener(People):
     class Meta:
         verbose_name = u'Intervenant extérieur'
         verbose_name_plural = u'Intervenants extérieurs'
-
