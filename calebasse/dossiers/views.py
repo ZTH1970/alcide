@@ -42,8 +42,8 @@ class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
         return super(NewPatientRecordView, self).post(request, *args, **kwarg)
 
     def form_valid(self, form):
-        create_patient(form.data['first_name'], form.data['last_name'], self.service,
-                self.user)
+        self.patient = create_patient(form.data['first_name'], form.data['last_name'], self.service,
+                self.user, date_selected=datetime.strptime(form.data['date_selected'], "%d/%m/%Y"))
         return super(NewPatientRecordView, self).form_valid(form)
 
 new_patient_record = NewPatientRecordView.as_view()

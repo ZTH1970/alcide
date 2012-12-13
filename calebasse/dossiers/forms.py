@@ -37,6 +37,8 @@ class StateForm(Form):
             required=False, widget=forms.Textarea)
 
 class NewPatientRecordForm(ModelForm):
+    date_selected = forms.DateField(label=u"Date d'accueil", initial=date.today())
+
     class Meta:
         model = PatientRecord
         fields = ('last_name', 'first_name')
