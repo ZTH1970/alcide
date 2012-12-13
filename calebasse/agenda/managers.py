@@ -1,5 +1,5 @@
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from interval import IntervalSet
 
 from django.db import models
@@ -42,7 +42,7 @@ class EventManager(InheritanceManager):
         services=[], start_datetime=None, end_datetime=None, room=None, note=None,
         **rrule_params):
         """
-        Convenience function to create an ``Event``, optionally create an 
+        Convenience function to create an ``Event``, optionally create an
         ``EventType``, and associated ``Occurrence``s. ``Occurrence`` creation
         rules match those for ``Event.add_occurrences``.
 
@@ -83,7 +83,7 @@ class OccurrenceManager(models.Manager):
     def daily_occurrences(self, date=None, participants=None, services=None,
             event_type=None):
         '''
-        Returns a queryset of for instances that have any overlap with a 
+        Returns a queryset of for instances that have any overlap with a
         particular day.
 
         Args:
@@ -162,7 +162,8 @@ class OccurrenceManager(models.Manager):
             return None
 
     def next_appoinments(self, patient_record):
-        return self.filter(start_time__gt=datetime.now()).\
+        today = date.today()
+        return self.filter(start_time__gt=datetime(today.year, today.month, today.day)).\
                 filter(event__event_type__id=1).\
                 filter(event__eventact__patient=patient_record).\
                 prefetch_related('event__eventact').\
@@ -181,4 +182,3 @@ class OccurrenceManager(models.Manager):
                 filter(event__eventact__patient=patient_record).\
                 prefetch_related('event__eventact').\
                 order_by('-start_time')
-
