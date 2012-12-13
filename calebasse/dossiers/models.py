@@ -195,7 +195,7 @@ class PatientAddress(models.Model):
             verbose_name=u"Rue")
     address_complement = models.CharField(max_length=100,
             blank=True, null=True,
-            verbose_name=u"Complément d'addresse")
+            verbose_name=u"Complément d'adresse")
     zip_code = ZipCodeField(verbose_name=u"Code postal")
     city = models.CharField(max_length=60,
             verbose_name=u"Ville")
