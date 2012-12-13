@@ -333,7 +333,7 @@ class PatientRecordsHomepageView(cbv.ListView):
                     state = STATES_MAPPING[current_state.status.type]
                 else:
                     state = current_state.status.name
-                state_class = patient_record.last_state.status.type.lower()
+                state_class = current_state.status.type.lower()
                 ctx['patient_records'].append(
                         {
                             'object': patient_record,
