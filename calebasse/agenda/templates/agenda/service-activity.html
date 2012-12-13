@@ -26,7 +26,11 @@
         {% endif %}
         <td {% if appointment.type == 2 %}colspan="2"{% endif %}>{{ appointment.label }}</td>
         {% if appointment.type != 2 %}<td>{{ appointment.act }}</td>{% endif %}
-        <td>{{ appointment.therapists }}</td>
+        <td>
+        {% for participant in appointment.participants %}
+            <span class="lastname">{{ participant.last_name }}</span> {{ participant.first_name }}<br/>
+        {% endfor %}
+        </td>
       </tr>
       {% endfor %}
     </tr>

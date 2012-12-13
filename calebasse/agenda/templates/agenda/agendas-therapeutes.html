@@ -36,8 +36,8 @@
     <td> {% if appointment.act_absence %}{{ appointment.act_absence }}{% endif %}</td>
     <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
     <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
-    <td> {% for worker_code in appointment.workers_code %}
-          {{ worker_code }}<br/>
+    <td> {% for worker in appointment.workers %}
+          <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
          {% endfor %}
     </td>
    </tr>
@@ -59,4 +59,3 @@ Validés :  {{ worker_agenda.summary.valides }}
 {% endfor %}
 
 {% endblock %}
-

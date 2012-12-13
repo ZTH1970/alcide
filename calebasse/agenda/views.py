@@ -114,11 +114,7 @@ class AgendaServiceActivityView(TemplateView):
             else:
                 appointment['type'] = 0
                 appointment['label'] = '???'
-            appointment['therapists'] = ""
-            for participant in occurrence.event.participants.all():
-                appointment['therapists'] += participant.display_name + "; "
-            if appointment['therapists']:
-                appointment['therapists'] = appointment['therapists'][:-2]
+            appointment['participants'] = occurrence.event.participants.all()
             appointments_times[start_time]['row'] += 1
             appointments_times[start_time]['appointments'].append(appointment)
         context['appointments_times'] = sorted(appointments_times.items())
