@@ -163,6 +163,24 @@ function state_dialog(url, state_title, state_type) {
             '#ajax-dlg', '600px', 'Ajouter');
     });
 
+      $('.place_of_life').click(function() {
+          if ((this.checked) == true)
+          {
+              var value = "true";
+          } else {
+              var value = "false";
+          }
+          $.ajax({
+              url: '/api/patientaddress/' + $(this).data("id") + '/?format=json',
+              type: 'PATCH',
+              contentType: 'application/json',
+              data: '{"place_of_life": ' + value + '}',
+              success: function(data) {
+                  console.log('success');
+              }
+          });
+      });
+
     $('button.blind').next().hide();
     $('button.blind').click(function() {
       $(this).next().toggle('blind');

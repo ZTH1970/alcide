@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from urls_utils import decorated_includes
 
 from calebasse.api import (event_resource, occurrence_resource,
-        patientrecord_resource)
+        patientrecord_resource, patientaddress_ressource)
 
 admin.autodiscover()
 
@@ -39,6 +39,9 @@ urlpatterns = patterns('',
         ),
     url(r'^api/',
         decorated_includes(login_required, include(patientrecord_resource.urls)),
+        ),
+    url(r'^api/',
+        decorated_includes(login_required, include(patientaddress_ressource.urls)),
         ),
     url(r'^(?P<service>[a-z-]+)/', decorated_includes(login_required,
         include(service_patterns))),
