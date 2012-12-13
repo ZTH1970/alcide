@@ -79,7 +79,7 @@ class Act(models.Model):
             try:
                 self.healthcare.cmpphealthcarediagnostic
                 acts = self.healthcare.act_set.order_by('date')
-                i = 0
+                i = 1
                 for act in acts:
                     if act.id == self.id:
                         return 'D' + str(i)
