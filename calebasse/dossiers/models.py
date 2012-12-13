@@ -192,13 +192,13 @@ class PatientAddress(models.Model):
     number = models.CharField(max_length=12,
             verbose_name=u"Numéro", blank=True, null=True)
     street = models.CharField(max_length=100,
-            verbose_name=u"Rue")
+            verbose_name=u"Rue", blank=True, null=True)
     address_complement = models.CharField(max_length=100,
             blank=True, null=True,
             verbose_name=u"Complément d'adresse")
-    zip_code = ZipCodeField(verbose_name=u"Code postal")
+    zip_code = ZipCodeField(verbose_name=u"Code postal", blank=True, null=True)
     city = models.CharField(max_length=60,
-            verbose_name=u"Ville")
+            verbose_name=u"Ville", blank=True, null=True)
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True)
 
