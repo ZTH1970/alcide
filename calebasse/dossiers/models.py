@@ -262,7 +262,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             related_name='contact_of')
     nationality = models.CharField(verbose_name=u"Nationalité",
             max_length=70, null=True, blank=True)
-    paper_id = models.CharField(max_length=2,
+    paper_id = models.CharField(max_length=6,
             verbose_name=u"N° dossier papier",
             null=True, blank=True)
     last_state = models.ForeignKey(FileState, related_name='+',
