@@ -164,7 +164,7 @@ function state_dialog(url, state_title, state_type) {
     });
 
       $('.place_of_life').click(function() {
-          if ((this.checked) == true)
+          if ((this.checked) == true) {
           {
               var value = "true";
           } else {
