@@ -36,7 +36,9 @@ def list_view(request, service, model_name):
     model = get_ressource_model(model_name)
     if model is None:
         raise Http404
-    view = ListView.as_view(model=model, template_name='ressources/list.html')
+    view = ListView.as_view(model=model,
+            queryset=models.objects.select_related(),
+            template_name='ressources/list.html')
     return view(request, service=service)
 
 class RessourceCreateView(ReturnToObjectMixin, CreateView):
