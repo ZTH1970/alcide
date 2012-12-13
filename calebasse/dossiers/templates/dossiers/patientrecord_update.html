@@ -40,7 +40,7 @@
     <form method="post" id="policyholder-form" class="patientrecordform">{% csrf_token %}
         {% for address in object.addresses.all %}
         <div class="frame">
-            <h3>{{ address.number }} {{ address.street }}</h3>
+            <h3>{{ address.number }} {{ address.street }} {{ address.zip_code }} {{ address.city }}</h3>
             <div class="buttons">
                 <button type="button" data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
                 <button type="button" data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
@@ -48,8 +48,8 @@
             <div class="right">
                 <input type="checkbox" data-id="{{ address.id }}" class="place_of_life" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
             </div>
-            <p>{{ address.zip_code }} {{ address.city }}</p>
-            <p>{{ address.phone }}</p>
+            {% if address.phone %}<p><span class="icon-home-space">{{ address.phone }}</span></p>{% endif %}
+            {% if address.comment %}<p><label>Commentaire :</label>{{ address.comment }}</p>{% endif %}
             {% for contact in address.patientcontact_set.all  %}
             <div class="contact{% if contact.id == object.id %} patient{% endif %}">
                 <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
@@ -74,8 +74,7 @@
                         {% endif %}
                         {% if contact.mobile %}
                             <li>
-                            <label>Téléphone mobile :</label>
-                            {{ contact.mobile }}
+                            <span class="icon-user-space">{{ contact.mobile }}</span>
                             </li>
                         {% endif %}
                         {% if contact.contact_comment %}
