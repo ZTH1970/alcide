@@ -218,7 +218,7 @@ class PatientContact(People):
     mobile = PhoneNumberField(verbose_name=u"Téléphone mobile", blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     # carte vitale
-    social_security_id = models.CharField(max_length=13, verbose_name=u"NRI",
+    social_security_id = models.CharField(max_length=13, verbose_name=u"NIR",
             null=True, blank=True)
     birthdate = models.DateField(verbose_name=u"Date de naissance",
             null=True, blank=True)
