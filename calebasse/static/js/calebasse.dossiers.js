@@ -49,7 +49,7 @@ function state_dialog(url, state_title, state_type) {
         $('#btn-maj').click();
     });
     $('.policyholder-radio').click(function() {
-        $("#submit-policyholder").click();
+        $("#policyholder-form").submit();
     });
     $('.pr-line').click(function() {
         window.location.href = $(this).data('link');
