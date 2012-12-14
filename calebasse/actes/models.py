@@ -90,7 +90,7 @@ class Act(models.Model):
 
     def is_absent(self):
         if self.get_state() in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
-                'ANNUL_FAMILLE', 'ABS_ESS_PPS', 'ENF_HOSP'):
+                'ANNUL_FAMILLE', 'REPORTE', 'ABS_ESS_PPS', 'ENF_HOSP'):
             return True
 
     def get_state(self):

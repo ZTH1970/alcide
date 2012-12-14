@@ -61,6 +61,7 @@ def automated_validation(date, service, user, commit=True):
     nb_acts_abs_exc = 0
     nb_acts_annul_nous = 0
     nb_acts_annul_famille = 0
+    nb_acts_reporte = 0
     nb_acts_abs_ess_pps = 0
     nb_acts_enf_hosp = 0
     acts_of_the_day = get_acts_of_the_day(date, service)
@@ -73,6 +74,8 @@ def automated_validation(date, service, user, commit=True):
             nb_acts_annul_nous = nb_acts_annul_nous + 1
         if act.is_state('ANNUL_FAMILLE'):
             nb_acts_annul_famille = nb_acts_annul_famille + 1
+        if act.is_state('REPORTE'):
+            nb_acts_reporte = nb_acts_reporte + 1
         if act.is_state('ABS_ESS_PPS'):
             nb_acts_abs_ess_pps = nb_acts_abs_ess_pps + 1
         if act.is_state('ENF_HOSP'):
@@ -134,5 +137,5 @@ def automated_validation(date, service, user, commit=True):
             patient.automated_switch_state(user)
     return (nb_acts_total, nb_acts_validated, nb_acts_double,
         nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_annul_nous,
-        nb_acts_annul_famille, nb_acts_abs_ess_pps,
+        nb_acts_annul_famille, nb_acts_reporte, nb_acts_abs_ess_pps,
         nb_acts_enf_hosp)

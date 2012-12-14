@@ -62,7 +62,7 @@ class ActTest(TestCase):
         act_event6.set_state('VALIDE', creator)
 
         result = automated_validation(datetime(2020, 10, 2, 12, 20), service, creator, commit=False)
-        self.assertEqual(result, (5,2,2,0,1,0,0,0,0))
+        self.assertEqual(result, (5,2,2,0,1,0,0,0,0,0))
         self.assertTrue(act_event.is_state('NON_VALIDE'))
         self.assertTrue(act_event2.is_state('NON_VALIDE'))
         self.assertTrue(act_event3.is_state('ABS_EXC'))
@@ -71,7 +71,7 @@ class ActTest(TestCase):
         self.assertTrue(act_event6.is_state('VALIDE'))
 
         result = automated_validation(datetime(2020, 10, 2, 12, 20), service, creator)
-        self.assertEqual(result, (5,2,2,0,1,0,0,0,0))
+        self.assertEqual(result, (5,2,2,0,1,0,0,0,0,0))
 
         self.assertTrue(act_event.is_state('VALIDE'))
         self.assertTrue(act_event2.is_state('ACT_DOUBLE'))
@@ -87,7 +87,7 @@ class ActTest(TestCase):
             [datetime(2020, 10, 3, 0, 0), datetime(2020, 10, 4, 0, 0)])
 
         result = automated_validation(datetime(2020, 10, 2, 12, 20), service, creator, commit=False)
-        self.assertEqual(result, (5,2,2,0,1,0,0,0,0))
+        self.assertEqual(result, (5,2,2,0,1,0,0,0,0,0))
         self.assertTrue(act_event.is_state('VALIDE'))
         self.assertTrue(act_event2.is_state('ACT_DOUBLE'))
         self.assertTrue(act_event3.is_state('ABS_EXC'))
@@ -96,7 +96,7 @@ class ActTest(TestCase):
         self.assertTrue(act_event6.is_state('ACT_DOUBLE'))
 
         result = automated_validation(datetime(2020, 10, 2, 12, 20), service, creator)
-        self.assertEqual(result, (5,2,2,0,1,0,0,0,0))
+        self.assertEqual(result, (5,2,2,0,1,0,0,0,0,0))
         self.assertTrue(act_event.is_state('VALIDE'))
         self.assertTrue(act_event2.is_state('ACT_DOUBLE'))
         self.assertTrue(act_event3.is_state('ABS_EXC'))
@@ -105,7 +105,7 @@ class ActTest(TestCase):
         self.assertTrue(act_event6.is_state('ACT_DOUBLE'))
 
         result = automated_validation(datetime(2020, 10, 2, 12, 20), service, creator, commit=False)
-        self.assertEqual(result, (5,2,2,0,1,0,0,0,0))
+        self.assertEqual(result, (5,2,2,0,1,0,0,0,0,0))
         self.assertTrue(act_event.is_state('VALIDE'))
         self.assertTrue(act_event2.is_state('ACT_DOUBLE'))
         self.assertTrue(act_event3.is_state('ABS_EXC'))
