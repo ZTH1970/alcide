@@ -366,6 +366,12 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     def get_states_history(self):
         return self.filestate_set.order_by('date_selected')
 
+    def can_be_deleted(self):
+        for act in self.act_set.all():
+            if act.is_state('VALIDE'):
+                return False
+        return True
+
     def set_state(self, status, author, date_selected=None, comment=None):
         if not author:
             raise Exception('Missing author to set state')
