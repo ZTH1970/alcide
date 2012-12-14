@@ -23,6 +23,20 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
         $('form', this).ajaxForm({
           success: onsuccess,
         });
+        $('#social-security-id input').keyup(function() {
+            if ($(this).val().length < 13) {
+              $('p#nir-key span').removeAttr('id')
+              $('p#nir-key span').text('-');
+            } else {
+              $('p#nir-key span').attr('id', 'highlight')
+              var key = 97 - ($(this).val() % 97)
+              if (isNaN(key)) {
+                $('p#nir-key span').text('NIR invalide');
+              } else {
+                $('p#nir-key span').text(key);
+              }
+            }
+        });
         $(this).dialog({title: title,
           width: width,
           buttons: [ { text: "Annuler",
@@ -36,7 +50,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
   $.fn.dialogButton = function (opts) {
     var id = $(this).attr('id');
     this.on('click', function () {
-      var $dialog = $('<div id="dialog-' + (opts.name || id) + 
+      var $dialog = $('<div id="dialog-' + (opts.name || id) +
                      '" title="' + opts.title + '"><form class="inline-form" method="post"></form></div>');
       var default_button = opts.default_button == undefined ? 'Envoyer' : opts.default_button;
       var form_action = opts.url.split(' ')[0];

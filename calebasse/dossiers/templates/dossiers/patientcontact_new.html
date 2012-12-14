@@ -41,10 +41,11 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td id="social-security-id">
           {{ form.social_security_id.label_tag }} :<br>
           {{ form.social_security_id }}
           {{ form.social_security_id.errors }}
+          <p id="nir-key">Clé : <span>-</span></p>
         </td>
         <td>
           {{ form.begin_rights.label_tag }} :<br>
