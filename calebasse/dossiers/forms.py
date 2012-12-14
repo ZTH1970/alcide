@@ -144,7 +144,7 @@ class PatientContactForm(ModelForm):
                             else:
                                 msg = u"Ceci ne devrait pas arriver, %s n'est pas unique." % health_org
                         else:
-                            msg = "Plusieurs centres possibles, précisez parmis :"
+                            msg = "Plusieurs centres possibles, précisez parmi :"
                             for hc in hcs:
                                 msg += " %s" % str(hc)
             if msg:
