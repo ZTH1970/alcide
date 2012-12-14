@@ -90,7 +90,7 @@
                             <li>
                                 {% if contact.social_security_id %}
                                     <label>Numéro d'assuré social :</label>
-                                    {{ contact.social_security_id }}
+                                    {{ contact.social_security_id }} {{ contact.get_control_key }}
                                 {% else %}
                                     <label>Aucun numéro d'assuré social renseigné.</label>
                                 {% endif %}

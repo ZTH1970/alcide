@@ -238,6 +238,11 @@ class PatientContact(People):
     contact_comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True)
 
+    def get_control_key(self):
+        if self.social_security_id:
+            return (97 - (int(self.social_security_id) % 97))
+        return None
+
 
 class PatientRecordManager(models.Manager):
     def for_service(self, service):
