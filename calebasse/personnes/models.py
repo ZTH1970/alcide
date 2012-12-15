@@ -10,6 +10,7 @@ from django import forms
 
 import reversion
 
+from calebasse.models import PhoneNumberField
 from calebasse.ressources.models import Service, NamedAbstractModel
 from calebasse.models import BaseModelMixin, WeekRankField
 from calebasse.utils import weeks_since_epoch, weekday_ranks
@@ -35,6 +36,8 @@ class People(BaseModelMixin, models.Model):
             verbose_name=u'Nom complet', editable=False)
     gender = models.IntegerField(verbose_name=u"Genre", choices=GENDERS,
             max_length=1, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
 
     def save(self, **kwargs):
         self.display_name = self.first_name + ' ' + self.last_name.upper()

@@ -31,16 +31,19 @@ def intervenants_mapper(tables_data, service):
     from calebasse.personnes.models import Worker
     from calebasse.ressources.models import WorkerType
     for line in tables_data['intervenants']:
-        print line.keys()
         # Insert workers
         for disp in tables_data['discipline']:
             if disp['id'] == line['discipline']:
                 type = WorkerType.objects.get(name=disp['libelle'])
-#        Worker.objects.create(
-#                type=type,
-#                last_name=line['nom'],
-#                first_name=line=['prenom'],
-#                first_name=line=['prenom'],
+        # TODO : import actif or not
+        Worker.objects.create(
+                type=type,
+                last_name=line['nom'],
+                first_name=line['prenom'],
+                email=line['email'],
+                phone=line['tel'],
+                gender=int(line['titre']),
+                )
 
 
 def conge_mapper(tables_data, service):

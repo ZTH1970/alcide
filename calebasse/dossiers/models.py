@@ -216,7 +216,6 @@ class PatientContact(People):
         verbose_name_plural = u'Contacts patient'
 
     mobile = PhoneNumberField(verbose_name=u"Téléphone mobile", blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
     # carte vitale
     social_security_id = models.CharField(max_length=13, verbose_name=u"NIR",
             null=True, blank=True)
