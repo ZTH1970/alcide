@@ -16,6 +16,7 @@ from calebasse.ressources.models import Service
 db_path = "/home/jschneider/temp/20121213-185146/"
 
 dbs = ["F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD", "F_ST_ETIENNE_SESSAD_TED"]
+#tables = ["discipline", "intervenants", "notes", "ev", "conge"]
 tables = ["discipline", "intervenants", "notes", "ev", "conge"]
 
 
@@ -36,7 +37,7 @@ def intervenants_mapper(tables_data, service):
             if disp['id'] == line['discipline']:
                 type = WorkerType.objects.get(name=disp['libelle'])
         # TODO : import actif or not
-        Worker.objects.create(
+        worker, created = Worker.objects.get_or_create(
                 type=type,
                 last_name=line['nom'],
                 first_name=line['prenom'],
@@ -44,11 +45,14 @@ def intervenants_mapper(tables_data, service):
                 phone=line['tel'],
                 gender=int(line['titre']),
                 )
-
+        worker.services.add(service)
 
 def conge_mapper(tables_data, service):
     """ """
-    pass
+    from calebasse.personnes.models import Holiday
+    # ['base_origine', 'motif', 'date_conge', 'date_fin', 'id', 'thera_id', 'date_debut']
+    for line in tables_data['conge']:
+        print line
 
 def ev_mapper(tables_data, service):
     """ """
