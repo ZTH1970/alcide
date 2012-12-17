@@ -26,7 +26,7 @@ function enable_events(base) {
           if (r == true)
           {
             $.ajax({
-              url: '/api/occurrence/' + $(this).data('occurrence-id') + '/',
+              url: '/api/event/' + $(this).data('event-id') + '/',
               type: 'DELETE',
               success: function(data) {
                   window.location.reload(true);
@@ -45,7 +45,7 @@ function enable_events(base) {
           event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
       });
       $(base).find('.edit-appointment').click(function() {
-          event_dialog("update-rdv/" + $(this).data('occurrence-id') , 'Modifier rendez-vous', '850px', 'Modifier');
+          event_dialog("update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
           return false;
       });
       $(base).find('.newevent').click(function() {
@@ -56,13 +56,13 @@ function enable_events(base) {
           event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
       });
       $(base).find('.edit-event').click(function() {
-          event_dialog("update-event/" + $(this).data('occurrence-id') , 'Modifier un événement', '850px', 'Modifier');
+          event_dialog("update-event/" + $(this).data('event-id') , 'Modifier un événement', '850px', 'Modifier');
           return false;
       });
       $(base).find('#print-button').click(function() { window.print(); });
 
       $('.generate-mail-btn', base).click(function() {
-        var url = '../../dossiers/' + $(this).data('dossier-id') + '/generate?event-id=' + $(this).data('occurence-id');
+        var url = '../../dossiers/' + $(this).data('dossier-id') + '/generate?event-id=' + $(this).data('occurence-id' + '&date=' + $(this).data('date'));
         $('#ajax-dlg').load(url,
           function () {
             $(this).dialog({title: 'Générer un courrier', width: '500px',

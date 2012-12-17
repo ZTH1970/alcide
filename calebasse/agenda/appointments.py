@@ -23,7 +23,7 @@ class Appointment(object):
         self.patient_record_paper_id = None
         self.event_id = None
         self.event_type = None
-        self.occurrence_id = None
+        self.event_id = None
         self.workers = None
         self.workers_initial = None
         self.workers_codes = None
@@ -41,15 +41,15 @@ class Appointment(object):
         else:
             self.begin_hour = None
 
-    def init_from_occurrence(self, occurrence, service):
+    def init_from_event(self, event, service):
         """ """
-        delta = occurrence.end_time - occurrence.start_time
-        self.occurrence_id = occurrence.id
+        delta = event.end_datetime - event.start_datetime
+        self.event_id = event.id
         self.length = delta.seconds / 60
-        self.title = occurrence.title
-        services = occurrence.event.services.all()
-        self.date = occurrence.start_time.date()
-        self.__set_time(time(occurrence.start_time.hour, occurrence.start_time.minute))
+        self.title = event.title
+        services = event.services.all()
+        self.date = event.start_datetime.date()
+        self.__set_time(time(event.start_datetime.hour, event.start_datetime.minute))
         for e_service in services:
             if e_service != service:
                 name = e_service.name.lower().replace(' ', '-')
@@ -58,13 +58,13 @@ class Appointment(object):
             self.type = "busy-here"
         else:
             self.type = "busy-elsewhere"
-        self.event_id = occurrence.event.id
-        if occurrence.event.room:
-            self.room = occurrence.event.room.name
-        self.description = occurrence.event.description
-        if occurrence.event.event_type.id == 1:
-            event_act = occurrence.event.eventact
-            workers = event_act.participants.all()
+        self.event_id = event.id
+        if event.room:
+            self.room = event.room.name
+        self.description = event.description
+        if event.event_type.id == 1:
+            event_act = event.act
+            workers = event_act.doctors.all()
             self.convocation_sent = event_act.convocation_sent
             self.patient = event_act.patient
             self.patient_record_id = event_act.patient.id
@@ -93,7 +93,7 @@ class Appointment(object):
                     validation_states.pop('ACT_DOUBLE')
             self.validation = (event_act, state, display_name, validation_states)
         else:
-            self.event_type = occurrence.event.event_type
+            self.event_type = event.event_type
 
     def init_free_time(self, length, begin_time):
         """ """
@@ -116,15 +116,15 @@ class Appointment(object):
         self.title = title
         self.__set_time(time)
 
-def get_daily_appointments(date, worker, service, time_tables, occurrences, holidays):
+def get_daily_appointments(date, worker, service, time_tables, events, holidays):
     """
     """
     appointments = []
 
     timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
-    occurrences_set = IntervalSet((o.to_interval() for o in occurrences))
+    events_set = IntervalSet((o.to_interval() for o in events))
     holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
-    busy_occurrences_set = IntervalSet((o.to_interval() for o in occurrences if not o.is_event_absence()))
+    busy_occurrences_set = IntervalSet((o.to_interval() for o in events_set if not o.is_event_absence()))
     for free_time in timetables_set - (busy_occurrences_set+holidays_set):
         if free_time:
             delta = free_time.upper_bound - free_time.lower_bound
@@ -133,9 +133,9 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences, holi
             appointment.init_free_time(delta_minutes,
                     time(free_time.lower_bound.hour, free_time.lower_bound.minute))
             appointments.append(appointment)
-    for occurrence in occurrences:
+    for event in events:
         appointment = Appointment()
-        appointment.init_from_occurrence(occurrence, service)
+        appointment.init_from_event(event, service)
         appointments.append(appointment)
     for holiday in holidays:
         interval = holiday.to_interval(date)

@@ -27,7 +27,7 @@ TIMESLOT_MIN_COLUMNS = 4
 
 # Indicate the default length in time for a new occurrence, specifed by using
 # a datetime.timedelta object
-DEFAULT_OCCURRENCE_DURATION = datetime.timedelta(hours=+1)
+DEFAULT_EVENT_DURATION = datetime.timedelta(hours=+1)
 
 # If not None, passed to the calendar module's setfirstweekday function.
 CALENDAR_FIRST_WEEKDAY = 1

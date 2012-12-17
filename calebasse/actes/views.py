@@ -14,13 +14,13 @@ def redirect_today(request, service):
             service=service)
 
 class ActListingView(ListView):
-    model=models.EventAct
+    model=models.Act
     template_name='actes/act_listing.html'
 
     def get_queryset(self):
         qs = super(ActListingView, self).get_queryset()
         self.get_search_form()
-        qs = qs.filter(services=self.service)
+        qs = qs.filter(patient__service=self.service)
         qs = qs.filter(date=self.date)
         if self.request.method == 'POST' and self.search_form.is_valid():
             cd = self.search_form.cleaned_data

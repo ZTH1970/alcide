@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -40,9 +42,32 @@ class ActValidationState(models.Model):
         return VALIDATION_STATES[self.state_name]
 
 
+class ActManager(models.Manager):
+    def create_act(self, author=None, **kwargs):
+        act = self.create(**kwargs)
+        ActValidationState.objects.create(act=act,state_name='NON_VALIDE',
+            author=author, previous_state=None)
+        return act
+
+    def next_acts(self, patient_record, today=None):
+        today = today or date.today()
+        return self.filter(date__gte=today) \
+                .filter(patient=patient_record) \
+                .order_by('date')
+
+    def last_acts(self, patient_record, today=None):
+        today = today or date.today()
+        return self.filter(date__lte=today) \
+                .filter(patient=patient_record) \
+                .order_by('-date')
+
+
 class Act(models.Model):
+    objects = ActManager()
+
     patient = models.ForeignKey('dossiers.PatientRecord')
-    date = models.DateTimeField()
+    date = models.DateField()
+    _duration = models.IntegerField(u'Durée en minutes', default=0)
     act_type = models.ForeignKey('ressources.ActType',
             verbose_name=u'Type d\'acte')
     validation_locked = models.BooleanField(default=False,
@@ -68,6 +93,32 @@ class Act(models.Model):
             verbose_name=u'Intervenants')
     pause = models.BooleanField(default=False,
             verbose_name=u'Pause facturation')
+    parent_event = models.ForeignKey('agenda.Event', 
+            verbose_name=u'Rendez-vous lié',
+            blank=True, null=True)
+    VALIDATION_CODE_CHOICES = (
+            ('absent', u'Absent'),
+            ('present', u'Présent'),
+            )
+    attendance = models.CharField(max_length=16,
+            choices=VALIDATION_CODE_CHOICES,
+            default='absent',
+            verbose_name=u'Présence')
+    convocation_sent = models.BooleanField(blank=True,
+            verbose_name=u'Convoqué')
+
+    @property
+    def event(self):
+        if self.parent_event:
+            return self.parent_event.today_occurence(self.date)
+        return None
+
+    @property
+    def start_time(self):
+        event = self.event
+        if event:
+            return event.start_datetime.timetz()
+        return None
 
     def get_hc_tag(self):
         if self.healthcare:
@@ -155,7 +206,7 @@ class Act(models.Model):
         if not hc:
             # On pourrait ici créer une prise en charge de diagnostic
             return (False, None)
-        if self.date.date() < hc.start_date:
+        if self.date < hc.start_date:
             return (False, None)
         # Les acts facturés déja couvert par la prise en charge sont pointés
         # dans hc.act_set.all()
@@ -172,7 +223,7 @@ class Act(models.Model):
         for a in acts_billable:
             if nb_acts_billed + count >= hc.get_act_number():
                 return (False, None)
-            if a.date.date() >= hc.start_date:
+            if a.date >= hc.start_date:
                 if a.id == self.id:
                     return (True, hc)
                 count = count + 1
@@ -225,7 +276,12 @@ class Act(models.Model):
 #                    return (True, hc)
 #                count = count + 1
 #        return (False, None)
-    # END Specific to cmpp healthcare
+# END Specific to cmpp healthcare
+
+    def duration(self):
+        '''Return a displayable duration for this field.'''
+        hours, remainder = divmod(self._duration, 60)
+        return '%02d:%02d' % (hours, remainder)
 
     def __unicode__(self):
         return u'{0} le {1} pour {2} avec {3}'.format(
@@ -285,91 +341,6 @@ class EventActManager(EventManager):
                 end_datetime=end_datetime,
                 room=room, note=note, **rrule_params)
 
-    def modify_patient_appointment(self, creator, title, patient, participants,
-            act_type, service, start_datetime, end_datetime, description='',
-            room=None, note=None, **rrule_params):
-        """
-        This method allow you to create a new patient appointment quickly
-
-        Args:
-            creator: author of the modification
-            title: patient appointment title (str)
-            patient: Patient object
-            participants: List of CalebasseUser (therapists)
-            act_type: ActType object
-            service: Service object. Use session service by defaut
-            start_datetime: datetime with the start date and time
-            end_datetime: datetime with the end date and time
-            description: description of the event
-            room: room where the event will take place
-            freq, count, until, byweekday, rrule_params:
-            follow the ``dateutils`` API (see http://labix.org/python-dateutil)
-
-        Example:
-            Look at calebasse.agenda.tests.EventTest (test_create_appointments
-            method)
-        """
-
-        event_type, created = EventType.objects.get_or_create(
-                label=u"Rendez-vous patient"
-                )
-
-        act_event = EventAct.objects.create(
-                title=title,
-                event_type=event_type,
-                patient=patient,
-                act_type=act_type,
-                date=start_datetime,
-                )
-        act_event.doctors = participants
-        ActValidationState(act=act_event, state_name=NON_VALIDE,
-            author=creator, previous_state=None).save()
-
-        return self._set_event(act_event, participants, description,
-                services=[service], start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                room=room, note=note, **rrule_params)
-
-class EventAct(Event, Act):
-    objects = EventActManager()
-
-    VALIDATION_CODE_CHOICES = (
-            ('absent', u'Absent'),
-            ('present', u'Présent'),
-            )
-    attendance = models.CharField(max_length=16,
-            choices=VALIDATION_CODE_CHOICES,
-            default='absent',
-            verbose_name=u'Présence')
-    convocation_sent = models.BooleanField(blank=True,
-            verbose_name=u'Convoqué')
-
-    def __unicode__(self):
-        return u'Rdv le {0} de {1} avec {2} pour {3}'.format(
-                self.occurrence_set.all()[0].start_time, self.patient,
-                ', '.join(map(unicode, self.participants.all())),
-                self.act_type)
-
-    def __repr__(self):
-        return (u'<%s %r %r>' % (self.__class__.__name__, unicode(self),
-            self.id)).encode('utf-8')
-
-    def start_time(self):
-        return self.occurrence_set.all()[0].start_time
-
-    def duration(self):
-        o = self.occurrence_set.all()[0]
-        td = o.end_time - o.start_time
-        hours, remainder = divmod(td.seconds, 3600)
-        minutes, remainder = divmod(remainder, 60)
-        return '%02d:%02d' % (hours, minutes)
-
-    class Meta:
-        verbose_name = 'Rendez-vous patient'
-        verbose_name_plural = 'Rendez-vous patient'
-        ordering = ['-date', 'patient']
-
-reversion.register(EventAct, follow=['act_ptr', 'event_ptr'])
 
 class ValidationMessage(ServiceLinkedAbstractModel):
     validation_date = models.DateTimeField()

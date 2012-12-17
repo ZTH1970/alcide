@@ -105,7 +105,10 @@
         1,
         2
       ],
-      "room": 2
+      "room": 2,
+      "create_date": "2012-10-20T11:30:00",
+      "start_datetime": "2012-10-30T11:30:00",
+      "end_datetime": "2012-10-30T12:00:00"
     }
   },
   {
@@ -121,7 +124,10 @@
       "services": [
         1
       ],
-      "room": 1
+      "room": 1,
+      "create_date": "2012-10-20T11:30:00",
+      "start_datetime": "2012-10-30T10:45:00",
+      "end_datetime": "2012-10-30T11:30:00"
     }
   },
   {
@@ -137,37 +143,28 @@
       "services": [
         1
       ],
-      "room": 2
+      "room": 2,
+      "create_date": "2012-10-20T11:30:00",
+      "start_datetime": "2012-10-30T10:00:00",
+      "end_datetime": "2012-10-30T10:45:00"
     }
   },
   {
-    "pk": 1,
-    "model": "agenda.occurrence",
-    "fields": {
-      "notes": [],
-      "start_time": "2012-10-30T10:00:00",
-      "end_time": "2012-10-30T10:45:00",
-      "event": 1
-    }
+      "fields": {
+          "act_type": 97,
+          "patient": 10,
+          "event_ptr": 1
+      },
+      "model": "agenda.eventwithact",
+      "pk": 1
   },
   {
-    "pk": 2,
-    "model": "agenda.occurrence",
-    "fields": {
-      "notes": [],
-      "start_time": "2012-10-30T10:45:00",
-      "end_time": "2012-10-30T11:30:00",
-      "event": 2
-    }
-  },
-  {
-    "pk": 3,
-    "model": "agenda.occurrence",
-    "fields": {
-      "notes": [],
-      "start_time": "2012-10-30T11:30:00",
-      "end_time": "2012-10-30T12:00:00",
-      "event": 3
-    }
+      "fields": {
+          "act_type": 10,
+          "patient": 9,
+          "event_ptr": 2
+      },
+      "model": "agenda.eventwithact",
+      "pk": 2
   }
 ]

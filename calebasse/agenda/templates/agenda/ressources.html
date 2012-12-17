@@ -70,11 +70,11 @@
                  {% endif %}
                  {% if appointment.event_id %}
                   {% if appointment.patient_record_id %}
-                    <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-occurrence-id="{{ appointment.occurrence_id }}"></button>
+                    <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
                   {% else %}
-                    <button title="Éditer un événement" class="edit-event icon-edit" data-occurrence-id="{{ appointment.occurrence_id }}">
+                    <button title="Éditer un événement" class="edit-event icon-edit" data-event-id="{{ appointment.event_id }}">
                   {% endif %}
-                 <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-occurrence-id="{{ appointment.occurrence_id }}" data-rdv="{{ appointment.title }}"></button>
+                 <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-event-id="{{ appointment.event_id }}" data-rdv="{{ appointment.title }}"></button>
                  {% endif %}
             </span>
            </h3>
@@ -112,7 +112,7 @@
              </p>
              <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view" target="_blank">Dossier patient</a> -
              <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view#tab=5" target="_blank">Prochains rendez-vous</a> -
-             <a href="#" class="generate-mail-btn" data-dossier-id="{{ appointment.patient_record_id }}" data-occurence-id="{{ appointment.occurrence_id }}" data-next-url="{{ request.get_full_path }}">Courrier</a>
+             <a href="#" class="generate-mail-btn" data-dossier-id="{{ appointment.patient_record_id }}" data-date="{{date}}" data-occurence-id="{{ appointment.occurrence_id }}" data-next-url="{{ request.get_full_path }}">Courrier</a>
              {% endif %}
              {% if appointment.validation %}
                <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong>, le {{ appointment.validation.1.created }} par {{ appointment.validation.1.author }}

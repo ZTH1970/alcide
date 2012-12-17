@@ -2,11 +2,15 @@
     {
         "fields": {
             "act_type": 97,
-            "date": "2012-10-30T12:00:00",
+            "date": "2012-10-30",
             "patient": 8,
             "transport_company": null,
             "transport_type": null,
-            "validation_locked": false
+            "validation_locked": false,
+            "doctors": [
+                5
+            ],
+            "parent_event": 1
         },
         "model": "actes.act",
         "pk": 1
@@ -14,43 +18,17 @@
     {
         "fields": {
             "act_type": 10,
-            "date": "2012-10-30T00:00:00",
+            "date": "2012-10-30",
             "patient": 9,
             "transport_company": null,
             "transport_type": null,
-            "validation_locked": false
+            "validation_locked": false,
+            "doctors": [
+                5
+            ],
+            "parent_event": 2
         },
         "model": "actes.act",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "attendance": "absent",
-            "convocation_sent": false,
-            "event_ptr": 1,
-            "participants": [
-                5
-            ],
-            "services": [
-                1
-            ]
-        },
-        "model": "actes.eventact",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "attendance": "absent",
-            "convocation_sent": false,
-            "event_ptr": 2,
-            "participants": [
-                5
-            ],
-            "services": [
-                1
-            ]
-        },
-        "model": "actes.eventact",
         "pk": 2
     },
     {

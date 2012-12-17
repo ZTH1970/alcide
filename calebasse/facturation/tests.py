@@ -10,7 +10,8 @@ from django.contrib.auth.models import User
 from calebasse.actes.validation import automated_validation, \
     are_all_acts_of_the_day_locked, \
     get_days_with_acts_not_locked
-from calebasse.actes.models import EventAct
+from calebasse.actes.models import Act
+from calebasse.agenda.models import EventWithAct
 from calebasse.dossiers.models import create_patient, PatientRecord, \
     SessadHealthCareNotification, CmppHealthCareTreatment, CmppHealthCareDiagnostic
 from calebasse.dossiers.models import Status
@@ -39,50 +40,50 @@ class FacturationTest(TestCase):
         service_camsp = Service.objects.get(name='CAMSP')
 
         patient_a = create_patient('a', 'A', service_camsp, self.creator, date_selected=datetime(2020, 10, 5))
-        act0 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act0 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 6, 10, 15),
                 end_datetime=datetime(2020, 10, 6, 12, 20))
         status_suivi = Status.objects.filter(services__name='CAMSP').filter(type='SUIVI')[0]
         patient_a.set_state(status_suivi, self.creator, date_selected=datetime(2020, 10, 7))
-        act1 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act1 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 10, 15),
                 end_datetime=datetime(2020, 10, 7, 12, 20))
-        act2 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act2 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 14, 15),
                 end_datetime=datetime(2020, 10, 7, 16, 20))
-        act3 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act3 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 16, 20),
                 end_datetime=datetime(2020, 10, 7, 17, 20))
         status_clos = Status.objects.filter(services__name='CAMSP').filter(type='CLOS')[0]
         patient_a.set_state(status_clos, self.creator, date_selected=datetime(2020, 10, 8))
-        act4 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act4 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 8, 10, 15),
                 end_datetime=datetime(2020, 10, 8, 12, 20))
 
         patient_b = create_patient('b', 'B', service_camsp, self.creator, date_selected=datetime(2020, 10, 4))
-        act5 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act5 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 4, 10, 15),
                 end_datetime=datetime(2020, 10, 4, 12, 20))
-        act6 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act6 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 5, 10, 15),
                 end_datetime=datetime(2020, 10, 5, 12, 20))
         act6.set_state('ABS_EXC', self.creator)
-        act7 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act7 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 5, 10, 15),
                 end_datetime=datetime(2020, 10, 5, 12, 20))
         act7.switch_billable = True
         act7.save()
         patient_b.set_state(status_suivi, self.creator, date_selected=datetime(2020, 10, 6))
-        act8 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act8 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 10, 15),
                 end_datetime=datetime(2020, 10, 7, 12, 20))
-        act9 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act9 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 14, 15),
                 end_datetime=datetime(2020, 10, 7, 16, 20))
-        act10 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act10 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 7, 16, 20),
                 end_datetime=datetime(2020, 10, 7, 17, 20))
-        act11 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
+        act11 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 8, 10, 15),
                 end_datetime=datetime(2020, 10, 8, 12, 20))
         patient_b.set_state(status_clos, self.creator, date_selected=datetime(2020, 10, 9))
@@ -149,23 +150,23 @@ class FacturationTest(TestCase):
         service_sessad = Service.objects.get(name='SESSAD DYS')
 
         patient_a = create_patient('a', 'A', service_sessad, self.creator, date_selected=datetime(2020, 10, 5))
-        act0 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act0 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 6, 10, 15),
                 end_datetime=datetime(2020, 10, 6, 12, 20))
         status_traitement = Status.objects.filter(services__name='SESSAD DYS').filter(type='TRAITEMENT')[0]
         patient_a.set_state(status_traitement, self.creator, date_selected=datetime(2020, 10, 7))
-        act1 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act1 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 10, 15),
                 end_datetime=datetime(2020, 10, 7, 12, 20))
-        act2 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act2 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 14, 15),
                 end_datetime=datetime(2020, 10, 7, 16, 20))
-        act3 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act3 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 7, 16, 20),
                 end_datetime=datetime(2020, 10, 7, 17, 20))
         status_clos = Status.objects.filter(services__name='SESSAD DYS').filter(type='CLOS')[0]
         patient_a.set_state(status_clos, self.creator, date_selected=datetime(2020, 10, 8))
-        act4 = EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        act4 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_sessad, start_datetime=datetime(2020, 10, 8, 10, 15),
                 end_datetime=datetime(2020, 10, 8, 12, 20))
 
@@ -196,7 +197,7 @@ class FacturationTest(TestCase):
         service_cmpp = Service.objects.get(name='CMPP')
 
         patient_a = create_patient('a', 'A', service_cmpp, self.creator, date_selected=datetime(2020, 10, 1))
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2020, 10, i, 10, 15),
                 end_datetime=datetime(2020, 10, i, 12, 20)) for i in range (1, 32)]
         status_accueil = Status.objects.filter(services__name='CMPP').filter(type='ACCUEIL')[0]
@@ -236,7 +237,7 @@ class FacturationTest(TestCase):
             patient_a = PatientRecord.objects.get(id=patient_a.id)
             self.assertEqual(patient_a.get_state().status, status_traitement)
 
-        acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
+        acts_2 = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_a, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2020, 11, i, 10, 15),
                 end_datetime=datetime(2020, 11, i, 12, 20)) for i in range (1, 31)]
         for i in range(1, 31):
@@ -281,10 +282,10 @@ class FacturationTest(TestCase):
         patients = []
         for j in range(2):
             patients.append(create_patient(str(j), str(j), service_cmpp, self.creator, date_selected=datetime(2012, 10, 1)))
-            acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
+            acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
                     self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
                     end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (1, 32)]
-            acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
+            acts_2 = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patients[j], [self.therapist3],
                     self.act_type, service_cmpp, start_datetime=datetime(2012, 11, i, 10, 15),
                     end_datetime=datetime(2012, 11, i, 12, 20)) for i in range (1, 31)]
             hct = CmppHealthCareTreatment(patient=patients[j], start_date=datetime(2012, 10, 7), author=self.creator)
@@ -376,7 +377,7 @@ class FacturationTest(TestCase):
 
 
         patient = create_patient('A', 'a', service_cmpp, self.creator, date_selected=datetime(2012, 10, 1))
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
                 end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (1, 32)]
         hct = CmppHealthCareTreatment(patient=patient, start_date=datetime(2011, 11, 7), author=self.creator)
@@ -407,7 +408,7 @@ class FacturationTest(TestCase):
         self.assertEqual(len_patient_with_lost_acts, 0)
 
 
-        acts_2 = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts_2 = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 11, i, 10, 15),
                 end_datetime=datetime(2012, 11, i, 12, 20)) for i in range (1, 31)]
 
@@ -447,7 +448,7 @@ class FacturationTest(TestCase):
 
         self.assertEqual(patient.last_state.status.type, "ACCUEIL")
 
-        EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, 1, 10, 15),
                 end_datetime=datetime(2012, 10, 1, 12, 20))
 
@@ -457,7 +458,7 @@ class FacturationTest(TestCase):
         self.assertEqual(patient.last_state.status.type, "DIAGNOSTIC")
         self.assertEqual(patient.last_state.date_selected, datetime(2012, 10, 1, 0, 0))
 
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
                 end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (2, 32)]
 
@@ -472,7 +473,7 @@ class FacturationTest(TestCase):
 
         self.assertEqual(patient.last_state.status.type, "ACCUEIL")
 
-        EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, 1, 10, 15),
                 end_datetime=datetime(2012, 10, 1, 12, 20))
 
@@ -489,7 +490,7 @@ class FacturationTest(TestCase):
         self.assertEqual(patient.last_state.status.type, "CLOS")
         self.assertEqual(patient.last_state.date_selected, datetime(2012, 12, 9, 0, 0))
 
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
                 end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (2, 32)]
 
@@ -506,7 +507,7 @@ class FacturationTest(TestCase):
         price_o = add_price(120, date(2012, 10, 1))
 
         patient = create_patient('A', 'a', service_cmpp, self.creator, date_selected=datetime(2012, 10, 1))
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
                 end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (1, 4)]
 
@@ -545,7 +546,7 @@ class FacturationTest(TestCase):
 
         hcd.set_act_number(5)
 
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 10, i, 10, 15),
                 end_datetime=datetime(2012, 10, i, 12, 20)) for i in range (4, 32)]
 
@@ -601,7 +602,7 @@ class FacturationTest(TestCase):
 
         hct.set_act_number(28)
 
-        acts = [ EventAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
+        acts = [ EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient, [self.therapist3],
                 self.act_type, service_cmpp, start_datetime=datetime(2012, 11, i, 10, 15),
                 end_datetime=datetime(2012, 11, i, 12, 20)) for i in range (1, 4)]
 

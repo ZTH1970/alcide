@@ -15,7 +15,8 @@ from django.contrib import messages
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
 from calebasse.dossiers import forms
-from calebasse.agenda.models import Occurrence
+from calebasse.agenda.models import Event, EventWithAct
+from calebasse.actes.models import Act
 from calebasse.agenda.appointments import Appointment
 from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
@@ -27,20 +28,20 @@ from calebasse.ressources.models import (Service,
 
 def get_next_rdv(patient_record):
     next_rdv = {}
-    occurrence = Occurrence.objects.next_appoinment(patient_record)
-    if occurrence:
-        next_rdv['start_datetime'] = occurrence.start_time
-        next_rdv['participants'] = occurrence.event.participants.all()
-        next_rdv['act_type'] = occurrence.event.eventact.act_type
+    event = Event.objects.next_appointment(patient_record)
+    if event:
+        next_rdv['start_datetime'] = event.start_time
+        next_rdv['participants'] = event.participants.all()
+        next_rdv['act_type'] = event.eventact.act_type
     return next_rdv
 
 def get_last_rdv(patient_record):
     last_rdv = {}
-    occurrence = Occurrence.objects.last_appoinment(patient_record)
-    if occurrence:
-        last_rdv['start_datetime'] = occurrence.start_time
-        last_rdv['participants'] = occurrence.event.participants.all()
-        last_rdv['act_type'] = occurrence.event.eventact.act_type
+    event = Event.objects.last_appointment(patient_record)
+    if event:
+        last_rdv['start_datetime'] = event.start_time
+        last_rdv['participants'] = event.participants.all()
+        last_rdv['act_type'] = event.eventact.act_type
     return last_rdv
 
 class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
@@ -254,17 +255,17 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['service_id'] = self.service.id
         ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
         ctx['next_rdvs'] = []
-        for rdv in Occurrence.objects.next_appoinments(ctx['object']):
-            state = rdv.event.eventact.get_state()
+        for act in Act.objects.next_acts(ctx['object']).select_related():
+            state = act.get_state()
             if not state.previous_state:
                 state = None
-            ctx['next_rdvs'].append((rdv, state))
+            ctx['next_rdvs'].append((act.parent_event, state))
         ctx['last_rdvs'] = []
-        for rdv in Occurrence.objects.last_appoinments(ctx['object']):
-            state = rdv.event.eventact.get_state()
+        for act in Act.objects.last_acts(ctx['object']):
+            state = act.get_state()
             if not state.previous_state:
                 state = None
-            ctx['last_rdvs'].append((rdv, state))
+            ctx['last_rdvs'].append((act.parent_event, state))
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
@@ -577,9 +578,12 @@ class GenerateRtfFormView(cbv.FormView):
         ctx['object'] = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
         ctx['service_id'] = self.service.id
         if self.request.GET.get('event-id'):
+            date = self.request.GET.get('date')
+            date = datetime.strptime(date, '%Y-%m-%d').date()
             appointment = Appointment()
-            occurrence = Occurrence.objects.get(id=self.request.GET.get('event-id'))
-            appointment.init_from_occurrence(occurrence, self.service)
+            event = Event.objects.get(id=self.request.GET.get('event-id'))
+            event = event.today_occurence(date)
+            appointment.init_from_event(event, self.service)
             ctx['appointment'] = appointment
         return ctx
 
@@ -632,21 +636,16 @@ class PatientRecordsQuotationsView(cbv.ListView):
         else:
             qs = qs.filter(last_state__status__type__in='')
 
-        qs_events = Occurrence.objects.select_related('event')
         try:
             date_actes_start = datetime.strptime(form.data['date_actes_start'], "%d/%m/%Y")
-            qs_events = qs_events.filter(models.Q(start_time__gte=date_actes_start))
+            qs = qs.filter(act_set__date__gte=date_actes_start.date())
         except (ValueError, KeyError):
-            date_actes_start = None
+            pass
         try:
             date_actes_end = datetime.strptime(form.data['date_actes_end'], "%d/%m/%Y")
-            qs_events = qs_events.filter(models.Q(end_time__lte=date_actes_end))
+            qs = qs.filter(act_set__date__lte=date_actes_end.date())
         except (ValueError, KeyError):
-            date_actes_end = None
-
-        if date_actes_start or date_actes_end:
-            qs = qs.filter(id__in=[x.event.eventact.patient.id for x in qs_events])
-
+            pass
         qs = qs.filter(service=self.service).order_by('last_name')
         return qs
 

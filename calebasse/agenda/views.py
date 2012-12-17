@@ -7,21 +7,19 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
 from calebasse.cbv import TemplateView, CreateView, UpdateView
-from calebasse.agenda.models import Occurrence, Event, EventType
+from calebasse.agenda.models import Event, EventType, EventWithAct
 from calebasse.personnes.models import TimeTable, Holiday
-from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments, get_daily_usage
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import WorkerType, Room
-from calebasse.actes.validation import get_acts_of_the_day
+from calebasse.actes.validation import (get_acts_of_the_day,
+        get_days_with_acts_not_locked)
 from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.actes.models import Act, ValidationMessage
-from calebasse.actes.validation import (automated_validation,
-    unlock_all_acts_of_the_day, are_all_acts_of_the_day_locked)
+from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
 
-from forms import (NewAppointmentForm, NewEventForm,
-        UpdateAppointmentForm, UpdateEventForm)
+from forms import (NewAppointmentForm, NewEventForm, UpdateAppointmentForm)
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -70,41 +68,42 @@ class AgendaServiceActivityView(TemplateView):
         appointments_times = dict()
         appoinment_type = EventType.objects.get(id=1)
         meeting_type = EventType.objects.get(id=2)
-        occurrences = Occurrence.objects.daily_occurrences(context['date'],
-                services=[self.service],
-                event_type=[appoinment_type, meeting_type])
-        for occurrence in occurrences:
-            start_time = occurrence.start_time.strftime("%H:%M")
-            if not appointments_times.has_key(start_time):
-                appointments_times[start_time] = dict()
-                appointments_times[start_time]['row'] = 0
-                appointments_times[start_time]['appointments'] = []
+        plain_events = Event.objects.for_today(self.date) \
+                .filter(services=self.service,
+                        event_type__in=[appoinment_type, meeting_type])
+        events = [ e.today_occurence(self.date) for e in plain_events ]
+        for event in events:
+            start_datetime = event.start_datetime.strftime("%H:%M")
+            if not appointments_times.has_key(start_datetime):
+                appointments_times[start_datetime] = dict()
+                appointments_times[start_datetime]['row'] = 0
+                appointments_times[start_datetime]['appointments'] = []
             appointment = dict()
-            length = occurrence.end_time - occurrence.start_time
+            length = event.end_datetime - event.start_datetime
             if length.seconds:
                 length = length.seconds / 60
                 appointment['length'] = "%sm" % length
-            if occurrence.event.event_type == EventType.objects.get(id=1):
+            if event.event_type == EventType.objects.get(id=1):
                 appointment['type'] = 1
-                event_act = occurrence.event.eventact
+                event_act = event.act
                 appointment['label'] = event_act.patient.display_name
                 appointment['act'] = event_act.act_type.name
-            elif occurrence.event.event_type == EventType.objects.get(id=2):
+            elif event.event_type == EventType.objects.get(id=2):
                 appointment['type'] = 2
-                appointment['label'] = '%s - %s' % (occurrence.event.event_type.label,
-                                                    occurrence.event.title)
+                appointment['label'] = '%s - %s' % (event.event_type.label,
+                                                    event.title)
             else:
                 appointment['type'] = 0
                 appointment['label'] = '???'
-            appointment['participants'] = occurrence.event.participants.all()
-            appointments_times[start_time]['row'] += 1
-            appointments_times[start_time]['appointments'].append(appointment)
+            appointment['participants'] = event.participants.all()
+            appointments_times[start_datetime]['row'] += 1
+            appointments_times[start_datetime]['appointments'].append(appointment)
         context['appointments_times'] = sorted(appointments_times.items())
         return context
 
 
 class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateView):
-    model = EventAct
+    model = EventWithAct
     form_class = NewAppointmentForm
     template_name = 'agenda/nouveau-rdv.html'
     success_url = '..'
@@ -119,21 +118,16 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
 
 
 class UpdateAppointmentView(UpdateView):
-    model = EventAct
+    model = EventWithAct
     form_class = UpdateAppointmentForm
     template_name = 'agenda/update-rdv.html'
     success_url = '..'
 
-    def get_object(self, queryset=None):
-        self.occurrence = Occurrence.objects.get(id=self.kwargs['id'])
-        if self.occurrence.event.eventact:
-            return self.occurrence.event.eventact
-
     def get_initial(self):
         initial = super(UpdateView, self).get_initial()
-        initial['date'] = self.object.date
-        initial['time'] = self.occurrence.start_time.strftime("%H:%M")
-        time = self.occurrence.end_time - self.occurrence.start_time
+        initial['date'] = self.object.start_datetime.strftime("%Y-%m-%d")
+        initial['time'] = self.object.start_datetime.strftime("%H:%M")
+        time = self.object.end_datetime - self.object.start_datetime
         if time:
             time = time.seconds / 60
         else:
@@ -144,7 +138,6 @@ class UpdateAppointmentView(UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(UpdateAppointmentView, self).get_form_kwargs()
-        kwargs['occurrence'] = self.occurrence
         kwargs['service'] = self.service
         return kwargs
 
@@ -165,21 +158,18 @@ class NewEventView(CreateView):
         initial['room'] = self.request.GET.get('room')
         return initial
 
+
 class UpdateEventView(UpdateView):
     model = Event
-    form_class = UpdateEventForm
+    form_class = NewEventForm
     template_name = 'agenda/update-event.html'
     success_url = '..'
 
-    def get_object(self, queryset=None):
-        self.occurrence = Occurrence.objects.get(id=self.kwargs['id'])
-        return self.occurrence.event
-
     def get_initial(self):
         initial = super(UpdateEventView, self).get_initial()
-        initial['date'] = self.occurrence.start_time.date()
-        initial['time'] = self.occurrence.start_time.strftime("%H:%M")
-        time = self.occurrence.end_time - self.occurrence.start_time
+        initial['date'] = self.object.start_datetime.strftime("%Y-%m-%d")
+        initial['time'] = self.object.start_datetime.strftime("%H:%M")
+        time = self.object.end_datetime - self.object.start_datetime
         if time:
             time = time.seconds / 60
         else:
@@ -188,16 +178,8 @@ class UpdateEventView(UpdateView):
         initial['participants'] = self.object.participants.values_list('id', flat=True)
         return initial
 
-    def get_form_kwargs(self):
-        kwargs = super(UpdateEventView, self).get_form_kwargs()
-        kwargs['occurrence'] = self.occurrence
-        return kwargs
-
-def new_appointment(request):
-    pass
 
 class AgendaServiceActValidationView(TemplateView):
-
     template_name = 'agenda/act-validation.html'
 
     def acts_of_the_day(self):
@@ -299,7 +281,6 @@ class UnlockAllView(CreateView):
 
 
 class AgendasTherapeutesView(AgendaHomepageView):
-
     template_name = 'agenda/agendas-therapeutes.html'
 
     def get_context_data(self, **kwargs):
@@ -312,22 +293,24 @@ class AgendasTherapeutesView(AgendaHomepageView):
         holidays = Holiday.objects.select_related('worker'). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
-        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
+        plain_events = Event.objects.for_today(self.date) \
+                .order_by('start_datetime').select_subclasses()
+        events = [ e.today_occurence(self.date) for e in plain_events ]
 
-        occurrences_workers = {}
+        events_workers = {}
         time_tables_workers = {}
         holidays_workers = {}
         context['workers_agenda'] = []
         for worker in context['workers']:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
-            occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
+            events_worker = [o for o in events if worker.id in o.participants.values_list('id', flat=True)]
             holidays_worker = [h for h in holidays if h.worker_id in (None, worker.id)]
-            occurrences_workers[worker.id] = occurrences_worker
+            events_workers[worker.id] = events_worker
             time_tables_workers[worker.id] = time_tables_worker
             holidays_workers[worker.id] = holidays_worker
             context['workers_agenda'].append({'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, occurrences_worker, holidays_worker)})
+                        time_tables_worker, events_worker, holidays_worker)})
 
         for worker_agenda in context.get('workers_agenda', []):
             patient_appointments = [x for x in worker_agenda['appointments'] if x.patient_record_id]
@@ -342,21 +325,16 @@ class AgendasTherapeutesView(AgendaHomepageView):
         return context
 
 class JoursNonVerrouillesView(TemplateView):
-
     template_name = 'agenda/days-not-locked.html'
 
     def get_context_data(self, **kwargs):
         context = super(JoursNonVerrouillesView, self).get_context_data(**kwargs)
-        acts = EventAct.objects.filter(is_billed=False,
+        acts = Act.objects.filter(is_billed=False,
             patient__service=self.service).order_by('date')
-        days_not_locked = []
-        for act in acts:
-            current_day = datetime.datetime(act.date.year, act.date.month, act.date.day)
-            if not current_day in days_not_locked:
-                locked = are_all_acts_of_the_day_locked(current_day, self.service)
-                if not locked:
-                    days_not_locked.append(current_day)
-        context['days_not_locked'] = days_not_locked
+        days = set(acts.values_list('date', flat=True))
+        max_day, min_day = max(days), min(days)
+        days &= set(get_days_with_acts_not_locked(min_day, max_day, self.service))
+        context['days_not_locked'] = days
         return context
 
 class RessourcesView(TemplateView):
@@ -366,7 +344,9 @@ class RessourcesView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(RessourcesView, self).get_context_data(**kwargs)
 
-        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
+        plain_events = Event.objects.for_today(self.date) \
+                .order_by('start_datetime').select_subclasses()
+        events = [ e.today_occurence(self.date) for e in plain_events ]
 
         context['ressources_types'] = []
         context['ressources_agenda'] = []
@@ -376,13 +356,13 @@ class RessourcesView(TemplateView):
         context['ressources_types'].append(data)
         ressources.extend(data['ressources'])
 
-        occurrences_ressources = {}
+        events_ressources = {}
         for ressource in ressources:
-            occurrences_ressource = [o for o in occurrences if ressource == o.event.room]
-            occurrences_ressources[ressource.id] = occurrences_ressource
+            events_ressource = [e for e in events if ressource == e.room]
+            events_ressources[ressource.id] = events_ressource
             context['ressources_agenda'].append({'ressource': ressource,
                     'appointments': get_daily_usage(context['date'], ressource,
-                        self.service, occurrences_ressource)})
+                        self.service, events_ressource)})
 
         return context
 
@@ -401,13 +381,15 @@ class AjaxWorkerTabView(TemplateView):
         holidays_worker = Holiday.objects.for_worker_id(worker_id). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
-        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
-        occurrences_worker = [o for o in occurrences if worker_id in o.event.participants.values_list('id', flat=True)]
+        plain_events = Event.objects.for_today(self.date) \
+                .order_by('start_datetime').select_subclasses()
+        events = [ e.today_occurence(self.date) for e in plain_events ]
+        events_worker = [e for e in events if worker_id in e.participants.values_list('id', flat=True)]
 
         worker = Worker.objects.get(pk=worker_id)
         context['worker_agenda'] = {'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, occurrences_worker, holidays_worker)}
+                        time_tables_worker, events_worker, holidays_worker)}
         return context
 
 class AjaxWorkerDisponibilityColumnView(TemplateView):
@@ -425,16 +407,16 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         holidays_worker = Holiday.objects.for_worker_id(worker_id). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
-        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
-        occurrences_worker = [o for o in occurrences if worker_id in o.event.participants.values_list('id', flat=True)]
+        events = Event.objects.today_occurences(self.date)
+        events_worker = [e for e in events if worker_id in e.participants.values_list('id', flat=True)]
 
         worker = Worker.objects.get(pk=worker_id)
         time_tables_workers = {worker.id: time_tables_worker}
-        occurrences_workers = {worker.id: occurrences_worker}
+        events_workers = {worker.id: events_worker}
         holidays_workers = {worker.id: holidays_worker}
 
         context['initials'] = worker.get_initials()
         context['worker_id'] = worker.id
-        context['disponibility'] = Occurrence.objects.daily_disponibility(context['date'],
-                occurrences_workers, [worker], time_tables_workers, holidays_workers)
+        context['disponibility'] = Event.objects.daily_disponibilities(self.date,
+                events_workers, [worker], time_tables_workers, holidays_workers)
         return context

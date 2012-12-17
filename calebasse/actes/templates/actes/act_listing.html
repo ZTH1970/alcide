@@ -123,7 +123,7 @@
             {% endif %}
             {% endfor %}
         </td>
-        <td>{{ act.start_time|date:"H:i" }}</td>
+        <td>{{ act.parent_event.start_time|date:"H:i" }}</td>
         <td>{{ act.duration }}</td>
       </tr>
     {% endfor %}

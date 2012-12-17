@@ -4,14 +4,13 @@ from datetime import datetime, timedelta
 
 from django import forms
 
-from calebasse.dossiers.models import PatientRecord
-from calebasse.personnes.models import Worker
-from calebasse.actes.models import EventAct
-from calebasse.agenda.models import Event, EventType
-from calebasse.ressources.models import ActType
-from calebasse.middleware.request import get_request
+from ..dossiers.models import PatientRecord
+from ..personnes.models import Worker
+from ..ressources.models import ActType
+from ..middleware.request import get_request
 
 from ajax_select import make_ajax_field
+from models import Event, EventWithAct, EventType
 
 class NewAppointmentForm(forms.ModelForm):
     date = forms.DateField(label=u'Date')
@@ -19,11 +18,11 @@ class NewAppointmentForm(forms.ModelForm):
     duration = forms.CharField(label=u'Durée',
             help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
 
-    participants = make_ajax_field(EventAct, 'participants', 'worker-or-group', True)
-    patient = make_ajax_field(EventAct, 'patient', 'patientrecord', False)
+    participants = make_ajax_field(EventWithAct, 'participants', 'worker-or-group', True)
+    patient = make_ajax_field(EventWithAct, 'patient', 'patientrecord', False)
 
     class Meta:
-        model = EventAct
+        model = EventWithAct
         fields = (
                 'date',
                 'time',
@@ -52,51 +51,27 @@ class NewAppointmentForm(forms.ModelForm):
         duration = self.cleaned_data['duration']
         try:
             return int(duration)
-        except:
-            return None
+        except ValueError:
+            return 0
 
-    def save(self, commit=False):
-        start_datetime = datetime.combine(self.cleaned_data['date'],
+    def save(self, commit=True):
+        appointment = super(NewAppointmentForm, self).save(commit=False)
+        appointment.start_datetime = datetime.combine(self.cleaned_data['date'],
                     self.cleaned_data['time'])
-        end_datetime = start_datetime + timedelta(
+        appointment.end_datetime = appointment.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
-        patient = self.cleaned_data['patient']
-        creator = get_request().user
-        self.instance = EventAct.objects.create_patient_appointment(
-                creator=creator,
-                title=patient.display_name,
-                patient=patient,
-                participants=self.cleaned_data['participants'],
-                act_type=self.cleaned_data['act_type'],
-                service=self.service,
-                start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                description='',
-                room=self.cleaned_data['room'],
-                note=None,)
-        return self.instance
+        appointment.recurrence_end_date = appointment.start_datetime.date()
+        appointment.creator = get_request().user
+        appointment.title = appointment.patient.display_name
+        appointment.service = self.service
+        appointment.clean()
+        if commit:
+            appointment.save()
+        return appointment
+
 
 class UpdateAppointmentForm(NewAppointmentForm):
-
-    def __init__(self, instance, service=None, occurrence=None, **kwargs):
-        super(UpdateAppointmentForm, self).__init__(instance=instance,
-                                                    service=service, **kwargs)
-        self.occurrence = occurrence
-
-
-    def save(self):
-        self.occurrence.start_time = datetime.combine(
-                self.cleaned_data['date'],
-                self.cleaned_data['time'])
-        self.occurrence.end_time = self.occurrence.start_time + timedelta(
-                minutes=self.cleaned_data['duration'])
-        self.occurrence.save()
-        patient = self.cleaned_data['patient']
-        creator = get_request().user
-        self.instance.title = patient.display_name
-        self.instance.participants = self.cleaned_data['participants']
-        self.instance.save()
-        return self.instance
+    pass
 
 
 class NewEventForm(forms.ModelForm):
@@ -106,11 +81,11 @@ class NewEventForm(forms.ModelForm):
     time = forms.TimeField(label=u'Heure de début')
     duration = forms.CharField(label=u'Durée',
             help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
-    participants = make_ajax_field(EventAct, 'participants', 'worker-or-group', True)
+
+    participants = make_ajax_field(Event, 'participants', 'worker-or-group', True)
 
     class Meta:
         model = Event
-        widgets = {'services': forms.CheckboxSelectMultiple}
         fields = (
                 'title',
                 'date',
@@ -118,7 +93,6 @@ class NewEventForm(forms.ModelForm):
                 'duration',
                 'room',
                 'participants',
-                'services',
                 'event_type'
         )
 
@@ -135,22 +109,19 @@ class NewEventForm(forms.ModelForm):
         except:
             return None
 
-    def save(self, commit=False):
-        start_datetime = datetime.combine(self.cleaned_data['date'],
+    def save(self, commit=True):
+        event = super(NewEventForm, self).save(commit=False)
+        event.start_datetime = datetime.combine(self.cleaned_data['date'],
                     self.cleaned_data['time'])
-        end_datetime = start_datetime + timedelta(
+        event.end_datetime = event.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
-        self.instance = Event.objects.create_event(
-                title=self.cleaned_data['title'],
-                event_type=self.cleaned_data['event_type'],
-                participants=self.cleaned_data['participants'],
-                services=self.cleaned_data['services'],
-                start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                description='',
-                room=self.cleaned_data['room'],
-                note=None,)
-        return self.instance
+        event.recurrence_end_date = event.start_datetime.date()
+        event.creator = get_request().user
+        event.service = self.service
+        event.clean()
+        if commit:
+            event.save()
+        return event
 
     def clean(self):
         cleaned_data = super(NewEventForm, self).clean()
@@ -159,23 +130,3 @@ class NewEventForm(forms.ModelForm):
             self._errors['title'] = self.error_class([
                             u"Ce champ est obligatoire pour les événements de type « Autre »."])
         return cleaned_data
-
-
-class UpdateEventForm(NewEventForm):
-
-    def __init__(self, instance, occurrence=None, **kwargs):
-        super(UpdateEventForm, self).__init__(instance=instance, **kwargs)
-        self.occurrence = occurrence
-
-    def save(self):
-        self.occurrence.start_time = datetime.combine(
-                self.cleaned_data['date'],
-                self.cleaned_data['time'])
-        self.occurrence.end_time = self.occurrence.start_time + timedelta(
-                minutes=self.cleaned_data['duration'])
-        self.occurrence.save()
-        creator = get_request().user
-        self.instance.participants = self.cleaned_data['participants']
-        self.instance.services = self.cleaned_data['services']
-        self.instance.save()
-        return self.instance

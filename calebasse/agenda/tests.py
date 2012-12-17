@@ -4,70 +4,111 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-from datetime import datetime, date
-from dateutil import rrule
 
-from calebasse.agenda.models import Occurrence, Event
-from calebasse.actes.models import EventAct
-from calebasse.dossiers.models import PatientRecord
+from calebasse.agenda.models import Event, EventType, EventWithAct
 from calebasse.dossiers.models import create_patient
 from calebasse.ressources.models import ActType, Service, WorkerType
 from calebasse.personnes.models import Worker
+from calebasse.actes.models import Act
 
 class EventTest(TestCase):
     fixtures = ['services', 'filestates']
     def setUp(self):
         self.creator = User.objects.create(username='John')
 
-    def test_create_events(self):
-        event = Event.objects.create_event("test 1", 'un test', description='42 42',
-            start_datetime=datetime(2012, 10, 20, 13), end_datetime=datetime(2012, 10, 20, 14),
-            freq=rrule.WEEKLY, count=3)
-        self.assertEqual(str(event), 'test 1')
+    def test_recurring_events(self):
+        event = Event.objects.create(start_datetime=datetime(2012, 10, 20, 13),
+                end_datetime=datetime(2012, 10, 20, 13, 30), event_type=EventType(id=1),
+                recurrence_week_period=3, recurrence_end_date=date(2012, 12, 1))
+        event.clean()
+        event.save()
+        # Test model
+        self.assertEqual(event.timedelta(), timedelta(minutes=30))
+        occurences = list(event.all_occurences())
+        self.assertEqual(occurences[0].start_datetime,
+                datetime(2012, 10, 20, 13))
+        self.assertEqual(occurences[0].end_datetime,
+                datetime(2012, 10, 20, 13, 30))
+        self.assertEqual(occurences[1].start_datetime,
+                datetime(2012, 11, 10, 13))
+        self.assertEqual(occurences[1].end_datetime,
+                datetime(2012, 11, 10, 13, 30))
+        self.assertEqual(occurences[2].start_datetime,
+                datetime(2012, 12,  1, 13))
+        self.assertEqual(occurences[2].end_datetime,
+                datetime(2012, 12,  1, 13, 30))
+        self.assertEqual(len(occurences), 3)
+        self.assertTrue(event.is_recurring())
+        self.assertEqual(event.next_occurence(today=date(2012, 10, 21)).start_datetime,
+            datetime(2012, 11, 10, 13))
+        self.assertEqual(event.next_occurence(today=date(2012, 11,  30)).start_datetime,
+            datetime(2012, 12,  1, 13))
+        self.assertEqual(event.next_occurence(today=date(2012, 12,  2)), None)
+        # Test manager
+        i = datetime(2012, 10, 1)
+        while i < datetime(2013, 2, 1):
+            d = i.date()
+            if d in (date(2012, 10, 20), date(2012, 11, 10), date(2012, 12, 1)):
+                self.assertEqual(list(Event.objects.for_today(d)), [event], d)
+            else:
+                self.assertEqual(list(Event.objects.for_today(d)), [], d)
+            i += timedelta(days=1)
+
 
     def test_create_appointments(self):
-        service_camsp = Service.objects.create(name='CAMSP')
+        service_camsp = Service.objects.get(name='CAMSP')
 
-        patient = create_patient('Jean', 'Lepoulpe', service_camsp, self.creator, date_selected=datetime(2020, 10, 5))
+        patient = create_patient('Jean', 'LEPOULPE', service_camsp, self.creator, date_selected=datetime(2020, 10, 5))
         wtype = WorkerType.objects.create(name='ElDoctor', intervene=True)
         therapist1 = Worker.objects.create(first_name='Bob', last_name='Leponge', type=wtype)
         therapist2 = Worker.objects.create(first_name='Jean', last_name='Valjean', type=wtype)
-        therapist3 = Worker.objects.create(first_name='Pierre', last_name='PaulJacques', type=wtype)
         act_type = ActType.objects.create(name='trepanation')
         service = Service.objects.create(name='CMPP')
-        act_event = EventAct.objects.create_patient_appointment(self.creator, 'RDV avec M X', patient,
+        appointment1 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV avec M X', patient,
                 [therapist1, therapist2], act_type, service,
                 start_datetime=datetime(2020, 10, 2, 7, 15),
                 end_datetime=datetime(2020, 10, 2, 9, 20),
-                freq=rrule.WEEKLY, byweekday=rrule.FR, until=datetime(2040, 10, 2))
-        act_event2 = EventAct.objects.create_patient_appointment(self.creator, 'RDV avec M Y', patient, [therapist3],
+                periodicity=None, until=None)
+        self.assertEqual(unicode(appointment1), u'Rdv le 2020-10-02 07:15:00 de Jean LEPOULPE avec Bob LEPONGE, Jean VALJEAN pour trepanation (1)')
+
+    def test_create_recurring_appointment(self):
+        service_camsp = Service.objects.get(name='CAMSP')
+        patient = create_patient('Jean', 'LEPOULPE', service_camsp, self.creator, date_selected=datetime(2020, 10, 5))
+        wtype = WorkerType.objects.create(name='ElDoctor', intervene=True)
+        therapist3 = Worker.objects.create(first_name='Pierre', last_name='PaulJacques', type=wtype)
+        act_type = ActType.objects.create(name='trepanation')
+        service = Service.objects.create(name='CMPP')
+        appointment2 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV avec M Y', patient, [therapist3],
                 act_type, service, start_datetime=datetime(2020, 10, 2, 10, 15),
                 end_datetime=datetime(2020, 10, 2, 12, 20),
-                freq=rrule.WEEKLY, byweekday=rrule.FR, until=datetime(2021, 10, 2))
-        self.assertEqual(str(act_event), 'Rdv le 2020-10-02 07:15:00 de Jean Lepoulpe avec Bob Leponge, Jean Valjean pour trepanation (1)')
-        self.assertEqual(
-                str(Occurrence.objects.daily_occurrences(datetime(2020, 10, 8), [therapist2])),
-                '[]'
-                )
-        self.assertEqual(
-                str(Occurrence.objects.daily_occurrences(datetime(2020, 10, 9), [therapist2])),
-                '[<Occurrence: RDV avec M X: 2020-10-09T07:15:00>]'
-                )
-        self.assertEqual(
-                str(Occurrence.objects.daily_occurrences(datetime(2020, 10, 9), [therapist3])),
-                '[<Occurrence: RDV avec M Y: 2020-10-09T10:15:00>]'
-                )
+                periodicity=2, until=date(2020, 10, 16))
+        occurences = list(appointment2.all_occurences())
+        self.assertEqual(len(occurences), 2)
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
+                2)
+        self.assertEqual(occurences[0].act.date, occurences[0].start_datetime.date())
+        self.assertEqual(occurences[1].act.date, occurences[1].start_datetime.date())
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
+                2)
+        appointment2.recurrence_week_period = None
+        appointment2.save()
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
+                1)
+        appointment2.recurrence_week_period = 2
+        appointment2.recurrence_end_date = date(2020, 10, 16)
+        appointment2.save()
+        occurences = list(appointment2.all_occurences())
+        self.assertEqual(len(occurences), 2)
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 2)
+        occurences[1].act.set_state('ANNUL_NOUS', self.creator)
+        appointment2.recurrence_week_period = None
+        appointment2.save()
+        occurences = list(appointment2.all_occurences())
+        self.assertEqual(len(occurences), 1)
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 1)
+        self.assertEqual(Act.objects.count(), 2)
 
-    def test_create_holiday(self):
-        """docstring for test_create_event"""
-        wtype = WorkerType.objects.create(name='ElProfessor', intervene=True)
-        user = Worker.objects.create(first_name='Jean-Claude', last_name='Van Damme', type=wtype)
-        event = Event.objects.create_holiday(date(2012, 12, 12), date(2012,12,30),
-                [user], motive='tournage d\'un film')
-        self.assertEqual(str(event), 'Conge')
-        #event = user.event.occurrence_set.all()[0]
-        #self.assertEqual(event.end_time - event.start_time, timedelta(0, 7200))
