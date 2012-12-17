@@ -118,7 +118,7 @@ for db in dbs:
                 '%s.INFORMATION_SCHEMA.COLUMNS ' % db + \
                 " where TABLE_NAME='%s';\" " % table + \
                 ' -o "%s-title.csv"' % os.path.join(db_dir, table))
-        os.system('bcp %s.dbo.%s out %s-data.csv -w  -t"\\",\\"" -T -SSRVAPS' % (db, table, os.path.join(db_dir, table)))
+        os.system('bcp %s.dbo.%s out %s-data.csv -w  -t"-!-!-EOSEP-!-!-" -T -SSRVAPS' % (db, table, os.path.join(db_dir, table)))
         title = open("%s-title.csv" % os.path.join(db_dir, table), 'r')
         data = open("%s-data.csv" % os.path.join(db_dir, table), 'r')
         res = open("%s.csv" % os.path.join(db_dir, table), "a+")
@@ -128,16 +128,23 @@ for db in dbs:
         res.write(title_content)
         lines = data.readlines()
         for i, line in enumerate(lines):
-            line = unicode(line, 'cp1252')
-            line = line.replace('\0', '').replace('\r', '')
             if i == 0:
-                line = re.sub('^', '"', line[2:])
-            else:
-                line = re.sub('^', '"', line)
-            if line and line != "\n":
-                line = re.sub('\n', '"\n', line)
-            if line != '"' and line != '"\n' and line != '""\n':
-                res.write(line.encode('utf-8'))
+                line = line[2:]
+            line = unicode(line, 'cp1252')
+            line = line.replace('\0', '')
+            line = line.replace('\r\n', '')
+            line = line.replace('\n', '')
+            cols = line.split("-!-!-EOSEP-!-!-")
+            line = ""
+            for i, col in enumerate(cols):
+                col = col.replace('"', '\\"')
+                if i != 0:
+                    line += ',"'
+                else:
+                    line += '"'
+                line += col + '"'
+            line += "\n"
+            res.write(line.encode('utf-8'))
         title.close()
         data.close()
         res.close()

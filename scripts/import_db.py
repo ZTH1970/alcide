@@ -11,14 +11,21 @@ import django.core.management
 django.core.management.setup_environ(calebasse.settings)
 
 from calebasse.ressources.models import Service
+from django.contrib.auth.models import User
 
 # Config
-db_path = "/home/jschneider/temp/20121213-185146/"
+db_path = "/home/jschneider/temp/20121217-174913"
 
 dbs = ["F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD", "F_ST_ETIENNE_SESSAD_TED"]
 #tables = ["discipline", "intervenants", "notes", "ev", "conge"]
-tables = ["discipline", "intervenants", "notes", "ev", "conge"]
+tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
 
+
+def _to_date(str_date):
+    if not str_date:
+        return None
+    print str_date
+    return datetime.strptime(str_date[:-13], "%Y-%m-%d")
 
 def discipline_mapper(tables_data, service):
     from calebasse.ressources.models import WorkerType
@@ -46,6 +53,47 @@ def intervenants_mapper(tables_data, service):
                 gender=int(line['titre']),
                 )
         worker.services.add(service)
+
+def dossiers_mapper(tables_data, service):
+    from calebasse.dossiers.models import PatientRecord
+    from calebasse.dossiers.models import Status, FileState
+    for line in tables_data['dossiers']:
+        print "ID : " + line['id']
+        print "Inscription : " + line['ins_date']
+        print "Sortie : " + line['sor_date']
+        print "Naissance : "  + line['nais_date']
+        status = Status.objects.filter(type="ACCUEIL").filter(services=service)
+        creator = User.objects.get(id=1)
+        if not line['nais_sexe']:
+            gender = None
+        else:
+            gender = int(line['nais_sexe'])
+        if gender == 0:
+            gender = None
+        patient, created = PatientRecord.objects.get_or_create(first_name=line['nom'],
+                last_name=line['prenom'], birthdate=_to_date(line['nais_date']),
+                twinning_rank=int(line['nais_rang']),
+                gender=gender, service=service, creator=creator)
+
+        if not created:
+            if not line['ins_date']:
+                # TODO: hack when there is not inscription date put 01/01/1900
+                line['ins_date'] = "1900-01-01 00:00:00.000"
+            fs = FileState.objects.create(status=status[0], author=creator,
+                   date_selected=_to_date(line['ins_date']),
+                    previous_state=None, patient=patient)
+            patient.last_state = fs
+            patient.save()
+            if line['sor_date']:
+                status = Status.objects.filter(type="CLOS").filter(services=service)
+                fs = FileState.objects.create(status=status[0], author=creator,
+                        date_selected=_to_date(line['sor_date']),
+                        previous_state=None, patient=patient)
+                patient.last_state = fs
+                patient.save()
+
+def rs_mapper(tables_data, service):
+    pass
 
 def conge_mapper(tables_data, service):
     """ """
