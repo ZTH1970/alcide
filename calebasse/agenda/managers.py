@@ -122,14 +122,16 @@ class OccurrenceManager(models.Manager):
                 qs = qs.filter(event__event_type=event_type)
         return qs
 
-    def daily_disponiblity(self, date, occurrences, participants, time_tables):
+    def daily_disponiblity(self, date, occurrences, participants, time_tables, holidays):
         result = dict()
         quater = 0
         occurrences_set = {}
         timetables_set = {}
+        holidays_set = {}
         for participant in participants:
             occurrences_set[participant.id] = IntervalSet((o.to_interval() for o in occurrences[participant.id]))
             timetables_set[participant.id] = IntervalSet((t.to_interval(date) for t in time_tables[participant.id]))
+            holidays_set[participant.id] = IntervalSet((h.to_interval(date) for h in holidays[participant.id]))
         start_datetime = datetime(date.year, date.month, date.day, 8, 0)
         end_datetime = datetime(date.year, date.month, date.day, 8, 15)
         while (start_datetime.hour <= 19):
@@ -144,6 +146,8 @@ class OccurrenceManager(models.Manager):
 
                 interval = IntervalSet.between(start_datetime, end_datetime, False)
                 if interval.intersection(occurrences_set[participant.id]):
+                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
+                elif interval.intersection(holidays_set[participant.id]):
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
                 elif not interval.intersection(timetables_set[participant.id]):
                     result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'away'})

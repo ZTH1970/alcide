@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 
 from calebasse.cbv import TemplateView, CreateView, UpdateView
 from calebasse.agenda.models import Occurrence, Event, EventType
-from calebasse.personnes.models import TimeTable
+from calebasse.personnes.models import TimeTable, Holiday
 from calebasse.actes.models import EventAct
 from calebasse.agenda.appointments import get_daily_appointments
 from calebasse.personnes.models import Worker
@@ -50,6 +50,9 @@ class AgendaHomepageView(TemplateView):
                 filter(services=self.service). \
                 for_today(self.date). \
                 order_by('start_date')
+        holidays = Holiday.objects.select_related('worker'). \
+                for_period(self.date, self.date). \
+                order_by('start_date')
         occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
 
         context['workers_types'] = []
@@ -65,17 +68,20 @@ class AgendaHomepageView(TemplateView):
 
         occurrences_workers = {}
         time_tables_workers = {}
+        holidays_workers = {}
         for worker in workers:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
             occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
+            holidays_worker = [h for h in holidays if h.worker_id == worker.id]
             occurrences_workers[worker.id] = occurrences_worker
             time_tables_workers[worker.id] = time_tables_worker
+            holidays_workers[worker.id] = holidays_worker
             context['workers_agenda'].append({'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, occurrences_worker)})
+                        time_tables_worker, occurrences_worker, holidays_worker)})
 
         context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
-                occurrences_workers, workers, time_tables_workers)
+                occurrences_workers, workers, time_tables_workers, holidays_workers)
         return context
 
 class AgendaServiceActivityView(TemplateView):

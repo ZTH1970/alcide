@@ -98,6 +98,11 @@ class Appointment(object):
         self.length = length
         self.__set_time(begin_time)
 
+    def init_busy_time(self, title, length, begin_time):
+        self.title = title
+        self.type = "busy-here"
+        self.length = length
+        self.__set_time(begin_time)
 
     def init_start_stop(self, title, time):
         """
@@ -107,14 +112,15 @@ class Appointment(object):
         self.title = title
         self.__set_time(time)
 
-def get_daily_appointments(date, worker, service, time_tables, occurrences):
+def get_daily_appointments(date, worker, service, time_tables, occurrences, holidays):
     """
     """
     appointments = []
 
     timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
     occurrences_set = IntervalSet((o.to_interval() for o in occurrences))
-    for free_time in timetables_set - occurrences_set:
+    holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
+    for free_time in timetables_set - (occurrences_set+holidays_set):
         if free_time:
             delta = free_time.upper_bound - free_time.lower_bound
             delta_minutes = delta.seconds / 60
@@ -126,15 +132,32 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences):
         appointment = Appointment()
         appointment.init_from_occurrence(occurrence, service)
         appointments.append(appointment)
-    for time_table in time_tables:
+    for holiday in holidays:
+        interval = holiday.to_interval(date)
+        delta = interval.upper_bound - interval.lower_bound
+        delta_minutes = delta.seconds / 60
         appointment = Appointment()
-        appointment.init_start_stop(u"Arrivée",
-            time(time_table.start_time.hour, time_table.start_time.minute))
+        appointment.init_busy_time(u"Congé",
+                    delta_minutes,
+                    time(interval.lower_bound.hour, interval.lower_bound.minute))
+        appointments.append(appointment)
+    for time_table in time_tables:
+        interval_set = IntervalSet.between(time_table.to_interval(date).lower_bound.time(),
+                                   time_table.to_interval(date).upper_bound.time())
+        for holiday in holidays:
+            holiday_interval_set = IntervalSet.between(holiday.to_interval(date).lower_bound.time(),
+                                   holiday.to_interval(date).upper_bound.time())
+            interval_set = interval_set - holiday_interval_set
+        if not interval_set:
+            continue
+        start_time = interval_set.lower_bound()
+        end_time = interval_set.upper_bound()
+        appointment = Appointment()
+        appointment.init_start_stop(u"Arrivée", start_time)
         appointment.weight = -1
         appointments.append(appointment)
         appointment = Appointment()
-        appointment.init_start_stop(u"Départ",
-            time(time_table.end_time.hour, time_table.end_time.minute))
+        appointment.init_start_stop(u"Départ", end_time)
         appointment.weight = 1
         appointments.append(appointment)
 

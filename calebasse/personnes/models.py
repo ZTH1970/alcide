@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, date
+from datetime import datetime, date, time as datetime_time
 
 from django.db import models
 from django.db.models import query
@@ -280,6 +280,19 @@ class Holiday(BaseModelMixin, models.Model):
                     date_filter(self.start_date, 'j F'),
                     date_filter(self.end_date, 'j F Y'))
         return ret
+
+    def to_interval(self, date):
+        if date == self.start_date:
+            start_time = self.start_time or datetime_time(8, 0)
+        else:
+            start_time = datetime_time(8, 0)
+        if date == self.end_date:
+            end_time = self.end_time or datetime_time(20, 0)
+        else:
+            end_time = datetime_time(20, 0)
+        return Interval(datetime.combine(self.start_date, start_time),
+                datetime.combine(self.end_date, end_time))
+
 
 class ExternalDoctor(People):
     class Meta:
