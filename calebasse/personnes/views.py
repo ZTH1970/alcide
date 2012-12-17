@@ -253,9 +253,7 @@ holiday_listing = HolidayView.as_view()
 class YearlyHolidayUpdateView(cbv.FormView):
     form_class = forms.YearlyHolidayFormSet
     template_name = 'personnes/yearly_holiday_update.html'
-
-    def get_success_url(self):
-        return '../'
+    success_url = '.'
 
     def get_form_kwargs(self):
         kwargs = super(YearlyHolidayUpdateView, self).get_form_kwargs()
@@ -263,6 +261,10 @@ class YearlyHolidayUpdateView(cbv.FormView):
         kwargs['queryset'] = qs
         kwargs['service'] = self.service
         return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super(YearlyHolidayUpdateView, self).form_valid(form)
 
 
 yearly_holiday_update = YearlyHolidayUpdateView.as_view()
