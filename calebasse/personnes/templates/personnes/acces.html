@@ -1,4 +1,4 @@
-{% extends "calebasse/base.html" %}
+{% extends "personnes/base.html" %}
 
 {% block extrascripts %}
 <script src="{{ STATIC_URL }}js/calebasse.reset-button.js"></script>
@@ -16,7 +16,7 @@
   <div>
     <h3>Rechercher dans les comptes</h3>
     <form>
-      <label>Identifiant : 
+      <label>Identifiant :
         <input type="text"/ name='identifier' value="{{ request.GET.identifier }}">
       </label>
       {% if request.GET %}
