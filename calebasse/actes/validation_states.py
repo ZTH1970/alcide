@@ -4,8 +4,8 @@
     The value given in the dictionnary can only be used for display.
 '''
 
-NON_VALIDE = u'Non validé'
-VALIDE = u'Validé'
+NON_VALIDE = u'Non pointé'
+VALIDE = u'Présent'
 ABS_NON_EXC = u'Absence non excusée'
 ABS_EXC = u'Absence excusée'
 ANNUL_NOUS = u'Annulé par nous'
