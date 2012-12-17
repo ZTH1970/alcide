@@ -37,7 +37,7 @@ def list_view(request, service, model_name):
     if model is None:
         raise Http404
     view = ListView.as_view(model=model,
-            queryset=models.objects.select_related(),
+            queryset=model.objects.select_related(),
             template_name='ressources/list.html')
     return view(request, service=service)
 
