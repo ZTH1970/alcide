@@ -139,8 +139,8 @@ class Office(ServiceLinkedAbstractModel):
 
 class School(models.Model):
     class Meta:
-        verbose_name = u'Lieu de scolarisation'
-        verbose_name_plural = u'Lieux de scolarisation'
+        verbose_name = u'Lieu de socialisation'
+        verbose_name_plural = u'Lieux de socialisation'
 
     def __unicode__(self):
         return self.name
@@ -161,10 +161,27 @@ class School(models.Model):
     director_name = models.CharField(max_length=70,
             blank=True, null=True, default=None)
 
+
 class SchoolTeacherRole(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de rôle des professeurs'
         verbose_name_plural = u'Types de rôle des professeurs'
+
+
+class SocialisationDuration(models.Model):
+    class Meta:
+        verbose_name = u'Période de socialisation'
+        verbose_name_plural = u'Périodes de socialisation'
+
+    place = models.ForeignKey('ressources.School',
+        verbose_name=u'Lieu de socialisation')
+    start_date = models.DateField(verbose_name=u"Date d'arrivée")
+    end_date = models.DateField(verbose_name=u"Date de départ",
+        blank=True, null=True)
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+    comment = models.TextField(max_length=3000,
+        blank=True, null=True, verbose_name=u"Commentaire")
+
 
 class InscriptionMotive(NamedAbstractModel):
     class Meta:
