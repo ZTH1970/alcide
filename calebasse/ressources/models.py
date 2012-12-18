@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.db.models import query
+from model_utils import Choices
 
 from calebasse.models import PhoneNumberField, ZipCodeField
 
@@ -279,3 +280,21 @@ class WorkerType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de personnel'
         verbose_name_plural = u'Types de personnel'
+
+
+AXIS =  Choices(
+        (1, 'Axe I : catégories cliniques'),
+        (2, 'Axe II : facteurs organiques'),
+        (3, 'Axe II : facteurs environementaux'),
+)
+
+class CodeCFTMEA(NamedAbstractModel):
+    code = models.IntegerField(verbose_name=u"Code")
+    axe = models.IntegerField(verbose_name=u"Axe", choices=AXIS,
+            max_length=1)
+
+    def __unicode__(self):
+        return "%d %s" % (self.code, self.name)
+
+    class Meta:
+        ordering = ['code']
