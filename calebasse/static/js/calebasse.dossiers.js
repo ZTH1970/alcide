@@ -93,7 +93,25 @@ function state_dialog(url, state_title, state_type) {
 
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',
-            '#dossier-dlg', '500px', 'Ajouter');
+            '#dossier-dlg', '500px', 'Ajouter', null, function(that) {
+                    $(that).find('#id_last_name').keyup(function() {
+                            var val = $(this).val();
+                            if (val.length < 3) {
+                               $(that).find('#last_name_matches').empty();
+                               return;
+                            }
+                            $.ajax({
+                               url: "/lookups/ajax_lookup/patientrecord?term=" + val,
+                               success: function(json) {
+                                  var list = $(that).find('#last_name_matches');
+                                  list.empty();
+                                  $(eval(json)).each(function(a, b) {
+                                          list.append($('<li><a href="' + b.pk + '/view" target="new">' + b.value + '</a></li>'));
+                                  });
+                               }
+                            });
+                    });
+            });
     });
     $('#patientrecord-delete').click(function() {
         generic_ajaxform_dialog('delete', 'Supprimer le dossier',
