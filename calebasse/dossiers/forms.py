@@ -10,7 +10,8 @@ from calebasse.dossiers.models import (PatientRecord,
     CmppHealthCareTreatment, CmppHealthCareDiagnostic,
     SessadHealthCareNotification)
 from calebasse.dossiers.states import STATE_CHOICES
-from calebasse.ressources.models import (HealthCenter, LargeRegime)
+from calebasse.ressources.models import (HealthCenter, LargeRegime,
+    CodeCFTMEA)
 
 from ajax_select import make_ajax_field
 
@@ -59,7 +60,19 @@ class CivilStatusForm(ModelForm):
 class PhysiologyForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('size', 'weight', 'pregnancy_term')
+        fields = ('size', 'weight', 'pregnancy_term',
+            'cranium_perimeter', 'chest_perimeter', 'apgar_score_one',
+            'apgar_score_two', 'mises_1', 'mises_2', 'mises_3')
+
+    def __init__(self, instance, **kwargs):
+        super(PhysiologyForm, self).__init__(instance=instance, **kwargs)
+        self.fields['mises_1'].queryset = \
+                CodeCFTMEA.objects.filter(axe=1)
+        self.fields['mises_2'].queryset = \
+                CodeCFTMEA.objects.filter(axe=2)
+        self.fields['mises_3'].queryset = \
+                CodeCFTMEA.objects.filter(axe=3)
+
 
 class InscriptionForm(ModelForm):
     class Meta:

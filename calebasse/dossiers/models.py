@@ -278,12 +278,29 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     pause = models.BooleanField(verbose_name=u"Pause facturation",
             default=False)
 
-    # Physiology
+    # Physiology and health data
     size = models.IntegerField(verbose_name=u"Taille (cm)",
             null=True, blank=True, default=None)
     weight = models.IntegerField(verbose_name=u"Poids (kg)",
             null=True, blank=True, default=None)
     pregnancy_term = models.IntegerField(verbose_name=u"Terme en semaines",
+            null=True, blank=True, default=None)
+    cranium_perimeter = models.DecimalField(verbose_name=u"Périmètre cranien", max_digits=5, decimal_places=2,
+            null=True, blank=True, default=None)
+    chest_perimeter = models.DecimalField(verbose_name=u"Périmètre thoracique", max_digits=5, decimal_places=2,
+            null=True, blank=True, default=None)
+    apgar_score_one = models.IntegerField(verbose_name=u"Test d'Apgar 1",
+            null=True, blank=True, default=None)
+    apgar_score_two = models.IntegerField(verbose_name=u"Test d'Apgar 2",
+            null=True, blank=True, default=None)
+    mises_1 = models.ManyToManyField('ressources.CodeCFTMEA', related_name="mises1",
+            verbose_name=u"Axe I : catégories cliniques",
+            null=True, blank=True, default=None)
+    mises_2 = models.ManyToManyField('ressources.CodeCFTMEA', related_name="mises2",
+            verbose_name=u"Axe II : facteurs organiques",
+            null=True, blank=True, default=None)
+    mises_3 = models.ManyToManyField('ressources.CodeCFTMEA', related_name="mises3",
+            verbose_name=u"Axe II : facteurs environementaux",
             null=True, blank=True, default=None)
 
     # Inscription motive

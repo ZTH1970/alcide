@@ -380,6 +380,22 @@
     </div>
 
     <div id="tabs-8">
+        <form method="post" id="physiology-form" class="patientrecordform">
+          {% csrf_token %}
+            <button class="save">Enregistrer</button>
+            {% for field in forms.physiology %}
+            <p>
+                {{ field.errors }}
+            </p>
+            <p>
+                {{ field.label_tag  }}
+                {{ field }}
+            </p>
+            {% endfor %}
+            </p>
+            <input type="hidden"  name="tab"  value="7">
+            <button class="save">Enregistrer</button>
+        </form>
     </div>
   </div>
 </div>

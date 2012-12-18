@@ -21,26 +21,6 @@
   </div>
 </form>
 
-
-<form method="post" id="physiology-form" class="patientrecordform">
-  {% csrf_token %}
-  <div class="frame inline">
-    <h3>Physiologie</h3>
-    <button class="save">✔</button>
-    <p>
-    {% for field in forms.physiology %}
-    {{ field.errors }}
-    {% endfor %}
-    </p>
-    <p>
-    {% for field in forms.physiology %}
-    {{ field.label_tag  }} : {{ field }}
-    {% endfor %}
-    </p>
-    <input type="hidden"  name="tab"  value="1">
-  </div>
-</form>
-
 <form method="post" id="inscription-form" class="patientrecordform">
   {% csrf_token %}
   <div class="frame inline">
