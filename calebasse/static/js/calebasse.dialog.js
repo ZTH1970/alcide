@@ -1,5 +1,5 @@
 
-function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl) {
+function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback) {
   $(id).load(url,
       function () {
         function onsuccess(response, status, xhr, form) {
@@ -43,6 +43,9 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
             click: function() { $(this).dialog("close"); } },
           { text: btn_submit_name,
             click: function() { $(id + " form").submit(); } }]});
+	if (on_load_callback) {
+            on_load_callback($(this));
+	}
       });
 }
 
