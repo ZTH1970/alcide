@@ -138,7 +138,22 @@ function state_dialog(url, state_title, state_type) {
 
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
-            '#ajax-dlg', '800px', 'Ajouter');
+            '#ajax-dlg', '800px', 'Ajouter', null, function(that) {
+                    $(that).find('#social-security-id input').keyup(function() {
+                            if ($(this).val().length < 13) {
+                                $('p#nir-key span').removeAttr('id')
+                                $('p#nir-key span').text('-');
+                            } else {
+                                $('p#nir-key span').attr('id', 'highlight')
+                                var key = 97 - ($(this).val() % 97)
+                                if (isNaN(key)) {
+                                    $('p#nir-key span').text('NIR invalide');
+                                } else {
+                                    $('p#nir-key span').text(key);
+                                }
+                            }
+                        });
+            });
     });
     $('.update-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
