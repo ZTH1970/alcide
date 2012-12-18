@@ -11,7 +11,8 @@ from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
         CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
-from calebasse.ressources.models import Service
+from calebasse.ressources.models import (Service,
+    SocialisationDuration)
 
 
 def get_next_rdv(patient_record):
@@ -368,3 +369,47 @@ class PatientRecordPaperIDUpdateView(cbv.UpdateView):
     success_url = '../..'
 
 update_paper_id = PatientRecordPaperIDUpdateView.as_view()
+
+
+class NewSocialisationDurationView(cbv.CreateView):
+    model = SocialisationDuration
+    form_class = forms.SocialisationDurationForm
+    template_name = 'dossiers/generic_form.html'
+    success_url = '../view#tab=6'
+
+    def get_success_url(self):
+        return self.success_url
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(NewSocialisationDurationView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        duration = form.save()
+        patientrecord = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        patientrecord.socialisation_durations.add(duration)
+        return HttpResponseRedirect(self.get_success_url())
+
+new_socialisation_duration = NewSocialisationDurationView.as_view()
+
+class UpdateSocialisationDurationView(cbv.UpdateView):
+    model = SocialisationDuration
+    form_class = forms.SocialisationDurationForm
+    template_name = 'dossiers/generic_form.html'
+    success_url = '../../view#tab=6'
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(UpdateSocialisationDurationView, self).get(request, *args, **kwargs)
+
+update_socialisation_duration = UpdateSocialisationDurationView.as_view()
+
+class DeleteSocialisationDurationView(cbv.DeleteView):
+    model = SocialisationDuration
+    form_class = forms.SocialisationDurationForm
+    template_name = 'dossiers/socialisationduration_confirm_delete.html'
+    success_url = '../../view#tab=6'
+
+delete_socialisation_duration = DeleteSocialisationDurationView.as_view()
