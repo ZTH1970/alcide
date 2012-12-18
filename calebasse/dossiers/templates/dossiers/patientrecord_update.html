@@ -377,6 +377,27 @@
     </div>
 
     <div id="tabs-7">
+        <p><button id="new-socialisation-duration-btn">Nouvelle période de socialisation</button></p>
+        {% if object.socialisation_durations.all %}
+        <div class="frame">
+            <h3>Périodes de socialisation</h3>
+            {% for duration in object.socialisation_durations.all %}
+                <div class="frame">
+                Arrivée le <strong>{{ duration.start_date }}</strong> dans l'établissement <strong>{{ duration.place }}</strong>
+                <div class="right">
+                    <button type="button" data-id="{{ duration.id }}" class="del-duration icon-minus" title="Supprimer"></button>
+                    <button type="button" data-id="{{ duration.id }}" class="update-duration-btn icon-edit" title="Modifier"></button>
+                </div>
+                <div>
+                    <ul>
+                        {% if duration.end_date %}<li><label>Date de départ</label> : {{ duration.end_date }}</li>{% endif %}
+                        {% if duration.comment %}<li><label>Commentaire</label> : {{ duration.comment }}</li>{% endif %}
+                    </ul>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 
     <div id="tabs-8">

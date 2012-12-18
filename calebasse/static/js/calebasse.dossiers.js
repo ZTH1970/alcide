@@ -163,6 +163,18 @@ function state_dialog(url, state_title, state_type) {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del', 'Supprimer un contact',
             '#ajax-dlg', '500px', 'Supprimer');
     });
+    $('#new-socialisation-duration-btn').click(function() {
+        generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
+            '#ajax-dlg', '800px', 'Ajouter');
+    });
+    $('.update-duration-btn').click(function() {
+        generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/update', 'Modifier une période de socialisation',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
+    $('.del-duration').click(function() {
+        generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
 
     $('#add-prise-en-charge-btn').click(function() {
       $('#add-prise-en-charge-dlg').dialog({title: 'Prise en charge',
