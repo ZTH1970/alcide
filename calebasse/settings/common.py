@@ -227,6 +227,7 @@ AJAX_LOOKUP_CHANNELS = {
     #'patientrecord'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
     #'coordinators'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
     'patientrecord' : ('calebasse.dossiers.lookups', 'PatientRecordLookup'),
+    'school' : {'model':'ressources.School', 'search_field':'name'},
     'addresses' : ('calebasse.dossiers.lookups', 'PatientAddressLookup'),
 }
 
