@@ -271,8 +271,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True)
     last_state = models.ForeignKey(FileState, related_name='+',
             null=True)
-    school = models.ForeignKey('ressources.School',
-            null=True, blank=True, default=None)
+    socialisation_durations = models.ManyToManyField('ressources.SocialisationDuration',
+            related_name='socialisation_duration_of')
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
     pause = models.BooleanField(verbose_name=u"Pause facturation",
