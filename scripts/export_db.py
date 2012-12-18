@@ -3,11 +3,13 @@
 import re
 import os
 
+from copy import copy
 from datetime import datetime
 
 # Config
 dbs = ["F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD", "F_ST_ETIENNE_SESSAD_TED"]
-tables = ["actes",
+tables = [
+"actes",
 "actes_non_factures",
 "adresses",
 "annexes",
@@ -102,12 +104,20 @@ tables = ["actes",
 "type_acte",
 "type_acte_categorie",
 "type_transport",
-"users"]
+"users"
+]
 
 export_path = os.path.join("C:\\", "export", datetime.now().strftime("%Y%m%d-%H%M%S"))
 
 
 os.mkdir(export_path)
+
+def format_line(line):
+    line = unicode(line, 'cp1252')
+    line = line.replace('\0', '')
+    line = line.replace('\r\n', '')
+    line = line.replace('\n', '')
+    return line
 
 for db in dbs:
     db_dir = os.path.join(export_path, db)
@@ -115,40 +125,48 @@ for db in dbs:
     for table in tables:
         os.system('sqlcmd -S SRVAPS -E -h-1 -s, -Q"SET NOCOUNT ON;' + \
                 ' SELECT column_name from ' + \
-                '%s.INFORMATION_SCHEMA.COLUMNS ' % db + \
+		'%s.INFORMATION_SCHEMA.COLUMNS ' % db + \
                 " where TABLE_NAME='%s';\" " % table + \
                 ' -o "%s-title.csv"' % os.path.join(db_dir, table))
-        os.system('bcp %s.dbo.%s out %s-data.csv -w  -t"-!-!-EOSEP-!-!-" -T -SSRVAPS' % (db, table, os.path.join(db_dir, table)))
+        os.system('bcp %s.dbo.%s out %s-data.csv -w  -t"-!-!-EOSEP-!-!-" -rmyeof\\n -T -SSRVAPS' % (db, table, os.path.join(db_dir, table)))
         title = open("%s-title.csv" % os.path.join(db_dir, table), 'r')
         data = open("%s-data.csv" % os.path.join(db_dir, table), 'r')
         res = open("%s.csv" % os.path.join(db_dir, table), "a+")
-        title_content = title.read()
-        title_content, nb = re.subn(r'\s+\n', ',', title_content)
-        title_content = title_content[:-1] + '\n'
+    	title_content = title.read()
+    	title_content, nb = re.subn(r'\s+\n', ',', title_content)
+    	title_content = title_content[:-1] + '\n'
         res.write(title_content)
         lines = data.readlines()
-        for i, line in enumerate(lines):
+        i = 0
+    	while i < len(lines):
+            line = lines[i]
             if i == 0:
                 line = line[2:]
-            line = unicode(line, 'cp1252')
-            line = line.replace('\0', '')
-            line = line.replace('\r\n', '')
-            line = line.replace('\n', '')
-            cols = line.split("-!-!-EOSEP-!-!-")
-            line = ""
-            for i, col in enumerate(cols):
+            line = format_line(line)
+            csv_line = copy(line)
+            while not re.search(r'myeof$', line):
+                i += 1 
+                if i >= len(lines):
+                    break
+                line = format_line(lines[i])
+                csv_line += " " + line
+            csv_line = csv_line[:-5]
+            cols = csv_line.split("-!-!-EOSEP-!-!-")
+            csv_line = ""
+            for j, col in enumerate(cols):
                 col = col.replace('"', '\\"')
-                if i != 0:
-                    line += ',"'
+                if j != 0:
+                    csv_line += ',"'
                 else:
-                    line += '"'
-                line += col + '"'
-            line += "\n"
-            res.write(line.encode('utf-8'))
+                    csv_line += '"'
+                csv_line += col + '"'
+            csv_line += "\n"
+            i += 1
+            res.write(csv_line.encode('utf-8'))
         title.close()
         data.close()
         res.close()
         os.remove("%s-title.csv" % os.path.join(db_dir, table))
         os.remove("%s-data.csv" % os.path.join(db_dir, table))
 
-
+#
