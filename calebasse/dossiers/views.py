@@ -116,12 +116,8 @@ class DeletePatientAddressView(cbv.DeleteView):
 
 delete_patient_address = DeletePatientAddressView.as_view()
 
-class NewHealthCareView(cbv.CreateView):
-    template_name = 'dossiers/generic_form.html'
-    success_url = '../view#tab=3'
 
-    def get_success_url(self):
-        return self.success_url
+class NewHealthCareView(cbv.CreateView):
 
     def get_initial(self):
         initial = super(NewHealthCareView, self).get_initial()
@@ -129,13 +125,48 @@ class NewHealthCareView(cbv.CreateView):
         initial['patient'] = self.kwargs['patientrecord_id']
         return initial
 
-
-new_healthcare_treatment = NewHealthCareView.as_view(model=CmppHealthCareTreatment,
+new_healthcare_treatment = \
+    NewHealthCareView.as_view(model=CmppHealthCareTreatment,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../view#tab=3',
         form_class=forms.CmppHealthCareTreatmentForm)
-new_healthcare_diagnostic = NewHealthCareView.as_view(model=CmppHealthCareDiagnostic,
+new_healthcare_diagnostic = \
+    NewHealthCareView.as_view(model=CmppHealthCareDiagnostic,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../view#tab=3',
         form_class=forms.CmppHealthCareDiagnosticForm)
-new_healthcare_notification = NewHealthCareView.as_view(model=SessadHealthCareNotification,
+new_healthcare_notification = \
+    NewHealthCareView.as_view(model=SessadHealthCareNotification,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../view#tab=3',
         form_class=forms.SessadHealthCareNotificationForm)
+update_healthcare_treatment = \
+    cbv.UpdateView.as_view(model=CmppHealthCareTreatment,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../../view#tab=3',
+        form_class=forms.CmppHealthCareTreatmentForm)
+update_healthcare_diagnostic = \
+    cbv.UpdateView.as_view(model=CmppHealthCareDiagnostic,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../../view#tab=3',
+        form_class=forms.CmppHealthCareDiagnosticForm)
+update_healthcare_notification = \
+    cbv.UpdateView.as_view(model=SessadHealthCareNotification,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../../view#tab=3',
+        form_class=forms.SessadHealthCareNotificationForm)
+delete_healthcare_treatment = \
+    cbv.DeleteView.as_view(model=CmppHealthCareTreatment,
+        template_name = 'dossiers/generic_confirm_delete.html',
+        success_url = '../../view#tab=3')
+delete_healthcare_diagnostic = \
+    cbv.DeleteView.as_view(model=CmppHealthCareDiagnostic,
+        template_name = 'dossiers/generic_confirm_delete.html',
+        success_url = '../../view#tab=3')
+delete_healthcare_notification = \
+    cbv.DeleteView.as_view(model=SessadHealthCareNotification,
+        template_name = 'dossiers/generic_confirm_delete.html',
+        success_url = '../../view#tab=3')
 
 
 class StateFormView(cbv.FormView):
