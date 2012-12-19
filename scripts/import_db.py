@@ -14,25 +14,27 @@ from calebasse.ressources.models import Service
 from django.contrib.auth.models import User
 
 # Config
-db_path = "/home/jschneider/temp/20121218-123613/"
+db_path = "/home/jschneider/temp/20121219-171421/"
 
 dbs = ["F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD", "F_ST_ETIENNE_SESSAD_TED"]
-#tables = ["discipline", "intervenants", "notes", "ev", "conge"]
+#tables = ["rs"]
 tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
 
 
 def _to_date(str_date):
     if not str_date:
         return None
-    print str_date
     return datetime.strptime(str_date[:-13], "%Y-%m-%d")
+
+def _to_int(str_int):
+    if not str_int:
+        return None
+    return int(str_int)
 
 def discipline_mapper(tables_data, service):
     from calebasse.ressources.models import WorkerType
     for line in tables_data['discipline']:
         # Insert workertype
-        print "ICI"
-        print line.keys()
         if not WorkerType.objects.filter(name=line['libelle']):
             WorkerType.objects.create(name=line['libelle'])
 
@@ -60,27 +62,20 @@ def dossiers_mapper(tables_data, service):
     from calebasse.dossiers.models import PatientRecord
     from calebasse.dossiers.models import Status, FileState
     for line in tables_data['dossiers']:
-        print "ID : " + line['id']
-        print "Inscription : " + line['ins_date']
-        print "Sortie : " + line['sor_date']
-        print "Naissance : "  + line['nais_date']
         status = Status.objects.filter(type="ACCUEIL").filter(services=service)
         creator = User.objects.get(id=1)
-        if not line['nais_sexe']:
-            gender = None
-        else:
-            gender = int(line['nais_sexe'])
+        gender = _to_int(line['nais_sexe'])
         if gender == 0:
             gender = None
         patient, created = PatientRecord.objects.get_or_create(first_name=line['nom'],
                 last_name=line['prenom'], birthdate=_to_date(line['nais_date']),
-                twinning_rank=int(line['nais_rang']),
+                twinning_rank=_to_int(line['nais_rang']),
                 gender=gender, service=service, creator=creator)
 
         if not created:
             if not line['ins_date']:
-                # TODO: hack when there is not inscription date put 01/01/1900
-                line['ins_date'] = "1900-01-01 00:00:00.000"
+                # Hack when there is no inscription date put 01/01/1970
+                line['ins_date'] = "1970-01-01 00:00:00.000"
             fs = FileState.objects.create(status=status[0], author=creator,
                    date_selected=_to_date(line['ins_date']),
                     previous_state=None, patient=patient)
@@ -102,7 +97,7 @@ def conge_mapper(tables_data, service):
     from calebasse.personnes.models import Holiday
     # ['base_origine', 'motif', 'date_conge', 'date_fin', 'id', 'thera_id', 'date_debut']
     for line in tables_data['conge']:
-        print line
+        pass
 
 def ev_mapper(tables_data, service):
     """ """
@@ -132,10 +127,11 @@ def main():
             service = Service.objects.get(name="SESSAD TED")
         elif "F_ST_ETIENNE_SESSAD" == db:
             service = Service.objects.get(name="SESSAD DYS")
+        print db
         for table in tables:
             tables_data[table] = None
             csvfile = open(os.path.join(db_path, db, '%s.csv' % table), 'rb')
-            csvlines = csv.reader(csvfile, delimiter=',', quotechar='"')
+            csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
             cols = csvlines.next()
             tables_data[table] = []
             for line in csvlines:

@@ -133,7 +133,7 @@ for db in dbs:
         data = open("%s-data.csv" % os.path.join(db_dir, table), 'r')
         res = open("%s.csv" % os.path.join(db_dir, table), "a+")
     	title_content = title.read()
-    	title_content, nb = re.subn(r'\s+\n', ',', title_content)
+    	title_content, nb = re.subn(r'\s+\n', ';', title_content)
     	title_content = title_content[:-1] + '\n'
         res.write(title_content)
         lines = data.readlines()
@@ -154,15 +154,14 @@ for db in dbs:
             cols = csv_line.split("-!-!-EOSEP-!-!-")
             csv_line = ""
             for j, col in enumerate(cols):
-                col = col.replace('"', '\\"')
                 if j != 0:
-                    csv_line += ',"'
+                    csv_line += ';|'
                 else:
-                    csv_line += '"'
-                csv_line += col + '"'
+                    csv_line += '|'
+                csv_line += col + '|'
             csv_line += "\n"
             i += 1
-            if csv_line != u'""\n': 
+            if csv_line != u'||\n': 
                 res.write(csv_line.encode('utf-8'))
         title.close()
         data.close()
