@@ -242,7 +242,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
-                # Insciption automatique au premier acte facturable valide
+                # Inscription automatique au premier acte facturable valide
                 ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
                         STATES_BTN_MAPPER['DIAGNOSTIC'],
                         STATES_BTN_MAPPER['TRAITEMENT']]
