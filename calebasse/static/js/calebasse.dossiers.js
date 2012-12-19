@@ -93,7 +93,7 @@ function state_dialog(url, state_title, state_type) {
 
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',
-            '#dossier-dlg', '500px', 'Ajouter', null, function(that) {
+            '#dossier-dlg', '500px', 'Ajouter', false, function(that) {
                     $(that).find('#id_last_name').keyup(function() {
                             var val = $(this).val();
                             if (val.length < 3) {

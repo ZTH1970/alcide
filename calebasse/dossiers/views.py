@@ -37,6 +37,7 @@ class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
     form_class = forms.NewPatientRecordForm
     template_name = 'dossiers/patientrecord_new.html'
     success_url = '..'
+    patient = None
 
     def post(self, request, *args, **kwarg):
         self.user = request.user
@@ -46,6 +47,9 @@ class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
         self.patient = create_patient(form.data['first_name'], form.data['last_name'], self.service,
                 self.user, date_selected=datetime.strptime(form.data['date_selected'], "%d/%m/%Y"))
         return super(NewPatientRecordView, self).form_valid(form)
+
+    def get_success_url(self):
+        return '%s/view' % self.patient.id
 
 new_patient_record = NewPatientRecordView.as_view()
 

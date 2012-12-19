@@ -14,8 +14,13 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
             console.log('success');
             if (redirectToUrl) {
               window.location = redirectToUrl;
-            }
-            else {
+            } else if (redirectToUrl == false) {
+              /* if redirectToUrl is set to false then look for the redirection
+               * url in the actual page content.
+               */
+              var url = $(parse).find('#ajax-redirect').data('url');
+              if (url) { window.location = url; }
+            } else {
               window.location.reload(true);
             }
           }

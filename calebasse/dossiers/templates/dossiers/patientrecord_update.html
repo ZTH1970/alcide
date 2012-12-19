@@ -3,6 +3,7 @@
 
 {% block appbar %}
 <h2><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
+<span id="ajax-redirect" data-url="{{ object.id }}/view"/>
 <a href="..">Retourner aux dossiers</a>
 {% if object.can_be_deleted %}<button id="patientrecord-delete">Supprimer</button>{% endif %}
 {% endblock %}
