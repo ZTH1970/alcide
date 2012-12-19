@@ -72,7 +72,7 @@ class AgendaHomepageView(TemplateView):
         for worker in workers:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
             occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
-            holidays_worker = [h for h in holidays if h.worker_id == worker.id]
+            holidays_worker = [h for h in holidays if h.worker_id in (None, worker.id)]
             occurrences_workers[worker.id] = occurrences_worker
             time_tables_workers[worker.id] = time_tables_worker
             holidays_workers[worker.id] = holidays_worker
