@@ -24,9 +24,11 @@ function toggle_worker(worker_selector) {
     var target = $($(worker_selector).data('target'));
     target.toggle();
 
-    var tab = $('#link-tab-worker-' + $(worker_selector).data('worker-id')).parent().get(0);
+    var worker_id = $(worker_selector).data('worker-id');
+    var tab = $('#link-tab-worker-' + worker_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
     $(tab).detach().appendTo(tab_list);
+    $('td.worker-' + worker_id).each(function() {$(this).parent().append($(this));})
     return target.find('a.tab');
 }
 
