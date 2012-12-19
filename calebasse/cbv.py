@@ -16,11 +16,13 @@ class ReturnToObjectMixin(object):
     def get_success_url(self):
         return '../#object-' + str(self.object.pk)
 
+
 class ServiceFormMixin(object):
     def get_form_kwargs(self):
         kwargs = super(ServiceFormMixin, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
 
 class ServiceViewMixin(object):
     service = None
@@ -59,8 +61,10 @@ class ServiceViewMixin(object):
             context['next_month'] = self.date + relativedelta(months=1)
         return context
 
+
 class TemplateView(ServiceViewMixin, base.TemplateView):
     pass
+
 
 class AppTemplateFirstMixin(object):
     def get_template_names(self):
@@ -76,12 +80,14 @@ class AppTemplateFirstMixin(object):
             names.append(self.template_name)
         return names
 
+
 class ModelNameMixin(object):
     def get_context_data(self, **kwargs):
         ctx = super(ModelNameMixin, self).get_context_data(**kwargs)
         ctx['model_verbose_name_plural'] = self.model._meta.verbose_name_plural
         ctx['model_verbose_name'] = self.model._meta.verbose_name
         return ctx
+
 
 class ListView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
         list_cbv.ListView):
@@ -117,8 +123,10 @@ class UpdateView(M2MFormMixin, AppTemplateFirstMixin,
         ModelNameMixin, ServiceViewMixin, edit.UpdateView):
     pass
 
+
 class FormView(ServiceViewMixin, edit.FormView):
     pass
+
 
 class ContextMixin(object):
     """
@@ -130,6 +138,7 @@ class ContextMixin(object):
         if 'view' not in kwargs:
             kwargs['view'] = self
         return kwargs
+
 
 class MultiFormMixin(ContextMixin):
     """
@@ -219,6 +228,7 @@ class MultiFormMixin(ContextMixin):
         """
         return self.render_to_response(self.get_context_data(forms=forms))
 
+
 class MultiModelFormMixin(MultiFormMixin, detail.SingleObjectMixin):
     """
     A mixin that provides a way to show and handle multiple forms or modelforms
@@ -277,6 +287,7 @@ class MultiModelFormMixin(MultiFormMixin, detail.SingleObjectMixin):
         context.update(kwargs)
         return super(MultiModelFormMixin, self).get_context_data(**context)
 
+
 class ProcessMultiFormView(base.View):
     """
     A mixin that renders a form on GET and processes it on POST.
@@ -305,15 +316,18 @@ class ProcessMultiFormView(base.View):
     def put(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
+
 class BaseMultiFormView(MultiFormMixin, ProcessMultiFormView):
     """
     A base view for displaying multiple forms
     """
 
+
 class MultiFormView(base.TemplateResponseMixin, BaseMultiFormView):
     """
     A base view for displaying multiple forms, and rendering a template reponse.
     """
+
 
 class BaseMultiUpdateView(MultiModelFormMixin, ProcessMultiFormView):
     """
@@ -328,6 +342,7 @@ class BaseMultiUpdateView(MultiModelFormMixin, ProcessMultiFormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super(BaseMultiUpdateView, self).post(request, *args, **kwargs)
+
 
 class MultiUpdateView(AppTemplateFirstMixin,
         detail.SingleObjectTemplateResponseMixin, BaseMultiUpdateView):
