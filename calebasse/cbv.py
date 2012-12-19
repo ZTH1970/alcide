@@ -240,7 +240,7 @@ class MultiModelFormMixin(MultiFormMixin, detail.SingleObjectMixin):
                     " a get_absolute_url method on the Model.")
         return url
 
-    def form_valid(self, form, commit=True):
+    def form_valid(self, form):
         """
         If the form is valid, save the associated model.
         """
