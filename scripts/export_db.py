@@ -115,7 +115,7 @@ os.mkdir(export_path)
 def format_line(line):
     line = unicode(line, 'cp1252')
     line = line.replace('\0', '')
-    line = line.replace('\r\n', '')
+    line = line.replace('\r', '')
     line = line.replace('\n', '')
     return line
 
@@ -162,11 +162,12 @@ for db in dbs:
                 csv_line += col + '"'
             csv_line += "\n"
             i += 1
-            res.write(csv_line.encode('utf-8'))
+            if csv_line != u'""\n': 
+                res.write(csv_line.encode('utf-8'))
         title.close()
         data.close()
         res.close()
         os.remove("%s-title.csv" % os.path.join(db_dir, table))
         os.remove("%s-data.csv" % os.path.join(db_dir, table))
 
-#
+

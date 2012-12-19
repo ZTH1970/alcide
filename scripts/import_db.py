@@ -14,7 +14,7 @@ from calebasse.ressources.models import Service
 from django.contrib.auth.models import User
 
 # Config
-db_path = "/home/jschneider/temp/20121217-174913"
+db_path = "/home/jschneider/temp/20121218-123613/"
 
 dbs = ["F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD", "F_ST_ETIENNE_SESSAD_TED"]
 #tables = ["discipline", "intervenants", "notes", "ev", "conge"]
@@ -31,6 +31,8 @@ def discipline_mapper(tables_data, service):
     from calebasse.ressources.models import WorkerType
     for line in tables_data['discipline']:
         # Insert workertype
+        print "ICI"
+        print line.keys()
         if not WorkerType.objects.filter(name=line['libelle']):
             WorkerType.objects.create(name=line['libelle'])
 

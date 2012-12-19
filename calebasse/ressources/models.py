@@ -315,3 +315,4 @@ class CodeCFTMEA(NamedAbstractModel):
 
     class Meta:
         ordering = ['code']
+
