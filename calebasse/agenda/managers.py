@@ -124,7 +124,7 @@ class OccurrenceManager(models.Manager):
 
     def daily_disponiblity(self, date, occurrences, participants, time_tables, holidays):
         result = dict()
-        quater = 0
+        quarter = 0
         occurrences_set = {}
         timetables_set = {}
         holidays_set = {}
@@ -142,18 +142,18 @@ class OccurrenceManager(models.Manager):
                     result[start_datetime.hour][1] = []
                     result[start_datetime.hour][2] = []
                     result[start_datetime.hour][3] = []
-                    quater = 0
+                    quarter = 0
 
                 interval = IntervalSet.between(start_datetime, end_datetime, False)
                 if interval.intersection(occurrences_set[participant.id]):
-                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
+                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'busy'})
                 elif interval.intersection(holidays_set[participant.id]):
-                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'busy'})
+                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'busy'})
                 elif not interval.intersection(timetables_set[participant.id]):
-                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'away'})
+                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'away'})
                 else:
-                    result[start_datetime.hour][quater].append({'id': participant.id, 'dispo': 'free'})
-            quater += 1
+                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'free'})
+            quarter += 1
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
         return result
