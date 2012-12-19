@@ -94,7 +94,16 @@ class ListView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
             ctx['new_id'] = int(self.request.GET.get('new_id'))
         return ctx
 
-class CreateView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
+class M2MFormMixin(object):
+    '''Alos save Many2Many relations for model forms if needed.'''
+    def form_valid(self, form):
+        res = super(M2MFormMixin, self).form_valid(form)
+        if hasattr(form, 'save_m2m'):
+            form.save_m2m()
+        return res
+
+
+class CreateView(M2MFormMixin, AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
         edit.CreateView):
     pass
 
@@ -104,7 +113,7 @@ class DeleteView(AppTemplateFirstMixin,
     pass
 
 
-class UpdateView(AppTemplateFirstMixin,
+class UpdateView(M2MFormMixin, AppTemplateFirstMixin,
         ModelNameMixin, ServiceViewMixin, edit.UpdateView):
     pass
 
@@ -247,9 +256,11 @@ class MultiModelFormMixin(MultiFormMixin, detail.SingleObjectMixin):
         form = form[self.get_current_prefix()]
         if hasattr(form, 'save'):
             if isinstance(form, forms.ModelForm):
-                self.object = form.save(commit=commit)
+                self.object = form.save()
             else:
                 form.save()
+        if hasattr(form, 'save_m2m'): # save many2many relations
+            form.save_m2m()
         return super(MultiModelFormMixin, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
