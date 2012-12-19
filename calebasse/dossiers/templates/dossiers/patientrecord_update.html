@@ -156,17 +156,22 @@
 
     {% if object.service.name == "CMPP" %}
         <p>
-        <button id="new-pcdiag-btn">Nouvelle PC diagnostic</button>
-        <button id="new-pctrait-btn">Nouvelle PC traitement</button>
+        <button id="new-hcdiag-btn">Nouvelle PC diagnostic</button>
+        <button id="new-hctrait-btn">Nouvelle PC traitement</button>
         </p>
         {% if hcs %}
             {% for hc in hcs %}
                 {% if hc.cmpphealthcarediagnostic %}
                   <div id="patient-diag">
                     <div class="frame">
+                    <div class="right">
+                        <button type="button" data-id="{{ hc.id }}" class="del-hcdiag icon-minus" title="Supprimer"></button>
+                        <button type="button" data-id="{{ hc.id }}" class="update-hcdiag-btn icon-edit" title="Modifier"></button>
+                    </div>
                       <h3>En diagnostic depuis le {{ hc.start_date }}</h3>
                       <ul>
-                        <li><input size="4" value="{{ hc.cmpphealthcarediagnostic.act_number }}"/> actes prévus</li>
+                        <li><label>Actes prévus</label> : {{ hc.cmpphealthcarediagnostic.act_number }}</li>
+                        {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
                         <li>{% if hc.get_nb_acts_cared %}<strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés.{% else %}Aucun acte facturé.{% endif %}</li>
                       </ul>
                     </div>
@@ -174,9 +179,14 @@
                 {% else %}
                   <div id="patient-traitement">
                     <div class="frame">
+                    <div class="right">
+                        <button type="button" data-id="{{ hc.id }}" class="del-hctrait icon-minus" title="Supprimer"></button>
+                        <button type="button" data-id="{{ hc.id }}" class="update-hctrait-btn icon-edit" title="Modifier"></button>
+                    </div>
                       <h3>En traitement depuis le {{ hc.start_date }} jusqu'au {{ hc.end_date }}</h3>
                       <ul>
-                        <li><input size="4" value="{{ hc.cmpphealthcaretreatment.act_number }}"/> actes prévus</li>
+                        <li><label>Actes prévus</label> : {{ hc.cmpphealthcaretreatment.act_number }}</li>
+                        {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
                         <li>{% if hc.get_nb_acts_cared %}<strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés.{% else %}Aucun acte facturé.{% endif %}</li>
                       </ul>
                     </div>

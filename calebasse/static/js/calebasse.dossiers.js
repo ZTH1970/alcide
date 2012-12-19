@@ -175,37 +175,41 @@ function state_dialog(url, state_title, state_type) {
         generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
             '#ajax-dlg', '500px', 'Supprimer');
     });
-
-    $('#add-prise-en-charge-btn').click(function() {
-      $('#add-prise-en-charge-dlg').dialog({title: 'Prise en charge',
-        width: '300px',
-        buttons: [ { text: "Annuler",
-          click: function() { $(this).dialog("close"); } },
-        { text: "Valider",
-          click: function() { $(this).dialog("close"); } }]}
-        );
-    });
-
-    $('#add-prolongation-btn').click(function() {
-      $('#add-prolongation-dlg').dialog({title: 'Prolongation',
-        width: '300px',
-        buttons: [ { text: "Annuler",
-          click: function() { $(this).dialog("close"); } },
-        { text: "Valider",
-          click: function() { $(this).dialog("close"); } }]}
-        );
-    });
-    $('#new-pctrait-btn').click(function() {
+    $('#new-hctrait-btn').click(function() {
         generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
             '#ajax-dlg', '600px', 'Ajouter');
     });
-    $('#new-pcdiag-btn').click(function() {
+    $('#new-hcdiag-btn').click(function() {
         generic_ajaxform_dialog('healthcare_diagnostic/new', 'Ajouter une prise en charge de diagnostic',
             '#ajax-dlg', '600px', 'Ajouter');
     });
     $('#new-notification-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_notification/new', 'Ajouter une nouvelle notification',
+        generic_ajaxform_dialog('healthcare_notification/new', 'Ajouter une notification',
             '#ajax-dlg', '600px', 'Ajouter');
+    });
+    $('.update-hctrait-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/update', 'Modifier une prise en charge de traitement',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
+    $('.update-hcdiag-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/update', 'Modifier une prise en charge de diagnostic',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
+    $('.update-notification-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/update', 'Modifier une notification',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
+    $('.del-hctrait').click(function() {
+        generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de traitement',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('.del-hcdiag').click(function() {
+        generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de diagnostic',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('.del-notification').click(function() {
+        generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/del', 'Supprimer une notification',
+            '#ajax-dlg', '500px', 'Supprimer');
     });
 
       $('.place_of_life').click(function() {
