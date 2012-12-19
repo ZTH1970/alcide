@@ -3,23 +3,31 @@
 import os
 import csv
 
-from datetime import datetime
+from datetime import datetime, time
 
 import calebasse.settings
 import django.core.management
 
 django.core.management.setup_environ(calebasse.settings)
 
-from calebasse.ressources.models import Service
 from django.contrib.auth.models import User
 
-# Config
-db_path = "/home/jschneider/temp/20121219-171421/"
+from calebasse.actes.models import EventAct
+from calebasse.agenda.models import Event, EventType
+from calebasse.dossiers.models import PatientRecord, Status, FileState
+from calebasse.ressources.models import Service
+from calebasse.personnes.models import Worker, Holiday
+from calebasse.ressources.models import WorkerType
 
-dbs = ["F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD", "F_ST_ETIENNE_SESSAD_TED"]
-#tables = ["rs"]
+# Configuration
+db_path = "/home/jschneider/temp/20121219-174113/"
+
+dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
 tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
 
+
+# Global mappers. This dicts are used to map a Faure id with a calebasse object.
+dossiers = {}
 
 def _to_date(str_date):
     if not str_date:
@@ -32,7 +40,6 @@ def _to_int(str_int):
     return int(str_int)
 
 def discipline_mapper(tables_data, service):
-    from calebasse.ressources.models import WorkerType
     for line in tables_data['discipline']:
         # Insert workertype
         if not WorkerType.objects.filter(name=line['libelle']):
@@ -40,8 +47,6 @@ def discipline_mapper(tables_data, service):
 
 
 def intervenants_mapper(tables_data, service):
-    from calebasse.personnes.models import Worker
-    from calebasse.ressources.models import WorkerType
     for line in tables_data['intervenants']:
         # Insert workers
         for disp in tables_data['discipline']:
@@ -59,18 +64,19 @@ def intervenants_mapper(tables_data, service):
         worker.services.add(service)
 
 def dossiers_mapper(tables_data, service):
-    from calebasse.dossiers.models import PatientRecord
-    from calebasse.dossiers.models import Status, FileState
+    global dossiers
     for line in tables_data['dossiers']:
         status = Status.objects.filter(type="ACCUEIL").filter(services=service)
         creator = User.objects.get(id=1)
         gender = _to_int(line['nais_sexe'])
         if gender == 0:
             gender = None
-        patient, created = PatientRecord.objects.get_or_create(first_name=line['nom'],
-                last_name=line['prenom'], birthdate=_to_date(line['nais_date']),
+        # TODO: add more fields
+        patient, created = PatientRecord.objects.get_or_create(first_name=line['prenom'],
+                last_name=line['nom'], birthdate=_to_date(line['nais_date']),
                 twinning_rank=_to_int(line['nais_rang']),
                 gender=gender, service=service, creator=creator)
+        dossiers[line['id']] = patient
 
         if not created:
             if not line['ins_date']:
@@ -90,12 +96,33 @@ def dossiers_mapper(tables_data, service):
                 patient.save()
 
 def rs_mapper(tables_data, service):
-    pass
+    global dossiers
+
+    event_type = EventType.objects.get(
+                label=u"Rendez-vous patient"
+                )
+
+    for line in tables_data['rs']:
+        if dossiers.has_key(line['enfant_id']):
+            patient = dossiers[line['enfant_id']]
+            strdate = line['date_rdv'][:-13] + ' ' + line['heure'][11:-4]
+            date = datetime.strptime(strdate, "%Y-%m-%d %H:%M:%S")
+
+             # TODO: add act_type
+#            act_event = EventAct.objects.get_or_create(
+#                    title=line['libelle'],
+#                    event_type=event_type,
+#                    patient=patient,
+#                    act_type=act_type,
+#                    date=date
+#                    )
+        else:
+            # TODO: if no patient add event
+            pass
+
 
 def conge_mapper(tables_data, service):
     """ """
-    from calebasse.personnes.models import Holiday
-    # ['base_origine', 'motif', 'date_conge', 'date_fin', 'id', 'thera_id', 'date_debut']
     for line in tables_data['conge']:
         pass
 
@@ -129,6 +156,7 @@ def main():
             service = Service.objects.get(name="SESSAD DYS")
         print db
         for table in tables:
+            # TODO: rewrite this part and treat only line by line
             tables_data[table] = None
             csvfile = open(os.path.join(db_path, db, '%s.csv' % table), 'rb')
             csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
