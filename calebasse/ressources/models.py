@@ -18,7 +18,7 @@ class ServiceLinkedQuerySet(query.QuerySet):
 ServiceLinkedManager = PassThroughManager.for_queryset_class(ServiceLinkedQuerySet)
 
 class NamedAbstractModel(models.Model):
-    name = models.CharField(max_length=100, verbose_name=u'Nom')
+    name = models.CharField(max_length=150, verbose_name=u'Nom')
 
     def __unicode__(self):
         return self.name
