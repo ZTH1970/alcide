@@ -178,6 +178,7 @@ class PatientAddressForm(ModelForm):
                 'number': forms.TextInput(attrs={'size': 10}),
                 }
 
+
 class CmppHealthCareTreatmentForm(ModelForm):
     class Meta:
         model = CmppHealthCareTreatment
@@ -189,6 +190,16 @@ class CmppHealthCareTreatmentForm(ModelForm):
                 'author': forms.HiddenInput(),
                 }
 
+    def clean(self):
+        cleaned_data = super(CmppHealthCareTreatmentForm, self).clean()
+        if cleaned_data.get('act_number') < self.instance.get_nb_acts_cared():
+            msg = u"Le nombre d'actes ne peut être inférieur au \
+                nombre d'actes déja pris en charge (%d)." \
+                    % self.get_nb_acts_cared()
+            self._errors["act_number"] = self.error_class([msg])
+        return cleaned_data
+
+
 class CmppHealthCareDiagnosticForm(ModelForm):
     class Meta:
         model = CmppHealthCareDiagnostic
@@ -199,6 +210,16 @@ class CmppHealthCareDiagnosticForm(ModelForm):
                 'patient': forms.HiddenInput(),
                 'author': forms.HiddenInput(),
                 }
+
+    def clean(self):
+        cleaned_data = super(CmppHealthCareDiagnosticForm, self).clean()
+        if cleaned_data.get('act_number') < self.instance.get_nb_acts_cared():
+            msg = u"Le nombre d'actes ne peut être inférieur au \
+                nombre d'actes déja pris en charge (%d)." \
+                    % self.get_nb_acts_cared()
+            self._errors["act_number"] = self.error_class([msg])
+        return cleaned_data
+
 
 class SessadHealthCareNotificationForm(ModelForm):
     class Meta:
