@@ -175,6 +175,30 @@ function state_dialog(url, state_title, state_type) {
         generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
             '#ajax-dlg', '500px', 'Supprimer');
     });
+    $('#new-mdph-request-btn').click(function() {
+        generic_ajaxform_dialog('mdph_request/new', 'Ajouter une demande MDPH',
+            '#ajax-dlg', '800px', 'Ajouter');
+    });
+    $('.update-mdph-request-btn').click(function() {
+        generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/update', 'Modifier une demande MDPH',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
+    $('.del-mdph-request').click(function() {
+        generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/del', 'Supprimer une demande MDPH',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('#new-mdph-response-btn').click(function() {
+        generic_ajaxform_dialog('mdph_response/new', 'Ajouter une réponse MDPH',
+            '#ajax-dlg', '800px', 'Ajouter');
+    });
+    $('.update-mdph-response-btn').click(function() {
+        generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/update', 'Modifier une réponse MDPH',
+            '#ajax-dlg', '800px', 'Modifier');
+    });
+    $('.del-mdph-response').click(function() {
+        generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/del', 'Supprimer une réponse MDPH',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
     $('#new-hctrait-btn').click(function() {
         generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
             '#ajax-dlg', '600px', 'Ajouter');

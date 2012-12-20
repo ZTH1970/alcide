@@ -370,7 +370,7 @@
             <h3>Périodes de socialisation</h3>
             {% for duration in object.socialisation_durations.all %}
                 <div class="frame">
-                Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.place %}l'établissement <strong>{{ duration.place }}</strong>{% else %}un établissement non renseigné{% endif %}
+                Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.school %}l'établissement <strong>{{ duration.school }}</strong>{% else %}un établissement non renseigné{% endif %}
                 <div class="right">
                     <button type="button" data-id="{{ duration.id }}" class="del-duration icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ duration.id }}" class="update-duration-btn icon-edit" title="Modifier"></button>
@@ -379,6 +379,49 @@
                     <ul>
                         {% if duration.end_date %}<li><label>Date de départ</label> : {{ duration.end_date }}</li>{% endif %}
                         {% if duration.comment %}<li><label>Commentaire</label> : {{ duration.comment }}</li>{% endif %}
+                    </ul>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <p><button id="new-mdph-request-btn">Nouvelle demande MDPH</button></p>
+        {% if object.mdph_requests.all %}
+        <div class="frame">
+            <h3>Demandes MDPH</h3>
+            {% for request in object.mdph_requests.all %}
+                <div class="frame">
+                Demande le <strong>{{ request.start_date }}</strong> à la MDPH <strong>{{ request.mdph }}</strong>
+                <div class="right">
+                    <button type="button" data-id="{{ request.id }}" class="del-mdph-request icon-minus" title="Supprimer"></button>
+                    <button type="button" data-id="{{ request.id }}" class="update-mdph-request-btn icon-edit" title="Modifier"></button>
+                </div>
+                <div>
+                    <ul>
+                        {% if request.comment %}<li><label>Commentaire</label> : {{ request.comment }}</li>{% endif %}
+                    </ul>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <p><button id="new-mdph-response-btn">Nouvelle réponse MDPH</button></p>
+        {% if object.mdph_responses.all %}
+        <div class="frame">
+            <h3>Réponses MDPH</h3>
+            {% for response in object.mdph_responses.all %}
+                <div class="frame">
+                Du <strong>{{ response.start_date }}</strong> au <strong>{{ response.end_date }}</strong> à la MDPH <strong>{{ response.mdph }}</strong>
+                <div class="right">
+                    <button type="button" data-id="{{ response.id }}" class="del-mdph-response icon-minus" title="Supprimer"></button>
+                    <button type="button" data-id="{{ response.id }}" class="update-mdph-response-btn icon-edit" title="Modifier"></button>
+                </div>
+                <div>
+                    <ul>
+                        {% if response.comment %}<li><label>Commentaire</label> : {{ response.comment }}</li>{% endif %}
+                        {% if response.type_aide %}<li><label>Type d'aide</label> : {{ response.type_aide }}</li>{% endif %}
+                        {% if response.name %}<li><label>Nom</label> : {{ response.name }}</li>{% endif %}
+                        {% if response.rate %}<li><label>Taux</label> : {{ response.rate }}</li>{% endif %}
                     </ul>
                 </div>
                 </div>
