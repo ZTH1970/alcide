@@ -370,3 +370,33 @@ class MaisonDepartementalePersonnesHandicapees(models.Model):
         blank=True, null=True)
     city = models.CharField(max_length=80,
             verbose_name=u"Ville", blank=True, null=True)
+
+class MDPHRequest(models.Model):
+    start_date = models.DateField(verbose_name=u"Date de la demande")
+    mdph = models.ForeignKey('ressources.MaisonDepartementalePersonnesHandicapees',
+            verbose_name=u"Maison départementales des personnes handicapées")
+    comment = models.TextField(max_length=3000,
+        blank=True, null=True, verbose_name=u"Commentaire")
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+
+MDPH_HELP =  Choices(
+        (0, "Non défini"),
+        (1, "AEEH (Allocation d'éducation de l'enfant handicapé)"),
+        (2, 'AVS (Assistant de vie scolaire)'),
+        (3, 'EVS (Emplois de vie scolaire)'),
+)
+
+class MDPHResponse(models.Model):
+    start_date = models.DateField(verbose_name=u"Date de début")
+    end_date = models.DateField(verbose_name=u"Date de fin")
+    mdph = models.ForeignKey('ressources.MaisonDepartementalePersonnesHandicapees',
+            verbose_name=u"Maison départementales des personnes handicapées")
+    comment = models.TextField(max_length=3000,
+        blank=True, null=True, verbose_name=u"Commentaire")
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+    type_aide = models.IntegerField(verbose_name=u"Type d'aide", choices=MDPH_HELP,
+            max_length=1, default=0)
+    name =  models.CharField(max_length=200,
+            verbose_name=u"Nom", blank=True, null=True)
+    rate =  models.CharField(max_length=10,
+            verbose_name=u"Taux", blank=True, null=True)
