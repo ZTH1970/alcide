@@ -11,7 +11,7 @@ from calebasse.dossiers.models import (PatientRecord,
     SessadHealthCareNotification)
 from calebasse.dossiers.states import STATE_CHOICES
 from calebasse.ressources.models import (HealthCenter, LargeRegime,
-    CodeCFTMEA,SocialisationDuration)
+    CodeCFTMEA,SocialisationDuration, MDPHRequest, MDPHResponse)
 
 from ajax_select import make_ajax_field
 
@@ -241,5 +241,22 @@ class SocialisationDurationForm(ModelForm):
             'end_date', 'contact', 'comment')
         widgets = {
                 'contact': forms.Textarea(attrs={'cols': 39, 'rows': 2}),
+                'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
+                }
+
+class MDPHRequestForm(ModelForm):
+    class Meta:
+        model = MDPHRequest
+        fields = ('start_date', 'mdph', 'comment')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
+                }
+
+class MDPHResponseForm(ModelForm):
+    class Meta:
+        model = MDPHResponse
+        fields = ('start_date', 'end_date', 'mdph', 'comment',
+            'type_aide', 'name', 'rate')
+        widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
                 }
