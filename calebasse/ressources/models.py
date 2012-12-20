@@ -124,12 +124,12 @@ class Office(ServiceLinkedAbstractModel):
 
     # Address
     address = models.CharField(max_length=120,
-            verbose_name=u"Addresse")
+            verbose_name=u"Adresse")
     address_complement = models.CharField(max_length=120,
             blank=True,
             null=True,
             default=None,
-            verbose_name=u"Complément d'addresse")
+            verbose_name=u"Complément d'adresse")
     zip_code = ZipCodeField(verbose_name=u"Code postal")
             #verbose_name=u"Code postal")
     city = models.CharField(max_length=80,
@@ -337,3 +337,36 @@ class CodeCFTMEA(NamedAbstractModel):
 
     class Meta:
         ordering = ['code']
+
+class MaisonDepartementalePersonnesHandicapees(models.Model):
+    class Meta:
+        verbose_name = u'Maison départementales des personnes handicapées'
+        verbose_name_plural = u'Maisons départementales des personnes handicapées'
+
+    def __unicode__(self):
+        return self.department
+
+    department = models.CharField(max_length=200,
+            verbose_name=u"Département")
+
+    description = models.TextField(blank=True, null=True)
+
+    # Contact
+    phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
+    fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    website = models.CharField(max_length=200,
+            verbose_name=u"Site Web", blank=True, null=True)
+
+    # Address
+    address = models.CharField(max_length=120,
+            verbose_name=u"Adresse", blank=True, null=True)
+    address_complement = models.CharField(max_length=120,
+            blank=True,
+            null=True,
+            default=None,
+            verbose_name=u"Complément d'addresse")
+    zip_code = ZipCodeField(verbose_name=u"Code postal",
+        blank=True, null=True)
+    city = models.CharField(max_length=80,
+            verbose_name=u"Ville", blank=True, null=True)

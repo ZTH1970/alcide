@@ -6,8 +6,10 @@ from models import (ActType, CFTMEACode, FamilySituationType, HealthCenter,
         InscriptionMotive, Job, Nationality, Office, ParentalAuthorityType,
         ParentalCustodyType, Room, SchoolType, School, SchoolTeacherRole,
         Service, SessionType, TransportCompany, TransportType,
-        UninvoicableCode, WorkerType, LargeRegime, SocialisationDuration)
+        UninvoicableCode, WorkerType, LargeRegime, SocialisationDuration,
+        MaisonDepartementalePersonnesHandicapees)
 
+admin.site.register(MaisonDepartementalePersonnesHandicapees, reversion.VersionAdmin)
 admin.site.register(ActType, reversion.VersionAdmin)
 admin.site.register(CFTMEACode, reversion.VersionAdmin)
 admin.site.register(FamilySituationType, reversion.VersionAdmin)
