@@ -370,7 +370,7 @@
             <h3>Périodes de socialisation</h3>
             {% for duration in object.socialisation_durations.all %}
                 <div class="frame">
-                Arrivée le <strong>{{ duration.start_date }}</strong> dans l'établissement <strong>{{ duration.place }}</strong>
+                Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.place %}l'établissement <strong>{{ duration.place }}</strong>{% else %}un établissement non renseigné{% endif %}
                 <div class="right">
                     <button type="button" data-id="{{ duration.id }}" class="del-duration icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ duration.id }}" class="update-duration-btn icon-edit" title="Modifier"></button>
