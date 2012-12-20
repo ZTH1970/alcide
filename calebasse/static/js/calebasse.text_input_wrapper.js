@@ -4,5 +4,6 @@
         $(this).prev('input').val('');
         $(this).closest('form').submit();
       });
+      $("input:text:visible:first").focus();
   });
 })(window.jQuery)
