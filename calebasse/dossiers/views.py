@@ -12,7 +12,7 @@ from calebasse.dossiers.models import (PatientRecord, PatientContact,
         CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
-    SocialisationDuration)
+    SocialisationDuration, MDPHRequest, MDPHResponse)
 
 
 def get_next_rdv(patient_record):
@@ -448,3 +448,72 @@ class DeleteSocialisationDurationView(cbv.DeleteView):
     success_url = '../../view#tab=6'
 
 delete_socialisation_duration = DeleteSocialisationDurationView.as_view()
+
+
+class NewMDPHRequestView(cbv.CreateView):
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(NewMDPHRequestView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        request = form.save()
+        patientrecord = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        patientrecord.mdph_requests.add(request)
+        return HttpResponseRedirect(self.success_url)
+
+class UpdateMDPHRequestView(cbv.UpdateView):
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(UpdateMDPHRequestView, self).get(request, *args, **kwargs)
+
+
+new_mdph_request = \
+    NewMDPHRequestView.as_view(model=MDPHRequest,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../view#tab=6',
+        form_class=forms.MDPHRequestForm)
+update_mdph_request = \
+    UpdateMDPHRequestView.as_view(model=MDPHRequest,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../../view#tab=6',
+        form_class=forms.MDPHRequestForm)
+delete_mdph_request = \
+    cbv.DeleteView.as_view(model=MDPHRequest,
+        template_name = 'dossiers/generic_confirm_delete.html',
+        success_url = '../../view#tab=6')
+
+class NewMDPHResponseView(cbv.CreateView):
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(NewMDPHResponseView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        response = form.save()
+        patientrecord = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        patientrecord.mdph_responses.add(response)
+        return HttpResponseRedirect(self.success_url)
+
+class UpdateMDPHResponseView(cbv.UpdateView):
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(UpdateMDPHResponseView, self).get(request, *args, **kwargs)
+
+
+new_mdph_response = \
+    NewMDPHResponseView.as_view(model=MDPHResponse,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../view#tab=6',
+        form_class=forms.MDPHResponseForm)
+update_mdph_response = \
+    UpdateMDPHResponseView.as_view(model=MDPHResponse,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../../view#tab=6',
+        form_class=forms.MDPHResponseForm)
+delete_mdph_response = \
+    cbv.DeleteView.as_view(model=MDPHResponse,
+        template_name = 'dossiers/generic_confirm_delete.html',
+        success_url = '../../view#tab=6')

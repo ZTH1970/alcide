@@ -17,7 +17,14 @@ from views import (patientrecord_home, patient_record, state_form,
         update_healthcare_notification,
         delete_healthcare_notification,
         new_socialisation_duration,
-        update_socialisation_duration, delete_socialisation_duration)
+        update_socialisation_duration,
+        delete_socialisation_duration,
+        new_mdph_request,
+        update_mdph_request,
+        delete_mdph_request,
+        new_mdph_response,
+        update_mdph_response,
+        delete_mdph_response)
 from forms import EditPatientRecordForm
 
 urlpatterns = patterns('',
@@ -45,4 +52,10 @@ urlpatterns = patterns('',
         url(r'^(?P<patientrecord_id>\d+)/socialisation/new$', new_socialisation_duration),
         url(r'^(?P<patientrecord_id>\d+)/socialisation/(?P<pk>\d+)/update$', update_socialisation_duration),
         url(r'^(?P<patientrecord_id>\d+)/socialisation/(?P<pk>\d+)/del$', delete_socialisation_duration),
+        url(r'^(?P<patientrecord_id>\d+)/mdph_request/new$', new_mdph_request),
+        url(r'^(?P<patientrecord_id>\d+)/mdph_request/(?P<pk>\d+)/update$', update_mdph_request),
+        url(r'^(?P<patientrecord_id>\d+)/mdph_request/(?P<pk>\d+)/del$', delete_mdph_request),
+        url(r'^(?P<patientrecord_id>\d+)/mdph_response/new$', new_mdph_response),
+        url(r'^(?P<patientrecord_id>\d+)/mdph_response/(?P<pk>\d+)/update$', update_mdph_response),
+        url(r'^(?P<patientrecord_id>\d+)/mdph_response/(?P<pk>\d+)/del$', delete_mdph_response),
 )
