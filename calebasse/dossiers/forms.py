@@ -234,10 +234,10 @@ class SessadHealthCareNotificationForm(ModelForm):
 
 
 class SocialisationDurationForm(ModelForm):
-    place = make_ajax_field(SocialisationDuration, 'place', 'school', False)
+    school = make_ajax_field(SocialisationDuration, 'school', 'school', False)
     class Meta:
         model = SocialisationDuration
-        fields = ('place', 'start_date',
+        fields = ('school', 'start_date',
             'end_date', 'comment')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),

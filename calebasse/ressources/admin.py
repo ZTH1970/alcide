@@ -4,7 +4,7 @@ import reversion
 
 from models import (ActType, CFTMEACode, FamilySituationType, HealthCenter,
         InscriptionMotive, Job, Nationality, Office, ParentalAuthorityType,
-        ParentalCustodyType, Room, School, SchoolTeacherRole,
+        ParentalCustodyType, Room, SchoolType, School, SchoolTeacherRole,
         Service, SessionType, TransportCompany, TransportType,
         UninvoicableCode, WorkerType, LargeRegime, SocialisationDuration)
 
@@ -21,6 +21,7 @@ admin.site.register(ParentalAuthorityType, reversion.VersionAdmin)
 admin.site.register(ParentalCustodyType, reversion.VersionAdmin)
 admin.site.register(Room, reversion.VersionAdmin)
 admin.site.register(School, reversion.VersionAdmin)
+admin.site.register(SchoolType, reversion.VersionAdmin)
 admin.site.register(SchoolTeacherRole, reversion.VersionAdmin)
 admin.site.register(SocialisationDuration, reversion.VersionAdmin)
 admin.site.register(Service, reversion.VersionAdmin)

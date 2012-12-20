@@ -137,27 +137,39 @@ class Office(ServiceLinkedAbstractModel):
 
     # TODO: add this fields : finess, suite, dm, dpa, genre, categorie, statut_juridique, mft, mt, dmt
 
-class School(models.Model):
+class SchoolType(NamedAbstractModel):
+    class Meta:
+        verbose_name = u'Type du lieu de socialisation'
+        verbose_name_plural = u'Types du lieu de socialisation'
+
+    services = models.ManyToManyField('ressources.Service')
+
+
+class School(NamedAbstractModel):
     class Meta:
         verbose_name = u'Lieu de socialisation'
         verbose_name_plural = u'Lieux de socialisation'
 
     def __unicode__(self):
-        return self.name
+        return self.school_type + ' ' + self.name
 
-    name = models.CharField(max_length=70, blank=False)
+    school_type = models.ForeignKey('ressources.SchoolType',
+        verbose_name=u"Type d'établissement")
     description = models.TextField(blank=True, null=True, default=None)
-    address = models.CharField(max_length=120)
+    address = models.CharField(max_length=120, blank=True, null=True, default=None)
     address_complement = models.CharField(max_length=120,
             blank=True,
             null=True,
             default=None)
-    zip_code = ZipCodeField(verbose_name=u"Code postal")
-    city = models.CharField(max_length=80)
-    phone = PhoneNumberField(verbose_name=u"Téléphone")
+    zip_code = ZipCodeField(verbose_name=u"Code postal",
+        blank=True, null=True, default=None)
+    city = models.CharField(max_length=80,
+        blank=True, null=True, default=None)
+    phone = PhoneNumberField(verbose_name=u"Téléphone",
+        blank=True, null=True, default=None)
     fax = models.CharField(max_length=30,
             blank=True, null=True, default=None)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True, default=None)
     director_name = models.CharField(max_length=70,
             blank=True, null=True, default=None)
 
@@ -168,14 +180,24 @@ class SchoolTeacherRole(NamedAbstractModel):
         verbose_name_plural = u'Types de rôle des professeurs'
 
 
+#NO_SCHOOL =  Choices(
+#        (1, '----------'),
+#        (2, 'Patient non sociabilisé'),
+#        (3, 'Lieu non connu'),
+#)
+
 class SocialisationDuration(models.Model):
     class Meta:
         verbose_name = u'Période de socialisation'
         verbose_name_plural = u'Périodes de socialisation'
 
-    place = models.ForeignKey('ressources.School',
-        verbose_name=u'Lieu de socialisation')
+    school = models.ForeignKey('ressources.School',
+        verbose_name=u'Lieu de socialisation',
+        blank=True, null=True)
+#    rough_school = models.IntegerField(verbose_name=u"Autre choix", choices=NO_SCHOOL,
+#            max_length=1)
     start_date = models.DateField(verbose_name=u"Date d'arrivée")
+    contact = models.CharField(verbose_name=u"Contact", max_length=200, blank=True, null=True, default=None)
     end_date = models.DateField(verbose_name=u"Date de départ",
         blank=True, null=True)
     created = models.DateTimeField(u'Création', auto_now_add=True)
@@ -315,4 +337,3 @@ class CodeCFTMEA(NamedAbstractModel):
 
     class Meta:
         ordering = ['code']
-
