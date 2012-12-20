@@ -271,12 +271,16 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True)
     last_state = models.ForeignKey(FileState, related_name='+',
             null=True)
-    socialisation_durations = models.ManyToManyField('ressources.SocialisationDuration',
-            related_name='socialisation_duration_of')
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
     pause = models.BooleanField(verbose_name=u"Pause facturation",
             default=False)
+    socialisation_durations = models.ManyToManyField('ressources.SocialisationDuration',
+            related_name='socialisation_duration_of')
+    mdph_requests = models.ManyToManyField('ressources.MDPHRequest',
+            related_name='mdph_requests_of')
+    mdph_responses = models.ManyToManyField('ressources.MDPHResponse',
+            related_name='mdph_responses_of')
 
     # Physiology and health data
     size = models.IntegerField(verbose_name=u"Taille (cm)",
