@@ -41,6 +41,8 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     """
 
     from calebasse.actes.models import Act
+    if isinstance(end_day, datetime):
+        end_day = end_day.date()
     if acts is None:
         acts = Act.objects.filter(is_billed=False,
             patient__service=service).order_by('date')
@@ -48,8 +50,7 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     i = 0
     for act in acts:
         # On enlève tous les acts sup au jour de l'end_date
-        if datetime(act.date.year, act.date.month, act.date.day) > \
-                datetime(end_day.year, end_day.month, end_day.day):
+        if act.date > end_day:
             acts = acts[:i]
             break
         i = i + 1
@@ -326,7 +327,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
         count_hct_2 = 0
         for act in acts:
             cared = False
-            if hcd and hcd.start_date <= act.date.date():
+            if hcd and hcd.start_date <= act.date:
                 # Ce qui seraient prise en charge
                 nb_acts_cared = len_acts_cared_diag + count_hcd
                 # Ne doit pas dépasser la limite de prise en charge du hc
@@ -340,7 +341,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                         count_hcd = count_hcd + 1
                         cared = True
             # The one before the last may be not full.
-            if not cared and len(hcts) > 1 and hcts[1] and hcts[1].start_date <= act.date.date() and hcts[1].end_date >= act.date.date():
+            if not cared and len(hcts) > 1 and hcts[1] and hcts[1].start_date <= act.date and hcts[1].end_date >= act.date:
                 # Ce qui seraient prise en charge
                 # ne doit pas dépasser la limite de prise en charge du hc
                 if count_hct_1 < hcts[1].get_act_number() - hcts[1].get_nb_acts_cared():
@@ -351,7 +352,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                         acts_treatment[act.patient] = [(act, hcts[1])]
                     count_hct_1 = count_hct_1 + 1
                     cared = True
-            if not cared and len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date.date() and hcts[0].end_date >= act.date.date():
+            if not cared and len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
                 if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
                     if act.patient in acts_treatment:
                         acts_treatment[act.patient]. \
