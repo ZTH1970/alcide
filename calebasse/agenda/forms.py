@@ -101,6 +101,7 @@ class UpdateAppointmentForm(NewAppointmentForm):
 
 class NewEventForm(forms.ModelForm):
 
+    title = forms.CharField(label=u"Complément de l'intitulé", max_length=32, required=False)
     date = forms.DateField(label=u'Date')
     time = forms.TimeField(label=u'Heure de début')
     duration = forms.CharField(label=u'Durée',

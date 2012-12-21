@@ -57,7 +57,7 @@ class Event(models.Model):
     '''
     objects = managers.EventManager()
 
-    title = models.CharField(_(u"Complément de l'intitulé"), max_length=32, blank=True)
+    title = models.CharField(_('Title'), max_length=32, blank=True)
     description = models.TextField(_('Description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=u"Type d'événement")
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
