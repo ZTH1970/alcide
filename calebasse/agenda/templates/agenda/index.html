@@ -26,15 +26,19 @@
      <input type="text"/>
     </div>
     <p id="filtre-workers">
-     <input type="checkbox" id="hide-workers" checked="checked"><label for="hide-workers">{{ service_name }} seulement</label></input>
+     <input type="checkbox" id="show-everybody"><label for="show-everybody">Tout le monde</label></input>
     </p>
     <dl>
      {% for workers_type in workers_types %}
      <dt>{{ workers_type.type }}</dt>
      <dd><ul>
        {% for worker in workers_type.workers %}
-       {% if worker|is_worker_in_service:service_name %}
+       {% if worker|is_worker_in_service:service_name and worker|is_intervenant %}
+       <li id="selector-worker-{{worker.id}}" class="person-item in_service intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       {% elif worker|is_worker_in_service:service_name %}
        <li id="selector-worker-{{worker.id}}" class="person-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       {% elif worker|is_intervenant %}
+       <li id="selector-worker-{{worker.id}}" class="person-item intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% else %}
        <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% endif %}

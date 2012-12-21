@@ -388,7 +388,7 @@ div#users input {
 	width: 10em;
 }
 
-div#users input#hide-workers {
+div#users input#show-everybody {
 	width: auto;
 }
 

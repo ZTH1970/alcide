@@ -143,9 +143,9 @@ function event_dialog(url, title, width, btn_text) {
       /* Gestion du filtre sur les utilisateurs */
       $('#filtre input').keyup(function() {
           var filtre = $(this).val();
-          var service_only = $('#hide-workers').is(':checked');
+          var everybody = $('#show-everybody').is(':checked');
           if (filtre) {
-              $('#hide-workers').attr('checked', false);
+              $('#show-everybody').attr('checked', true);
               $('#users li').each(function() {
                   if ($(this).text().match(new RegExp(filtre, "i"))) {
                       $(this).show();
@@ -155,8 +155,9 @@ function event_dialog(url, title, width, btn_text) {
               });
           } else {
               $('#users li').show();
-              if (service_only) {
+              if (! everybody) {
                   $('.person-item:not(.in_service)').hide();
+                  $('.person-item:not(.intervenant)').hide();
               }
           }
           /* hide worker type titles that do not have a single visible person */
@@ -191,8 +192,8 @@ function event_dialog(url, title, width, btn_text) {
           return false;
       });
       $('#print-button').click(function() { window.print(); });
-    $('#hide-workers').change(function() {
-      if ($(this).is(':checked')) {
+    $('#show-everybody').change(function() {
+      if (! $(this).is(':checked')) {
         $('#filtre input').val('');
       }
       $('#filtre input').keyup();

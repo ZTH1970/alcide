@@ -8,3 +8,8 @@ def is_worker_in_service(worker, service_name):
         if service.name == service_name:
             return True
     return False
+
+
+@register.filter
+def is_intervenant(worker):
+    return worker.type.intervene
