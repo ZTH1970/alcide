@@ -19,7 +19,7 @@ class NewAppointmentForm(forms.ModelForm):
     duration = forms.CharField(label=u'Durée',
             help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
 
-    participants = make_ajax_field(EventAct, 'participants', 'worker', True)
+    participants = make_ajax_field(EventAct, 'participants', 'worker-or-group', True)
     patient = make_ajax_field(EventAct, 'patient', 'patientrecord', False)
 
     class Meta:
@@ -106,7 +106,7 @@ class NewEventForm(forms.ModelForm):
     time = forms.TimeField(label=u'Heure de début')
     duration = forms.CharField(label=u'Durée',
             help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
-    participants = make_ajax_field(EventAct, 'participants', 'worker', True)
+    participants = make_ajax_field(EventAct, 'participants', 'worker-or-group', True)
 
     class Meta:
         model = Event

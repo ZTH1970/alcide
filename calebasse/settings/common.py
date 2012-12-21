@@ -229,6 +229,7 @@ AJAX_LOOKUP_CHANNELS = {
     'patientrecord' : ('calebasse.dossiers.lookups', 'PatientRecordLookup'),
     'school' : {'model':'ressources.School', 'search_field':'name'},
     'addresses' : ('calebasse.dossiers.lookups', 'PatientAddressLookup'),
+    'worker-or-group' : ('calebasse.ressources.lookups', 'WorkerOrGroupLookup'),
 }
 
 # Default URL after login
