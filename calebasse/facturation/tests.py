@@ -25,6 +25,7 @@ from models import add_price, PricePerAct, Invoicing
 
 
 class FacturationTest(TestCase):
+    fixtures = ['services', 'filestates']
     def setUp(self):
         self.creator = User.objects.create(username='John')
 

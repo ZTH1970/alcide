@@ -19,6 +19,7 @@ from calebasse.ressources.models import ActType, Service, WorkerType
 from calebasse.personnes.models import Worker
 
 class EventTest(TestCase):
+    fixtures = ['services', 'filestates']
     def setUp(self):
         self.creator = User.objects.create(username='John')
 

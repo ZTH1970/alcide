@@ -14,6 +14,7 @@ from calebasse.personnes.models import Worker
 
 
 class ActTest(TestCase):
+    fixtures = ['services', 'filestates']
     def test_act_validation(self):
         wtype = WorkerType.objects.create(name='ElDoctor', intervene=True)
         therapist1 = Worker.objects.create(first_name='Bob', last_name='Leponge', type=wtype)
