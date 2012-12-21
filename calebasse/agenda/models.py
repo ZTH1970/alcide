@@ -35,6 +35,7 @@ class Note(models.Model):
     note = models.TextField(_('note'))
     created = models.DateTimeField(_('created'), auto_now_add=True)
     content_type = models.ForeignKey(ContentType)
+    object_id = models.IntegerField()
 
 
 class EventType(models.Model):
