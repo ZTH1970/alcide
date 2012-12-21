@@ -1,57 +1,48 @@
 # -*- coding: utf-8 -*-
+
 import datetime
+import models
 
 def get_acts_of_the_day(date, service=None):
-    from models import EventAct
+    if not isinstance(date, datetime.date):
+        date = date.date()
+    qs = models.Act.objects.filter(date=date)
     if service:
-        return EventAct.objects.filter(date__year=date.year,
-            date__month=date.month, date__day=date.day,
-            services__pk__icontains=service.pk).order_by('date')
-    return EventAct.objects.filter(date__year=date.year,
-        date__month=date.month, date__day=date.day).order_by('date')
+        qs = qs.filter(patient__service=service)
+    return qs.order_by('date')
 
 
 def unlock_all_acts_of_the_day(date, service=None):
-    for act in get_acts_of_the_day(date, service):
-        if not act.is_billed:
-            act.validation_locked = False
-            act.save()
-
-def are_all_acts_of_the_day_locked(date, service=None):
-    for act in get_acts_of_the_day(date, service):
-        if not act.validation_locked:
-            return False
-    return True
+    get_acts_of_the_day(date, service).update(validation_locked=False)
 
 
 def get_acts_not_locked_of_the_day(date, service=None):
-    acts = []
-    for act in get_acts_of_the_day(date, service):
-        if not act.validation_locked:
-            acts.append(act)
-    return acts
+    return get_acts_of_the_day(date, service) \
+            .filter(validation_locked=False)
+
+
+def are_all_acts_of_the_day_locked(date, service=None):
+    return not get_acts_not_locked_of_the_day(date, service).exists()
 
 
 def get_days_with_acts_not_locked(start_day, end_day, service=None):
-    num_days = abs((start_day - end_day).days) + 1
-    days_list = [start_day + datetime.timedelta(days=x) \
-        for x in range(0, num_days)]
-    result = []
-    for day in days_list:
-        if not are_all_acts_of_the_day_locked(day, service):
-            result.append(day)
-    return result
+    qs = models.Act.objects.filter(date__gte=start_day,
+            date__lte=end_day, validation_locked=False)
+    if service:
+        qs = qs.filter(patient__service=service)
+    return sorted(set(qs.values_list('date', flat=True)))
+
+
+def date_generator(from_date, to_date):
+    while from_date < to_date:
+        yield from_date
+        from_date += datetime.timedelta(days=1)
 
 
 def get_days_with_all_acts_locked(start_day, end_day, service=None):
-    num_days = abs((start_day - end_day).days) + 1
-    days_list = [start_day + datetime.timedelta(days=x) \
-        for x in range(0, num_days)]
-    result = []
-    for day in days_list:
-        if are_all_acts_of_the_day_locked(day, service):
-            result.append(day)
-    return result
+    locked_days = get_days_with_acts_not_locked(start_day, end_day,
+            service)
+    return sorted(set(date_generator) - set(locked_days))
 
 
 def automated_validation(date, service, user, commit=True):
