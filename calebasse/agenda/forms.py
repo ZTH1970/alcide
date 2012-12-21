@@ -126,7 +126,7 @@ class NewEventForm(forms.ModelForm):
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
         self.fields['event_type'].queryset = \
-                    EventType.objects.exclude(id=1).exclude(id=3)
+                    EventType.objects.exclude(id=1).exclude(id=3).order_by('rank', 'label')
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
@@ -151,6 +151,15 @@ class NewEventForm(forms.ModelForm):
                 room=self.cleaned_data['room'],
                 note=None,)
         return self.instance
+
+    def clean(self):
+        cleaned_data = super(NewEventForm, self).clean()
+        event_type = cleaned_data.get('event_type')
+        if event_type and event_type.id == 4 and not cleaned_data.get('title'): # 'Autre'
+            self._errors['title'] = self.error_class([
+                            u"Ce champ est obligatoire pour les événements de type « Autre »."])
+        return cleaned_data
+
 
 class UpdateEventForm(NewEventForm):
 

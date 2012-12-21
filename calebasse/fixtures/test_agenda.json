@@ -1,90 +1,90 @@
 [
   {
-    "pk": 4,
+    "pk": 5,
     "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union \u00e0 l'ext\u00e9rieur"
     }
   },
   {
-    "pk": 5,
+    "pk": 6,
     "model": "agenda.eventtype",
     "fields": {
       "label": "En formation"
     }
   },
   {
-    "pk": 6,
+    "pk": 7,
     "model": "agenda.eventtype",
     "fields": {
       "label": "Donne une formation"
     }
   },
   {
-    "pk": 7,
+    "pk": 8,
     "model": "agenda.eventtype",
     "fields": {
       "label": "Equipe pluridisciplinaire MLA"
     }
   },
   {
-    "pk": 8,
+    "pk": 9,
     "model": "agenda.eventtype",
     "fields": {
       "label": "Supervision"
     }
   },
   {
-    "pk": 9,
+    "pk": 10,
     "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union de service"
     }
   },
   {
-    "pk": 10,
+    "pk": 11,
     "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union de direction"
     }
   },
   {
-    "pk": 11,
+    "pk": 12,
     "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union administratifs"
     }
   },
   {
-    "pk": 12,
+    "pk": 13,
     "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union agents de service"
     }
   },
   {
-    "pk": 13,
+    "pk": 14,
     "model": "agenda.eventtype",
     "fields": {
       "label": "Concertation direction"
     }
   },
   {
-    "pk": 14,
+    "pk": 15,
     "model": "agenda.eventtype",
     "fields": {
       "label": "P\u00e9rinatalit\u00e9"
     }
   },
   {
-    "pk": 15,
+    "pk": 16,
     "model": "agenda.eventtype",
     "fields": {
       "label": "R\u00e9union des parents"
     }
   },
   {
-    "pk": 16,
+    "pk": 17,
     "model": "agenda.eventtype",
     "fields": {
       "label": "Temps de trajet"
@@ -94,7 +94,7 @@
     "pk": 3,
     "model": "agenda.event",
     "fields": {
-      "event_type": 4,
+      "event_type": 5,
       "title": "Entr'ouvert",
       "description": "Bla bla bla",
       "participants": [

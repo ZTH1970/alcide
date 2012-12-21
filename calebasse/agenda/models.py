@@ -49,6 +49,7 @@ class EventType(models.Model):
         return self.label
 
     label = models.CharField(_('label'), max_length=50)
+    rank = models.IntegerField(_('Sorting Rank'), null=True, blank=True, default=0)
 
 
 class Event(models.Model):

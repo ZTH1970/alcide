@@ -19,5 +19,13 @@
     "fields": {
       "label": "Vacances"
     }
+  },
+  {
+    "pk": 4,
+    "model": "agenda.eventtype",
+    "fields": {
+      "label": "Autre",
+      "rank": 999
+    }
   }
 ]
