@@ -11,7 +11,7 @@ from calebasse.dossiers.models import (PatientRecord,
     SessadHealthCareNotification)
 from calebasse.dossiers.states import STATE_CHOICES
 from calebasse.ressources.models import (HealthCenter, LargeRegime,
-    CodeCFTMEA,SocialisationDuration, MDPHRequest, MDPHResponse)
+    CodeCFTMEA, SocialisationDuration, MDPHRequest, MDPHResponse)
 
 from ajax_select import make_ajax_field
 

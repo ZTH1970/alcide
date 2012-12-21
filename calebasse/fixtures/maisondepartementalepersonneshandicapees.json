@@ -12,7 +12,7 @@
             "website": "www.loire.fr/display.jsp?id=c_302585",
             "zip_code": "42000"
         },
-        "model": "ressources.maisondepartementalepersonneshandicapees",
+        "model": "ressources.mdph",
         "pk": 1
     },
     {
@@ -28,7 +28,7 @@
             "website": "",
             "zip_code": "43003"
         },
-        "model": "ressources.maisondepartementalepersonneshandicapees",
+        "model": "ressources.mdph",
         "pk": 2
     },
     {
@@ -44,7 +44,7 @@
             "website": "",
             "zip_code": "63000"
         },
-        "model": "ressources.maisondepartementalepersonneshandicapees",
+        "model": "ressources.mdph",
         "pk": 3
     },
     {
@@ -60,7 +60,7 @@
             "website": "",
             "zip_code": "07007"
         },
-        "model": "ressources.maisondepartementalepersonneshandicapees",
+        "model": "ressources.mdph",
         "pk": 4
     }
 ]

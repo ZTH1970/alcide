@@ -338,10 +338,10 @@ class CodeCFTMEA(NamedAbstractModel):
     class Meta:
         ordering = ['code']
 
-class MaisonDepartementalePersonnesHandicapees(models.Model):
+class MDPH(models.Model):
     class Meta:
-        verbose_name = u'Maison départementales des personnes handicapées'
-        verbose_name_plural = u'Maisons départementales des personnes handicapées'
+        verbose_name = u'MDPH'
+        verbose_name_plural = u'MDPHs'
 
     def __unicode__(self):
         return self.department
@@ -373,8 +373,8 @@ class MaisonDepartementalePersonnesHandicapees(models.Model):
 
 class MDPHRequest(models.Model):
     start_date = models.DateField(verbose_name=u"Date de la demande")
-    mdph = models.ForeignKey('ressources.MaisonDepartementalePersonnesHandicapees',
-            verbose_name=u"Maison départementales des personnes handicapées")
+    mdph = models.ForeignKey('ressources.MDPH',
+            verbose_name=u"MDPH")
     comment = models.TextField(max_length=3000,
         blank=True, null=True, verbose_name=u"Commentaire")
     created = models.DateTimeField(u'Création', auto_now_add=True)
@@ -389,8 +389,8 @@ MDPH_HELP =  Choices(
 class MDPHResponse(models.Model):
     start_date = models.DateField(verbose_name=u"Date de début")
     end_date = models.DateField(verbose_name=u"Date de fin")
-    mdph = models.ForeignKey('ressources.MaisonDepartementalePersonnesHandicapees',
-            verbose_name=u"Maison départementales des personnes handicapées")
+    mdph = models.ForeignKey('ressources.MDPH',
+            verbose_name=u"MDPH")
     comment = models.TextField(max_length=3000,
         blank=True, null=True, verbose_name=u"Commentaire")
     created = models.DateTimeField(u'Création', auto_now_add=True)
