@@ -66,22 +66,8 @@ class AgendaHomepageView(TemplateView):
                 context['workers_types'].append(data)
                 workers.extend(data['workers'])
 
-        occurrences_workers = {}
-        time_tables_workers = {}
-        holidays_workers = {}
-        for worker in workers:
-            time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
-            occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
-            holidays_worker = [h for h in holidays if h.worker_id in (None, worker.id)]
-            occurrences_workers[worker.id] = occurrences_worker
-            time_tables_workers[worker.id] = time_tables_worker
-            holidays_workers[worker.id] = holidays_worker
-            context['workers_agenda'].append({'worker': worker,
-                    'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, occurrences_worker, holidays_worker)})
-
-        context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
-                occurrences_workers, workers, time_tables_workers, holidays_workers)
+        context['workers'] = workers
+        context['disponibility_start_times'] = range(8, 20)
         return context
 
 class AgendaServiceActivityView(TemplateView):
@@ -383,4 +369,55 @@ class RessourcesView(TemplateView):
                     'appointments': get_daily_usage(context['date'], ressource,
                         self.service, occurrences_ressource)})
 
+        return context
+
+class AjaxWorkerTabView(TemplateView):
+
+    template_name = 'agenda/ajax-worker-tab.html'
+
+    def get_context_data(self, worker_id, **kwargs):
+        context = super(AjaxWorkerTabView, self).get_context_data(**kwargs)
+
+        time_tables_worker = TimeTable.objects.select_related('worker'). \
+                filter(services=self.service, worker_id=worker_id). \
+                for_today(self.date). \
+                order_by('start_date')
+        holidays_worker = Holiday.objects.select_related('worker'). \
+                filter(worker_id=worker_id). \
+                for_period(self.date, self.date). \
+                order_by('start_date')
+        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
+        occurrences_worker = [o for o in occurrences if worker_id in o.event.participants.values_list('id', flat=True)]
+
+        worker = Worker.objects.get(pk=worker_id)
+        context['worker_agenda'] = {'worker': worker,
+                    'appointments': get_daily_appointments(context['date'], worker, self.service,
+                        time_tables_worker, occurrences_worker, holidays_worker)}
+        return context
+
+class AjaxWorkerDisponibilityColumnView(TemplateView):
+
+    template_name = 'agenda/ajax-worker-disponibility-column.html'
+
+    def get_context_data(self, worker_id, **kwargs):
+        context = super(AjaxWorkerDisponibilityColumnView, self).get_context_data(**kwargs)
+
+        time_tables_worker = TimeTable.objects.select_related('worker'). \
+                filter(services=self.service, worker_id=worker_id). \
+                for_today(self.date). \
+                order_by('start_date')
+        holidays_worker = Holiday.objects.select_related('worker'). \
+                filter(worker_id=worker_id). \
+                for_period(self.date, self.date). \
+                order_by('start_date')
+        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
+        occurrences_worker = [o for o in occurrences if worker_id in o.event.participants.values_list('id', flat=True)]
+
+        worker = Worker.objects.get(pk=worker_id)
+        time_tables_workers = {worker.id: time_tables_worker}
+        occurrences_workers = {worker.id: occurrences_worker}
+        holidays_workers = {worker.id: holidays_worker}
+
+        context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
+                occurrences_workers, [worker], time_tables_workers, holidays_workers)
         return context

@@ -6,7 +6,7 @@ from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         NewEventView, AgendaServiceActivityView, UpdateAppointmentView,
         UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
         UnlockAllView, AgendasTherapeutesView, JoursNonVerrouillesView,
-        RessourcesView)
+        RessourcesView, AjaxWorkerTabView, AjaxWorkerDisponibilityColumnView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -55,6 +55,12 @@ agenda_patterns = patterns('',
                 RessourcesView.as_view(
                     template_name='agenda/ressources.html'),
                 name='ressources'),
+            url(r'^ajax-worker-tab/(?P<worker_id>\d+)$',
+                AjaxWorkerTabView.as_view(),
+                name='ajax-worker-tab'),
+            url(r'^ajax-worker-disponibility-column/(?P<worker_id>\d+)$',
+                AjaxWorkerDisponibilityColumnView.as_view(),
+                name='ajax-worker-disponibility-column'),
             )
 
 urlpatterns = patterns('',

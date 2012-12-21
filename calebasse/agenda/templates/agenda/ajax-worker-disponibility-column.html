@@ -1,0 +1,9 @@
+{% for start_time, quarters in disponibility.items %}
+  <tr>
+      {% for quarter in quarters %}
+        {% for value in quarter %}
+        <td class="worker-{{ value.id }} agenda {{ value.dispo }}" data-id="{{ value.id }}"</td>
+        {% endfor %}
+      {% endfor %}
+  </tr>
+{% endfor %}
