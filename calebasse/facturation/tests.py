@@ -67,7 +67,7 @@ class FacturationTest(TestCase):
         act6 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 5, 10, 15),
                 end_datetime=datetime(2020, 10, 5, 12, 20))
-        act6.set_state('ABS_EXC', self.creator)
+        act6.act.set_state('ABS_EXC', self.creator)
         act7 = EventWithAct.objects.create_patient_appointment(self.creator, 'RDV', patient_b, [self.therapist3],
                 self.act_type, service_camsp, start_datetime=datetime(2020, 10, 5, 10, 15),
                 end_datetime=datetime(2020, 10, 5, 12, 20))
