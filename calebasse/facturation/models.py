@@ -118,7 +118,8 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
     return (invoices, len_invoices, len_invoices_hors_pause,
         len_acts_invoiced, len_acts_invoiced_hors_pause)
 
-INVOICING_OFFSET = 666
+# The firts cmpp invoicing with calebasse
+INVOICING_OFFSET = 134
 
 class Invoicing(models.Model):
     '''Represent a batch of invoices:
