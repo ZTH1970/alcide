@@ -56,12 +56,25 @@ class WorkerQuerySet(query.QuerySet):
         else:
             return self.filter(services__in=[service])
 
+
 class Worker(People):
     objects = PassThroughManager.for_queryset_class(WorkerQuerySet)()
-    # TODO : use manytomany here ?
     type = models.ForeignKey('ressources.WorkerType',
             verbose_name=u'Type de personnel')
     services = models.ManyToManyField('ressources.Service')
+    enabled = models.BooleanField(verbose_name=u'Actif',
+                default=True)
+    old_camsp_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au CAMSP', blank=True, null=True)
+    old_cmpp_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au CMPP', blank=True, null=True)
+    old_sessad_dys_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au SESSAD TED', blank=True, null=True)
+    old_sessad_ted_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au SESSAD DYS', blank=True, null=True)
+
+    def is_active(self):
+        return self.enabled
 
     def is_away(self):
         if self.timetable_set.filter(weekday=date.today().weekday()).exists():
