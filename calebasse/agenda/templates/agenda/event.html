@@ -1,21 +1,21 @@
 {% load widget_tweaks %}
 <table>
   <tr>
-    <td>
+    <td {% if form.event_type.field.required %}class="required"{% endif %}>
       <p>
       {{ form.event_type.label_tag }}
       {{ form.event_type }}
       {{ form.event_type.errors }}
       </p>
     </td>
-    <td>
+    <td {% if form.title.field.required %}class="required"{% endif %}>
       <p>
       {{ form.title.label_tag }}
       {{ form.title }}
       {{ form.title.errors }}
       </p>
     </td>
-    <td>
+    <td {% if form.room.field.required %}class="required"{% endif %}>
       <p>
       {{ form.room.label_tag }}
       {{ form.room }}
@@ -24,21 +24,21 @@
   </tr>
 
   <tr>
-    <td>
+    <td {% if form.date.field.required %}class="required"{% endif %}>
       <p>
       {{ form.date.label_tag }}
       {{ form.date|add_class:"datepicker-date" }}
       {{ form.date.errors }}
       </p>
     </td>
-    <td>
+    <td {% if form.time.field.required %}class="required"{% endif %}>
       <p>
       {{ form.time.label_tag }}
       {{ form.time }}
       {{ form.time.errors }}
       </p>
     </td>
-    <td>
+    <td {% if form.duration.field.required %}class="required"{% endif %}>
       <p>
       {{ form.duration.label_tag }}
       {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:5" }}
@@ -51,14 +51,14 @@
   </tr>
 
   <tr>
-    <td>
+    <td {% if form.participants.field.required %}class="required"{% endif %}>
       {{ form.participants.label_tag }}
       <div id="intervenants">
         {{ form.participants }}
         {{ form.participants.errors }}
       </div>
     </td>
-    <td>
+    <td {% if form.services.field.required %}class="required"{% endif %}>
       <div id="services">
         {{ form.services.label_tag }}
         {{ form.services }}

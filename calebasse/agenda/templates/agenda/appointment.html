@@ -1,21 +1,21 @@
 {% load widget_tweaks %}
    <table id="new-appointment-table">
        <tr>
-           <td>
+           <td {% if form.date.field.required %}class="required"{% endif %}>
            <p class="datepicker">
            {{ form.date.label_tag }}
            {{ form.date|add_class:"datepicker-date" }}
            {{ form.date.errors }}
            </p>
            </td>
-           <td>
+           <td {% if form.time.field.required %}class="required"{% endif %}>
             <p>
            {{ form.time.label_tag }}
            {{ form.time }}
            {{ form.time.errors }}
            </p>
            </td>
-           <td>
+           <td {% if form.duration.field.required %}class="required"{% endif %}>
            <p>
            {{ form.duration.label_tag }}
            {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:5" }}
@@ -27,7 +27,7 @@
            </td>
        </tr>
        <tr>
-           <td>
+           <td {% if form.duration.field.required %}class="required"{% endif %}>
            <p>
            {{ form.room.label_tag }}
            {{ form.room }}
@@ -36,19 +36,19 @@
            </td>
        </tr>
        <tr>
-           <td>
+           <td {% if form.participants.field.required %}class="required"{% endif %}>
            <h4>{{ form.participants.label_tag }}</h4>
            <div id="intervenants">
            {{ form.participants }}
            {{ form.participants.errors }}
            </div>
            </td>
-           <td>
+           <td {% if form.patient.field.required %}class="required"{% endif %}>
            <h4>{{ form.patient.label_tag }}</h4>
            {{ form.patient }}
            {{ form.patient.errors }}
            </td>
-           <td>
+           <td {% if form.act_type.field.required %}class="required"{% endif %}>
            <h4>{{ form.act_type.label_tag }}</h4>
            {{ form.act_type }}
            {{ form.act_type.errors }}

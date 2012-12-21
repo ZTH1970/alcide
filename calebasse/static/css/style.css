@@ -1077,8 +1077,9 @@ input:not([value]) + .clear, input[value=""] + .clear {
   width: 100%;
 }
 
+td.required label:after,
 label.required:after {
-  content: '*';
+  content: ' *';
   color: red;
 }
 
