@@ -199,7 +199,7 @@ class UpdateEventView(UpdateView):
 
     def get_initial(self):
         initial = super(UpdateEventView, self).get_initial()
-        initial['date'] = self.occurrence.start_time.strftime("%Y-%m-%d")
+        initial['date'] = self.occurrence.start_time.date()
         initial['time'] = self.occurrence.start_time.strftime("%H:%M")
         time = self.occurrence.end_time - self.occurrence.start_time
         if time:
