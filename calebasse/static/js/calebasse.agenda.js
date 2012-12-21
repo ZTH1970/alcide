@@ -192,7 +192,7 @@ function event_dialog(url, title, width, btn_text) {
           return false;
       });
       $('#print-button').click(function() { window.print(); });
-    $('#show-everybody').change(function() {
+      $('#show-everybody').change(function() {
       if (! $(this).is(':checked')) {
         $('#filtre input').val('');
       }
