@@ -17,7 +17,7 @@ class UserForm(forms.ModelForm):
     }
 
     worker = forms.ModelChoiceField(label=_('Personnel'),
-            queryset=Worker.objects.all(), empty_label=_('None'),
+            queryset=Worker.objects.filter(enabled=True), empty_label=_('None'),
             required=False)
     password1 = forms.CharField(label=_("Password"),
         widget=forms.PasswordInput, required=False)

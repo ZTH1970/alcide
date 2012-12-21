@@ -52,9 +52,9 @@ class People(BaseModelMixin, models.Model):
 class WorkerQuerySet(query.QuerySet):
     def for_service(self, service, type=None):
         if type:
-            return self.filter(services__in=[service]).filter(type=type)
+            return self.filter(enabled=True, services__in=[service], type=type)
         else:
-            return self.filter(services__in=[service])
+            return self.filter(enabled=True, services__in=[service])
 
 
 class Worker(People):

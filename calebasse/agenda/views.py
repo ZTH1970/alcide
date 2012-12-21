@@ -60,7 +60,7 @@ class AgendaHomepageView(TemplateView):
         context['disponibility'] = {}
         workers = []
         for worker_type in WorkerType.objects.all():
-            workers_type = Worker.objects.filter(type=worker_type)
+            workers_type = Worker.objects.filter(enabled=True, type=worker_type)
             if workers_type:
                 data = {'type': worker_type.name, 'workers': workers_type }
                 context['workers_types'].append(data)
