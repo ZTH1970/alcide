@@ -10,9 +10,9 @@ from calebasse.cbv import TemplateView, CreateView, UpdateView
 from calebasse.agenda.models import Occurrence, Event, EventType
 from calebasse.personnes.models import TimeTable, Holiday
 from calebasse.actes.models import EventAct
-from calebasse.agenda.appointments import get_daily_appointments
+from calebasse.agenda.appointments import get_daily_appointments, get_daily_usage
 from calebasse.personnes.models import Worker
-from calebasse.ressources.models import WorkerType
+from calebasse.ressources.models import WorkerType, Room
 from calebasse.actes.validation import get_acts_of_the_day
 from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.actes.models import Act, ValidationMessage
@@ -138,6 +138,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         initial['date'] = self.date
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
+        initial['room'] = self.request.GET.get('room')
         return initial
 
 
@@ -185,6 +186,7 @@ class NewEventView(CreateView):
         initial['time'] = self.request.GET.get('time')
         initial['services'] = [self.service]
         initial['event_type'] = 2
+        initial['room'] = self.request.GET.get('room')
         return initial
 
 class UpdateEventView(UpdateView):
@@ -354,4 +356,31 @@ class JoursNonVerrouillesView(TemplateView):
                 if not locked:
                     days_not_locked.append(current_day)
         context['days_not_locked'] = days_not_locked
+        return context
+
+class RessourcesView(TemplateView):
+
+    template_name = 'agenda/ressources.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(RessourcesView, self).get_context_data(**kwargs)
+
+        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
+
+        context['ressources_types'] = []
+        context['ressources_agenda'] = []
+        context['disponibility'] = {}
+        ressources = []
+        data = {'type': Room._meta.verbose_name_plural, 'ressources': Room.objects.all() }
+        context['ressources_types'].append(data)
+        ressources.extend(data['ressources'])
+
+        occurrences_ressources = {}
+        for ressource in ressources:
+            occurrences_ressource = [o for o in occurrences if ressource == o.event.room]
+            occurrences_ressources[ressource.id] = occurrences_ressource
+            context['ressources_agenda'].append({'ressource': ressource,
+                    'appointments': get_daily_usage(context['date'], ressource,
+                        self.service, occurrences_ressource)})
+
         return context

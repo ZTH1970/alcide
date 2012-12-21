@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from datetime import time
+from datetime import datetime, time
+from datetime import time as datetime_time
 
-from interval import IntervalSet
+from interval import Interval, IntervalSet
 
 from calebasse.actes.validation_states import VALIDATION_STATES
 
@@ -160,6 +161,31 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences, holi
         appointment = Appointment()
         appointment.init_start_stop(u"Départ", end_time)
         appointment.weight = 1
+        appointments.append(appointment)
+
+    return sorted(appointments, key=lambda app: (app.begin_time, app.weight))
+
+def get_daily_usage(date, ressource, service, occurrences):
+    """
+    """
+    appointments = []
+
+    start_time = datetime_time(8, 0)
+    end_time = datetime_time(20, 0)
+    all_day = Interval(datetime.combine(date, start_time), datetime.combine(date, end_time))
+    timetables_set = IntervalSet([all_day])
+    occurrences_set = IntervalSet((o.to_interval() for o in occurrences))
+    for free_time in timetables_set - occurrences_set:
+        if free_time:
+            delta = free_time.upper_bound - free_time.lower_bound
+            delta_minutes = delta.seconds / 60
+            appointment = Appointment()
+            appointment.init_free_time(delta_minutes,
+                    time(free_time.lower_bound.hour, free_time.lower_bound.minute))
+            appointments.append(appointment)
+    for occurrence in occurrences:
+        appointment = Appointment()
+        appointment.init_from_occurrence(occurrence, service)
         appointments.append(appointment)
 
     return sorted(appointments, key=lambda app: (app.begin_time, app.weight))
