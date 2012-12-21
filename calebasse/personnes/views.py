@@ -79,7 +79,7 @@ class WorkerView(cbv.ListView):
             if profession:
                 qs = qs.filter(type=profession)
             if intervene_status and 0 < len(intervene_status) < 2:
-                qs = qs.filter(type__intervene=intervene_status[0] == 'a')
+                qs = qs.filter(enabled=intervene_status[0] == 'a')
         today = date.today()
         if models.Holiday.objects.for_service(self.service).future() \
                 .filter(start_date__lte=today).exists():
@@ -123,7 +123,7 @@ user_delete = cbv.DeleteView.as_view(model=User)
 class WorkerUpdateView(cbv.MultiUpdateView):
     model = models.Worker
     forms_classes = {
-            'id': forms.WorkerIdForm, 
+            'id': forms.WorkerIdForm,
             'services': forms.WorkerServiceForm
     }
     template_name = 'personnes/worker_update.html'
@@ -238,9 +238,9 @@ class HolidayView(cbv.TemplateView):
         for holiday in future_qs:
             key = (holiday.start_date.year, holiday.start_date.month, holiday.start_date.strftime('%B'))
             future_holidays[key].append(holiday)
-        ctx['future_holidays'] = [ { 
+        ctx['future_holidays'] = [ {
             'date': date(day=1, month=key[1], year=key[0]),
-            'holidays': future_holidays[key] 
+            'holidays': future_holidays[key]
           } for key in sorted(future_holidays.keys()) ]
         ctx['annual_holidays'] = annual_qs
         ctx['search_form'] = form

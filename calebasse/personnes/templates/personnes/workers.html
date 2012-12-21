@@ -93,6 +93,7 @@
       <th class="profession">Profession</th>
       <th class="services">Services</th>
       <th class="is_away">En congé</th>
+      <th class="active">Actif</th>
     </tr>
     </thead>
     <tbody>
@@ -110,6 +111,9 @@
       </td>
       <td class="is_away">
         {% if object.holiday %}×{% else %}&nbsp;{% endif %}
+      </td>
+      <td class="active">
+        {% if object.enabled %}✔{% else %}&nbsp;{% endif %}
       </td>
     </tr>
     {% endfor %}

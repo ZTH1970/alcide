@@ -89,8 +89,7 @@ class WorkerSearchForm(forms.Form):
             queryset=WorkerType.objects.all(), required=False)
 
     INTERVENE_STATUS_CHOICES = {
-            'a': u'Thérapeute',
-            'b': u'Non-thérapeute'
+            'a': u'Actif',
     }
 
     intervene_status = forms.MultipleChoiceField(
@@ -102,7 +101,7 @@ class WorkerSearchForm(forms.Form):
 class WorkerIdForm(forms.ModelForm):
     class Meta:
         model = Worker
-        fields = ('last_name', 'first_name', 'gender')
+        fields = ('last_name', 'first_name', 'gender', 'enabled')
 
 class WorkerServiceForm(forms.ModelForm):
     class Meta:
