@@ -160,3 +160,8 @@ class Occurrence(models.Model):
     def to_interval(self):
         return Interval(self.start_time, self.end_time)
 
+    def is_event_absence(self):
+        if self.event.event_type.id != 1:
+            return False
+        event_act = self.event.eventact
+        return event_act.is_absent()

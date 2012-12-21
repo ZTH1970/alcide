@@ -89,9 +89,11 @@ class Act(models.Model):
         return None
 
     def is_absent(self):
-        if self.get_state() in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
+        state = self.get_state()
+        if state and state.state_name in ('ABS_NON_EXC', 'ABS_EXC', 'ANNUL_NOUS',
                 'ANNUL_FAMILLE', 'REPORTE', 'ABS_ESS_PPS', 'ENF_HOSP'):
             return True
+        return False
 
     def get_state(self):
         return self.actvalidationstate_set.latest('created')

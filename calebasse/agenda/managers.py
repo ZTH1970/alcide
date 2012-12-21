@@ -129,7 +129,7 @@ class OccurrenceManager(models.Manager):
         timetables_set = {}
         holidays_set = {}
         for participant in participants:
-            occurrences_set[participant.id] = IntervalSet((o.to_interval() for o in occurrences[participant.id]))
+            occurrences_set[participant.id] = IntervalSet((o.to_interval() for o in occurrences[participant.id] if not o.is_event_absence()))
             timetables_set[participant.id] = IntervalSet((t.to_interval(date) for t in time_tables[participant.id]))
             holidays_set[participant.id] = IntervalSet((h.to_interval(date) for h in holidays[participant.id]))
         start_datetime = datetime(date.year, date.month, date.day, 8, 0)

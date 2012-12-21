@@ -120,7 +120,10 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences, holi
     timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
     occurrences_set = IntervalSet((o.to_interval() for o in occurrences))
     holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
-    for free_time in timetables_set - (occurrences_set+holidays_set):
+    busy_occurrences_set = IntervalSet((o.to_interval() for o in occurrences if not o.is_event_absence()))
+    print occurrences_set
+    print busy_occurrences_set
+    for free_time in timetables_set - (busy_occurrences_set+holidays_set):
         if free_time:
             delta = free_time.upper_bound - free_time.lower_bound
             delta_minutes = delta.seconds / 60
