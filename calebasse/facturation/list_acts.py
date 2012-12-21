@@ -40,9 +40,9 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     :rtype: list
     """
 
-    from calebasse.actes.models import EventAct
+    from calebasse.actes.models import Act
     if acts is None:
-        acts = EventAct.objects.filter(is_billed=False,
+        acts = Act.objects.filter(is_billed=False,
             patient__service=service).order_by('date')
     # Filter acts according to the date
     i = 0
