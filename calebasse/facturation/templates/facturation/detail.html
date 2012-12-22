@@ -25,7 +25,7 @@
     {% endif %}</h2>
     <a href="..">Retourner à la liste</a>
     {% if service_name == "CMPP" %}
-        {% if invoicing.status == "open" %}<button id="close-invoicing">Clôre cette facturation</button>{% endif %}
+        {% if invoicing.status == "open" %}<button id="close-invoicing">Clore cette facturation</button>{% endif %}
         {% if invoicing.status == "closed" %}<button id="validate"">Valider cette facturation</button>{% endif %}
         {% if invoicing.status == "validated" %}
             <button id="teletrans-btn">Télétransmission à l'assurance maladie</button>
