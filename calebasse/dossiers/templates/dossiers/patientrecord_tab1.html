@@ -4,7 +4,7 @@
     <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Non renseigné" }}
     <button id="update-paper-id-btn" class="icon-edit" title="Modifier"></button>
     </li>
-    <li><label>N° dossier informatique :</label>{{ object.id }}</li>
+    <li><label>N° dossier informatique :</label> {{ object.id }}</li>
     <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
     <li><label>Prénom :</label> {{ object.first_name }}</li>
     <li><label>Genre :</label> {{ object.get_gender_display|default_if_none:"Non renseigné" }}</li>
