@@ -38,7 +38,9 @@ function enable_events(base) {
       });
       $(base).find('.newrdv').click(function() {
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
-          var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
+          var qs = $.param({participants: $.makeArray(participants),
+                            room: $.cookie('active-ressource-agenda'),
+                            time: $(this).data('hour') }, true);
           var new_appointment_url = $(this).data('url') + "?" + qs;
           event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
       });
@@ -48,7 +50,9 @@ function enable_events(base) {
       });
       $(base).find('.newevent').click(function() {
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
-          var qs = $.param({participants: $.makeArray(participants), time: $(this).data('hour') }, true);
+          var qs = $.param({participants: $.makeArray(participants),
+                            room: $.cookie('active-ressource-agenda'),
+                            time: $(this).data('hour') }, true);
           event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
       });
       $(base).find('.edit-event').click(function() {
