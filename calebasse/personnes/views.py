@@ -80,6 +80,9 @@ class WorkerView(cbv.ListView):
                 qs = qs.filter(type=profession)
             if intervene_status and 0 < len(intervene_status) < 2:
                 qs = qs.filter(enabled=intervene_status[0] == 'a')
+        else:
+            # only display current workers by default
+            qs = qs.filter(enabled=True)
         today = date.today()
         if models.Holiday.objects.for_service(self.service).future() \
                 .filter(start_date__lte=today).exists():
