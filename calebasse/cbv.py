@@ -85,8 +85,10 @@ class ModelNameMixin(object):
 
 class ListView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
         list_cbv.ListView):
-    pass
-
+    def get_context_data(self, **kwargs):
+        ctx = super(ModelNameMixin, self).get_context_data(**kwargs)
+        ctx.update(super(ServiceViewMixin, self).get_context_data(**kwargs))
+        return ctx
 
 class CreateView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
         edit.CreateView):

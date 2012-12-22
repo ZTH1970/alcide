@@ -1,9 +1,10 @@
 from django.db import models
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from calebasse.cbv import (ListView, CreateView, UpdateView, DeleteView,
         ReturnToObjectMixin)
+from calebasse.ressources.models import Service
 
 
 _models = None
@@ -22,14 +23,17 @@ def get_ressource_model(model_name):
 
 def homepage(request, service):
     global _models
+    print 'repr:', repr(service)
     if _models is None:
         _models = models.get_models()
     ressources_models = [
             (model._meta.verbose_name_plural, model._meta.module_name)
             for model in _models
             if model._meta.app_label == 'ressources' ]
+    service_name = get_object_or_404(Service, slug=service)
     return render(request, 'ressources/index.html',
-            dict(models=sorted(ressources_models)))
+            dict(models=sorted(ressources_models),
+                 service_name=service_name))
 
 
 def list_view(request, service, model_name):
