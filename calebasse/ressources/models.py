@@ -324,7 +324,7 @@ class WorkerType(NamedAbstractModel):
 AXIS =  Choices(
         (1, 'Axe I : catégories cliniques'),
         (2, 'Axe II : facteurs organiques'),
-        (3, 'Axe II : facteurs environementaux'),
+        (3, 'Axe II : facteurs environnementaux'),
 )
 
 class CodeCFTMEA(NamedAbstractModel):
