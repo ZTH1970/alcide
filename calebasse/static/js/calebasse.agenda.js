@@ -83,25 +83,25 @@ function toggle_worker(worker_selector) {
     }
 
     $(worker_selector).toggleClass('active');
-    if (!($.cookie('agenda-tabs'))) {
-        $.cookie('agenda-tabs', new Array(), { path: '/' });
+    if (!($.cookie('agenda-worker-tabs'))) {
+        $.cookie('agenda-worker-tabs', new Array(), { path: '/' });
     }
     if ($(worker_selector).hasClass('active')) {
-        var tabs = $.cookie('agenda-tabs');
+        var tabs = $.cookie('agenda-worker-tabs');
         if ($.inArray($(worker_selector).attr('id'), tabs) == -1)
         {
             tabs.push($(worker_selector).attr('id'));
-            $.cookie('agenda-tabs', tabs, { path: '/' });
+            $.cookie('agenda-worker-tabs', tabs, { path: '/' });
         }
     }
     else {
-        var agendatabs = $.cookie('agenda-tabs');
+        var agendatabs = $.cookie('agenda-worker-tabs');
         $.each(agendatabs, function (i, value) {
             if (value == $(worker_selector).attr('id')) {
                 agendatabs.splice(i, 1);
             }
         });
-        $.cookie('agenda-tabs', agendatabs, { path: '/' });
+        $.cookie('agenda-worker-tabs', agendatabs, { path: '/' });
     }
     var target = $($(worker_selector).data('target'));
     target.toggle();
@@ -134,6 +134,66 @@ function toggle_worker(worker_selector) {
     }
     return target.find('a.tab');
 }
+
+function toggle_ressource(ressource_selector) {
+    var ressource_id = $(ressource_selector).data('ressource-id');
+    if (!ressource_id) {
+        return;
+    }
+
+    $(ressource_selector).toggleClass('active');
+    if (!($.cookie('agenda-ressource-tabs'))) {
+        $.cookie('agenda-ressource-tabs', new Array(), { path: '/' });
+    }
+    if ($(ressource_selector).hasClass('active')) {
+        var tabs = $.cookie('agenda-ressource-tabs');
+        if ($.inArray($(ressource_selector).attr('id'), tabs) == -1)
+        {
+            tabs.push($(ressource_selector).attr('id'));
+            $.cookie('agenda-ressource-tabs', tabs, { path: '/' });
+        }
+    }
+    else {
+        var agendatabs = $.cookie('agenda-ressource-tabs');
+        $.each(agendatabs, function (i, value) {
+            if (value == $(ressource_selector).attr('id')) {
+                agendatabs.splice(i, 1);
+            }
+        });
+        $.cookie('agenda-ressource-tabs', agendatabs, { path: '/' });
+    }
+    var target = $($(ressource_selector).data('target'));
+    target.toggle();
+
+    var tab = $('#link-tab-ressource-' + ressource_id).parent().get(0);
+    var tab_list = $(tab).parent().get(0);
+    $(tab).detach().appendTo(tab_list);
+
+    if ($('#tabs-ressource-' + ressource_id + ' .ressource-tab-content-placeholder').length) {
+        /* load ressource appointments tab */
+        $('#tabs-ressource-' + ressource_id).load('ajax-ressource-tab/' + ressource_id,
+            function () {
+	       $(this).children('div').accordion({active: false, autoHeight: false});
+               enable_events(this);
+            }
+        );
+        /* load ressource disponibility column */
+        $.get('ajax-ressource-disponibility-column/' + ressource_id,
+            function(data) {
+                var dispo_table_rows = $('td#dispos table tr');
+                $(data).find('td').each(function(a, b) {
+                        $(dispo_table_rows[a]).append(b);
+                    }
+                );
+                reorder_disponibility_columns();
+            }
+        );
+    } else {
+        reorder_disponibility_columns();
+    }
+    return target.find('a.tab');
+}
+
 
 function event_dialog(url, title, width, btn_text) {
           $('#rdv').load(url,
@@ -171,42 +231,83 @@ function event_dialog(url, title, width, btn_text) {
   $(function() {
       $('#tabs').tabs();
 
-      $('.person-item').on('click', function() {
-          var target = toggle_worker(this);
-          if ($(target).is(':visible')) {
-              $(target).click();
-          }
-          if ($('#filtre input').val()) {
-              $('#filtre input').val('');
-              $('#filtre input').keyup();
-              $('#filtre input').focus();
-          }
-      });
-
-      $('a.tab').click(function() {
-          $.cookie('active-agenda', $(this).data('id'), { path: '/' });
-      });
-      $('a.close-tab').click(function() {
-          $('#' + $(this).data('target')).click()
-      });
-
-      if ($.cookie('agenda-tabs')) {
-          $.each($.cookie('agenda-tabs'), function (i, worker_selector) {
-              toggle_worker('#' + worker_selector);
+      if ($('.person-item').length) {
+          $('.person-item').on('click', function() {
+              var target = toggle_worker(this);
+              if ($(target).is(':visible')) {
+                  $(target).click();
+              }
+              if ($('#filtre input').val()) {
+                  $('#filtre input').val('');
+                  $('#filtre input').keyup();
+                  $('#filtre input').focus();
+              }
           });
-          if ($.cookie('active-agenda'))
-          {
-              var target = $('#link-tab-worker-' + $.cookie('active-agenda'));
-              if (target.is(':visible')) {
-                  target.click();
+
+          $('a.tab').click(function() {
+              $.cookie('active-worker-agenda', $(this).data('id'), { path: '/' });
+          });
+
+          if ($.cookie('agenda-worker-tabs')) {
+              $.each($.cookie('agenda-worker-tabs'), function (i, worker_selector) {
+                  toggle_worker('#' + worker_selector);
+              });
+              if ($.cookie('active-worker-agenda'))
+              {
+                  var target = $('#link-tab-worker-' + $.cookie('active-worker-agenda'));
+                  if (target.is(':visible')) {
+                      target.click();
+                  }
               }
           }
       }
 
+      if ($('.ressource-item').length) {
+          $('.ressource-item').on('click', function() {
+              var target = toggle_ressource(this);
+              if ($(target).is(':visible')) {
+                  $(target).click();
+              }
+              if ($('#filtre input').val()) {
+                  $('#filtre input').val('');
+                  $('#filtre input').keyup();
+                  $('#filtre input').focus();
+              }
+          });
+
+          $('div.agenda > div').accordion({active: false, autoHeight: false});
+
+          $('a.tab').click(function() {
+              $.cookie('active-ressource-agenda', $(this).data('id'), { path: '/' });
+          });
+
+          if ($.cookie('agenda-ressource-tabs')) {
+              $.each($.cookie('agenda-ressource-tabs'), function (i, ressource_selector) {
+                  toggle_ressource('#' + ressource_selector);
+              });
+              if ($.cookie('active-ressource-agenda'))
+              {
+                  var target = $('#link-tab-ressource-' + $.cookie('active-ressource-agenda'));
+                  if (target.is(':visible')) {
+                      target.click();
+                  }
+              }
+          }
+      }
+
+      $('a.close-tab').click(function() {
+          $('#' + $(this).data('target')).click()
+      });
+
+
       /* Gestion du filtre sur les utilisateurs */
       $('#filtre input').keyup(function() {
           var filtre = $(this).val();
-          var everybody = $('#show-everybody').is(':checked');
+	  if ($('#show-everybody').length) {
+              var everybody = $('#show-everybody').is(':checked');
+	  } else {
+              var everybody = true;
+          }
           if (filtre) {
               $('#show-everybody').attr('checked', true);
               $('#users li').each(function() {

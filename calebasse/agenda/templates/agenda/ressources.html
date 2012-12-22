@@ -19,7 +19,7 @@
      <dt>{{ ressources_type.type }}</dt>
      <dd><ul>
        {% for ressource in ressources_type.ressources %}
-       <li id="selector-ressource-{{ressource.id}}" class="person-item" data-ressource-id="{{ressource.id}}" data-target=".ressource-{{ressource.id}}.agenda">{{ ressource.name }} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-ressource-{{ressource.id}}" class="ressource-item" data-ressource-id="{{ressource.id}}" data-target=".ressource-{{ressource.id}}.agenda">{{ ressource.name }} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% endfor %}
      </ul></dd>
      {% endfor %}
