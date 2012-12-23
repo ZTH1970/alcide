@@ -1211,6 +1211,11 @@ a [class^="icon-"], a [class*=" icon-"] {
 	right: 10px;
 }
 
+#id_participants_on_deck {
+  max-height: 7em;
+  overflow-y: scroll;
+}
+
 
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {
