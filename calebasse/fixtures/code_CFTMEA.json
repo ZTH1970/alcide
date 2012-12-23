@@ -1029,7 +1029,7 @@
         "fields": {
             "axe": 2,
             "code": 145,
-            "name": "Hypothyro\u0xefdies cong\u00e9nitales"
+            "name": "Hypothyro\u00efdies cong\u00e9nitales"
         },
         "model": "ressources.codecftmea",
         "pk": 219
@@ -2262,7 +2262,7 @@
         "fields": {
             "axe": 1,
             "code": 7304,
-            "name": "Coca\u0xefne"
+            "name": "Coca\u00efne"
         },
         "model": "ressources.codecftmea",
         "pk": 166
