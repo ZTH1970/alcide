@@ -59,9 +59,11 @@ class CivilStatusForm(ModelForm):
 
 class PhysiologyForm(ModelForm):
     cranium_perimeter = forms.DecimalField(label=u"Périmètre cranien",
-                    max_digits=5, decimal_places=2, localize=True)
+                    max_digits=5, decimal_places=2, localize=True,
+                    required=False)
     chest_perimeter = forms.DecimalField(label=u"Périmètre thoracique",
-                    max_digits=5, decimal_places=2, localize=True)
+                    max_digits=5, decimal_places=2, localize=True,
+                    required=False)
 
     class Meta:
         model = PatientRecord
