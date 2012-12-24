@@ -100,11 +100,12 @@ class Appointment(object):
         self.length = length
         self.__set_time(begin_time)
 
-    def init_busy_time(self, title, length, begin_time):
+    def init_busy_time(self, title, length, begin_time, description=None):
         self.title = title
         self.type = "busy-here"
         self.length = length
         self.__set_time(begin_time)
+        self.description = description
 
     def init_start_stop(self, title, time):
         """
@@ -140,9 +141,11 @@ def get_daily_appointments(date, worker, service, time_tables, occurrences, holi
         delta = interval.upper_bound - interval.lower_bound
         delta_minutes = delta.seconds / 60
         appointment = Appointment()
-        appointment.init_busy_time(u"Congé",
+        label = u"Congé (%s)" % holiday.holiday_type.name
+        appointment.init_busy_time(label,
                     delta_minutes,
-                    time(interval.lower_bound.hour, interval.lower_bound.minute))
+                    time(interval.lower_bound.hour, interval.lower_bound.minute),
+                    description=holiday.comment)
         appointments.append(appointment)
     for time_table in time_tables:
         interval_set = IntervalSet.between(time_table.to_interval(date).lower_bound.time(),
