@@ -72,7 +72,8 @@ class Appointment(object):
             self.workers_code = []
             self.workers = workers
             for worker in workers:
-                self.workers_initial += " " + worker.first_name.upper()[0]
+                if worker.first_name:
+                    self.workers_initial += " " + worker.first_name.upper()[0]
                 self.workers_initial += worker.last_name.upper()[0]
                 self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
             self.act_type = event_act.act_type.name
