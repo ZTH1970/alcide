@@ -1216,6 +1216,10 @@ a [class^="icon-"], a [class*=" icon-"] {
   overflow-y: scroll;
 }
 
+#tabs-8 form p {
+	clear: both;
+}
+
 
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {

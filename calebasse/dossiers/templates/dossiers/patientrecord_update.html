@@ -1,6 +1,17 @@
 {% extends "dossiers/base.html" %}
 {% load url from future %}
 
+{% block extrascripts %}
+<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}filter-widget/css/filter-widget.css"/>
+<script src="{{ STATIC_URL }}js/jquery.parse-url.js"></script>
+<script src="{{ STATIC_URL }}js/calebasse.dossiers.js"></script>
+<script src="{{ STATIC_URL }}filter-widget/js/i18n.js"></script>
+<script src="{{ STATIC_URL }}filter-widget/js/core.js"></script>
+<script src="{{ STATIC_URL }}filter-widget/js/SelectBox.js"></script>
+<script src="{{ STATIC_URL }}filter-widget/js/SelectFilter2.js"></script>
+{% endblock %}
+
+
 {% block appbar %}
 <h2><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
 <span id="ajax-redirect" data-url="{{ object.id }}/view"/>

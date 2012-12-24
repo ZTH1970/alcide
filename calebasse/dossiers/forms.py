@@ -4,6 +4,7 @@ from datetime import date
 
 from django import forms
 from django.forms import ModelForm, Form
+import django.contrib.admin.widgets
 
 from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
@@ -57,6 +58,12 @@ class CivilStatusForm(ModelForm):
         model = PatientRecord
         fields = ('first_name', 'last_name', 'birthdate', 'gender', 'nationality')
 
+
+class FilteredSelectMultipleMise(django.contrib.admin.widgets.FilteredSelectMultiple):
+    def __init__(self, **kwargs):
+        super(FilteredSelectMultipleMise, self).__init__(u'Catégorie', False)
+
+
 class PhysiologyForm(ModelForm):
     cranium_perimeter = forms.DecimalField(label=u"Périmètre cranien",
                     max_digits=5, decimal_places=2, localize=True,
@@ -70,6 +77,11 @@ class PhysiologyForm(ModelForm):
         fields = ('size', 'weight', 'pregnancy_term',
             'cranium_perimeter', 'chest_perimeter', 'apgar_score_one',
             'apgar_score_two', 'mises_1', 'mises_2', 'mises_3')
+        widgets = {
+            'mises_1': FilteredSelectMultipleMise,
+            'mises_2': FilteredSelectMultipleMise,
+            'mises_3': FilteredSelectMultipleMise,
+        }
 
     def __init__(self, instance, **kwargs):
         super(PhysiologyForm, self).__init__(instance=instance, **kwargs)
