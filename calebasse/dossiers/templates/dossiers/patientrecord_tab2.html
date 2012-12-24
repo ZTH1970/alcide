@@ -2,7 +2,7 @@
   {% csrf_token %}
   <div class="frame inline">
     <h3>État civil</h3>
-    <button class="save">✔</button>
+    <button class="save enable-on-change">✔</button>
     <p>
     {% for field in forms.id %}
     {{ field.errors }}
@@ -25,7 +25,7 @@
   {% csrf_token %}
   <div class="frame inline">
     <h3>Inscription</h3>
-    <button class="save">✔</button>
+    <button class="save enable-on-change">✔</button>
     <p>
     {% for field in forms.inscription %}
     {{ field.label_tag  }} : {{ field }}
@@ -46,7 +46,7 @@
   {% csrf_token %}
   <div class="frame inline">
     <h3>Famille</h3>
-    <button class="save">✔</button>
+    <button class="save enable-on-change">✔</button>
     <p>
     {% for field in forms.family %}
     {{ field.errors }}
@@ -88,7 +88,7 @@
   {% csrf_token %}
   <div class="frame inline">
     <h3>Transport</h3>
-    <button class="save">✔</button>
+    <button class="save enable-on-change">✔</button>
     <p>
     {% for field in forms.transport %}
     {{ field.label_tag  }} : {{ field }}
@@ -112,7 +112,7 @@
   <form method="post" id="followup-form" class="patientrecordform">{% csrf_token %}
     <div class="frame inline">
       <h3>Suivi du patient</h3>
-      <button class="save">✔</button>
+      <button class="save enable-on-change">✔</button>
       <p>
       {{ forms.followup.coordinators.label_tag  }} : {{ forms.followup.coordinators }}
       </p>

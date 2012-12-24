@@ -444,7 +444,7 @@
     <div id="tabs-8">
         <form method="post" id="physiology-form" class="patientrecordform">
           {% csrf_token %}
-            <button class="save">Enregistrer</button>
+            <button class="save enable-on-change">Enregistrer</button>
             {% for field in forms.physiology %}
             <p>
                 {{ field.errors }}
@@ -456,7 +456,7 @@
             {% endfor %}
             </p>
             <input type="hidden"  name="tab"  value="7">
-            <button class="save">Enregistrer</button>
+            <button class="save enable-on-change">Enregistrer</button>
         </form>
     </div>
   </div>
