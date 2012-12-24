@@ -224,7 +224,7 @@ class HolidayView(cbv.TemplateView):
         qs = models.Holiday.objects.for_service_workers(self.service).future()
         today = date.today()
         future_qs = qs.for_period(today, end_date)
-        annual_qs = models.Holiday.objects.for_service(self.service)
+        group_qs = models.Holiday.objects.for_service(self.service)
         current_qs = qs.today()
         form = self.get_form()
         if form.is_valid() and form.cleaned_data.get('start_date'):
@@ -234,7 +234,7 @@ class HolidayView(cbv.TemplateView):
             future_qs = models.Holiday.objects \
                     .for_period(start_date, end_date) \
                     .for_service_workers(self.service)
-            annual_qs = annual_qs.for_period(start_date, end_date)
+            group_qs = group_qs.for_period(start_date, end_date)
             current_qs = []
         ctx['current_holidays'] = current_qs
         future_holidays = defaultdict(lambda:[])
@@ -245,7 +245,7 @@ class HolidayView(cbv.TemplateView):
             'date': date(day=1, month=key[1], year=key[0]),
             'holidays': future_holidays[key]
           } for key in sorted(future_holidays.keys()) ]
-        ctx['annual_holidays'] = annual_qs
+        ctx['group_holidays'] = group_qs.order_by('-start_date')
         ctx['search_form'] = form
         return ctx
 
@@ -253,13 +253,13 @@ class HolidayView(cbv.TemplateView):
 holiday_listing = HolidayView.as_view()
 
 
-class YearlyHolidayUpdateView(cbv.FormView):
-    form_class = forms.YearlyHolidayFormSet
-    template_name = 'personnes/yearly_holiday_update.html'
+class GroupHolidayUpdateView(cbv.FormView):
+    form_class = forms.GroupHolidayFormSet
+    template_name = 'personnes/group_holiday_update.html'
     success_url = '.'
 
     def get_form_kwargs(self):
-        kwargs = super(YearlyHolidayUpdateView, self).get_form_kwargs()
+        kwargs = super(GroupHolidayUpdateView, self).get_form_kwargs()
         qs = models.Holiday.objects.for_service(self.service)
         kwargs['queryset'] = qs
         kwargs['service'] = self.service
@@ -267,7 +267,7 @@ class YearlyHolidayUpdateView(cbv.FormView):
 
     def form_valid(self, form):
         form.save()
-        return super(YearlyHolidayUpdateView, self).form_valid(form)
+        return super(GroupHolidayUpdateView, self).form_valid(form)
 
 
-yearly_holiday_update = YearlyHolidayUpdateView.as_view()
+group_holiday_update = GroupHolidayUpdateView.as_view()

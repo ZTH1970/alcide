@@ -1,8 +1,8 @@
 {% extends "personnes/simple-form.html" %}
 
 {% block appbar %}
-<h2>Congés annuels du {{service_name}}</h2>
-  <a href="..">Retour</a>
+<h2>Congés du {{service_name}}</h2>
+  <a href="..">Retour à la gestion des congés</a>
 {% endblock %}
 
 
@@ -18,7 +18,11 @@
             <tr>
               <td><label class="required">Date de début</label></td>
               <td><label class="required">Date de fin</label></td>
-              <td><label>Pour tous les services</label></td>
+              <td><label>Heure de début</label></td>
+              <td><label>Heure de fin</label></td>
+              <td><label class="required">Type de congé</label></td>
+              <td><label>Commentaire</label></td>
+              <td><label>Tous les services</label></td>
               <td><label>Supprimer</label></td>
             </tr>
           </thead>
@@ -30,6 +34,10 @@
             <tr class="timetable">
               <td id="start-{{ forloop.counter0 }}" class="datepicker" data-before-selector="#end-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.start_date }}</td>
               <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}</td>
+              <td class="timepicker">{{ form.start_time }}</td>
+              <td class="timepicker">{{ form.end_time }}</td>
+              <td>{{ form.holiday_type }} {{ form.holiday_type.errors }}</td>
+              <td>{{ form.comment }}{{ form.comment.errors }}</td>
               <td>{{ form.for_all_services }}</td>
               <td class="delete">{% if form.id.value != None %}{{ form.DELETE }}{% endif %}
                 {% for field in form %}
@@ -48,7 +56,6 @@
       <button class="enable-on-change">Modifier</button>
       <button id="add-form">Ajouter une ligne</button>
       {% endblock %}
-      <a href="..">{% block back-link %}Retour{% endblock %}</a>
     </form>
 {% endblock %}
 

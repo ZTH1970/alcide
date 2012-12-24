@@ -20,7 +20,7 @@ worker_patterns = patterns('calebasse.personnes.views',
 
 holidays_patterns = patterns('calebasse.personnes.views',
     url(r'^$', 'holiday_listing'),
-    url(r'^annuel/$', 'yearly_holiday_update'))
+    url(r'^groupe/$', 'group_holiday_update'))
 
 urlpatterns = patterns('calebasse.personnes.views',
     url(r'^$', 'homepage'),

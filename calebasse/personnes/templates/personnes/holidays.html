@@ -51,18 +51,18 @@
   </table>
 {% endif %}
 
-{% if annual_holidays %}
-<h3>Congés annuels</h3>
+{% if group_holidays %}
+<h3>Congés de groupe</h3>
+<p>
+  <a href="groupe/">Gestion des congés de groupe</a>
+</p>
 <ul>
-  {% for holiday in annual_holidays %}
+  {% for holiday in group_holidays %}
     <li>{{ holiday|capfirst }}</li>
   {% endfor %}
 </ul>
 {% endif %}
 <!-- <button>Gestion des congés annuels</button> -->
-<p>
-  <a href="annuel/">Gestion des congés annuels</a>
-</p>
 
 <h3>Affichage interactif</h3>
 
