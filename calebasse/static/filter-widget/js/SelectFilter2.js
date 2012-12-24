@@ -58,7 +58,7 @@ var SelectFilter = {
         selector_chosen.className = 'selector-chosen';
         var selector_filter = quickElement('p', selector_chosen, gettext('Select your choice(s) and click '));
         selector_filter.className = 'selector-filter';
-        quickElement('img', selector_filter, '', 'src', admin_media_prefix + (is_stacked ? 'img/admin/selector_stacked-add.gif':'img/admin/selector-add.gif'), 'alt', 'Add');
+        quickElement('img', selector_filter, '', 'src', '/static/filter-widget/img/selector-add.gif', 'alt', 'Add');
 
 
         var to_box = quickElement('select', selector_chosen, '', 'id', field_id + '_to', 'multiple', 'multiple', 'size', from_box.size, 'name', from_box.getAttribute('name'));
