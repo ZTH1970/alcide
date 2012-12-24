@@ -1,0 +1,146 @@
+[
+    {
+        "fields": {
+            "for_group": true, 
+            "name": "Jour f\u00e9ri\u00e9"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "for_group": true, 
+            "name": "Cong\u00e9s annuels"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "for_group": true, 
+            "name": "Cong\u00e9s trimestriels"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "RTT"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "RTT et r\u00e9cup\u00e9ration"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "R\u00e9cup\u00e9ration"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "En formation"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Donne une formation"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "R\u00e9union \u00e0 l'ext\u00e9rieur"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Cong\u00e9 exceptionnel"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Cong\u00e9 maladie"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Cong\u00e9 maternit\u00e9"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Heures de d\u00e9l\u00e9gation"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Cong\u00e9 sans solde"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Fin de contrat"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Journ\u00e9e de solidarit\u00e9"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Cong\u00e9 anciennet\u00e9"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "for_group": false, 
+            "name": "Motif inconnu"
+        }, 
+        "model": "ressources.holidaytype", 
+        "pk": 18
+    }
+]
