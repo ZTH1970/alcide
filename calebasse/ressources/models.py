@@ -94,27 +94,20 @@ class TransportCompany(NamedAbstractModel):
         verbose_name_plural = u'Compagnies de transport'
 
 
-class CFTMEACode(NamedAbstractModel):
-    class Meta:
-        verbose_name = u'Code CFTMEA'
-        verbose_name_plural = u'Codes CFTMEA'
-
-
 class UninvoicableCode(models.Model):
     class Meta:
         verbose_name = u'Code de non-facturation'
         verbose_name_plural = u'Codes de non-facturation'
 
 
-class Office(ServiceLinkedAbstractModel):
+class Office(NamedAbstractModel):
     class Meta:
         verbose_name = u'Établissement'
         verbose_name_plural = u'Établissements'
 
     def __unicode__(self):
-        return self.slug
+        return self.name
 
-    slug = models.SlugField(verbose_name='Label')
     description = models.TextField(blank=True, null=True)
 
     # Contact
@@ -124,16 +117,16 @@ class Office(ServiceLinkedAbstractModel):
 
     # Address
     address = models.CharField(max_length=120,
-            verbose_name=u"Adresse")
+            verbose_name=u"Adresse", blank=True, null=True, default=None)
     address_complement = models.CharField(max_length=120,
             blank=True,
             null=True,
             default=None,
             verbose_name=u"Complément d'adresse")
-    zip_code = ZipCodeField(verbose_name=u"Code postal")
-            #verbose_name=u"Code postal")
-    city = models.CharField(max_length=80,
-            verbose_name=u"Ville")
+    zip_code = ZipCodeField(verbose_name=u"Code postal",
+            blank=True, null=True, default=None)
+    city = models.CharField(max_length=80, verbose_name=u"Ville",
+            blank=True, null=True, default=None)
 
     # TODO: add this fields : finess, suite, dm, dpa, genre, categorie, statut_juridique, mft, mt, dmt
 
@@ -337,11 +330,13 @@ class CodeCFTMEA(NamedAbstractModel):
 
     class Meta:
         ordering = ['code']
+        verbose_name = u'Code CFTMEA'
+        verbose_name_plural = u'Codes CFTMEA'
 
 class MDPH(models.Model):
     class Meta:
-        verbose_name = u'MDPH'
-        verbose_name_plural = u'MDPHs'
+        verbose_name = u'Etablissement MDPH'
+        verbose_name_plural = u'Etablissements MDPH'
 
     def __unicode__(self):
         return self.department
@@ -372,6 +367,10 @@ class MDPH(models.Model):
             verbose_name=u"Ville", blank=True, null=True)
 
 class MDPHRequest(models.Model):
+    class Meta:
+        verbose_name = u'Demande MDPH'
+        verbose_name_plural = u'Demandes MDPH'
+
     start_date = models.DateField(verbose_name=u"Date de la demande")
     mdph = models.ForeignKey('ressources.MDPH',
             verbose_name=u"MDPH")
@@ -387,6 +386,10 @@ MDPH_HELP =  Choices(
 )
 
 class MDPHResponse(models.Model):
+    class Meta:
+        verbose_name = u'Réponse MDPH'
+        verbose_name_plural = u'Réponses MDPH'
+
     start_date = models.DateField(verbose_name=u"Date de début")
     end_date = models.DateField(verbose_name=u"Date de fin")
     mdph = models.ForeignKey('ressources.MDPH',
@@ -400,3 +403,13 @@ class MDPHResponse(models.Model):
             verbose_name=u"Nom", blank=True, null=True)
     rate =  models.CharField(max_length=10,
             verbose_name=u"Taux", blank=True, null=True)
+
+
+class HolidayType(NamedAbstractModel):
+    for_group = models.BooleanField(
+            verbose_name=u'Congé de groupe',
+            blank=True)
+
+    class Meta:
+        verbose_name = u'Type de congé'
+        verbose_name_plural = u'Types de congé'
