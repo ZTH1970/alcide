@@ -377,6 +377,7 @@ class AjaxWorkerTabView(TemplateView):
 
     def get_context_data(self, worker_id, **kwargs):
         context = super(AjaxWorkerTabView, self).get_context_data(**kwargs)
+        worker_id = int(worker_id)
 
         time_tables_worker = TimeTable.objects.select_related('worker'). \
                 filter(services=self.service, worker_id=worker_id). \
@@ -401,6 +402,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
 
     def get_context_data(self, worker_id, **kwargs):
         context = super(AjaxWorkerDisponibilityColumnView, self).get_context_data(**kwargs)
+        worker_id = int(worker_id)
 
         time_tables_worker = TimeTable.objects.select_related('worker'). \
                 filter(services=self.service, worker_id=worker_id). \
