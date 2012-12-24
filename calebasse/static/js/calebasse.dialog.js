@@ -98,11 +98,11 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
       /* Form buttons with the '.enable-on-change' class are only enabled if an
        * input or a select of the form is modified. */
       $('form button.enable-on-change, form input[type="submit"]', base).prop('disabled', 'true');
-      $('form input, form select', base).on('change', function () {
+      $('form input, form select, form textarea', base).on('change', function () {
         var form = $(this).closest('form');
         $('button.enable-on-change, form input[type="submit"]', form).enable();
       })
-      $('form input', base).on('keyup', function () {
+      $('form input, form textarea', base).on('keyup', function () {
         var form = $(this).closest('form');
         $('button.enable-on-change, form input[type="submit"]', form).enable();
       })
