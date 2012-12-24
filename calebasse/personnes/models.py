@@ -226,16 +226,38 @@ class TimeTable(BaseModelMixin, models.Model):
                 datetime.combine(date, self.end_time))
 
 class HolidayQuerySet(query.QuerySet):
+    # To grab group holidays:
+    # No worker AND
+    # Either the holiday has no service, that means for all
+    # Or the user must be in the service of the holiday
     def for_worker(self, worker):
         filter_query = models.Q(worker=worker) \
               | models.Q(worker__isnull=True,
-                           service=worker.services.all())
+                           service=None) \
+              | models.Q(worker__isnull=True,
+                           service__in=worker.services.all())
         return self.filter(filter_query)
+
+    def for_worker_id(self, worker_id):
+        worker = None
+        try:
+            worker = Worker.objects.get(pk=worker_id)
+        except:
+            return None
+        filter_query = models.Q(worker=worker) \
+              | models.Q(worker__isnull=True,
+                           service=None) \
+              | models.Q(worker__isnull=True,
+                           service__in=worker.services.all())
+        return self.filter(filter_query)
+
+    def for_type(self, holiday_type):
+        return self.filter(holiday_type=holiday_type)
 
     def for_service(self, service):
         return self.filter(worker__isnull=True) \
                    .filter(models.Q(service=service)
-                          |models.Q(service__isnull=True)) \
+                          |models.Q(service__isnull=True))
 
     def for_service_workers(self, service):
         return self.filter(worker__services=service)
@@ -259,6 +281,8 @@ def time2french(time):
 class Holiday(BaseModelMixin, models.Model):
     objects = PassThroughManager().for_queryset_class(HolidayQuerySet)()
 
+    holiday_type = models.ForeignKey('ressources.HolidayType',
+            verbose_name=u'Type de congé')
     worker = models.ForeignKey(Worker, blank=True, null=True,
             verbose_name=u"Personnel")
     service = models.ForeignKey(Service, blank=True, null=True,
@@ -285,13 +309,17 @@ class Holiday(BaseModelMixin, models.Model):
         ret = ''
         if self.start_date == self.end_date:
             ret = u'le {0}'.format(date_filter(self.start_date, 'j F Y'))
-            if self.start_time and self.end_time:
-                ret += u', de {0} à {1}'.format(time2french(self.start_time),
-                time2french(self.end_time))
+            if self.start_time:
+                ret += u', à partir de {0}'.format(time2french(self.start_time))
+            if self.end_time:
+                ret += u", jusqu'à {0}".format(time2french(self.end_time))
         else:
-            ret = u'du {0} au {1}'.format(
-                    date_filter(self.start_date, 'j F'),
-                    date_filter(self.end_date, 'j F Y'))
+            ret = u'du {0}'.format(date_filter(self.start_date, 'j F Y'))
+            if self.start_time:
+                ret += u' (à partir de {0})'.format(time2french(self.start_time))
+            ret += u' au {0}'.format(date_filter(self.end_date, 'j F Y'))
+            if self.end_time:
+                ret += u" (jusqu'à {0})".format(time2french(self.end_time))
         return ret
 
     def to_interval(self, date):
