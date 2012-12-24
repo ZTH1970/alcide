@@ -5,7 +5,7 @@ from django.forms.models import (inlineformset_factory, modelformset_factory,
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
-from calebasse.ressources.models import WorkerType, Service
+from calebasse.ressources.models import WorkerType, Service, HolidayType
 
 from models import Worker, UserWorker, TimeTable, Holiday
 
@@ -126,6 +126,10 @@ TimetableFormSet = inlineformset_factory(Worker, TimeTable,
             'services', 'week_period', 'week_parity', 'week_rank'))
 
 class BaseHolidayForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BaseHolidayForm, self).__init__(*args, **kwargs)
+        self.fields['holiday_type'].queryset = \
+                HolidayType.objects.filter(for_group=False)
     class Meta:
         widgets = {
                 'comment': forms.Textarea(attrs={'rows': 3}),
@@ -134,7 +138,7 @@ class BaseHolidayForm(forms.ModelForm):
 HolidayFormSet = inlineformset_factory(
         Worker, Holiday,
         form=BaseHolidayForm,
-        fields=('start_date', 'end_date', 'start_time', 'end_time', 'comment'))
+        fields=('start_date', 'end_date', 'start_time', 'end_time', 'holiday_type', 'comment'))
 
 class HolidaySearchForm(forms.Form):
     start_date = forms.DateField(required=False)
@@ -150,25 +154,27 @@ class HolidaySearchForm(forms.Form):
                 raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
         return cleaned_data
 
-class YearlyHolidayBaseFormSet(BaseModelFormSet):
+class GroupHolidayBaseFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         self.service = kwargs.pop('service', None)
         old_form = self.form
         self.form = lambda *args, **kwargs: old_form(*args, service=self.service, **kwargs)
-        super(YearlyHolidayBaseFormSet, self).__init__(*args, **kwargs)
+        super(GroupHolidayBaseFormSet, self).__init__(*args, **kwargs)
 
-class YearlyHolidayForm(forms.ModelForm):
-    for_all_services = forms.BooleanField(required=False)
+class GroupHolidayForm(forms.ModelForm):
+    for_all_services = forms.BooleanField(required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
         self.service = kwargs.pop('service', None)
-        super(YearlyHolidayForm, self).__init__(*args, **kwargs)
+        super(GroupHolidayForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.id:
             self.initial['for_all_services'] = self.instance.service is None
+        self.fields['holiday_type'].queryset = \
+                HolidayType.objects.filter(for_group=True)
 
 
     def save(self, commit=True):
-        instance = super(YearlyHolidayForm, self).save(commit=False)
+        instance = super(GroupHolidayForm, self).save(commit=False)
         if not self.cleaned_data.get('for_all_services', False):
             instance.service = self.service
         if commit:
@@ -177,9 +183,12 @@ class YearlyHolidayForm(forms.ModelForm):
 
     class Meta:
         form = Holiday
+        widgets = {
+                'comment': forms.Textarea(attrs={'rows': 3}),
+        }
 
-YearlyHolidayFormSet = modelformset_factory(Holiday,
+GroupHolidayFormSet = modelformset_factory(Holiday,
         can_delete=True,
-        form=YearlyHolidayForm,
-        formset=YearlyHolidayBaseFormSet,
-        fields=('start_date', 'end_date'))
+        form=GroupHolidayForm,
+        formset=GroupHolidayBaseFormSet,
+        fields=('start_date', 'end_date', 'start_time', 'end_time', 'holiday_type', 'comment'))
