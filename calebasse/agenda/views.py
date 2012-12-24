@@ -383,8 +383,7 @@ class AjaxWorkerTabView(TemplateView):
                 filter(services=self.service, worker_id=worker_id). \
                 for_today(self.date). \
                 order_by('start_date')
-        holidays_worker = Holiday.objects.select_related('worker'). \
-                filter(worker_id=worker_id). \
+        holidays_worker = Holiday.objects.for_worker_id(worker_id). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
         occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
@@ -408,8 +407,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
                 filter(services=self.service, worker_id=worker_id). \
                 for_today(self.date). \
                 order_by('start_date')
-        holidays_worker = Holiday.objects.select_related('worker'). \
-                filter(worker_id=worker_id). \
+        holidays_worker = Holiday.objects.for_worker_id(worker_id). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
         occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
