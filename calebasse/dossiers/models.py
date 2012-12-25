@@ -392,6 +392,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                 return False
         return True
 
+    def delete(self, *args, **kwargs):
+        if self.can_be_deleted():
+            super(PatientRecord, self).delete(*args, **kwargs)
+
     def set_state(self, status, author, date_selected=None, comment=None):
         if not author:
             raise Exception('Missing author to set state')
