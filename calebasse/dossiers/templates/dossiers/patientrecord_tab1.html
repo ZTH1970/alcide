@@ -64,7 +64,7 @@
     <div class="etat">
       <h4>État courant du dossier :  {{ current_state.status.name.lower }}</h4>
       <p>depuis le : {{ current_state.date_selected|date:"d/m/Y" }}</p>
-      {% if current_state.comment %}<p><label>Commentaire :</label>{{ current_state.comment }}</p>{% endif %}
+      {% if current_state.comment %}<p><label>Commentaire :</label> {{ current_state.comment }}</p>{% endif %}
       {% for state in status %}
       <button type="button" id="{{ state.0 }}">{{ state.1 }}</button>
       {% endfor %}
