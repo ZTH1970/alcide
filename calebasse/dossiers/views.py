@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import DeleteView, FormMixin
+from django.contrib import messages
 
 from calebasse import cbv
 from calebasse.dossiers import forms
@@ -314,6 +317,11 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
         ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
         return ctx
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, u'Modification enregistrée avec succès.')
+        return super(PatientRecordView, self).form_valid(form)
+
 
 patient_record = PatientRecordView.as_view()
 
