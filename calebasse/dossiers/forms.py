@@ -38,6 +38,14 @@ class StateForm(Form):
     comment = forms.CharField(label='Commentaire',
             required=False, widget=forms.Textarea)
 
+    def clean_date(self):
+        patient = PatientRecord.objects.get(id=self.cleaned_data['patient_id'])
+        date_selected = self.cleaned_data['date']
+        current_state = patient.get_state()
+        if date_selected < current_state.date_selected.date():
+            raise forms.ValidationError(u"La date ne peut pas être antérieure à celle du précédent changement d'état.")
+        return self.cleaned_data['date']
+
 class NewPatientRecordForm(ModelForm):
     date_selected = forms.DateField(label=u"Date de contact", initial=date.today())
 
