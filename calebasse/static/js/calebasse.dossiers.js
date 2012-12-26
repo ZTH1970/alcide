@@ -2,12 +2,15 @@
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
             function () {
+                var patient_id = $(this).data('id');
+                var service_id = $(this).data('service-id');
                 function onsuccess(response, status, xhr, form) {
                     var parse = $(response);
                     if ($('.errorlist', parse).length != 0) {
                         $('#change-record').html(response);
                         $('#change-record form').ajaxForm({
                             success: onsuccess,
+                            data: { patient_id: patient_id,  state_type: state_type, service_id: service_id }
                         });
                         console.log('error');
                     } else {
@@ -17,7 +20,7 @@ function state_dialog(url, state_title, state_type) {
                 }
                 $('form', this).ajaxForm({
                     success: onsuccess,
-                    data: { patient_id: $(this).data('id'),  state_type: state_type, service_id: $(this).data('service-id') }
+                    data: { patient_id: patient_id,  state_type: state_type, service_id: service_id }
                 });
                 $(this).dialog({title: "Changement - " + state_title,
                     width: '500px',
