@@ -87,7 +87,7 @@
             <option value="{{ state_name }}" {% if state_name == appointment.validation.1.state_name %}selected{% endif %}>{{ display_state_name }}</option>
             {% endfor %}
           </select>
-          <button {% if appointment.validation.1 %}disabled{% endif %}>Modifier</button>
+          <button>Modifier</button>
           </form>
         {% endif %}
      </div>
