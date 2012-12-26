@@ -93,6 +93,10 @@ function state_dialog(url, state_title, state_type) {
           click: function() { $(this).dialog("close"); } }]}
         );
     });
+    if (location.hash.indexOf('histo') != -1) {
+      $('#patientrecord-history').click();
+      location.hash = '';
+    }
 
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',
@@ -241,11 +245,11 @@ function state_dialog(url, state_title, state_type) {
 
     $('.update-patient-state-btn').click(function() {
         generic_ajaxform_dialog('state/' + $(this).data('id') + '/update', 'Modifier un état',
-            '#ajax-dlg', '500px', 'Modifier');
+            '#ajax-dlg', '500px', 'Modifier', '#histo');
     });
     $('.del-patient-state-btn').click(function() {
         generic_ajaxform_dialog('state/' + $(this).data('id') + '/del', 'Supprimer un état',
-            '#ajax-dlg', '500px', 'Supprimer');
+            '#ajax-dlg', '500px', 'Supprimer', '#histo');
     });
 
 

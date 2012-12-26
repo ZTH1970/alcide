@@ -13,7 +13,12 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
           } else {
             console.log('success');
             if (redirectToUrl) {
-              window.location = redirectToUrl;
+              if (redirectToUrl.indexOf('#') == 0) {
+                window.location.hash = redirectToUrl.substr(1);
+                window.location.reload(true);
+              } else {
+                window.location = redirectToUrl;
+              }
             } else if (redirectToUrl == false) {
               /* if redirectToUrl is set to false then look for the redirection
                * url in the actual page content.
