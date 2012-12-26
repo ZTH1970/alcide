@@ -40,6 +40,28 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
       });
 }
 
+function select_add_dialog(opts, $form, form_action)
+{
+  var add_form = $form;
+
+  function on_success(response, status, xhr, form) {
+    var parsed_response= $(response);
+    if ($('.errorlist', parsed_response).length != 0) {
+      $(add_form).html($(parsed_response).find('#form-content'));
+    } else {
+      new_id = $('.new-object .col-id', parsed_response).text();
+      new_label = $('.new-object .col-label', parsed_response).text();
+      $(opts.add_select).append('<option value="' + new_id + '">' + new_label + '</option>');
+      $(opts.add_select).val(new_id);
+      $(opts.add_select).trigger('change');
+      $(add_form).parent().dialog('close');
+    }
+  }
+
+  $form.attr('action', form_action);
+  $form.ajaxForm({success: on_success});
+}
+
 (function ($) {
   $.fn.dialogButton = function (opts) {
     var id = $(this).attr('id');
@@ -55,6 +77,11 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
       } else {
           $form.attr('action', form_action);
       }
+
+      if (opts.add_select) {
+          select_add_dialog(opts, $form, form_action);
+      }
+
       var buttons = [{
           text: default_button,
           click: function () {
@@ -91,7 +118,8 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
           url: $button.data('url') || $button.closest('a').attr('href'),
           default_button: $button.data('default-button') || $button.text(),
           title: $button.attr('title') || $button.text(),
-          next_url: $button.data('next-url') || false
+          next_url: $button.data('next-url') || false,
+          add_select: $button.data('add-select') || false
         });
       });
 
