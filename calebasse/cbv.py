@@ -90,6 +90,8 @@ class ListView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
         ctx.update(super(ModelNameMixin, self).get_context_data(**kwargs))
         ctx.update(super(ServiceViewMixin, self).get_context_data(**kwargs))
         ctx.update(super(list_cbv.ListView, self).get_context_data(**kwargs))
+        if self.request.GET.get('new_id'):
+            ctx['new_id'] = int(self.request.GET.get('new_id'))
         return ctx
 
 class CreateView(AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,

@@ -45,7 +45,7 @@ def list_view(request, service, model_name):
             template_name='ressources/list.html')
     return view(request, service=service)
 
-class RessourceCreateView(ReturnToObjectMixin, CreateView):
+class RessourceCreateView(CreateView):
     template_name="ressources/new.html"
     template_name_suffix='_new'
 
@@ -58,7 +58,7 @@ class RessourceCreateView(ReturnToObjectMixin, CreateView):
         if self.request.GET.has_key('next_url'):
             return self.request.GET['next_url']
         else:
-            return super(RessourceCreateView, self).get_success_url()
+            return '../?new_id=%s' % self.object.id
 
 def create_view(request, service, model_name):
     model = get_ressource_model(model_name)
