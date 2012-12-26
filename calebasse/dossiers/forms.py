@@ -9,7 +9,7 @@ import django.contrib.admin.widgets
 from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
     CmppHealthCareTreatment, CmppHealthCareDiagnostic,
-    SessadHealthCareNotification)
+    SessadHealthCareNotification, FileState)
 from calebasse.dossiers.states import STATE_CHOICES
 from calebasse.ressources.models import (HealthCenter, LargeRegime,
     CodeCFTMEA, SocialisationDuration, MDPHRequest, MDPHResponse)
@@ -45,6 +45,29 @@ class StateForm(Form):
         if date_selected < current_state.date_selected.date():
             raise forms.ValidationError(u"La date ne peut pas être antérieure à celle du précédent changement d'état.")
         return self.cleaned_data['date']
+
+class PatientStateForm(ModelForm):
+    date_selected = forms.DateField(label=u'Date')
+    comment = forms.CharField(label='Commentaire',
+            required=False, widget=forms.Textarea)
+
+    class Meta:
+        model = FileState
+        fields = ('status', 'date_selected', 'comment')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
+                }
+
+    def clean_date_selected(self):
+        date_selected = self.cleaned_data['date_selected']
+        next_state = self.instance.get_next_state()
+        if self.instance.previous_state:
+            if date_selected < self.instance.previous_state.date_selected.date():
+                raise forms.ValidationError(u"La date ne peut pas être antérieure à celle du précédent changement d'état.")
+        if next_state:
+            if date_selected > next_state.date_selected.date():
+                raise forms.ValidationError(u"La date ne peut pas être postérieure à celle du changement d'état suivant.")
+        return self.cleaned_data['date_selected']
 
 class NewPatientRecordForm(ModelForm):
     date_selected = forms.DateField(label=u"Date de contact", initial=date.today())

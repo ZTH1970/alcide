@@ -236,6 +236,16 @@ function state_dialog(url, state_title, state_type) {
             '#ajax-dlg', '500px', 'Supprimer');
     });
 
+    $('.update-patient-state-btn').click(function() {
+        generic_ajaxform_dialog('state/' + $(this).data('id') + '/update', 'Modifier un état',
+            '#ajax-dlg', '500px', 'Modifier');
+    });
+    $('.del-patient-state-btn').click(function() {
+        generic_ajaxform_dialog('state/' + $(this).data('id') + '/del', 'Supprimer un état',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+
+
       $('.place_of_life').click(function() {
           if ((this.checked) == true) {
               var value = "true";

@@ -157,7 +157,7 @@ class FileState(models.Model):
 
     patient = models.ForeignKey('dossiers.PatientRecord',
         verbose_name=u'Dossier patient')
-    status = models.ForeignKey('dossiers.Status')
+    status = models.ForeignKey('dossiers.Status', verbose_name=u'Statut')
     created = models.DateTimeField(u'Création', auto_now_add=True)
     date_selected = models.DateTimeField()
     author = \
@@ -181,6 +181,16 @@ class FileState(models.Model):
 
     def __unicode__(self):
         return self.status.name + ' ' + str(self.date_selected)
+
+    def delete(self, *args, **kwargs):
+        next_state = self.get_next_state()
+        if next_state and self.previous_state:
+            next_state.previous_state = self.previous_state
+            next_state.save()
+        if self.patient.last_state == self:
+            self.patient.last_state = self.previous_state
+            self.patient.save()
+        super(FileState, self).delete(*args, **kwargs)
 
 class PatientAddress(models.Model):
 
@@ -270,7 +280,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             verbose_name=u"N° dossier papier",
             null=True, blank=True)
     last_state = models.ForeignKey(FileState, related_name='+',
-            null=True)
+            null=True, on_delete=models.SET_NULL)
     comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
     pause = models.BooleanField(verbose_name=u"Pause facturation",

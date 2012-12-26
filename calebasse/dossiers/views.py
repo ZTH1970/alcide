@@ -525,3 +525,20 @@ delete_mdph_response = \
     cbv.DeleteView.as_view(model=MDPHResponse,
         template_name = 'dossiers/generic_confirm_delete.html',
         success_url = '../../view#tab=6')
+
+
+class UpdatePatientStateView(cbv.UpdateView):
+    def get(self, request, *args, **kwargs):
+        if kwargs.has_key('patientrecord_id'):
+            request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(UpdatePatientStateView, self).get(request, *args, **kwargs)
+
+update_patient_state = \
+    UpdatePatientStateView.as_view(model=FileState,
+        template_name = 'dossiers/generic_form.html',
+        success_url = '../../view#tab=0',
+        form_class=forms.PatientStateForm)
+delete_patient_state = \
+    cbv.DeleteView.as_view(model=FileState,
+        template_name = 'dossiers/generic_confirm_delete.html',
+        success_url = '../../view#tab=0')
