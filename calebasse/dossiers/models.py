@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import os
 
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django import forms
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -405,6 +407,16 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     def delete(self, *args, **kwargs):
         if self.can_be_deleted():
             super(PatientRecord, self).delete(*args, **kwargs)
+
+    def save(self, **kwargs):
+        if settings.PATIENT_FILES_BASE_DIRECTORY:
+            dirname = self.last_name.upper()
+            if self.first_name:
+                dirname = '%s %s' % (dirname, self.first_name)
+            patient_files_directory = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, dirname)
+            if not os.path.exists(patient_files_directory):
+                os.makedirs(patient_files_directory)
+        super(PatientRecord, self).save(**kwargs)
 
     def set_state(self, status, author, date_selected=None, comment=None):
         if not author:

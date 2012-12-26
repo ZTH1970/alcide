@@ -234,3 +234,6 @@ AJAX_LOOKUP_CHANNELS = {
 
 # Default URL after login
 LOGIN_REDIRECT_URL = '/'
+
+# Base directory for generated patient files
+PATIENT_FILES_BASE_DIRECTORY = None
