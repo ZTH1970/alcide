@@ -486,7 +486,6 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
     <dt><b>{{ state.date_selected|date:"d/m/Y" }}</b> <small>(date info: {{ state.created|date:"d/m/Y" }})</small></dt>
     <dd>
     <p><b>{{ state.status.name }}</b>; <label>commentaire:</label> {% if state.comment %}{{ state.comment }}{% else %}-{% endif %}</p>
-    <p>changement par {{ state.author }}</p>
     </dd>
     {% endfor%}
    </dl>
