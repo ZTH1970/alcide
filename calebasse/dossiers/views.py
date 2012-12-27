@@ -570,7 +570,7 @@ class GenerateRtfFormView(cbv.FormView):
         template_filename = form.cleaned_data.get('template_filename')
         dest_filename = datetime.now().strftime('%Y-%m-%d--%H:%M') + '--' + template_filename
         from_path = os.path.join(settings.RTF_TEMPLATES_DIRECTORY, template_filename)
-        to_path = os.path.join(patient.get_ondisk_directory(), dest_filename)
+        to_path = os.path.join(patient.get_ondisk_directory(self.service.name), dest_filename)
         vars = {'AD11': '', 'AD12': '', 'AD13': '', 'AD14': '', 'AD15': '',
                 'JOU1': datetime.today().strftime('%d/%m/%Y'),
                 'VIL1': u'Saint-Étienne',

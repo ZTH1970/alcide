@@ -408,7 +408,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         if self.can_be_deleted():
             super(PatientRecord, self).delete(*args, **kwargs)
 
-    def get_ondisk_directory(self):
+    def get_ondisk_directory(self, service):
         if not settings.PATIENT_FILES_BASE_DIRECTORY:
             return None
 
@@ -423,9 +423,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             dirnames.append(dirname)
 
         for i, dirname in enumerate(dirnames):
-            fullpath = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, dirname)
+            fullpath = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, service, dirname)
             try:
-                next_fullpath = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, dirnames[i+1])
+                next_fullpath = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, service, dirnames[i+1])
             except IndexError:
                 pass
             else:
