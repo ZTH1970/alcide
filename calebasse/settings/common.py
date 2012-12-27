@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Django settings for calebasse project.
 
 import os
@@ -237,6 +239,27 @@ LOGIN_REDIRECT_URL = '/'
 
 # Base directory for generated patient files
 PATIENT_FILES_BASE_DIRECTORY = None
+
+# Patient subdirectories
+PATIENT_SUBDIRECTORIES = (
+    u'Assistante sociale',
+    u'Consultation',
+    u'Courriers',
+    u'Demande',
+    u'Demandes prises en charge',
+    u'Ergothérapie',
+    u'Groupe',
+    u'Kinésithérapie',
+    u'Logico-mathématiques',
+    u'Neuro-psychologie',
+    u'Orientation',
+    u'Orthophonie',
+    u'Psychologie',
+    u'Psychomotricité',
+    u'Psychopédagogue',
+    u'Synthèses',
+    u'TCC',
+)
 
 # RTF templates directory
 RTF_TEMPLATES_DIRECTORY = None

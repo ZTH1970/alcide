@@ -409,17 +409,39 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             super(PatientRecord, self).delete(*args, **kwargs)
 
     def get_ondisk_directory(self):
-        if settings.PATIENT_FILES_BASE_DIRECTORY:
-            dirname = self.last_name.upper()
-            if self.first_name:
-                dirname = '%s %s' % (dirname, self.first_name)
-            return os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, dirname)
-        return None
+        if not settings.PATIENT_FILES_BASE_DIRECTORY:
+            return None
+
+        dirnames = []
+        dirname = self.last_name.upper()
+        dirnames.append(dirname)
+        if self.first_name:
+            dirname = '%s %s' % (dirname, self.first_name)
+            dirnames.append(dirname)
+        if self.paper_id:
+            dirname = '%s %s' % (dirname, self.paper_id)
+            dirnames.append(dirname)
+
+        for i, dirname in enumerate(dirnames):
+            fullpath = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, dirname)
+            try:
+                next_fullpath = os.path.join(settings.PATIENT_FILES_BASE_DIRECTORY, dirnames[i+1])
+            except IndexError:
+                pass
+            else:
+                 if os.path.exists(fullpath) and not os.path.exists(next_fullpath):
+                     os.rename(fullpath, next_fullpath)
+                 continue
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+            for subdir in settings.PATIENT_SUBDIRECTORIES:
+                subdir_fullpath = os.path.join(fullpath, subdir)
+                if not os.path.exists(subdir_fullpath):
+                    os.makedirs(subdir_fullpath)
+        return fullpath
 
     def save(self, **kwargs):
-        patient_files_directory = self.get_ondisk_directory()
-        if not os.path.exists(patient_files_directory):
-            os.makedirs(patient_files_directory)
+        self.get_ondisk_directory()
         super(PatientRecord, self).save(**kwargs)
 
     def set_state(self, status, author, date_selected=None, comment=None):
