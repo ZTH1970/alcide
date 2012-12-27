@@ -60,6 +60,26 @@ function enable_events(base) {
           return false;
       });
       $(base).find('#print-button').click(function() { window.print(); });
+
+      $('.generate-mail-btn', base).click(function() {
+        var url = '../../dossiers/' + $(this).data('dossier-id') + '/generate?event-id=' + $(this).data('occurence-id');
+        $('#ajax-dlg').load(url,
+          function () {
+            $(this).dialog({title: 'Générer un courrier', width: '500px',
+                      buttons: [ { text: "Fermer",
+                          click: function() { $(this).dialog("close"); } },
+                      { text: "Générer",
+                          click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
+             $(this).find('.addresses input[type=radio]').change(function() {
+               var address = $(this).data('contact-first-name') + ' ' + $(this).data('contact-last-name') + '\n';
+               address += $(this).data('address-number') + ' ' + $(this).data('address-street') + '\n';
+               address += $(this).data('address-zip-code') + ' ' + $(this).data('address-city')
+               $('#id_address').val(address);
+             });
+             $('.addresses input[type=radio]').first().click();
+          });
+        return false;
+      });
 }
 
 function reorder_disponibility_columns() {

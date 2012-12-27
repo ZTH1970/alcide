@@ -1,0 +1,65 @@
+{% load widget_tweaks %}
+
+<form action="{{ request.get_full_path }}" method="post">
+  {% csrf_token %}
+
+  Modèle : {{ form.template_filename }}
+
+<h3>Patient</h3>
+
+<input type="hidden" name="first_name" value="{{ object.first_name }}" />
+<input type="hidden" name="last_name" value="{{ object.last_name }}" />
+<input type="hidden" name="birthdate" value="{{ object.birthdate|date:"d/m/Y" }}" />
+
+<ul>
+ <li>{{ object.first_name }} <span class="lastname">{{ object.last_name }}</span></li>
+ {% if object.birthdate %}
+ <li>Date de naissance : {{ object.birthdate|date:"d/m/Y" }}</li>
+ {% endif %}
+</ul>
+
+<h3>Adresse</h3>
+
+<ul class="addresses">
+  {% for address in object.addresses.all %}
+  {% if address.place_of_life %}<li>{{ address.display_name }}
+  <ul>
+    {% for contact in address.patientcontact_set.all  %}
+    <li><input type="radio" name="contact" id="contact_{{ address.id }}_{{ contact.id }}"
+               data-address-street="{{ address.street }}"
+               data-address-number="{{ address.number }}"
+               data-address-zip-code="{{ address.zip_code }}"
+               data-address-city="{{ address.city }}"
+               data-contact-first-name="{{ contact.first_name }}"
+               data-contact-last-name="{{ contact.last_name }}"
+       ><label for="contact_{{ address.id }}_{{ contact.id }}">{{ contact.first_name }} <span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</label></input></li>
+    {% endfor %}
+  </ul>
+  </li>{% endif %}
+  {% endfor %}
+</ul>
+
+{{ form.address }}
+
+{% if appointment %}
+<h3>Rendez-vous</h3>
+
+<input type="hidden" name="appointment_date" value="{{ appointment.date }}" />
+<input type="hidden" name="appointment_begin_hour" value="{{ appointment.begin_hour }}" />
+<input type="hidden" name="appointment_intervenants" value="{% for worker in appointment.workers %}{{ worker.first_name }} {{ worker.last_name }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}" />
+
+<ul>
+ <li>Date : {{ appointment.date }}</li>
+ <li>Heure : {{ appointment.begin_hour }}</li>
+ {% if appointment.workers %}
+ <li>Intervenant(s) : 
+      {% for worker in appointment.workers %}
+        {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+      {% endfor %}
+ </li>
+ {% endif %}
+</ul>
+
+{% endif %}
+
+</form>

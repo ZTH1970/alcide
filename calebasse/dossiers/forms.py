@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from datetime import date
 
 from django import forms
+from django.conf import settings
 from django.forms import ModelForm, Form
 import django.contrib.admin.widgets
 
@@ -310,3 +313,22 @@ class MDPHResponseForm(ModelForm):
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
                 }
+
+class AvailableRtfTemplates:
+    def __iter__(self):
+        if not settings.RTF_TEMPLATES_DIRECTORY:
+            return iter([])
+        templates = []
+        for filename in os.listdir(settings.RTF_TEMPLATES_DIRECTORY):
+            templates.append((filename, filename[:-4]))
+        return iter(templates)
+
+class GenerateRtfForm(Form):
+    template_filename = forms.ChoiceField(choices=AvailableRtfTemplates())
+    address = forms.CharField(widget=forms.Textarea(attrs={'rows':5}))
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    birthdate = forms.CharField()
+    appointment_date = forms.CharField()
+    appointment_begin_hour = forms.CharField()
+    appointment_intervenants = forms.CharField()

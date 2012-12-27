@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from datetime import datetime
 
+from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic.edit import DeleteView, FormMixin
 from django.contrib import messages
 
 from calebasse import cbv
+from calebasse.doc_templates import make_doc_from_template
 from calebasse.dossiers import forms
 from calebasse.agenda.models import Occurrence
+from calebasse.agenda.appointments import Appointment
 from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
         CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare)
@@ -542,3 +547,44 @@ delete_patient_state = \
     cbv.DeleteView.as_view(model=FileState,
         template_name = 'dossiers/generic_confirm_delete.html',
         success_url = '../../view#tab=0')
+
+
+class GenerateRtfFormView(cbv.FormView):
+    template_name = 'dossiers/generate_rtf_form.html'
+    form_class = forms.GenerateRtfForm
+    success_url = './view#tab=0'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(GenerateRtfFormView, self).get_context_data(**kwargs)
+        ctx['object'] = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        ctx['service_id'] = self.service.id
+        if self.request.GET.get('event-id'):
+            appointment = Appointment()
+            occurrence = Occurrence.objects.get(id=self.request.GET.get('event-id'))
+            appointment.init_from_occurrence(occurrence, self.service)
+            ctx['appointment'] = appointment
+        return ctx
+
+    def form_valid(self, form):
+        patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        template_filename = form.cleaned_data.get('template_filename')
+        dest_filename = datetime.now().strftime('%Y-%m-%d--%H:%M') + '--' + template_filename
+        from_path = os.path.join(settings.RTF_TEMPLATES_DIRECTORY, template_filename)
+        to_path = os.path.join(patient.get_ondisk_directory(), dest_filename)
+        vars = {'AD11': '', 'AD12': '', 'AD13': '', 'AD14': '', 'AD15': '',
+                'JOU1': datetime.today().strftime('%d/%m/%Y'),
+                'VIL1': u'Saint-Étienne',
+                'PRE1': form.cleaned_data.get('first_name'),
+                'NOM1': form.cleaned_data.get('last_name'),
+                'DPA1': form.cleaned_data.get('appointment_intervenants')
+               }
+        for i, line in enumerate(form.cleaned_data.get('address').splitlines()):
+            vars['AD%d' % (11+i)] = line
+        make_doc_from_template(from_path, to_path, vars)
+
+        response = HttpResponse(mimetype='text/rtf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % dest_filename
+        response.write(file(to_path).read())
+        return response
+
+generate_rtf_form = GenerateRtfFormView.as_view()

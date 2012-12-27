@@ -48,6 +48,7 @@ class Appointment(object):
         self.length = delta.seconds / 60
         self.title = occurrence.title
         services = occurrence.event.services.all()
+        self.date = occurrence.start_time.date()
         self.__set_time(time(occurrence.start_time.hour, occurrence.start_time.minute))
         for e_service in services:
             if e_service != service:

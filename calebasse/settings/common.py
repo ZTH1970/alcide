@@ -237,3 +237,6 @@ LOGIN_REDIRECT_URL = '/'
 
 # Base directory for generated patient files
 PATIENT_FILES_BASE_DIRECTORY = None
+
+# RTF templates directory
+RTF_TEMPLATES_DIRECTORY = None
