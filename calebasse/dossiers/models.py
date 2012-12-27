@@ -440,10 +440,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     os.makedirs(subdir_fullpath)
         return fullpath
 
-    def save(self, **kwargs):
-        self.get_ondisk_directory()
-        super(PatientRecord, self).save(**kwargs)
-
     def set_state(self, status, author, date_selected=None, comment=None):
         if not author:
             raise Exception('Missing author to set state')
