@@ -61,6 +61,7 @@ function state_dialog(url, state_title, state_type) {
         window.location.href = window.location.pathname;
         return false;
     });
+    $('#print-button').click(function() { window.print(); });
 
     $('#close-patientrecord').click(function() {
         state_dialog('update-state', 'Clore', 'CLOS');

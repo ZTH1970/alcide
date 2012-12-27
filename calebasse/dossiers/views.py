@@ -6,6 +6,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
+from django.db import models
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic.edit import DeleteView, FormMixin
 from django.contrib import messages
@@ -593,3 +594,69 @@ class GenerateRtfFormView(cbv.FormView):
             return HttpResponseRedirect('file://' + client_filepath)
 
 generate_rtf_form = GenerateRtfFormView.as_view()
+
+
+class PatientRecordsQuotationsView(cbv.ListView):
+    model = PatientRecord
+    template_name = 'dossiers/quotations.html'
+
+    def get_queryset(self):
+        form = forms.QuotationsForm(data=self.request.GET or None)
+        qs = super(PatientRecordsQuotationsView, self).get_queryset()
+        without_quotations = self.request.GET.get('without_quotations')
+        if without_quotations:
+            qs = qs.filter(mises_1=None).filter(mises_2=None).filter(mises_3=None)
+        states = self.request.GET.getlist('states')
+        if states:
+            status_types = ['BILAN', 'SURVEILLANCE', 'SUIVI']
+            for state in states:
+                status_types.append(STATE_CHOICES_TYPE[state])
+            qs = qs.filter(last_state__status__type__in=status_types)
+        else:
+            qs = qs.filter(last_state__status__type__in='')
+
+        qs_events = Occurrence.objects.select_related('event')
+        try:
+            date_actes_start = datetime.strptime(form.data['date_actes_start'], "%d/%m/%Y")
+            qs_events = qs_events.filter(models.Q(start_time__gte=date_actes_start))
+        except (ValueError, KeyError):
+            date_actes_start = None
+        try:
+            date_actes_end = datetime.strptime(form.data['date_actes_end'], "%d/%m/%Y")
+            qs_events = qs_events.filter(models.Q(end_time__lte=date_actes_end))
+        except (ValueError, KeyError):
+            date_actes_end = None
+
+        if date_actes_start or date_actes_end:
+            qs = qs.filter(id__in=[x.event.eventact.patient.id for x in qs_events])
+
+        qs = qs.filter(service=self.service).order_by('last_name')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordsQuotationsView, self).get_context_data(**kwargs)
+        ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None)
+        ctx['patient_records'] = []
+        if self.request.GET:
+            for patient_record in ctx['object_list'].filter():
+                next_rdv = get_next_rdv(patient_record)
+                last_rdv = get_last_rdv(patient_record)
+                current_state = patient_record.get_current_state()
+                if STATES_MAPPING.has_key(current_state.status.type):
+                    state = STATES_MAPPING[current_state.status.type]
+                else:
+                    state = current_state.status.name
+                state_class = current_state.status.type.lower()
+                ctx['patient_records'].append(
+                        {
+                            'object': patient_record,
+                            'state': state,
+                            'state_class': state_class
+                            }
+                        )
+                state = state.replace(' ', '_')
+                state = state.replace("'", '')
+
+        return ctx
+
+patientrecord_quotations = PatientRecordsQuotationsView.as_view()

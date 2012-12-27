@@ -62,3 +62,7 @@ div.summary {
 .print-only {
   display: inherit;
 }
+
+div#sidebar {
+  display: none;
+}

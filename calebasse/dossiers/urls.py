@@ -27,11 +27,13 @@ from views import (patientrecord_home, patient_record, state_form,
         new_mdph_response,
         update_mdph_response,
         delete_mdph_response,
-        generate_rtf_form)
+        generate_rtf_form,
+        patientrecord_quotations)
 from forms import EditPatientRecordForm
 
 urlpatterns = patterns('',
         url(r'^$', patientrecord_home),
+        url(r'^quotations$', patientrecord_quotations),
         url(r'^new$', new_patient_record),
         url(r'^(?P<pk>\d+)/view$', patient_record),
         url(r'^(?P<pk>\d+)/delete$', patientrecord_delete),

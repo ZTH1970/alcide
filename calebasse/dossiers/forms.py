@@ -332,3 +332,11 @@ class GenerateRtfForm(Form):
     appointment_date = forms.CharField()
     appointment_begin_hour = forms.CharField()
     appointment_intervenants = forms.CharField()
+
+class QuotationsForm(Form):
+    states = forms.MultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}),
+            choices=STATE_CHOICES, initial=(2,3,4))
+    date_actes_start = forms.DateField(label=u'Date')
+    date_actes_end = forms.DateField(label=u'Date')
+    without_quotations = forms.BooleanField()
