@@ -240,6 +240,9 @@ LOGIN_REDIRECT_URL = '/'
 # Base directory for generated patient files
 PATIENT_FILES_BASE_DIRECTORY = None
 
+# Client side base directory for generated patient files
+CLIENT_SIDE_PATIENT_FILES_BASE_DIRECTORY = None
+
 # Patient subdirectories
 PATIENT_SUBDIRECTORIES = (
     u'Assistante sociale',

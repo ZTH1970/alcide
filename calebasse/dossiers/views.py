@@ -582,9 +582,14 @@ class GenerateRtfFormView(cbv.FormView):
             vars['AD%d' % (11+i)] = line
         make_doc_from_template(from_path, to_path, vars)
 
-        response = HttpResponse(mimetype='text/rtf')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % dest_filename
-        response.write(file(to_path).read())
-        return response
+        client_dir = patient.get_client_side_directory(self.service.name)
+        if not client_dir:
+            response = HttpResponse(mimetype='text/rtf')
+            response['Content-Disposition'] = 'attachment; filename="%s"' % dest_filename
+            response.write(file(to_path).read())
+            return response
+        else:
+            client_filepath = os.path.join(client_dir, dest_filename)
+            return HttpResponseRedirect('file://' + client_filepath)
 
 generate_rtf_form = GenerateRtfFormView.as_view()
