@@ -316,7 +316,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             verbose_name=u"Axe II : facteurs organiques",
             null=True, blank=True, default=None)
     mises_3 = models.ManyToManyField('ressources.CodeCFTMEA', related_name="mises3",
-            verbose_name=u"Axe II : facteurs environementaux",
+            verbose_name=u"Axe II : facteurs environnementaux",
             null=True, blank=True, default=None)
 
     # Inscription motive
