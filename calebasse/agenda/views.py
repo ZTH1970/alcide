@@ -418,6 +418,6 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         occurrences_workers = {worker.id: occurrences_worker}
         holidays_workers = {worker.id: holidays_worker}
 
-        context['disponibility'] = Occurrence.objects.daily_disponiblity(context['date'],
+        context['disponibility'] = Occurrence.objects.daily_disponibility(context['date'],
                 occurrences_workers, [worker], time_tables_workers, holidays_workers)
         return context

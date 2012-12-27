@@ -122,7 +122,7 @@ class OccurrenceManager(models.Manager):
                 qs = qs.filter(event__event_type=event_type)
         return qs
 
-    def daily_disponiblity(self, date, occurrences, participants, time_tables, holidays):
+    def daily_disponibility(self, date, occurrences, participants, time_tables, holidays):
         result = dict()
         quarter = 0
         occurrences_set = {}
