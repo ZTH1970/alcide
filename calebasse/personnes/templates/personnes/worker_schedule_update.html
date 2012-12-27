@@ -85,13 +85,7 @@
               <td class="timepicker">{{ form.end_time }}{{ form.end_time.errors }}</td>
               <td id="start-{{ forloop.counter0 }}" class="datepicker" data-before-selector="#end-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.start_date }}{{ form.start_date.errors }}</td>
               <td id="end-{{ forloop.counter0 }}" class="datepicker" data-after-selector="#start-{{ forloop.counter0 }}" data-number-of-months="3">{{ form.end_date }}{{ form.end_date.errors }}</td>
-              <td class="periodicity">
-                <div>
-                  <div>{{ form.week_period }}{{ form.week_period.errors }}</div>
-                  <div>{{ form.week_parity }}{{ form.week_parity.errors }}</div>
-                  <div>{{ form.week_rank }}{{ form.week_rank.errors }}</div>
-                </div>
-              </td>
+              <td>{{ form.periodicity }}{{ form.periodicity.errors }}</td>
               <td>{% if form.id.value %}{{ form.DELETE }}{% endif %}
                 {% for field in form %}
                 {% if field.is_hidden %}

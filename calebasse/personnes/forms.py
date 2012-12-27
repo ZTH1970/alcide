@@ -111,19 +111,55 @@ class WorkerServiceForm(forms.ModelForm):
                 'services': forms.CheckboxSelectMultiple,
         }
 
+PERIOD_LIST_TO_FIELDS = [(1, None, None),
+(2, None, None),
+(3, None, None),
+(4, None, None),
+(5, None, None),
+(None, 0, None),
+(None, 1, None),
+(None, 2, None),
+(None, 3, None),
+(None, 4, None),
+(None, None, 0),
+(None, None, 1)
+]
 
 class BaseTimeTableForm(forms.ModelForm):
     class Meta:
         model = TimeTable
         widgets = {
                 'services': forms.CheckboxSelectMultiple,
-                'week_rank': forms.SelectMultiple,
+                'week_period': forms.HiddenInput(),
+                'week_parity': forms.HiddenInput(),
+                'week_rank': forms.HiddenInput(),
         }
+
+    def clean(self):
+        cleaned_data = super(BaseTimeTableForm, self).clean()
+        msg = None
+        if not cleaned_data.get('periodicity'):
+            msg = u"Périodicité manquante."
+        else:
+            try:
+                periodicity = int(cleaned_data.get('periodicity'))
+                if periodicity:
+                    if periodicity < 1 or periodicity > 12:
+                        msg = u"Périodicité inconnue."
+                    else:
+                        cleaned_data['week_period'], \
+                        cleaned_data['week_parity'], \
+                        cleaned_data['week_rank'] = PERIOD_LIST_TO_FIELDS[periodicity - 1]
+            except:
+                msg = u"Périodicité invalide."
+        if msg:
+            self._errors["periodicity"] = self.error_class([msg])
+        return cleaned_data
 
 TimetableFormSet = inlineformset_factory(Worker, TimeTable,
         form=BaseTimeTableForm,
         fields=('start_time', 'end_time', 'start_date', 'end_date',
-            'services', 'week_period', 'week_parity', 'week_rank'))
+            'services', 'periodicity', 'week_period', 'week_parity', 'week_rank'))
 
 class BaseHolidayForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

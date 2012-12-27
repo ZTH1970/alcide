@@ -158,12 +158,33 @@ class TimeTable(BaseModelMixin, models.Model):
         verbose_name=u'Fin', blank=True, null=True,
         help_text=u'format: jj/mm/aaaa')
 
+    PERIODICITIES = (
+            (1, u'Toutes les semaines'),
+            (2, u'Une semaine sur deux'),
+            (3, u'Une semaine sur trois'),
+            (4, u'Une semaine sur quatre'),
+            (5, u'Une semaine sur cinq'),
+            (6, u'La première semaine du mois'),
+            (7, u'La deuxième semaine du mois'),
+            (8, u'La troisième semaine du mois'),
+            (9, u'La quatrième semaine du mois'),
+            (10, u'La dernière semaine du mois'),
+            (11, u'Les semaines paires'),
+            (12, u'Les semaines impaires')
+    )
+    periodicity = models.PositiveIntegerField(
+            choices=PERIODICITIES,
+            verbose_name=u"Périodicité",
+            default=1,
+            blank=True,
+            null=True)
+
     PERIODS = (
             (1, u'Toutes les semaines'),
             (2, u'Une semaine sur deux'),
             (3, u'Une semaine sur trois'),
-            (4, 'Une semaine sur quatre'),
-            (4, 'Une semaine sur cinq')
+            (4, u'Une semaine sur quatre'),
+            (5, u'Une semaine sur cinq')
     )
     OFFSET = range(0,4)
     week_offset = models.PositiveIntegerField(
@@ -178,8 +199,8 @@ class TimeTable(BaseModelMixin, models.Model):
             null=True)
 
     PARITIES = (
-            (0, 'Les semaines paires'),
-            (1, 'Les semaines impaires')
+            (0, u'Les semaines paires'),
+            (1, u'Les semaines impaires')
     )
     week_parity = models.PositiveIntegerField(
             choices=PARITIES,
