@@ -144,7 +144,7 @@ class School(NamedAbstractModel):
         verbose_name_plural = u'Lieux de socialisation'
 
     def __unicode__(self):
-        return self.school_type + ' ' + self.name
+        return unicode(self.school_type) + ' ' + self.name
 
     school_type = models.ForeignKey('ressources.SchoolType',
         verbose_name=u"Type d'établissement")
