@@ -739,11 +739,13 @@ div#tabs-3 div.contact div.right {
 
 div#tabs-2 div,
 div#tabs-3 div,
-div#tabs-4 div.frame {
+div#tabs-4 div.frame,
+div#tabs-7 div.frame {
         position: relative;
 }
 
 #info-membre div button.save,
+div#tabs-7 div div.buttons,
 div#tabs-4 div div.buttons,
 div#tabs-3 div div.buttons,
 div#tabs-2 div button.save {
@@ -752,6 +754,13 @@ div#tabs-2 div button.save {
         right: 0;
 }
 
+#tabs-7 div.frame div.subframe {
+	position: relative;
+        margin: 12px;
+        background: #eee;
+        padding: 1em;
+        border-radius: 10px;
+}
 
 div#tabs-3 div div.buttons,
 div#tabs-4 div div.buttons {

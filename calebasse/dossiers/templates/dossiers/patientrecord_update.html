@@ -386,14 +386,13 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
     </div>
 
     <div id="tabs-7">
-        <p><button id="new-socialisation-duration-btn">Nouvelle période de socialisation</button></p>
-        {% if object.socialisation_durations.all %}
         <div class="frame">
             <h3>Périodes de socialisation</h3>
+            <p><button id="new-socialisation-duration-btn">Nouvelle période de socialisation</button></p>
             {% for duration in object.socialisation_durations.all %}
-                <div class="frame">
+                <div class="subframe">
                 Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.school %}l'établissement <strong>{{ duration.school }}</strong>{% else %}un établissement non renseigné{% endif %}
-                <div class="right">
+                <div class="buttons">
                     <button type="button" data-id="{{ duration.id }}" class="del-duration icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ duration.id }}" class="update-duration-btn icon-edit" title="Modifier"></button>
                 </div>
@@ -406,15 +405,14 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
                 </div>
             {% endfor %}
         </div>
-        {% endif %}
-        <p><button id="new-mdph-request-btn">Nouvelle demande MDPH</button></p>
-        {% if object.mdph_requests.all %}
+
         <div class="frame">
             <h3>Demandes MDPH</h3>
+            <p><button id="new-mdph-request-btn">Nouvelle demande MDPH</button></p>
             {% for request in object.mdph_requests.all %}
-                <div class="frame">
+                <div class="subframe">
                 Demande le <strong>{{ request.start_date }}</strong> à la MDPH <strong>{{ request.mdph }}</strong>
-                <div class="right">
+                <div class="buttons">
                     <button type="button" data-id="{{ request.id }}" class="del-mdph-request icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ request.id }}" class="update-mdph-request-btn icon-edit" title="Modifier"></button>
                 </div>
@@ -426,15 +424,14 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
                 </div>
             {% endfor %}
         </div>
-        {% endif %}
-        <p><button id="new-mdph-response-btn">Nouvelle réponse MDPH</button></p>
-        {% if object.mdph_responses.all %}
+
         <div class="frame">
             <h3>Réponses MDPH</h3>
+            <p><button id="new-mdph-response-btn">Nouvelle réponse MDPH</button></p>
             {% for response in object.mdph_responses.all %}
-                <div class="frame">
+                <div class="subframe">
                 Du <strong>{{ response.start_date }}</strong> au <strong>{{ response.end_date }}</strong> à la MDPH <strong>{{ response.mdph }}</strong>
-                <div class="right">
+                <div class="buttons">
                     <button type="button" data-id="{{ response.id }}" class="del-mdph-response icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ response.id }}" class="update-mdph-response-btn icon-edit" title="Modifier"></button>
                 </div>
@@ -449,7 +446,6 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
                 </div>
             {% endfor %}
         </div>
-        {% endif %}
     </div>
 
     <div id="tabs-8">
