@@ -291,7 +291,7 @@ class SocialisationDurationForm(ModelForm):
     class Meta:
         model = SocialisationDuration
         fields = ('school', 'start_date',
-            'end_date', 'contact', 'comment')
+            'end_date', 'level', 'contact', 'comment')
         widgets = {
                 'contact': forms.Textarea(attrs={'cols': 39, 'rows': 2}),
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),

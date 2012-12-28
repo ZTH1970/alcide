@@ -1,0 +1,371 @@
+[
+    {
+        "fields": {
+            "name": "PS", 
+            "old_id": "1", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "MS", 
+            "old_id": "2", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "GS", 
+            "old_id": "3", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "CP", 
+            "old_id": "4", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "name": "NON SCOLARISE", 
+            "old_id": "5", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "name": "CLIS", 
+            "old_id": "6", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "name": "MATERNELLE", 
+            "old_id": "1", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "name": "PRIMAIRE", 
+            "old_id": "2", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "name": "COLLEGE", 
+            "old_id": "3", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "name": "LYCEE", 
+            "old_id": "4", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "name": "LYCEE PROFESSIONNEL", 
+            "old_id": "5", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "name": "CLASSE DE PERFECTIONNEMENT", 
+            "old_id": "6", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "name": "SEGPA (SES)", 
+            "old_id": "7", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "name": "ETUDIANT", 
+            "old_id": "8", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "name": "EREA", 
+            "old_id": "9", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "name": "HANDICAPE MOTEUR", 
+            "old_id": "10", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "name": "NON SCOLARISE", 
+            "old_id": "11", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "name": "INTERNAT", 
+            "old_id": "12", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 18
+    }, 
+    {
+        "fields": {
+            "name": "APPRENTISSAGE", 
+            "old_id": "13", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 19
+    }, 
+    {
+        "fields": {
+            "name": "xxx", 
+            "old_id": "1", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 20
+    }, 
+    {
+        "fields": {
+            "name": "GRANDE SECTION", 
+            "old_id": "1", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 21
+    }, 
+    {
+        "fields": {
+            "name": "CP", 
+            "old_id": "2", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 22
+    }, 
+    {
+        "fields": {
+            "name": "CE1", 
+            "old_id": "3", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 23
+    }, 
+    {
+        "fields": {
+            "name": "CE2", 
+            "old_id": "4", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 24
+    }, 
+    {
+        "fields": {
+            "name": "CM1", 
+            "old_id": "5", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 25
+    }, 
+    {
+        "fields": {
+            "name": "CM2", 
+            "old_id": "6", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 26
+    }, 
+    {
+        "fields": {
+            "name": "CLIS", 
+            "old_id": "7", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 27
+    }, 
+    {
+        "fields": {
+            "name": "6\u00c8ME", 
+            "old_id": "8", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 28
+    }, 
+    {
+        "fields": {
+            "name": "5\u00c8ME", 
+            "old_id": "9", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 29
+    }, 
+    {
+        "fields": {
+            "name": "4\u00c8ME", 
+            "old_id": "10", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 30
+    }, 
+    {
+        "fields": {
+            "name": "3\u00c8ME", 
+            "old_id": "11", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 31
+    }, 
+    {
+        "fields": {
+            "name": "SECONDE", 
+            "old_id": "12", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 32
+    }, 
+    {
+        "fields": {
+            "name": "6\u00c8ME SEGPA", 
+            "old_id": "13", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 33
+    }, 
+    {
+        "fields": {
+            "name": "5\u00c8ME SEGPA", 
+            "old_id": "14", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 34
+    }, 
+    {
+        "fields": {
+            "name": "4\u00c8ME SEGPA", 
+            "old_id": "15", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 35
+    }, 
+    {
+        "fields": {
+            "name": "3\u00c8ME SEGPA", 
+            "old_id": "16", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 36
+    }, 
+    {
+        "fields": {
+            "name": "ULIS", 
+            "old_id": "17", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 37
+    }, 
+    {
+        "fields": {
+            "name": "6\u00c8ME ULIS", 
+            "old_id": "18", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 38
+    }, 
+    {
+        "fields": {
+            "name": "5\u00e8me ULIS", 
+            "old_id": "19", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 39
+    }, 
+    {
+        "fields": {
+            "name": "4\u00c8ME ULIS", 
+            "old_id": "20", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 40
+    }, 
+    {
+        "fields": {
+            "name": "3\u00e8me ULIS", 
+            "old_id": "21", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.schoollevel", 
+        "pk": 41
+    }
+]

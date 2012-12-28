@@ -137,14 +137,15 @@ class SchoolType(NamedAbstractModel):
 
     services = models.ManyToManyField('ressources.Service')
 
-
 class School(NamedAbstractModel):
     class Meta:
         verbose_name = u'Lieu de socialisation'
         verbose_name_plural = u'Lieux de socialisation'
 
     def __unicode__(self):
-        return unicode(self.school_type) + ' ' + self.name
+        if self.school_type.name != 'Inconnu':
+            return unicode(self.school_type) + ' ' + self.name
+        return self.name
 
     school_type = models.ForeignKey('ressources.SchoolType',
         verbose_name=u"Type d'établissement")
@@ -168,6 +169,10 @@ class School(NamedAbstractModel):
     director_name = models.CharField(max_length=70,
             blank=True, null=True, default=None,
             verbose_name=u"Nom du directeur")
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
 
 
 class SchoolTeacherRole(NamedAbstractModel):
@@ -176,11 +181,16 @@ class SchoolTeacherRole(NamedAbstractModel):
         verbose_name_plural = u'Types de rôle des professeurs'
 
 
-#NO_SCHOOL =  Choices(
-#        (1, '----------'),
-#        (2, 'Patient non sociabilisé'),
-#        (3, 'Lieu non connu'),
-#)
+class SchoolLevel(NamedAbstractModel):
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
+
+    class Meta:
+        verbose_name = u'Classe'
+        verbose_name_plural = u'Classes'
+
 
 class SocialisationDuration(models.Model):
     class Meta:
@@ -190,8 +200,9 @@ class SocialisationDuration(models.Model):
     school = models.ForeignKey('ressources.School',
         verbose_name=u'Lieu de socialisation',
         blank=True, null=True)
-#    rough_school = models.IntegerField(verbose_name=u"Autre choix", choices=NO_SCHOOL,
-#            max_length=1)
+    level = models.ForeignKey('ressources.SchoolLevel',
+        verbose_name=u'Classe',
+        blank=True, null=True)
     start_date = models.DateField(verbose_name=u"Date d'arrivée")
     contact = models.CharField(verbose_name=u"Contact", max_length=200, blank=True, null=True, default=None)
     end_date = models.DateField(verbose_name=u"Date de départ",

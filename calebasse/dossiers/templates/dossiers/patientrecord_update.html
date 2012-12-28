@@ -391,7 +391,7 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
             <p><button id="new-socialisation-duration-btn">Nouvelle période de socialisation</button></p>
             {% for duration in object.socialisation_durations.all %}
                 <div class="subframe">
-                Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.school %}l'établissement <strong>{{ duration.school }}</strong>{% else %}un établissement non renseigné{% endif %}
+                Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.school %}l'établissement <strong>{{ duration.school }}</strong>{% else %}un établissement non renseigné{% endif %}{% if duration.level %} (en {{ duration.level }}){% endif %}
                 <div class="buttons">
                     <button type="button" data-id="{{ duration.id }}" class="del-duration icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ duration.id }}" class="update-duration-btn icon-edit" title="Modifier"></button>
