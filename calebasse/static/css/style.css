@@ -738,11 +738,13 @@ div#tabs-3 div.contact div.right {
 }
 
 div#tabs-2 div,
-div#tabs-3 div {
+div#tabs-3 div,
+div#tabs-4 div.frame {
         position: relative;
 }
 
 #info-membre div button.save,
+div#tabs-4 div div.buttons,
 div#tabs-3 div div.buttons,
 div#tabs-2 div button.save {
         position: absolute;
@@ -751,7 +753,8 @@ div#tabs-2 div button.save {
 }
 
 
-div#tabs-3 div div.buttons {
+div#tabs-3 div div.buttons,
+div#tabs-4 div div.buttons {
 	border: 0;
 	margin: 0;
 }
