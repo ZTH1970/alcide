@@ -330,7 +330,7 @@ class EventActManager(EventManager):
                 end_datetime=end_datetime,
                 room=room, note=note, **rrule_params)
 
-class EventAct(Act, Event):
+class EventAct(Event, Act):
     objects = EventActManager()
 
     VALIDATION_CODE_CHOICES = (
