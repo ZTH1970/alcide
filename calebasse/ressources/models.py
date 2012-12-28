@@ -149,14 +149,16 @@ class School(NamedAbstractModel):
     school_type = models.ForeignKey('ressources.SchoolType',
         verbose_name=u"Type d'établissement")
     description = models.TextField(blank=True, null=True, default=None)
-    address = models.CharField(max_length=120, blank=True, null=True, default=None)
+    address = models.CharField(max_length=120,
+            verbose_name=u"Adresse", blank=True, null=True, default=None)
     address_complement = models.CharField(max_length=120,
             blank=True,
             null=True,
-            default=None)
+            default=None,
+            verbose_name=u"Complément d'adresse")
     zip_code = ZipCodeField(verbose_name=u"Code postal",
         blank=True, null=True, default=None)
-    city = models.CharField(max_length=80,
+    city = models.CharField(max_length=80, verbose_name=u"Ville",
         blank=True, null=True, default=None)
     phone = PhoneNumberField(verbose_name=u"Téléphone",
         blank=True, null=True, default=None)
@@ -164,7 +166,8 @@ class School(NamedAbstractModel):
             blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
     director_name = models.CharField(max_length=70,
-            blank=True, null=True, default=None)
+            blank=True, null=True, default=None,
+            verbose_name=u"Nom du directeur")
 
 
 class SchoolTeacherRole(NamedAbstractModel):
