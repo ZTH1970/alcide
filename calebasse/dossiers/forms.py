@@ -162,7 +162,6 @@ class FollowUpForm(ModelForm):
         fields = ('coordinators', 'externaldoctor', 'externalintervener')
 
 class PatientContactForm(ModelForm):
-    addresses = make_ajax_field(PatientContact, 'addresses', 'addresses', True)
     health_org = forms.CharField(label=u"Numéro de l'organisme destinataire", required=False)
 
     class Meta:
@@ -172,6 +171,7 @@ class PatientContactForm(ModelForm):
                 'key': forms.TextInput(attrs={'size': 4}),
                 'twinning_rank': forms.TextInput(attrs={'size': 4}),
                 'health_org': forms.TextInput(attrs={'size': 9}),
+                'addresses': forms.CheckboxSelectMultiple(),
                 }
 
     def __init__(self, *args, **kwargs):
