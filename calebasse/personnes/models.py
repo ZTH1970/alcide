@@ -135,6 +135,21 @@ class TimeTableQuerySet(query.QuerySet):
         qs = qs.filter(reduce(models.Q.__or__, filters))
         return qs
 
+PERIODICITIES = (
+        (1, u'Toutes les semaines'),
+        (2, u'Une semaine sur deux'),
+        (3, u'Une semaine sur trois'),
+        (4, u'Une semaine sur quatre'),
+        (5, u'Une semaine sur cinq'),
+        (6, u'La première semaine du mois'),
+        (7, u'La deuxième semaine du mois'),
+        (8, u'La troisième semaine du mois'),
+        (9, u'La quatrième semaine du mois'),
+        (10, u'La dernière semaine du mois'),
+        (11, u'Les semaines paires'),
+        (12, u'Les semaines impaires')
+)
+
 
 class TimeTable(BaseModelMixin, models.Model):
     objects = PassThroughManager.for_queryset_class(TimeTableQuerySet)()
@@ -158,20 +173,6 @@ class TimeTable(BaseModelMixin, models.Model):
         verbose_name=u'Fin', blank=True, null=True,
         help_text=u'format: jj/mm/aaaa')
 
-    PERIODICITIES = (
-            (1, u'Toutes les semaines'),
-            (2, u'Une semaine sur deux'),
-            (3, u'Une semaine sur trois'),
-            (4, u'Une semaine sur quatre'),
-            (5, u'Une semaine sur cinq'),
-            (6, u'La première semaine du mois'),
-            (7, u'La deuxième semaine du mois'),
-            (8, u'La troisième semaine du mois'),
-            (9, u'La quatrième semaine du mois'),
-            (10, u'La dernière semaine du mois'),
-            (11, u'Les semaines paires'),
-            (12, u'Les semaines impaires')
-    )
     periodicity = models.PositiveIntegerField(
             choices=PERIODICITIES,
             verbose_name=u"Périodicité",
@@ -194,9 +195,7 @@ class TimeTable(BaseModelMixin, models.Model):
     week_period = models.PositiveIntegerField(
             choices=PERIODS,
             verbose_name=u"Période en semaines",
-            default=1,
-            blank=True,
-            null=True)
+            blank=True, null=True)
 
     PARITIES = (
             (0, u'Les semaines paires'),
@@ -205,7 +204,6 @@ class TimeTable(BaseModelMixin, models.Model):
     week_parity = models.PositiveIntegerField(
             choices=PARITIES,
             verbose_name=u"Parité des semaines",
-            default=None,
             blank=True, null=True)
 
     WEEK_RANKS = (
@@ -216,15 +214,15 @@ class TimeTable(BaseModelMixin, models.Model):
             (4, u'La dernière semaine du mois')
     )
 
-    week_rank = WeekRankField(
+    week_rank = models.PositiveIntegerField(
             verbose_name=u"Rang de la semaine dans le mois",
             choices=WEEK_RANKS,
-            default=None)
+            blank=True, null=True)
 
     def clean(self):
         if (self.week_period is None) + (self.week_parity is None) + \
                 (self.week_rank is None) != 2:
-            raise forms.ValidationError('only one periodicity criteria can be used')
+            raise forms.ValidationError('Only one periodicity criteria can be used')
         if self.week_period and self.start_date:
             self.week_offset = weeks_since_epoch(self.start_date) % self.week_period
 
