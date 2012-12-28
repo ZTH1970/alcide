@@ -130,7 +130,7 @@ function select_add_dialog(opts, $form, form_action)
 
       /* Form buttons with the '.enable-on-change' class are only enabled if an
        * input or a select of the form is modified. */
-      $('form button.enable-on-change, form input[type="submit"]', base).prop('disabled', 'true');
+      $('form button.enable-on-change, form input[type="submit"]:not(".login")', base).prop('disabled', 'true');
       $('form input, form select, form textarea', base).on('change', function () {
         var form = $(this).closest('form');
         $('button.enable-on-change, form input[type="submit"]', form).enable();
