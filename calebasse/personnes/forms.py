@@ -148,8 +148,8 @@ class BaseTimeTableForm(forms.ModelForm):
                         msg = u"Périodicité inconnue."
                     else:
                         cleaned_data['week_period'], \
-                        cleaned_data['week_parity'], \
-                        cleaned_data['week_rank'] = PERIOD_LIST_TO_FIELDS[periodicity - 1]
+                        cleaned_data['week_rank'], \
+                        cleaned_data['week_parity'] = PERIOD_LIST_TO_FIELDS[periodicity - 1]
             except:
                 msg = u"Périodicité invalide."
         if msg:
