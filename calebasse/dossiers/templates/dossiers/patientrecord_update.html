@@ -182,7 +182,7 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
                         <button type="button" data-id="{{ hc.id }}" class="del-hctrait icon-minus" title="Supprimer"></button>
                         <button type="button" data-id="{{ hc.id }}" class="update-hctrait-btn icon-edit" title="Modifier"></button>
                     </div>
-                      <h3>En traitement depuis le {{ hc.start_date }} jusqu'au {{ hc.end_date }}</h3>
+                      <h3>En traitement depuis le {{ hc.start_date }}{% if hc.end_date %} jusqu'au {{ hc.end_date }}{% endif %}</h3>
                       <ul>
                         <li><label>Actes prévus</label> : {{ hc.cmpphealthcaretreatment.act_number }}</li>
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
