@@ -83,7 +83,7 @@ $('.messages').delay(3000*(1+{{ messages|length }})).fadeOut('slow');
                     value="{{ contact.id }}"
                     class="policyholder-radio"
                     name="policyholder-policyholder">
-                    <button type="button" data-id="{{ contact.id }}" class="del-contact icon-minus" title="Supprimer"></button>
+                    <button type="button" data-id="{{ contact.id }}" data-address-id="{{ address.id }}" class="del-contact icon-minus" title="Supprimer"></button>
                     <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
                 </div>
                 <div>

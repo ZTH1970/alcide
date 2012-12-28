@@ -94,6 +94,16 @@ class DeletePatientContactView(cbv.DeleteView):
     template_name = 'dossiers/patientcontact_confirm_delete.html'
     success_url = '../../view#tab=2'
 
+    def post(self, request, *args, **kwargs):
+        try:
+            patient = PatientRecord.objects.get(id=kwargs.get('pk'))
+        except PatientRecord.DoesNotExist:
+            return super(DeletePatientContactView, self).post(request, *args, **kwargs)
+        # the contact is also a patient record; it shouldn't be deleted; just
+        # altered to remove an address
+        patient.addresses.remove(self.request.GET['address'])
+        return HttpResponseRedirect(self.get_success_url())
+
 delete_patient_contact = DeletePatientContactView.as_view()
 
 class NewPatientAddressView(cbv.CreateView):

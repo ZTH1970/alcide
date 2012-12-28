@@ -170,8 +170,8 @@ function state_dialog(url, state_title, state_type) {
             '#ajax-dlg', '800px', 'Modifier', null, nir_check);
     });
     $('.del-contact').click(function() {
-        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del', 'Supprimer un contact',
-            '#ajax-dlg', '500px', 'Supprimer');
+        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del?address=' + $(this).data('address-id'),
+                'Supprimer un contact', '#ajax-dlg', '500px', 'Supprimer');
     });
     $('#new-socialisation-duration-btn').click(function() {
         generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
