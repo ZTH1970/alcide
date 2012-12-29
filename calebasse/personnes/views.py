@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from collections import defaultdict
 from datetime import date
 
@@ -6,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 from calebasse import cbv, models as cb_models
 from calebasse.ressources.models import Service
@@ -103,7 +105,6 @@ class WorkerView(cbv.ListView):
         ctx['search_form'] = self.get_form()
         return ctx
 
-
 homepage = cbv.TemplateView.as_view(template_name='personnes/index.html')
 
 
@@ -156,6 +157,11 @@ class WorkerUpdateView(cbv.MultiUpdateView):
             holiday = None
         ctx['holiday'] = holiday
         return ctx
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, u'Modification enregistrée avec succès.')
+        return super(WorkerUpdateView, self).form_valid(form)
+
 
 class WorkerScheduleUpdateView(cbv.UpdateView):
     model = models.Worker
