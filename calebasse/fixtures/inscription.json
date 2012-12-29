@@ -1,0 +1,692 @@
+[
+    {
+        "fields": {
+            "name": "VULN\u00c9RABILIT\u00c9 FAMILLE/ENVIRONNEMENT", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "RETARD GLOBAL DE D\u00c9VELOPPEMENT", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "MALADIE G\u00c9N\u00c9TIQUE", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLES DU COMPORTEMENT", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "name": "SURVEILLANCE P\u00c9RINATALE", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "name": "RETARD PSYCHOMOTEUR", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "name": "RETARD DE PAROLE ET LANGAGE", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "name": "RETARD DES ACQUISITIONS", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLE SENSORIEL AUDITIF", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLE SENSORIEL VISUEL", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLES MOTEURS", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "name": "ENC\u00c9PHALOPATHIE D'\u00c9TIOLOGIE NON R\u00c9V\u00c9L\u00c9E", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "name": "ANT\u00c9C\u00c9DENTS M\u00c9DICAUX LOURDS", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "name": "SYNDROME PARTICULIER", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "name": "AUTRES", 
+            "service": null
+        }, 
+        "model": "ressources.analysemotive", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "name": "VULNERABILITE FAMILLE/ENVIRONNEMENT", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "RETARD GLOBAL DE DEVELOPPEMENT", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "MALADIE GENERIQUE", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLES DU COMPORTEMENT", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "name": "SURVEILLANCE PERINATALE", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "name": "RETARD PSYCHOMOTEUR", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "name": "RETARD DE PAROLE ET DE LANGAGE", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "name": "RETARD DES ACQUISITIONS", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLE SENSORIEL/AUDITIF", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLE SENSORIEL/VISUEL", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "name": "TROUBLES MOTEURS", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "name": "ENCEPHALOPATHIE D'ETIOLOGIE NON REVELEE", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "name": "ANTECEDENTS MEDICAUX LOURDS", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "name": "SYNDROME PARTICULIER", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "name": "AUTRES", 
+            "service": null
+        }, 
+        "model": "ressources.familymotive", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "name": "Dr BLANCHON", 
+            "old_id": "1", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "CAMSP", 
+            "old_id": "2", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "Dr ROUSSON", 
+            "old_id": "3", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "CMP", 
+            "old_id": "4", 
+            "old_service": "SESSAD TED"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "name": "ENSEIGNANTS", 
+            "old_id": "1", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "name": "ASSISTANTES SOCIALES", 
+            "old_id": "2", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "name": "R.A.S.E.D.", 
+            "old_id": "3", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "name": "C.I.O.", 
+            "old_id": "4", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "name": "MEDECINS SANTE SCOLAIRE", 
+            "old_id": "5", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "name": "C.D.A.", 
+            "old_id": "6", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "name": "PARENTS CONNAISSENT LE SERVICE", 
+            "old_id": "7", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "name": "ENTOURAGE", 
+            "old_id": "8", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "name": "MEDECIN DE FAMILLE", 
+            "old_id": "9", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "name": "PARAMEDICAUX", 
+            "old_id": "10", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "name": "SERVICES SPECIAL. - SAUV. JUGE", 
+            "old_id": "11", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "name": "C.A.M.S.P.", 
+            "old_id": "12", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "name": "DIVERS", 
+            "old_id": "13", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "name": "ENFANT LUI-MEME", 
+            "old_id": "14", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 18
+    }, 
+    {
+        "fields": {
+            "name": "A DEJA ETE SUIVI AU CMPP", 
+            "old_id": "15", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 19
+    }, 
+    {
+        "fields": {
+            "name": "AUTRE SERVICE DE SOINS", 
+            "old_id": "16", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 20
+    }, 
+    {
+        "fields": {
+            "name": "AISPAS", 
+            "old_id": "17", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 21
+    }, 
+    {
+        "fields": {
+            "name": "SESSAD ST ETIENNE", 
+            "old_id": "18", 
+            "old_service": "CMPP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 22
+    }, 
+    {
+        "fields": {
+            "name": "CR\u00c8CHE", 
+            "old_id": "1", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 23
+    }, 
+    {
+        "fields": {
+            "name": "ECOLE MATERNELLE", 
+            "old_id": "2", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 24
+    }, 
+    {
+        "fields": {
+            "name": "M\u00c9DECIN DE PMI", 
+            "old_id": "3", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 25
+    }, 
+    {
+        "fields": {
+            "name": "M\u00c9DECIN SCOLAIRE", 
+            "old_id": "4", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 26
+    }, 
+    {
+        "fields": {
+            "name": "FAMILLE", 
+            "old_id": "5", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 27
+    }, 
+    {
+        "fields": {
+            "name": "C.M.P.P. (FRATRIE)", 
+            "old_id": "6", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 28
+    }, 
+    {
+        "fields": {
+            "name": "INTERVENANT LIB\u00c9RAL", 
+            "old_id": "7", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 29
+    }, 
+    {
+        "fields": {
+            "name": "PSYCHOLOGUE SCOLAIRE", 
+            "old_id": "8", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 30
+    }, 
+    {
+        "fields": {
+            "name": "SERVICE P\u00c9DIATRIQUE CHU", 
+            "old_id": "9", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 31
+    }, 
+    {
+        "fields": {
+            "name": "SERVICE N\u00c9ONATOLOGIE CHU", 
+            "old_id": "10", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 32
+    }, 
+    {
+        "fields": {
+            "name": "SERVICE G\u00c9N\u00c9TIQUE CHU", 
+            "old_id": "11", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 33
+    }, 
+    {
+        "fields": {
+            "name": "SERVICE ORL", 
+            "old_id": "12", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 34
+    }, 
+    {
+        "fields": {
+            "name": "SECTEUR PSYCHIATRIQUE", 
+            "old_id": "13", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 35
+    }, 
+    {
+        "fields": {
+            "name": "M\u00c9DECIN TRAITANT", 
+            "old_id": "14", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 36
+    }, 
+    {
+        "fields": {
+            "name": "P\u00c9DIATRE TRAITANT", 
+            "old_id": "15", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 37
+    }, 
+    {
+        "fields": {
+            "name": "SAUVEGARDE DE L'ENFANCE", 
+            "old_id": "16", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 38
+    }, 
+    {
+        "fields": {
+            "name": "AUTRE SERVICE DE SOINS", 
+            "old_id": "17", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 39
+    }, 
+    {
+        "fields": {
+            "name": "C.D.E.S. - C.C.P.E.", 
+            "old_id": "18", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 40
+    }, 
+    {
+        "fields": {
+            "name": "AUTRE C.A.M.S.P.", 
+            "old_id": "19", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 41
+    }, 
+    {
+        "fields": {
+            "name": "AIDE SOCIALE \u00c0 L'ENFANCE", 
+            "old_id": "20", 
+            "old_service": "CAMSP"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 42
+    }, 
+    {
+        "fields": {
+            "name": "CAMSP ST ETIENNE", 
+            "old_id": "1", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 43
+    }, 
+    {
+        "fields": {
+            "name": "CAMSP FIRMINY", 
+            "old_id": "2", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 44
+    }, 
+    {
+        "fields": {
+            "name": "CAMSP MONTBRISON", 
+            "old_id": "3", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 45
+    }, 
+    {
+        "fields": {
+            "name": "INTERSECTEUR", 
+            "old_id": "4", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 46
+    }, 
+    {
+        "fields": {
+            "name": "CMPP ST ETIENNE", 
+            "old_id": "5", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 47
+    }, 
+    {
+        "fields": {
+            "name": "CMPP ST CHAMOND", 
+            "old_id": "6", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 48
+    }, 
+    {
+        "fields": {
+            "name": "CMPP FIRMINY", 
+            "old_id": "7", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 49
+    }, 
+    {
+        "fields": {
+            "name": "CENTRE R\u00c9F\u00c9RENT", 
+            "old_id": "8", 
+            "old_service": "SESSAD DYS"
+        }, 
+        "model": "ressources.provenance", 
+        "pk": 50
+    }
+]
