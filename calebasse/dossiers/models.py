@@ -327,6 +327,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     familymotive = models.ForeignKey('ressources.FamilyMotive',
             verbose_name=u"Motif (famille)",
             null=True, blank=True, default=None)
+    provenance = models.ForeignKey('ressources.Provenance',
+            verbose_name=u"Provenance",
+            null=True, blank=True, default=None)
     advicegiver = models.ForeignKey('ressources.AdviceGiver',
             verbose_name=u"Conseilleur",
             null=True, blank=True, default=None)
