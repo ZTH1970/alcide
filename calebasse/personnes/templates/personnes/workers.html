@@ -104,10 +104,14 @@
       <td class="first_name">{{ object.first_name }}</td>
       <td class="profession">{{ object.type }}</td>
       <td class="services">
-        {% for service in object.services.all %}
-        {{ service.name }}
-        {% if not forloop.last %} / {% endif %}
-        {% endfor %}
+        {% if object.services.all %}
+            {% for service in object.services.all %}
+            {{ service.name }}
+            {% if not forloop.last %} / {% endif %}
+            {% endfor %}
+        {% else %}
+         Externe
+        {% endif %}
       </td>
       <td class="is_away">
         {% if object.holiday %}×{% else %}&nbsp;{% endif %}
