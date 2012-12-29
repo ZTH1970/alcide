@@ -12,7 +12,8 @@ import reversion
 
 from calebasse.models import PhoneNumberField
 from calebasse.ressources.models import Service, NamedAbstractModel
-from calebasse.models import BaseModelMixin, WeekRankField
+from calebasse.models import (BaseModelMixin, WeekRankField,
+    PhoneNumberField, ZipCodeField)
 from calebasse.utils import weeks_since_epoch, weekday_ranks
 
 from interval import Interval
@@ -98,8 +99,71 @@ class Worker(People):
         verbose_name = u'Personnel'
         verbose_name_plural = u'Personnels'
 
+
 reversion.register(Worker, follow=['people_ptr'])
 reversion.register(User)
+
+class ExternalWorker(People):
+    description = models.TextField(blank=True, null=True, default=None)
+    address = models.CharField(max_length=120,
+            verbose_name=u"Adresse", blank=True, null=True, default=None)
+    address_complement = models.CharField(max_length=120,
+            blank=True,
+            null=True,
+            default=None,
+            verbose_name=u"Complément d'adresse")
+    zip_code = ZipCodeField(verbose_name=u"Code postal",
+        blank=True, null=True, default=None)
+    city = models.CharField(max_length=80, verbose_name=u"Ville",
+        blank=True, null=True, default=None)
+    phone_work = PhoneNumberField(verbose_name=u"Téléphone du travail",
+        blank=True, null=True, default=None)
+    fax = models.CharField(max_length=30,
+            blank=True, null=True, default=None)
+    type = models.ForeignKey('ressources.WorkerType',
+            verbose_name=u'Spécialité')
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
+    class Meta:
+        verbose_name = u'Intervenant extérieur'
+        verbose_name_plural = u'Intervenants extérieurs'
+
+reversion.register(ExternalWorker, follow=['people_ptr'])
+
+class ExternalTherapist(People):
+    description = models.TextField(blank=True, null=True, default=None)
+    address = models.CharField(max_length=120,
+            verbose_name=u"Adresse", blank=True, null=True, default=None)
+    address_complement = models.CharField(max_length=120,
+            blank=True,
+            null=True,
+            default=None,
+            verbose_name=u"Complément d'adresse")
+    zip_code = ZipCodeField(verbose_name=u"Code postal",
+        blank=True, null=True, default=None)
+    city = models.CharField(max_length=80, verbose_name=u"Ville",
+        blank=True, null=True, default=None)
+    phone_work = PhoneNumberField(verbose_name=u"Téléphone du travail",
+        blank=True, null=True, default=None)
+    fax = models.CharField(max_length=30,
+            blank=True, null=True, default=None)
+    type = models.ForeignKey('ressources.WorkerType',
+            verbose_name=u'Spécialité')
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
+    class Meta:
+        verbose_name = u'Médecin extérieur'
+        verbose_name_plural = u'Médecins extérieurs'
+
+reversion.register(ExternalTherapist, follow=['people_ptr'])
 
 class UserWorker(BaseModelMixin, models.Model):
     user = models.OneToOneField('auth.User')
@@ -359,14 +423,3 @@ class Holiday(BaseModelMixin, models.Model):
             end_time = datetime_time(20, 0)
         return Interval(datetime.combine(self.start_date, start_time),
                 datetime.combine(self.end_date, end_time))
-
-
-class ExternalDoctor(People):
-    class Meta:
-        verbose_name = u'Médecin extérieur'
-        verbose_name_plural = u'Médecins extérieurs'
-
-class ExternalIntervener(People):
-    class Meta:
-        verbose_name = u'Intervenant extérieur'
-        verbose_name_plural = u'Intervenants extérieurs'

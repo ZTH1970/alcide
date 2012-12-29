@@ -358,10 +358,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     coordinators = models.ManyToManyField('personnes.Worker',
             verbose_name=u"Coordinateurs",
             null=True, blank=True, default=None)
-    externaldoctor = models.ForeignKey('personnes.ExternalDoctor',
+    externaldoctor = models.ForeignKey('personnes.ExternalTherapist',
             verbose_name=u"Médecin extérieur",
             null=True, blank=True, default=None)
-    externalintervener = models.ForeignKey('personnes.ExternalIntervener',
+    externalintervener = models.ForeignKey('personnes.ExternalWorker',
             verbose_name=u"Intervenant extérieur",
             null=True, blank=True, default=None)
 

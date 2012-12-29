@@ -137,8 +137,8 @@
     },
     {
         "fields": {
-            "intervene": false,
-            "name": "Professeur des écoles"
+            "intervene": true,
+            "name": "Non défini"
         },
         "model": "ressources.workertype",
         "pk": 18
@@ -146,9 +146,17 @@
     {
         "fields": {
             "intervene": true,
-            "name": "Non défini"
+            "name": "Pédiatre"
         },
         "model": "ressources.workertype",
         "pk": 19
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Médecin généraliste"
+        },
+        "model": "ressources.workertype",
+        "pk": 20
     }
 ]
