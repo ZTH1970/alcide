@@ -325,13 +325,13 @@ class AvailableRtfTemplates:
 
 class GenerateRtfForm(Form):
     template_filename = forms.ChoiceField(choices=AvailableRtfTemplates())
-    address = forms.CharField(widget=forms.Textarea(attrs={'rows':5}))
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-    birthdate = forms.CharField()
-    appointment_date = forms.CharField()
-    appointment_begin_hour = forms.CharField()
-    appointment_intervenants = forms.CharField()
+    address = forms.CharField(widget=forms.Textarea(attrs={'rows':5}), required=False)
+    first_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=False)
+    birthdate = forms.CharField(required=False)
+    appointment_date = forms.CharField(required=False)
+    appointment_begin_hour = forms.CharField(required=False)
+    appointment_intervenants = forms.CharField(required=False)
 
 class QuotationsForm(Form):
     states = forms.MultipleChoiceField(

@@ -1,5 +1,14 @@
 {% load widget_tweaks %}
 
+{% if form.errors %}
+<pre style="display: none">
+errors:
+{% for field in form %}
+{% if field.errors %}- {{field.name}} {{ field.errors|striptags }}{% endif %}
+{% endfor %}
+</pre>
+{% endif %}
+
 <form action="{{ request.get_full_path }}" method="post">
   {% csrf_token %}
 
