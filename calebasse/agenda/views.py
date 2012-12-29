@@ -55,6 +55,10 @@ class AgendaHomepageView(TemplateView):
                 order_by('start_date')
         occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
 
+        context['time_tables'] = time_tables
+        context['holidays'] = holidays
+        context['occurrences'] = occurrences
+
         context['workers_types'] = []
         context['workers_agenda'] = []
         context['disponibility'] = {}
@@ -314,6 +318,24 @@ class AgendasTherapeutesView(AgendaHomepageView):
 
     def get_context_data(self, **kwargs):
         context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
+        time_tables = context['time_tables']
+        holidays = context['holidays']
+        occurrences = context['occurrences']
+        occurrences_workers = {}
+        time_tables_workers = {}
+        holidays_workers = {}
+        context['workers_agenda'] = []
+        for worker in context['workers']:
+            time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
+            occurrences_worker = [o for o in occurrences if worker.id in o.event.participants.values_list('id', flat=True)]
+            holidays_worker = [h for h in holidays if h.worker_id in (None, worker.id)]
+            occurrences_workers[worker.id] = occurrences_worker
+            time_tables_workers[worker.id] = time_tables_worker
+            holidays_workers[worker.id] = holidays_worker
+            context['workers_agenda'].append({'worker': worker,
+                    'appointments': get_daily_appointments(context['date'], worker, self.service,
+                        time_tables_worker, occurrences_worker, holidays_worker)})
+
         for worker_agenda in context.get('workers_agenda', []):
             patient_appointments = [x for x in worker_agenda['appointments'] if x.patient_record_id]
             worker_agenda['summary'] = {
