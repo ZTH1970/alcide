@@ -89,7 +89,7 @@ class WorkerSearchForm(forms.Form):
             queryset=WorkerType.objects.all(), required=False)
 
     INTERVENE_STATUS_CHOICES = {
-            'a': u'Actif',
+            'a': u'Actifs',
     }
 
     intervene_status = forms.MultipleChoiceField(
