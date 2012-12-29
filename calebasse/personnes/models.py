@@ -68,7 +68,7 @@ class Worker(People):
     objects = PassThroughManager.for_queryset_class(WorkerQuerySet)()
     type = models.ForeignKey('ressources.WorkerType',
             verbose_name=u'Type de personnel')
-    services = models.ManyToManyField('ressources.Service')
+    services = models.ManyToManyField('ressources.Service', blank=True, null=True)
     enabled = models.BooleanField(verbose_name=u'Actif',
                 default=True)
     old_camsp_id = models.CharField(max_length=256,
