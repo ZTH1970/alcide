@@ -46,6 +46,13 @@ class People(BaseModelMixin, models.Model):
     def __unicode__(self):
         return self.display_name
 
+    def get_initials(self):
+        initials = []
+        if self.first_name:
+            initials.append(self.first_name[0].upper())
+        initials.append(self.last_name[0].upper())
+        return ''.join(initials)
+
     class Meta:
         ordering = ['last_name', 'first_name']
 

@@ -452,6 +452,10 @@ td#dispos {
   vertical-align: top;
 }
 
+td#dispos tr.initials {
+	font-size: 80%;
+}
+
 td#dispos td {
 	height: 4px;
 	width: 15px;
