@@ -1,0 +1,1138 @@
+[
+    {
+        "fields": {
+            "address": "2 rue Jean Jaur\u00e8s", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "26", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 183
+    }, 
+    {
+        "fields": {
+            "address": "34 rue d'Arcole", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "66", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 223
+    }, 
+    {
+        "fields": {
+            "address": "5 rue de la R\u00e9publique", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "36", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 193
+    }, 
+    {
+        "fields": {
+            "address": "Cabinet Mothe 23 Bis Avenue de Rochetaill\u00e9e", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "65", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.57.97.71", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 222
+    }, 
+    {
+        "fields": {
+            "address": "2 rue Faure Belon", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "9", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.41.49.42", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 166
+    }, 
+    {
+        "fields": {
+            "address": "14 rue Victor Hugo", 
+            "address_complement": null, 
+            "city": "LA TALAUDIERE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "8", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.53.27.51", 
+            "type": 18, 
+            "zip_code": "42350"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 165
+    }, 
+    {
+        "fields": {
+            "address": "1 bis rue Jules Feery", 
+            "address_complement": null, 
+            "city": "SAINT GENEST LERPT", 
+            "description": "Kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "14", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.90.92.61", 
+            "type": 18, 
+            "zip_code": "42530"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 171
+    }, 
+    {
+        "fields": {
+            "address": "35 Boulevard Alexandre de Fraissinette", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "15", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.41.13.32", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 172
+    }, 
+    {
+        "fields": {
+            "address": "13 rue des Passementiers", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "57", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.80.70.08", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 214
+    }, 
+    {
+        "fields": {
+            "address": "6 rue L\u00e9on Lamaizi\u00e8re", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "38", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.74.44.69", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 195
+    }, 
+    {
+        "fields": {
+            "address": "8 Boulevard des Etats Unis", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "10", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.79.71.77", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 167
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "40", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 197
+    }, 
+    {
+        "fields": {
+            "address": "34 rue D'Arcole", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Psychomotricienne", 
+            "fax": null, 
+            "old_id": "62", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.32.85.05", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 219
+    }, 
+    {
+        "fields": {
+            "address": "63 C rue des Dr Charcot", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "54", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.57.60.27", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 211
+    }, 
+    {
+        "fields": {
+            "address": "2 rue du Grand Moulin", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "24", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.25.02.49", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 181
+    }, 
+    {
+        "fields": {
+            "address": "2 rue Fosses", 
+            "address_complement": null, 
+            "city": "SAINT HEAND", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "69", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.72.38.99", 
+            "type": 18, 
+            "zip_code": "42570"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 226
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "49", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 206
+    }, 
+    {
+        "fields": {
+            "address": "Kin\u00e9 M\u00f4me 35 rue le Corbusier", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "12", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 169
+    }, 
+    {
+        "fields": {
+            "address": "23 rue Emile Clermont", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "4", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.37.06.73", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 161
+    }, 
+    {
+        "fields": {
+            "address": "3 rue Amouroux", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "31", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.80.52.11", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 188
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "psychomotricienne", 
+            "fax": null, 
+            "old_id": "44", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 201
+    }, 
+    {
+        "fields": {
+            "address": "1 place de la Paix", 
+            "address_complement": null, 
+            "city": "SAINT JUST SAINT RAMBERT", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "3", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.52.13.31", 
+            "type": 18, 
+            "zip_code": "42170"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 160
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "46", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 203
+    }, 
+    {
+        "fields": {
+            "address": "63 rue de l'Eternit\u00e9", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "16", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.47.54.02", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 173
+    }, 
+    {
+        "fields": {
+            "address": "40 rue des Dr Charcot", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "70", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.27.77.16.64", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 227
+    }, 
+    {
+        "fields": {
+            "address": "23 Bis avenue de Rochetaill\u00e9e", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "60", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.57.97.71", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 217
+    }, 
+    {
+        "fields": {
+            "address": "84 rue Louis Pasteur", 
+            "address_complement": null, 
+            "city": "LA GRAND CROIX", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "39", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.73.48.99", 
+            "type": 18, 
+            "zip_code": "42320"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 196
+    }, 
+    {
+        "fields": {
+            "address": "7 Boulevard Karl Marx", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "71", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.25.92.21", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 228
+    }, 
+    {
+        "fields": {
+            "address": "15 rue de la r\u00e9publique", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "47", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 204
+    }, 
+    {
+        "fields": {
+            "address": "12 Boulevard de la Palle", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophonste", 
+            "fax": null, 
+            "old_id": "17", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.33.55.69", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 174
+    }, 
+    {
+        "fields": {
+            "address": "3 rue Andr\u00e9 Malraux", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "18", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.32.84.01", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 175
+    }, 
+    {
+        "fields": {
+            "address": "1 all\u00e9e du Parc", 
+            "address_complement": null, 
+            "city": "SAINT PRIEST EN JAREZ", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "63", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.90.94.46", 
+            "type": 18, 
+            "zip_code": "42270"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 220
+    }, 
+    {
+        "fields": {
+            "address": "8 rue Lazare Carnot", 
+            "address_complement": null, 
+            "city": "LA TALAUDIERE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "25", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.53.33.71", 
+            "type": 18, 
+            "zip_code": "42350"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 182
+    }, 
+    {
+        "fields": {
+            "address": "7 boulevard Karl Marx", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "2", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.25.92.21", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 159
+    }, 
+    {
+        "fields": {
+            "address": "Armandie 183 rue Bergson", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "29", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.46.90.45", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 186
+    }, 
+    {
+        "fields": {
+            "address": "27 A rue de la Convention", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "41", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.46.71.16", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 198
+    }, 
+    {
+        "fields": {
+            "address": "14 rue du Onze Novembre", 
+            "address_complement": null, 
+            "city": "L'ETRAT", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "53", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.93.71.96", 
+            "type": 18, 
+            "zip_code": "42580"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 210
+    }, 
+    {
+        "fields": {
+            "address": "2 rue du Grand Moulin", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "55", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.25.02.49", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 212
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "35", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 192
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "48", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 205
+    }, 
+    {
+        "fields": {
+            "address": "35 rue le Corbusier", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "37", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 194
+    }, 
+    {
+        "fields": {
+            "address": "collaboratrice de NOAILLY 12 rue Danton", 
+            "address_complement": null, 
+            "city": "VILLARS", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "61", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.93.73.78", 
+            "type": 18, 
+            "zip_code": "42390"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 218
+    }, 
+    {
+        "fields": {
+            "address": "3 rue Berthelot", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "43", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.32.24.64", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 200
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Pasteur", 
+            "address_complement": null, 
+            "city": "L'ETRAT", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "33", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42580"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 190
+    }, 
+    {
+        "fields": {
+            "address": "67 rue Bergson", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Psychomotricienne", 
+            "fax": null, 
+            "old_id": "11", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.21.79.08", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 168
+    }, 
+    {
+        "fields": {
+            "address": "19 rue Gambetat", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Psychologue Clinicienne", 
+            "fax": null, 
+            "old_id": "58", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.51.79.13", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 215
+    }, 
+    {
+        "fields": {
+            "address": "Kin\u00e9 M\u00f4me 35 rue Le Corbusier", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "13", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.49.12.50", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 170
+    }, 
+    {
+        "fields": {
+            "address": "8 rue Lazare Carnot", 
+            "address_complement": null, 
+            "city": "LA TALAUDIERE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "21", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.59.33.71", 
+            "type": 18, 
+            "zip_code": "42350"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 178
+    }, 
+    {
+        "fields": {
+            "address": "23 Bis Avenue de Rochetaill\u00e9e", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "64", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.57.97.71", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 221
+    }, 
+    {
+        "fields": {
+            "address": "12 rue Danton", 
+            "address_complement": null, 
+            "city": "VILLARS", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "30", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.93.73.78", 
+            "type": 18, 
+            "zip_code": "42390"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 187
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Voltaire", 
+            "address_complement": null, 
+            "city": "SAINT PRIEST EN JAREZ", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "7", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.74.59.23", 
+            "type": 18, 
+            "zip_code": "42270"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 164
+    }, 
+    {
+        "fields": {
+            "address": "11 Avenue Paccard", 
+            "address_complement": null, 
+            "city": "VEAUCHE", 
+            "description": "kiin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "6", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.06.59.14", 
+            "type": 18, 
+            "zip_code": "42340"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 163
+    }, 
+    {
+        "fields": {
+            "address": "34 rue d'Arcole", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "5", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.32.50.29", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 162
+    }, 
+    {
+        "fields": {
+            "address": "5 rue du Onze Novembre", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophonistes", 
+            "fax": null, 
+            "old_id": "27", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.21.30.84", 
+            "type": 18, 
+            "zip_code": "42100"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 184
+    }, 
+    {
+        "fields": {
+            "address": "3 rue Andr\u00e9 Malraux", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "56", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.25.62.42", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 213
+    }, 
+    {
+        "fields": {
+            "address": "7 Place Jean Moulin", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "42", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.38.77.48", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 199
+    }, 
+    {
+        "fields": {
+            "address": "6 rue Mi-Car\u00eame", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "32", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.37.26.82", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 189
+    }, 
+    {
+        "fields": {
+            "address": "34 rue d'Arcole", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "fax": null, 
+            "old_id": "51", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.32.85.05", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 208
+    }, 
+    {
+        "fields": {
+            "address": "Cabinet Noailly 12 rue Danton", 
+            "address_complement": null, 
+            "city": "VILLARS", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "52", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.93.73.78", 
+            "type": 18, 
+            "zip_code": "42390"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 209
+    }, 
+    {
+        "fields": {
+            "address": "15 rue de la R\u00e9publique", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "50", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 207
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": null, 
+            "city": "", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "34", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": ""
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 191
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Emile Combes", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "68", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.32.15.77", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 225
+    }, 
+    {
+        "fields": {
+            "address": "3 rue Pasteur", 
+            "address_complement": null, 
+            "city": "L'ETRAT", 
+            "description": "orthophoniste", 
+            "fax": null, 
+            "old_id": "20", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.93.27.61", 
+            "type": 18, 
+            "zip_code": "42580"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 177
+    }, 
+    {
+        "fields": {
+            "address": "20/22 Mont\u00e9e du Cr\u00eat de Roch", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Coordonnatrice du Dispositif de R\u00e9ussite Educative St\u00e9phanois", 
+            "fax": null, 
+            "old_id": "1", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.21.80.96", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 158
+    }, 
+    {
+        "fields": {
+            "address": "25 rue Georges Teissier", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "22", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.37.88.32", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 179
+    }, 
+    {
+        "fields": {
+            "address": "29 rue du Onze Novembre", 
+            "address_complement": null, 
+            "city": "LE CHAMBON FEUGEROLLES", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "28", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.61.01.12", 
+            "type": 18, 
+            "zip_code": "42500"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 185
+    }, 
+    {
+        "fields": {
+            "address": "Espace Ambroise Par\u00e9  10 Avenue de Saint Etienne", 
+            "address_complement": null, 
+            "city": "ANDREZIEUX BOUTHEON", 
+            "description": "Orthophoniste", 
+            "fax": null, 
+            "old_id": "59", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.55.42.20", 
+            "type": 18, 
+            "zip_code": "42160"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 216
+    }, 
+    {
+        "fields": {
+            "address": "7 rue Edmond Charpentier", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "Kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "67", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.93.67.60", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 224
+    }, 
+    {
+        "fields": {
+            "address": "77 Avenue Albert Raimond", 
+            "address_complement": null, 
+            "city": "SAINT PRIEST EN JAREZ", 
+            "description": "Kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "23", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.74.55.39", 
+            "type": 18, 
+            "zip_code": "42270"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 180
+    }, 
+    {
+        "fields": {
+            "address": "34 rue D'Arcole", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "fax": null, 
+            "old_id": "19", 
+            "old_service": "CAMSP", 
+            "phone_work": "", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 176
+    }, 
+    {
+        "fields": {
+            "address": "183 rue Bergson", 
+            "address_complement": null, 
+            "city": "SAINT ETIENNE", 
+            "description": "kin\u00e9sith\u00e9rapeute", 
+            "fax": null, 
+            "old_id": "45", 
+            "old_service": "CAMSP", 
+            "phone_work": "04.77.46.90.45", 
+            "type": 18, 
+            "zip_code": "42000"
+        }, 
+        "model": "personnes.externalworker", 
+        "pk": 202
+    }
+]
