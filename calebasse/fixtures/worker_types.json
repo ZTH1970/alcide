@@ -137,10 +137,18 @@
     },
     {
         "fields": {
+            "intervene": false,
+            "name": "Professeur des écoles"
+        },
+        "model": "ressources.workertype",
+        "pk": 18
+    },
+    {
+        "fields": {
             "intervene": true,
             "name": "Non défini"
         },
         "model": "ressources.workertype",
-        "pk": 18
+        "pk": 19
     }
 ]
