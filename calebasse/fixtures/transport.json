@@ -1,0 +1,343 @@
+[
+    {
+        "fields": {
+            "address": "Route du Violet", 
+            "address_complement": "", 
+            "city": "SAINT GENEST MALIFAUX", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "taxi.p.r@orange.fr", 
+            "fax": "", 
+            "name": "TAXI REYMONDON", 
+            "old_camsp_id": "1", 
+            "old_cmpp_id": "1", 
+            "old_sessad_dys_id": "1", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.77.39.08.88", 
+            "zip_code": "42660"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "address": "2, Rue C. Coignet", 
+            "address_complement": "", 
+            "city": "ANDREZIEUX BOUTHEON", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "TAXI LAFOND", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "2", 
+            "old_sessad_dys_id": "2", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.7736.61.48", 
+            "zip_code": "42160"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "TAXI PIAZON", 
+            "old_camsp_id": "2", 
+            "old_cmpp_id": "3", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "", 
+            "zip_code": ""
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "address": "2, Rue du Stade", 
+            "address_complement": "", 
+            "city": "LA TALAUDIERE", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "TAL'AMBULANCES", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "4", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.77.53.41.41", 
+            "zip_code": "42350"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "address": "Le Bourg", 
+            "address_complement": "", 
+            "city": "SOLEYMIEUX", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "BOURGIN TAXIS", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "5", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.77.76.71.41", 
+            "zip_code": "42560"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "address": "7, Rue Louis Lumi\u00e8re", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "correspondant": "Madame BRUYAS", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "TAXI DE VILLE", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "6", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "0427862323", 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "ESTIVAREILLES", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "Taxi BOURGIN", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "7", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "", 
+            "zip_code": "42380"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "address": "46, Rue des Grands Ch\u00eanes", 
+            "address_complement": "", 
+            "city": "MONTBRISON", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "CENTRE AMBULANCIER MONTBRISONNAIS", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "8", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "", 
+            "zip_code": "42600"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "address": "R\u00e9sidence Le Mermoz", 
+            "address_complement": "Rue Moli\u00e8re - All\u00e9e B", 
+            "city": "ANDREZIEUX", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "TAXI BOGY", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "3", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.7736.55.85", 
+            "zip_code": "42160"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "address": "8, Rue du 11 Novembre", 
+            "address_complement": "", 
+            "city": "LE CHAMBON FEUGEROLLES", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "CHAMBON AMBULANCES", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "4", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.77.80.75.88", 
+            "zip_code": "42500"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "FOURNEL", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "5", 
+            "old_sessad_ted_id": "", 
+            "phone": "", 
+            "zip_code": ""
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "address": "1, Place Jean Jaur\u00e8s", 
+            "address_complement": "", 
+            "city": "ROCHE LA MOLIERE", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "GAGNAIRE", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "6", 
+            "old_sessad_ted_id": "", 
+            "phone": "0477906527", 
+            "zip_code": "42230"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "address": "1 Bis, Rue du 19 Mars 1962", 
+            "address_complement": "", 
+            "city": "SAINT CYPRIEN", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "Taxi CHANUT", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "7", 
+            "old_sessad_ted_id": "", 
+            "phone": "0477369321", 
+            "zip_code": "42160"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "ami de la famille", 
+            "old_camsp_id": "3", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "", 
+            "zip_code": ""
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "address": "1 All\u00e9e Chancarte", 
+            "address_complement": "", 
+            "city": "SAINT HEAND", 
+            "correspondant": "", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "TAXIS St HEAND", 
+            "old_camsp_id": "4", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.77.30.95.95", 
+            "zip_code": "42570"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "address": "5 Route de Saint Etienne", 
+            "address_complement": "", 
+            "city": "SAINT CHAMOND", 
+            "correspondant": "JJ FAURE 06.80.28.45.39   Fr\u00e9d\u00e9ric THIZY 06.07.33.07.27", 
+            "description": null, 
+            "email": "", 
+            "fax": "", 
+            "name": "FAURE -THIZY", 
+            "old_camsp_id": "5", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "", 
+            "phone": "04.77.226.239", 
+            "zip_code": "42400"
+        }, 
+        "model": "ressources.transportcompany", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "name": "V.S.L."
+        }, 
+        "model": "ressources.transporttype", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "Transports en commun"
+        }, 
+        "model": "ressources.transporttype", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "Voiture particuli\u00e8re"
+        }, 
+        "model": "ressources.transporttype", 
+        "pk": 3
+    }
+]
