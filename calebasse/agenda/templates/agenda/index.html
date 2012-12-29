@@ -34,13 +34,13 @@
      <dd><ul>
        {% for worker in workers_type.workers %}
        {% if worker|is_worker_in_service:service_name and worker|is_intervenant %}
-       <li id="selector-worker-{{worker.id}}" class="person-item in_service intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item in_service intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% elif worker|is_worker_in_service:service_name %}
-       <li id="selector-worker-{{worker.id}}" class="person-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% elif worker|is_intervenant %}
-       <li id="selector-worker-{{worker.id}}" class="person-item intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% else %}
-       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span> <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="person-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
        {% endif %}
        {% endfor %}
      </ul></dd>
