@@ -89,6 +89,33 @@ class LargeRegime(NamedAbstractModel):
 
 
 class TransportCompany(NamedAbstractModel):
+    description = models.TextField(blank=True, null=True, default=None)
+    address = models.CharField(max_length=120,
+            verbose_name=u"Adresse", blank=True, null=True, default=None)
+    address_complement = models.CharField(max_length=120,
+            blank=True,
+            null=True,
+            default=None,
+            verbose_name=u"Complément d'adresse")
+    zip_code = ZipCodeField(verbose_name=u"Code postal",
+        blank=True, null=True, default=None)
+    city = models.CharField(max_length=80, verbose_name=u"Ville",
+        blank=True, null=True, default=None)
+    phone = PhoneNumberField(verbose_name=u"Téléphone",
+        blank=True, null=True, default=None)
+    fax = models.CharField(max_length=30,
+            blank=True, null=True, default=None)
+    email = models.EmailField(blank=True, null=True)
+    correspondant = models.CharField(max_length=80, blank=True, null=True)
+    old_camsp_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au CAMSP', blank=True, null=True)
+    old_cmpp_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au CMPP', blank=True, null=True)
+    old_sessad_dys_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au SESSAD TED', blank=True, null=True)
+    old_sessad_ted_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au SESSAD DYS', blank=True, null=True)
+
     class Meta:
         verbose_name = u'Compagnie de transport'
         verbose_name_plural = u'Compagnies de transport'
@@ -216,6 +243,15 @@ class InscriptionMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u'Motif d\'inscription'
         verbose_name_plural = u'Motifs d\'inscription'
+
+class Provenance(NamedAbstractModel):
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
+    class Meta:
+        verbose_name = u'Provenance'
+        verbose_name_plural = u'Provenances'
 
 
 class Nationality(NamedAbstractModel):
