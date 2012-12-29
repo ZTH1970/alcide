@@ -46,22 +46,7 @@ class AgendaHomepageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
-        time_tables = TimeTable.objects.select_related('worker'). \
-                filter(services=self.service). \
-                for_today(self.date). \
-                order_by('start_date')
-        holidays = Holiday.objects.select_related('worker'). \
-                for_period(self.date, self.date). \
-                order_by('start_date')
-        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
-
-        context['time_tables'] = time_tables
-        context['holidays'] = holidays
-        context['occurrences'] = occurrences
-
         context['workers_types'] = []
-        context['workers_agenda'] = []
-        context['disponibility'] = {}
         workers = []
         for worker_type in WorkerType.objects.all():
             workers_type = Worker.objects.filter(enabled=True, type=worker_type)
@@ -72,6 +57,7 @@ class AgendaHomepageView(TemplateView):
 
         context['workers'] = workers
         context['disponibility_start_times'] = range(8, 20)
+
         return context
 
 class AgendaServiceActivityView(TemplateView):
@@ -318,9 +304,16 @@ class AgendasTherapeutesView(AgendaHomepageView):
 
     def get_context_data(self, **kwargs):
         context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
-        time_tables = context['time_tables']
-        holidays = context['holidays']
-        occurrences = context['occurrences']
+
+        time_tables = TimeTable.objects.select_related('worker'). \
+                filter(services=self.service). \
+                for_today(self.date). \
+                order_by('start_date')
+        holidays = Holiday.objects.select_related('worker'). \
+                for_period(self.date, self.date). \
+                order_by('start_date')
+        occurrences = Occurrence.objects.daily_occurrences(context['date']).order_by('start_time')
+
         occurrences_workers = {}
         time_tables_workers = {}
         holidays_workers = {}
