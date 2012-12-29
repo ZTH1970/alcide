@@ -134,6 +134,13 @@
         },
         "model": "ressources.workertype",
         "pk": 17
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Non défini"
+        },
+        "model": "ressources.workertype",
+        "pk": 18
     }
-
 ]
