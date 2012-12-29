@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.db import models
 from django.http import HttpResponseRedirect, HttpResponse
+from django.views.generic import View
 from django.views.generic.edit import DeleteView, FormMixin
 from django.contrib import messages
 
@@ -676,3 +677,14 @@ class PatientRecordsQuotationsView(cbv.ListView):
         return ctx
 
 patientrecord_quotations = PatientRecordsQuotationsView.as_view()
+
+
+class CreateDirectoryView(View, cbv.ServiceViewMixin):
+    def post(self, request, *args, **kwargs):
+        patient = PatientRecord.objects.get(id=kwargs['patientrecord_id'])
+        service = Service.objects.get(slug=kwargs['service'])
+        patient.get_ondisk_directory(service.name)
+        messages.add_message(self.request, messages.INFO, u'Répertoire patient créé.')
+        return HttpResponseRedirect('view')
+
+create_directory = CreateDirectoryView.as_view()

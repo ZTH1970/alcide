@@ -1261,6 +1261,9 @@ ul.messages li {
 	border: none;
 }
 
+#create-directory-form {
+        text-align: right;
+}
 
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {
