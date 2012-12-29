@@ -88,16 +88,15 @@ function reorder_disponibility_columns() {
     $('a.tab').each(function(a, b) {
         table_indexes.push($(b).data('id'));
     });
-    $('td#dispos table tr').each(function(a, b) {
-        $(b).find('td').sortElements(function(a, b) {
-          id_a = $(a).data('id');
-          id_b = $(b).data('id');
-          if (id_a == id_b) return 0;
-          if (id_a == undefined) return -1;
-          if (id_b == undefined) return 1;
-          return table_indexes.indexOf(parseInt(id_a)) < table_indexes.indexOf(id_b) ? -1 : 1;
-        });
-    });
+    rows = $('td#dispos table tr');
+    for (var i=0; i<rows.length; i++) {
+        tr = $(rows[i]);
+        t = $.map(table_indexes,
+                  function(v, i) { return $('.worker-' + v, tr)[0]; }).filter(
+                  function(a) { if (a) return true; return false; });
+        $('.agenda', tr).detach();
+        $(tr).append(t);
+    };
 }
 
 function toggle_worker(worker_selector) {
@@ -146,15 +145,12 @@ function toggle_worker(worker_selector) {
         $.get('ajax-worker-disponibility-column/' + worker_id,
             function(data) {
                 var dispo_table_rows = $('td#dispos table tr');
-                $(data).find('td').each(function(a, b) {
-                        $(dispo_table_rows[a]).append(b);
-                    }
-                );
-                reorder_disponibility_columns();
+                all_td = $(data).find('td');
+                for (var i=0; i<all_td.length; i++) {
+                    $(dispo_table_rows[i]).append(all_td[i]);
+                }
             }
         );
-    } else {
-        reorder_disponibility_columns();
     }
     return target.find('a.tab');
 }
@@ -278,6 +274,8 @@ function event_dialog(url, title, width, btn_text) {
 (function($) {
   $(function() {
       $('#tabs').tabs();
+
+      $('#tabs').ajaxStop(function() { reorder_disponibility_columns(); });
 
       if ($('.person-item').length) {
           $('.person-item').on('click', function() {
