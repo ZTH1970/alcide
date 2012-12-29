@@ -101,7 +101,7 @@ class WorkerSearchForm(forms.Form):
 class WorkerIdForm(forms.ModelForm):
     class Meta:
         model = Worker
-        fields = ('last_name', 'first_name', 'gender', 'enabled')
+        fields = ('last_name', 'first_name', 'gender', 'type', 'enabled')
 
 class WorkerServiceForm(forms.ModelForm):
     class Meta:
