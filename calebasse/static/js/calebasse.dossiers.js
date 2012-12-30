@@ -1,3 +1,8 @@
+function add_datepickers(that) {
+  $('input#id_start_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  $('input#id_end_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  $('input#id_date_selected', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+}
 
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
@@ -18,6 +23,7 @@ function state_dialog(url, state_title, state_type) {
                         window.location.reload(true);
                     }
                 }
+                $('input.date', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
                 $('form', this).ajaxForm({
                     success: onsuccess,
                     data: { patient_id: patient_id,  state_type: state_type, service_id: service_id }
@@ -102,6 +108,7 @@ function state_dialog(url, state_title, state_type) {
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',
             '#dossier-dlg', '500px', 'Ajouter', false, function(that) {
+                    $('input#id_date_selected', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
                     $(that).find('#id_last_name').keyup(function() {
                             var val = $(this).val();
                             if (val.length < 3) {
@@ -175,11 +182,11 @@ function state_dialog(url, state_title, state_type) {
     });
     $('#new-socialisation-duration-btn').click(function() {
         generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
-            '#ajax-dlg', '800px', 'Ajouter');
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
     });
     $('.update-duration-btn').click(function() {
         generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/update', 'Modifier une période de socialisation',
-            '#ajax-dlg', '800px', 'Modifier');
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
     });
     $('.del-duration').click(function() {
         generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
@@ -187,11 +194,11 @@ function state_dialog(url, state_title, state_type) {
     });
     $('#new-mdph-request-btn').click(function() {
         generic_ajaxform_dialog('mdph_request/new', 'Ajouter une demande MDPH',
-            '#ajax-dlg', '800px', 'Ajouter');
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
     });
     $('.update-mdph-request-btn').click(function() {
         generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/update', 'Modifier une demande MDPH',
-            '#ajax-dlg', '800px', 'Modifier');
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
     });
     $('.del-mdph-request').click(function() {
         generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/del', 'Supprimer une demande MDPH',
@@ -199,11 +206,11 @@ function state_dialog(url, state_title, state_type) {
     });
     $('#new-mdph-response-btn').click(function() {
         generic_ajaxform_dialog('mdph_response/new', 'Ajouter une réponse MDPH',
-            '#ajax-dlg', '800px', 'Ajouter');
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
     });
     $('.update-mdph-response-btn').click(function() {
         generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/update', 'Modifier une réponse MDPH',
-            '#ajax-dlg', '800px', 'Modifier');
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
     });
     $('.del-mdph-response').click(function() {
         generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/del', 'Supprimer une réponse MDPH',
@@ -211,27 +218,27 @@ function state_dialog(url, state_title, state_type) {
     });
     $('#new-hctrait-btn').click(function() {
         generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
-            '#ajax-dlg', '600px', 'Ajouter');
+            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
     });
     $('#new-hcdiag-btn').click(function() {
         generic_ajaxform_dialog('healthcare_diagnostic/new', 'Ajouter une prise en charge de diagnostic',
-            '#ajax-dlg', '600px', 'Ajouter');
+            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
     });
     $('#new-notification-btn').click(function() {
         generic_ajaxform_dialog('healthcare_notification/new', 'Ajouter une notification',
-            '#ajax-dlg', '600px', 'Ajouter');
+            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
     });
     $('.update-hctrait-btn').click(function() {
         generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/update', 'Modifier une prise en charge de traitement',
-            '#ajax-dlg', '800px', 'Modifier');
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
     });
     $('.update-hcdiag-btn').click(function() {
         generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/update', 'Modifier une prise en charge de diagnostic',
-            '#ajax-dlg', '800px', 'Modifier');
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
     });
     $('.update-notification-btn').click(function() {
         generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/update', 'Modifier une notification',
-            '#ajax-dlg', '800px', 'Modifier');
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
     });
     $('.del-hctrait').click(function() {
         generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de traitement',
@@ -248,7 +255,7 @@ function state_dialog(url, state_title, state_type) {
 
     $('.update-patient-state-btn').click(function() {
         generic_ajaxform_dialog('state/' + $(this).data('id') + '/update', 'Modifier un état',
-            '#ajax-dlg', '500px', 'Modifier', '#histo');
+            '#ajax-dlg', '500px', 'Modifier', '#histo', add_datepickers);
     });
     $('.del-patient-state-btn').click(function() {
         generic_ajaxform_dialog('state/' + $(this).data('id') + '/del', 'Supprimer un état',
@@ -272,6 +279,8 @@ function state_dialog(url, state_title, state_type) {
               }
           });
       });
+
+    $('input#id_id-birthdate', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 
     $('button.blind').next().hide();
     $('button.blind').click(function() {

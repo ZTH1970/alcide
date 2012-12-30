@@ -149,7 +149,7 @@ function select_add_dialog(opts, $form, form_action)
         var months = $span.data('number-of-months');
         var before_selector = $span.data('before-selector');
         var after_selector = $span.data('after-selector');
-        $input.datepicker({dateFormat: 'd/m/yy' });
+        $input.datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
         if (months) {
           $input.datepicker("option", "numberOfMonths", months);
         }
