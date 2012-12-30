@@ -822,7 +822,8 @@ table#conges-a-venir {
 }
 
 table#conges-a-venir td {
-  width: 32%;
+  width: 25%;
+  vertical-align: top;
 }
 
 div#overlay {

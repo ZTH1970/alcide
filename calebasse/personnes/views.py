@@ -242,6 +242,7 @@ class HolidayView(cbv.TemplateView):
                     .for_service_workers(self.service)
             group_qs = group_qs.for_period(start_date, end_date)
             current_qs = []
+        ctx['end_date'] = end_date
         ctx['current_holidays'] = current_qs
         future_holidays = defaultdict(lambda:[])
         for holiday in future_qs:

@@ -16,14 +16,14 @@
   <ul>
     {% for holiday in current_holidays %}
     <li><a href="{% url 'worker_update' service=service pk=holiday.worker.pk %}">
-        <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}
-        </a>, {{ holiday }}</li>
+        <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}</a>,
+        {{ holiday }}</li>
     {% endfor %}
   </ul>
 {% endif %}
 
 {% if future_holidays %}
-  <h4>À venir</h4>
+  <h4>À venir (jusqu'au {{ end_date|date:"d/m/Y" }})</h4>
 
   <table id="conges-a-venir">
     <thead>
@@ -40,8 +40,8 @@
             <ul>
               {% for holiday in month.holidays %}
               <li><a href="{% url 'worker_update' service=service pk=holiday.worker.pk %}">
-                  <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}
-                  </a>, {{ holiday }}</li>
+                  <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}</a>,
+                  {{ holiday }}</li>
               {% endfor %}
             </ul>
           </td>
