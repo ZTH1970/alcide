@@ -454,6 +454,7 @@ td#dispos {
 
 td#dispos tr.initials {
 	font-size: 80%;
+	font-family: monospace;
 }
 
 td#dispos td {
