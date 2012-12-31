@@ -125,8 +125,8 @@ class UpdateAppointmentView(UpdateView):
 
     def get_initial(self):
         initial = super(UpdateView, self).get_initial()
-        initial['date'] = self.object.start_datetime.strftime("%Y-%m-%d")
-        initial['time'] = self.object.start_datetime.strftime("%H:%M")
+        initial['date'] = self.object.start_datetime.date()
+        initial['time'] = self.object.start_datetime.time()
         time = self.object.end_datetime - self.object.start_datetime
         if time:
             time = time.seconds / 60
@@ -167,8 +167,8 @@ class UpdateEventView(UpdateView):
 
     def get_initial(self):
         initial = super(UpdateEventView, self).get_initial()
-        initial['date'] = self.object.start_datetime.strftime("%Y-%m-%d")
-        initial['time'] = self.object.start_datetime.strftime("%H:%M")
+        initial['date'] = self.object.start_datetime.date()
+        initial['time'] = self.object.start_datetime.time()
         initial['service'] = self.service
         time = self.object.end_datetime - self.object.start_datetime
         if time:
