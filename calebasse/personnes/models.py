@@ -9,6 +9,7 @@ from django.template.defaultfilters import date as date_filter
 from django import forms
 
 import reversion
+from model_utils.managers import InheritanceManager
 
 from calebasse.models import PhoneNumberField
 from calebasse.ressources.models import Service, NamedAbstractModel
@@ -31,6 +32,7 @@ class People(BaseModelMixin, models.Model):
             (2, 'Féminin'),
     )
 
+    objects = InheritanceManager()
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
     first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
     display_name = models.CharField(max_length=256,
