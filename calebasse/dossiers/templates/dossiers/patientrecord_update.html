@@ -320,22 +320,22 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <div id="tabs-5"> <!-- Actes passés -->
         {% for last_rdv, state in last_rdvs %}
         <div class="frame">
-            <h3>{{ last_rdv.start_time|date:"d/m/y H:m" }} {{ last_rdv.event.eventact.act_type }}</h3>
+            <h3>{{ last_rdv.start_datetime|date:"d/m/y H:m" }} {{ last_rdv.eventwithact.act_type }}</h3>
             <ul>
-            {% if last_rdv.event.eventact.doctors.all %}
+            {% if last_rdv.participants.all %}
             <li><label>Praticiens :</label>
-            {% for doctor in last_rdv.event.eventact.doctors.all %}
+            {% for doctor in last_rdv.participants.all %}
             {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}
             </li>
             {% endif %}
-            {% if last_rdv.event.room %}
+            {% if last_rdv.room %}
             <li>
-            Salle : {{ last_rdv.event.room }}
+            Salle : {{ last_rdv.room }}
             </li>
             {% endif %}
             <li>
-            {% if last_rdv.event.eventact.convocation_sent %}
+            {% if last_rdv.eventwithact.act.convocation_sent %}
             Convocation envoyé
             {% else %}
             Convocation non envoyé
@@ -354,22 +354,22 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <div id="tabs-6"> <!-- Prochains rendez-vous -->
         {% for next_rdv, state in next_rdvs %}
         <div class="frame">
-            <h3>{{ next_rdv.start_time|date:"d/m/y H:m" }} {{ next_rdv.event.eventact.act_type }}</h3>
+            <h3>{{ next_rdv.start_datetime|date:"d/m/y H:m" }} {{ next_rdv.eventwithact.act_type }}</h3>
             <ul>
-            {% if next_rdv.event.eventact.doctors.all %}
+            {% if next_rdv.participants.all %}
             <li><label>Praticiens :</label>
-            {% for doctor in next_rdv.event.eventact.doctors.all %}
+            {% for doctor in next_rdv.participants.all %}
             {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}
             </li>
             {% endif %}
-            {% if next_rdv.event.room %}
+            {% if next_rdv.room %}
             <li>
-            Salle : {{ next_rdv.event.room }}
+            Salle : {{ next_rdv.room }}
             </li>
             {% endif %}
             <li>
-            {% if next_rdv.event.eventact.convocation_sent %}
+            {% if next_rdv.eventwithact.act.convocation_sent %}
             Convocation envoyé
             {% else %}
             Convocation non envoyé

@@ -30,18 +30,18 @@ def get_next_rdv(patient_record):
     next_rdv = {}
     event = Event.objects.next_appointment(patient_record)
     if event:
-        next_rdv['start_datetime'] = event.start_time
+        next_rdv['start_datetime'] = event.start_datetime
         next_rdv['participants'] = event.participants.all()
-        next_rdv['act_type'] = event.eventact.act_type
+        next_rdv['act_type'] = event.eventwithact.act_type
     return next_rdv
 
 def get_last_rdv(patient_record):
     last_rdv = {}
     event = Event.objects.last_appointment(patient_record)
     if event:
-        last_rdv['start_datetime'] = event.start_time
+        last_rdv['start_datetime'] = event.start_datetime
         last_rdv['participants'] = event.participants.all()
-        last_rdv['act_type'] = event.eventact.act_type
+        last_rdv['act_type'] = event.eventwithact.act_type
     return last_rdv
 
 class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
