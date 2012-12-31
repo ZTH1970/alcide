@@ -124,7 +124,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
     timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
     events_set = IntervalSet((o.to_interval() for o in events))
     holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
-    busy_occurrences_set = IntervalSet((o.to_interval() for o in events_set if not o.is_event_absence()))
+    busy_occurrences_set = IntervalSet((o.to_interval() for o in events if not o.is_event_absence()))
     for free_time in timetables_set - (busy_occurrences_set+holidays_set):
         if free_time:
             delta = free_time.upper_bound - free_time.lower_bound
