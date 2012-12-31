@@ -230,6 +230,8 @@ class SocialisationDuration(models.Model):
     level = models.ForeignKey('ressources.SchoolLevel',
         verbose_name=u'Classe',
         blank=True, null=True)
+    redoublement = models.BooleanField(verbose_name=u"Redoublement",
+            default=False)
     start_date = models.DateField(verbose_name=u"Date d'arrivée")
     contact = models.CharField(verbose_name=u"Contact", max_length=200, blank=True, null=True, default=None)
     end_date = models.DateField(verbose_name=u"Date de départ",
