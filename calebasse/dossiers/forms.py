@@ -37,7 +37,7 @@ class StateForm(Form):
     patient_id = forms.IntegerField()
     service_id = forms.IntegerField()
     state_type = forms.CharField(max_length=40)
-    date = forms.DateField(label=u'Date')
+    date = forms.DateField(label=u'Date', localize=True)
     comment = forms.CharField(label='Commentaire',
             required=False, widget=forms.Textarea)
 
@@ -50,7 +50,7 @@ class StateForm(Form):
         return self.cleaned_data['date']
 
 class PatientStateForm(ModelForm):
-    date_selected = forms.DateField(label=u'Date')
+    date_selected = forms.DateField(label=u'Date', localize=True)
     comment = forms.CharField(label='Commentaire',
             required=False, widget=forms.Textarea)
 
@@ -73,7 +73,7 @@ class PatientStateForm(ModelForm):
         return self.cleaned_data['date_selected']
 
 class NewPatientRecordForm(ModelForm):
-    date_selected = forms.DateField(label=u"Date de contact", initial=date.today())
+    date_selected = forms.DateField(label=u"Date de contact", initial=date.today(), localize=True)
 
     class Meta:
         model = PatientRecord
@@ -337,6 +337,6 @@ class QuotationsForm(Form):
     states = forms.MultipleChoiceField(
             widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}),
             choices=STATE_CHOICES, initial=(2,3,4))
-    date_actes_start = forms.DateField(label=u'Date')
-    date_actes_end = forms.DateField(label=u'Date')
+    date_actes_start = forms.DateField(label=u'Date', localize=True)
+    date_actes_end = forms.DateField(label=u'Date', localize=True)
     without_quotations = forms.BooleanField()

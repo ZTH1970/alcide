@@ -177,8 +177,8 @@ HolidayFormSet = inlineformset_factory(
         fields=('start_date', 'end_date', 'start_time', 'end_time', 'holiday_type', 'comment'))
 
 class HolidaySearchForm(forms.Form):
-    start_date = forms.DateField(required=False)
-    end_date = forms.DateField(required=False)
+    start_date = forms.DateField(required=False, localize=True)
+    end_date = forms.DateField(required=False, localize=True)
 
     def clean(self):
         cleaned_data = super(HolidaySearchForm, self).clean()

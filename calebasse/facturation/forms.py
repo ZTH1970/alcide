@@ -15,4 +15,4 @@ class EditInvoiceForm(ModelForm):
 class CloseInvoicingForm(Form):
     invoicing_id = forms.IntegerField()
     service_name = forms.CharField()
-    date = forms.DateField(label=u'Date')
+    date = forms.DateField(label=u'Date', localize=True)
