@@ -1,39 +1,38 @@
 [
+  {
+    "pk": 1,
+    "model": "agenda.eventtype",
+    "fields": {
+      "label": "Rendez-vous patient"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "agenda.eventtype",
+    "fields": {
+      "label": "R\u00e9union"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "agenda.eventtype",
+    "fields": {
+      "label": "Vacances"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "agenda.eventtype",
+    "fields": {
+      "label": "Autre",
+      "rank": 999
+    }
+  },
+
+
     {
         "fields": {
             "label": "P\u00e9rinatalit\u00e9",
-            "rank": 0
-        },
-        "model": "agenda.eventtype",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "label": "R\u00e9union des parents",
-            "rank": 0
-        },
-        "model": "agenda.eventtype",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "label": "Temps de trajet",
-            "rank": 0
-        },
-        "model": "agenda.eventtype",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "label": "Autre",
-            "rank": 999
-        },
-        "model": "agenda.eventtype",
-        "pk": 4
-    },
-    {
-        "fields": {
-            "label": "R\u00e9union",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -41,7 +40,7 @@
     },
     {
         "fields": {
-            "label": "R\u00e9union \u00e0 l'ext\u00e9rieur",
+            "label": "R\u00e9union des parents",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -49,7 +48,7 @@
     },
     {
         "fields": {
-            "label": "En formation",
+            "label": "Temps de trajet",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -57,7 +56,7 @@
     },
     {
         "fields": {
-            "label": "Donne  une formation",
+            "label": "R\u00e9union \u00e0 l'ext\u00e9rieur",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -65,7 +64,7 @@
     },
     {
         "fields": {
-            "label": "\u00c9quipe pluridisciplinaire MLA",
+            "label": "En formation",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -73,7 +72,7 @@
     },
     {
         "fields": {
-            "label": "Supervision",
+            "label": "Donne une formation",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -81,7 +80,7 @@
     },
     {
         "fields": {
-            "label": "R\u00e9union de service",
+            "label": "\u00c9quipe pluridisciplinaire MLA",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -89,7 +88,7 @@
     },
     {
         "fields": {
-            "label": "R\u00e9union de direction",
+            "label": "Supervision",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -97,7 +96,7 @@
     },
     {
         "fields": {
-            "label": "R\u00e9union administratifs",
+            "label": "R\u00e9union de service",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -105,7 +104,7 @@
     },
     {
         "fields": {
-            "label": "R\u00e9union agents de service",
+            "label": "R\u00e9union de direction",
             "rank": 0
         },
         "model": "agenda.eventtype",
@@ -113,10 +112,26 @@
     },
     {
         "fields": {
-            "label": "Concertation direction",
+            "label": "R\u00e9union administratifs",
             "rank": 0
         },
         "model": "agenda.eventtype",
         "pk": 15
+    },
+    {
+        "fields": {
+            "label": "R\u00e9union agents de service",
+            "rank": 0
+        },
+        "model": "agenda.eventtype",
+        "pk": 16
+    },
+    {
+        "fields": {
+            "label": "Concertation direction",
+            "rank": 0
+        },
+        "model": "agenda.eventtype",
+        "pk": 17
     }
 ]
