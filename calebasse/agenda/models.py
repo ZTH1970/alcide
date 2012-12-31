@@ -6,6 +6,7 @@ from copy import copy
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import m2m_changed
 
 from ..middleware.request import get_request
 from calebasse.agenda import managers
@@ -272,3 +273,15 @@ class EventWithAct(Event):
         kwargs['doctors'] = ', '.join(map(unicode, self.participants.all())) if self.id else ''
         return u'Rdv le {start_datetime} de {patient} avec {doctors} pour ' \
             '{act_type} ({act_type.id})'.format(**kwargs)
+
+
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
+
+
+@receiver(m2m_changed, sender=Event.participants.through)
+def participants_changed(sender, instance, action, **kwargs):
+    if action.startswith('post'):
+        workers = [ p.worker for p in instance.participants.prefetch_related('worker') ]
+        for act in instance.act_set.all():
+            act.doctors = workers
