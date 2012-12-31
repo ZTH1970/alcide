@@ -31,6 +31,8 @@ class NewAppointmentForm(forms.ModelForm):
                 'participants',
                 'room',
                 'act_type',
+                'recurrence_week_period',
+                'recurrence_end_date'
         )
 
 
@@ -38,6 +40,7 @@ class NewAppointmentForm(forms.ModelForm):
         self.service = None
         super(NewAppointmentForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
+        self.fields['recurrence_week_period'].label = u'Récurrence'
         if service:
             self.service = service
             self.fields['participants'].queryset = \
@@ -54,13 +57,18 @@ class NewAppointmentForm(forms.ModelForm):
         except ValueError:
             return 0
 
+    def clean(self):
+        cleaned_data = super(NewAppointmentForm, self).clean()
+        if not cleaned_data.get('recurrence_week_period'):
+            cleaned_data['recurrence_end_date'] = None
+        return cleaned_data
+
     def save(self, commit=True):
         appointment = super(NewAppointmentForm, self).save(commit=False)
         appointment.start_datetime = datetime.combine(self.cleaned_data['date'],
                     self.cleaned_data['time'])
         appointment.end_datetime = appointment.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
-        appointment.recurrence_end_date = appointment.start_datetime.date()
         appointment.creator = get_request().user
         appointment.title = appointment.patient.display_name
         appointment.service = self.service
@@ -93,7 +101,9 @@ class NewEventForm(forms.ModelForm):
                 'duration',
                 'room',
                 'participants',
-                'event_type'
+                'event_type',
+                'recurrence_week_period',
+                'recurrence_end_date'
         )
 
     def __init__(self, instance, service=None, **kwargs):
@@ -102,6 +112,7 @@ class NewEventForm(forms.ModelForm):
         self.fields['date'].css = 'datepicker'
         self.fields['event_type'].queryset = \
                     EventType.objects.exclude(id=1).exclude(id=3).order_by('rank', 'label')
+        self.fields['recurrence_week_period'].label = u'Récurrence'
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
@@ -116,7 +127,6 @@ class NewEventForm(forms.ModelForm):
                     self.cleaned_data['time'])
         event.end_datetime = event.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
-        event.recurrence_end_date = event.start_datetime.date()
         event.creator = get_request().user
         event.service = self.service
         event.clean()
@@ -126,6 +136,8 @@ class NewEventForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(NewEventForm, self).clean()
+        if not cleaned_data.get('recurrence_week_period'):
+            cleaned_data['recurrence_end_date'] = None
         event_type = cleaned_data.get('event_type')
         if event_type and event_type.id == 4 and not cleaned_data.get('title'): # 'Autre'
             self._errors['title'] = self.error_class([

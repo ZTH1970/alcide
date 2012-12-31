@@ -69,5 +69,22 @@
 </table>
 
 <hr/>
-<!-- <button>Configurer la périodicité</button> -->
 
+<table id="new-appointment-table">
+   <tr>
+       <td {% if form.recurrence_week_period.field.required %}class="required"{% endif %}>
+        <p>
+       {{ form.recurrence_week_period.label_tag }}
+       {{ form.recurrence_week_period }}
+       {{ form.recurrence_week_period.errors }}
+       </p>
+       </td>
+       <td {% if form.recurrence_end_date.field.required %}class="required"{% endif %}>
+       <p class="datepicker">
+       {{ form.recurrence_end_date.label_tag }}
+       {{ form.recurrence_end_date|add_class:"datepicker-date" }}
+       {{ form.recurrence_end_date.errors }}
+       </p>
+       </td>
+   </tr>
+</table>
