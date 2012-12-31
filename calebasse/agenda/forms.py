@@ -96,7 +96,8 @@ class NewEventForm(forms.ModelForm):
                 'event_type'
         )
 
-    def __init__(self, instance, **kwargs):
+    def __init__(self, instance, service=None, **kwargs):
+        self.service = service
         super(NewEventForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
         self.fields['event_type'].queryset = \

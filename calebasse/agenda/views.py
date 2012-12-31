@@ -169,6 +169,7 @@ class UpdateEventView(UpdateView):
         initial = super(UpdateEventView, self).get_initial()
         initial['date'] = self.object.start_datetime.strftime("%Y-%m-%d")
         initial['time'] = self.object.start_datetime.strftime("%H:%M")
+        initial['service'] = self.service
         time = self.object.end_datetime - self.object.start_datetime
         if time:
             time = time.seconds / 60
