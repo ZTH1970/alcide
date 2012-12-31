@@ -298,7 +298,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     # Physiology and health data
     size = models.IntegerField(verbose_name=u"Taille (cm)",
             null=True, blank=True, default=None)
-    weight = models.IntegerField(verbose_name=u"Poids (kg)",
+    weight = models.IntegerField(verbose_name=u"Poids (g)",
             null=True, blank=True, default=None)
     pregnancy_term = models.IntegerField(verbose_name=u"Terme en semaines",
             null=True, blank=True, default=None)
@@ -306,9 +306,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     chest_perimeter = models.DecimalField(verbose_name=u"Périmètre thoracique", max_digits=5, decimal_places=2,
             null=True, blank=True, default=None)
-    apgar_score_one = models.IntegerField(verbose_name=u"Test d'Apgar 1",
+    apgar_score_one = models.IntegerField(verbose_name=u"Test d'Apgar (1)",
             null=True, blank=True, default=None)
-    apgar_score_two = models.IntegerField(verbose_name=u"Test d'Apgar 2",
+    apgar_score_two = models.IntegerField(verbose_name=u"Test d'Apgar (5)",
             null=True, blank=True, default=None)
     mises_1 = models.ManyToManyField('ressources.CodeCFTMEA', related_name="mises1",
             verbose_name=u"Axe I : catégories cliniques",
@@ -367,6 +367,11 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     externalintervener = models.ForeignKey('personnes.ExternalWorker',
             verbose_name=u"Intervenant extérieur",
             null=True, blank=True, default=None)
+
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ancien ID', blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(PatientRecord, self).__init__(*args, **kwargs)
