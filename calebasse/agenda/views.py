@@ -45,14 +45,14 @@ class AgendaHomepageView(TemplateView):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
         context['workers_types'] = []
-        workers = []
-        for worker_type in WorkerType.objects.all():
-            workers_type = Worker.objects.filter(enabled=True, type=worker_type)
-            if workers_type:
-                data = {'type': worker_type.name, 'workers': workers_type }
-                context['workers_types'].append(data)
-                workers.extend(data['workers'])
-
+        workers = list(Worker.objects.filter(enabled=True).select_related())
+        worker_by_type = {}
+        for worker in workers:
+            workers_for_type = worker_by_type.setdefault(worker.type, [])
+            workers_for_type.append(worker)
+        for worker_type, workers_for_type in worker_by_type.iteritems():
+            context['workers_types'].append(
+                    {'type': worker_type.name, 'workers': workers_for_type })
         context['workers'] = workers
         context['disponibility_start_times'] = range(8, 20)
 
