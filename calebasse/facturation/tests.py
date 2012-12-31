@@ -98,37 +98,38 @@ class FacturationTest(TestCase):
 
         self.assertEqual(len(days_not_locked), 1)
 
-        self.assertTrue(act1 in selected[patient_a])
-        self.assertTrue(act2 in selected[patient_a])
-        self.assertTrue(act3 in selected[patient_a])
+        self.assertTrue(act1.act in selected[patient_a])
+        self.assertTrue(act2.act in selected[patient_a])
+        self.assertTrue(act3.act in selected[patient_a])
         acts_rejected = [x[0] for x in rejected[patient_a]]
-        self.assertTrue(act0 in acts_rejected)
-        self.assertTrue(act4 in acts_rejected)
+        self.assertTrue(act0.act in acts_rejected)
+        self.assertTrue(act4.act in acts_rejected)
 
         acts_not_locked = [x[0] for x in not_locked[patient_b]]
-        self.assertTrue(act5 in acts_not_locked)
+        self.assertTrue(act5.act in acts_not_locked)
         acts_not_valide = [x[0] for x in not_valide[patient_b]]
-        self.assertTrue(act6 in acts_not_valide)
-        self.assertTrue(act7 in not_billable[patient_b])
-        self.assertTrue(act8 in selected[patient_b])
-        self.assertTrue(act9 in selected[patient_b])
-        self.assertTrue(act10 in selected[patient_b])
-        self.assertTrue(act11 in selected[patient_b])
+        self.assertTrue(act6.act in acts_not_valide)
+        print not_billable
+        self.assertTrue(act7.act in not_billable[patient_b])
+        self.assertTrue(act8.act in selected[patient_b])
+        self.assertTrue(act9.act in selected[patient_b])
+        self.assertTrue(act10.act in selected[patient_b])
+        self.assertTrue(act11.act in selected[patient_b])
 
         states = patient_b.get_states_history()
         patient_b.change_day_selected_of_state(states[2], datetime(2020, 10, 7))
         not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, selected = \
             list_acts_for_billing_CAMSP(datetime(2020, 10, 4), datetime(2020, 10, 8), service_camsp)
         acts_not_locked = [x[0] for x in not_locked[patient_b]]
-        self.assertTrue(act5 in acts_not_locked)
+        self.assertTrue(act5.act in acts_not_locked)
         acts_not_valide = [x[0] for x in not_valide[patient_b]]
-        self.assertTrue(act6 in acts_not_valide)
-        self.assertTrue(act7 in not_billable[patient_b])
+        self.assertTrue(act6.act in acts_not_valide)
+        self.assertTrue(act7.act in not_billable[patient_b])
         acts_rejected = [x[0] for x in rejected[patient_b]]
-        self.assertTrue(act8 in acts_rejected)
-        self.assertTrue(act9 in acts_rejected)
-        self.assertTrue(act10 in acts_rejected)
-        self.assertTrue(act11 in acts_rejected)
+        self.assertTrue(act8.act in acts_rejected)
+        self.assertTrue(act9.act in acts_rejected)
+        self.assertTrue(act10.act in acts_rejected)
+        self.assertTrue(act11.act in acts_rejected)
 
         states = patient_b.get_states_history()
         patient_b.change_day_selected_of_state(states[2], datetime(2020, 10, 9))
@@ -136,15 +137,15 @@ class FacturationTest(TestCase):
         not_locked, days_not_locked, not_valide, not_billable, acts_pause, rejected, selected = \
             list_acts_for_billing_CAMSP(datetime(2020, 10, 4), datetime(2020, 10, 8), service_camsp)
         acts_not_locked = [x[0] for x in not_locked[patient_b]]
-        self.assertTrue(act5 in acts_not_locked)
+        self.assertTrue(act5.act in acts_not_locked)
         acts_not_valide = [x[0] for x in not_valide[patient_b]]
-        self.assertTrue(act6 in acts_not_valide)
-        self.assertTrue(act7 in not_billable[patient_b])
+        self.assertTrue(act6.act in acts_not_valide)
+        self.assertTrue(act7.act in not_billable[patient_b])
         acts_rejected = [x[0] for x in rejected[patient_b]]
-        self.assertTrue(act8 in acts_rejected)
-        self.assertTrue(act9 in acts_rejected)
-        self.assertTrue(act10 in acts_rejected)
-        self.assertTrue(act11 in selected[patient_b])
+        self.assertTrue(act8.act in acts_rejected)
+        self.assertTrue(act9.act in acts_rejected)
+        self.assertTrue(act10.act in acts_rejected)
+        self.assertTrue(act11.act in selected[patient_b])
 
     def test_facturation_sessad(self):
         service_sessad = Service.objects.get(name='SESSAD DYS')
@@ -502,7 +503,6 @@ class FacturationTest(TestCase):
         self.assertEqual(patient.last_state.date_selected, datetime(2012, 12, 9, 0, 0))
 
     def test_change_hc_number(self):
-
         service_cmpp = Service.objects.get(name='CMPP')
         price_o = add_price(120, date(2012, 10, 1))
 
