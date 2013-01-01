@@ -284,12 +284,12 @@ class Room(NamedAbstractModel):
         verbose_name = u'Salle'
         verbose_name_plural = u'Salles'
 
-class AnalyseMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
+class AnalyseMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u"Motif analysé"
         verbose_name_plural = u"Motifs analysés"
 
-class FamilyMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
+class FamilyMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u"Motif familiale"
         verbose_name_plural = u"Motifs familiaux"
@@ -304,7 +304,7 @@ class OutTo(NamedAbstractModel):
         verbose_name = u"Orientation de sortie"
         verbose_name_plural = u"Orientations de sortie"
 
-class AdviceGiver(NamedAbstractModel, ServiceLinkedAbstractModel):
+class AdviceGiver(NamedAbstractModel):
     class Meta:
         verbose_name = u"Conseilleur"
         verbose_name_plural = u"Conseilleurs"
