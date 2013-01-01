@@ -334,6 +334,14 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             verbose_name=u"Conseilleur",
             null=True, blank=True, default=None)
 
+    # Out motive
+    outmotive = models.ForeignKey('ressources.OutMotive',
+            verbose_name=u"Motif de sortie",
+            null=True, blank=True, default=None)
+    outto = models.ForeignKey('ressources.OutTo',
+            verbose_name=u"Orientation",
+            null=True, blank=True, default=None)
+
     # Family
     sibship_place = models.IntegerField(verbose_name=u"Place dans la fratrie",
             null=True, blank=True, default=None)

@@ -43,6 +43,28 @@
   </div>
 </form>
 
+<form method="post" id="out-form" class="patientrecordform">
+  {% csrf_token %}
+  <div class="frame inline">
+    <h3>Sortie</h3>
+    <button class="save enable-on-change">✔</button>
+    <p>
+    {% for field in forms.out %}
+    {{ field.label_tag  }} : {{ field }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/{{ field.name }}/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_inscription-{{ field.name }}"
+      title="Ajouter un {{ field.label.lower }}"
+      type="button">+</button>
+    {% endfor %}
+    </p>
+    <input type="hidden"  name="tab"  value="1">
+  </div>
+</form>
+
 <form method="post" id="family-form" class="patientrecordform">
   {% csrf_token %}
   <div class="frame inline">

@@ -228,6 +228,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             'id': forms.CivilStatusForm,
             'physiology': forms.PhysiologyForm,
             'inscription': forms.InscriptionForm,
+            'out': forms.OutForm,
             'family': forms.FamilyForm,
             'transport': forms.TransportFrom,
             'followup': forms.FollowUpForm,

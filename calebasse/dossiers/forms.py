@@ -133,6 +133,12 @@ class InscriptionForm(ModelForm):
         fields = ('analysemotive', 'familymotive', 'provenance', 'advicegiver')
         widgets = {}
 
+class OutForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('outmotive', 'outto')
+        widgets = {}
+
 class FamilyForm(ModelForm):
     class Meta:
         model = PatientRecord
