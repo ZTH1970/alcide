@@ -294,12 +294,12 @@ class FamilyMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
         verbose_name = u"Motif familiale"
         verbose_name_plural = u"Motifs familiaux"
 
-class OutMotive(NamedAbstractModel, ServiceLinkedAbstractModel):
+class OutMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u"Motif de sortie"
         verbose_name_plural = u"Motifs de sortie"
 
-class OutTo(NamedAbstractModel, ServiceLinkedAbstractModel):
+class OutTo(NamedAbstractModel):
     class Meta:
         verbose_name = u"Orientation de sortie"
         verbose_name_plural = u"Orientations de sortie"
