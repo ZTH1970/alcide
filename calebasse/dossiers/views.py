@@ -419,7 +419,7 @@ class PatientRecordsHomepageView(cbv.ListView):
                 ctx['stats'][state] += 1
 
         page = self.request.GET.get('page')
-        paginator = Paginator(patient_records, 3)
+        paginator = Paginator(patient_records, 50)
         try:
             patient_records = paginator.page(page)
         except PageNotAnInteger:
