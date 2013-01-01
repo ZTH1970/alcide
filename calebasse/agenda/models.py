@@ -120,7 +120,9 @@ class Event(models.Model):
             return None
         if weeks_since_epoch(today) % self.recurrence_week_period != self.recurrence_week_offset:
             return None
-        if not (self.start_datetime.date() <= today <= self.recurrence_end_date):
+        if self.start_datetime.date() > today:
+            return None
+        if self.recurrence_end_date and self.recurrence_end_date < today:
             return None
         start_datetime = datetime.combine(today, self.start_datetime.timetz())
         end_datetime = start_datetime + self.timedelta()
