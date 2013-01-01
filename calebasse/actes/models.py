@@ -8,9 +8,6 @@ import reversion
 
 from calebasse.agenda.models import Event, EventType
 from calebasse.agenda.managers import EventManager
-from calebasse.dossiers.models import SessadHealthCareNotification, \
-    CmppHealthCareDiagnostic, CmppHealthCareTreatment
-from calebasse.actes.validation import are_all_acts_of_the_day_locked
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 
 from validation_states import VALIDATION_STATES, NON_VALIDE
@@ -93,7 +90,7 @@ class Act(models.Model):
             verbose_name=u'Intervenants')
     pause = models.BooleanField(default=False,
             verbose_name=u'Pause facturation')
-    parent_event = models.ForeignKey('agenda.Event', 
+    parent_event = models.ForeignKey('agenda.Event',
             verbose_name=u'Rendez-vous lié',
             blank=True, null=True)
     VALIDATION_CODE_CHOICES = (
@@ -172,6 +169,7 @@ class Act(models.Model):
 
     # START Specific to sessad healthcare
     def was_covered_by_notification(self):
+        from calebasse.dossiers.models import SessadHealthCareNotification
         notifications = \
             SessadHealthCareNotification.objects.filter(patient=self.patient,
             start_date__lte=self.date, end_date__gte=self.date)
@@ -181,6 +179,8 @@ class Act(models.Model):
 
     # START Specific to cmpp healthcare
     def is_act_covered_by_diagnostic_healthcare(self):
+        from calebasse.dossiers.models import CmppHealthCareDiagnostic
+        from validation import are_all_acts_of_the_day_locked
         # L'acte est déja pointé par une prise en charge
         if self.is_billed:
             # Sinon ce peut une refacturation, donc ne pas tenir compte qu'il
