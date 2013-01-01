@@ -87,6 +87,7 @@
       data-url="../../ressources/parentalauthoritytype/new/ #form-content"
       data-default-button="Ajouter"
       data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-parental_authority"
       title="Ajouter un type d'autorité parentale">+</button>
     {{ forms.family.family_situation.label_tag  }} : {{ forms.family.family_situation }}
     <button type="button"
@@ -94,6 +95,7 @@
       data-url="../../ressources/familysituationtype/new/ #form-content"
       data-default-button="Ajouter"
       data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-family_situation"
       title="Ajouter un type de situation familiale">+</button>
     {{ forms.family.child_custody.label_tag  }} : {{ forms.family.child_custody }}
     <button type="button"
@@ -101,6 +103,7 @@
       data-url="../../ressources/parentalcustodytype/new/ #form-content"
       data-default-button="Ajouter"
       data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-child_custody"
       title="Ajouter un type de garde parentale">+</button>
     </p>
     <input type="hidden"  name="tab"  value="1">
@@ -120,6 +123,7 @@
       data-url="../../ressources/{{ field.name }}/new/ #form-content"
       data-default-button="Ajouter"
       data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_transport-{{ field.name }}"
       title="Ajouter {% if field.label.lower == "type de transport" %}un{% else %}une{% endif %} {{ field.label.lower }}">+</button>
     {% endfor %}
     </p>
