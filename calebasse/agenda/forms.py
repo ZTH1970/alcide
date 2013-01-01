@@ -71,10 +71,10 @@ class NewAppointmentForm(forms.ModelForm):
                 minutes=self.cleaned_data['duration'])
         appointment.creator = get_request().user
         appointment.title = appointment.patient.display_name
-        appointment.service = self.service
         appointment.clean()
         if commit:
             appointment.save()
+            appointment.services = [self.service]
         return appointment
 
 
@@ -128,10 +128,10 @@ class NewEventForm(forms.ModelForm):
         event.end_datetime = event.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
         event.creator = get_request().user
-        event.service = self.service
         event.clean()
         if commit:
             event.save()
+            event.services = [self.service]
         return event
 
     def clean(self):
