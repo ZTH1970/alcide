@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import View
 from django.views.generic.edit import DeleteView, FormMixin
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
@@ -384,7 +385,7 @@ class PatientRecordsHomepageView(cbv.ListView):
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordsHomepageView, self).get_context_data(**kwargs)
         ctx['search_form'] = forms.SearchForm(data=self.request.GET or None)
-        ctx['patient_records'] = []
+        patient_records = []
         ctx['stats'] = {"dossiers": 0,
                 "En_contact": 0,
                 "Fin_daccueil": 0,
@@ -402,7 +403,7 @@ class PatientRecordsHomepageView(cbv.ListView):
                 else:
                     state = current_state.status.name
                 state_class = current_state.status.type.lower()
-                ctx['patient_records'].append(
+                patient_records.append(
                         {
                             'object': patient_record,
                             'next_rdv': next_rdv,
@@ -417,6 +418,21 @@ class PatientRecordsHomepageView(cbv.ListView):
                     ctx['stats'][state] = 0
                 ctx['stats'][state] += 1
 
+        page = self.request.GET.get('page')
+        paginator = Paginator(patient_records, 3)
+        try:
+            patient_records = paginator.page(page)
+        except PageNotAnInteger:
+            patient_records = paginator.page(1)
+        except EmptyPage:
+            patient_records = paginator.page(paginator.num_pages)
+
+        query = self.request.GET.copy()
+        if 'page' in query:
+            del query['page']
+        ctx['query'] = query.urlencode()
+
+        ctx['patient_records'] = patient_records
         return ctx
 
 patientrecord_home = PatientRecordsHomepageView.as_view()
@@ -652,7 +668,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordsQuotationsView, self).get_context_data(**kwargs)
         ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None)
-        ctx['patient_records'] = []
+        patient_records = []
         if self.request.GET:
             for patient_record in ctx['object_list'].filter():
                 next_rdv = get_next_rdv(patient_record)
@@ -663,7 +679,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
                 else:
                     state = current_state.status.name
                 state_class = current_state.status.type.lower()
-                ctx['patient_records'].append(
+                patient_records.append(
                         {
                             'object': patient_record,
                             'state': state,
@@ -672,6 +688,22 @@ class PatientRecordsQuotationsView(cbv.ListView):
                         )
                 state = state.replace(' ', '_')
                 state = state.replace("'", '')
+
+        page = self.request.GET.get('page')
+        paginator = Paginator(patient_records, 50)
+        try:
+            patient_records = paginator.page(page)
+        except PageNotAnInteger:
+            patient_records = paginator.page(1)
+        except EmptyPage:
+            patient_records = paginator.page(paginator.num_pages)
+
+        ctx['patient_records'] = patient_records
+
+        query = self.request.GET.copy()
+        if 'page' in query:
+            del query['page']
+        ctx['query'] = query.urlencode()
 
         return ctx
 

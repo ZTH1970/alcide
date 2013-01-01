@@ -1275,6 +1275,11 @@ input.hasDatepicker {
         text-align: right;
 }
 
+div.pagination {
+  margin-top: 1em;
+  text-align: center;
+}
+
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {
   vertical-align: top;

@@ -73,6 +73,26 @@
     </tbody>
   </table>
 
+{% if request.GET %}
+<div class="pagination">
+    <span class="step-links">
+        {% if patient_records.has_previous %}
+            <a href="?{{ query }}&page={{ patient_records.previous_page_number }}">««</a>
+        {% endif %}
+
+        <span class="current">
+            page {{ patient_records.number }} de {{ patient_records.paginator.num_pages }}
+        </span>
+
+        {% if patient_records.has_next %}
+            <a href="?{{ query }}&page={{ patient_records.next_page_number }}">»»</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+
+
+
   {% if not request.GET %}
   <div class="big-msg-info">
     Utilisez le formulaire de recherche sur la gauche de l'écran pour afficher
