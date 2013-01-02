@@ -333,10 +333,12 @@ class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
     billable = models.BooleanField(default=True, verbose_name=u"Facturable")
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
+    display_first = models.BooleanField(default=False, verbose_name=u"Acte principalement utilisé")
 
     class Meta(NamedAbstractModel.Meta):
         verbose_name = u'Type d\'actes'
         verbose_name_plural = u'Types d\'actes'
+        ordering = ('-display_first','name')
 
 class ParentalAuthorityType(NamedAbstractModel):
     class Meta:
