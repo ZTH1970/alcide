@@ -105,6 +105,41 @@
       data-next-url="{{ request.get_full_path }}#tab=1"
       data-add-select="#id_family-child_custody"
       title="Ajouter un type de garde parentale">+</button>
+    {{ forms.family.job_mother.label_tag  }} : {{ forms.family.job_mother }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/job/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-job_mother"
+      title="Ajouter un type de profession">+</button>
+    {{ forms.family.job_father.label_tag  }} : {{ forms.family.job_father }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/job/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-job_father"
+      title="Ajouter un type de profession">+</button>
+    {{ forms.family.rm_mother.label_tag  }} : {{ forms.family.rm_mother }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/maritalstatustype/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-rm_mother"
+      title="Ajouter un type de régime">+</button>
+    {{ forms.family.rm_father.label_tag  }} : {{ forms.family.rm_father }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/maritalstatustype/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      data-add-select="#id_family-rm_father"
+      title="Ajouter un type de régime">+</button>
+    </p>
+    <p>
+    {{ forms.family.family_comment.label_tag  }} : {{ forms.family.family_comment }}
     </p>
     <input type="hidden"  name="tab"  value="1">
   </div>

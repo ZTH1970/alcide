@@ -360,6 +360,12 @@ class FamilySituationType(NamedAbstractModel):
         verbose_name_plural = u'Types de situations familiales'
 
 
+class MaritalStatusType(NamedAbstractModel):
+    class Meta:
+        verbose_name = u'Régime matrimonial'
+        verbose_name_plural = u'Régimes matrimoniaux'
+
+
 class TransportType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de transport'

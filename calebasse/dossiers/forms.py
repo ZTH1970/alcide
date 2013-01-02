@@ -143,7 +143,11 @@ class FamilyForm(ModelForm):
     class Meta:
         model = PatientRecord
         fields = ('sibship_place', 'nb_children_family', 'parental_authority',
-                'family_situation', 'child_custody')
+                'family_situation', 'child_custody', 'job_mother', 'job_father',
+                'rm_mother', 'rm_father', 'family_comment')
+        widgets = {
+                'family_comment': forms.Textarea(attrs={'cols': 100, 'rows': 1}),
+                }
 
 class TransportFrom(ModelForm):
     class Meta:

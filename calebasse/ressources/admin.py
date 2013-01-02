@@ -7,9 +7,10 @@ from models import (ActType, CodeCFTMEA, FamilySituationType, HealthCenter,
         ParentalCustodyType, Room, SchoolType, School, SchoolTeacherRole,
         Service, SessionType, TransportCompany, TransportType,
         UninvoicableCode, WorkerType, LargeRegime, SocialisationDuration,
-        MDPH, HolidayType)
+        MDPH, HolidayType, AdviceGiver, MaritalStatusType)
 
 admin.site.register(MDPH, reversion.VersionAdmin)
+admin.site.register(AdviceGiver, reversion.VersionAdmin)
 admin.site.register(ActType, reversion.VersionAdmin)
 admin.site.register(CodeCFTMEA, reversion.VersionAdmin)
 admin.site.register(FamilySituationType, reversion.VersionAdmin)
@@ -17,6 +18,7 @@ admin.site.register(HealthCenter, reversion.VersionAdmin)
 admin.site.register(LargeRegime, reversion.VersionAdmin)
 admin.site.register(InscriptionMotive, reversion.VersionAdmin)
 admin.site.register(Job, reversion.VersionAdmin)
+admin.site.register(MaritalStatusType, reversion.VersionAdmin)
 admin.site.register(Nationality, reversion.VersionAdmin)
 admin.site.register(Office, reversion.VersionAdmin)
 admin.site.register(ParentalAuthorityType, reversion.VersionAdmin)

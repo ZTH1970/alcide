@@ -288,6 +288,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     pause = models.BooleanField(verbose_name=u"Pause facturation",
             default=False)
+    confidential = models.BooleanField(verbose_name=u"Confidentiel",
+            default=False)
     socialisation_durations = models.ManyToManyField('ressources.SocialisationDuration',
             related_name='socialisation_duration_of')
     mdph_requests = models.ManyToManyField('ressources.MDPHRequest',
@@ -355,6 +357,24 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     child_custody = models.ForeignKey('ressources.ParentalCustodyType',
             verbose_name=u"Garde parentale",
+            null=True, blank=True, default=None)
+    job_mother = models.ForeignKey('ressources.Job',
+            related_name="job_mother",
+            verbose_name=u"Profession de la mère",
+            null=True, blank=True, default=None)
+    job_father = models.ForeignKey('ressources.Job',
+            related_name="job_father",
+            verbose_name=u"Profession du père",
+            null=True, blank=True, default=None)
+    rm_mother = models.ForeignKey('ressources.MaritalStatusType',
+            related_name="rm_mother",
+            verbose_name=u"Régime matrimonial de la mère",
+            null=True, blank=True, default=None)
+    rm_father = models.ForeignKey('ressources.MaritalStatusType',
+            related_name="rm_father",
+            verbose_name=u"Régime matrimonial du père",
+            null=True, blank=True, default=None)
+    family_comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True, default=None)
 
     # Transport
