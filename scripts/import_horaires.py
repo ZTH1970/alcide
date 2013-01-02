@@ -222,10 +222,8 @@ def main():
             except Exception, e:
                 not_found.append(line[2])
             if worker:
-                if line[1] in thera_evt.keys():
-                    thera_evt[service.name][line[1]].append(worker)
-                else:
-                    thera_evt[service.name][line[1]] = [worker]
+                workers = thera_evt.setdefault(line[1], [])
+                workers.append(worker)
         csvfile.close()
 
         print "%s - Liste des worker not found : %s" % (service.name, str(set(not_found)))
