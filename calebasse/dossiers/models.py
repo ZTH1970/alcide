@@ -218,7 +218,17 @@ class PatientAddress(models.Model):
         return self.display_name
 
     def save(self, **kwargs):
-        self.display_name = "%s %s, %s %s" % (self.number, self.street,  self.zip_code, self.city)
+        self.display_name = ''
+        if self.number:
+            self.display_name += self.number + ' '
+        if self.street:
+            self.display_name += self.street + ' '
+        if self.address_complement:
+            self.display_name += self.address_complement + ' '
+        if self.zip_code:
+            self.display_name += self.zip_code + ' '
+        if self.city:
+            self.display_name += self.city + ' '
         super(PatientAddress, self).save(**kwargs)
 
 
