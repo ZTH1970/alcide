@@ -1,4 +1,6 @@
 {% load widget_tweaks %}
+{{ form.start_datetime }}
+{{ form.start_datetime.errors }}
 <table>
   <tr>
     <td {% if form.event_type.field.required %}class="required"{% endif %}>

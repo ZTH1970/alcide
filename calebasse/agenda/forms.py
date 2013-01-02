@@ -24,6 +24,7 @@ class NewAppointmentForm(forms.ModelForm):
     class Meta:
         model = EventWithAct
         fields = (
+                'start_datetime',
                 'date',
                 'time',
                 'duration',
@@ -34,6 +35,10 @@ class NewAppointmentForm(forms.ModelForm):
                 'recurrence_week_period',
                 'recurrence_end_date'
         )
+        widgets = {
+                'start_datetime': forms.HiddenInput,
+        }
+
 
 
     def __init__(self, instance, service=None, **kwargs):
@@ -61,6 +66,8 @@ class NewAppointmentForm(forms.ModelForm):
         cleaned_data = super(NewAppointmentForm, self).clean()
         if not cleaned_data.get('recurrence_week_period'):
             cleaned_data['recurrence_end_date'] = None
+        cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
+                cleaned_data['time'])
         return cleaned_data
 
     def save(self, commit=True):
@@ -95,6 +102,7 @@ class NewEventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = (
+                'start_datetime',
                 'title',
                 'date',
                 'time',
@@ -105,6 +113,9 @@ class NewEventForm(forms.ModelForm):
                 'recurrence_week_period',
                 'recurrence_end_date'
         )
+        widgets = {
+                'start_datetime': forms.HiddenInput,
+        }
 
     def __init__(self, instance, service=None, **kwargs):
         self.service = service
@@ -136,6 +147,8 @@ class NewEventForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(NewEventForm, self).clean()
+        cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
+                cleaned_data['time'])
         if not cleaned_data.get('recurrence_week_period'):
             cleaned_data['recurrence_end_date'] = None
         event_type = cleaned_data.get('event_type')
