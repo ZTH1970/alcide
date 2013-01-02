@@ -111,11 +111,11 @@ class Act(models.Model):
         return None
 
     @property
-    def start_time(self):
+    def start_datetime(self):
         event = self.event
         if event:
-            return event.start_datetime.timetz()
-        return None
+            return event.start_datetime
+        return self.date
 
     def get_hc_tag(self):
         if self.healthcare:

@@ -261,13 +261,13 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             state = act.get_state()
             if not state.previous_state:
                 state = None
-            ctx['next_rdvs'].append((act.parent_event, state))
+            ctx['next_rdvs'].append((act, state))
         ctx['last_rdvs'] = []
         for act in Act.objects.last_acts(ctx['object']):
             state = act.get_state()
             if not state.previous_state:
                 state = None
-            ctx['last_rdvs'].append((act.parent_event, state))
+            ctx['last_rdvs'].append((act, state))
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
