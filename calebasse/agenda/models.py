@@ -52,7 +52,7 @@ class Event(models.Model):
     room = models.ForeignKey('ressources.Room', blank=True, null=True,
             verbose_name=u'Salle')
 
-    start_datetime = models.DateTimeField(_('Début'), blank=True, null=True, db_index=True)
+    start_datetime = models.DateTimeField(_('Début'), db_index=True)
     end_datetime = models.DateTimeField(_('Fin'), blank=True, null=True)
 
     PERIODS = (
