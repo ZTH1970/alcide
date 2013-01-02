@@ -53,10 +53,10 @@ class Event(models.Model):
 
     start_datetime = models.DateTimeField(_('Début'), db_index=True)
     end_datetime = models.DateTimeField(_('Fin'), blank=True, null=True)
-    old_ev_id = models.CharField(max_lenght=8, blank=True, null=True)
-    old_rr_id = models.CharField(max_lenght=8, blank=True, null=True)
+    old_ev_id = models.CharField(max_length=8, blank=True, null=True)
+    old_rr_id = models.CharField(max_length=8, blank=True, null=True)
     # only used when there is no rr id
-    old_rs_id = models.CharField(max_lenght=8, blank=True, null=True)
+    old_rs_id = models.CharField(max_length=8, blank=True, null=True)
 
     PERIODS = (
             (1, u'Toutes les semaines'),
@@ -289,7 +289,7 @@ class Event(models.Model):
 
 class OldRSID(models.Model):
     event = models.ForeignKey(Event)
-    old_rs_id = models.CharField(max_lenght=8, blank=True, null=True)
+    old_rs_id = models.CharField(max_length=8, blank=True, null=True)
 
 
 class EventWithActManager(managers.EventManager):
