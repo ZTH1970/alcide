@@ -266,6 +266,14 @@ class Event(models.Model):
         self.clean() # force call to clean to initialize recurrence fields
         super(Event, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        from ..actes.models import Act
+        for a in Act.objects.filter(parent_event=self):
+            if len(a.actvalidationstate_set.all()) > 1:
+                a.parent_event = None
+                a.save()
+        super(Event, self).delete(*args, **kwargs)
+
     def to_interval(self):
         return Interval(self.start_datetime, self.end_datetime)
 
