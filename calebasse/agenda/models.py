@@ -6,11 +6,10 @@ from copy import copy
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import m2m_changed
+from django import forms
 
-from ..middleware.request import get_request
 from calebasse.agenda import managers
-from calebasse.utils import weeks_since_epoch
+from calebasse.utils import weeks_since_epoch, weekday_ranks
 from interval import Interval
 
 __all__ = (
@@ -64,6 +63,37 @@ class Event(models.Model):
             (5, 'Une semaine sur cinq')
     )
     OFFSET = range(0,4)
+    PERIODICITIES = (
+            (1, u'Toutes les semaines'),
+            (2, u'Une semaine sur deux'),
+            (3, u'Une semaine sur trois'),
+            (4, u'Une semaine sur quatre'),
+            (5, u'Une semaine sur cinq'),
+            (6, u'La première semaine du mois'),
+            (7, u'La deuxième semaine du mois'),
+            (8, u'La troisième semaine du mois'),
+            (9, u'La quatrième semaine du mois'),
+            (10, u'La dernière semaine du mois'),
+            (11, u'Les semaines paires'),
+            (12, u'Les semaines impaires')
+    )
+    WEEK_RANKS = (
+            (0, u'La première semaine du mois'),
+            (1, u'La deuxième semaine du mois'),
+            (2, u'La troisième semaine du mois'),
+            (3, u'La quatrième semaine du mois'),
+            (4, u'La dernière semaine du mois')
+    )
+    PARITIES = (
+            (0, u'Les semaines paires'),
+            (1, u'Les semaines impaires')
+    )
+    recurrence_periodicity = models.PositiveIntegerField(
+            choices=PERIODICITIES,
+            verbose_name=u"Périodicité",
+            default=None,
+            blank=True,
+            null=True)
     recurrence_week_day = models.PositiveIntegerField(default=0)
     recurrence_week_offset = models.PositiveIntegerField(
             choices=zip(OFFSET, OFFSET),
@@ -77,10 +107,33 @@ class Event(models.Model):
             blank=True,
             null=True,
             db_index=True)
+    recurrence_week_rank = models.PositiveIntegerField(
+            verbose_name=u"Rang de la semaine dans le mois",
+            choices=WEEK_RANKS,
+            blank=True, null=True)
+    recurrence_week_parity = models.PositiveIntegerField(
+            choices=PARITIES,
+            verbose_name=u"Parité des semaines",
+            blank=True,
+            null=True)
     recurrence_end_date = models.DateField(
             verbose_name=_(u'Fin de la récurrence'),
             blank=True, null=True,
             db_index=True)
+
+    PERIOD_LIST_TO_FIELDS = [(1, None, None),
+        (2, None, None),
+        (3, None, None),
+        (4, None, None),
+        (5, None, None),
+        (None, 0, None),
+        (None, 1, None),
+        (None, 2, None),
+        (None, 3, None),
+        (None, 4, None),
+        (None, None, 0),
+        (None, None, 1)
+    ]
 
     class Meta:
         verbose_name = u'Evénement'
@@ -94,12 +147,31 @@ class Event(models.Model):
 
     def clean(self):
         '''Initialize recurrence fields if they are not.'''
-        if self.start_datetime:
-            if self.recurrence_week_period:
-                if self.recurrence_end_date and self.recurrence_end_date < self.start_datetime.date():
-                    self.recurrence_end_date = self.start_datetime.date()
+        if self.recurrence_periodicity:
+            l = self.PERIOD_LIST_TO_FIELDS[self.recurrence_periodicity-1]
+        else:
+            l = None, None, None
+        self.recurrence_week_period = l[0]
+        self.recurrence_week_rank = l[1]
+        self.recurrence_week_parity = l[2]
+        if self.recurrence_periodicity:
+            if self.recurrence_end_date and self.recurrence_end_date < self.start_datetime.date():
+                raise forms.ValidationError(u'La date de fin de périodicité doit être postérieure à la date de début.')
+            if self.start_datetime:
                 self.recurrence_week_day = self.start_datetime.weekday()
+        if self.recurrence_week_period is not None:
+            if self.start_datetime:
                 self.recurrence_week_offset = weeks_since_epoch(self.start_datetime) % self.recurrence_week_period
+        if self.recurrence_week_parity is not None:
+            if self.start_datetime:
+                week = self.start_datetime.date().isocalendar()[1]
+                start_week_parity = week % 2
+                if start_week_parity != self.recurrence_week_parity:
+                    raise forms.ValidationError(u'Le date de départ de la périodicité est en semaine {week}.'.format(week=week))
+        if self.recurrence_week_rank is not None and self.start_datetime:
+            start_week_ranks = weekday_ranks(self.start_datetime.date())
+            if self.recurrence_week_rank not in start_week_ranks:
+                raise forms.ValidationError('La date de début de périodicité doit faire partie de la bonne semaine dans le mois.')
 
     def timedelta(self):
         '''Distance between start and end of the event'''
@@ -118,12 +190,21 @@ class Event(models.Model):
                 return None
         if today.weekday() != self.recurrence_week_day:
             return None
-        if weeks_since_epoch(today) % self.recurrence_week_period != self.recurrence_week_offset:
-            return None
         if self.start_datetime.date() > today:
             return None
         if self.recurrence_end_date and self.recurrence_end_date < today:
             return None
+        if self.recurrence_week_period is not None:
+            if weeks_since_epoch(today) % self.recurrence_week_period != self.recurrence_week_offset:
+                return None
+        elif self.recurrence_week_parity is not None:
+            if today.isocalendar()[1] % 2 != self.recurrence_week_parity:
+                return None
+        elif self.recurrence_week_rank is not None:
+            if self.recurrence_week_rank not in weekday_ranks(today):
+                return None
+        else:
+            raise NotImplemented
         start_datetime = datetime.combine(today, self.start_datetime.timetz())
         end_datetime = start_datetime + self.timedelta()
         event = copy(self)
@@ -133,6 +214,7 @@ class Event(models.Model):
         event.recurrence_week_offset = None
         event.recurrence_week_period = None
         event.parent = self
+        # the returned event is "virtual", it must not be saved
         def save(*args, **kwarks): 
             raise RuntimeError()
         event.save = save
@@ -147,26 +229,42 @@ class Event(models.Model):
 
     def is_recurring(self):
         '''Is this event multiple ?'''
-        return self.recurrence_week_period is not None
+        return self.recurrence_periodicity is not None
 
     def all_occurences(self, limit=90):
-        '''Returns all occurences of this event as a list or pair (start_datetime,
-           end_datetime).
+        '''Returns all occurences of this event as virtual Event objects
 
            limit - compute occurrences until limit days in the future
 
            Default is to limit to 90 days.
         '''
-        if self.recurrence_week_period:
+        if self.recurrence_periodicity is not None:
             day = self.start_datetime.date()
             max_end_date = max(date.today(), self.start_datetime.date()) + timedelta(days=limit)
             end_date = min(self.recurrence_end_date or max_end_date, max_end_date)
-            delta = timedelta(days=self.recurrence_week_period*7)
-            while day <= end_date:
-                yield self.today_occurence(day)
-                day += delta
+            if self.recurrence_week_period is not None:
+                delta = timedelta(days=self.recurrence_week_period*7)
+                while day <= end_date:
+                    yield self.today_occurence(day)
+                    day += delta
+            elif self.recurrence_week_parity is not None:
+                delta = timedelta(days=7)
+                while day <= end_date:
+                    if day.isocalendar()[1] % 2 == self.recurrence_week_parity:
+                        yield self.today_occurence(day)
+                    day += delta
+            elif self.recurrence_week_rank is not None:
+                delta = timedelta(days=7)
+                while day <= end_date:
+                    if self.recurrence_week_rank in weekday_ranks(day):
+                        yield self.today_occurence(day)
+                    day += delta
         else:
             yield self
+
+    def save(self, *args, **kwargs):
+        self.clean() # force call to clean to initialize recurrence fields
+        super(Event, self).save(*args, **kwargs)
 
     def to_interval(self):
         return Interval(self.start_datetime, self.end_datetime)
@@ -234,7 +332,6 @@ class EventWithAct(Event):
 
     def save(self, *args, **kwargs):
         '''Force event_type to be patient meeting.'''
-        self.clean()
         self.event_type = EventType(id=1)
         super(EventWithAct, self).save(*args, **kwargs)
         # list of occurences may have changed
@@ -257,7 +354,6 @@ class EventWithAct(Event):
                     a.save()
                 else:
                     a.delete()
-        participants = self.participants.select_subclasses()
         for o in occurences:
             if o.start_datetime.date() in acts_by_date:
                 continue

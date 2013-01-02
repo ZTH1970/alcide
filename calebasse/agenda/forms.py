@@ -32,7 +32,7 @@ class NewAppointmentForm(forms.ModelForm):
                 'participants',
                 'room',
                 'act_type',
-                'recurrence_week_period',
+                'recurrence_periodicity',
                 'recurrence_end_date'
         )
         widgets = {
@@ -45,7 +45,6 @@ class NewAppointmentForm(forms.ModelForm):
         self.service = None
         super(NewAppointmentForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
-        self.fields['recurrence_week_period'].label = u'Récurrence'
         if service:
             self.service = service
             self.fields['participants'].queryset = \
@@ -64,7 +63,7 @@ class NewAppointmentForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(NewAppointmentForm, self).clean()
-        if not cleaned_data.get('recurrence_week_period'):
+        if not cleaned_data.get('recurrence_periodicity'):
             cleaned_data['recurrence_end_date'] = None
         cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
                 cleaned_data['time'])
@@ -110,7 +109,7 @@ class NewEventForm(forms.ModelForm):
                 'room',
                 'participants',
                 'event_type',
-                'recurrence_week_period',
+                'recurrence_periodicity',
                 'recurrence_end_date'
         )
         widgets = {
@@ -123,7 +122,6 @@ class NewEventForm(forms.ModelForm):
         self.fields['date'].css = 'datepicker'
         self.fields['event_type'].queryset = \
                     EventType.objects.exclude(id=1).exclude(id=3).order_by('rank', 'label')
-        self.fields['recurrence_week_period'].label = u'Récurrence'
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
@@ -149,7 +147,7 @@ class NewEventForm(forms.ModelForm):
         cleaned_data = super(NewEventForm, self).clean()
         cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
                 cleaned_data['time'])
-        if not cleaned_data.get('recurrence_week_period'):
+        if not cleaned_data.get('recurrence_periodicity'):
             cleaned_data['recurrence_end_date'] = None
         event_type = cleaned_data.get('event_type')
         if event_type and event_type.id == 4 and not cleaned_data.get('title'): # 'Autre'

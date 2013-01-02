@@ -6,7 +6,7 @@ from django.db.models import Q
 from model_utils.managers import InheritanceManager, PassThroughManager, InheritanceQuerySet
 
 from calebasse.agenda.conf import default
-from calebasse.utils import weeks_since_epoch
+from calebasse.utils import weeks_since_epoch, weekday_ranks
 from calebasse import agenda
 
 __all__ = (
@@ -19,13 +19,21 @@ class EventQuerySet(InheritanceQuerySet):
         today = today or date.today()
         weeks = weeks_since_epoch(today)
         filters = [Q(start_datetime__gte=datetime.combine(today, time()),
-               start_datetime__lte=datetime.combine(today, time(23,59,59))) ]
-        base_q = Q(start_datetime__lte=datetime.combine(today, time(23,59,59))) & \
+               start_datetime__lte=datetime.combine(today, time(23,59,59)),
+               recurrence_periodicity__isnull=True) ]
+        base_q = Q(start_datetime__lte=datetime.combine(today, time(23,59,59)),
+                recurrence_periodicity__isnull=False) & \
                 (Q(recurrence_end_date__gte=today) |
                     Q(recurrence_end_date__isnull=True))
+        # week periods
         for period in range(1, 6):
             filters.append(base_q & Q(recurrence_week_offset=weeks % period,
                 recurrence_week_period=period, recurrence_week_day=today.weekday()))
+        # week parity
+        parity = today.isocalendar()[1] % 2
+        filters.append(base_q & Q(recurrence_week_parity=parity))
+        # week ranks
+        filters.append(base_q & Q(recurrence_week_rank__in=weekday_ranks(today)))
         qs = self.filter(reduce(Q.__or__, filters))
         return qs
 
@@ -113,9 +121,8 @@ class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),
         event = self.create(creator=creator,
                 title=title, start_datetime=start_datetime,
                 end_datetime=end_datetime, event_type=event_type,
-                room=room, recurrence_week_period=periodicity,
-                recurrence_end_date=until,
-                recurrence_week_day=start_datetime.weekday(), **kwargs)
+                room=room, recurrence_periodicity=periodicity,
+                recurrence_end_date=until, **kwargs)
         event.services = services
         event.participants = participants
         return event

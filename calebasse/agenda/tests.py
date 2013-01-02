@@ -20,12 +20,10 @@ class EventTest(TestCase):
     def setUp(self):
         self.creator = User.objects.create(username='John')
 
-    def test_recurring_events(self):
+    def test_triweekly_events(self):
         event = Event.objects.create(start_datetime=datetime(2012, 10, 20, 13),
                 end_datetime=datetime(2012, 10, 20, 13, 30), event_type=EventType(id=1),
-                recurrence_week_period=3, recurrence_end_date=date(2012, 12, 1))
-        event.clean()
-        event.save()
+                recurrence_periodicity=3, recurrence_end_date=date(2012, 12, 1))
         # Test model
         self.assertEqual(event.timedelta(), timedelta(minutes=30))
         occurences = list(event.all_occurences())
@@ -58,6 +56,39 @@ class EventTest(TestCase):
                 self.assertEqual(list(Event.objects.for_today(d)), [], d)
             i += timedelta(days=1)
 
+    def test_odd_week_events(self):
+        event = Event.objects.create(start_datetime=datetime(2012, 10, 27, 13),
+                end_datetime=datetime(2012, 10, 27, 13, 30), event_type=EventType(id=1),
+                recurrence_periodicity=12, recurrence_end_date=date(2012, 11, 10))
+        occurences = list(event.all_occurences())
+        self.assertEqual(len(occurences), 2)
+        self.assertEqual(occurences[0].start_datetime,
+                datetime(2012, 10, 27, 13))
+        self.assertEqual(occurences[0].end_datetime,
+                datetime(2012, 10, 27, 13, 30))
+        self.assertEqual(occurences[1].start_datetime,
+                datetime(2012, 11, 10, 13))
+        self.assertEqual(occurences[1].end_datetime,
+                datetime(2012, 11, 10, 13, 30))
+
+    def test_first_week_of_month(self):
+        event = Event.objects.create(start_datetime=datetime(2012, 9, 3, 13),
+                end_datetime=datetime(2012, 9, 3, 13, 30), event_type=EventType(id=1),
+                recurrence_periodicity=6, recurrence_end_date=date(2012, 11, 10))
+        occurences = list(event.all_occurences())
+        self.assertEqual(len(occurences), 3)
+        self.assertEqual(occurences[0].start_datetime,
+                datetime(2012, 9, 3, 13))
+        self.assertEqual(occurences[0].end_datetime,
+                datetime(2012, 9, 3, 13, 30))
+        self.assertEqual(occurences[1].start_datetime,
+                datetime(2012, 10, 1, 13))
+        self.assertEqual(occurences[1].end_datetime,
+                datetime(2012, 10, 1, 13, 30))
+        self.assertEqual(occurences[2].start_datetime,
+                datetime(2012, 11, 5, 13))
+        self.assertEqual(occurences[2].end_datetime,
+                datetime(2012, 11, 5, 13, 30))
 
     def test_create_appointments(self):
         service_camsp = Service.objects.get(name='CAMSP')
@@ -94,18 +125,18 @@ class EventTest(TestCase):
         self.assertEqual(occurences[1].act.date, occurences[1].start_datetime.date())
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
                 2)
-        appointment2.recurrence_week_period = None
+        appointment2.recurrence_periodicity = None
         appointment2.save()
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
                 1)
-        appointment2.recurrence_week_period = 2
+        appointment2.recurrence_periodicity = 2
         appointment2.recurrence_end_date = date(2020, 10, 16)
         appointment2.save()
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 2)
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 2)
         occurences[1].act.set_state('ANNUL_NOUS', self.creator)
-        appointment2.recurrence_week_period = None
+        appointment2.recurrence_periodicity = None
         appointment2.save()
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 1)

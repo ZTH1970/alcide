@@ -1,4 +1,5 @@
 {% load widget_tweaks %}
+{{ form.non_field_errors }}
 {{ form.start_datetime }}
 {{ form.start_datetime.errors }}
 <table>
@@ -74,11 +75,11 @@
 
 <table id="new-appointment-table">
    <tr>
-       <td {% if form.recurrence_week_period.field.required %}class="required"{% endif %}>
+       <td {% if form.recurrence_periodicity.field.required %}class="required"{% endif %}>
         <p>
-       {{ form.recurrence_week_period.label_tag }}
-       {{ form.recurrence_week_period }}
-       {{ form.recurrence_week_period.errors }}
+       {{ form.recurrence_periodicity.label_tag }}
+       {{ form.recurrence_periodicity }}
+       {{ form.recurrence_periodicity.errors }}
        </p>
        </td>
        <td {% if form.recurrence_end_date.field.required %}class="required"{% endif %}>
