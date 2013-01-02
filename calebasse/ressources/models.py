@@ -331,6 +331,8 @@ class ActTypeQuerySet(query.QuerySet):
 class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
     objects = PassThroughManager.for_queryset_class(ActTypeQuerySet)()
     billable = models.BooleanField(default=True, verbose_name=u"Facturable")
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
 
     class Meta(NamedAbstractModel.Meta):
         verbose_name = u'Type d\'actes'
