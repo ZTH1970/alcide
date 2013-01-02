@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 import os
@@ -16,15 +17,13 @@ from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Event, EventType
 from calebasse.dossiers.models import PatientRecord, Status, FileState
 from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday
-from calebasse.ressources.models import WorkerType
+from calebasse.personnes.models import Worker, Holiday, ExternalTherapist, ExternalWorker
+from calebasse.ressources.models import WorkerType, AnalyseMotive, FamilyMotive, Provenance
 
 # Configuration
-db_path = "/home/jschneider/temp/20121219-174113/"
+db_path = "./scripts/20121221-192258"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
-
 
 # Global mappers. This dicts are used to map a Faure id with a calebasse object.
 dossiers = {}
@@ -144,7 +143,22 @@ def _get_dict(cols, line):
 tables_data = {}
 
 def main():
-    """ """
+
+    csvfile = open(os.path.join(db_path, "F_ST_ETIENNE_CAMSP", 'ins_motifs.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    cols = csvlines.next()
+    for line in csvlines:
+        AnalyseMotive(name=line[1]).save()
+    csvfile.close()
+
+
+    csvfile = open(os.path.join(db_path, "F_ST_ETIENNE_CAMSP", 'ins_motif_exprim.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    cols = csvlines.next()
+    for line in csvlines:
+        FamilyMotive(name=line[1]).save()
+    csvfile.close()
+
     for db in dbs:
         if "F_ST_ETIENNE_CMPP" == db:
             service = Service.objects.get(name="CMPP")
@@ -154,22 +168,14 @@ def main():
             service = Service.objects.get(name="SESSAD TED")
         elif "F_ST_ETIENNE_SESSAD" == db:
             service = Service.objects.get(name="SESSAD DYS")
-        print db
-        for table in tables:
-            # TODO: rewrite this part and treat only line by line
-            tables_data[table] = None
-            csvfile = open(os.path.join(db_path, db, '%s.csv' % table), 'rb')
-            csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-            cols = csvlines.next()
-            tables_data[table] = []
-            for line in csvlines:
-                data = _get_dict(cols, line)
-                tables_data[table].append(data)
-            func = eval("%s_mapper" % table)
-            func(tables_data, service)
-            csvfile.close()
+
+        csvfile = open(os.path.join(db_path, db, 'ins_provenance.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        cols = csvlines.next()
+        for line in csvlines:
+            Provenance(name=line[1], old_id=line[0], old_service=service.name).save()
+        csvfile.close()
 
 
 if __name__ == "__main__":
     main()
-

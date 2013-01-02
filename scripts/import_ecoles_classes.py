@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 import os
 import csv
 
-from datetime import datetime, time
+from datetime import datetime, time, date
 
 import calebasse.settings
 import django.core.management
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 django.core.management.setup_environ(calebasse.settings)
 
@@ -16,18 +18,15 @@ from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Event, EventType
 from calebasse.dossiers.models import PatientRecord, Status, FileState
 from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday
-from calebasse.ressources.models import WorkerType
+from calebasse.personnes.models import Worker, Holiday, TimeTable, PERIODICITIES
+from calebasse.personnes.forms import PERIOD_LIST_TO_FIELDS
+from calebasse.ressources.models import WorkerType, HolidayType, SchoolType, School, SchoolLevel
 
 # Configuration
-db_path = "/home/jschneider/temp/20121219-174113/"
+db_path = "./scripts/20121221-192258"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
 
-
-# Global mappers. This dicts are used to map a Faure id with a calebasse object.
-dossiers = {}
 
 def _to_date(str_date):
     if not str_date:
@@ -141,10 +140,39 @@ def _get_dict(cols, line):
         res[cols[i]] = data.decode('utf-8')
     return res
 
-tables_data = {}
+PERIOD_FAURE_NOUS = {1 : 1,
+2 : 2,
+3 : 3,
+4 : 4,
+5: 6,
+6: 7,
+7: 8,
+8: 9,
+9: None,
+10: 10,
+12: 11,
+13: 12,
+}
+
+JOURS = {1: 'lundi',
+2: 'mardi',
+3: 'mercredi',
+4: 'jeudi',
+5: 'vendredi'
+}
+
+dic_worker = {}
+
 
 def main():
     """ """
+
+    t_inconnu = SchoolType.objects.get(name='Inconnu')
+    t_maternelle = SchoolType.objects.get(name='Ecole maternelle')
+    t_primaire = SchoolType.objects.get(name='Ecole primaire')
+    t_college = SchoolType.objects.get(name='Collège')
+    t_lycee = SchoolType.objects.get(name='Lycée')
+
     for db in dbs:
         if "F_ST_ETIENNE_CMPP" == db:
             service = Service.objects.get(name="CMPP")
@@ -154,22 +182,51 @@ def main():
             service = Service.objects.get(name="SESSAD TED")
         elif "F_ST_ETIENNE_SESSAD" == db:
             service = Service.objects.get(name="SESSAD DYS")
-        print db
-        for table in tables:
-            # TODO: rewrite this part and treat only line by line
-            tables_data[table] = None
-            csvfile = open(os.path.join(db_path, db, '%s.csv' % table), 'rb')
-            csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-            cols = csvlines.next()
-            tables_data[table] = []
-            for line in csvlines:
-                data = _get_dict(cols, line)
-                tables_data[table].append(data)
-            func = eval("%s_mapper" % table)
-            func(tables_data, service)
-            csvfile.close()
 
+        l = []
+        csvfile = open(os.path.join(db_path, db, 'classes.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        cols = csvlines.next()
+        for line in csvlines:
+            data = _get_dict(cols, line)
+            l.append(data)
+        csvfile.close()
+
+        for classe in l:
+            SchoolLevel(name=classe['libelle'], old_id=classe['id'], old_service=service.name).save()
+
+        l = []
+        csvfile = open(os.path.join(db_path, db, 'ecoles.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        cols = csvlines.next()
+        for line in csvlines:
+            data = _get_dict(cols, line)
+            l.append(data)
+        csvfile.close()
+
+        for ecole in l:
+            t = t_inconnu
+            ecole_nom = ecole['nom'].encode('utf-8')
+            if 'mat' in ecole_nom or 'Mat' in ecole_nom or 'Maternelle' in ecole_nom or 'maternelle' in ecole_nom or 'MATERNELLE' in ecole_nom:
+                t = t_maternelle
+            elif  'Primaire' in ecole_nom or 'primaire' in ecole_nom or 'PRIMAIRE' in ecole_nom:
+                t = t_primaire
+            elif  'COLLEGE' in ecole_nom or 'COLLÈGE' in ecole_nom or 'collège' in ecole_nom or 'college' in ecole_nom or 'Collège' in ecole_nom or 'College' in ecole_nom:
+                t = t_college
+            elif  'LYCEE' in ecole_nom or 'LYCÉE' in ecole_nom or 'lycée' in ecole_nom or 'lycee' in ecole_nom or 'Lycée' in ecole_nom or 'Lycée' in ecole_nom:
+                t = t_lycee
+            School(name=ecole['nom'],
+                school_type = t,
+                address = ecole['voie'],
+                address_complement = ecole['suite'],
+                zip_code = ecole['codepostal'],
+                city = ecole['ville'],
+                phone = ecole['tel'],
+                fax = ecole['fax'],
+                email = ecole['email'],
+                director_name = ecole['nom_dir'],
+                description = ecole['infos'],
+                old_id=ecole['id'], old_service=service.name).save()
 
 if __name__ == "__main__":
     main()
-

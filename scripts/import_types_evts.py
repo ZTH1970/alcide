@@ -20,11 +20,9 @@ from calebasse.personnes.models import Worker, Holiday
 from calebasse.ressources.models import WorkerType
 
 # Configuration
-db_path = "/home/jschneider/temp/20121219-174113/"
+db_path = "./scripts/20121221-192258"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
-
 
 # Global mappers. This dicts are used to map a Faure id with a calebasse object.
 dossiers = {}
@@ -145,31 +143,12 @@ tables_data = {}
 
 def main():
     """ """
-    for db in dbs:
-        if "F_ST_ETIENNE_CMPP" == db:
-            service = Service.objects.get(name="CMPP")
-        elif "F_ST_ETIENNE_CAMSP" == db:
-            service = Service.objects.get(name="CAMSP")
-        elif "F_ST_ETIENNE_SESSAD_TED" == db:
-            service = Service.objects.get(name="SESSAD TED")
-        elif "F_ST_ETIENNE_SESSAD" == db:
-            service = Service.objects.get(name="SESSAD DYS")
-        print db
-        for table in tables:
-            # TODO: rewrite this part and treat only line by line
-            tables_data[table] = None
-            csvfile = open(os.path.join(db_path, db, '%s.csv' % table), 'rb')
-            csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-            cols = csvlines.next()
-            tables_data[table] = []
-            for line in csvlines:
-                data = _get_dict(cols, line)
-                tables_data[table].append(data)
-            func = eval("%s_mapper" % table)
-            func(tables_data, service)
-            csvfile.close()
-
+    csvfile = open('./scripts/liste_evenements.csv', 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='"')
+    cols = csvlines.next()
+    for line in csvlines:
+        label = line[1][0].upper()+line[1][1:]
+        EventType(label=label).save()
 
 if __name__ == "__main__":
     main()
-

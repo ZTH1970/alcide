@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 import os
@@ -16,15 +17,13 @@ from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Event, EventType
 from calebasse.dossiers.models import PatientRecord, Status, FileState
 from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday
-from calebasse.ressources.models import WorkerType
+from calebasse.personnes.models import Worker, Holiday, ExternalTherapist, ExternalWorker
+from calebasse.ressources.models import WorkerType, OutMotive, OutTo
 
 # Configuration
-db_path = "/home/jschneider/temp/20121219-174113/"
+db_path = "./scripts/20121221-192258"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
-
 
 # Global mappers. This dicts are used to map a Faure id with a calebasse object.
 dossiers = {}
@@ -144,32 +143,21 @@ def _get_dict(cols, line):
 tables_data = {}
 
 def main():
-    """ """
-    for db in dbs:
-        if "F_ST_ETIENNE_CMPP" == db:
-            service = Service.objects.get(name="CMPP")
-        elif "F_ST_ETIENNE_CAMSP" == db:
-            service = Service.objects.get(name="CAMSP")
-        elif "F_ST_ETIENNE_SESSAD_TED" == db:
-            service = Service.objects.get(name="SESSAD TED")
-        elif "F_ST_ETIENNE_SESSAD" == db:
-            service = Service.objects.get(name="SESSAD DYS")
-        print db
-        for table in tables:
-            # TODO: rewrite this part and treat only line by line
-            tables_data[table] = None
-            csvfile = open(os.path.join(db_path, db, '%s.csv' % table), 'rb')
-            csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-            cols = csvlines.next()
-            tables_data[table] = []
-            for line in csvlines:
-                data = _get_dict(cols, line)
-                tables_data[table].append(data)
-            func = eval("%s_mapper" % table)
-            func(tables_data, service)
-            csvfile.close()
 
+    csvfile = open(os.path.join(db_path, "F_ST_ETIENNE_CAMSP", 'sor_motifs.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    cols = csvlines.next()
+    for line in csvlines:
+        OutMotive(name=line[1]).save()
+    csvfile.close()
+
+
+    csvfile = open(os.path.join(db_path, "F_ST_ETIENNE_CAMSP", 'sor_orientation.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    cols = csvlines.next()
+    for line in csvlines:
+        OutTo(name=line[1]).save()
+    csvfile.close()
 
 if __name__ == "__main__":
     main()
-
