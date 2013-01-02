@@ -116,6 +116,10 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         initial['room'] = self.request.GET.get('room')
         return initial
 
+    def get_form_kwargs(self):
+        kwargs = super(NewAppointmentView, self).get_form_kwargs()
+        kwargs['service'] = self.service
+        return kwargs
 
 class UpdateAppointmentView(UpdateView):
     model = EventWithAct
@@ -153,10 +157,14 @@ class NewEventView(CreateView):
         initial['date'] = self.date
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
-        initial['services'] = [self.service]
         initial['event_type'] = 2
         initial['room'] = self.request.GET.get('room')
         return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(NewEventView, self).get_form_kwargs()
+        kwargs['service'] = self.service
+        return kwargs
 
 
 class UpdateEventView(UpdateView):
@@ -169,7 +177,6 @@ class UpdateEventView(UpdateView):
         initial = super(UpdateEventView, self).get_initial()
         initial['date'] = self.object.start_datetime.date()
         initial['time'] = self.object.start_datetime.time()
-        initial['service'] = self.service
         time = self.object.end_datetime - self.object.start_datetime
         if time:
             time = time.seconds / 60
@@ -178,6 +185,11 @@ class UpdateEventView(UpdateView):
         initial['duration'] = time
         initial['participants'] = self.object.participants.values_list('id', flat=True)
         return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateEventView, self).get_form_kwargs()
+        kwargs['service'] = self.service
+        return kwargs
 
 
 class AgendaServiceActValidationView(TemplateView):
