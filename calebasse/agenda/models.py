@@ -32,7 +32,6 @@ class EventType(models.Model):
     label = models.CharField(_('label'), max_length=50)
     rank = models.IntegerField(_('Sorting Rank'), null=True, blank=True, default=0)
 
-
 class Event(models.Model):
     '''
     Container model for general agenda events
@@ -54,6 +53,10 @@ class Event(models.Model):
 
     start_datetime = models.DateTimeField(_('Début'), db_index=True)
     end_datetime = models.DateTimeField(_('Fin'), blank=True, null=True)
+    old_ev_id = models.CharField(max_lenght=8, blank=True, null=True)
+    old_rr_id = models.CharField(max_lenght=8, blank=True, null=True)
+    # only used when there is no rr id
+    old_rs_id = models.CharField(max_lenght=8, blank=True, null=True)
 
     PERIODS = (
             (1, u'Toutes les semaines'),
@@ -282,6 +285,11 @@ class Event(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class OldRSID(models.Model):
+    event = models.ForeignKey(Event)
+    old_rs_id = models.CharField(max_lenght=8, blank=True, null=True)
 
 
 class EventWithActManager(managers.EventManager):
