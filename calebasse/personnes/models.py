@@ -201,7 +201,7 @@ class TimeTableQuerySet(query.QuerySet):
             filters.append(models.Q(week_period=week_period,
                 week_offset=weeks_since_epoch(today) % week_period))
         # week parity
-        parity = (today.isocalendar()[1]-1) % 2
+        parity = today.isocalendar()[1] % 2
         filters.append(models.Q(week_parity=parity))
         # week ranks
         filters.append(models.Q(week_rank__in=weekday_ranks(today)))
