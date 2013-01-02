@@ -192,7 +192,7 @@ def main():
         cols = csvlines.next()
         i = 0
         for line in csvlines:
-            if line[8] == 'ARRIVEE' or line[8] == 'DEPART':
+            if line[8].upper() == 'ARRIVEE' or line[8].upper() == 'DEPART':
                 data = _get_dict(cols, line)
                 tables_data[service.name].append(data)
                 i += 1
