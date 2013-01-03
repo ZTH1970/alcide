@@ -131,6 +131,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                                 <li><label>Date de naissance :</label>
                                 {{ contact.birthdate }}</li>
                             {% endif %}
+                            {% if contact.birthplace %}
+                                <li><label>Lieu de naissance :</label>
+                                {{ contact.birthplace }}</li>
+                            {% endif %}
                             {% if contact.begin_rights %}
                                 <li><label>Début de droits :</label>
                                 {{ contact.begin_rights }}</li>
