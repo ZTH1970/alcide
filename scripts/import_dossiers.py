@@ -152,7 +152,7 @@ def get_rm(service, val):
     except:
         return None
 
-map_job_camsp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 25, 21, 23, 20, 17, 15, 18, 16, 26, 27]
+map_job_camsp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 25, 21, 23, 20, 17, 15, 18, 16, 26, 27, 28]
 
 # CMPP à 25 = Rien
 def get_job(service, val):
@@ -174,7 +174,7 @@ def extract_phone(val):
     s = ''.join([c for c in val if c.isdigit()])
     return s[:11]
 
-def get_nir(nir, key):
+def get_nir(nir, key, writer, line, service):
     if not nir:
         return None
     if len(nir) != 13:
@@ -188,7 +188,8 @@ def get_nir(nir, key):
             good_key = 97 - (nir % 97)
             key = int(key)
             if key != good_key:
-                print 'Clé incorrect %s pour %s' % (str(key), str(nir))
+                msg = 'Clé incorrect %s pour %s' % (str(key), str(nir))
+                writer.writerow(line + [service.name, msg])
         except:
             pass
     return nir
@@ -203,6 +204,9 @@ def main():
 
     f2 = open('./scripts/dossiers_manuel.csv', 'wb')
     writer2 = csv.writer(f2, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+
+    f3 = open('./scripts/contacts_manuel.csv', 'wb')
+    writer3 = csv.writer(f3, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
     for db in dbs:
         if "F_ST_ETIENNE_CMPP" == db:
@@ -336,7 +340,12 @@ def main():
             number = None
             street = line[11]
             address_complement = line[12]
-            zip_code = line[3]
+            zip_code = None
+            if _exist(line[3]):
+                if len(line[3]) > 5:
+                    zip_code = line[3][-5:]
+                else:
+                    zip_code = line[3]
             city = line[4]
 
             address = PatientAddress(phone=phone, comment=comment,
@@ -367,6 +376,7 @@ def main():
         csvfile = open(os.path.join(db_path, db, 'contacts.csv'), 'rb')
         csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
         cols = csvlines.next()
+        writer3.writerow(cols + ['service', 'commentaire'])
         i = 0
         for line in csvlines:
             i += 1
@@ -395,12 +405,16 @@ def main():
             email = None
             if _exist(line[15]):
                 email = line[15]
-            social_security_id = get_nir(line[7], line[8])
+            social_security_id = get_nir(line[7], line[8], writer3, line, service)
             if social_security_id == -1:
-                print 'Numéro %s de longueur diff de 13.' % line[7]
+                msg = 'Numéro %s de longueur diff de 13.' % line[7]
+                writer3.writerow(line + [service.name, msg])
+                contact_comment += "Numéro NIR invalide : " + line[7] + ' - '
                 social_security_id = None
             if social_security_id == -1:
-                print 'Impossible de convertir numéro %s.' % line[7]
+                msg = 'Impossible de convertir numéro %s.' % line[7]
+                writer3.writerow(line + [service.name, msg])
+                contact_comment += "Numéro NIR invalide : " + line[7] + ' - '
                 social_security_id = None
             birthdate = _to_date(line[5])
             job = get_job(service, line[9])
@@ -436,7 +450,8 @@ def main():
             contact.save()
 
             if not line[1] in adresses_per_old_id:
-                print 'Contact sans adresse %s' % contact
+                msg = 'Contact sans adresse'
+                writer3.writerow(line + [service.name, msg])
                 contact.delete()
             else:
                 adresse, old_patient_id = adresses_per_old_id[line[1]]
@@ -717,7 +732,6 @@ def main():
                     #Et quand le contact est le patient ? reconnaissance nom et prénom!
                     if contact.last_name == patient.last_name \
                             and contact.first_name == patient.first_name:
-                        print 'Le contact est le patient'
                         patient.email = contact.email
                         patient.phone = contact.phone
                         patient.mobile = contact.mobile
@@ -732,12 +746,15 @@ def main():
                     else:
                         patient.contacts.add(contact)
 
+
             # L'assuré c'est le premier contact sauf au CMPP où c'est celui déclaré sur la dernière pc s'il existe
 
             # Dossier en pause facturation! champs pause sur le dossier OK
             # si aucun contact, ou aucun contact avec un Nir valide!
 
             #Tiers-payant ? healthcenter ?
+
+            #Etat des dossiers
 
 #            i += 1
 #            print 'Fin de traitement pour le dossier %s' % patient
