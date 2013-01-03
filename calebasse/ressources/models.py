@@ -485,3 +485,16 @@ class HolidayType(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de congé'
         verbose_name_plural = u'Types de congé'
+
+class PatientRelatedLink(NamedAbstractModel):
+    old_camsp_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au CAMSP', blank=True, null=True)
+    old_cmpp_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au CMPP', blank=True, null=True)
+    old_sessad_dys_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au SESSAD TED', blank=True, null=True)
+    old_sessad_ted_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID au SESSAD DYS', blank=True, null=True)
+    class Meta:
+        verbose_name = u'Type de lien avec le patient (parenté)'
+        verbose_name_plural = u'Types de lien avec le patient (parenté)'
