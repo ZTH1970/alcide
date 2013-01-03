@@ -15,12 +15,13 @@ django.core.management.setup_environ(calebasse.settings)
 from django.contrib.auth.models import User
 
 from calebasse.agenda.models import Event, EventType
-from calebasse.dossiers.models import PatientRecord, Status, FileState
+from calebasse.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact
 from calebasse.ressources.models import Service
 from calebasse.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
 from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
     FamilySituationType, TransportType, TransportCompany, Provenance, AnalyseMotive, FamilyMotive,
-    CodeCFTMEA, SocialisationDuration, School, SchoolLevel, OutMotive, OutTo)
+    CodeCFTMEA, SocialisationDuration, School, SchoolLevel, OutMotive, OutTo, AdviceGiver,
+    MaritalStatusType, Job, PatientRelatedLink)
 
 # Configuration
 db_path = "./scripts/20121221-192258"
@@ -35,23 +36,14 @@ dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_
 #Contacts et données secu, assuré
 #Adresses
 #prise en charges (cmpp)
-#état des dossiers
-
-#Croiser, dans le dossier patient: prof mere et mere or nous on veut le mettre sur les contacts
-#Notes, si existe mettre en description, mais tous les fichiers vides ?
+#Quel contact est l'assuré ? voir pc Idem, la caisse est pas sur le contact mais sur la pc!
 #Les états des dossiers!
-
-
-#les contacts sont des people qui apparaissent dans les listes des exterieurs ?
 #diag id = 1 trait id = 2
 #notes ?
 
 #Ajouter au contact lien avec l'enfant mère, grand mèere, etc.
 #table parente champs du dossier: parente.csv associé à la table contact ?
-#Ajouter au contact: catégorie socio pro
-#Import csp.csv
-#Imports adresses et contacts
-#Quel contact est l'assuré ?
+#Ajouter au contact
 #Attention caisse il faut les ancien id pour retourber? on peut rechercher sur le numéro de la caisse!
 
 
@@ -146,6 +138,61 @@ def _get_dict(cols, line):
     return res
 
 tables_data = {}
+
+map_rm_camsp = [1, 3, 2, 8, 6, 4]
+
+def get_rm(service, val):
+    old_id_rm = _to_int(val)
+    if old_id_rm < 1 or 'SESSAD' in service.name:
+        return None
+    if service.name == 'CAMSP':
+        old_id_rm = map_rm_camsp[old_id_rm - 1]
+    try:
+        return MaritalStatusType.objects.get(id=old_id_rm)
+    except:
+        return None
+
+map_job_camsp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 25, 21, 23, 20, 17, 15, 18, 16, 26, 27]
+
+# CMPP à 25 = Rien
+def get_job(service, val):
+    old_id_job = _to_int(val)
+    if old_id_job < 1:
+        return None
+    if service.name == 'CAMSP' and old_id_job == 25:
+        return None
+    if service.name == 'CAMSP':
+        old_id_job = map_job_camsp[old_id_job - 1]
+    try:
+        return Job.objects.get(id=old_id_job)
+    except:
+        return None
+
+def extract_phone(val):
+    if not val or val == '' or val == '0':
+        return None
+    s = ''.join([c for c in val if c.isdigit()])
+    return s[:11]
+
+def get_nir(nir, key):
+    if not nir:
+        return None
+    if len(nir) != 13:
+        return -1
+    try:
+        nir = int(nir)
+    except:
+        return -2
+    if key:
+        try:
+            good_key = 97 - (nir % 97)
+            key = int(key)
+            if key != good_key:
+                print 'Clé incorrect %s pour %s' % (str(key), str(nir))
+        except:
+            pass
+    return nir
+
 
 def main():
     """ """
@@ -259,6 +306,158 @@ def main():
         csvfile.close()
         print "<-- Terminé"
 
+        print "--> Ajout des adresses..."
+        adresses_per_patient = {}
+        adresses_per_old_id = {}
+        csvfile = open(os.path.join(db_path, db, 'adresses.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        cols = csvlines.next()
+        i = 0
+        for line in csvlines:
+            i += 1
+        print "Nombre à traiter : %d" % i
+        csvfile.close()
+        csvfile = open(os.path.join(db_path, db, 'adresses.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        csvlines.next()
+        for line in csvlines:
+            phone = extract_phone(line[5])
+            comment = ''
+            if _exist(line[10]):
+                comment += line[10] + ' - '
+            if _exist(line[5]):
+                comment += "Numéro 1 : " + line[5] + ' - '
+            if _exist(line[8]):
+                comment += "Numéro 2 : " + line[8] + ' - '
+            fax = None
+            place_of_life = False
+            if _exist(line[9]) and line[9] != '-1':
+                place_of_life = True
+            number = None
+            street = line[11]
+            address_complement = line[12]
+            zip_code = line[3]
+            city = line[4]
+
+            address = PatientAddress(phone=phone, comment=comment,
+                fax=fax, place_of_life=place_of_life, number=number,
+                street=street, address_complement=address_complement,
+                zip_code=zip_code, city=city)
+
+            address.save()
+            if line[1] in adresses_per_patient.keys():
+                adresses_per_patient[line[1]].append(address)
+            else:
+                adresses_per_patient[line[1]] = [address]
+            adresses_per_old_id[line[0]] = (address, line[1])
+            i -= 1
+            if not (i % 10):
+                sys.stdout.write('%d' %i)
+            else:
+                sys.stdout.write('.')
+            sys.stdout.flush()
+        csvfile.close()
+        print "<-- Terminé"
+
+        print "--> Chargement des prise en charge pour le CMPP..."
+        print "<-- Terminé"
+
+        print "--> Ajout des contacts..."
+        contacts_per_patient = {}
+        csvfile = open(os.path.join(db_path, db, 'contacts.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        cols = csvlines.next()
+        i = 0
+        for line in csvlines:
+            i += 1
+        print "Nombre à traiter : %d" % i
+        csvfile.close()
+        csvfile = open(os.path.join(db_path, db, 'contacts.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        csvlines.next()
+        for line in csvlines:
+            phone = extract_phone(line[13])
+            mobile = extract_phone(line[14])
+            contact_comment = ''
+            if _exist(line[13]):
+                contact_comment += "Travail : " + line[13] + ' - '
+            if _exist(line[14]):
+                contact_comment += "Mobile : " + line[14] + ' - '
+            if _exist(line[17]):
+                contact_comment += "Divers : " + line[17] + ' - '
+            last_name = treat_name(line[3])
+            first_name = treat_name(line[4])
+            gender = None
+            if line[2] == "1":
+                gender = 1
+            if line[2] == "2":
+                gender = 2
+            email = None
+            if _exist(line[15]):
+                email = line[15]
+            social_security_id = get_nir(line[7], line[8])
+            if social_security_id == -1:
+                print 'Numéro %s de longueur diff de 13.' % line[7]
+                social_security_id = None
+            if social_security_id == -1:
+                print 'Impossible de convertir numéro %s.' % line[7]
+                social_security_id = None
+            birthdate = _to_date(line[5])
+            job = get_job(service, line[9])
+            parente = None
+            try:
+                if service.name == 'CAMSP':
+                    parente = PatientRelatedLink.objects.get(old_camsp_id=_to_int(line[11]))
+                elif service.name == 'CMPP':
+                    parente = PatientRelatedLink.objects.get(old_cmpp_id=_to_int(line[11]))
+                elif service.name == 'SESSAD DYS':
+                    parente = PatientRelatedLink.objects.get(old_sessad_dys_id=_to_int(line[11]))
+                elif service.name == 'SESSAD TED':
+                    parente = PatientRelatedLink.objects.get(old_sessad_ted_id=_to_int(line[11]))
+            except:
+                pass
+            twinning_rank = None
+            thirdparty_payer = False
+            begin_rights = None
+            end_rights = None
+            health_center = None
+
+            contact = PatientContact(phone=phone, mobile= mobile,
+                contact_comment=contact_comment,
+                last_name = last_name, first_name = first_name,
+                gender = gender, email = email, parente = parente,
+                social_security_id = social_security_id,
+                birthdate = birthdate, job = job,
+                twinning_rank = twinning_rank,
+                thirdparty_payer = thirdparty_payer,
+                begin_rights = begin_rights,
+                end_rights = end_rights,
+                health_center = health_center)
+            contact.save()
+
+            if not line[1] in adresses_per_old_id:
+                print 'Contact sans adresse %s' % contact
+                contact.delete()
+            else:
+                adresse, old_patient_id = adresses_per_old_id[line[1]]
+                contact.addresses.add(adresse)
+                # Ajouter l'adresse au contact
+                # Faire une liste des contacts par patient pour ajouter ensuite
+                if old_patient_id in contacts_per_patient.keys():
+                    contacts_per_patient[old_patient_id].append(contact)
+                else:
+                    contacts_per_patient[old_patient_id] = [contact]
+            i -= 1
+            if not (i % 10):
+                sys.stdout.write('%d' %i)
+            else:
+                sys.stdout.write('.')
+            sys.stdout.flush()
+        csvfile.close()
+        print "<-- Terminé"
+
+
+
         accueil_status = Status.objects.filter(type="ACCUEIL").filter(services=service)
         creator = User.objects.get(id=1)
 
@@ -282,12 +481,11 @@ def main():
 
             #PatientContact
             mobile = None
-            # Pourra etre init à l'import des contacts après création du dossier
             social_security_id = None
             birthdate = _to_date(dossier['nais_date'])
             twinning_rank = _to_int(dossier['nais_rang'])
             # Pourra etre init à l'import des contacts après création du dossier
-            thirdparty_payer = None
+            thirdparty_payer = False
             begin_rights = None
             end_rights = None
             health_center = None
@@ -301,6 +499,11 @@ def main():
             paper_id = None
             comment = dossier['infos']
             pause = False
+            if _exist(dossier['blocage']):
+                pause = True
+            confidential = False
+            if _exist(dossier['non_communication_ecole']):
+                confidential = True
 
             # Physiology and health data
             size = _to_int(dossier['taille'])
@@ -330,8 +533,12 @@ def main():
                 provenance = Provenance.objects.get(old_id=_to_int(dossier['ins_provenance']), old_service=service.name)
             except:
                 pass
-            #Champs pas trouvé dans le dossier
+            # Up to now only used at the CAMSP
             advicegiver = None
+            try:
+                advicegiver = AdviceGiver.objects.get(id=_to_int(dossier['con_qui']))
+            except:
+                pass
 
             # Inscription motive
             # Up to now only used at the CAMSP
@@ -367,6 +574,12 @@ def main():
                 child_custody = ParentalCustodyType.objects.get(id=_to_int(dossier['garde']))
             except:
                 pass
+
+            rm_mother = get_rm(service, dossier['rm_mere'])
+            rm_father = get_rm(service, dossier['rm_pere'])
+            job_mother = get_job(service, dossier['prof_mere'])
+            job_father = get_job(service, dossier['prof_pere'])
+            family_comment = None
 
             # Transport
             transportcompany = None
@@ -416,6 +629,7 @@ def main():
                     paper_id = paper_id,
                     comment = comment,
                     pause = pause,
+                    confidential = confidential,
                     size = size,
                     weight = weight,
                     pregnancy_term = pregnancy_term,
@@ -433,6 +647,11 @@ def main():
                     nb_children_family = nb_children_family,
                     parental_authority = parental_authority,
                     family_situation = family_situation,
+                    rm_mother = rm_mother,
+                    rm_father = rm_father,
+                    job_mother = job_mother,
+                    job_father = job_father,
+                    family_comment = family_comment,
                     child_custody = child_custody,
                     transportcompany = transportcompany,
                     transporttype = transporttype,
@@ -489,13 +708,44 @@ def main():
                 except:
                     pass
 
+            # Initialisation adresses et contacts
+            if old_id in adresses_per_patient.keys():
+                for adresse in adresses_per_patient[old_id]:
+                    patient.addresses.add(adresse)
+            if old_id in contacts_per_patient.keys():
+                for contact in contacts_per_patient[old_id]:
+                    #Et quand le contact est le patient ? reconnaissance nom et prénom!
+                    if contact.last_name == patient.last_name \
+                            and contact.first_name == patient.first_name:
+                        print 'Le contact est le patient'
+                        patient.email = contact.email
+                        patient.phone = contact.phone
+                        patient.mobile = contact.mobile
+                        patient.social_security_id = contact.social_security_id
+                        patient.thirdparty_payer = contact.thirdparty_payer
+                        patient.begin_rights = contact.begin_rights
+                        patient.end_rights = contact.end_rights
+                        patient.health_center = contact.health_center
+                        patient.contact_comment = contact.contact_comment
+                        patient.save()
+                        contact.delete()
+                    else:
+                        patient.contacts.add(contact)
+
+            # L'assuré c'est le premier contact sauf au CMPP où c'est celui déclaré sur la dernière pc s'il existe
+
+            # Dossier en pause facturation! champs pause sur le dossier OK
+            # si aucun contact, ou aucun contact avec un Nir valide!
+
+            #Tiers-payant ? healthcenter ?
+
 #            i += 1
 #            print 'Fin de traitement pour le dossier %s' % patient
 #            if i >= 10:
 #                break
             i -= 1
             if not (i % 10):
-                sys.stdout.write('%d ' %i)
+                sys.stdout.write('%d' %i)
             else:
                 sys.stdout.write('.')
             sys.stdout.flush()
