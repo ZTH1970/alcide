@@ -159,10 +159,11 @@ def get_job(service, val):
     old_id_job = _to_int(val)
     if old_id_job < 1:
         return None
-    if service.name == 'CAMSP' and old_id_job == 25:
-        return None
     if service.name == 'CAMSP':
-        old_id_job = map_job_camsp[old_id_job - 1]
+        try:
+            old_id_job = map_job_camsp[old_id_job - 1]
+        except:
+            print 'Old id job out of range: %d' % old_id_job
     try:
         return Job.objects.get(id=old_id_job)
     except:
@@ -179,14 +180,24 @@ def get_nir(nir, key, writer, line, service):
         return None
     if len(nir) != 13:
         return -1
-    try:
-        nir = int(nir)
-    except:
-        return -2
     if key:
+        minus = 0
+        # Corsica dept 2A et 2B
+        if nir[6] in ('A', 'a'):
+            nir = [c for c in nir]
+            nir[6] = '0'
+            nir = ''.join(nir)
+            minus = 1000000
+        elif nir[6] in ('B', 'b'):
+            nir = [c for c in nir]
+            nir[6] = '0'
+            nir = ''.join(nir)
+            minus = 2000000
         try:
+            nir = int(nir) - minus
             good_key = 97 - (nir % 97)
             key = int(key)
+            if
             if key != good_key:
                 msg = 'Clé incorrect %s pour %s' % (str(key), str(nir))
                 writer.writerow(line + [service.name, msg])
@@ -408,11 +419,6 @@ def main():
             social_security_id = get_nir(line[7], line[8], writer3, line, service)
             if social_security_id == -1:
                 msg = 'Numéro %s de longueur diff de 13.' % line[7]
-                writer3.writerow(line + [service.name, msg])
-                contact_comment += "Numéro NIR invalide : " + line[7] + ' - '
-                social_security_id = None
-            if social_security_id == -1:
-                msg = 'Impossible de convertir numéro %s.' % line[7]
                 writer3.writerow(line + [service.name, msg])
                 contact_comment += "Numéro NIR invalide : " + line[7] + ' - '
                 social_security_id = None
@@ -732,6 +738,7 @@ def main():
                     #Et quand le contact est le patient ? reconnaissance nom et prénom!
                     if contact.last_name == patient.last_name \
                             and contact.first_name == patient.first_name:
+                        print "Le contact %s %s est l'assuré" % (contact.last_name, contact.first_name)
                         patient.email = contact.email
                         patient.phone = contact.phone
                         patient.mobile = contact.mobile
