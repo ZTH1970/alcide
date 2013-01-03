@@ -154,7 +154,6 @@ def main():
             service = Service.objects.get(name="SESSAD TED")
         elif "F_ST_ETIENNE_SESSAD" == db:
             service = Service.objects.get(name="SESSAD DYS")
-        print db
         for table in tables:
             # TODO: rewrite this part and treat only line by line
             tables_data[table] = None
