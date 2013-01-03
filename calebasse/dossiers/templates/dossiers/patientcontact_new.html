@@ -5,8 +5,6 @@
   <table>
     <tbody>
       <tr>
-        <p>
-        </p>
         <td>
           {{ form.first_name.label_tag }} :<br>
           {{ form.first_name }}
@@ -29,10 +27,27 @@
           {{ form.birthdate }}
           {{ form.birthdate.errors }}
         </td>
+         <td>
+          {{ form.parente.label_tag }} :<br>
+          {{ form.parente }}
+          {{ form.parente.errors }}
+        </td>
         <td>
-          {{ form.mobile.label_tag }} :<br>
+          {{ form.job.label_tag }} :<br>
+          {{ form.job }}
+          {{ form.job.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Téléphone personnel :<br>
           {{ form.mobile }}
           {{ form.mobile.errors }}
+        </td>
+        <td>
+          Téléphone professionnel :<br>
+          {{ form.phone }}
+          {{ form.phone.errors }}
         </td>
         <td>
           {{ form.email.label_tag }} :<br>
@@ -64,18 +79,20 @@
           {{ form.health_org }}
           {{ form.health_org.errors }}
         </td>
-      </tr>
-      <tr>
+        <td/>
         <td>
           {{ form.twinning_rank.label_tag }} :<br>
           {{ form.twinning_rank }}
           {{ form.twinning_rank.errors }}
         </td>
+      </tr>
+      <tr>
         <td>
           {{ form.addresses.label_tag }} :
           {{ form.addresses }}
           {{ form.addresses.errors }}
         </td>
+      </tr>
     </tbody>
   </table>
   <p>

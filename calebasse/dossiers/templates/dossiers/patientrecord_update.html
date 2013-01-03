@@ -88,15 +88,30 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                 </div>
                 <div>
                     <ul>
+                        {% if contact.parente %}
+                            <li><label>Lien avec le patient :</label>
+                            {{ contact.parente }}</li>
+                        {% endif %}
+                        {% if contact.mobile %}
+                            <li>
+                            <span class="icon-user-space">{{ contact.mobile }} (perso)</span>
+                            </li>
+                        {% endif %}
+                        {% if contact.phone %}
+                            <li>
+                            <span class="icon-user-space">{{ contact.phone }} (pro)</span>
+                            </li>
+                        {% endif %}
                         {% if contact.email %}
                             <li>
                             <label>Courriel :</label>
                             {{ contact.email }}
                             </li>
                         {% endif %}
-                        {% if contact.mobile %}
+                        {% if contact.job %}
                             <li>
-                            <span class="icon-user-space">{{ contact.mobile }}</span>
+                            <label>Profession :</label>
+                            {{ contact.job }}
                             </li>
                         {% endif %}
                         {% if contact.contact_comment %}
