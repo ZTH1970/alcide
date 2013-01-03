@@ -26,8 +26,8 @@ from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, Pare
 # Configuration
 db_path = "./scripts/20121221-192258"
 
-dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-#dbs = ["F_ST_ETIENNE_CMPP"]
+#dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+dbs = ["F_ST_ETIENNE_CAMSP"]
 
 
 
@@ -139,14 +139,14 @@ def _get_dict(cols, line):
 
 tables_data = {}
 
-map_rm_camsp = [1, 3, 2, 8, 6, 4]
+map_rm_cmpp = [1, 3, 2, 8, 6, 4]
 
 def get_rm(service, val):
     old_id_rm = _to_int(val)
     if old_id_rm < 1 or 'SESSAD' in service.name:
         return None
-    if service.name == 'CAMSP':
-        old_id_rm = map_rm_camsp[old_id_rm - 1]
+    if service.name == 'CMPP':
+        old_id_rm = map_rm_cmpp[old_id_rm - 1]
     try:
         return MaritalStatusType.objects.get(id=old_id_rm)
     except:
@@ -158,6 +158,8 @@ map_job_camsp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 25, 21, 23, 20, 
 def get_job(service, val):
     old_id_job = _to_int(val)
     if old_id_job < 1:
+        return None
+    if service.name == 'CAMSP' and old_id_job == 26:
         return None
     if service.name == 'CAMSP':
         try:
@@ -197,7 +199,6 @@ def get_nir(nir, key, writer, line, service):
             nir = int(nir) - minus
             good_key = 97 - (nir % 97)
             key = int(key)
-            if
             if key != good_key:
                 msg = 'Clé incorrect %s pour %s' % (str(key), str(nir))
                 writer.writerow(line + [service.name, msg])
@@ -346,7 +347,7 @@ def main():
                 comment += "Numéro 2 : " + line[8] + ' - '
             fax = None
             place_of_life = False
-            if _exist(line[9]) and line[9] != '-1':
+            if _exist(line[9]):
                 place_of_life = True
             number = None
             street = line[11]
@@ -416,6 +417,9 @@ def main():
             email = None
             if _exist(line[15]):
                 email = line[15]
+            birthplace = None
+            if _exist(line[6]):
+                birthplace = line[6]
             social_security_id = get_nir(line[7], line[8], writer3, line, service)
             if social_security_id == -1:
                 msg = 'Numéro %s de longueur diff de 13.' % line[7]
@@ -447,7 +451,7 @@ def main():
                 last_name = last_name, first_name = first_name,
                 gender = gender, email = email, parente = parente,
                 social_security_id = social_security_id,
-                birthdate = birthdate, job = job,
+                birthdate = birthdate, job = job, birthplace=birthplace,
                 twinning_rank = twinning_rank,
                 thirdparty_payer = thirdparty_payer,
                 begin_rights = begin_rights,
@@ -738,7 +742,10 @@ def main():
                     #Et quand le contact est le patient ? reconnaissance nom et prénom!
                     if contact.last_name == patient.last_name \
                             and contact.first_name == patient.first_name:
-                        print "Le contact %s %s est l'assuré" % (contact.last_name, contact.first_name)
+#                        print "Le contact %s %s est le patient" % (contact.last_name, contact.first_name)
+                        if not patient.birthdate:
+                             patient.birthdate = contact.birthdate
+                        patient.birthplace = contact.birthplace
                         patient.email = contact.email
                         patient.phone = contact.phone
                         patient.mobile = contact.mobile
@@ -753,15 +760,16 @@ def main():
                     else:
                         patient.contacts.add(contact)
 
+            #Etat des dossiers
 
-            # L'assuré c'est le premier contact sauf au CMPP où c'est celui déclaré sur la dernière pc s'il existe
+            # patient.policyholder soit le contact, d'il n'y en a qu'un
+            # au cmmp, cf la pc
 
             # Dossier en pause facturation! champs pause sur le dossier OK
             # si aucun contact, ou aucun contact avec un Nir valide!
 
             #Tiers-payant ? healthcenter ?
 
-            #Etat des dossiers
 
 #            i += 1
 #            print 'Fin de traitement pour le dossier %s' % patient
