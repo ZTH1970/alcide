@@ -254,6 +254,13 @@ class PatientContact(People):
     health_center = models.ForeignKey('ressources.HealthCenter',
             verbose_name=u"Centre d'assurance maladie",
             null=True, blank=True)
+    job = models.ForeignKey('ressources.Job',
+            related_name="job",
+            verbose_name=u"Profession",
+            null=True, blank=True, default=None)
+    parente = models.ForeignKey('ressources.PatientRelatedLink',
+            verbose_name=u"Lien avec le patient (Parenté)",
+            null=True, blank=True, default=None)
 
     addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses")
     contact_comment = models.TextField(verbose_name=u"Commentaire",
