@@ -158,7 +158,19 @@ function state_dialog(url, state_title, state_type) {
              $('p#nir-key span').text('-');
          } else {
              $('p#nir-key span').attr('id', 'highlight')
-             var key = 97 - ($(this).val() % 97)
+             var nir = $(this).val();
+             var minus = 0;
+             if (nir.charAt(6) == 'A'){
+               nir = nir.replace('A', '0');
+               minus = 1000000;
+             }
+             if (nir.charAt(6) == 'B'){
+               nir = nir.replace('B', '0');
+               minus = 2000000;
+             }
+             nir = parseInt(nir, 10);
+             nir = nir - minus;
+             var key = 97 - (nir % 97);
              if (isNaN(key)) {
                  $('p#nir-key span').text('NIR invalide');
              } else {

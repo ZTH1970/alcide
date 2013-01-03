@@ -268,7 +268,25 @@ class PatientContact(People):
 
     def get_control_key(self):
         if self.social_security_id:
-            return (97 - (int(self.social_security_id) % 97))
+            nir = self.social_security_id
+            try:
+                # Corse dpt 2A et 2B
+                minus = 0
+                if nir[6] in ('A', 'a'):
+                    nir = [c for c in nir]
+                    nir[6] = '0'
+                    nir = ''.join(nir)
+                    minus = 1000000
+                elif nir[6] in ('B', 'b'):
+                    nir = [c for c in nir]
+                    nir[6] = '0'
+                    nir = ''.join(nir)
+                    minus = 2000000
+                nir = int(nir) - minus
+                return (97 - (nir % 97))
+            except Exception, e:
+                print str(e)
+                return None
         return None
 
 
