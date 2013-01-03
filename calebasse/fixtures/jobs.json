@@ -2,190 +2,197 @@
     {
         "fields": {
             "name": "EXPLOITANT AGRICOLE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 1
-    }, 
+    },
     {
         "fields": {
             "name": "ARTISAN - COMMERCANT\t"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 2
-    }, 
+    },
     {
         "fields": {
             "name": "CHEF D'ENTREPRISE\t"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 3
-    }, 
+    },
     {
         "fields": {
             "name": "PROFESSIONS LIBERALES"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 4
-    }, 
+    },
     {
         "fields": {
             "name": "CADRE\t"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 5
-    }, 
+    },
     {
         "fields": {
             "name": "ENSEIGNANT\t"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 6
-    }, 
+    },
     {
         "fields": {
             "name": "PROFESSION DE SANTE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 7
-    }, 
+    },
     {
         "fields": {
             "name": "RELIGIEUX - CLERGE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 8
-    }, 
+    },
     {
         "fields": {
             "name": "TECHNICIEN - CONTREMAITRE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 9
-    }, 
+    },
     {
         "fields": {
             "name": "POLICIER"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 10
-    }, 
+    },
     {
         "fields": {
             "name": "MILITAIRE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 11
-    }, 
+    },
     {
         "fields": {
             "name": "EMPLOYE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 12
-    }, 
+    },
     {
         "fields": {
             "name": "OUVRIER QUALIFIE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 13
-    }, 
+    },
     {
         "fields": {
             "name": "OUVRIER NON QUALIFIE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 14
-    }, 
+    },
     {
         "fields": {
             "name": "TRAVAIL A DOMICILE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 15
-    }, 
+    },
     {
         "fields": {
             "name": "INVALIDITE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 16
-    }, 
+    },
     {
         "fields": {
             "name": "ARTISTE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 17
-    }, 
+    },
     {
         "fields": {
             "name": "RETRAITE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 18
-    }, 
+    },
     {
         "fields": {
             "name": "FORMATION"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 19
-    }, 
+    },
     {
         "fields": {
             "name": "ETUDIANT \u2013 ELEVE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 20
-    }, 
+    },
     {
         "fields": {
             "name": "CHOMAGE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 21
-    }, 
+    },
     {
         "fields": {
             "name": "ALLOCATIONS DIVERSES"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 22
-    }, 
+    },
     {
         "fields": {
             "name": "AU FOYER"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 23
-    }, 
+    },
     {
         "fields": {
             "name": "DIVERS"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 24
-    }, 
+    },
     {
         "fields": {
             "name": "OUVRIER AGRICOLE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 25
-    }, 
+    },
     {
         "fields": {
             "name": "PARENT ABSENT"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 26
-    }, 
+    },
     {
         "fields": {
             "name": "PARENT DECEDE"
-        }, 
-        "model": "ressources.job", 
+        },
+        "model": "ressources.job",
         "pk": 27
+    },
+    {
+        "fields": {
+            "name": "SANS ACTIVITE PROFESSIONNELLE"
+        },
+        "model": "ressources.job",
+        "pk": 28
     }
 ]
