@@ -1,0 +1,123 @@
+[
+    {
+        "fields": {
+            "name": "P\u00e8re", 
+            "old_camsp_id": "1", 
+            "old_cmpp_id": "1", 
+            "old_sessad_dys_id": "1", 
+            "old_sessad_ted_id": "1"
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "M\u00e8re", 
+            "old_camsp_id": "2", 
+            "old_cmpp_id": "2", 
+            "old_sessad_dys_id": "2", 
+            "old_sessad_ted_id": "2"
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "Oncle", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "3", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "Tante", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "4", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "name": "Enfant assurant lui-m\u00eame", 
+            "old_camsp_id": "4", 
+            "old_cmpp_id": "5", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "3"
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "name": "Beau-p\u00e8re", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "6", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "name": "Grand-p\u00e8re", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "7", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "name": "Famille d'accueil", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "8", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "name": "Belle-m\u00e8re", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "9", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "name": "\u00c9ducateur", 
+            "old_camsp_id": "", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": "4"
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "name": "Grand-m\u00e8re maternelle", 
+            "old_camsp_id": "3", 
+            "old_cmpp_id": "", 
+            "old_sessad_dys_id": "", 
+            "old_sessad_ted_id": ""
+        }, 
+        "model": "ressources.patientrelatedlink", 
+        "pk": 11
+    }
+]
