@@ -90,7 +90,7 @@ class GeneralForm(ModelForm):
 class CivilStatusForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('first_name', 'last_name', 'birthdate', 'gender', 'nationality')
+        fields = ('first_name', 'last_name', 'birthdate', 'birthplace', 'gender', 'nationality')
 
 
 class FilteredSelectMultipleMise(django.contrib.admin.widgets.FilteredSelectMultiple):

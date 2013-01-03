@@ -243,6 +243,8 @@ class PatientContact(People):
             null=True, blank=True)
     birthdate = models.DateField(verbose_name=u"Date de naissance",
             null=True, blank=True)
+    birthplace = models.CharField(max_length=100, verbose_name=u"Lieu de naissace",
+            null=True, blank=True)
     twinning_rank = models.IntegerField(verbose_name=u"Rang (gémellité)",
             null=True, blank=True)
     thirdparty_payer = models.BooleanField(verbose_name=u'Tiers-payant',
