@@ -122,7 +122,12 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         kwargs['service'] = self.service
         return kwargs
 
-class UpdateAppointmentView(UpdateView):
+class TodayOccurrenceMixin(object):
+    def get_object(self, queryset=None):
+        o = super(TodayOccurrenceMixin, self).get_object(queryset)
+        return o.today_occurrence(self.date)
+
+class UpdateAppointmentView(TodayOccurrenceMixin, UpdateView):
     model = EventWithAct
     form_class = UpdateAppointmentForm
     template_name = 'agenda/update-rdv.html'
@@ -170,7 +175,7 @@ class NewEventView(CreateView):
         return kwargs
 
 
-class UpdateEventView(UpdateView):
+class UpdateEventView(TodayOccurrenceMixin, UpdateView):
     model = Event
     form_class = NewEventForm
     template_name = 'agenda/update-event.html'
