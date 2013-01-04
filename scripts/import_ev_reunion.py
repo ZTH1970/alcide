@@ -22,6 +22,8 @@ from calebasse.agenda.models import Event, EventType
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service
 
+from scripts.import_rs import PERIOD_FAURE_NOUS
+
 # Configuration
 db_path = "./scripts/20121221-192258"
 log_file = "./scripts/import_ev_reunion.log"
@@ -32,14 +34,56 @@ tables = ['rs', 'ev', 'details_rs', 'details_ev']
 # Global mappers. This dicts are used to map a Faure id with a calebasse object.
 tables_data = {}
 
+def _to_datetime(str_date):
+    if not str_date:
+        return None
+    return datetime.strptime(str_date[:19], "%Y-%m-%d %H:%M:%S")
+
+def _to_date(str_date):
+    dt = _to_datetime(str_date)
+    return dt and dt.date()
+
+def _to_time(str_date):
+    dt = _to_datetime(str_date)
+    return dt and dt.time()
+
+def _to_duration(str_date):
+    dt = _to_datetime(str_date)
+    if dt is None:
+        return timedelta(minutes=15)
+    return dt - datetime(1900, 01, 01, 0, 0)
+
 def _get_dict(cols, line):
     res = {}
     for i, data in enumerate(line):
         res[cols[i]] = data.decode('utf-8')
     return res
 
+def _get_therapists(line, table_name, service):
+    p_ids = []
+    for id, detail in tables_data['details_%s' % table_name].iteritems():
+        if detail['%s_id' % table_name] == line['id']:
+            p_ids.append(detail['thera_id'])
+    participants = []
+    for p_id in p_ids:
+        try:
+            if service.name == "CMPP":
+                participants.append(Worker.objects.get(old_cmpp_id=int(p_id)))
+            elif service.name == "CAMSP":
+                participants.append(Worker.objects.get(old_camsp_id=int(p_id)))
+            elif service.name == "SESSAD DYS":
+                participants.append(Worker.objects.get(old_sessad_dys_id=int(p_id)))
+            elif service.name == "SESSAD TED":
+                participants.append(Worker.objects.get(old_sessad_ted_id=int(p_id)))
+        except Worker.DoesNotExist:
+            logging.warning("%s %s_id %s thera_id %s" %\
+                    (service.name, table_name, line['id'], p_id) +\
+                    " therapeute non trouve")
+
+    return participants
+
 def create_event(line, service, tables_data):
-    if not Event.objects.filter(old_ev_id=line['id']):
+    if not Event.objects.filter(old_rs_id=line['id']):
         event_type = EventType.objects.get(id=4)
         start_datetime = datetime.strptime(
                 line['date_rdv'][:-13] + ' ' + line['heure'][11:-4],
@@ -48,37 +92,57 @@ def create_event(line, service, tables_data):
                 hours=int(line['duree'][11:-10]),
                 minutes=int(line['duree'][14:-7]),
                 )
-        # Find therapists
-        p_ids = []
-        for id, detail_rs in tables_data['details_rs'].iteritems():
-            if detail_rs['rs_id'] == line['id']:
-                p_ids.append(detail_rs['thera_id'])
-        participants = []
-
-        for p_id in p_ids:
-            try:
-                if service.name == "CMPP":
-                    participants.append(Worker.objects.get(old_cmpp_id=int(p_id)))
-                elif service.name == "CAMSP":
-                    participants.append(Worker.objects.get(old_camsp_id=int(p_id)))
-                elif service.name == "SESSAD DYS":
-                    participants.append(Worker.objects.get(old_sessad_dys_id=int(p_id)))
-                elif service.name == "SESSAD TED":
-                    participants.append(Worker.objects.get(old_sessad_ted_id=int(p_id)))
-            except Worker.DoesNotExist:
-                logging.warning("rs_id %s thera_id %s" % (line['id'], p_id)  + " therapeute non trouve " +  service.name)
-
+        participants = _get_therapists(line, 'rs', service)
         event = Event.objects.create(
                 title=line['libelle'][:60],
                 description=line['texte'],
                 event_type=event_type,
                 start_datetime=start_datetime,
                 end_datetime=end_datetime,
-                old_ev_id=line['id'],
+                old_rs_id=line['id'],
                 )
         event.services = [service]
         event.participants = participants
         event.save()
+
+def create_recurrent_event(line, service, tables_data):
+    if not Event.objects.filter(old_ev_id=line['id']):
+        start_date = _to_date(line['date_debut'])
+        end_date = _to_date(line['date_fin'])
+        if end_date and start_date > end_date:
+            logging.warning('%s ev_id %s date_fin < date_debut' % \
+                    (service.name, line['id']))
+        time = _to_time(line['heure'])
+        duration = _to_duration(line['duree'])
+        start_datetime = datetime.combine(start_date, time)
+        end_datetime = start_datetime + duration
+
+        # connect rythme
+        rythme = int(line['rythme'])
+        if PERIOD_FAURE_NOUS.get(rythme):
+            recurrence_periodicity = PERIOD_FAURE_NOUS[rythme]
+        else:
+            recurrence_periodicity = None
+            logging.warning('%s ev_id %s rythme not found %s' % \
+                    (service.name, line['id'], line['rythme']))
+
+        participants = _get_therapists(line, 'ev', service)
+        event_type = EventType.objects.get(id=4)
+        try:
+            event = Event.objects.create(
+                start_datetime=start_datetime,
+                end_datetime=end_datetime,
+                event_type=event_type,
+                title=line['libelle'],
+                old_ev_id=line['id'],
+                description=line['note'],
+                recurrence_periodicity=recurrence_periodicity,
+                recurrence_end_date=end_date)
+            event.services = [service]
+            event.participants = participants
+            event.save()
+        except django.core.exceptions.ValidationError, e:
+            logging.error(service.name + ' ev %s %s' % (line, e))
 
 def main():
     logging.basicConfig(filename=log_file,level=logging.DEBUG)
@@ -110,7 +174,7 @@ def main():
 
         for id, line in tables_data['ev'].iteritems():
             if line['libelle'].upper() not in ('ARRIVEE', 'DEPART'):
-                pass
+                create_recurrent_event(line, service, tables_data)
 
 if __name__ == "__main__":
     main()
