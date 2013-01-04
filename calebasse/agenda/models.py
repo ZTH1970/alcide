@@ -347,6 +347,11 @@ class Event(models.Model):
     def __unicode__(self):
         return self.title
 
+    def __repr__(self):
+        return '<Event: on {start_datetime} with {participants}'.format(
+                start_datetime=self.start_datetime,
+                participants=self.participants.all() if self.id else '<un-saved>')
+
 
 class OldRSID(models.Model):
     event = models.ForeignKey(Event)
