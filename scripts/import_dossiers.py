@@ -6,6 +6,7 @@ import sys
 import csv
 
 from datetime import datetime, time
+from dateutil.relativedelta import relativedelta
 
 import calebasse.settings
 import django.core.management
@@ -71,64 +72,6 @@ def _to_int(str_int):
     if not str_int:
         return None
     return int(str_int)
-
-def dossiers_mapper(tables_data, service):
-    global dossiers
-    for line in tables_data['dossiers']:
-        status = Status.objects.filter(type="ACCUEIL").filter(services=service)
-        creator = User.objects.get(id=1)
-        gender = _to_int(line['nais_sexe'])
-        if gender == 0:
-            gender = None
-        # TODO: add more fields
-        patient, created = PatientRecord.objects.get_or_create(first_name=line['prenom'],
-                last_name=line['nom'], birthdate=_to_date(line['nais_date']),
-                twinning_rank=_to_int(line['nais_rang']),
-                gender=gender, service=service, creator=creator)
-        dossiers[line['id']] = patient
-
-        if not created:
-            if not line['ins_date']:
-                # Hack when there is no inscription date put 01/01/1970
-                line['ins_date'] = "1970-01-01 00:00:00.000"
-            fs = FileState.objects.create(status=status[0], author=creator,
-                   date_selected=_to_date(line['ins_date']),
-                    previous_state=None, patient=patient)
-            patient.last_state = fs
-            patient.save()
-            if line['sor_date']:
-                status = Status.objects.filter(type="CLOS").filter(services=service)
-                fs = FileState.objects.create(status=status[0], author=creator,
-                        date_selected=_to_date(line['sor_date']),
-                        previous_state=None, patient=patient)
-                patient.last_state = fs
-                patient.save()
-
-def rs_mapper(tables_data, service):
-    global dossiers
-
-    event_type = EventType.objects.get(
-                label=u"Rendez-vous patient"
-                )
-
-    for line in tables_data['rs']:
-        if dossiers.has_key(line['enfant_id']):
-            patient = dossiers[line['enfant_id']]
-            strdate = line['date_rdv'][:-13] + ' ' + line['heure'][11:-4]
-            date = datetime.strptime(strdate, "%Y-%m-%d %H:%M:%S")
-
-             # TODO: add act_type
-#            act_event = EventAct.objects.get_or_create(
-#                    title=line['libelle'],
-#                    event_type=event_type,
-#                    patient=patient,
-#                    act_type=act_type,
-#                    date=date
-#                    )
-        else:
-            # TODO: if no patient add event
-            pass
-
 
 def _get_dict(cols, line):
     """"""
@@ -220,6 +163,15 @@ def main():
     f3 = open('./scripts/contacts_manuel.csv', 'wb')
     writer3 = csv.writer(f3, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
+    status_accueil = Status.objects.filter(type="ACCUEIL")[0]
+    status_diagnostic = Status.objects.filter(type="DIAGNOSTIC")[0]
+    status_traitement = Status.objects.filter(type="TRAITEMENT")[0]
+    status_clos = Status.objects.filter(type="CLOS")[0]
+    status_bilan = Status.objects.filter(type="BILAN")[0]
+    status_suivi = Status.objects.filter(type="SUIVI")[0]
+    status_surveillance = Status.objects.filter(type="SURVEILLANCE")[0]
+    creator = User.objects.get(id=1)
+
     for db in dbs:
         if "F_ST_ETIENNE_CMPP" == db:
             service = Service.objects.get(name="CMPP")
@@ -237,7 +189,7 @@ def main():
         csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
         csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
         d_cols = csvlines.next()
-        writer2.writerow(d_cols + ['service', 'creation'])
+        writer2.writerow(d_cols + ['service', 'creation', 'commenataire'])
         tables_data['dossiers'] = []
         for line in csvlines:
             #Au moins nom et prénom
@@ -245,7 +197,7 @@ def main():
                 data = _get_dict(d_cols, line)
                 tables_data['dossiers'].append(data)
             else:
-                writer2.writerow(line + [service.name, 'Non'])
+                writer2.writerow(line + [service.name, 'Non', 'Ni Nom, ni prénom'])
         csvfile.close()
         print "<-- Terminé"
 
@@ -347,7 +299,7 @@ def main():
                 comment += "Numéro 2 : " + line[8] + ' - '
             fax = None
             place_of_life = False
-            if _exist(line[9]):
+            if _exist(line[9]) and line[9] == '-1':
                 place_of_life = True
             number = None
             street = line[11]
@@ -481,18 +433,84 @@ def main():
         csvfile.close()
         print "<-- Terminé"
 
-
-
-        accueil_status = Status.objects.filter(type="ACCUEIL").filter(services=service)
-        creator = User.objects.get(id=1)
-
         print "--> Ajout dossiers..."
         print "Nombre à traiter : %d" % len(tables_data['dossiers'])
         i = len(tables_data['dossiers'])
         for dossier in tables_data['dossiers']:
+
+            date_accueil = None
+            date_diagnostic = None
+            date_traitement = None
+            date_clos = None
+            date_bilan = None
+            date_suivi = None
+            date_surveillance = None
+            fss = []
+            date_accueil = _to_date(dossier['con_date'])
+            date_traitement = _to_date(dossier['ins_date'])
+            date_clos = _to_date(dossier['sor_date'])
+            if not (date_accueil or date_traitement or date_clos):
+                # no state date, the record is inconsistent
+                writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Non', "Aucune date d'état existante"])
+                continue
+            # Manage states
+            if date_accueil and date_traitement and date_accueil > date_traitement:
+                date_accueil = None
+            elif date_traitement and date_clos and date_traitement > date_clos:
+                date_traitement = None
+            if "SESSAD" in service.name:
+                # Il n'y a jamais eu de retour au SESSADs
+                if date_accueil:
+                    fss.append((status_accueil, date_accueil, None))
+                if date_traitement:
+                    fss.append((status_traitement, date_traitement, None))
+                if date_clos:
+                    fss.append((status_clos, date_clos, None))
+            # Jamais de motif et provenance au retour
+            elif service.name == 'CAMSP':
+                date_retour = _to_date(dossier['ret_date'])
+                if date_accueil:
+                    fss.append((status_accueil, date_accueil, None))
+                if not date_retour:
+                    if date_traitement:
+                        s = status_bilan
+                        if dossier['suivi'] == '3':
+                            s = status_suivi
+                        elif dossier['suivi'] == '4':
+                            s = status_surveillance
+                        fss.append((s, date_traitement, "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
+                else:
+                    # Le retour supprime la précédente de clôture, on choisit le retour à j-1
+                    if date_traitement:
+                        # c'est l'inscription
+                        fss.append((status_suivi, date_traitement, "Etat de traitement indéterminé (Suivi par défaut)."))
+                        fss.append((status_clos, date_retour + relativedelta(days=-1), "La date de clôture est indéterminée (par défaut positionnée à 1 jour avant le retour)."))
+                        s = status_bilan
+                        if dossier['suivi'] == '3':
+                            s = status_suivi
+                        elif dossier['suivi'] == '4':
+                            s = status_surveillance
+                        fss.append((s, date_retour,  "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
+                if date_clos:
+                    if date_retour and date_clos < date_retour:
+                        print 'La date de clôture ne peut être antérieure à la date de fermeture!'
+                    else:
+                        fss.append((status_clos, date_clos, None))
+
+            else:
+                pass
+                # date_traitement c'est diagnostic ou traitement
+                # CMPP : Si retour ret_diag = -1 si retour en diag.
+                # Pour savoir si c'est traitement ou diagnostique il faut connaître les actes validés passés
+                # Donc cela ne peut être fait que lorsque l'import des actes seront effectués et que l'on sera comment ils sont pris en charge
+                # Donc on run ce script, on run l'import des rdv patients et actes, puis un script pour mettre à jour les états et imputer les actes facturés aux pc
+                # L'import des pc ne peut aussi se faire qu'après l'import des actes
+
+
             for col in ('mdph', 'code_archive', 'aeeh', 'mdph_departement', 'pps', 'pps_deb', 'pps_fin', 'mdph_Debut', 'mdph_Fin'):
                 if _exist(dossier[col]):
-                    writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Oui'])
+                    writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Oui', "Données présentes non traitées"])
+                    break
 
             #People
             first_name = treat_name(dossier['prenom'])
@@ -640,6 +658,7 @@ def main():
             old_id = dossier['id']
             old_old_id = dossier['ancien_numero']
 
+
             patient, created = PatientRecord.objects.get_or_create(first_name = first_name,
                     last_name = last_name,
                     birthdate = birthdate,
@@ -692,16 +711,21 @@ def main():
 #            else:
 #                print 'Patient %s existe' % patient
 
-            fs = FileState(status=accueil_status[0], author=creator, previous_state=None)
-            "Date du premier contact"
-            date_selected = None
-            if not date_selected:
-                date_selected = patient.created
-            fs.patient = patient
-            fs.date_selected = date_selected
-            fs.save()
-            patient.last_state = fs
-            patient.save()
+            # Init states
+            if not fss:
+                print "Pas d'état et le dossier patient %s (old_id) a été créé!" % old_id
+            else:
+                fs = FileState(status=fss[0][0], author=creator, previous_state=None)
+                date_selected = fss[0][1]
+                fs.patient = patient
+                fs.date_selected = date_selected
+                fs.comment = fss[0][2]
+                fs.save()
+                patient.last_state = fs
+                patient.save()
+                if len(fss) > 1:
+                    for status, date, comment in fss[1:]:
+                        patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
 
             if old_id in mises_per_patient.keys():
                 for quotation in mises_per_patient[old_id]:
@@ -739,7 +763,6 @@ def main():
                     patient.addresses.add(adresse)
             if old_id in contacts_per_patient.keys():
                 for contact in contacts_per_patient[old_id]:
-                    #Et quand le contact est le patient ? reconnaissance nom et prénom!
                     if contact.last_name == patient.last_name \
                             and contact.first_name == patient.first_name:
 #                        print "Le contact %s %s est le patient" % (contact.last_name, contact.first_name)
@@ -770,6 +793,7 @@ def main():
 
             #Tiers-payant ? healthcenter ?
 
+            # Notifications au sessad, il n'y en a pas!
 
 #            i += 1
 #            print 'Fin de traitement pour le dossier %s' % patient
