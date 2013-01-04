@@ -27,8 +27,8 @@ from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, Pare
 # Configuration
 db_path = "./scripts/20121221-192258"
 
-#dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-dbs = ["F_ST_ETIENNE_CAMSP"]
+dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+#dbs = ["F_ST_ETIENNE_CAMSP"]
 
 
 map_cs = {}
@@ -567,6 +567,11 @@ def main():
                 # Donc cela ne peut être fait que lorsque l'import des actes seront effectués et que l'on sera comment ils sont pris en charge
                 # Donc on run ce script, on run l'import des rdv patients et actes, puis un script pour mettre à jour les états et imputer les actes facturés aux pc
                 # L'import des pc ne peut aussi se faire qu'après l'import des actes
+                # imports des actes dit ce qui a été facturé sans le détail de quelle facture ou quel invoice.
+                # à l'import, tous les actes 2012 seront locked, jedui et vendredi seront à faire à la main par les secrétaires
+                # pour le camsp et sessads, on prendre à partir de 2013 les actes
+                # pour le cmpp, il va faloire imputer tous les actes facturés aux prises en charges
+                # pour savoir dans la nouvelle facturation (134) comment les imputer et donc savoir dans quel état est le dossier
 
 
             for col in ('mdph', 'code_archive', 'aeeh', 'mdph_departement', 'pps', 'pps_deb', 'pps_fin', 'mdph_Debut', 'mdph_Fin'):
@@ -774,20 +779,21 @@ def main():
 #                print 'Patient %s existe' % patient
 
             # Init states
-            if not fss:
-                print "Pas d'état et le dossier patient %s (old_id) a été créé!" % old_id
-            else:
-                fs = FileState(status=fss[0][0], author=creator, previous_state=None)
-                date_selected = fss[0][1]
-                fs.patient = patient
-                fs.date_selected = date_selected
-                fs.comment = fss[0][2]
-                fs.save()
-                patient.last_state = fs
-                patient.save()
-                if len(fss) > 1:
-                    for status, date, comment in fss[1:]:
-                        patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
+            if service.name != 'CMPP':
+                if not fss:
+                    print "Pas d'etat et le dossier patient %s (old_id) a ete cree!" % old_id
+                else:
+                    fs = FileState(status=fss[0][0], author=creator, previous_state=None)
+                    date_selected = fss[0][1]
+                    fs.patient = patient
+                    fs.date_selected = date_selected
+                    fs.comment = fss[0][2]
+                    fs.save()
+                    patient.last_state = fs
+                    patient.save()
+                    if len(fss) > 1:
+                        for status, date, comment in fss[1:]:
+                            patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
 
             if old_id in mises_per_patient.keys():
                 for quotation in mises_per_patient[old_id]:
