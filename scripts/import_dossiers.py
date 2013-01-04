@@ -507,6 +507,7 @@ def main():
             date_bilan = None
             date_suivi = None
             date_surveillance = None
+            date_retour = None
             fss = []
             date_accueil = _to_date(dossier['con_date'])
             date_traitement = _to_date(dossier['ins_date'])
@@ -518,8 +519,10 @@ def main():
             # Manage states
             if date_accueil and date_traitement and date_accueil > date_traitement:
                 date_accueil = None
-            elif date_traitement and date_clos and date_traitement > date_clos:
+            if date_traitement and date_clos and date_traitement > date_clos:
                 date_traitement = None
+            if date_accueil and date_clos and date_accueil > date_clos:
+                date_accueil = None
             if "SESSAD" in service.name:
                 # Il n'y a jamais eu de retour au SESSADs
                 if date_accueil:
@@ -545,8 +548,10 @@ def main():
                     # Le retour supprime la précédente de clôture, on choisit le retour à j-1
                     if date_traitement:
                         # c'est l'inscription
-                        fss.append((status_suivi, date_traitement, "Etat de traitement indéterminé (Suivi par défaut)."))
-                        fss.append((status_clos, date_retour + relativedelta(days=-1), "La date de clôture est indéterminée (par défaut positionnée à 1 jour avant le retour)."))
+                        if date_traitement < date_retour:
+                            fss.append((status_suivi, date_traitement, "Etat de traitement indéterminé (Suivi par défaut)."))
+                        old_clos_date = date_retour + relativedelta(days=-1)
+                        fss.append((status_clos, old_clos_date, "La date de clôture est indéterminée (par défaut positionnée à 1 jour avant le retour)."))
                         s = status_bilan
                         if dossier['suivi'] == '3':
                             s = status_suivi
