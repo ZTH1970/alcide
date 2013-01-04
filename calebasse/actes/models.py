@@ -69,8 +69,8 @@ class Act(models.Model):
 
     patient = models.ForeignKey('dossiers.PatientRecord')
     date = models.DateField(u'Date')
-    time = models.TimeField(u'Heure', default=time())
-    _duration = models.IntegerField(u'Durée en minutes', default=0)
+    time = models.TimeField(u'Heure', blank=True, null=True, default=time())
+    _duration = models.IntegerField(u'Durée en minutes', blank=True, null=True, default=0)
     act_type = models.ForeignKey('ressources.ActType',
             verbose_name=u'Type d\'acte')
     validation_locked = models.BooleanField(default=False,

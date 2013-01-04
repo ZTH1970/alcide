@@ -17,7 +17,7 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, Room
 from calebasse.ressources.models import ActType
-from calebasse.actes.models import Act
+from calebasse.actes.models import Act, ActValidationState
 
 from import_dossiers import map_cs
 
@@ -57,6 +57,14 @@ def _get_dict(cols, line):
     for i, data in enumerate(line):
         res[cols[i]] = data.decode('utf-8')
     return res
+
+def batch_delete(qs, limit):
+    count = qs.count()
+    i = 0
+    while i < count:
+        ids = qs[i:i+limit].values_list('pk', flat=True)
+        qs.filter(pk__in=ids).delete()
+        i += limit
 
 
 PERIOD_FAURE_NOUS = {1 : 1,
@@ -113,6 +121,8 @@ def main():
     invalid_rs_writer = csv.writer(invalid_rs_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     invalid_rr_csv = open('./scripts/invalid_rr.csv', 'wb+')
     invalid_rr_writer = csv.writer(invalid_rr_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    invalid_actes_csv = open('./scripts/invalid_actes.csv', 'wb+')
+    invalid_actes_writer = csv.writer(invalid_actes_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for db in dbs:
         workers_idx = {}
         act_types_idx = {}
@@ -126,6 +136,7 @@ def main():
         elif "F_ST_ETIENNE_SESSAD" == db:
             service = Service.objects.get(name="SESSAD DYS")
 
+        EventWithAct.objects.filter(services=service).delete()
         print '===', service.name, '==='
         print datetime.now()
 
@@ -368,144 +379,200 @@ def main():
         print ' Rdv individuels invalides', invalid_single
 
         # create single rdv
-        limit = 1000000
-        with transaction.commit_manually():
-            try:
-                # single RS
-                i = 0 
-                rows = []
-                events = []
-                for row in rs_data[:limit]:
-                    if row['exception'] or row.get('invalid'):
-                        continue
-                    i += 1
-                    rows.append(row)
-                    event = EventWithAct.objects.create(patient=row['enfant'],
-                            start_datetime=row['start_datetime'],
-                            end_datetime=row['end_datetime'],
-                            act_type=row['act_type'],
-                            old_rs_id=row['id'],
-                            room=Room(id=1),
-                            title=row['libelle'],
-                            description=row['texte'])
-                    row['event'] = event
-                    events.append(event)
-                    print "Rdv creation %-6d\r" % i,
-                print
-                def batch_bulk(model, rows, limit):
-                    i = 0
-                    while rows[i:i+limit]:
-                        model.objects.bulk_create(rows[i:i+limit])
-                        i += limit
-                def service_and_workers(events, rows):
-                    services = []
-                    ServiceThrough = EventWithAct.services.through
-                    for event in events:
-                        services.append(ServiceThrough(
-                            event_id=event.event_ptr_id,
-                            service_id=service.id))
-                    batch_bulk(ServiceThrough, services, 100)
-                    ParticipantThrough = EventWithAct.participants.through
-                    participants = []
-                    for row, event in zip(rows, events):
-                        for worker in row['workers']:
-                            participants.append(
-                                    ParticipantThrough(
-                                        event_id=event.event_ptr_id,
-                                        people_id=worker.people_ptr_id))
-                    batch_bulk(ParticipantThrough, participants, 100)
-                    print 'Created %s service links' % len(services)
-                    print 'Created %s participants links' % len(participants)
-                service_and_workers(events, rows)
-                # RR
-                rows = []
-                events = []
-                i = 0
-                for row in rr_data[:limit]:
-                    if row.get('invalid'):
-                        continue
-                    i += 1
-                    rows.append(row)
-                    event = EventWithAct.objects.create(
-                            patient=row['enfant'],
-                            start_datetime=row['start_datetime'],
-                            end_datetime=row['end_datetime'],
-                            act_type=row['act_type'],
-                            old_rs_id=row['id'],
-                            room=Room(id=1),
-                            title=row['libelle'],
-                            description=row['texte'],
-                            recurrence_periodicity=row['recurrence_periodicity'],
-                            recurrence_end_date=row['end_date'])
-                    row['event'] = event
-                    events.append(event)
-                    print "Rdv recurrent creation %-6d\r" % i,
-                print
-                service_and_workers(events, rows)
-                # Exceptions
-                excrows = []
-                excevents = []
-                i = 0
-                for rr, event in zip(rows, events):
-                    for row in rr['exceptions']:
-                        if row.get('invalid'):
-                            print 'exception invalide'
-                            continue
-                        i += 1
-                        excrows.append(row)
-                        event = EventWithAct.objects.create(
-                                patient=row['enfant'],
-                                start_datetime=row['start_datetime'],
-                                end_datetime=row['end_datetime'],
-                                act_type=row['act_type'],
-                                old_rs_id=row['id'],
-                                room=Room(id=1),
-                                title=row['libelle'],
-                                description=row['texte'],
-                                exception_to=event,
-                                exception_date=row['date'])
-                        row['event'] = event
-                        excevents.append(event)
-                        print "Exception creation %-6d\r" % i,
-                print
-                service_and_workers(excevents, excrows)
-            except:
-                transaction.rollback()
-            else:
-                transaction.commit()
+        limit = 100000
+        # single RS
+        i = 0 
+        rows = []
+        events = []
+        for row in rs_data[:limit]:
+            if row['exception'] or row.get('invalid'):
+                continue
+            i += 1
+            rows.append(row)
+            event = EventWithAct.objects.create(patient=row['enfant'],
+                    start_datetime=row['start_datetime'],
+                    end_datetime=row['end_datetime'],
+                    act_type=row['act_type'],
+                    old_rs_id=row['id'],
+                    room=Room(id=1),
+                    title=row['libelle'],
+                    description=row['texte'])
+            row['event'] = event
+            events.append(event)
+            print "Rdv creation %-6d\r" % i,
+        print
+        def batch_bulk(model, rows, limit):
+            i = 0
+            while rows[i:i+limit]:
+                model.objects.bulk_create(rows[i:i+limit])
+                i += limit
+        def service_and_workers(events, rows):
+            services = []
+            ServiceThrough = EventWithAct.services.through
+            for event in events:
+                services.append(ServiceThrough(
+                    event_id=event.event_ptr_id,
+                    service_id=service.id))
+            batch_bulk(ServiceThrough, services, 100)
+            ParticipantThrough = EventWithAct.participants.through
+            participants = []
+            for row, event in zip(rows, events):
+                for worker in row['workers']:
+                    participants.append(
+                            ParticipantThrough(
+                                event_id=event.event_ptr_id,
+                                people_id=worker.people_ptr_id))
+            batch_bulk(ParticipantThrough, participants, 100)
+            print 'Created %s service links' % len(services)
+            print 'Created %s participants links' % len(participants)
+        service_and_workers(events, rows)
+        # RR
+        rows = []
+        events = []
+        i = 0
+        for row in rr_data[:limit]:
+            if row.get('invalid'):
+                continue
+            i += 1
+            rows.append(row)
+            event = EventWithAct.objects.create(
+                    patient=row['enfant'],
+                    start_datetime=row['start_datetime'],
+                    end_datetime=row['end_datetime'],
+                    act_type=row['act_type'],
+                    old_rr_id=row['id'],
+                    room=Room(id=1),
+                    title=row['libelle'],
+                    description=row['texte'],
+                    recurrence_periodicity=row['recurrence_periodicity'],
+                    recurrence_end_date=row['end_date'])
+            row['event'] = event
+            events.append(event)
+            print "Rdv recurrent creation %-6d\r" % i,
+        print
+        service_and_workers(events, rows)
+        # Exceptions
+        excrows = []
+        excevents = []
+        i = 0
+        for rr, event in zip(rows, events):
+            for row in rr['exceptions']:
+                if row.get('invalid'):
+                    print 'exception invalide'
+                    continue
+                i += 1
+                excrows.append(row)
+                excevent = EventWithAct.objects.create(
+                        patient=row['enfant'],
+                        start_datetime=row['start_datetime'],
+                        end_datetime=row['end_datetime'],
+                        act_type=row['act_type'],
+                        old_rs_id=row['id'],
+                        room=Room(id=1),
+                        title=row['libelle'],
+                        description=row['texte'],
+                        exception_to=event,
+                        exception_date=row['date'])
+                row['event'] = excevent
+                excevents.append(excevent)
+                print "Exception creation %-6d\r" % i,
+        print
+        service_and_workers(excevents, excrows)
 
 
         # Clean act for this service
-        Act.objects.filter(patient__service=service).delete()
+        print "Actes before delete", Act.objects.count()
+        batch_delete(Act.objects.filter(patient__service=service), 500)
+        print "Actes afterdelete", Act.objects.count()
         actes_data, actes_idx, actes_cols = load_csv(db, 'actes')
+        actes_cols.extend(['workers','invalid'])
+        invalid_actes_writer.writerow(map(lambda x: x.encode('utf-8'), actes_cols))
+        actes_details_data, _, _ = load_csv(db, 'details_actes')
+        handle_details(actes_data, actes_idx, actes_details_data, 'acte_id')
         act_to_event = dict()
         for row in rs_data:
             if row.get('event') and row['base_id']:
                 act_to_event[row['base_id']] = row['event']
+        rows = []
         actes = []
+        validation_state = []
+        doctors = []
         i = 0
         j = 0
+        k = 0
+        DoctorThrough = Act.doctors.through
         for row in actes_data:
-            i += 1
+            row.setdefault('workers', set())
             row['date'] = _to_date(row['date_acte'])
-            row['time'] = _to_time(row['horaire'])
+            row['time'] = _to_time(row['heure'])
             row['duration'] = _to_duration(row['duree'])
             row['is_billed'] = row['marque'] == '1'
             row['validation_locked'] = row['date'] < date(2013, 1, 3)
             set_enfant(row)
             set_act_type(row)
             row['parent_event'] = act_to_event.get(row['id'])
-            if row['parent_event']:
-                j += 1
             row['state'] = map_cs[service.name].get(row['cs'],
                     'VALIDE')
+            duration = row['duration']
+            if duration:
+                duration = duration.seconds // 60
+            if row.get('invalid'):
+                invalid_actes_writer.writerow([ unicode(row[col]).encode('utf-8') for col in actes_cols ])
+                continue
+            i += 1
+            if row['parent_event']:
+                j += 1
+            else:
+                t = row['time']
+                if t:
+                    query = 'EXTRACT(hour from start_datetime) = %i and EXTRACT(minute from start_datetime) = %i' % (t.hour, t.minute)
+                    qs = EventWithAct.objects.for_today(row['date']).filter(patient=row['enfant']).extra(where=[query])
+                    if qs:
+                        try:
+                            row['parent_event'] = qs.get()
+                        except:
+                            print qs
+                            import pdb
+                            pdb.set_trace()
+
+                        k += 1
+            act = Act.objects.create(
+                    date=row['date'],
+                    time=row['time'],
+                    _duration=duration,
+                    is_billed=row['is_billed'],
+                    act_type=row['act_type'],
+                    patient=row['enfant'],
+                    validation_locked=row['validation_locked'],
+                    parent_event=row['parent_event'])
+            rows.append(row)
+            actes.append(act)
+            validation_state.append(
+                    ActValidationState(act=act,
+                        state_name=row['state'],
+                        previous_state=None))
+            for worker in row['workers']:
+                doctors.append(DoctorThrough(
+                    act_id=act.id,
+                    worker_id=worker.id))
+        batch_bulk(ActValidationState, validation_state, 500)
+        batch_bulk(DoctorThrough, doctors, 500)
+
         print 'Actes:'
         print ' - importe ', i
-        print ' - link to rdv', j
+        print ' - natual link to rdv', j
+        print ' - complicated link to rdv', k
 
 
     invalid_rs_csv.close()
     invalid_rr_csv.close()
 
 if __name__ == "__main__":
-    main()
+    with transaction.commit_manually():
+        try:
+            main()
+        except:
+            transaction.rollback()
+            raise
+        else:
+            transaction.commit()
