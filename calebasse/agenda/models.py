@@ -323,6 +323,7 @@ class Event(models.Model):
             return [self]
 
     def save(self, *args, **kwargs):
+        assert self.recurrence_periodicity is None or self.exception_to is None
         self.clean() # force call to clean to initialize recurrence fields
         super(Event, self).save(*args, **kwargs)
 
