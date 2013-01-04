@@ -17,7 +17,7 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, Room
 from calebasse.ressources.models import ActType
-from calebasse.actes.models import Act
+from calebasse.actes.models import Act, ActValidationState
 
 from import_dossiers import map_cs
 
@@ -121,6 +121,8 @@ def main():
     invalid_rs_writer = csv.writer(invalid_rs_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     invalid_rr_csv = open('./scripts/invalid_rr.csv', 'wb+')
     invalid_rr_writer = csv.writer(invalid_rr_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    invalid_actes_csv = open('./scripts/invalid_actes.csv', 'wb+')
+    invalid_actes_writer = csv.writer(invalid_actes_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for db in dbs:
         workers_idx = {}
         act_types_idx = {}
@@ -134,6 +136,7 @@ def main():
         elif "F_ST_ETIENNE_SESSAD" == db:
             service = Service.objects.get(name="SESSAD DYS")
 
+        EventWithAct.objects.filter(services=service).delete()
         print '===', service.name, '==='
         print datetime.now()
 
@@ -376,7 +379,7 @@ def main():
         print ' Rdv individuels invalides', invalid_single
 
         # create single rdv
-        limit = 50
+        limit = 100000
         # single RS
         i = 0 
         rows = []
@@ -437,7 +440,7 @@ def main():
                     start_datetime=row['start_datetime'],
                     end_datetime=row['end_datetime'],
                     act_type=row['act_type'],
-                    old_rs_id=row['id'],
+                    old_rr_id=row['id'],
                     room=Room(id=1),
                     title=row['libelle'],
                     description=row['texte'],
@@ -459,7 +462,7 @@ def main():
                     continue
                 i += 1
                 excrows.append(row)
-                event = EventWithAct.objects.create(
+                excevent = EventWithAct.objects.create(
                         patient=row['enfant'],
                         start_datetime=row['start_datetime'],
                         end_datetime=row['end_datetime'],
@@ -470,8 +473,8 @@ def main():
                         description=row['texte'],
                         exception_to=event,
                         exception_date=row['date'])
-                row['event'] = event
-                excevents.append(event)
+                row['event'] = excevent
+                excevents.append(excevent)
                 print "Exception creation %-6d\r" % i,
         print
         service_and_workers(excevents, excrows)
@@ -482,17 +485,24 @@ def main():
         batch_delete(Act.objects.filter(patient__service=service), 500)
         print "Actes afterdelete", Act.objects.count()
         actes_data, actes_idx, actes_cols = load_csv(db, 'actes')
+        actes_cols.extend(['workers','invalid'])
+        invalid_actes_writer.writerow(map(lambda x: x.encode('utf-8'), actes_cols))
         actes_details_data, _, _ = load_csv(db, 'details_actes')
         handle_details(actes_data, actes_idx, actes_details_data, 'acte_id')
         act_to_event = dict()
         for row in rs_data:
             if row.get('event') and row['base_id']:
                 act_to_event[row['base_id']] = row['event']
+        rows = []
         actes = []
+        validation_state = []
+        doctors = []
         i = 0
         j = 0
+        k = 0
+        DoctorThrough = Act.doctors.through
         for row in actes_data:
-            i += 1
+            row.setdefault('workers', set())
             row['date'] = _to_date(row['date_acte'])
             row['time'] = _to_time(row['heure'])
             row['duration'] = _to_duration(row['duree'])
@@ -501,13 +511,57 @@ def main():
             set_enfant(row)
             set_act_type(row)
             row['parent_event'] = act_to_event.get(row['id'])
-            if row['parent_event']:
-                j += 1
             row['state'] = map_cs[service.name].get(row['cs'],
                     'VALIDE')
+            duration = row['duration']
+            if duration:
+                duration = duration.seconds // 60
+            if row.get('invalid'):
+                invalid_actes_writer.writerow([ unicode(row[col]).encode('utf-8') for col in actes_cols ])
+                continue
+            i += 1
+            if row['parent_event']:
+                j += 1
+            else:
+                t = row['time']
+                if t:
+                    query = 'EXTRACT(hour from start_datetime) = %i and EXTRACT(minute from start_datetime) = %i' % (t.hour, t.minute)
+                    qs = EventWithAct.objects.for_today(row['date']).filter(patient=row['enfant']).extra(where=[query])
+                    if qs:
+                        try:
+                            row['parent_event'] = qs.get()
+                        except:
+                            print qs
+                            import pdb
+                            pdb.set_trace()
+
+                        k += 1
+            act = Act.objects.create(
+                    date=row['date'],
+                    time=row['time'],
+                    _duration=duration,
+                    is_billed=row['is_billed'],
+                    act_type=row['act_type'],
+                    patient=row['enfant'],
+                    validation_locked=row['validation_locked'],
+                    parent_event=row['parent_event'])
+            rows.append(row)
+            actes.append(act)
+            validation_state.append(
+                    ActValidationState(act=act,
+                        state_name=row['state'],
+                        previous_state=None))
+            for worker in row['workers']:
+                doctors.append(DoctorThrough(
+                    act_id=act.id,
+                    worker_id=worker.id))
+        batch_bulk(ActValidationState, validation_state, 500)
+        batch_bulk(DoctorThrough, doctors, 500)
+
         print 'Actes:'
         print ' - importe ', i
-        print ' - link to rdv', j
+        print ' - natual link to rdv', j
+        print ' - complicated link to rdv', k
 
 
     invalid_rs_csv.close()
@@ -519,5 +573,6 @@ if __name__ == "__main__":
             main()
         except:
             transaction.rollback()
+            raise
         else:
             transaction.commit()
