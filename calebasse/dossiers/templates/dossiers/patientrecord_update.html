@@ -500,12 +500,12 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
   <div id="dossier-histo-dlg" style="display: none;">
    <dl>
     {% for state in states %}
-    <dt><b>{{ state.date_selected|date:"d/m/Y" }}</b> <small>(date info: {{ state.created|date:"d/m/Y" }})</small>
+    <dt><b>{{ state.date_selected|date:"d/m/Y" }}</b> <!--<small>(date info: {{ state.created|date:"d/m/Y" }})</small>-->
       <button data-id="{{ state.id }}" class="update-patient-state-btn icon-edit" title="Modifier"></button>
       <button data-id="{{ state.id }}" class="del-patient-state-btn icon-remove"></button>
     </dt>
     <dd>
-    <p><b>{{ state.status.name }}</b>; <label>commentaire:</label> {% if state.comment %}{{ state.comment }}{% else %}-{% endif %}</p>
+    <p><b>{{ state.status.name }}</b>{% if state.comment %}; <label>commentaire:</label> {{ state.comment }}{% endif %}</p>
     </dd>
     <dd class="edit-histo-item" style="display: none;">
 
