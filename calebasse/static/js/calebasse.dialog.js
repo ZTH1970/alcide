@@ -36,12 +36,14 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
         $(this).dialog({title: title,
           width: width,
           buttons: [ { text: "Annuler",
+              id: "close-btn",
             click: function() { $(this).dialog("close"); } },
           { text: btn_submit_name,
+              id: "submit-btn",
             click: function() { $(id + " form").submit(); } }]});
-	if (on_load_callback) {
+        if (on_load_callback) {
             on_load_callback($(this));
-	}
+        }
       });
 }
 
