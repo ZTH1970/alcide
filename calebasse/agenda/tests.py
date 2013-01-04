@@ -182,26 +182,20 @@ class EventTest(TestCase):
                 end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=1),
                 recurrence_periodicity=1, recurrence_end_date=date(2012, 10, 15))
         event.participants = [ therapist1 ]
-        print repr(event)
         occurrences = list(event.all_occurences())
-        print occurrences
         self.assertEqual(len(occurrences), 3)
         self.assertEqual(occurrences[1].start_datetime, datetime(2012, 10, 8, 13))
         occurrences[1].start_datetime = datetime(2012, 10, 9, 13)
         occurrences[1].end_datetime = datetime(2012, 10, 9, 13, 30)
         occurrences[1].save()
-        print event.id, occurrences[1].id
         occurrences[1].participants = [ therapist1, therapist2 ]
         occurrences[2].canceled = True
         occurrences[2].save()
         a = Event.objects.today_occurences(date(2012, 10, 1))
         self.assertEqual(list(a), [event])
-        print repr(a[0])
-        print event.participants.all()
         self.assertEqual(set(a[0].participants.select_subclasses()), set([therapist1]))
         a1 = list(a[0].all_occurences())
-        print a1
-        self.assertEqual(len(a1), 2)
+        self.assertEqual(len(a1), 1)
         b = Event.objects.for_today(date(2012, 10, 8))
         self.assertEqual(list(b), [])
         b1 = Event.objects.for_today(date(2012, 10, 9))
