@@ -27,8 +27,8 @@ from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, Pare
 # Configuration
 db_path = "./scripts/20130104-213225"
 
-dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-#dbs = ["F_ST_ETIENNE_CAMSP"]
+#dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+dbs = ["F_ST_ETIENNE_SESSAD_TED"]
 
 
 map_cs = {}
