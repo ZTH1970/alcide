@@ -50,17 +50,21 @@ def automated_validation(date, service, user, commit=True):
     nb_acts_validated = 0
     nb_acts_abs_non_exc = 0
     nb_acts_abs_exc = 0
+    nb_acts_abs_inter = 0
     nb_acts_annul_nous = 0
     nb_acts_annul_famille = 0
     nb_acts_reporte = 0
     nb_acts_abs_ess_pps = 0
     nb_acts_enf_hosp = 0
+    nb_acts_losts = 0
     acts_of_the_day = get_acts_of_the_day(date, service)
     for act in acts_of_the_day:
         if act.is_state('ABS_NON_EXC'):
             nb_acts_abs_non_exc = nb_acts_abs_non_exc + 1
         if act.is_state('ABS_EXC'):
             nb_acts_abs_exc = nb_acts_abs_exc + 1
+        if act.is_state('ABS_INTER'):
+            nb_acts_abs_inter = nb_acts_abs_inter + 1
         if act.is_state('ANNUL_NOUS'):
             nb_acts_annul_nous = nb_acts_annul_nous + 1
         if act.is_state('ANNUL_FAMILLE'):
@@ -71,6 +75,8 @@ def automated_validation(date, service, user, commit=True):
             nb_acts_abs_ess_pps = nb_acts_abs_ess_pps + 1
         if act.is_state('ENF_HOSP'):
             nb_acts_enf_hosp = nb_acts_enf_hosp + 1
+        if act.is_state('ACT_LOST'):
+            nb_acts_losts = nb_acts_losts + 1
 
     nb_acts_total = len(acts_of_the_day)
     patients = {}
@@ -127,6 +133,6 @@ def automated_validation(date, service, user, commit=True):
             patient.create_diag_healthcare(user)
             patient.automated_switch_state(user)
     return (nb_acts_total, nb_acts_validated, nb_acts_double,
-        nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_annul_nous,
+        nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_abs_inter, nb_acts_annul_nous,
         nb_acts_annul_famille, nb_acts_reporte, nb_acts_abs_ess_pps,
-        nb_acts_enf_hosp)
+        nb_acts_enf_hosp, nb_acts_losts)
