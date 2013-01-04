@@ -191,7 +191,7 @@ class EventTest(TestCase):
         occurrences[1].participants = [ therapist1, therapist2 ]
         occurrences[2].canceled = True
         occurrences[2].save()
-        a = Event.objects.today_occurences(date(2012, 10, 1))
+        a = Event.objects.today_occurrences(date(2012, 10, 1))
         self.assertEqual(list(a), [event])
         self.assertEqual(set(a[0].participants.select_subclasses()), set([therapist1]))
         a1 = list(a[0].all_occurences())

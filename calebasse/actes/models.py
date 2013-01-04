@@ -9,6 +9,7 @@ import reversion
 from calebasse.agenda.models import Event, EventType
 from calebasse.agenda.managers import EventManager
 from calebasse.ressources.models import ServiceLinkedAbstractModel
+from ..middleware.request import get_request
 
 from validation_states import VALIDATION_STATES, NON_VALIDE
 
@@ -110,7 +111,7 @@ class Act(models.Model):
     @property
     def event(self):
         if self.parent_event:
-            return self.parent_event.today_occurence(self.date)
+            return self.parent_event.today_occurrence(self.date)
         return None
 
     @property
@@ -293,6 +294,18 @@ class Act(models.Model):
 
     def __repr__(self):
         return '<%s %r %r>' % (self.__class__.__name__, unicode(self), self.id)
+
+    def cancel(self):
+        '''Parent event is canceled completely, or partially, act upon it.
+        '''
+        new_act = self.actvalidationstate_set.count() > 1
+        if self.date <= date.today():
+            if new_act:
+                self.set_state('ANNUL_NOUS', get_request().user)
+            self.parent_event = None
+            self.save()
+        else:
+            self.delete()
 
     class Meta:
         verbose_name = u"Acte"

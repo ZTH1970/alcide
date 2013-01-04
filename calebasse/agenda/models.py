@@ -220,7 +220,7 @@ class Event(models.Model):
             return date == self.start_datetime.date()
 
 
-    def today_occurence(self, today=None, match=False):
+    def today_occurrence(self, today=None, match=False):
         '''For a recurring event compute the today 'Event'.
 
            The computed event is the fake one that you cannot save to the database.
@@ -231,7 +231,7 @@ class Event(models.Model):
         if match:
             exception = self.get_exceptions_dict().get(today)
             if exception and exception.start_datetime.date() == today():
-                return exception.today_occurence(today, True)
+                return exception.today_occurrence(today, True)
             else:
                 return None
         else:
@@ -239,7 +239,7 @@ class Event(models.Model):
             if exception_or_self is None:
                 return None
             if exception_or_self != self:
-                return exception_or_self.today_occurence(today)
+                return exception_or_self.today_occurrence(today)
         start_datetime = datetime.combine(today, self.start_datetime.timetz())
         end_datetime = start_datetime + self.timedelta()
         event = copy(self)
@@ -297,7 +297,7 @@ class Event(models.Model):
             if self.recurrence_week_period is not None:
                 delta = timedelta(days=self.recurrence_week_period*7)
                 while day <= end_date:
-                    occurrence = self.today_occurence(day)
+                    occurrence = self.today_occurrence(day)
                     if occurrence is not None:
                         occurrences.append(occurrence)
                     day += delta
@@ -385,6 +385,20 @@ class EventWithAct(Event):
     patient = models.ForeignKey('dossiers.PatientRecord')
     convocation_sent = models.BooleanField(blank=True,
         verbose_name=u'Convoqué')
+
+
+    def delete(self, *args, **kwargs):
+        if self.recurrence_periodicity is None:
+            # clear all linked exceptions
+            pass
+        elif self.exception_to is not None:
+            pass
+        elif hasattr(self, 'parent'):
+            pass
+        else:
+            # clear all linked exceptions
+            pass
+        super(EventWithAct, self).delete(*args, **kwargs)
 
     @property
     def act(self):

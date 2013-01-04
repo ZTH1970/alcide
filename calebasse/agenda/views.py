@@ -71,7 +71,7 @@ class AgendaServiceActivityView(TemplateView):
         plain_events = Event.objects.for_today(self.date) \
                 .filter(services=self.service,
                         event_type__in=[appoinment_type, meeting_type])
-        events = [ e.today_occurence(self.date) for e in plain_events ]
+        events = [ e.today_occurrence(self.date) for e in plain_events ]
         for event in events:
             start_datetime = event.start_datetime.strftime("%H:%M")
             if not appointments_times.has_key(start_datetime):
@@ -312,7 +312,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
                 order_by('start_date')
         plain_events = Event.objects.for_today(self.date) \
                 .order_by('start_datetime').select_subclasses()
-        events = [ e.today_occurence(self.date) for e in plain_events ]
+        events = [ e.today_occurrence(self.date) for e in plain_events ]
 
         events_workers = {}
         time_tables_workers = {}
@@ -363,7 +363,7 @@ class RessourcesView(TemplateView):
 
         plain_events = Event.objects.for_today(self.date) \
                 .order_by('start_datetime').select_subclasses()
-        events = [ e.today_occurence(self.date) for e in plain_events ]
+        events = [ e.today_occurrence(self.date) for e in plain_events ]
 
         context['ressources_types'] = []
         context['ressources_agenda'] = []
@@ -400,7 +400,7 @@ class AjaxWorkerTabView(TemplateView):
                 order_by('start_date')
         plain_events = Event.objects.for_today(self.date) \
                 .order_by('start_datetime').select_subclasses()
-        events = [ e.today_occurence(self.date) for e in plain_events ]
+        events = [ e.today_occurrence(self.date) for e in plain_events ]
         events_worker = [e for e in events if worker_id in e.participants.values_list('id', flat=True)]
 
         worker = Worker.objects.get(pk=worker_id)
@@ -424,7 +424,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         holidays_worker = Holiday.objects.for_worker_id(worker_id). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
-        events = Event.objects.today_occurences(self.date)
+        events = Event.objects.today_occurrences(self.date)
         events_worker = [e for e in events if worker_id in e.participants.values_list('id', flat=True)]
 
         worker = Worker.objects.get(pk=worker_id)

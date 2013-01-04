@@ -41,10 +41,10 @@ class EventQuerySet(InheritanceQuerySet):
         qs = self.filter(reduce(Q.__or__, filters))
         return qs
 
-    def today_occurences(self, today=None):
+    def today_occurrences(self, today=None):
         today = today or date.today()
         self = self.for_today(today)
-        occurences = ( e.today_occurence(today) for e in self )
+        occurences = ( e.today_occurrence(today) for e in self )
         return sorted(occurences, key=lambda e: e.start_datetime)
 
     def daily_disponibilities(self, date, events, participants, time_tables,
@@ -143,7 +143,7 @@ class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),
         acts = Act.objects.next_acts(patient_record, today=today) \
                 .filter(parent_event__isnull=False) \
                 .select_related()
-        return [ a.parent_event.today_occurence(a.date) for a in acts ]
+        return [ a.parent_event.today_occurrence(a.date) for a in acts ]
 
     def last_appointment(self, patient_record):
         qs = self.last_appointments(patient_record)
@@ -157,4 +157,4 @@ class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),
         acts = Act.objects.last_acts(patient_record, today=today) \
                 .filter(parent_event__isnull=False) \
                 .select_related()
-        return [ a.parent_event.today_occurence(a.date) for a in acts ]
+        return [ a.parent_event.today_occurrence(a.date) for a in acts ]

@@ -605,7 +605,7 @@ class GenerateRtfFormView(cbv.FormView):
             date = datetime.strptime(date, '%Y-%m-%d').date()
             appointment = Appointment()
             event = EventWithAct.objects.get(id=self.request.GET.get('event-id'))
-            event = event.today_occurence(date)
+            event = event.today_occurrence(date)
             appointment.init_from_event(event, self.service)
             ctx['appointment'] = appointment
         return ctx
