@@ -4,27 +4,25 @@
 import os
 import csv
 
-from datetime import datetime, time, date
+from datetime import datetime
 
 import calebasse.settings
 import django.core.management
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 django.core.management.setup_environ(calebasse.settings)
 
-from django.contrib.auth.models import User
-
-from calebasse.agenda.models import Event, EventType
-from calebasse.dossiers.models import PatientRecord, Status, FileState
-from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday, TimeTable, PERIODICITIES
-from calebasse.personnes.forms import PERIOD_LIST_TO_FIELDS
-from calebasse.ressources.models import WorkerType, HolidayType, ActType
+from django.db import transaction
+from calebasse.agenda.models import EventWithAct, Event
+from calebasse.dossiers.models import PatientRecord
+from calebasse.personnes.models import Worker
+from calebasse.ressources.models import Service, Room
+from calebasse.ressources.models import ActType
 
 # Configuration
 db_path = "./scripts/20121221-192258"
 
-dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+# dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+dbs = ["F_ST_ETIENNE_CAMSP"]
 
 def _to_datetime(str_date):
     if not str_date:
@@ -98,12 +96,20 @@ def load_csv(db, name):
     csvfile.close()
     return records, idx, cols
 
+def add_invalid(d, reason):
+    d.setdefault('invalid', '')
+    if d['invalid']:
+        d['invalid'] += ', '
+    d['invalid'] += reason
+
 def main():
     """ """
 
     workers = Worker.objects.all()
-    invalid_rs_csv = open('./scripts/invalid.csv', 'wb+')
-    writer = csv.writer(invalid_rs_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    invalid_rs_csv = open('./scripts/invalid_rs.csv', 'wb+')
+    invalid_rs_writer = csv.writer(invalid_rs_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    invalid_rr_csv = open('./scripts/invalid_rr.csv', 'wb+')
+    invalid_rr_writer = csv.writer(invalid_rr_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for db in dbs:
         workers_idx = {}
         act_types_idx = {}
@@ -122,7 +128,10 @@ def main():
 
         rs_data, rs_idx, rs_cols = load_csv(db, 'rs')
         rr_data, rr_idx, rr_cols = load_csv(db, 'rr')
-        writer.writerow(map(lambda x: x.encode('utf-8'), rs_cols))
+        rs_cols.extend(['workers', 'invalid'])
+        rr_cols.extend(['workers', 'invalid'])
+        invalid_rs_writer.writerow(map(lambda x: x.encode('utf-8'), rs_cols))
+        invalid_rr_writer.writerow(map(lambda x: x.encode('utf-8'), rr_cols))
 
         print "%s - Nombre de rdv : %d" % (service.name, len(rs_data))
         print u"%s - Nombre de rdv récurrents : %d" % (service.name, len(rr_data))
@@ -153,26 +162,31 @@ def main():
             else:
                 act_type_id_not_found.add(act_type)
 
-        not_found = set()
-        rs_not_found = set()
-        for rs_detail in rs_details_data:
-            rs_id = rs_detail['rs_id']
-            thera_id = rs_detail['thera_id']
-            if rs_id not in rs_idx:
-                rs_not_found.add(rs_id)
-                continue
-            rs = rs_data[rs_idx[rs_id]]
-            if thera_id in workers_idx:
-                rs_workers = rs.setdefault('workers', set())
-                rs_workers.add(workers_idx[thera_id])
-            else:
-                rs['valid'] = False
-                not_found.add(thera_id)
+        
+        def handle_details(data, idx, details, id_key):
+            not_found = set()
+            id_not_found = set()
+            for detail in details:
+                i = detail[id_key]
+                thera_id = detail['thera_id']
+                if i not in idx:
+                    id_not_found.add(i)
+                    continue
+                row = data[idx[i]]
+                if thera_id in workers_idx:
+                    workers = row.setdefault('workers', set())
+                    workers.add(workers_idx[thera_id])
+                else:
+                    add_invalid(row, 'unknown thera_id %s' % thera_id)
+                    not_found.add(thera_id)
 
+            print "%s - Liste des worker not found : %s" % (service.name, str(set(not_found)))
+            print "%s - Liste des details pour des RS/RR not found : %s" % (service.name, str(set(id_not_found)))
 
-        print "%s - Liste des worker not found : %s" % (service.name, str(set(not_found)))
-        print "%s - Liste des details pour des RS not found : %s" % (service.name, str(set(rs_not_found)))
-
+        print ' - Traitement rs_detail....'
+        handle_details(rs_data, rs_idx, rs_details_data, 'rs_id')
+        print ' - Traitement rr_detail....'
+        handle_details(rr_data, rr_idx, rr_details_data, 'rr_id')
         print "%s - Nombre de types d'actes : %d" % (service.name, len(act_types))
         print "%s - Liste des types d'actes sans id : %s" % (service.name, str(act_type_id_not_found))
 
@@ -185,17 +199,20 @@ def main():
         rs_without_act_type = set()
         unknown_act_type_id = set()
         invalid_rs = set()
+        seen_exceptions = dict()
         for rs in rs_data:
-            rs['ok'] = True
-            rs.setdefault('valid', True)
+            rs['exception'] = False
+            rs['event'] = False
+            rs['date'] = _to_date(rs['date_rdv'])
             # connect enfant
             enfant_id = rs['enfant_id']
             if enfant_id == '0':
-                rs['ok'] = False
+                add_invalid(rs, 'no enfant_id=>not an appointment')
+                rs['event'] = True
             elif enfant_id in enfant_idx:
                 rs['enfant'] = enfant_idx[enfant_id]
             else:
-                rs['ok'] = rs['valid'] = False
+                add_invalid(rs, 'enfant_id not found %s' % enfant_id)
                 enfant_not_found.add(enfant_id)
             # connect rr
             rr_id = rs['rr_ev_id']
@@ -205,29 +222,38 @@ def main():
                 elif rr_id.startswith('rr_'):
                     _, rr_id = rr_id.split('_')
                     if rr_id in rr_idx:
-                        rs['rr'] = rr_data[rr_idx[rr_id]]
+                        if (rr_id, rs['date']) not in seen_exceptions:
+                            seen_exceptions[(rr_id, rs['date'])] = rs['id']
+                            exceptions = rr_data[rr_idx[rr_id]].setdefault('exceptions', [])
+                            exceptions.append(rs)
+                            rs['exception'] = True
+                        else:
+                            add_invalid(rs, 'already another exception on the same day: %s' %
+                                    seen_exceptions[(rr_id, rs['date'])])
                     else:
-                        rs['ok'] = False
+                        add_invalid(rs, 'rr_id not found %s' % rr_id)
                         rr_not_found.add(rr_id)
                 else:
-                    print 'invalid rr_id', rr_id
-            rs['date_rdv'] = _to_date(rs['date_rdv'])
-            rs['heure'] = _to_time(rs['heure'])
-            rs['duree'] = _to_duration(rs['duree'])
+                    add_invalid(rs, 'rr_id invalid %s' % rr_id)
+            rs['time'] = _to_time(rs['heure'])
+            rs['duration'] = _to_duration(rs['duree'])
+            rs['start_datetime'] = datetime.combine(rs['date'], rs['time'])
+            rs['end_datetime'] = rs['start_datetime'] + rs['duration']
             act_type_id = rs['type_acte']
             if act_type_id == '0' and rs['enfant_id'] == '0':
-                rs['ok'] = False
+                add_invalid(rs, 'no act_id=>not an appointment')
+                rs['event'] = True
             elif act_type_id:
                 if act_type_id in act_types_idx:
                     rs['act_type'] = act_types_idx[act_type_id]
                 else:
-                    rs['ok'] = rs['valid'] = False
+                    add_invalid(rs, 'act_type not found %s' % act_type_id)
                     unknown_act_type_id.add(act_type_id)
             else:
                 raise NotImplemented
-            if not rs['valid']:
+            if rs.get('invalid') and not rs['event']:
                 invalid_rs.add(rs['id'])
-                writer.writerow([ unicode(rs[col]).encode('utf-8') for col in rs_cols ])
+                invalid_rs_writer.writerow([ unicode(rs[col]).encode('utf-8') for col in rs_cols ])
 
 
         print "%s - Liste des enfants not found : %s" % (service.name, str(enfant_not_found))
@@ -236,7 +262,184 @@ def main():
         print "%s - Liste des types d'actes inconnus : %s" % (service.name, str(unknown_act_type_id))
         print "%s - Liste des RS invalides : %s" % (service.name, len(invalid_rs))
 
+        enfant_not_found = set()
+        rr_not_found = set()
+        rs_without_act_type = set()
+        unknown_act_type_id = set()
+        invalid_rs = set()
+        for rr in rr_data:
+            rr.setdefault('exceptions', [])
+            rr['start_date'] = _to_date(rr['date_debut'])
+            rr['end_date'] = _to_date(rr['date_fin'])
+            if rr['end_date'] and rr['start_date'] > rr['end_date']:
+                add_invalid(rr, 'date_fin < date_debut')
+            rr['time'] = _to_time(rr['heure'])
+            rr['duration'] = _to_duration(rr['duree'])
+            rr['start_datetime'] = datetime.combine(rr['start_date'], rr['time'])
+            rr['end_datetime'] = rr['start_datetime'] + rr['duration']
+            # connect rythme
+            rr['rythme'] = int(rr['rythme'])
+            if PERIOD_FAURE_NOUS.get(rr['rythme']):
+                rr['recurrence_periodicity'] = PERIOD_FAURE_NOUS[rr['rythme']]
+            else:
+                add_invalid(rr, 'rythme not found %s' % rr['rythme'])
+            # connect enfant
+            enfant_id = rr['enfant_id']
+            if enfant_id == '0':
+                add_invalid(rr, 'not an appointment')
+            elif enfant_id in enfant_idx:
+                rr['enfant'] = enfant_idx[enfant_id]
+            else:
+                add_invalid(rr, 'enfant_id not found %s' % enfant_id)
+                enfant_not_found.add(enfant_id)
+            # connect act_type
+            act_type_id = rr['type_acte']
+            if act_type_id == '0' and rr['enfant_id'] == '0':
+                add_invalid(rr, 'not an appointment')
+            elif act_type_id:
+                if act_type_id in act_types_idx:
+                    rr['act_type'] = act_types_idx[act_type_id]
+                else:
+                    add_invalid(rr, 'act_type not found %s' % act_type_id)
+                    unknown_act_type_id.add(act_type_id)
+            else:
+                raise NotImplemented
+            if rr.get('invalid'):
+                invalid_rr_writer.writerow([ unicode(rr[col]).encode('utf-8') for col in rr_cols ])
+
+        # stats
+        exceptions = 0
+        events = 0
+        single = 0
+        recurrent = 0
+        invalid_single = 0
+        invalid_recurrent = 0
+        for row in rs_data:
+            if row['event']:
+                events += 1
+            elif row.get('invalid'):
+                invalid_single += 1
+            elif row['exception']:
+                exceptions += 1
+            else:
+                single += 1
+        for row in rr_data:
+            if row.get('invalid'):
+                invalid_recurrent += 1
+            else:
+                recurrent += 1
+        print ' == Stat == '
+        print ' Évènements hors RDV', events
+        print ' Rdv individuels', single
+        print ' Rdv recurrents', recurrent
+        print ' Exceptions', exceptions
+        print ' Rdv recurrents invalides', invalid_recurrent
+        print ' Rdv individuels invalides', invalid_single
+
+        # create single rdv
+        limit = 1000000
+        with transaction.commit_manually():
+            try:
+                # single RS
+                i = 0 
+                rows = []
+                events = []
+                for row in rs_data[:limit]:
+                    if row['exception'] or row.get('invalid'):
+                        continue
+                    i += 1
+                    rows.append(row)
+                    events.append(EventWithAct.objects.create(patient=row['enfant'],
+                            start_datetime=row['start_datetime'],
+                            end_datetime=row['end_datetime'],
+                            act_type=row['act_type'],
+                            old_rs_id=row['id'],
+                            room=Room(id=1),
+                            title=row['libelle'],
+                            description=row['texte']))
+                    print "Rdv creation %-6d\r" % i,
+                print
+                def batch_bulk(model, rows, limit):
+                    i = 0
+                    while rows[i:i+limit]:
+                        model.objects.bulk_create(rows[i:i+limit])
+                        i += limit
+                def service_and_workers(events, rows):
+                    services = []
+                    ServiceThrough = EventWithAct.services.through
+                    for event in events:
+                        services.append(ServiceThrough(
+                            event_id=event.event_ptr_id,
+                            service_id=service.id))
+                    batch_bulk(ServiceThrough, services, 100)
+                    ParticipantThrough = EventWithAct.participants.through
+                    participants = []
+                    for row, event in zip(rows, events):
+                        for worker in row['workers']:
+                            participants.append(
+                                    ParticipantThrough(
+                                        event_id=event.event_ptr_id,
+                                        people_id=worker.people_ptr_id))
+                    batch_bulk(ParticipantThrough, participants, 100)
+                    print 'Created %s service links' % len(services)
+                    print 'Created %s participants links' % len(participants)
+                service_and_workers(events, rows)
+                # RR
+                rows = []
+                events = []
+                i = 0
+                for row in rr_data[:limit]:
+                    if row.get('invalid'):
+                        continue
+                    i += 1
+                    rows.append(row)
+                    events.append(EventWithAct.objects.create(
+                            patient=row['enfant'],
+                            start_datetime=row['start_datetime'],
+                            end_datetime=row['end_datetime'],
+                            act_type=row['act_type'],
+                            old_rs_id=row['id'],
+                            room=Room(id=1),
+                            title=row['libelle'],
+                            description=row['texte'],
+                            recurrence_periodicity=row['recurrence_periodicity'],
+                            recurrence_end_date=row['end_date']))
+                    print "Rdv recurrent creation %-6d\r" % i,
+                print
+                service_and_workers(events, rows)
+                # Exceptions
+                excrows = []
+                excevents = []
+                i = 0
+                for rr, event in zip(rows, events):
+                    for row in rr['exceptions']:
+                        if row.get('invalid'):
+                            print 'exception invalide'
+                            continue
+                        i += 1
+                        excrows.append(row)
+                        excevents.append(EventWithAct.objects.create(
+                                patient=row['enfant'],
+                                start_datetime=row['start_datetime'],
+                                end_datetime=row['end_datetime'],
+                                act_type=row['act_type'],
+                                old_rs_id=row['id'],
+                                room=Room(id=1),
+                                title=row['libelle'],
+                                description=row['texte'],
+                                exception_to=event,
+                                exception_date=row['date']))
+                        print "Exception creation %-6d\r" % i,
+                print
+                service_and_workers(excevents, excrows)
+            finally:
+                transaction.rollback()
+
+
+
+
     invalid_rs_csv.close()
+    invalid_rr_csv.close()
 
 if __name__ == "__main__":
     main()
