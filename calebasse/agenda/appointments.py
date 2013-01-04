@@ -65,7 +65,7 @@ class Appointment(object):
         if event.event_type.id == 1:
             event_act = event.act
             workers = event_act.doctors.all()
-            self.convocation_sent = event_act.convocation_sent
+            self.convocation_sent = event.convocation_sent
             self.patient = event_act.patient
             self.patient_record_id = event_act.patient.id
             self.patient_record_paper_id = event_act.patient.paper_id

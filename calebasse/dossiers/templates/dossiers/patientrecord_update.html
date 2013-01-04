@@ -355,10 +355,12 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             </li>
             {% endif %}
             <li>
-            {% if act.convocation_sent %}
-            Convocation envoyé
-            {% else %}
-            Convocation non envoyé
+            {% if act.parent_event %}
+              {% if act.parent_event.convocation_sent %}
+                Convocation envoyé
+              {% else %}
+                Convocation non envoyé
+              {% endif %}
             {% endif %}
             </li>
             <li>{% if state %}<strong>{{ state.state_name }}</strong>, le {{ state.created }} par {{ state.author }}

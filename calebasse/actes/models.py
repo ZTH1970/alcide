@@ -101,8 +101,6 @@ class Act(models.Model):
             choices=VALIDATION_CODE_CHOICES,
             default='absent',
             verbose_name=u'Présence')
-    convocation_sent = models.BooleanField(blank=True,
-            verbose_name=u'Convoqué')
 
     @property
     def event(self):

@@ -317,6 +317,8 @@ class EventWithAct(Event):
     act_type = models.ForeignKey('ressources.ActType',
         verbose_name=u'Type d\'acte')
     patient = models.ForeignKey('dossiers.PatientRecord')
+    convocation_sent = models.BooleanField(blank=True,
+        verbose_name=u'Convoqué')
 
     @property
     def act(self):
