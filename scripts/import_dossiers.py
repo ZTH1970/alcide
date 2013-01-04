@@ -25,7 +25,7 @@ from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, Pare
     MaritalStatusType, Job, PatientRelatedLink)
 
 # Configuration
-db_path = "./scripts/20121221-192258"
+db_path = "./scripts/20130104-213225"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
 #dbs = ["F_ST_ETIENNE_CAMSP"]
@@ -577,7 +577,6 @@ def main():
                 # pour le camsp et sessads, on prendre à partir de 2013 les actes
                 # pour le cmpp, il va faloire imputer tous les actes facturés aux prises en charges
                 # pour savoir dans la nouvelle facturation (134) comment les imputer et donc savoir dans quel état est le dossier
-
 
             for col in ('mdph', 'code_archive', 'aeeh', 'mdph_departement', 'pps', 'pps_deb', 'pps_fin', 'mdph_Debut', 'mdph_Fin'):
                 if _exist(dossier[col]):
