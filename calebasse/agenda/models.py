@@ -217,7 +217,7 @@ class Event(models.Model):
                 raise NotImplemented
             return self
         else:
-            return date == self.start_datetime.date()
+            return self if date == self.start_datetime.date() else None
 
 
     def today_occurrence(self, today=None, match=False):
