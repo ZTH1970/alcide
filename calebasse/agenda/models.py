@@ -462,6 +462,17 @@ class EventWithAct(Event):
                 continue
             o.get_or_create_act()
 
+    def today_occurrence(self, today=None, match=False):
+        '''For virtual occurrences reset the event_ptr_id'''
+        occurrence = super(EventWithAct, self).today_occurrence(today, match)
+        if hasattr(occurrence, 'parent'):
+            old_save = occurrence.save
+            def save(*args, **kwargs):
+                occurrence.event_ptr_id = None
+                old_save(*args, **kwargs)
+            occurrence.save = save
+        return occurrence
+
     def is_event_absence(self):
         return self.act.is_absent()
 
