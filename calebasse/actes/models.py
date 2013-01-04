@@ -25,7 +25,7 @@ class ActValidationState(models.Model):
     created = models.DateTimeField(u'Création', auto_now_add=True)
     author = \
         models.ForeignKey(User,
-        verbose_name=u'Auteur', editable=False)
+        verbose_name=u'Auteur', editable=False, blank=True, null=True)
     previous_state = models.ForeignKey('ActValidationState',
         verbose_name=u'Etat précédent',
         editable=False, blank=True, null=True)
