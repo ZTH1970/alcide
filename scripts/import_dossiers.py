@@ -31,6 +31,68 @@ db_path = "./scripts/20121221-192258"
 dbs = ["F_ST_ETIENNE_CAMSP"]
 
 
+map_cs = {}
+map_cs['CAMSP'] = {
+'1': 'ACT_DOUBLE',
+'2': 'ABS_NON_EXC',
+'3': 'ABS_EXC',
+'4': 'ABS_INTER',
+'5': 'ACT_LOST',
+'6': 'ANNUL_NOUS',
+'7': 'ANNUL_FAMILLE',
+'8': 'ENF_HOSP',
+'9': 'ACT_LOST',
+'10': 'ACT_LOST',
+'11': 'ACT_LOST',
+'12': 'REPORTE'
+}
+
+map_cs['CMPP'] = {
+'1': 'ACT_DOUBLE',
+'2': 'ABS_NON_EXC',
+'3': 'ABS_EXC',
+'4': 'ABS_INTER',
+'5': 'ACT_LOST',
+'6': 'ANNUL_NOUS',
+'7': 'ANNUL_FAMILLE',
+'8': 'ABS_ESS_PPS',
+'9': 'ACT_LOST',
+'10': 'ACT_LOST',
+'11': 'ACT_LOST',
+'12': 'REPORTE'
+}
+
+map_cs['SESSAD DYS'] = {
+'1': 'ACT_DOUBLE',
+'2': 'ABS_NON_EXC',
+'3': 'ABS_EXC',
+'4': 'ABS_INTER',
+'5': 'ACT_LOST',
+'6': 'ANNUL_NOUS',
+'7': 'ANNUL_FAMILLE',
+'8': 'ABS_ESS_PPS',
+'9': 'ACT_LOST',
+'10': 'ACT_LOST',
+'11': 'REPORTE'
+}
+
+
+map_cs['SESSAD TED'] = {
+'1': 'ACT_DOUBLE',
+'2': 'ABS_NON_EXC',
+'3': 'ABS_EXC',
+'4': 'ACT_LOST',
+'5': 'ABS_INTER',
+'6': 'ANNUL_NOUS',
+'7': 'ANNUL_FAMILLE',
+'8': 'REPORTE'
+}
+
+# Mettre tous les actes avant le 3 janvier à validation_locked = True
+# Mettre tous les actes avec dossier['marque'] = 1 à is_billed = True
+
+
+
 
 #tarifs: prix_journee.csv
 
