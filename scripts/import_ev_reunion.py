@@ -2,7 +2,6 @@
 #!/usr/bin/env python
 
 """
-Import reunion and 
 """
 
 
@@ -83,7 +82,24 @@ def _get_therapists(line, table_name, service):
     return participants
 
 def create_event(line, service, tables_data):
-    if not Event.objects.filter(old_rs_id=line['id']):
+    if not Event.objects.filter(old_rs_id=line['id'], services__in=[service]):
+        # Manage exception
+        exception_date = None
+        exception_to = None
+        exception_error = False
+        if line['rr_ev_id']:
+            ev_id = int(line['rr_ev_id'][3:])
+            exception_date = _to_date(line['date_rdv'])
+            exception_to = Event.objects.filter(old_ev_id=ev_id,
+                    services__in=[service])
+            if exception_to:
+                exception_to = exception_to[0]
+                if Event.objects.filter(exception_date=exception_date,
+                        exception_to=exception_to):
+                    logging.info("rs_id %s is duplicated" % line["id"])
+                    return
+            else:
+                exception_error = True
         event_type = EventType.objects.get(id=4)
         start_datetime = datetime.strptime(
                 line['date_rdv'][:-13] + ' ' + line['heure'][11:-4],
@@ -93,20 +109,26 @@ def create_event(line, service, tables_data):
                 minutes=int(line['duree'][14:-7]),
                 )
         participants = _get_therapists(line, 'rs', service)
-        event = Event.objects.create(
-                title=line['libelle'][:60],
-                description=line['texte'],
-                event_type=event_type,
-                start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                old_rs_id=line['id'],
-                )
-        event.services = [service]
-        event.participants = participants
-        event.save()
+        if not exception_error:
+            event = Event.objects.create(
+                    title=line['libelle'][:60],
+                    description=line['texte'],
+                    event_type=event_type,
+                    start_datetime=start_datetime,
+                    end_datetime=end_datetime,
+                    old_rs_id=line['id'],
+                    exception_to = exception_to,
+                    exception_date = exception_date
+                    )
+            event.services = [service]
+            event.participants = participants
+            event.save()
+        else:
+            logging.error("%s rs_id %s exception pas d'ev trouve %s" % (service.name,
+                line["id"], line))
 
 def create_recurrent_event(line, service, tables_data):
-    if not Event.objects.filter(old_ev_id=line['id']):
+    if not Event.objects.filter(old_ev_id=line['id'], services__in=[service]):
         start_date = _to_date(line['date_debut'])
         end_date = _to_date(line['date_fin'])
         if end_date and start_date > end_date:
@@ -142,7 +164,7 @@ def create_recurrent_event(line, service, tables_data):
             event.participants = participants
             event.save()
         except django.core.exceptions.ValidationError, e:
-            logging.error(service.name + ' ev %s %s' % (line, e))
+            logging.error(service.name + ' ev recurrence non valide %s %s' % (line, e))
 
 def main():
     logging.basicConfig(filename=log_file,level=logging.DEBUG)
@@ -167,14 +189,14 @@ def main():
                 tables_data[table][data['id']] = data
             csvfile.close()
 
-        for id, line in tables_data['rs'].iteritems():
-            if not line['enfant_id'] or not int(line['enfant_id']):
-                if not line['rr_ev_id']:
-                    create_event(line, service, tables_data)
-
         for id, line in tables_data['ev'].iteritems():
-            if line['libelle'].upper() not in ('ARRIVEE', 'DEPART'):
+            if line['libelle'].replace(u'é', u'e').upper() not in ('ARRIVEE', 'DEPART'):
                 create_recurrent_event(line, service, tables_data)
+
+        for id, line in tables_data['rs'].iteritems():
+            if (not line['enfant_id'] or not int(line['enfant_id'])) \
+                    and (line['libelle'].replace(u'é', u'e').upper() not in ('ARRIVEE', 'DEPART')):
+                create_event(line, service, tables_data)
 
 if __name__ == "__main__":
     main()
