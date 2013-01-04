@@ -231,7 +231,7 @@ class Event(models.Model):
         if match:
             exception = self.get_exceptions_dict().get(today)
             if exception and exception.start_datetime.date() == today():
-                return exception.today_occurrence(today, True)
+                return exception.today_occurrence(today)
             else:
                 return None
         else:
@@ -299,7 +299,7 @@ class Event(models.Model):
             if self.recurrence_week_period is not None:
                 delta = timedelta(days=self.recurrence_week_period*7)
                 while day <= end_date:
-                    occurrence = self.today_occurrence(day)
+                    occurrence = self.today_occurrence(day, True)
                     if occurrence is not None:
                         occurrences.append(occurrence)
                     day += delta
@@ -307,6 +307,7 @@ class Event(models.Model):
                 delta = timedelta(days=7)
                 while day <= end_date:
                     if day.isocalendar()[1] % 2 == self.recurrence_week_parity:
+                        occurrence = self.today_occurrence(day, True)
                         if occurrence is not None:
                             occurrences.append(occurrence)
                     day += delta
@@ -314,6 +315,7 @@ class Event(models.Model):
                 delta = timedelta(days=7)
                 while day <= end_date:
                     if self.recurrence_week_rank in weekday_ranks(day):
+                        occurrence = self.today_occurrence(day, True)
                         if occurrence is not None:
                             occurrences.append(occurrence)
                     day += delta
