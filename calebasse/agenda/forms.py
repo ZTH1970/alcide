@@ -45,6 +45,7 @@ class NewAppointmentForm(forms.ModelForm):
         self.service = None
         super(NewAppointmentForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
+        self.fields['participants'].required = True
         if service:
             self.service = service
             self.fields['participants'].queryset = \
