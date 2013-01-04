@@ -38,7 +38,7 @@ class Event(models.Model):
     '''
     objects = managers.EventManager()
 
-    title = models.CharField(_('Title'), max_length=32, blank=True)
+    title = models.CharField(_('Title'), max_length=60, blank=True)
     description = models.TextField(_('Description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=u"Type d'événement")
     creator = models.ForeignKey(User, verbose_name=_(u'Créateur'), blank=True, null=True)
