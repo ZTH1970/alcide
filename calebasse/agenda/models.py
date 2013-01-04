@@ -280,8 +280,9 @@ class Event(models.Model):
     def get_exceptions_dict(self):
         if not hasattr(self, 'exceptions_dict'):
             self.exceptions_dict = dict()
-            for exception in self.exceptions.all():
-                self.exceptions_dict[exception.exception_date] = exception
+            if self.exception_to_id is None:
+                for exception in self.exceptions.all():
+                    self.exceptions_dict[exception.exception_date] = exception
         return self.exceptions_dict
 
     def all_occurences(self, limit=90):
