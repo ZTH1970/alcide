@@ -24,8 +24,8 @@ from import_dossiers import map_cs
 # Configuration
 db_path = "./scripts/20121221-192258"
 
-# dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-dbs = ["F_ST_ETIENNE_SESSAD_TED"]
+dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+# dbs = ["F_ST_ETIENNE_SESSAD_TED"]
 
 def _to_datetime(str_date):
     if not str_date:
