@@ -143,3 +143,69 @@ class EventTest(TestCase):
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 1)
         self.assertEqual(Act.objects.count(), 2)
 
+    def test_weekly_event_with_exception(self):
+        '''
+           We create a single weekly event for 3 weeks between 2012-10-01
+           and 2012-10-15, then we add two exception:
+            - a change on the date for the second occurrence,
+            - a cancellation for the third occurrence.
+        '''
+        event = Event.objects.create(start_datetime=datetime(2012, 10, 1, 13),
+                end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=1),
+                recurrence_periodicity=1, recurrence_end_date=date(2012, 10, 15))
+        exception1 = Event.objects.create(start_datetime=datetime(2012, 10, 9, 13, 30),
+                end_datetime=datetime(2012, 10, 9, 14), event_type=EventType(id=1),
+                exception_to=event, exception_date=date(2012, 10, 8))
+        exception2 = Event.objects.create(start_datetime=datetime(2012, 10, 15, 13, 30),
+                end_datetime=datetime(2012, 10, 15, 14), event_type=EventType(id=1),
+                exception_to=event, exception_date=date(2012, 10, 15), canceled=True)
+        a = Event.objects.for_today(date(2012, 10, 1))
+        self.assertEqual(list(a), [event])
+        b = Event.objects.for_today(date(2012, 10, 8))
+        self.assertEqual(list(b), [])
+        b1 = Event.objects.for_today(date(2012, 10, 9))
+        self.assertEqual(list(b1), [exception1])
+        c = Event.objects.for_today(date(2012, 10, 15))
+        self.assertEqual(list(c), [])
+
+    def test_weekly_event_exception_creation(self):
+        '''
+           We create a single weekly event for 3 weeks between 2012-10-01
+           and 2012-10-15, then we list its occurrences, modify them and save them:
+            - a change on the date for the second occurrence,
+            - a cancellation for the third occurrence.
+        '''
+        wtype = WorkerType.objects.create(name='ElDoctor', intervene=True)
+        therapist1 = Worker.objects.create(first_name='Pierre', last_name='PaulJacques', type=wtype)
+        therapist2 = Worker.objects.create(first_name='Bob', last_name='Leponge', type=wtype)
+        event = Event.objects.create(start_datetime=datetime(2012, 10, 1, 13),
+                end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=1),
+                recurrence_periodicity=1, recurrence_end_date=date(2012, 10, 15))
+        event.participants = [ therapist1 ]
+        print repr(event)
+        occurrences = list(event.all_occurences())
+        print occurrences
+        self.assertEqual(len(occurrences), 3)
+        self.assertEqual(occurrences[1].start_datetime, datetime(2012, 10, 8, 13))
+        occurrences[1].start_datetime = datetime(2012, 10, 9, 13)
+        occurrences[1].end_datetime = datetime(2012, 10, 9, 13, 30)
+        occurrences[1].save()
+        print event.id, occurrences[1].id
+        occurrences[1].participants = [ therapist1, therapist2 ]
+        occurrences[2].canceled = True
+        occurrences[2].save()
+        a = Event.objects.today_occurences(date(2012, 10, 1))
+        self.assertEqual(list(a), [event])
+        print repr(a[0])
+        print event.participants.all()
+        self.assertEqual(set(a[0].participants.select_subclasses()), set([therapist1]))
+        a1 = list(a[0].all_occurences())
+        print a1
+        self.assertEqual(len(a1), 2)
+        b = Event.objects.for_today(date(2012, 10, 8))
+        self.assertEqual(list(b), [])
+        b1 = Event.objects.for_today(date(2012, 10, 9))
+        self.assertEqual(list(b1), [occurrences[1]])
+        self.assertEqual(set(b1[0].participants.select_subclasses()), set([therapist1, therapist2]))
+        c = Event.objects.for_today(date(2012, 10, 15))
+        self.assertEqual(list(c), [])

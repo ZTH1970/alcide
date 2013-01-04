@@ -57,6 +57,15 @@ class Event(models.Model):
     old_rr_id = models.CharField(max_length=8, blank=True, null=True)
     # only used when there is no rr id
     old_rs_id = models.CharField(max_length=8, blank=True, null=True)
+    # exception to is mutually exclusive with recurrence_periodicity
+    # an exception cannot be periodic
+    exception_to = models.ForeignKey('self', related_name='exceptions',
+            blank=True, null=True,
+            verbose_name=u'Exception à')
+    exception_date = models.DateField(blank=True, null=True,
+            verbose_name=u'Reporté du')
+    # canceled can only be used with exception to
+    canceled = models.BooleanField(_('Annulé'))
 
     PERIODS = (
             (1, u'Toutes les semaines'),
@@ -142,6 +151,7 @@ class Event(models.Model):
         verbose_name = u'Evénement'
         verbose_name_plural = u'Evénements'
         ordering = ('start_datetime', 'end_datetime', 'title')
+        unique_together = (('exception_to', 'exception_date'),)
 
     def __init__(self, *args, **kwargs):
         if kwargs.get('start_datetime') and not kwargs.has_key('recurrence_end_date'):
@@ -180,46 +190,77 @@ class Event(models.Model):
         '''Distance between start and end of the event'''
         return self.end_datetime - self.start_datetime
 
-    def today_occurence(self, today=None):
+    def match_date(self, date):
+        if self.is_recurring():
+            # consider exceptions
+            exception = self.get_exceptions_dict().get(date)
+            if exception is not None:
+                return exception if exception.match_date(date) else None
+            if self.canceled:
+                return None
+            if date.weekday() != self.recurrence_week_day:
+                return None
+            if self.start_datetime.date() > date:
+                return None
+            if self.recurrence_end_date and self.recurrence_end_date < date:
+                return None
+            if self.recurrence_week_period is not None:
+                if weeks_since_epoch(date) % self.recurrence_week_period != self.recurrence_week_offset:
+                    return None
+            elif self.recurrence_week_parity is not None:
+                if date.isocalendar()[1] % 2 != self.recurrence_week_parity:
+                    return None
+            elif self.recurrence_week_rank is not None:
+                if self.recurrence_week_rank not in weekday_ranks(date):
+                    return None
+            else:
+                raise NotImplemented
+            return self
+        else:
+            return date == self.start_datetime.date()
+
+
+    def today_occurence(self, today=None, match=False):
         '''For a recurring event compute the today 'Event'.
 
            The computed event is the fake one that you cannot save to the database.
         '''
         today = today or date.today()
-        if not self.is_recurring():
-            if today == self.start_datetime.date():
-                return self
+        if self.canceled:
+            return None
+        if match:
+            exception = self.get_exceptions_dict().get(today)
+            if exception and exception.start_datetime.date() == today():
+                return exception.today_occurence(today, True)
             else:
                 return None
-        if today.weekday() != self.recurrence_week_day:
-            return None
-        if self.start_datetime.date() > today:
-            return None
-        if self.recurrence_end_date and self.recurrence_end_date < today:
-            return None
-        if self.recurrence_week_period is not None:
-            if weeks_since_epoch(today) % self.recurrence_week_period != self.recurrence_week_offset:
-                return None
-        elif self.recurrence_week_parity is not None:
-            if today.isocalendar()[1] % 2 != self.recurrence_week_parity:
-                return None
-        elif self.recurrence_week_rank is not None:
-            if self.recurrence_week_rank not in weekday_ranks(today):
-                return None
         else:
-            raise NotImplemented
+            exception_or_self = self.match_date(today)
+            if exception_or_self is None:
+                return None
+            if exception_or_self != self:
+                return exception_or_self.today_occurence(today)
         start_datetime = datetime.combine(today, self.start_datetime.timetz())
         end_datetime = start_datetime + self.timedelta()
         event = copy(self)
+        event.exception_to = self
+        event.exception_date = today
         event.start_datetime = start_datetime
         event.end_datetime = end_datetime
-        event.recurrence_end_date = None
-        event.recurrence_week_offset = None
+        event.recurrence_periodicity = None
+        event.recurrence_week_offset = 0
         event.recurrence_week_period = None
+        event.recurrence_week_parity = None
+        event.recurrence_week_rank = None
+        event.recurrence_end_date = None
         event.parent = self
         # the returned event is "virtual", it must not be saved
-        def save(*args, **kwarks): 
-            raise RuntimeError()
+        old_save = event.save
+        old_participants = list(self.participants.all())
+        def save(*args, **kwargs): 
+            event.id = None
+            old_save(*args, **kwargs)
+            event.participants = old_participants
         event.save = save
         return event
 
@@ -234,6 +275,13 @@ class Event(models.Model):
         '''Is this event multiple ?'''
         return self.recurrence_periodicity is not None
 
+    def get_exceptions_dict(self):
+        if not hasattr(self, 'exceptions_dict'):
+            self.exceptions_dict = dict()
+            for exception in self.exceptions.all():
+                self.exceptions_dict[exception.exception_date] = exception
+        return self.exceptions_dict
+
     def all_occurences(self, limit=90):
         '''Returns all occurences of this event as virtual Event objects
 
@@ -245,37 +293,50 @@ class Event(models.Model):
             day = self.start_datetime.date()
             max_end_date = max(date.today(), self.start_datetime.date()) + timedelta(days=limit)
             end_date = min(self.recurrence_end_date or max_end_date, max_end_date)
+            occurrences = []
             if self.recurrence_week_period is not None:
                 delta = timedelta(days=self.recurrence_week_period*7)
                 while day <= end_date:
-                    yield self.today_occurence(day)
+                    occurrence = self.today_occurence(day)
+                    if occurrence is not None:
+                        occurrences.append(occurrence)
                     day += delta
             elif self.recurrence_week_parity is not None:
                 delta = timedelta(days=7)
                 while day <= end_date:
                     if day.isocalendar()[1] % 2 == self.recurrence_week_parity:
-                        yield self.today_occurence(day)
+                        if occurrence is not None:
+                            occurrences.append(occurrence)
                     day += delta
             elif self.recurrence_week_rank is not None:
                 delta = timedelta(days=7)
                 while day <= end_date:
                     if self.recurrence_week_rank in weekday_ranks(day):
-                        yield self.today_occurence(day)
+                        if occurrence is not None:
+                            occurrences.append(occurrence)
                     day += delta
+            for exception in self.exceptions.all():
+                if exception.exception_date != exception.start_datetime.date():
+                    occurrences.append(exception)
+            return sorted(occurrences, key=lambda o: o.start_datetime)
         else:
-            yield self
+            return [self]
 
     def save(self, *args, **kwargs):
         self.clean() # force call to clean to initialize recurrence fields
         super(Event, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        # never delete, only cancel
         from ..actes.models import Act
         for a in Act.objects.filter(parent_event=self):
             if len(a.actvalidationstate_set.all()) > 1:
                 a.parent_event = None
                 a.save()
-        super(Event, self).delete(*args, **kwargs)
+            else:
+                a.delete()
+        self.canceled = True
+        self.save()
 
     def to_interval(self):
         return Interval(self.start_datetime, self.end_datetime)

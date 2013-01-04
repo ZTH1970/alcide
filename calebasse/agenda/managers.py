@@ -17,14 +17,18 @@ __all__ = (
 class EventQuerySet(InheritanceQuerySet):
     def for_today(self, today=None):
         today = today or date.today()
+        excluded = self.filter(exceptions__exception_date=today).values_list('id', flat=True)
         weeks = weeks_since_epoch(today)
         filters = [Q(start_datetime__gte=datetime.combine(today, time()),
                start_datetime__lte=datetime.combine(today, time(23,59,59)),
-               recurrence_periodicity__isnull=True) ]
+               recurrence_periodicity__isnull=True,
+               canceled=False) ]
         base_q = Q(start_datetime__lte=datetime.combine(today, time(23,59,59)),
+                canceled=False,
                 recurrence_periodicity__isnull=False) & \
                 (Q(recurrence_end_date__gte=today) |
-                    Q(recurrence_end_date__isnull=True))
+                    Q(recurrence_end_date__isnull=True)) & \
+                ~ Q(id__in=excluded)
         # week periods
         for period in range(1, 6):
             filters.append(base_q & Q(recurrence_week_offset=weeks % period,
