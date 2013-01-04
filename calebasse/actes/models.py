@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import date
+from datetime import date, time
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -40,6 +40,10 @@ class ActValidationState(models.Model):
 
 
 class ActManager(models.Manager):
+    def for_today(self, today=None):
+        today = today or date.today()
+        return self.filter(date=today)
+
     def create_act(self, author=None, **kwargs):
         act = self.create(**kwargs)
         ActValidationState.objects.create(act=act,state_name='NON_VALIDE',
@@ -63,7 +67,8 @@ class Act(models.Model):
     objects = ActManager()
 
     patient = models.ForeignKey('dossiers.PatientRecord')
-    date = models.DateField()
+    date = models.DateField(u'Date')
+    time = models.TimeField(u'Heure', default=time())
     _duration = models.IntegerField(u'Durée en minutes', default=0)
     act_type = models.ForeignKey('ressources.ActType',
             verbose_name=u'Type d\'acte')
