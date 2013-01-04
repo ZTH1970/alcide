@@ -72,6 +72,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             </div>
             {% if address.phone %}<p><span class="icon-home-space">{{ address.phone }}</span></p>{% endif %}
             {% if address.comment %}<p><label>Commentaire :</label>{{ address.comment }}</p>{% endif %}
+            {% if not address.phone and not address.comment %}<p>&nbsp;<!-- intentionaly empty --></p>{% endif %}
             {% for contact in address.patientcontact_set.all  %}
             <div class="contact{% if contact.id == object.id %} patient{% endif %}">
                 <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
