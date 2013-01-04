@@ -240,6 +240,8 @@ class Event(models.Model):
                 return None
             if exception_or_self != self:
                 return exception_or_self.today_occurrence(today)
+        if self.recurrence_periodicity is None:
+            return self
         start_datetime = datetime.combine(today, self.start_datetime.timetz())
         end_datetime = start_datetime + self.timedelta()
         event = copy(self)
