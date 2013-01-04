@@ -26,8 +26,8 @@
   <div>
     <form>
     <h3>Rechercher dans les dossiers</h3>
-        <label>Nom <input name="last_name" type="text" value="{{ request.GET.last_name }}"></label>
-        <label>Prénom <input name="first_name" type="text" value="{{ request.GET.first_name }}"></label>
+        <label>Nom (min. 2 caractères)<input name="last_name" type="text" value="{{ request.GET.last_name }}"></label>
+        <label>Prénom (min. 2 caractères) <input name="first_name" type="text" value="{{ request.GET.first_name }}"></label>
         <label>Numéro de dossier papier <input name="paper_id" type="text" value="{{ request.GET.paper_id }}"></label>
         <label>Numéro de dossier inform. <input name="id" type="text" value="{{ request.GET.id }}"></label>
         <label>Numéro d'assuré social <input name="social_security_id" value="{{ request.GET.social_security_id }}" type="text"></label>

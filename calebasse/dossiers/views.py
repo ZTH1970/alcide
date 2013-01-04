@@ -356,23 +356,28 @@ class PatientRecordsHomepageView(cbv.ListView):
     template_name = 'dossiers/index.html'
 
     def get_queryset(self):
-        qs = super(PatientRecordsHomepageView, self).get_queryset()
         first_name = self.request.GET.get('first_name')
         last_name = self.request.GET.get('last_name')
         paper_id = self.request.GET.get('paper_id')
         id = self.request.GET.get('id')
-        states = self.request.GET.getlist('states')
         social_security_id = self.request.GET.get('social_security_id')
+        if not (first_name or last_name or paper_id or id or social_security_id):
+            return None
+        if (first_name and len(first_name) < 2) or (last_name and len(last_name) < 2):
+            return None
+        qs = super(PatientRecordsHomepageView, self).get_queryset()
+        states = self.request.GET.getlist('states')
         if last_name:
             qs = qs.filter(last_name__icontains=last_name)
         if first_name:
             qs = qs.filter(first_name__icontains=first_name)
         if paper_id:
-            qs = qs.filter(paper_id__contains=paper_id)
+            qs = qs.filter(paper_id__startswith=paper_id)
         if id:
-            qs = qs.filter(id__contains=id)
+            qs = qs.filter(id__startswith=id)
         if social_security_id:
-            qs = qs.filter(social_security_id__contains=social_security_id)
+            qs = qs.filter(models.Q(social_security_id__startswith=social_security_id) | \
+                models.Q(contacts__social_security_id__startswith=social_security_id))
         if states:
             status_types = ['BILAN', 'SURVEILLANCE', 'SUIVI']
             for state in states:
@@ -394,30 +399,31 @@ class PatientRecordsHomepageView(cbv.ListView):
                 "Traitement": 0,
                 "Clos": 0}
         if self.request.GET:
-            for patient_record in ctx['object_list'].filter():
-                ctx['stats']['dossiers'] += 1
-                next_rdv = get_next_rdv(patient_record)
-                last_rdv = get_last_rdv(patient_record)
-                current_state = patient_record.get_current_state()
-                if STATES_MAPPING.has_key(current_state.status.type):
-                    state = STATES_MAPPING[current_state.status.type]
-                else:
-                    state = current_state.status.name
-                state_class = current_state.status.type.lower()
-                patient_records.append(
-                        {
-                            'object': patient_record,
-                            'next_rdv': next_rdv,
-                            'last_rdv': last_rdv,
-                            'state': state,
-                            'state_class': state_class
-                            }
-                        )
-                state = state.replace(' ', '_')
-                state = state.replace("'", '')
-                if not ctx['stats'].has_key(state):
-                    ctx['stats'][state] = 0
-                ctx['stats'][state] += 1
+            if ctx['object_list']:
+                for patient_record in ctx['object_list'].filter():
+                    ctx['stats']['dossiers'] += 1
+                    next_rdv = get_next_rdv(patient_record)
+                    last_rdv = get_last_rdv(patient_record)
+                    current_state = patient_record.get_current_state()
+                    if STATES_MAPPING.has_key(current_state.status.type):
+                        state = STATES_MAPPING[current_state.status.type]
+                    else:
+                        state = current_state.status.name
+                    state_class = current_state.status.type.lower()
+                    patient_records.append(
+                            {
+                                'object': patient_record,
+                                'next_rdv': next_rdv,
+                                'last_rdv': last_rdv,
+                                'state': state,
+                                'state_class': state_class
+                                }
+                            )
+                    state = state.replace(' ', '_')
+                    state = state.replace("'", '')
+                    if not ctx['stats'].has_key(state):
+                        ctx['stats'][state] = 0
+                    ctx['stats'][state] += 1
 
         page = self.request.GET.get('page')
         paginator = Paginator(patient_records, 50)
