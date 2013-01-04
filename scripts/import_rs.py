@@ -4,7 +4,7 @@
 import os
 import csv
 
-from datetime import datetime
+from datetime import datetime, date
 
 import calebasse.settings
 import django.core.management
@@ -17,12 +17,15 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, Room
 from calebasse.ressources.models import ActType
+from calebasse.actes.models import Act
+
+from import_dossiers import map_cs
 
 # Configuration
 db_path = "./scripts/20121221-192258"
 
 # dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-dbs = ["F_ST_ETIENNE_CAMSP"]
+dbs = ["F_ST_ETIENNE_SESSAD_TED"]
 
 def _to_datetime(str_date):
     if not str_date:
@@ -162,7 +165,21 @@ def main():
             else:
                 act_type_id_not_found.add(act_type)
 
-        
+        def set_act_type(row, not_found=None):
+            act_type_id = row['type_acte']
+            if act_type_id == '0' and row['enfant_id'] == '0':
+                add_invalid(row, 'no act_id=>not an appointment')
+                row['event'] = True
+            elif act_type_id != '0':
+                if act_type_id in act_types_idx:
+                    row['act_type'] = act_types_idx[act_type_id]
+                else:
+                    add_invalid(row, 'act_type not found %s' % act_type_id)
+                    if not_found:
+                        not_found.add(act_type_id)
+            else:
+                raise NotImplemented
+
         def handle_details(data, idx, details, id_key):
             not_found = set()
             id_not_found = set()
@@ -194,6 +211,18 @@ def main():
         for enfant in PatientRecord.objects.filter(service=service):
             enfant_idx[enfant.old_id] = enfant
 
+        def set_enfant(row, not_found=None):
+            # connect enfant
+            enfant_id = row['enfant_id']
+            if enfant_id == '0':
+                add_invalid(row, 'not an appointment')
+            elif enfant_id in enfant_idx:
+                row['enfant'] = enfant_idx[enfant_id]
+            else:
+                add_invalid(row, 'enfant_id not found %s' % enfant_id)
+                if not_found:
+                    not_found.add(enfant_id)
+
         enfant_not_found = set()
         rr_not_found = set()
         rs_without_act_type = set()
@@ -201,6 +230,7 @@ def main():
         invalid_rs = set()
         seen_exceptions = dict()
         for rs in rs_data:
+            rs.setdefault('workers', set())
             rs['exception'] = False
             rs['event'] = False
             rs['date'] = _to_date(rs['date_rdv'])
@@ -268,6 +298,7 @@ def main():
         unknown_act_type_id = set()
         invalid_rs = set()
         for rr in rr_data:
+            rs.setdefault('workers', set())
             rr.setdefault('exceptions', [])
             rr['start_date'] = _to_date(rr['date_debut'])
             rr['end_date'] = _to_date(rr['date_fin'])
@@ -349,14 +380,16 @@ def main():
                         continue
                     i += 1
                     rows.append(row)
-                    events.append(EventWithAct.objects.create(patient=row['enfant'],
+                    event = EventWithAct.objects.create(patient=row['enfant'],
                             start_datetime=row['start_datetime'],
                             end_datetime=row['end_datetime'],
                             act_type=row['act_type'],
                             old_rs_id=row['id'],
                             room=Room(id=1),
                             title=row['libelle'],
-                            description=row['texte']))
+                            description=row['texte'])
+                    row['event'] = event
+                    events.append(event)
                     print "Rdv creation %-6d\r" % i,
                 print
                 def batch_bulk(model, rows, limit):
@@ -393,7 +426,7 @@ def main():
                         continue
                     i += 1
                     rows.append(row)
-                    events.append(EventWithAct.objects.create(
+                    event = EventWithAct.objects.create(
                             patient=row['enfant'],
                             start_datetime=row['start_datetime'],
                             end_datetime=row['end_datetime'],
@@ -403,7 +436,9 @@ def main():
                             title=row['libelle'],
                             description=row['texte'],
                             recurrence_periodicity=row['recurrence_periodicity'],
-                            recurrence_end_date=row['end_date']))
+                            recurrence_end_date=row['end_date'])
+                    row['event'] = event
+                    events.append(event)
                     print "Rdv recurrent creation %-6d\r" % i,
                 print
                 service_and_workers(events, rows)
@@ -418,7 +453,7 @@ def main():
                             continue
                         i += 1
                         excrows.append(row)
-                        excevents.append(EventWithAct.objects.create(
+                        event = EventWithAct.objects.create(
                                 patient=row['enfant'],
                                 start_datetime=row['start_datetime'],
                                 end_datetime=row['end_datetime'],
@@ -428,14 +463,45 @@ def main():
                                 title=row['libelle'],
                                 description=row['texte'],
                                 exception_to=event,
-                                exception_date=row['date']))
+                                exception_date=row['date'])
+                        row['event'] = event
+                        excevents.append(event)
                         print "Exception creation %-6d\r" % i,
                 print
                 service_and_workers(excevents, excrows)
-            finally:
+            except:
                 transaction.rollback()
+            else:
+                transaction.commit()
 
 
+        # Clean act for this service
+        Act.objects.filter(patient__service=service).delete()
+        actes_data, actes_idx, actes_cols = load_csv(db, 'actes')
+        act_to_event = dict()
+        for row in rs_data:
+            if row.get('event') and row['base_id']:
+                act_to_event[row['base_id']] = row['event']
+        actes = []
+        i = 0
+        j = 0
+        for row in actes_data:
+            i += 1
+            row['date'] = _to_date(row['date_acte'])
+            row['time'] = _to_time(row['horaire'])
+            row['duration'] = _to_duration(row['duree'])
+            row['is_billed'] = row['marque'] == '1'
+            row['validation_locked'] = row['date'] < date(2013, 1, 3)
+            set_enfant(row)
+            set_act_type(row)
+            row['parent_event'] = act_to_event.get(row['id'])
+            if row['parent_event']:
+                j += 1
+            row['state'] = map_cs[service.name].get(row['cs'],
+                    'VALIDE')
+        print 'Actes:'
+        print ' - importe ', i
+        print ' - link to rdv', j
 
 
     invalid_rs_csv.close()
