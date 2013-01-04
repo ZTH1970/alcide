@@ -62,7 +62,7 @@ function enable_events(base) {
       $(base).find('#print-button').click(function() { window.print(); });
 
       $('.generate-mail-btn', base).click(function() {
-        var url = '../../dossiers/' + $(this).data('dossier-id') + '/generate?event-id=' + $(this).data('occurence-id' + '&date=' + $(this).data('date'));
+        var url = '../../dossiers/' + $(this).data('dossier-id') + '/generate?event-id=' + $(this).data('event-id') + '&date=' + $(this).data('date');
         $('#ajax-dlg').load(url,
           function () {
             $(this).dialog({title: 'Générer un courrier', width: '500px',
