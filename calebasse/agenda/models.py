@@ -364,11 +364,6 @@ class Event(models.Model):
                 participants=self.participants.all() if self.id else '<un-saved>')
 
 
-class OldRSID(models.Model):
-    event = models.ForeignKey(Event)
-    old_rs_id = models.CharField(max_length=8, blank=True, null=True)
-
-
 class EventWithActManager(managers.EventManager):
     def create_patient_appointment(self, creator, title, patient,
             doctors=[], act_type=None, service=None, start_datetime=None, end_datetime=None,
