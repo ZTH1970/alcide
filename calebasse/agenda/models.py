@@ -332,6 +332,8 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
         assert self.recurrence_periodicity is None or self.exception_to is None
+        assert self.exception_to is None or self.exception_to.recurrence_periodicity is not None
+        assert self.start_datetime is not None
         self.sanitize() # init periodicity fields
         super(Event, self).save(*args, **kwargs)
 
