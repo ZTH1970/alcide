@@ -414,6 +414,8 @@ class EventWithAct(Event):
         from ..actes.models import Act, ActValidationState
         today = today or self.start_datetime.date()
         act, created = Act.objects.get_or_create(patient=self.patient,
+                time=self.start_datetime.time(),
+                _duration=self.timedelta().seconds // 60,
                 parent_event=getattr(self, 'parent', self),
                 date=today,
                 act_type=self.act_type)
