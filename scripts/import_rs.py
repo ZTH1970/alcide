@@ -12,7 +12,7 @@ import django.core.management
 django.core.management.setup_environ(calebasse.settings)
 
 from django.db import transaction
-from calebasse.agenda.models import EventWithAct, Event
+from calebasse.agenda.models import EventWithAct
 from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, Room
@@ -126,7 +126,6 @@ def main():
     for db in dbs:
         workers_idx = {}
         act_types_idx = {}
-        not_found = set()
         if "F_ST_ETIENNE_CMPP" == db:
             service = Service.objects.get(name="CMPP")
         elif "F_ST_ETIENNE_CAMSP" == db:
@@ -478,9 +477,10 @@ def main():
 
 
         # Clean act for this service
-        print "Actes before delete", Act.objects.count()
-        batch_delete(Act.objects.filter(patient__service=service), 500)
-        print "Actes afterdelete", Act.objects.count()
+        qs = Act.objects.filter(patient__service=service)
+        print "Actes before delete", qs.count()
+        qs.delete()
+        print "Actes afterdelete", qs.count()
         actes_data, actes_idx, actes_cols = load_csv(db, 'actes')
         actes_cols.extend(['workers','invalid'])
         invalid_actes_writer.writerow(map(lambda x: x.encode('utf-8'), actes_cols))
