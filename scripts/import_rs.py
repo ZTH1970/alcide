@@ -178,18 +178,14 @@ def main():
 
         def set_act_type(row, not_found=None):
             act_type_id = row['type_acte']
-            if act_type_id == '0' and row['enfant_id'] == '0':
-                add_invalid(row, 'no act_id=>not an appointment')
-                row['event'] = True
-            elif act_type_id != '0':
-                if act_type_id in act_types_idx:
-                    row['act_type'] = act_types_idx[act_type_id]
-                else:
-                    add_invalid(row, 'act_type not found %s' % act_type_id)
-                    if not_found:
-                        not_found.add(act_type_id)
+            if act_type_id == '0':
+                add_invalid(row, 'no act_id=>not importable')
+            elif act_type_id in act_types_idx:
+                row['act_type'] = act_types_idx[act_type_id]
             else:
-                raise NotImplemented
+                add_invalid(row, 'act_type not found %s' % act_type_id)
+                if not_found:
+                    not_found.add(act_type_id)
 
         def handle_details(data, idx, details, id_key):
             not_found = set()
@@ -226,7 +222,8 @@ def main():
             # connect enfant
             enfant_id = row['enfant_id']
             if enfant_id == '0':
-                add_invalid(row, 'not an appointment')
+                add_invalid(row, 'no enfant_id=>not an appointment')
+                row['event'] = True
             elif enfant_id in enfant_idx:
                 row['enfant'] = enfant_idx[enfant_id]
             else:
