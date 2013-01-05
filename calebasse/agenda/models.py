@@ -233,10 +233,11 @@ class Event(models.Model):
             return None
         if match:
             exception = self.get_exceptions_dict().get(today)
-            if exception and exception.start_datetime.date() == today():
-                return exception.today_occurrence(today)
-            else:
-                return None
+            if exception:
+                if exception.start_datetime.date() == today:
+                    return exception.today_occurrence(today)
+                else:
+                    return None
         else:
             exception_or_self = self.match_date(today)
             if exception_or_self is None:
@@ -284,7 +285,7 @@ class Event(models.Model):
         if not hasattr(self, 'exceptions_dict'):
             self.exceptions_dict = dict()
             if self.exception_to_id is None:
-                for exception in self.exceptions.all():
+                for exception in self.exceptions.select_subclasses():
                     self.exceptions_dict[exception.exception_date] = exception
         return self.exceptions_dict
 
