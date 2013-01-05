@@ -160,21 +160,10 @@ class Event(models.Model):
 
     def clean(self):
         '''Initialize recurrence fields if they are not.'''
+        self.sanitize()
         if self.recurrence_periodicity:
-            l = self.PERIOD_LIST_TO_FIELDS[self.recurrence_periodicity-1]
-        else:
-            l = None, None, None
-        self.recurrence_week_period = l[0]
-        self.recurrence_week_rank = l[1]
-        self.recurrence_week_parity = l[2]
-        if self.recurrence_periodicity:
-            if self.recurrence_end_date and self.recurrence_end_date < self.start_datetime.date():
+            if self.recurrence_end_date and self.start_datetime and self.recurrence_end_date < self.start_datetime.date():
                 raise forms.ValidationError(u'La date de fin de périodicité doit être postérieure à la date de début.')
-            if self.start_datetime:
-                self.recurrence_week_day = self.start_datetime.weekday()
-        if self.recurrence_week_period is not None:
-            if self.start_datetime:
-                self.recurrence_week_offset = weeks_since_epoch(self.start_datetime) % self.recurrence_week_period
         if self.recurrence_week_parity is not None:
             if self.start_datetime:
                 week = self.start_datetime.date().isocalendar()[1]
@@ -185,6 +174,20 @@ class Event(models.Model):
             start_week_ranks = weekday_ranks(self.start_datetime.date())
             if self.recurrence_week_rank not in start_week_ranks:
                 raise forms.ValidationError('La date de début de périodicité doit faire partie de la bonne semaine dans le mois.')
+
+    def sanitize(self):
+        if self.recurrence_periodicity:
+            l = self.PERIOD_LIST_TO_FIELDS[self.recurrence_periodicity-1]
+        else:
+            l = None, None, None
+        self.recurrence_week_period = l[0]
+        self.recurrence_week_rank = l[1]
+        self.recurrence_week_parity = l[2]
+        if self.start_datetime:
+            if self.recurrence_periodicity:
+                self.recurrence_week_day = self.start_datetime.weekday()
+            if self.recurrence_week_period is not None:
+                self.recurrence_week_offset = weeks_since_epoch(self.start_datetime) % self.recurrence_week_period
 
     def timedelta(self):
         '''Distance between start and end of the event'''
@@ -329,7 +332,7 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
         assert self.recurrence_periodicity is None or self.exception_to is None
-        self.clean() # force call to clean to initialize recurrence fields
+        self.sanitize() # init periodicity fields
         super(Event, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
