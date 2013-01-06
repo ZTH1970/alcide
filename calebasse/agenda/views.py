@@ -358,8 +358,9 @@ class JoursNonVerrouillesView(TemplateView):
         acts = Act.objects.filter(is_billed=False,
             patient__service=self.service).order_by('date')
         days = set(acts.values_list('date', flat=True))
-        max_day, min_day = max(days), min(days)
-        days &= set(get_days_with_acts_not_locked(min_day, max_day, self.service))
+        if days:
+            max_day, min_day = max(days), min(days)
+            days &= set(get_days_with_acts_not_locked(min_day, max_day, self.service))
         context['days_not_locked'] = days
         return context
 
