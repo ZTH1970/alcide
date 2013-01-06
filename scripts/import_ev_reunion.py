@@ -16,6 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 django.core.management.setup_environ(calebasse.settings)
 
+from django.db import transaction
 
 from calebasse.agenda.models import Event, EventType
 from calebasse.personnes.models import Worker
@@ -166,6 +167,7 @@ def create_recurrent_event(line, service, tables_data):
         except django.core.exceptions.ValidationError, e:
             logging.error(service.name + ' ev recurrence non valide %s %s' % (line, e))
 
+@transaction.commit_on_success
 def main():
     logging.basicConfig(filename=log_file,level=logging.DEBUG)
     for db in dbs:
