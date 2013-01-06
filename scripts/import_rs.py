@@ -392,7 +392,7 @@ def main():
                     act_type=row['act_type'],
                     old_rs_id=row['id'],
                     room=Room(id=1),
-                    title=row['libelle'],
+                    title=row['enfant'].display_name,
                     description=row['texte'])
             row['event'] = event
             events.append(event)
@@ -439,7 +439,7 @@ def main():
                     act_type=row['act_type'],
                     old_rr_id=row['id'],
                     room=Room(id=1),
-                    title=row['libelle'],
+                    title=row['enfant'].display_name,
                     description=row['texte'],
                     recurrence_periodicity=row['recurrence_periodicity'],
                     recurrence_end_date=row['end_date'])
@@ -466,7 +466,7 @@ def main():
                         act_type=row['act_type'],
                         old_rs_id=row['id'],
                         room=Room(id=1),
-                        title=row['libelle'],
+                        title=row['enfant'].display_name,
                         description=row['texte'],
                         exception_to=event,
                         exception_date=row['date'])
