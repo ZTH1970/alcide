@@ -1,6 +1,7 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime, time
 from django.core.management.base import BaseCommand
 from django.db.transaction import commit_on_success
+from django.db.models import Q
 from ... import models
 from ....actes.models import Act
 
@@ -9,18 +10,15 @@ class Command(BaseCommand):
 
     @commit_on_success
     def handle(self, *args, **options):
-        i = date.today()
-        end = i + timedelta(days=90)
-        total = 0
-        while i != end:
-            print 'on', i,
-            before = Act.objects.count()
-            qs = models.EventWithAct.objects.for_today(i)
-            print qs.count(), 'events',
-            for e in qs:
-                e.save()
-            count = Act.objects.count()-before
-            total += count
-            print 'created', count , 'acts'
-            i += timedelta(days=1)
-        print 'total:', total, 'acts'
+        today = date.today()
+        print 'on', today
+        qs = models.EventWithAct.objects.filter(
+                Q(recurrence_periodicity__isnull=False, recurrence_end_date__isnull=True) |
+                Q(recurrence_periodicity__isnull=False, recurrence_end_date__gte=today) |
+                Q(start_datetime__gte=datetime.combine(today, time.min)))
+        print 'handling', qs.count(), 'active events'
+        before = Act.objects.count()
+        for event in qs:
+            event.save()
+        count = Act.objects.count()-before
+        print 'created', count , 'acts'
