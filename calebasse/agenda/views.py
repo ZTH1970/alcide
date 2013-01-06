@@ -244,7 +244,6 @@ class AgendaServiceActValidationView(TemplateView):
             display_name = VALIDATION_STATES[state.state_name]
             if not state.previous_state:
                 state = None
-            act.date = act.date.strftime("%H:%M")
             actes.append((act, state, display_name))
         context['validation_states'] = dict(VALIDATION_STATES)
         if self.service.name != 'CMPP' and \
