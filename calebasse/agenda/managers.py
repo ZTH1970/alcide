@@ -25,6 +25,7 @@ class EventQuerySet(InheritanceQuerySet):
                canceled=False) ]
         base_q = Q(start_datetime__lte=datetime.combine(today, time(23,59,59)),
                 canceled=False,
+                recurrence_week_day=today.weekday(),
                 recurrence_periodicity__isnull=False) & \
                 (Q(recurrence_end_date__gte=today) |
                     Q(recurrence_end_date__isnull=True)) & \
@@ -32,7 +33,7 @@ class EventQuerySet(InheritanceQuerySet):
         # week periods
         for period in range(1, 6):
             filters.append(base_q & Q(recurrence_week_offset=weeks % period,
-                recurrence_week_period=period, recurrence_week_day=today.weekday()))
+                recurrence_week_period=period))
         # week parity
         parity = today.isocalendar()[1] % 2
         filters.append(base_q & Q(recurrence_week_parity=parity))
