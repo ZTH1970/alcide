@@ -196,6 +196,7 @@ class PatientContactForm(ModelForm):
     def clean(self):
         cleaned_data = super(PatientContactForm, self).clean()
         health_org = cleaned_data.get('health_org')
+        other_health_center = cleaned_data.get('other_health_center')
         if health_org:
             msg = None
             lr = None
@@ -213,6 +214,8 @@ class PatientContactForm(ModelForm):
                         msg = u"Caisse %s inconnue." % health_org[2:5]
                     elif len(hcs) == 1:
                         hc = hcs[0]
+                        if not other_health_center and len(health_org) == 9:
+                            other_health_center = health_org[5:9]
                     else:
                         if len(health_org) == 9:
                             hcs = hcs.filter(code=health_org[5:9])
@@ -231,6 +234,7 @@ class PatientContactForm(ModelForm):
             else:
                 cleaned_data['large_regime'] = lr.code
                 cleaned_data['health_center'] = hc
+                cleaned_data['other_health_center'] = other_health_center
         return cleaned_data
 
 
