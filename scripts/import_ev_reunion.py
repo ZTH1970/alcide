@@ -82,6 +82,15 @@ def _get_therapists(line, table_name, service):
 
     return participants
 
+def _is_timetable(line):
+    return line and line['libelle'].replace(u'é', u'e').upper() in ('ARRIVEE', 'DEPART')
+
+def _get_ev(tables, line):
+    ev_id = line['rr_ev_id']
+    if not ev_id or not ev_id.startswith('ev_'):
+        return None
+    return tables['ev'].get(ev_id[3:])
+
 def create_event(line, service, tables_data):
     if not Event.objects.filter(old_rs_id=line['id'], services__in=[service]):
         # Manage exception
@@ -192,12 +201,13 @@ def main():
             csvfile.close()
 
         for id, line in tables_data['ev'].iteritems():
-            if line['libelle'].replace(u'é', u'e').upper() not in ('ARRIVEE', 'DEPART'):
+            if not _is_timetable(line):
                 create_recurrent_event(line, service, tables_data)
 
         for id, line in tables_data['rs'].iteritems():
             if (not line['enfant_id'] or not int(line['enfant_id'])) \
-                    and (line['libelle'].replace(u'é', u'e').upper() not in ('ARRIVEE', 'DEPART')):
+                    and not _is_timetable(line) \
+                    and (not _is_timetable(_get_ev(tables_data, line))):
                 create_event(line, service, tables_data)
 
 if __name__ == "__main__":
