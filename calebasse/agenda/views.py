@@ -85,7 +85,7 @@ class AgendaServiceActivityView(TemplateView):
                 appointment['length'] = "%sm" % length
             if event.event_type == EventType.objects.get(id=1):
                 appointment['type'] = 1
-                event_act = event.act
+                event_act = event.eventwithact
                 appointment['label'] = event_act.patient.display_name
                 appointment['act'] = event_act.act_type.name
             elif event.event_type == EventType.objects.get(id=2):
