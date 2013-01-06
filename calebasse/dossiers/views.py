@@ -634,8 +634,10 @@ class GenerateRtfFormView(cbv.FormView):
             response.write(file(to_path).read())
             return response
         else:
+            class LocalFileHttpResponseRedirect(HttpResponseRedirect):
+                allowed_schemes = ['file']
             client_filepath = os.path.join(client_dir, dest_filename)
-            return HttpResponseRedirect('file://' + client_filepath)
+            return LocalFileHttpResponseRedirect('file://' + client_filepath)
 
 generate_rtf_form = GenerateRtfFormView.as_view()
 
