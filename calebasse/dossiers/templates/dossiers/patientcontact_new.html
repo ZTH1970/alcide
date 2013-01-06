@@ -86,11 +86,22 @@
           {{ form.health_org }}
           {{ form.health_org.errors }}
         </td>
+        <td>
+          {{ form.other_health_center.label_tag }} :<br>
+          {{ form.other_health_center }}
+          {{ form.other_health_center.errors }}
         <td/>
         <td>
           {{ form.twinning_rank.label_tag }} :<br>
           {{ form.twinning_rank }}
           {{ form.twinning_rank.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.thirdparty_payer.label_tag }} :<br>
+          {{ form.thirdparty_payer }}
+          {{ form.thirdparty_payer.errors }}
         </td>
       </tr>
       <tr>
