@@ -65,35 +65,29 @@ class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
 
 new_patient_record = NewPatientRecordView.as_view()
 
-def dynamic_patient_contact_form(patientrecord_id):
-    patient = PatientRecord.objects.get(id=patientrecord_id)
-    class DynamicPatientContactForm(forms.PatientContactForm):
-        def __init__(self, *args, **kwargs):
-            super(DynamicPatientContactForm, self).__init__(*args, **kwargs)
-            self.fields['addresses'].queryset = patient.addresses
-    return DynamicPatientContactForm
+class RecordPatientRecordIdMixing(object):
+    def dispatch(self, request, *args, **kwargs):
+        self.patientrecord_id = request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        return super(RecordPatientRecordIdMixing, self).dispatch(request, *args, **kwargs)
 
-class NewPatientContactView(cbv.CreateView):
+    def get_form_kwargs(self):
+        kwargs = super(RecordPatientRecordIdMixing, self).get_form_kwargs()
+        kwargs['patient'] = PatientRecord.objects.get(id=self.patientrecord_id)
+        return kwargs
+
+class NewPatientContactView(RecordPatientRecordIdMixing, cbv.CreateView):
     model = PatientContact
+    form_class = forms.PatientContactForm
     template_name = 'dossiers/patientcontact_new.html'
     success_url = '../view#tab=2'
 
-    def get(self, request, *args, **kwargs):
-        request.session['patientrecord_id'] = kwargs['patientrecord_id']
-        self.form_class = dynamic_patient_contact_form(kwargs['patientrecord_id'])
-        return super(NewPatientContactView, self).get(request, *args, **kwargs)
-
 new_patient_contact = NewPatientContactView.as_view()
 
-class UpdatePatientContactView(cbv.UpdateView):
+class UpdatePatientContactView(RecordPatientRecordIdMixing, cbv.UpdateView):
     model = PatientContact
+    form_class = forms.PatientContactForm
     template_name = 'dossiers/patientcontact_new.html'
     success_url = '../../view#tab=2'
-
-    def get(self, request, *args, **kwargs):
-        request.session['patientrecord_id'] = kwargs['patientrecord_id']
-        self.form_class = dynamic_patient_contact_form(kwargs['patientrecord_id'])
-        return super(UpdatePatientContactView, self).get(request, *args, **kwargs)
 
 update_patient_contact = UpdatePatientContactView.as_view()
 
