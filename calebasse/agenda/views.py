@@ -45,7 +45,7 @@ class AgendaHomepageView(TemplateView):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
         context['workers_types'] = []
-        workers = list(Worker.objects.filter(enabled=True).select_related())
+        workers = Worker.objects.filter(enabled=True).select_related()
         worker_by_type = {}
         for worker in workers:
             workers_for_type = worker_by_type.setdefault(worker.type, [])
@@ -327,6 +327,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
         time_tables_workers = {}
         holidays_workers = {}
         context['workers_agenda'] = []
+        context['workers'] = context['workers'].filter(services=self.service)
         for worker in context['workers']:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
             events_worker = [o for o in events if worker.id in o.participants.values_list('id', flat=True)]
