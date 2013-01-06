@@ -360,6 +360,9 @@ class JoursNonVerrouillesView(TemplateView):
         days = set(acts.values_list('date', flat=True))
         if days:
             max_day, min_day = max(days), min(days)
+            today = datetime.datetime.today().date()
+            if max_day > today:
+                max_day = today
             days &= set(get_days_with_acts_not_locked(min_day, max_day, self.service))
         context['days_not_locked'] = days
         return context
