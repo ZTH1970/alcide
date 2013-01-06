@@ -320,6 +320,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
                 for_period(self.date, self.date). \
                 order_by('start_date')
         plain_events = Event.objects.for_today(self.date) \
+                .filter(services=self.service) \
                 .order_by('start_datetime').select_subclasses()
         events = [ e.today_occurrence(self.date) for e in plain_events ]
 
