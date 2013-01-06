@@ -22,7 +22,7 @@ from calebasse.personnes.models import Worker, Holiday, ExternalWorker, External
 from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
     FamilySituationType, TransportType, TransportCompany, Provenance, AnalyseMotive, FamilyMotive,
     CodeCFTMEA, SocialisationDuration, School, SchoolLevel, OutMotive, OutTo, AdviceGiver,
-    MaritalStatusType, Job, PatientRelatedLink)
+    MaritalStatusType, Job, PatientRelatedLink, HealthCenter)
 
 # Configuration
 db_path = "./scripts/20130104-213225"
@@ -212,7 +212,7 @@ def get_nir(nir, key, writer, line, service):
     return nir
 
 
-def main():
+def import_dossiers_phase_1():
     """ """
     print "====== Début à %s ======" % str(datetime.today())
 
@@ -224,6 +224,9 @@ def main():
 
     f3 = open('./scripts/contacts_manuel.csv', 'wb')
     writer3 = csv.writer(f3, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+
+    f4 = open('./scripts/pc_manuel.csv', 'wb')
+    writer4 = csv.writer(f4, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
     status_accueil = Status.objects.filter(type="ACCUEIL")[0]
     status_diagnostic = Status.objects.filter(type="DIAGNOSTIC")[0]
@@ -251,7 +254,7 @@ def main():
         csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
         csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
         d_cols = csvlines.next()
-        writer2.writerow(d_cols + ['service', 'creation', 'commenataire'])
+        writer2.writerow(d_cols + ['service', 'creation', 'commentaire'])
         tables_data['dossiers'] = []
         for line in csvlines:
             #Au moins nom et prénom
@@ -260,6 +263,17 @@ def main():
                 tables_data['dossiers'].append(data)
             else:
                 writer2.writerow(line + [service.name, 'Non', 'Ni Nom, ni prénom'])
+        csvfile.close()
+        print "<-- Terminé"
+
+        print "--> Lecture table des caisses..."
+        csvfile = open(os.path.join(db_path, db, 'caisses.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        caisses_cols = csvlines.next()
+        tables_data['caisses'] = {}
+        for line in csvlines:
+            data = _get_dict(caisses_cols, line)
+            tables_data['caisses'][data['id']] = data
         csvfile.close()
         print "<-- Terminé"
 
@@ -394,7 +408,19 @@ def main():
         csvfile.close()
         print "<-- Terminé"
 
-        print "--> Chargement des prise en charge pour le CMPP..."
+        print "--> Chargement des prise en charge..."
+        csvfile = open(os.path.join(db_path, db, 'pc.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        pc_cols = csvlines.next()
+        writer4.writerow(pc_cols + ['service', 'creation', 'commentaire'])
+        tables_data['pcs'] = {}
+        for line in csvlines:
+            data = _get_dict(pc_cols, line)
+            if line[1] in tables_data['pcs'].keys():
+                tables_data['pcs'][line[1]].append(data)
+            else:
+                tables_data['pcs'][line[1]] = [data]
+        csvfile.close()
         print "<-- Terminé"
 
         print "--> Ajout des contacts..."
@@ -459,6 +485,7 @@ def main():
             begin_rights = None
             end_rights = None
             health_center = None
+            old_contact_id = line[0]
 
             contact = PatientContact(phone=phone, mobile= mobile,
                 contact_comment=contact_comment,
@@ -470,7 +497,8 @@ def main():
                 thirdparty_payer = thirdparty_payer,
                 begin_rights = begin_rights,
                 end_rights = end_rights,
-                health_center = health_center)
+                health_center = health_center,
+                old_contact_id=old_contact_id)
             contact.save()
 
             if not line[1] in adresses_per_old_id:
@@ -543,7 +571,8 @@ def main():
                             s = status_suivi
                         elif dossier['suivi'] == '4':
                             s = status_surveillance
-                        fss.append((s, date_traitement, "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
+#                        fss.append((s, date_traitement, "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
+                        fss.append((s, date_traitement, ""))
                 else:
                     # Le retour supprime la précédente de clôture, on choisit le retour à j-1
                     if date_traitement:
@@ -557,26 +586,55 @@ def main():
                             s = status_suivi
                         elif dossier['suivi'] == '4':
                             s = status_surveillance
-                        fss.append((s, date_retour,  "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
+#                        fss.append((s, date_retour,  "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
+                        fss.append((s, date_retour,  ""))
                 if date_clos:
                     if date_retour and date_clos < date_retour:
-                        print 'La date de clôture ne peut être antérieure à la date de fermeture!'
+                        print 'La date de clôture ne peut être antérieure à la date de retour!'
                     else:
                         fss.append((status_clos, date_clos, None))
-
             else:
-                pass
-                # date_traitement c'est diagnostic ou traitement
-                # CMPP : Si retour ret_diag = -1 si retour en diag.
-                # Pour savoir si c'est traitement ou diagnostique il faut connaître les actes validés passés
-                # Donc cela ne peut être fait que lorsque l'import des actes seront effectués et que l'on sera comment ils sont pris en charge
-                # Donc on run ce script, on run l'import des rdv patients et actes, puis un script pour mettre à jour les états et imputer les actes facturés aux pc
-                # L'import des pc ne peut aussi se faire qu'après l'import des actes
-                # imports des actes dit ce qui a été facturé sans le détail de quelle facture ou quel invoice.
-                # à l'import, tous les actes 2012 seront locked, jedui et vendredi seront à faire à la main par les secrétaires
-                # pour le camsp et sessads, on prendre à partir de 2013 les actes
-                # pour le cmpp, il va faloire imputer tous les actes facturés aux prises en charges
-                # pour savoir dans la nouvelle facturation (134) comment les imputer et donc savoir dans quel état est le dossier
+                date_retour = _to_date(dossier['ret_date'])
+                if date_accueil:
+                    fss.append((status_accueil, date_accueil, None))
+                if not date_retour:
+                    if date_traitement:
+                        fss.append((status_diagnostic, date_traitement, "Inscription en diag mais pourrait etre en trait. A préciser"))
+                else:
+                    # Le retour supprime la précédente de clôture, on choisit le retour à j-1
+                    if date_traitement:
+                        # c'est l'inscription
+                        if date_traitement < date_retour:
+                            fss.append((status_diagnostic, date_traitement, "A préciser."))
+                            fss.append((status_traitement, date_traitement + relativedelta(days=1), "A préciser."))
+                        old_clos_date = date_retour + relativedelta(days=-1)
+                        fss.append((status_clos, old_clos_date, "La date de clôture est indéterminée (par défaut positionnée à 1 jour avant le retour)."))
+                        fss.append((status_diagnostic, date_retour,  "Retour en diag mais pourrait etre en trait. A préciser"))
+                if date_clos:
+                    if date_retour and date_clos < date_retour:
+                        print 'La date de clôture ne peut être antérieure à la date de retour!'
+                    else:
+                        fss.append((status_clos, date_clos, None))
+                else:
+                    if old_id in tables_data['pcs'].keys():
+                        pcs = tables_data['pcs'][old_id]
+                        last_pc = pcs(len(pcs)-1)
+                        if last_pc['genre_pc'] == 2:
+                            status, date, msg = fss[len(fss)-1]
+                            last_date = date + relativedelta(days=1)
+                            fss.append((status_traitement, last_date, "Date à préciser."))
+                        else:
+                            pass
+    #                        pc idag, reste en diag.
+                    else:
+                        pass
+#                        pas de pc, par defaut en diag.
+
+                # Il faut l'historique des actes du patient
+                # Il faut pour chaque acte assigner à la pc
+                # on sait les derniers actes s'ils sont affecté ou non
+                # Il faudrait conserver avec les actes les num de facture ?
+                # rEvori el fonctionnement de l'assignation d'un acte a une pc
 
             for col in ('mdph', 'code_archive', 'aeeh', 'mdph_departement', 'pps', 'pps_deb', 'pps_fin', 'mdph_Debut', 'mdph_Fin'):
                 if _exist(dossier[col]):
@@ -783,21 +841,21 @@ def main():
 #                print 'Patient %s existe' % patient
 
             # Init states
-            if service.name != 'CMPP':
-                if not fss:
-                    print "Pas d'etat et le dossier patient %s (old_id) a ete cree!" % old_id
-                else:
-                    fs = FileState(status=fss[0][0], author=creator, previous_state=None)
-                    date_selected = fss[0][1]
-                    fs.patient = patient
-                    fs.date_selected = date_selected
-                    fs.comment = fss[0][2]
-                    fs.save()
-                    patient.last_state = fs
-                    patient.save()
-                    if len(fss) > 1:
-                        for status, date, comment in fss[1:]:
-                            patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
+            if not fss:
+                print "Pas d'etat et le dossier patient %s (old_id) a ete cree!" % old_id
+            else:
+                fs = FileState(status=fss[0][0], author=creator, previous_state=None)
+                date_selected = fss[0][1]
+                fs.patient = patient
+                fs.date_selected = date_selected
+                fs.comment = fss[0][2]
+                fs.save()
+                patient.last_state = fs
+                patient.save()
+                if len(fss) > 1:
+                    for status, date, comment in fss[1:]:
+                        patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
+
 
             if old_id in mises_per_patient.keys():
                 for quotation in mises_per_patient[old_id]:
@@ -850,10 +908,117 @@ def main():
                         patient.end_rights = contact.end_rights
                         patient.health_center = contact.health_center
                         patient.contact_comment = contact.contact_comment
+                        patient.old_contact_id = contact.old_contact_id
                         patient.save()
                         contact.delete()
                     else:
                         patient.contacts.add(contact)
+
+            policyholder = None
+            health_center = None
+            other_health_center = None
+            if old_id in tables_data['pcs'].keys():
+                pcs = tables_data['pcs'][old_id]
+                i = len(pcs)-1
+                found = False
+                last_pc = None
+                while not found and i >= 0:
+                    last_pc = pcs[i]
+                    if 'contact_id' in last_pc.keys():
+                        found = True
+                    i = i -1
+                if not found:
+                    writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Oui', "Pas de pc, le patient est l'assure sans caisse"])
+#                    print "Pas de d'assure pour le patient %s" % old_id
+#                    print "Le patient sera l'assure"
+                else:
+                    try:
+                        caisse = None
+                        centre = None
+                        lg = None
+                        policyholder = patient.contacts.get(old_contact_id=_to_int(last_pc['contact_id']))
+                        if last_pc['caisse_id'] in tables_data['caisses'].keys():
+                            lg = tables_data['caisses'][last_pc['caisse_id']]['tp']
+                            if len(lg) < 2:
+                                lg = ['0', lg]
+                                lg = ''.join(lg)
+                            caisse = tables_data['caisses'][last_pc['caisse_id']]['caisse']
+                            while len(caisse) < 3:
+                                caisse = ['0', caisse]
+                                caisse = ''.join(caisse)
+                            centre = tables_data['caisses'][last_pc['caisse_id']]['centre']
+                            while len(centre) < 4:
+                                centre = ['0', centre]
+                                centre = ''.join(centre)
+                            if lg and caisse:
+                                health_centers = HealthCenter.objects.filter(large_regime__code=lg, health_fund=caisse)
+                                if health_centers and len(health_centers.all()) == 1:
+                                    health_center = health_centers[0]
+                                    if last_pc['centre']:
+                                        while len(last_pc['centre']) < 4:
+                                            last_pc['centre'] = ['0', last_pc['centre']]
+                                            last_pc['centre'] = ''.join(last_pc['centre'])
+                                        other_health_center = last_pc['centre']
+                                elif health_centers and len(health_centers.all()) > 1:
+                                    print lg
+                                    print caisse
+                                    health_centers = None
+                                    if last_pc['centre']:
+                                        while len(last_pc['centre']) < 4:
+                                            last_pc['centre'] = ['0', last_pc['centre']]
+                                            last_pc['centre'] = ''.join(last_pc['centre'])
+                                        print "centre 1 %s" % last_pc['centre']
+                                        health_centers = HealthCenter.objects.filter(large_regime__code=lg, health_fund=caisse,
+                                            code = last_pc['centre'])
+                                    elif centre:
+                                        print "centre 2 %s" % centre
+                                        health_centers = HealthCenter.objects.filter(large_regime__code=lg, health_fund=caisse,
+                                            code = centre)
+                                    if health_centers and len(health_centers.all()) == 1:
+                                        health_center = health_centers[0]
+                                    elif health_centers:
+#                                        print "Plusieurs caisses avec le meme centre, patient %s" % old_id
+                                        writer4.writerow([last_pc[c].encode('utf-8') for c in pc_cols] + \
+                                            [service.name, '', "Plusieurs caisses avec le meme centre, patient %s" % old_id])
+                                    else:
+#                                        print "Caisse non determinee par code centre, patient %s" % old_id
+                                        writer4.writerow([last_pc[c].encode('utf-8') for c in pc_cols] + \
+                                            [service.name, '', "Caisse non determinee par code centre, patient %s" % old_id])
+                                else:
+#                                    print 'Caisse non trouvee avec ce numero de caisse et grand regime, patient %s' % old_id
+                                    writer4.writerow([last_pc[c].encode('utf-8') for c in pc_cols] + \
+                                        [service.name, '', 'Caisse non trouvee avec ce numero de caisse et grand regime, patient %s' % old_id])
+                            else:
+#                                print 'Infos manquantes dans fichiers des caisses, patient %s' % old_id
+                                writer4.writerow([last_pc[c].encode('utf-8') for c in pc_cols] + \
+                                    [service.name, '', 'Infos manquantes dans fichiers des caisses, patient %s' % old_id])
+                        else:
+#                            print 'Pas de caisse dans le fichiers caisse avec l id %s, patient %s' % (last_pc['caisse_id'], old_id)
+                            writer4.writerow([last_pc[c].encode('utf-8') for c in pc_cols] + \
+                                [service.name, '', 'Pas de caisse dans le fichier caisse avec l id %s, patient %s' % (last_pc['caisse_id'], old_id)])
+                    except:
+#                        print "Pas de contact avec id %s, patient %s" % (last_pc['contact_id'], old_id)
+                        writer4.writerow([last_pc[c].encode('utf-8') for c in pc_cols] + \
+                            [service.name, '', "Pas d'assuré existant, le patient est choisi."])
+
+            else:
+                writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + \
+                    [service.name, 'Oui', "Pas de pc, le patient est l'assure sans caisse"])
+#                print "Pas de pc pour le patient %s" % old_id
+#                print "Le patient sera l'assure"
+            if not policyholder:
+                policyholder = patient.patientcontact
+            policyholder.health_center = health_center
+            policyholder.other_health_center = other_health_center
+            policyholder.save()
+            patient.policyholder = policyholder
+            patient.save()
+
+
+            # On ne pass plus par le clean du contact form, du coup, pas moyen de modifier le health center!
+
+            # Faut-il gére un code de gestion ?
+
 
             #Etat des dossiers
 
@@ -891,4 +1056,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import_dossiers_phase_1()
