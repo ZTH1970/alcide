@@ -10,9 +10,11 @@ import csv
 import logging
 from datetime import datetime, timedelta
 
+log_file = "./scripts/import_ev_reunion.log"
+logging.basicConfig(filename=log_file,level=logging.DEBUG)
+
 import calebasse.settings
 import django.core.management
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 django.core.management.setup_environ(calebasse.settings)
 
@@ -26,7 +28,6 @@ from scripts.import_rs import PERIOD_FAURE_NOUS
 
 # Configuration
 db_path = "./scripts/20121221-192258"
-log_file = "./scripts/import_ev_reunion.log"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
 tables = ['rs', 'ev', 'details_rs', 'details_ev']
@@ -59,7 +60,13 @@ def _get_dict(cols, line):
         res[cols[i]] = data.decode('utf-8')
     return res
 
+import utils
+
+worker_indexes = utils.QuerysetIndex(Worker.objects.all(),
+        'old_cmpp_id', 'old_camsp_id', 'old_sessad_dys_id', 'old_sessad_ted_id')
+
 def _get_therapists(line, table_name, service):
+    global worker_indexes
     p_ids = []
     for id, detail in tables_data['details_%s' % table_name].iteritems():
         if detail['%s_id' % table_name] == line['id']:
@@ -68,14 +75,15 @@ def _get_therapists(line, table_name, service):
     for p_id in p_ids:
         try:
             if service.name == "CMPP":
-                participants.append(Worker.objects.get(old_cmpp_id=int(p_id)))
+                worker = worker_indexes.by_old_cmpp_id[p_id]
             elif service.name == "CAMSP":
-                participants.append(Worker.objects.get(old_camsp_id=int(p_id)))
+                worker = worker_indexes.by_old_camsp_id[p_id]
             elif service.name == "SESSAD DYS":
-                participants.append(Worker.objects.get(old_sessad_dys_id=int(p_id)))
+                worker = worker_indexes.by_old_sessad_dys_id[p_id]
             elif service.name == "SESSAD TED":
-                participants.append(Worker.objects.get(old_sessad_ted_id=int(p_id)))
-        except Worker.DoesNotExist:
+                worker = worker_indexes.by_old_sessad_ted_id[p_id]
+            participants.append(worker)
+        except KeyError:
             logging.warning("%s %s_id %s thera_id %s" %\
                     (service.name, table_name, line['id'], p_id) +\
                     " therapeute non trouve")
@@ -91,8 +99,14 @@ def _get_ev(tables, line):
         return None
     return tables['ev'].get(ev_id[3:])
 
-def create_event(line, service, tables_data):
-    if not Event.objects.filter(old_rs_id=line['id'], services__in=[service]):
+ServicesThrough = Event.services.through
+ParticipantsThrough = Event.participants.through
+
+event_type_4 = EventType.objects.get(id=4)
+
+def create_event(line, service, tables_data, rs_by_id, events_by_id, events,
+        participants_by_id, exceptions_set):
+    if line['id'] not in rs_by_id:
         # Manage exception
         exception_date = None
         exception_to = None
@@ -101,17 +115,15 @@ def create_event(line, service, tables_data):
             assert line['rr_ev_id'].startswith('ev_')
             ev_id = int(line['rr_ev_id'][3:])
             exception_date = _to_date(line['date_rdv'])
-            exception_to = Event.objects.filter(old_ev_id=ev_id,
-                    services__in=[service])
+            exception_to = events_by_id.get(str(ev_id))
             if exception_to:
-                exception_to = exception_to[0]
-                if Event.objects.filter(exception_date=exception_date,
-                        exception_to=exception_to):
+                p = (exception_date, exception_to)
+                if p in exceptions_set:
                     logging.info("rs_id %s is duplicated" % line["id"])
                     return
+                exceptions_set.add(p)
             else:
                 exception_error = True
-        event_type = EventType.objects.get(id=4)
         start_datetime = datetime.strptime(
                 line['date_rdv'][:-13] + ' ' + line['heure'][11:-4],
                 "%Y-%m-%d %H:%M:%S")
@@ -120,25 +132,28 @@ def create_event(line, service, tables_data):
                 minutes=int(line['duree'][14:-7]),
                 )
         participants = _get_therapists(line, 'rs', service)
+        if not participants:
+            logging.error("%s rs_id %s exception aucun participant importable" % (service.name,
+                line["id"]))
+            return
         if not exception_error:
-            event = Event.objects.create(
+            event = Event(
                     title=line['libelle'][:60],
                     description=line['texte'],
-                    event_type=event_type,
+                    event_type=event_type_4,
                     start_datetime=start_datetime,
                     end_datetime=end_datetime,
                     old_rs_id=line['id'],
-                    exception_to = exception_to,
+                    exception_to = Event(id=exception_to),
                     exception_date = exception_date
                     )
-            event.services = [service]
-            event.participants = participants
-            event.save()
+            participants_by_id[line['id']] = participants
+            events.append(event)
         else:
             logging.error("%s rs_id %s exception pas d'ev trouve %s" % (service.name,
                 line["id"], line))
 
-def create_recurrent_event(line, service, tables_data):
+def create_recurrent_event(line, service, tables_data, events, participants_by_id):
     if not Event.objects.filter(old_ev_id=line['id'], services__in=[service]):
         start_date = _to_date(line['date_debut'])
         end_date = _to_date(line['date_fin'])
@@ -160,26 +175,27 @@ def create_recurrent_event(line, service, tables_data):
                     (service.name, line['id'], line['rythme']))
 
         participants = _get_therapists(line, 'ev', service)
-        event_type = EventType.objects.get(id=4)
+        if not participants:
+            logging.error("%s ev_id %s exception aucun participant importable" % (service.name,
+                line["id"]))
+            return
         try:
-            event = Event.objects.create(
+            event = Event(
                 start_datetime=start_datetime,
                 end_datetime=end_datetime,
-                event_type=event_type,
+                event_type=event_type_4,
                 title=line['libelle'],
                 old_ev_id=line['id'],
                 description=line['note'],
                 recurrence_periodicity=recurrence_periodicity,
                 recurrence_end_date=end_date)
-            event.services = [service]
-            event.participants = participants
-            event.save()
+            participants_by_id[line['id']] = participants
+            events.append(event)
         except django.core.exceptions.ValidationError, e:
             logging.error(service.name + ' ev recurrence non valide %s %s' % (line, e))
 
 @transaction.commit_on_success
 def main():
-    logging.basicConfig(filename=log_file,level=logging.DEBUG)
     for db in dbs:
         if "F_ST_ETIENNE_CMPP" == db:
             service = Service.objects.get(name="CMPP")
@@ -201,15 +217,71 @@ def main():
                 tables_data[table][data['id']] = data
             csvfile.close()
 
+        total = 0
+        events = []
+        participants = dict()
         for id, line in tables_data['ev'].iteritems():
             if not _is_timetable(line):
-                create_recurrent_event(line, service, tables_data)
+                total += 1
+                create_recurrent_event(line, service, tables_data, events,
+                        participants)
 
+        # create events
+        logging.info('%s creating %s events on %s',
+                service.name, len(events), total)
+        Event.objects.bulk_create(events)
+        participants_through = []
+        # get their ids
+        events_by_id = dict(Event.objects \
+                .exclude(event_type_id=1) \
+                .filter(services__isnull=True, old_ev_id__isnull=False) \
+                .values_list('old_ev_id', 'id'))
+        for line_id, participants in participants.iteritems():
+            for participant in participants:
+                pt = ParticipantsThrough(event_id=events_by_id[line_id],
+                        people_id=participant.people_ptr_id)
+                participants_through.append(pt)
+        ParticipantsThrough.objects.bulk_create(participants_through)
+        ServicesThrough.objects.bulk_create([
+            ServicesThrough(service_id=service.id, event_id=event_id) for event_id in events_by_id.values()])
+        participants = {}
+
+        total = 0
+        events = []
+        participants = dict()
+        exceptions_set = set()
+        # get their ids
+        rs_by_id = dict(Event.objects \
+                .exclude(event_type_id=1) \
+                .filter(services=service, old_rs_id__isnull=False) \
+                .values_list('old_rs_id', 'id'))
         for id, line in tables_data['rs'].iteritems():
             if (not line['enfant_id'] or not int(line['enfant_id'])) \
                     and not _is_timetable(line) \
                     and (not _is_timetable(_get_ev(tables_data, line))):
-                create_event(line, service, tables_data)
+                total += 1
+                create_event(line, service, tables_data, rs_by_id, events_by_id,
+                        events, participants, exceptions_set)
+        # create events
+        logging.info('%s creating %s events on %s',
+                service.name, len(events), total)
+        Event.objects.bulk_create(events)
+        participants_through = []
+        # get their ids
+        events_by_id = dict(Event.objects \
+                .exclude(event_type_id=1) \
+                .filter(services__isnull=True, old_rs_id__isnull=False) \
+                .values_list('old_rs_id', 'id'))
+        for line_id, participants in participants.iteritems():
+            for participant in participants:
+                pt = ParticipantsThrough(event_id=events_by_id[line_id],
+                        people_id=participant.people_ptr_id)
+                participants_through.append(pt)
+        ParticipantsThrough.objects.bulk_create(participants_through)
+        ServicesThrough.objects.bulk_create([
+            ServicesThrough(service_id=service.id, event_id=event_id) for event_id in events_by_id.values()])
+        participants = {}
+
 
 if __name__ == "__main__":
     main()
