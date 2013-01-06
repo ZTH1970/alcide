@@ -256,6 +256,9 @@ class PatientContact(People):
     health_center = models.ForeignKey('ressources.HealthCenter',
             verbose_name=u"Centre d'assurance maladie",
             null=True, blank=True)
+    other_health_center = models.CharField(verbose_name=u"Centre spécifique",
+            max_length=4,
+            null=True, blank=True)
     job = models.ForeignKey('ressources.Job',
             related_name="job",
             verbose_name=u"Profession",
@@ -267,6 +270,9 @@ class PatientContact(People):
     addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses")
     contact_comment = models.TextField(verbose_name=u"Commentaire",
             null=True, blank=True)
+
+    old_contact_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID du contact', blank=True, null=True)
 
     def get_control_key(self):
         if self.social_security_id:
