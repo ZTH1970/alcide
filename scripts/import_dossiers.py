@@ -618,8 +618,8 @@ def import_dossiers_phase_1():
                 else:
                     if old_id in tables_data['pcs'].keys():
                         pcs = tables_data['pcs'][old_id]
-                        last_pc = pcs(len(pcs)-1)
-                        if last_pc['genre_pc'] == 2:
+                        last_pc = pcs[len(pcs)-1]
+                        if last_pc['genre_pc'] == '2':
                             status, date, msg = fss[len(fss)-1]
                             last_date = date + relativedelta(days=1)
                             fss.append((status_traitement, last_date, "Date à préciser."))
@@ -919,14 +919,14 @@ def import_dossiers_phase_1():
             other_health_center = None
             if old_id in tables_data['pcs'].keys():
                 pcs = tables_data['pcs'][old_id]
-                i = len(pcs)-1
+                j = len(pcs)-1
                 found = False
                 last_pc = None
-                while not found and i >= 0:
-                    last_pc = pcs[i]
+                while not found and j >= 0:
+                    last_pc = pcs[j]
                     if 'contact_id' in last_pc.keys():
                         found = True
-                    i = i -1
+                    j -= 1
                 if not found:
                     writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Oui', "Pas de pc, le patient est l'assure sans caisse"])
 #                    print "Pas de d'assure pour le patient %s" % old_id
@@ -960,18 +960,16 @@ def import_dossiers_phase_1():
                                             last_pc['centre'] = ''.join(last_pc['centre'])
                                         other_health_center = last_pc['centre']
                                 elif health_centers and len(health_centers.all()) > 1:
-                                    print lg
-                                    print caisse
                                     health_centers = None
                                     if last_pc['centre']:
                                         while len(last_pc['centre']) < 4:
                                             last_pc['centre'] = ['0', last_pc['centre']]
                                             last_pc['centre'] = ''.join(last_pc['centre'])
-                                        print "centre 1 %s" % last_pc['centre']
+#                                        print "centre 1 %s" % last_pc['centre']
                                         health_centers = HealthCenter.objects.filter(large_regime__code=lg, health_fund=caisse,
                                             code = last_pc['centre'])
                                     elif centre:
-                                        print "centre 2 %s" % centre
+#                                        print "centre 2 %s" % centre
                                         health_centers = HealthCenter.objects.filter(large_regime__code=lg, health_fund=caisse,
                                             code = centre)
                                     if health_centers and len(health_centers.all()) == 1:
