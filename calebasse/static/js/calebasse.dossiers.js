@@ -57,6 +57,9 @@ function state_dialog(url, state_title, state_type) {
     $('#id_general-pause').click(function() {
         $('#btn-maj').click();
     });
+    $('#id_general-confidential').click(function() {
+        $('#btn-maj').click();
+    });
     $('.policyholder-radio').click(function() {
         $("#policyholder-form").submit();
     });

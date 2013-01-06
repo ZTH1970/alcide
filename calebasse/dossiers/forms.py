@@ -82,7 +82,7 @@ class NewPatientRecordForm(ModelForm):
 class GeneralForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('comment', 'pause')
+        fields = ('comment', 'pause', 'confidential')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
                 }

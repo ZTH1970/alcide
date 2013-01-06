@@ -70,6 +70,8 @@
       {% endfor %}
       <button type="button" id="patientrecord-history">Historique</button><br/>
       <hr/>
+      <p id="confidential-msg" style="display: none; font-size: 10px;">Confidentialité mise à jour</p>
+      {{ forms.general.confidential.label_tag }} : {{ forms.general.confidential }}
       <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
       {{ forms.general.pause.label_tag }} : {{ forms.general.pause }}
       <!-- 3/6 diagnostics -->
