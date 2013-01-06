@@ -205,7 +205,8 @@ class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
 
     def acts_of_the_day(self):
-        return get_acts_of_the_day(self.date, self.service)
+        return [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
+                .today_occurrences(self.date)]
 
     def post(self, request, *args, **kwargs):
         if 'unlock-all' in request.POST:
