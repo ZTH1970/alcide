@@ -88,31 +88,6 @@ map_cs['SESSAD TED'] = {
 '8': 'REPORTE'
 }
 
-# Mettre tous les actes avant le 3 janvier à validation_locked = True
-# Mettre tous les actes avec dossier['marque'] = 1 à is_billed = True
-
-
-
-
-#tarifs: prix_journee.csv
-
-#Contacts et données secu, assuré
-#Adresses
-#prise en charges (cmpp)
-#Quel contact est l'assuré ? voir pc Idem, la caisse est pas sur le contact mais sur la pc!
-#Les états des dossiers!
-#diag id = 1 trait id = 2
-#notes ?
-
-#Ajouter au contact lien avec l'enfant mère, grand mèere, etc.
-#table parente champs du dossier: parente.csv associé à la table contact ?
-#Ajouter au contact
-#Attention caisse il faut les ancien id pour retourber? on peut rechercher sur le numéro de la caisse!
-
-
-#tables = ["dossiers", "adresses", "contacts", "convocations", "dossiers_ecole", "dossiers_mises", "pc", "periodes_pc","pmt", "rm", , "sor_motifs", "sor_orientation", "suivi"]
-#tables = ["dossiers_test"]
-
 def _exist(str):
     if str and str != "" and str != '0':
         return True
@@ -545,11 +520,11 @@ def import_dossiers_phase_1():
                 writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Non', "Aucune date d'état existante"])
                 continue
             # Manage states
-            if date_accueil and date_traitement and date_accueil > date_traitement:
+            if date_accueil and date_traitement and date_accueil >= date_traitement:
                 date_accueil = None
-            if date_traitement and date_clos and date_traitement > date_clos:
+            if date_traitement and date_clos and date_traitement >= date_clos:
                 date_traitement = None
-            if date_accueil and date_clos and date_accueil > date_clos:
+            if date_accueil and date_clos and date_accueil >= date_clos:
                 date_accueil = None
             if "SESSAD" in service.name:
                 # Il n'y a jamais eu de retour au SESSADs
@@ -597,25 +572,9 @@ def import_dossiers_phase_1():
                 date_retour = _to_date(dossier['ret_date'])
                 if date_accueil:
                     fss.append((status_accueil, date_accueil, None))
-                if not date_retour:
-                    if date_traitement:
-                        fss.append((status_diagnostic, date_traitement, "Inscription en diag mais pourrait etre en trait. A préciser"))
-                else:
-                    # Le retour supprime la précédente de clôture, on choisit le retour à j-1
-                    if date_traitement:
-                        # c'est l'inscription
-                        if date_traitement < date_retour:
-                            fss.append((status_diagnostic, date_traitement, "A préciser."))
-                            fss.append((status_traitement, date_traitement + relativedelta(days=1), "A préciser."))
-                        old_clos_date = date_retour + relativedelta(days=-1)
-                        fss.append((status_clos, old_clos_date, "La date de clôture est indéterminée (par défaut positionnée à 1 jour avant le retour)."))
-                        fss.append((status_diagnostic, date_retour,  "Retour en diag mais pourrait etre en trait. A préciser"))
-                if date_clos:
-                    if date_retour and date_clos < date_retour:
-                        print 'La date de clôture ne peut être antérieure à la date de retour!'
-                    else:
-                        fss.append((status_clos, date_clos, None))
-                else:
+                if date_traitement:
+                    fss.append((status_diagnostic, date_traitement, "Inscription en diag mais pourrait etre en trait. A préciser"))
+                if (date_retour and date_clos and date_retour > date_clos) or not date_clos:
                     if old_id in tables_data['pcs'].keys():
                         pcs = tables_data['pcs'][old_id]
                         last_pc = pcs[len(pcs)-1]
@@ -623,12 +582,8 @@ def import_dossiers_phase_1():
                             status, date, msg = fss[len(fss)-1]
                             last_date = date + relativedelta(days=1)
                             fss.append((status_traitement, last_date, "Date à préciser."))
-                        else:
-                            pass
-    #                        pc idag, reste en diag.
-                    else:
-                        pass
-#                        pas de pc, par defaut en diag.
+                else:
+                    fss.append((status_clos, date_clos, None))
 
                 # Il faut l'historique des actes du patient
                 # Il faut pour chaque acte assigner à la pc
