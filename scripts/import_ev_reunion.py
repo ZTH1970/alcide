@@ -98,6 +98,7 @@ def create_event(line, service, tables_data):
         exception_to = None
         exception_error = False
         if line['rr_ev_id']:
+            assert line['rr_ev_id'].startswith('ev_')
             ev_id = int(line['rr_ev_id'][3:])
             exception_date = _to_date(line['date_rdv'])
             exception_to = Event.objects.filter(old_ev_id=ev_id,
