@@ -15,7 +15,7 @@ from django.db import transaction
 from calebasse.agenda.models import EventWithAct
 from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
-from calebasse.ressources.models import Service, Room
+from calebasse.ressources.models import Service
 from calebasse.ressources.models import ActType
 from calebasse.actes.models import Act, ActValidationState
 
@@ -391,7 +391,6 @@ def main():
                     end_datetime=row['end_datetime'],
                     act_type=row['act_type'],
                     old_rs_id=row['id'],
-                    room=Room(id=1),
                     title=row['enfant'].display_name,
                     description=row['texte'])
             row['event'] = event
@@ -438,7 +437,6 @@ def main():
                     end_datetime=row['end_datetime'],
                     act_type=row['act_type'],
                     old_rr_id=row['id'],
-                    room=Room(id=1),
                     title=row['enfant'].display_name,
                     description=row['texte'],
                     recurrence_periodicity=row['recurrence_periodicity'],
@@ -465,7 +463,6 @@ def main():
                         end_datetime=row['end_datetime'],
                         act_type=row['act_type'],
                         old_rs_id=row['id'],
-                        room=Room(id=1),
                         title=row['enfant'].display_name,
                         description=row['texte'],
                         exception_to=event,
