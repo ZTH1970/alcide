@@ -90,7 +90,7 @@ JOURS = {1: 'lundi',
 
 dic_worker = {}
 
-def load_csv(db, name):
+def load_csv(db, name, offset=0, limit=9999999, id_column=0):
     records = []
     idx = {}
 
@@ -99,7 +99,8 @@ def load_csv(db, name):
     cols = csvlines.next()
     i = 0
     for line in csvlines:
-        # ignore line for timetable
+        if not (offset <= int(line[id_column]) < offset+limit):
+            continue
         data = _get_dict(cols, line)
         records.append(data)
         idx[data['id']] = i
@@ -375,7 +376,7 @@ def main():
         print ' Rdv individuels invalides', invalid_single
 
         # create single rdv
-        limit = 100000
+        limit = 1000000
         # single RS
         i = 0 
         rows = []
@@ -481,84 +482,89 @@ def main():
         print "Actes before delete", qs.count()
         qs.delete()
         print "Actes afterdelete", qs.count()
-        actes_data, actes_idx, actes_cols = load_csv(db, 'actes')
-        actes_cols.extend(['workers','invalid'])
-        invalid_actes_writer.writerow(map(lambda x: x.encode('utf-8'), actes_cols))
-        actes_details_data, _, _ = load_csv(db, 'details_actes')
-        handle_details(actes_data, actes_idx, actes_details_data, 'acte_id')
-        act_to_event = dict()
-        for row in rs_data:
-            if row.get('event') and row['base_id']:
-                act_to_event[row['base_id']] = row['event']
-        rows = []
-        actes = []
-        validation_state = []
-        doctors = []
-        i = 0
-        j = 0
-        k = 0
-        DoctorThrough = Act.doctors.through
-        for row in actes_data:
-            row.setdefault('workers', set())
-            row['date'] = _to_date(row['date_acte'])
-            row['time'] = _to_time(row['heure'])
-            row['duration'] = _to_duration(row['duree'])
-            row['is_billed'] = row['marque'] == '1'
-            row['validation_locked'] = row['date'] < date(2013, 1, 3)
-            set_enfant(row)
-            set_act_type(row)
-            row['parent_event'] = act_to_event.get(row['id'])
-            row['state'] = map_cs[service.name].get(row['cs'],
-                    'VALIDE')
-            duration = row['duration']
-            if duration:
-                duration = duration.seconds // 60
-            if row.get('invalid'):
-                invalid_actes_writer.writerow([ unicode(row[col]).encode('utf-8') for col in actes_cols ])
-                continue
-            i += 1
-            if row['parent_event']:
-                j += 1
-            else:
-                t = row['time']
-                if t:
-                    query = 'EXTRACT(hour from start_datetime) = %i and EXTRACT(minute from start_datetime) = %i' % (t.hour, t.minute)
-                    qs = EventWithAct.objects.for_today(row['date']).filter(patient=row['enfant']).extra(where=[query])
-                    if qs:
-                        try:
-                            row['parent_event'] = qs.get()
-                        except:
-                            print qs
-                            import pdb
-                            pdb.set_trace()
+        limit = 20000
+        for offset in range(0, 99999999, limit):
+            actes_data, actes_idx, actes_cols = load_csv(db, 'actes', offset=offset, limit=limit)
+            print 'Loading', len(actes_data), 'acts'
+            if not actes_data:
+                break
+            actes_cols.extend(['workers','invalid'])
+            invalid_actes_writer.writerow(map(lambda x: x.encode('utf-8'), actes_cols))
+            actes_details_data, _, _ = load_csv(db, 'details_actes', offset=offset, limit=limit, id_column=1)
+            handle_details(actes_data, actes_idx, actes_details_data, 'acte_id')
+            act_to_event = dict()
+            for row in rs_data:
+                if row.get('event') and row['base_id']:
+                    act_to_event[row['base_id']] = row['event']
+            rows = []
+            actes = []
+            validation_state = []
+            doctors = []
+            i = 0
+            j = 0
+            k = 0
+            DoctorThrough = Act.doctors.through
+            for row in actes_data:
+                row.setdefault('workers', set())
+                row['date'] = _to_date(row['date_acte'])
+                row['time'] = _to_time(row['heure'])
+                row['duration'] = _to_duration(row['duree'])
+                row['is_billed'] = row['marque'] == '1'
+                row['validation_locked'] = row['date'] < date(2013, 1, 3)
+                set_enfant(row)
+                set_act_type(row)
+                row['parent_event'] = act_to_event.get(row['id'])
+                row['state'] = map_cs[service.name].get(row['cs'],
+                        'VALIDE')
+                duration = row['duration']
+                if duration:
+                    duration = duration.seconds // 60
+                if row.get('invalid'):
+                    invalid_actes_writer.writerow([ unicode(row[col]).encode('utf-8') for col in actes_cols ])
+                    continue
+                i += 1
+                if row['parent_event']:
+                    j += 1
+                else:
+                    t = row['time']
+                    if t:
+                        query = 'EXTRACT(hour from start_datetime) = %i and EXTRACT(minute from start_datetime) = %i' % (t.hour, t.minute)
+                        qs = EventWithAct.objects.for_today(row['date']).filter(patient=row['enfant']).extra(where=[query])
+                        if qs:
+                            try:
+                                row['parent_event'] = qs.get()
+                            except:
+                                print qs
+                                import pdb
+                                pdb.set_trace()
 
-                        k += 1
-            act = Act.objects.create(
-                    date=row['date'],
-                    time=row['time'],
-                    _duration=duration,
-                    is_billed=row['is_billed'],
-                    act_type=row['act_type'],
-                    patient=row['enfant'],
-                    validation_locked=row['validation_locked'],
-                    parent_event=row['parent_event'])
-            rows.append(row)
-            actes.append(act)
-            validation_state.append(
-                    ActValidationState(act=act,
-                        state_name=row['state'],
-                        previous_state=None))
-            for worker in row['workers']:
-                doctors.append(DoctorThrough(
-                    act_id=act.id,
-                    worker_id=worker.id))
-        batch_bulk(ActValidationState, validation_state, 500)
-        batch_bulk(DoctorThrough, doctors, 500)
+                            k += 1
+                act = Act.objects.create(
+                        date=row['date'],
+                        time=row['time'],
+                        _duration=duration,
+                        is_billed=row['is_billed'],
+                        act_type=row['act_type'],
+                        patient=row['enfant'],
+                        validation_locked=row['validation_locked'],
+                        parent_event=row['parent_event'])
+                rows.append(row)
+                actes.append(act)
+                validation_state.append(
+                        ActValidationState(act=act,
+                            state_name=row['state'],
+                            previous_state=None))
+                for worker in row['workers']:
+                    doctors.append(DoctorThrough(
+                        act_id=act.id,
+                        worker_id=worker.id))
+            batch_bulk(ActValidationState, validation_state, 500)
+            batch_bulk(DoctorThrough, doctors, 500)
 
-        print 'Actes:'
-        print ' - importe ', i
-        print ' - natual link to rdv', j
-        print ' - complicated link to rdv', k
+            print 'Actes:'
+            print ' - importe ', i
+            print ' - natual link to rdv', j
+            print ' - complicated link to rdv', k
 
 
     invalid_rs_csv.close()
