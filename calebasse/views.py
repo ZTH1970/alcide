@@ -10,8 +10,8 @@ from calebasse.ressources.models import Service
 APPLICATIONS = (
         (u'Gestion des dossiers', 'dossiers'),
         (u'Agenda', 'agenda'),
-        (u'Saisie des actes', 'actes'),
-        (u'Facturation et décompte', 'facturation'),
+#        (u'Saisie des actes', 'actes'),
+#        (u'Facturation et décompte', 'facturation'),
         (u'Gestion des personnes', 'personnes'),
         (u'Gestion des ressources', 'ressources'),
 )
