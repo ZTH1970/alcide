@@ -23,7 +23,6 @@ class Appointment(object):
         self.patient_record_paper_id = None
         self.event_id = None
         self.event_type = None
-        self.event_id = None
         self.workers = None
         self.workers_initial = None
         self.workers_codes = None

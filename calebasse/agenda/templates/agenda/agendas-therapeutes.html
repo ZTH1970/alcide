@@ -25,7 +25,7 @@
  </thead>
  <tbody>
    {% for appointment in worker_agenda.appointments %}
-   <tr>
+   <tr data-event-id="{{ appointment.event_id }}">
     <td class="col-time">{{ appointment.begin_hour }}</td>
     <td class="col-duration">{% if appointment.length %}{{ appointment.length }}min{% endif %}</td>
     <td class="col-record-id">{% if appointment.patient_record_id %}
