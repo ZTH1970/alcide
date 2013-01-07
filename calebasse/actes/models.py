@@ -145,6 +145,12 @@ class Act(models.Model):
                 pass
         return None
 
+    def is_new(self):
+        states = self.actvalidationstate_set.all()
+        states_len = len(states)
+        return states_len == 0 or \
+            (states_len == 1 and states[0].state_name == 'NON_VALIDE')
+
     def is_absent(self):
         state = self.get_state()
         if state and state.state_name in ('ABS_NON_EXC', 'ABS_EXC', 'ABS_INTER', 'ANNUL_NOUS',
