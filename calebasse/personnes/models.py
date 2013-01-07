@@ -357,8 +357,8 @@ class HolidayQuerySet(query.QuerySet):
     def future(self):
         return self.filter(end_date__gte=date.today())
 
-    def today(self):
-        today = date.today()
+    def today(self, today=None):
+        today = today or date.today()
         return self.filter(start_date__lte=today,
                 end_date__gte=today)
 
