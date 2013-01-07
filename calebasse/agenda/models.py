@@ -431,6 +431,7 @@ class EventWithAct(Event):
         act.doctors = self.participants.select_subclasses()
         act.act_type = self.act_type
         act.patient = self.patient
+        act.parent_event = self
         act.date = self.start_datetime.date()
         act.save()
 
@@ -438,41 +439,6 @@ class EventWithAct(Event):
         '''Force event_type to be patient meeting.'''
         self.event_type = EventType(id=1)
         super(EventWithAct, self).save(*args, **kwargs)
-        # list of occurences may have changed
-        from ..actes.models import Act
-        occurences = list(self.all_occurences())
-        acts = Act.objects.filter(parent_event=self)
-        occurences_by_date = dict((o.start_datetime.date(), o) for o in occurences)
-        acts_by_date = dict()
-        for a in acts:
-            # sanity check
-            assert a.date not in acts_by_date
-            acts_by_date[a.date] = a
-        for a in acts:
-            o = occurences_by_date.get(a.date)
-            if o:
-                o.update_act(a)
-            else:
-                if len(a.actvalidationstate_set.all()) > 1:
-                    a.parent_event = None
-                    a.save()
-                else:
-                    a.delete()
-        for o in occurences:
-            if o.start_datetime.date() in acts_by_date:
-                continue
-            o.get_or_create_act()
-
-    def today_occurrence(self, today=None, match=False, upgrade=True):
-        '''For virtual occurrences reset the event_ptr_id'''
-        occurrence = super(EventWithAct, self).today_occurrence(today, match, upgrade)
-        if hasattr(occurrence, 'parent'):
-            old_save = occurrence.save
-            def save(*args, **kwargs):
-                occurrence.event_ptr_id = None
-                old_save(*args, **kwargs)
-            occurrence.save = save
-        return occurrence
 
     def is_event_absence(self):
         return self.act.is_absent()
