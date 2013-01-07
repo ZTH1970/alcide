@@ -19,9 +19,9 @@
 
 <table>
  <thead>
-  <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Libellé</th>
+  <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Libellé</th><th>P</th>
        <th>Absence</th>
-       <th>Type d'acte</th> <th>Commentaire</th> <th>Intervenants</th> </tr>
+       <th>Type d'acte</th> <th>Commentaire</th> <th>Intervenants</th></tr>
  </thead>
  <tbody>
    {% for appointment in worker_agenda.appointments %}
@@ -33,6 +33,7 @@
       ({{ appointment.patient_record_id }}){% endif %}
     </td>
     <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
+    <td/>
     <td> {% if appointment.act_absence %}{{ appointment.act_absence }}{% endif %}</td>
     <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
     <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
