@@ -394,19 +394,6 @@ class EventWithAct(Event):
         verbose_name=u'Convoqué')
 
 
-    def delete(self, *args, **kwargs):
-        if self.recurrence_periodicity is None:
-            # clear all linked exceptions
-            pass
-        elif self.exception_to is not None:
-            pass
-        elif hasattr(self, 'parent'):
-            pass
-        else:
-            # clear all linked exceptions
-            pass
-        super(EventWithAct, self).delete(*args, **kwargs)
-
     @property
     def act(self):
         return self.get_or_create_act()
