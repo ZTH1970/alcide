@@ -1,9 +1,9 @@
 
 from ajax_select import LookupChannel
 from calebasse.dossiers.models import PatientRecord, PatientAddress
+from django.core.exceptions import PermissionDenied
 
 class PatientRecordLookup(LookupChannel):
-
     model = PatientRecord
     search_field = 'display_name'
 
@@ -14,9 +14,11 @@ class PatientRecordLookup(LookupChannel):
             qs = qs.filter(service__name=service)
         return qs
 
+    def check_auth(self, request):
+        if not request.user.is_authenticated():
+            raise PermissionDenied
 
 class PatientAddressLookup(LookupChannel):
-
     model = PatientAddress
     search_field = 'display_name'
 
@@ -25,3 +27,7 @@ class PatientAddressLookup(LookupChannel):
         if request.session.has_key('patientrecord_id'):
             qs = qs.filter(patientcontact__id=request.session['patientrecord_id'])
         return qs
+
+    def check_auth(self, request):
+        if not request.user.is_authenticated():
+            raise PermissionDenied
