@@ -400,6 +400,9 @@ class EventWithAct(Event):
 
     @property
     def act(self):
+        for act in self.act_set.all():
+            if act.date == self.start_datetime.date():
+                return act
         return self.get_or_create_act()
 
     def get_or_create_act(self, today=None):
