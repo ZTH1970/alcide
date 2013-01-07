@@ -66,11 +66,9 @@ class AgendaServiceActivityView(TemplateView):
         context = super(AgendaServiceActivityView, self).get_context_data(**kwargs)
 
         appointments_times = dict()
-        appoinment_type = EventType.objects.get(id=1)
-        meeting_type = EventType.objects.get(id=2)
         plain_events = Event.objects.for_today(self.date) \
-                .filter(services=self.service,
-                        event_type__in=[appoinment_type, meeting_type])
+                .filter(services=self.service) \
+                .select_subclasses()
         events = [ e.today_occurrence(self.date) for e in plain_events ]
         for event in events:
             start_datetime = event.start_datetime.strftime("%H:%M")
@@ -83,18 +81,14 @@ class AgendaServiceActivityView(TemplateView):
             if length.seconds:
                 length = length.seconds / 60
                 appointment['length'] = "%sm" % length
-            if event.event_type == EventType.objects.get(id=1):
+            if event.event_type_id == 1:
                 appointment['type'] = 1
-                event_act = event.eventwithact
-                appointment['label'] = event_act.patient.display_name
-                appointment['act'] = event_act.act_type.name
-            elif event.event_type == EventType.objects.get(id=2):
+                appointment['label'] = event.patient.display_name
+                appointment['act'] = event.act_type.name
+            else:
                 appointment['type'] = 2
                 appointment['label'] = '%s - %s' % (event.event_type.label,
                                                     event.title)
-            else:
-                appointment['type'] = 0
-                appointment['label'] = '???'
             appointment['participants'] = event.participants.all()
             appointments_times[start_datetime]['row'] += 1
             appointments_times[start_datetime]['appointments'].append(appointment)
