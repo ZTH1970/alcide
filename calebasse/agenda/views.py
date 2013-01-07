@@ -362,7 +362,7 @@ class JoursNonVerrouillesView(TemplateView):
             if max_day > today:
                 max_day = today
             days &= set(get_days_with_acts_not_locked(min_day, max_day, self.service))
-        context['days_not_locked'] = days
+        context['days_not_locked'] = sorted(days)
         return context
 
 class RessourcesView(TemplateView):
