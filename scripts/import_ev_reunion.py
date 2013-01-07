@@ -282,6 +282,7 @@ def main():
                         people_id=participant.people_ptr_id)
                 participants_through.append(pt)
         ParticipantsThrough.objects.bulk_create(participants_through)
+        logging.info('%s created %s participants links', service.name, len(participants_through))
         ServicesThrough.objects.bulk_create([
             ServicesThrough(service_id=service.id, event_id=event_id) for event_id in events_by_id.values()])
         participants = {}
