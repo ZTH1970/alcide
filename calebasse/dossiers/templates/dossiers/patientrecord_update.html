@@ -438,7 +438,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <div id="tabs-5"> <!-- Actes passés -->
         {% for act, state in last_rdvs %}
         <div class="frame">
-            <h3>{% firstof act.start_datetime|date:"d/m/y H:m" act.date %} {{ act.act_type }}</h3>
+            <h3>{% firstof act.start_datetime|date:"d/m/y H:i" act.date %} {{ act.act_type }}</h3>
             <ul>
             {% if act.doctors.all %}
             <li><label>Praticiens :</label>
@@ -474,7 +474,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <div id="tabs-6"> <!-- Prochains rendez-vous -->
         {% for act, state in next_rdvs %}
         <div class="frame">
-            <h3>{% firstof act.start_datetime|date:"d/m/y H:m" act.date %} {{ act.act_type }}</h3>
+            <h3>{% firstof act.start_datetime|date:"d/m/y H:i" act.date %} {{ act.act_type }}</h3>
             <ul>
             {% if act.doctors.all %}
             <li><label>Praticiens :</label>
