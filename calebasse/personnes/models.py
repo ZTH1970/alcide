@@ -52,8 +52,8 @@ class People(BaseModelMixin, models.Model):
     def get_initials(self):
         initials = []
         if self.first_name:
-            initials.append(self.first_name[0].upper())
-        initials.append(self.last_name[0].upper())
+            initials = [name[0].upper() for name in ' '.join(self.first_name.split('-')).split()]
+        initials += [name[0].upper() for name in ' '.join(self.last_name.split('-')).split()]
         return ''.join(initials)
 
     class Meta:
