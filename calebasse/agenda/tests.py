@@ -22,7 +22,7 @@ class EventTest(TestCase):
 
     def test_triweekly_events(self):
         event = Event.objects.create(start_datetime=datetime(2012, 10, 20, 13),
-                end_datetime=datetime(2012, 10, 20, 13, 30), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 10, 20, 13, 30), event_type=EventType(id=2),
                 recurrence_periodicity=3, recurrence_end_date=date(2012, 12, 1))
         # Test model
         self.assertEqual(event.timedelta(), timedelta(minutes=30))
@@ -58,7 +58,7 @@ class EventTest(TestCase):
 
     def test_odd_week_events(self):
         event = Event.objects.create(start_datetime=datetime(2012, 10, 27, 13),
-                end_datetime=datetime(2012, 10, 27, 13, 30), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 10, 27, 13, 30), event_type=EventType(id=2),
                 recurrence_periodicity=12, recurrence_end_date=date(2012, 11, 10))
         occurences = list(event.all_occurences())
         self.assertEqual(len(occurences), 2)
@@ -73,7 +73,7 @@ class EventTest(TestCase):
 
     def test_first_week_of_month(self):
         event = Event.objects.create(start_datetime=datetime(2012, 9, 3, 13),
-                end_datetime=datetime(2012, 9, 3, 13, 30), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 9, 3, 13, 30), event_type=EventType(id=2),
                 recurrence_periodicity=6, recurrence_end_date=date(2012, 11, 10))
         occurences = list(event.all_occurences())
         self.assertEqual(len(occurences), 3)
@@ -119,12 +119,11 @@ class EventTest(TestCase):
                 periodicity=2, until=date(2020, 10, 16))
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 2)
-        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
-                2)
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 0)
+        [o.act for o in occurences]
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 2)
         self.assertEqual(occurences[0].act.date, occurences[0].start_datetime.date())
         self.assertEqual(occurences[1].act.date, occurences[1].start_datetime.date())
-        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
-                2)
         appointment2.recurrence_periodicity = None
         appointment2.save()
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
@@ -134,14 +133,14 @@ class EventTest(TestCase):
         appointment2.save()
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 2)
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 1)
+        [o.act for o in occurences]
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 2)
         occurences[1].act.set_state('ANNUL_NOUS', self.creator)
-        appointment2.recurrence_periodicity = None
-        appointment2.save()
+        occurences[0].delete()
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 1)
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 1)
-        self.assertEqual(Act.objects.count(), 2)
 
     def test_weekly_event_with_exception(self):
         '''
@@ -151,13 +150,13 @@ class EventTest(TestCase):
             - a cancellation for the third occurrence.
         '''
         event = Event.objects.create(start_datetime=datetime(2012, 10, 1, 13),
-                end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=2),
                 recurrence_periodicity=1, recurrence_end_date=date(2012, 10, 15))
         exception1 = Event.objects.create(start_datetime=datetime(2012, 10, 9, 13, 30),
-                end_datetime=datetime(2012, 10, 9, 14), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 10, 9, 14), event_type=EventType(id=2),
                 exception_to=event, exception_date=date(2012, 10, 8))
         exception2 = Event.objects.create(start_datetime=datetime(2012, 10, 15, 13, 30),
-                end_datetime=datetime(2012, 10, 15, 14), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 10, 15, 14), event_type=EventType(id=2),
                 exception_to=event, exception_date=date(2012, 10, 15), canceled=True)
         a = Event.objects.for_today(date(2012, 10, 1))
         self.assertEqual(list(a), [event])
@@ -179,7 +178,7 @@ class EventTest(TestCase):
         therapist1 = Worker.objects.create(first_name='Pierre', last_name='PaulJacques', type=wtype)
         therapist2 = Worker.objects.create(first_name='Bob', last_name='Leponge', type=wtype)
         event = Event.objects.create(start_datetime=datetime(2012, 10, 1, 13),
-                end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=1),
+                end_datetime=datetime(2012, 10, 1, 13, 30), event_type=EventType(id=2),
                 recurrence_periodicity=1, recurrence_end_date=date(2012, 10, 15))
         event.participants = [ therapist1 ]
         occurrences = list(event.all_occurences())
