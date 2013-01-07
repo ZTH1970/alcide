@@ -40,6 +40,9 @@ class Appointment(object):
         else:
             self.begin_hour = None
 
+    def __get_initials(self, personns):
+        pass
+
     def init_from_event(self, event, service):
         """ """
         delta = event.end_datetime - event.start_datetime
@@ -61,21 +64,15 @@ class Appointment(object):
         if event.room:
             self.room = event.room.name
         self.description = event.description
+        self.workers_initial = ""
+        self.workers_code = []
         if event.event_type.id == 1:
             event_act = event.act
-            workers = event_act.doctors.all()
+            self.workers = event_act.doctors.all()
             self.convocation_sent = event.convocation_sent
             self.patient = event_act.patient
             self.patient_record_id = event_act.patient.id
             self.patient_record_paper_id = event_act.patient.paper_id
-            self.workers_initial = ""
-            self.workers_code = []
-            self.workers = workers
-            for worker in workers:
-                if worker.first_name:
-                    self.workers_initial += " " + worker.first_name.upper()[0]
-                self.workers_initial += worker.last_name.upper()[0]
-                self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
             self.act_type = event_act.act_type.name
             self.act_state = event_act.get_state().state_name
             if self.act_state not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
@@ -93,6 +90,12 @@ class Appointment(object):
             self.validation = (event_act, state, display_name, validation_states)
         else:
             self.event_type = event.event_type
+            self.workers = event.participants.all()
+            for worker in self.workers:
+                if worker.first_name:
+                    self.workers_initial += " " + worker.first_name.upper()[0]
+                self.workers_initial += worker.last_name.upper()[0]
+                self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
 
     def init_free_time(self, length, begin_time):
         """ """
