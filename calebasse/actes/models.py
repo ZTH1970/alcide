@@ -99,7 +99,8 @@ class Act(models.Model):
             verbose_name=u'Pause facturation', db_index=True)
     parent_event = models.ForeignKey('agenda.Event',
             verbose_name=u'Rendez-vous lié',
-            blank=True, null=True)
+            blank=True, null=True,
+            on_delete=models.SET_NULL)
     VALIDATION_CODE_CHOICES = (
             ('absent', u'Absent'),
             ('present', u'Présent'),
