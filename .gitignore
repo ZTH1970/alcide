@@ -1,3 +1,4 @@
+.gitignore
 *.py[cod]
 
 # C extensions
@@ -33,3 +34,5 @@ nosetests.xml
 # Django files
 local_settings.py
 calebasse.sqlite3
+scripts/*/*/*.csv
+scripts/*/*.json
