@@ -259,6 +259,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                         | ( Q(recurrence_periodicity__isnull=False)
                             & (Q(recurrence_end_date__gte=today)
                                | Q(recurrence_end_date__isnull=True)))) \
+                .select_related() \
                 .prefetch_related('participants', 'exceptions__eventwithact', 'act_set__actvalidationstate_set')
         occurrences = []
         for event in qs:
