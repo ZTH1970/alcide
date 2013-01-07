@@ -87,8 +87,11 @@ class AgendaServiceActivityView(TemplateView):
                 appointment['act'] = event.act_type.name
             else:
                 appointment['type'] = 2
-                appointment['label'] = '%s - %s' % (event.event_type.label,
-                                                    event.title)
+                if event.event_type.label == 'Autre' and event.title:
+                    appointment['label'] = event.title
+                else:
+                    appointment['label'] = '%s - %s' % (event.event_type.label,
+                                                        event.title)
             appointment['participants'] = event.participants.all()
             appointments_times[start_datetime]['row'] += 1
             appointments_times[start_datetime]['appointments'].append(appointment)
