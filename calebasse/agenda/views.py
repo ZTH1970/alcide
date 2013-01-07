@@ -85,6 +85,7 @@ class AgendaServiceActivityView(TemplateView):
                 appointment['type'] = 1
                 appointment['label'] = event.patient.display_name
                 appointment['act'] = event.act_type.name
+                appointment['state'] = event.act.get_state()
             else:
                 appointment['type'] = 2
                 if event.event_type.label == 'Autre' and event.title:
