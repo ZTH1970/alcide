@@ -2,7 +2,7 @@
 
 import os
 
-from datetime import datetime
+from datetime import datetime, date
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
@@ -251,13 +251,32 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['service_id'] = self.service.id
         ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
         ctx['next_rdvs'] = []
-        for act in Act.objects.next_acts(ctx['object']).select_related():
-            state = act.get_state()
-            if not state.previous_state and state.state_name == 'NON_VALIDE':
+        Q = models.Q
+        today = date.today()
+        qs = EventWithAct.objects.filter(patient=ctx['object']) \
+                .filter(exception_to__isnull=True) \
+                .filter(Q(start_datetime__gte=today)
+                        | ( Q(recurrence_periodicity__isnull=False)
+                            & (Q(recurrence_end_date__gte=today)
+                               | Q(recurrence_end_date__isnull=True)))) \
+                .prefetch_related('participants', 'exceptions__eventwithact', 'act_set__actvalidationstate_set')
+        occurrences = []
+        for event in qs:
+            occurrences.extend(filter(lambda e: e.start_datetime.date() > today, event.all_occurences(limit=180)))
+        occurrences = sorted(occurrences, key=lambda e: e.start_datetime)
+        acts = Act.objects.filter(date__gte=today, patient=ctx['object']) \
+                .prefetch_related('actvalidationstate_set')
+        acts_by_date = dict((act.date, act.time) for act in acts)
+        for event in occurrences:
+            state = None
+            act = acts_by_date.get((event.start_datetime.date, event.start_datetime.time))
+            if act:
+                state = act.actvalidationstate_set.all()[0]
+            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
-            ctx['next_rdvs'].append((act, state))
+            ctx['next_rdvs'].append((event, state))
         ctx['last_rdvs'] = []
-        for act in Act.objects.last_acts(ctx['object']):
+        for act in Act.objects.last_acts(ctx['object']).prefetch_related('doctors'):
             state = act.get_state()
             if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
