@@ -452,16 +452,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             Salle : {{ act.parent_event.room }}
             </li>
             {% endif %}
-            <li>
-            {% if act.parent_event %}
-              {% if act.parent_event.convocation_sent %}
-                Convocation envoyé
-              {% else %}
-                Convocation non envoyé
-              {% endif %}
-            {% endif %}
-            </li>
-            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }} par {{ state.author }}
+            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }}.
             {% else %}
               Non pointé.
             {% endif %}
@@ -488,14 +479,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             Salle : {{ act.parent_event.room }}
             </li>
             {% endif %}
-            <li>
-            {% if act.convocation_sent %}
-            Convocation envoyé
-            {% else %}
-            Convocation non envoyé
-            {% endif %}
-            </li>
-            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }} par {{ state.author }}
+            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }}.
             {% else %}
               Non pointé.
             {% endif %}

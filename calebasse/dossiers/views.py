@@ -253,13 +253,13 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['next_rdvs'] = []
         for act in Act.objects.next_acts(ctx['object']).select_related():
             state = act.get_state()
-            if not state.previous_state:
+            if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['next_rdvs'].append((act, state))
         ctx['last_rdvs'] = []
         for act in Act.objects.last_acts(ctx['object']):
             state = act.get_state()
-            if not state.previous_state:
+            if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['last_rdvs'].append((act, state))
         ctx['status'] = []
