@@ -522,20 +522,6 @@ def main():
                 i += 1
                 if row['parent_event']:
                     j += 1
-                else:
-                    t = row['time']
-                    if t:
-                        query = 'EXTRACT(hour from start_datetime) = %i and EXTRACT(minute from start_datetime) = %i' % (t.hour, t.minute)
-                        qs = EventWithAct.objects.for_today(row['date']).filter(patient=row['enfant']).extra(where=[query])
-                        if qs:
-                            try:
-                                row['parent_event'] = qs.get()
-                            except:
-                                print qs
-                                import pdb
-                                pdb.set_trace()
-
-                            k += 1
                 act = Act.objects.create(
                         date=row['date'],
                         time=row['time'],
