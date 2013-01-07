@@ -17,6 +17,7 @@ class Appointment(object):
         self.length = length
         self.description = description
         self.room = room
+        self.is_recurrent = False
         self.convocation_sent = None
         self.other_services_names = []
         self.patient_record_id = None
@@ -49,6 +50,8 @@ class Appointment(object):
         self.event_id = event.id
         self.length = delta.seconds / 60
         self.title = event.title
+        if event.parent.recurrence_periodicity:
+            self.is_recurrent = True
         services = event.services.all()
         self.date = event.start_datetime.date()
         self.__set_time(time(event.start_datetime.hour, event.start_datetime.minute))
