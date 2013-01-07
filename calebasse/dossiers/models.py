@@ -444,10 +444,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     old_old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ancien ID', blank=True, null=True)
 
-    def __init__(self, *args, **kwargs):
-        super(PatientRecord, self).__init__(*args, **kwargs)
-        if not hasattr(self, 'service'):
+    def save(self, *args, **kwargs):
+        if not getattr(self, 'service', None):
             raise Exception('The field service is mandatory.')
+        super(PatientRecord, self).save(*args, **kwargs)
 
     def get_state(self):
         return self.last_state
