@@ -271,6 +271,8 @@ class Event(models.Model):
             event.id = None
             event.event_ptr_id = None
             old_save(*args, **kwargs)
+            if hasattr(self, 'exceptions_dict'):
+                self.exceptions_dict[event.start_datetime.date()] = event
             event.participants = old_participants
         event.save = save
         return event
