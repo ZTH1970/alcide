@@ -344,18 +344,36 @@ class Event(models.Model):
         assert self.start_datetime is not None
         self.sanitize() # init periodicity fields
         super(Event, self).save(*args, **kwargs)
+        self.acts_cleaning()
 
     def delete(self, *args, **kwargs):
-        # never delete, only cancel
-        from ..actes.models import Act
-        for a in Act.objects.filter(parent_event=self):
-            if len(a.actvalidationstate_set.all()) > 1:
-                a.parent_event = None
-                a.save()
-            else:
-                a.delete()
         self.canceled = True
-        self.save()
+        # save will clean acts
+        self.save(*args, **kwargs)
+
+    def acts_cleaning(self):
+        # list of occurences may have changed
+        from ..actes.models import Act
+        if self.exception_to:
+            # maybe a new exception, so look for parent acts with same date
+            # as exception date
+            acts = Act.objects.filter(models.Q(parent_event=self)
+                    |models.Q(parent_event=self.exception_to,
+                        date=self.exception_date))
+        else:
+            acts = Act.objects.filter(parent_event=self)
+        acts = acts.prefetch_related('actvalidationstate_set')
+        if acts:
+            eventwithact = self.eventwithact
+            for act in acts:
+                if act.is_new():
+                    if self.match_date(act.date):
+                        if self.canceled:
+                            act.delete()
+                        else:
+                            eventwithact.update_act(act)
+                    else:
+                        act.delete()
 
     def to_interval(self):
         return Interval(self.start_datetime, self.end_datetime)
