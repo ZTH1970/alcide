@@ -85,8 +85,7 @@
     <a href="#" class="generate-mail-btn" data-dossier-id="{{ appointment.patient_record_id }}" data-date="{{date|date:"Y-m-d"}}" data-event-id="{{ appointment.event_id }}" data-next-url="{{ request.get_full_path }}">Courrier</a>
     {% endif %}
     {% if appointment.validation %}
-      <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong>, le {{ appointment.validation.1.created }} par {{ appointment.validation.1.author }}
-          {% if appointment.validation.1.auto %}(par validation automatique){% endif %}. {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
+      <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong>, le {{ appointment.validation.1.created }}. {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
         {% else %}
           Non pointé.
         {% endif %}

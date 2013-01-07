@@ -44,8 +44,7 @@
       </h3>
       <div>
          <span>
-         {% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }} par {{ last_status.author }}
-           {% if last_status.auto %}(par validation automatique){% endif %}. {% if acte.is_billed %}<strong>Acte facturé</strong>{% endif %}
+         {% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }}. {% if acte.is_billed %}<strong>Acte facturé</strong>{% endif %}
          {% else %}
            Non pointé.
          {% endif %}
