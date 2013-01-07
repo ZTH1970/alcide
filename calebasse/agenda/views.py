@@ -45,7 +45,8 @@ class AgendaHomepageView(TemplateView):
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
         context['workers_types'] = []
-        workers = Worker.objects.filter(enabled=True).select_related()
+        workers = Worker.objects.filter(enabled=True).select_related() \
+                .prefetch_related('services')
         worker_by_type = {}
         for worker in workers:
             workers_for_type = worker_by_type.setdefault(worker.type, [])
@@ -66,10 +67,19 @@ class AgendaServiceActivityView(TemplateView):
         context = super(AgendaServiceActivityView, self).get_context_data(**kwargs)
 
         appointments_times = dict()
-        plain_events = Event.objects.for_today(self.date) \
+        events = Event.objects.for_today(self.date) \
+                .exclude(event_type_id=1) \
                 .filter(services=self.service) \
-                .select_subclasses()
-        events = [ e.today_occurrence(self.date) for e in plain_events ]
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('participants', 'exceptions')
+        eventswithact = EventWithAct.objects.for_today(self.date) \
+                .filter(services=self.service) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('participants', 'exceptions')
+        events = [ e.today_occurrence(self.date) for e in events ] \
+             + [ e.today_occurrence(self.date) for e in eventswithact ]
         for event in events:
             start_datetime = event.start_datetime.strftime("%H:%M")
             if not appointments_times.has_key(start_datetime):
@@ -321,12 +331,31 @@ class AgendasTherapeutesView(AgendaHomepageView):
                 filter(services=self.service). \
                 for_today(self.date). \
                 order_by('start_date')
-        holidays = Holiday.objects.select_related('worker'). \
-                for_period(self.date, self.date). \
-                order_by('start_date')
-        plain_events = Event.objects.for_today(self.date) \
-                .order_by('start_datetime').select_subclasses()
-        events = [ e.today_occurrence(self.date) for e in plain_events ]
+        holidays = Holiday.objects.select_related('worker') \
+                .for_period(self.date, self.date) \
+                .order_by('start_date') \
+                .select_related()
+        events = Event.objects.for_today(self.date) \
+                .exclude(event_type_id=1) \
+                .filter(services=self.service) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('services',
+                        'exceptions',
+                        'participants')
+        eventswithact = EventWithAct.objects.for_today(self.date) \
+                .filter(services=self.service) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related(
+                        'services',
+                        'patient__service',
+                        'act_set__actvalidationstate_set', 
+                        'exceptions', 'participants')
+        events = [ e.today_occurrence(self.date) for e in events ] \
+             + [ e.today_occurrence(self.date) for e in eventswithact ]
+        for e in events:
+            e.workers_ids = set(p.id for p in e.participants.all())
 
         events_workers = {}
         time_tables_workers = {}
@@ -335,14 +364,17 @@ class AgendasTherapeutesView(AgendaHomepageView):
         context['workers'] = context['workers'].filter(services=self.service)
         for worker in context['workers']:
             time_tables_worker = [tt for tt in time_tables if tt.worker.id == worker.id]
-            events_worker = [o for o in events if worker.id in o.participants.values_list('id', flat=True)]
+            events_worker = [o for o in events if worker.id in o.workers_ids ]
             holidays_worker = [h for h in holidays if h.worker_id in (None, worker.id)]
             events_workers[worker.id] = events_worker
             time_tables_workers[worker.id] = time_tables_worker
             holidays_workers[worker.id] = holidays_worker
+            daily_appointments = get_daily_appointments(context['date'], worker, self.service,
+                        time_tables_worker, events_worker, holidays_worker)
+            if all(map(lambda x: x.type == 'busy-here', daily_appointments)):
+                continue
             context['workers_agenda'].append({'worker': worker,
-                    'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, events_worker, holidays_worker)})
+                    'appointments': daily_appointments})
 
         for worker_agenda in context.get('workers_agenda', []):
             patient_appointments = [x for x in worker_agenda['appointments'] if x.patient_record_id]
@@ -408,24 +440,41 @@ class AjaxWorkerTabView(TemplateView):
 
     def get_context_data(self, worker_id, **kwargs):
         context = super(AjaxWorkerTabView, self).get_context_data(**kwargs)
-        worker_id = int(worker_id)
+        worker = Worker.objects.get(id=worker_id)
 
         time_tables_worker = TimeTable.objects.select_related('worker'). \
-                filter(services=self.service, worker_id=worker_id). \
-                for_today(self.date). \
-                order_by('start_date')
-        holidays_worker = Holiday.objects.for_worker_id(worker_id). \
-                for_period(self.date, self.date). \
-                order_by('start_date')
-        plain_events = Event.objects.for_today(self.date) \
-                .order_by('start_datetime').select_subclasses()
-        events = [ e.today_occurrence(self.date) for e in plain_events ]
-        events_worker = [e for e in events if worker_id in e.participants.values_list('id', flat=True)]
+                filter(services=self.service, worker=worker) \
+                .for_today(self.date) \
+                .order_by('start_date') \
+                .select_related()
+        holidays_worker = Holiday.objects.for_worker(worker) \
+                .for_period(self.date, self.date) \
+                .order_by('start_date') \
+                .select_related()
+        events = Event.objects.for_today(self.date) \
+                .exclude(event_type_id=1) \
+                .filter(participants=worker) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('services',
+                        'exceptions',
+                        'participants')
+        eventswithact = EventWithAct.objects.for_today(self.date) \
+                .filter(participants=worker) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('patient__addresses',
+                        'patient__addresses__patientcontact_set',
+                        'services',
+                        'patient__service',
+                        'act_set__actvalidationstate_set', 
+                        'exceptions', 'participants')
+        events = [ e.today_occurrence(self.date) for e in events ] \
+             + [ e.today_occurrence(self.date) for e in eventswithact ]
 
-        worker = Worker.objects.get(pk=worker_id)
         context['worker_agenda'] = {'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, events_worker, holidays_worker)}
+                        time_tables_worker, events, holidays_worker)}
         return context
 
 class AjaxWorkerDisponibilityColumnView(TemplateView):
@@ -434,21 +483,32 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
 
     def get_context_data(self, worker_id, **kwargs):
         context = super(AjaxWorkerDisponibilityColumnView, self).get_context_data(**kwargs)
-        worker_id = int(worker_id)
+        worker = Worker.objects.get(pk=worker_id)
 
         time_tables_worker = TimeTable.objects.select_related('worker'). \
-                filter(services=self.service, worker_id=worker_id). \
+                filter(services=self.service, worker=worker). \
                 for_today(self.date). \
                 order_by('start_date')
-        holidays_worker = Holiday.objects.for_worker_id(worker_id). \
+        holidays_worker = Holiday.objects.for_worker(worker). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
-        events = Event.objects.today_occurrences(self.date)
-        events_worker = [e for e in events if worker_id in e.participants.values_list('id', flat=True)]
+        events = Event.objects.for_today(self.date) \
+                .exclude(event_type_id=1) \
+                .filter(participants=worker) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('participants', 'exceptions')
+        eventswithact = EventWithAct.objects.for_today(self.date) \
+                .filter(participants=worker) \
+                .order_by('start_datetime') \
+                .select_related() \
+                .prefetch_related('participants', 'exceptions',
+                        'act_set__actvalidationstate_set')
 
-        worker = Worker.objects.get(pk=worker_id)
+        events = list(events) + list(eventswithact)
+        events = [ e.today_occurrence(self.date) for e in events ]
         time_tables_workers = {worker.id: time_tables_worker}
-        events_workers = {worker.id: events_worker}
+        events_workers = {worker.id: events}
         holidays_workers = {worker.id: holidays_worker}
 
         context['initials'] = worker.get_initials()
