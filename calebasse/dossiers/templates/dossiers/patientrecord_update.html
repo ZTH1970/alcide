@@ -461,7 +461,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
               {% endif %}
             {% endif %}
             </li>
-            <li>{% if state %}<strong>{{ state.state_name }}</strong>, le {{ state.created }} par {{ state.author }}
+            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }} par {{ state.author }}
             {% else %}
               Non pointé.
             {% endif %}
@@ -495,7 +495,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             Convocation non envoyé
             {% endif %}
             </li>
-            <li>{% if state %}<strong>{{ state.state_name }}</strong>, le {{ state.created }} par {{ state.author }}
+            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }} par {{ state.author }}
             {% else %}
               Non pointé.
             {% endif %}
