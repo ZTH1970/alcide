@@ -106,93 +106,97 @@ event_type_4 = EventType.objects.get(id=4)
 
 def create_event(line, service, tables_data, rs_by_id, events_by_id, events,
         participants_by_id, exceptions_set):
-    if line['id'] not in rs_by_id:
-        # Manage exception
-        exception_date = None
-        exception_to = None
-        exception_error = False
-        if line['rr_ev_id']:
-            assert line['rr_ev_id'].startswith('ev_')
-            ev_id = int(line['rr_ev_id'][3:])
-            exception_date = _to_date(line['date_rdv'])
-            exception_to = events_by_id.get(str(ev_id))
-            if exception_to:
-                p = (exception_date, exception_to)
-                if p in exceptions_set:
-                    logging.info("rs_id %s is duplicated" % line["id"])
-                    return
-                exceptions_set.add(p)
-            else:
-                exception_error = True
-        start_datetime = datetime.strptime(
-                line['date_rdv'][:-13] + ' ' + line['heure'][11:-4],
-                "%Y-%m-%d %H:%M:%S")
-        end_datetime = start_datetime + timedelta(
-                hours=int(line['duree'][11:-10]),
-                minutes=int(line['duree'][14:-7]),
-                )
-        participants = _get_therapists(line, 'rs', service)
-        if not participants:
-            logging.error("%s rs_id %s exception aucun participant importable" % (service.name,
-                line["id"]))
-            return
-        if not exception_error:
-            event = Event(
-                    title=line['libelle'][:60],
-                    description=line['texte'],
-                    event_type=event_type_4,
-                    start_datetime=start_datetime,
-                    end_datetime=end_datetime,
-                    old_rs_id=line['id'],
-                    exception_to = Event(id=exception_to),
-                    exception_date = exception_date
-                    )
-            participants_by_id[line['id']] = participants
-            events.append(event)
+    if line['id'] in rs_by_id:
+        logging.warning("%s rs %s already loaded", service.name, line['id'])
+        return
+    # Manage exception
+    exception_date = None
+    exception_to = None
+    exception_error = False
+    if line['rr_ev_id']:
+        assert line['rr_ev_id'].startswith('ev_')
+        ev_id = int(line['rr_ev_id'][3:])
+        exception_date = _to_date(line['date_rdv'])
+        exception_to = events_by_id.get(str(ev_id))
+        if exception_to:
+            p = (exception_date, exception_to)
+            if p in exceptions_set:
+                logging.info("rs_id %s is duplicated" % line["id"])
+                return
+            exceptions_set.add(p)
         else:
-            logging.error("%s rs_id %s exception pas d'ev trouve %s" % (service.name,
-                line["id"], line))
-
-def create_recurrent_event(line, service, tables_data, events, participants_by_id):
-    if not Event.objects.filter(old_ev_id=line['id'], services__in=[service]):
-        start_date = _to_date(line['date_debut'])
-        end_date = _to_date(line['date_fin'])
-        if end_date and start_date > end_date:
-            logging.warning('%s ev_id %s date_fin < date_debut' % \
-                    (service.name, line['id']))
-        time = _to_time(line['heure'])
-        duration = _to_duration(line['duree'])
-        start_datetime = datetime.combine(start_date, time)
-        end_datetime = start_datetime + duration
-
-        # connect rythme
-        rythme = int(line['rythme'])
-        if PERIOD_FAURE_NOUS.get(rythme):
-            recurrence_periodicity = PERIOD_FAURE_NOUS[rythme]
-        else:
-            recurrence_periodicity = None
-            logging.warning('%s ev_id %s rythme not found %s' % \
-                    (service.name, line['id'], line['rythme']))
-
-        participants = _get_therapists(line, 'ev', service)
-        if not participants:
-            logging.error("%s ev_id %s exception aucun participant importable" % (service.name,
-                line["id"]))
-            return
-        try:
-            event = Event(
+            exception_error = True
+    start_datetime = datetime.strptime(
+            line['date_rdv'][:-13] + ' ' + line['heure'][11:-4],
+            "%Y-%m-%d %H:%M:%S")
+    end_datetime = start_datetime + timedelta(
+            hours=int(line['duree'][11:-10]),
+            minutes=int(line['duree'][14:-7]),
+            )
+    participants = _get_therapists(line, 'rs', service)
+    if not participants:
+        logging.error("%s rs_id %s exception aucun participant importable" % (service.name,
+            line["id"]))
+        return
+    if not exception_error:
+        event = Event(
+                title=line['libelle'][:60],
+                description=line['texte'],
+                event_type=event_type_4,
                 start_datetime=start_datetime,
                 end_datetime=end_datetime,
-                event_type=event_type_4,
-                title=line['libelle'],
-                old_ev_id=line['id'],
-                description=line['note'],
-                recurrence_periodicity=recurrence_periodicity,
-                recurrence_end_date=end_date)
-            participants_by_id[line['id']] = participants
-            events.append(event)
-        except django.core.exceptions.ValidationError, e:
-            logging.error(service.name + ' ev recurrence non valide %s %s' % (line, e))
+                old_rs_id=line['id'],
+                exception_to = Event(id=exception_to),
+                exception_date = exception_date
+                )
+        participants_by_id[line['id']] = participants
+        events.append(event)
+    else:
+        logging.error("%s rs_id %s exception pas d'ev trouve %s" % (service.name,
+            line["id"], line))
+
+def create_recurrent_event(line, service, tables_data, events, participants_by_id):
+    if Event.objects.filter(old_ev_id=line['id'], services__in=[service]):
+        logging.warning("%s ev %s already loaded", service.name, line['id'])
+        return
+    start_date = _to_date(line['date_debut'])
+    end_date = _to_date(line['date_fin'])
+    if end_date and start_date > end_date:
+        logging.warning('%s ev_id %s date_fin < date_debut' % \
+                (service.name, line['id']))
+    time = _to_time(line['heure'])
+    duration = _to_duration(line['duree'])
+    start_datetime = datetime.combine(start_date, time)
+    end_datetime = start_datetime + duration
+
+    # connect rythme
+    rythme = int(line['rythme'])
+    if PERIOD_FAURE_NOUS.get(rythme):
+        recurrence_periodicity = PERIOD_FAURE_NOUS[rythme]
+    else:
+        recurrence_periodicity = None
+        logging.warning('%s ev_id %s rythme not found %s' % \
+                (service.name, line['id'], line['rythme']))
+
+    participants = _get_therapists(line, 'ev', service)
+    if not participants:
+        logging.error("%s ev_id %s exception aucun participant importable" % (service.name,
+            line["id"]))
+        return
+    try:
+        event = Event(
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
+            event_type=event_type_4,
+            title=line['libelle'],
+            old_ev_id=line['id'],
+            description=line['note'],
+            recurrence_periodicity=recurrence_periodicity,
+            recurrence_end_date=end_date)
+        participants_by_id[line['id']] = participants
+        events.append(event)
+    except django.core.exceptions.ValidationError, e:
+        logging.error(service.name + ' ev recurrence non valide %s %s' % (line, e))
 
 @transaction.commit_on_success
 def main():
