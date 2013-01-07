@@ -269,6 +269,7 @@ class Event(models.Model):
         old_participants = list(self.participants.all())
         def save(*args, **kwargs): 
             event.id = None
+            event.event_ptr_id = None
             old_save(*args, **kwargs)
             event.participants = old_participants
         event.save = save
