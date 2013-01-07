@@ -70,17 +70,16 @@ class Appointment(object):
         self.workers_initial = ""
         self.workers_code = []
         if event.event_type.id == 1:
-            event_act = event.act
-            self.workers = event_act.doctors.all()
+            self.workers = event.participants.all()
             self.convocation_sent = event.convocation_sent
-            self.patient = event_act.patient
-            self.patient_record_id = event_act.patient.id
-            self.patient_record_paper_id = event_act.patient.paper_id
-            self.act_type = event_act.act_type.name
-            self.act_state = event_act.get_state().state_name
+            self.patient = event.patient
+            self.patient_record_id = event.patient.id
+            self.patient_record_paper_id = event.patient.paper_id
+            self.act_type = event.act_type.name
+            self.act_state = event.act.get_state().state_name
             if self.act_state not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
                 self.act_absence = VALIDATION_STATES.get(self.act_state)
-            state = event_act.get_state()
+            state = event.act.get_state()
             display_name = VALIDATION_STATES[state.state_name]
             if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
@@ -90,7 +89,7 @@ class Appointment(object):
                 if not 'CMPP' in [s.name for s in services] and \
                         'ACT_DOUBLE' in validation_states:
                     validation_states.pop('ACT_DOUBLE')
-            self.validation = (event_act, state, display_name, validation_states)
+            self.validation = (event.act, state, display_name, validation_states)
         else:
             self.event_type = event.event_type
             self.workers = event.participants.all()
