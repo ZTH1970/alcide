@@ -79,7 +79,7 @@ class Appointment(object):
                 self.act_absence = VALIDATION_STATES.get(self.act_state)
             state = event_act.get_state()
             display_name = VALIDATION_STATES[state.state_name]
-            if not state.previous_state:
+            if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             validation_states = None
             if service in services:
