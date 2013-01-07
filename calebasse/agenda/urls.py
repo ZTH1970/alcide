@@ -1,12 +1,14 @@
 from django.conf.urls import url, patterns, include
 
 from calebasse.cbv import TemplateView
+from django.views.decorators.csrf import csrf_exempt
 
 from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         NewEventView, AgendaServiceActivityView, UpdateAppointmentView,
         UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
         UnlockAllView, AgendasTherapeutesView, JoursNonVerrouillesView,
-        RessourcesView, AjaxWorkerTabView, AjaxWorkerDisponibilityColumnView)
+        RessourcesView, AjaxWorkerTabView, AjaxWorkerDisponibilityColumnView,
+        DeleteEventView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -25,6 +27,9 @@ agenda_patterns = patterns('',
             url(r'^update-event/(?P<pk>\d+)$',
                 UpdateEventView.as_view(),
                 name='update-event'),
+            url(r'^delete-event/(?P<pk>\d+)$',
+                csrf_exempt(DeleteEventView.as_view()),
+                name='delete-event'),
             url(r'^activite-du-service/$',
                 AgendaServiceActivityView.as_view(
                     template_name='agenda/service-activity.html'),

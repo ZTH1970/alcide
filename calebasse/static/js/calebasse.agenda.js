@@ -26,7 +26,7 @@ function enable_events(base) {
           if (r == true)
           {
             $.ajax({
-              url: '/api/event/' + $(this).data('event-id') + '/',
+              url: $(this).data('url'),
               type: 'DELETE',
               success: function(data) {
                   window.location.reload(true);

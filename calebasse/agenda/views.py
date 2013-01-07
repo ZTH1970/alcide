@@ -4,7 +4,7 @@ import datetime
 
 from django.db.models import Q
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from calebasse.cbv import TemplateView, CreateView, UpdateView
 from calebasse.agenda.models import Event, EventType, EventWithAct
@@ -198,6 +198,13 @@ class UpdateEventView(TodayOccurrenceMixin, UpdateView):
         kwargs['service'] = self.service
         return kwargs
 
+class DeleteEventView(TodayOccurrenceMixin, cbv.DeleteView):
+    model = Event
+    success_url = '..'
+
+    def delete(self, request, *args, **kwargs):
+        super(DeleteEventView, self).delete(request, *args, **kwargs)
+        return HttpResponse(status=204)
 
 class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
