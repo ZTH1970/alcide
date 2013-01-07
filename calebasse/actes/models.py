@@ -69,15 +69,15 @@ class Act(models.Model):
     objects = ActManager()
 
     patient = models.ForeignKey('dossiers.PatientRecord')
-    date = models.DateField(u'Date')
-    time = models.TimeField(u'Heure', blank=True, null=True, default=time())
+    date = models.DateField(u'Date', db_index=True)
+    time = models.TimeField(u'Heure', blank=True, null=True, default=time(), db_index=True)
     _duration = models.IntegerField(u'Durée en minutes', blank=True, null=True, default=0)
     act_type = models.ForeignKey('ressources.ActType',
             verbose_name=u'Type d\'acte')
     validation_locked = models.BooleanField(default=False,
-            verbose_name=u'Vérouillage')
+            verbose_name=u'Vérouillage', db_index=True)
     is_billed = models.BooleanField(default=False,
-            verbose_name=u'Facturé')
+            verbose_name=u'Facturé', db_index=True)
     switch_billable = models.BooleanField(default=False,
             verbose_name=u'Inverser type facturable')
     healthcare = models.ForeignKey('dossiers.HealthCare',
@@ -96,7 +96,7 @@ class Act(models.Model):
             limit_choices_to={'type__intervene': True},
             verbose_name=u'Intervenants')
     pause = models.BooleanField(default=False,
-            verbose_name=u'Pause facturation')
+            verbose_name=u'Pause facturation', db_index=True)
     parent_event = models.ForeignKey('agenda.Event',
             verbose_name=u'Rendez-vous lié',
             blank=True, null=True)

@@ -63,9 +63,9 @@ class Event(models.Model):
             blank=True, null=True,
             verbose_name=u'Exception à')
     exception_date = models.DateField(blank=True, null=True,
-            verbose_name=u'Reporté du')
+            verbose_name=u'Reporté du', db_index=True)
     # canceled can only be used with exception to
-    canceled = models.BooleanField(_('Annulé'))
+    canceled = models.BooleanField(_('Annulé'), db_index=True)
 
     PERIODS = (
             (1, u'Toutes les semaines'),
@@ -105,8 +105,9 @@ class Event(models.Model):
             verbose_name=u"Périodicité",
             default=None,
             blank=True,
-            null=True)
-    recurrence_week_day = models.PositiveIntegerField(default=0)
+            null=True,
+            db_index=True)
+    recurrence_week_day = models.PositiveIntegerField(default=0, db_index=True)
     recurrence_week_offset = models.PositiveIntegerField(
             choices=zip(OFFSET, OFFSET),
             verbose_name=u"Décalage en semaines par rapport au 1/1/1970 pour le calcul de période",
@@ -122,12 +123,13 @@ class Event(models.Model):
     recurrence_week_rank = models.PositiveIntegerField(
             verbose_name=u"Rang de la semaine dans le mois",
             choices=WEEK_RANKS,
-            blank=True, null=True)
+            blank=True, null=True, db_index=True)
     recurrence_week_parity = models.PositiveIntegerField(
             choices=PARITIES,
             verbose_name=u"Parité des semaines",
             blank=True,
-            null=True)
+            null=True,
+            db_index=True)
     recurrence_end_date = models.DateField(
             verbose_name=_(u'Fin de la récurrence'),
             blank=True, null=True,
@@ -391,7 +393,7 @@ class EventWithAct(Event):
         verbose_name=u'Type d\'acte')
     patient = models.ForeignKey('dossiers.PatientRecord')
     convocation_sent = models.BooleanField(blank=True,
-        verbose_name=u'Convoqué')
+        verbose_name=u'Convoqué', db_index=True)
 
 
     @property
