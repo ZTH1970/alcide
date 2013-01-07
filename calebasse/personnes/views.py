@@ -227,10 +227,10 @@ class HolidayView(cbv.TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(HolidayView, self).get_context_data(**kwargs)
         end_date = date.today() + relativedelta(months=self.months)
-        qs = models.Holiday.objects.for_service_workers(self.service).future()
+        qs = models.Holiday.objects.future().select_related('worker')
         today = date.today()
-        future_qs = qs.for_period(today, end_date)
-        group_qs = models.Holiday.objects.for_service(self.service)
+        future_qs = qs.for_period(today, end_date).select_related('worker')
+        group_qs = models.Holiday.objects.for_service(self.service).select_related()
         current_qs = qs.today()
         form = self.get_form()
         if form.is_valid() and form.cleaned_data.get('start_date'):
