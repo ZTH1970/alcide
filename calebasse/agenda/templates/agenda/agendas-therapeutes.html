@@ -12,7 +12,7 @@
 {% for worker_agenda in workers_agenda %}
 {% if worker_agenda.appointments %}
 <div class="worker-agenda">
-<h2>Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span></h2>
+  <h2>{{service_name }} - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span></h2>
 <h3>{{ date|date:"DATE_FORMAT" }}</h3>
 
 <span class="remarque">Remarque :</span>
