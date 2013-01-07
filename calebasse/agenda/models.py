@@ -225,7 +225,7 @@ class Event(models.Model):
             return self if date == self.start_datetime.date() else None
 
 
-    def today_occurrence(self, today=None, match=False):
+    def today_occurrence(self, today=None, match=False, upgrade=True):
         '''For a recurring event compute the today 'Event'.
 
            The computed event is the fake one that you cannot save to the database.
@@ -246,6 +246,8 @@ class Event(models.Model):
                 return None
             if exception_or_self != self:
                 return exception_or_self.today_occurrence(today)
+        if self.event_type_id == 1 and type(self) != EventWithAct and upgrade:
+           self = self.eventwithact
         if self.recurrence_periodicity is None:
             return self
         start_datetime = datetime.combine(today, self.start_datetime.timetz())
@@ -287,7 +289,7 @@ class Event(models.Model):
         if not hasattr(self, 'exceptions_dict'):
             self.exceptions_dict = dict()
             if self.exception_to_id is None:
-                for exception in self.exceptions.select_subclasses():
+                for exception in self.exceptions.all():
                     self.exceptions_dict[exception.exception_date] = exception
         return self.exceptions_dict
 
@@ -328,7 +330,7 @@ class Event(models.Model):
                     day += delta
             for exception in self.exceptions.all():
                 if exception.exception_date != exception.start_datetime.date():
-                    occurrences.append(exception)
+                    occurrences.append(exception.eventwithact if exception.event_type_id == 1 else exception)
             return sorted(occurrences, key=lambda o: o.start_datetime)
         else:
             return [self]
@@ -455,9 +457,9 @@ class EventWithAct(Event):
                 continue
             o.get_or_create_act()
 
-    def today_occurrence(self, today=None, match=False):
+    def today_occurrence(self, today=None, match=False, upgrade=True):
         '''For virtual occurrences reset the event_ptr_id'''
-        occurrence = super(EventWithAct, self).today_occurrence(today, match)
+        occurrence = super(EventWithAct, self).today_occurrence(today, match, upgrade)
         if hasattr(occurrence, 'parent'):
             old_save = occurrence.save
             def save(*args, **kwargs):
