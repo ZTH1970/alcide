@@ -211,7 +211,9 @@ class GroupHolidayForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(GroupHolidayForm, self).save(commit=False)
-        if not self.cleaned_data.get('for_all_services', False):
+        if self.cleaned_data.get('for_all_services', False):
+            instance.service = None
+        else:
             instance.service = self.service
         if commit:
             instance.save()
