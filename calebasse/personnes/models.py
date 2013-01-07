@@ -34,7 +34,8 @@ class People(BaseModelMixin, models.Model):
 
     objects = InheritanceManager()
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
-    first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
+    first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)',
+        blank=True, null=True)
     display_name = models.CharField(max_length=256,
             verbose_name=u'Nom complet', editable=False)
     gender = models.IntegerField(verbose_name=u"Genre", choices=GENDERS,
@@ -43,7 +44,10 @@ class People(BaseModelMixin, models.Model):
     phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
 
     def save(self, **kwargs):
-        self.display_name = self.first_name + ' ' + self.last_name.upper()
+        if self.first_name:
+            self.display_name = self.first_name + ' ' + self.last_name.upper()
+        else:
+            self.display_name = self.last_name.upper()
         super(People, self).save(**kwargs)
 
     def __unicode__(self):
