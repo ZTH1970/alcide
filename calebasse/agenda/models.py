@@ -426,9 +426,9 @@ class EventWithAct(Event):
                 return act
         return self.get_or_create_act()
 
-    def get_or_create_act(self, today=None):
+    def get_or_create_act(self):
         from ..actes.models import Act, ActValidationState
-        today = today or self.start_datetime.date()
+        today = self.start_datetime.date()
         act, created = Act.objects.get_or_create(patient=self.patient,
                 time=self.start_datetime.time(),
                 _duration=self.timedelta().seconds // 60,
