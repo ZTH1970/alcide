@@ -110,11 +110,13 @@ class NewEventForm(forms.ModelForm):
                 'room',
                 'participants',
                 'event_type',
+                'services',
                 'recurrence_periodicity',
                 'recurrence_end_date'
         )
         widgets = {
                 'start_datetime': forms.HiddenInput,
+                'services': forms.CheckboxSelectMultiple
         }
 
     def __init__(self, instance, service=None, **kwargs):
