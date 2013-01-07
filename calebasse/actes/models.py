@@ -152,7 +152,11 @@ class Act(models.Model):
         return False
 
     def get_state(self):
-        return self.actvalidationstate_set.latest('created')
+        states = sorted(self.actvalidationstate_set.all(),
+                key=lambda avs: avs.created, reverse=True)
+        if states:
+            return states[0]
+        return None
 
     def is_state(self, state_name):
         state = self.get_state()
