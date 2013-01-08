@@ -85,7 +85,7 @@ class Appointment(object):
                 state = None
             if not service in services:
                 validation_states = None
-            self.validation = (event_act, state, display_name, validation_states)
+            self.validation = (event.act, state, display_name, validation_states)
         else:
             self.event_type = event.event_type
             self.workers = event.participants.all()
