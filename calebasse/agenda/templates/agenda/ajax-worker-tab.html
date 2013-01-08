@@ -96,7 +96,7 @@
           {% csrf_token %}
           <input type="hidden" value="{{appointment.validation.0.id}}" name="acte-id">
           <select data-previous="{{ last_status.state_name }}" name="act_state">
-            {% for state_name, display_state_name in appointment.validation.3.items %}
+            {% for state_name, display_state_name in appointment.validation.3 %}
             <option value="{{ state_name }}" {% if state_name == appointment.validation.1.state_name %}selected{% endif %}>{{ display_state_name }}</option>
             {% endfor %}
           </select>

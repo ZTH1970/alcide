@@ -260,10 +260,14 @@ class AgendaServiceActValidationView(TemplateView):
             if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             actes.append((act, state, display_name))
-        context['validation_states'] = dict(VALIDATION_STATES)
+        validation_states = dict(VALIDATION_STATES)
         if self.service.name != 'CMPP' and \
-                'ACT_DOUBLE' in context['validation_states']:
-            context['validation_states'].pop('ACT_DOUBLE')
+                'ACT_DOUBLE' in validation_states:
+            validation_states.pop('ACT_DOUBLE')
+        vs = [('VALIDE', 'Présent')]
+        validation_states.pop('VALIDE')
+        validation_states = vs + sorted(validation_states.items(), key=lambda tup: tup[0])
+        context['validation_states'] = validation_states
         context['actes'] = actes
         context['validation_msg'] = validation_msg
         context['authorized_lock'] = authorized_lock
