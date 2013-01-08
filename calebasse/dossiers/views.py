@@ -270,9 +270,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         acts_by_date = dict((act.date, act.time) for act in acts)
         for event in occurrences:
             state = None
-            act = acts_by_date.get((event.start_datetime.date, event.start_datetime.time))
-            if act:
-                state = act.actvalidationstate_set.all()[0]
+            if event.act:
+                state = event.act.get_state()
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['next_rdvs'].append((event, state))
