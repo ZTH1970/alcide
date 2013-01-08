@@ -403,7 +403,8 @@ div#users dd {
 div#users ul {
 	margin-left: 0;
 	padding-left: 0;
-	font-size: 11px;
+	font-size: 13px;
+  line-height: 20px;
 	list-style: none;
 }
 
