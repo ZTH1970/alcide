@@ -220,8 +220,9 @@ class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
 
     def acts_of_the_day(self):
-        return [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
-                .today_occurrences(self.date)]
+        acts = [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
+                .today_occurrences(self.date)] + list(Act.objects.filter(date=self.date, parent_event__isnull=True))
+        return sorted(acts, key=lambda a: a.time)
 
     def post(self, request, *args, **kwargs):
         if 'unlock-all' in request.POST:
@@ -375,7 +376,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
             holidays_workers[worker.id] = holidays_worker
             daily_appointments = get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, events_worker, holidays_worker)
-            if all(map(lambda x: x.type == 'busy-here', daily_appointments)):
+            if all(map(lambda x: x.holiday, daily_appointments)):
                 continue
             context['workers_agenda'].append({'worker': worker,
                     'appointments': daily_appointments})

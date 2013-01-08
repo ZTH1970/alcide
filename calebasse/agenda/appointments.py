@@ -32,6 +32,7 @@ class Appointment(object):
         self.weight = 0
         self.act_type = None
         self.validation = None
+        self.holiday = False
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -106,6 +107,10 @@ class Appointment(object):
         self.__set_time(begin_time)
         self.description = description
 
+    def init_holiday_time(self, title, length, begin_time, description=None):
+        self.init_busy_time(title, length, begin_time, description)
+        self.holiday = True
+
     def init_start_stop(self, title, time):
         """
         title: Arrivee ou Depart
@@ -147,7 +152,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         delta_minutes = delta.seconds / 60
         appointment = Appointment()
         label = u"Congé (%s)" % holiday.holiday_type.name
-        appointment.init_busy_time(label,
+        appointment.init_holiday_time(label,
                     delta_minutes,
                     time(interval.lower_bound.hour, interval.lower_bound.minute),
                     description=holiday.comment)
