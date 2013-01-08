@@ -181,8 +181,20 @@
       </p>
       <p>
       {{ forms.followup.externaldoctor.label_tag  }} : {{ forms.followup.externaldoctor }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../personnes/externaltherapist/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un médecin extérieur">+</button>
       {{ forms.followup.externalintervener.label_tag  }} : {{ forms.followup.externalintervener }}
+    <button type="button"
+      class="dialog-button"
+      data-url="../../ressources/externalworker/new/ #form-content"
+      data-default-button="Ajouter"
+      data-next-url="{{ request.get_full_path }}#tab=1"
+      title="Ajouter un intervenant extérieur">+</button>
+    </div>
       </p>
       <input type="hidden"  name="tab"  value="1">
-    </div>
   </form>
