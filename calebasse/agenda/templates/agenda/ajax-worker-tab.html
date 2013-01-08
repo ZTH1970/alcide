@@ -1,5 +1,4 @@
 {% load url from future %}
-<a class="print" href="#">Imprimer</a>
 <div>
   {% for appointment in worker_agenda.appointments %}
   <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
