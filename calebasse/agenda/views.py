@@ -222,7 +222,7 @@ class AgendaServiceActValidationView(TemplateView):
     def acts_of_the_day(self):
         acts = [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
                 .today_occurrences(self.date)] + list(Act.objects.filter(date=self.date, parent_event__isnull=True))
-        return sorted(acts, key=lambda a: a.time)
+        return sorted(acts, key=lambda a: a.time or datetime.time.min)
 
     def post(self, request, *args, **kwargs):
         if 'unlock-all' in request.POST:
