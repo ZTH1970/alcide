@@ -6,12 +6,9 @@
     <a href="../..">Retourner à l'accueil</a>
     <button id="new-patientrecord">Nouveau dossier</button>
     <span>
-      Dossiers: <span class="num">{{ stats.dossiers }}</span> -
-      En contact: <span class="num">{{ stats.En_contact }}</span> -
-      Fin d'accueil: <span class="num">{{ stats.Fin_daccueil }}</span> -
-      En diagnostic: <span class="num">{{ stats.Diagnostic }}</span> -
-      En traitement: <span class="num">{{ stats.Traitement }}</span> -
-      Clos: <span class="num">{{ stats.Clos }}</span>
+      {% for name, nb in stats %}
+    {{ name }}: <span class="num">{{ nb }}</span> {% if not forloop.last %} - {% endif %}
+      {% endfor %}
     </span>
         <br>
         <br>&nbsp;

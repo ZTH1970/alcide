@@ -392,36 +392,29 @@ class PatientRecordsHomepageView(cbv.ListView):
             qs = qs.filter(models.Q(social_security_id__startswith=social_security_id) | \
                 models.Q(contacts__social_security_id__startswith=social_security_id))
         if states:
-            status_types = ['BILAN', 'SURVEILLANCE', 'SUIVI']
-            for state in states:
-                status_types.append(STATE_CHOICES_TYPE[state])
-            qs = qs.filter(last_state__status__type__in=status_types)
+            qs = qs.filter(last_state__status__id__in=states)
         else:
             qs = qs.filter(last_state__status__type__in="")
-        qs = qs.filter(service=self.service).order_by('last_name')
+        qs = qs.filter(service=self.service).order_by('last_name').\
+                prefetch_related('last_state',
+                        'patientcontact', 'last_state__status')
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordsHomepageView, self).get_context_data(**kwargs)
-        ctx['search_form'] = forms.SearchForm(data=self.request.GET or None)
+        ctx['search_form'] = forms.SearchForm(service=self.service, data=self.request.GET or None)
         patient_records = []
-        ctx['stats'] = {"dossiers": 0,
-                "En_contact": 0,
-                "Fin_daccueil": 0,
-                "Diagnostic": 0,
-                "Traitement": 0,
-                "Clos": 0}
+        ctx['stats'] = [["Dossiers", 0]]
+        for status in Status.objects.filter(services=self.service):
+            ctx['stats'].append([status.name, 0])
         if self.request.GET:
             if ctx['object_list']:
                 for patient_record in ctx['object_list'].filter():
-                    ctx['stats']['dossiers'] += 1
+                    ctx['stats'][0][1] += 1
                     next_rdv = get_next_rdv(patient_record)
                     last_rdv = get_last_rdv(patient_record)
                     current_state = patient_record.get_current_state()
-                    if STATES_MAPPING.has_key(current_state.status.type):
-                        state = STATES_MAPPING[current_state.status.type]
-                    else:
-                        state = current_state.status.name
+                    state = current_state.status.name
                     state_class = current_state.status.type.lower()
                     patient_records.append(
                             {
@@ -432,11 +425,9 @@ class PatientRecordsHomepageView(cbv.ListView):
                                 'state_class': state_class
                                 }
                             )
-                    state = state.replace(' ', '_')
-                    state = state.replace("'", '')
-                    if not ctx['stats'].has_key(state):
-                        ctx['stats'][state] = 0
-                    ctx['stats'][state] += 1
+                    for elem in ctx['stats']:
+                        if elem[0] == state:
+                            elem[1] += 1
 
         page = self.request.GET.get('page')
         paginator = Paginator(patient_records, 50)
@@ -666,13 +657,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
         if without_quotations:
             qs = qs.filter(mises_1=None).filter(mises_2=None).filter(mises_3=None)
         states = self.request.GET.getlist('states')
-        if states:
-            status_types = ['BILAN', 'SURVEILLANCE', 'SUIVI']
-            for state in states:
-                status_types.append(STATE_CHOICES_TYPE[state])
-            qs = qs.filter(last_state__status__type__in=status_types)
-        else:
-            qs = qs.filter(last_state__status__type__in='')
+        qs = qs.filter(last_state__status__id__in=states)
 
         try:
             date_actes_start = datetime.strptime(form.data['date_actes_start'], "%d/%m/%Y")
