@@ -16,14 +16,14 @@ def get_ressource_model(model_name):
         _models = models.get_models()
     for model in _models:
         meta = model._meta
-        if meta.module_name == model_name and meta.app_label == 'ressources':
+        if meta.module_name == model_name and \
+                (meta.app_label == 'ressources' or meta.app_label == 'personnes'):
             return model
     return None
 
 
 def homepage(request, service):
     global _models
-    print 'repr:', repr(service)
     if _models is None:
         _models = models.get_models()
     ressources_models = [

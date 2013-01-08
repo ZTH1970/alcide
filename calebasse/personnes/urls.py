@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url, include
+from calebasse.ressources.urls import ressource_patterns
 
 
 user_patterns = patterns('calebasse.personnes.views',
@@ -27,4 +28,5 @@ urlpatterns = patterns('calebasse.personnes.views',
     url(r'^acces/', include(user_patterns)),
     url(r'^gestion/', include(worker_patterns)),
     url(r'^conges/', include(holidays_patterns)),
+    url(r'^(?P<model_name>[a-z-]*)/', include(ressource_patterns)),
     )

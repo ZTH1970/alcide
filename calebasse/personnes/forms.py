@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 from calebasse.ressources.models import WorkerType, Service, HolidayType
 
-from models import Worker, UserWorker, TimeTable, Holiday
+from models import Worker, UserWorker, TimeTable, Holiday, ExternalTherapist, ExternalWorker
 
 
 class UserForm(forms.ModelForm):
