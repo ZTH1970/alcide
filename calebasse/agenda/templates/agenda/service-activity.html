@@ -14,7 +14,7 @@
 
 <table class="main" id="activity">
   <thead>
-      <tr> <th>Heure</th> <th>Libellé</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Statut</th> </tr>
+      <tr> <th>Heure</th> <th>Libellé</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Absence</th> </tr>
   </thead>
   <tbody>
     {% for row_appointments in appointments_times %}
@@ -31,7 +31,7 @@
             <span class="lastname">{{ participant.last_name }}</span> {{ participant.first_name }}<br/>
         {% endfor %}
         </td>
-        <td>{{ appointment.state }}</td>
+        <td>{% if appointment.absent %}{{ appointment.state }}{% endif %}</td>
       </tr>
       {% endfor %}
     </tr>

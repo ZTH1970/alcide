@@ -96,6 +96,7 @@ class AgendaServiceActivityView(TemplateView):
                 appointment['label'] = event.patient.display_name
                 appointment['act'] = event.act_type.name
                 appointment['state'] = event.act.get_state()
+                appointment['absent'] = event.act.is_absent()
             else:
                 appointment['type'] = 2
                 if event.event_type.label == 'Autre' and event.title:
@@ -355,7 +356,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
                 .prefetch_related(
                         'services',
                         'patient__service',
-                        'act_set__actvalidationstate_set', 
+                        'act_set__actvalidationstate_set',
                         'exceptions', 'participants')
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]
@@ -472,7 +473,7 @@ class AjaxWorkerTabView(TemplateView):
                         'patient__addresses__patientcontact_set',
                         'services',
                         'patient__service',
-                        'act_set__actvalidationstate_set', 
+                        'act_set__actvalidationstate_set',
                         'exceptions', 'participants')
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]
