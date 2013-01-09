@@ -41,6 +41,7 @@
       <th>Identifiant</th>
       <th>Courriel</th>
       <th>Fiche Personnel</th>
+      <th>Supprimer</th>
     </tr>
     </thead>
     <tbody>
@@ -51,7 +52,7 @@
       {% with worker=object.userworker.worker %}
       <td>{% if worker %}<a href="{{ worker.get_absolute_url }}">{{ worker }}</a>{% else %}-{% endif %}</td>
       {% endwith %}
-      <td><button class="icon-edit"></button> <button class="icon-minus"></button> <button>Histo</button></td>
+      <td><button class="icon-minus"/></td>
     </tr>
    {% endfor %}
     </tbody>
