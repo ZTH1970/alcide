@@ -674,7 +674,8 @@ class PatientRecordsQuotationsView(cbv.ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordsQuotationsView, self).get_context_data(**kwargs)
-        ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None)
+        ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None,
+                service=self.service)
         patient_records = []
         if self.request.GET:
             for patient_record in ctx['object_list'].filter():

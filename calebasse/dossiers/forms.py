@@ -13,7 +13,7 @@ from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
     CmppHealthCareTreatment, CmppHealthCareDiagnostic,
     SessadHealthCareNotification, FileState, Status)
-from calebasse.dossiers.states import STATE_CHOICES
+#from calebasse.dossiers.states import STATE_CHOICES
 from calebasse.ressources.models import (HealthCenter, LargeRegime,
     CodeCFTMEA, SocialisationDuration, MDPHRequest, MDPHResponse)
 
@@ -357,9 +357,16 @@ class GenerateRtfForm(Form):
     appointment_intervenants = forms.CharField(required=False)
 
 class QuotationsForm(Form):
-    states = forms.MultipleChoiceField(
-            widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}),
-            choices=STATE_CHOICES, initial=(2,3,4))
+
+    def __init__(self, service=None, *args, **kwargs):
+        self.service = service
+        super(QuotationsForm, self).__init__(*args, **kwargs)
+        self.fields['states'].queryset = Status.objects.filter(services=service)
+
+    states = forms.ModelMultipleChoiceField(queryset=Status.objects.all(),
+            initial=Status.objects.all(),
+            widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}))
     date_actes_start = forms.DateField(label=u'Date', localize=True)
     date_actes_end = forms.DateField(label=u'Date', localize=True)
     without_quotations = forms.BooleanField()
+
