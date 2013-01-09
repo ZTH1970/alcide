@@ -13,7 +13,6 @@ from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
     CmppHealthCareTreatment, CmppHealthCareDiagnostic,
     SessadHealthCareNotification, FileState, Status)
-#from calebasse.dossiers.states import STATE_CHOICES
 from calebasse.ressources.models import (HealthCenter, LargeRegime,
     CodeCFTMEA, SocialisationDuration, MDPHRequest, MDPHResponse)
 

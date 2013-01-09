@@ -369,6 +369,26 @@ class PatientRecordsHomepageView(cbv.ListView):
     model = PatientRecord
     template_name = 'dossiers/index.html'
 
+
+    def _get_search_result(self, paginate_patient_records):
+        patient_records = []
+        for patient_record in paginate_patient_records:
+            next_rdv = get_next_rdv(patient_record)
+            last_rdv = get_last_rdv(patient_record)
+            current_status = patient_record.last_state.status
+            state = current_status.name
+            state_class = current_status.type.lower()
+            patient_records.append(
+                    {
+                        'object': patient_record,
+                        'next_rdv': next_rdv,
+                        'last_rdv': last_rdv,
+                        'state': state,
+                        'state_class': state_class
+                        }
+                    )
+        return patient_records
+
     def get_queryset(self):
         first_name = self.request.GET.get('first_name')
         last_name = self.request.GET.get('last_name')
@@ -404,47 +424,37 @@ class PatientRecordsHomepageView(cbv.ListView):
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordsHomepageView, self).get_context_data(**kwargs)
         ctx['search_form'] = forms.SearchForm(service=self.service, data=self.request.GET or None)
-        patient_records = []
         ctx['stats'] = [["Dossiers", 0]]
         for status in Status.objects.filter(services=self.service):
             ctx['stats'].append([status.name, 0])
-        if self.request.GET:
-            if ctx['object_list']:
-                for patient_record in ctx['object_list'].filter():
-                    ctx['stats'][0][1] += 1
-                    next_rdv = get_next_rdv(patient_record)
-                    last_rdv = get_last_rdv(patient_record)
-                    current_state = patient_record.get_current_state()
-                    state = current_state.status.name
-                    state_class = current_state.status.type.lower()
-                    patient_records.append(
-                            {
-                                'object': patient_record,
-                                'next_rdv': next_rdv,
-                                'last_rdv': last_rdv,
-                                'state': state,
-                                'state_class': state_class
-                                }
-                            )
-                    for elem in ctx['stats']:
-                        if elem[0] == state:
-                            elem[1] += 1
 
         page = self.request.GET.get('page')
+        if ctx['object_list']:
+            patient_records = ctx['object_list'].filter()
+        else:
+            patient_records = []
+
+        # TODO: use a sql query to do this
+        for patient_record in patient_records:
+            ctx['stats'][0][1] += 1
+            for elem in ctx['stats']:
+                if elem[0] == patient_record.last_state.status.name:
+                    elem[1] += 1
         paginator = Paginator(patient_records, 50)
         try:
-            patient_records = paginator.page(page)
+            paginate_patient_records = paginator.page(page)
         except PageNotAnInteger:
-            patient_records = paginator.page(1)
+            paginate_patient_records = paginator.page(1)
         except EmptyPage:
-            patient_records = paginator.page(paginator.num_pages)
+            paginate_patient_records = paginator.page(paginator.num_pages)
 
         query = self.request.GET.copy()
         if 'page' in query:
             del query['page']
         ctx['query'] = query.urlencode()
 
-        ctx['patient_records'] = patient_records
+        ctx['paginate_patient_records'] = paginate_patient_records
+        ctx['patient_records'] = self._get_search_result(paginate_patient_records)
         return ctx
 
 patientrecord_home = PatientRecordsHomepageView.as_view()
@@ -651,6 +661,23 @@ class PatientRecordsQuotationsView(cbv.ListView):
     model = PatientRecord
     template_name = 'dossiers/quotations.html'
 
+    def _get_search_result(self, paginate_patient_records):
+        patient_records = []
+        for patient_record in paginate_patient_records:
+            next_rdv = get_next_rdv(patient_record)
+            last_rdv = get_last_rdv(patient_record)
+            current_state = patient_record.get_current_state()
+            state = current_state.status.name
+            state_class = current_state.status.type.lower()
+            patient_records.append(
+                    {
+                        'object': patient_record,
+                        'state': state,
+                        'state_class': state_class
+                        }
+                    )
+        return patient_records
+
     def get_queryset(self):
         form = forms.QuotationsForm(data=self.request.GET or None)
         qs = super(PatientRecordsQuotationsView, self).get_queryset()
@@ -670,7 +697,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
             qs = qs.filter(act_set__date__lte=date_actes_end.date())
         except (ValueError, KeyError):
             pass
-        qs = qs.filter(service=self.service).order_by('last_name')
+        qs = qs.filter(service=self.service).order_by('last_name').prefetch_related()
         return qs
 
     def get_context_data(self, **kwargs):
@@ -678,36 +705,17 @@ class PatientRecordsQuotationsView(cbv.ListView):
         ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None,
                 service=self.service)
         patient_records = []
-        if self.request.GET:
-            for patient_record in ctx['object_list'].filter():
-                next_rdv = get_next_rdv(patient_record)
-                last_rdv = get_last_rdv(patient_record)
-                current_state = patient_record.get_current_state()
-                if STATES_MAPPING.has_key(current_state.status.type):
-                    state = STATES_MAPPING[current_state.status.type]
-                else:
-                    state = current_state.status.name
-                state_class = current_state.status.type.lower()
-                patient_records.append(
-                        {
-                            'object': patient_record,
-                            'state': state,
-                            'state_class': state_class
-                            }
-                        )
-                state = state.replace(' ', '_')
-                state = state.replace("'", '')
-
         page = self.request.GET.get('page')
-        paginator = Paginator(patient_records, 50)
+        paginator = Paginator(ctx['object_list'].filter(), 50)
         try:
-            patient_records = paginator.page(page)
+            paginate_patient_records = paginator.page(page)
         except PageNotAnInteger:
-            patient_records = paginator.page(1)
+            paginate_patient_records = paginator.page(1)
         except EmptyPage:
-            patient_records = paginator.page(paginator.num_pages)
+            paginate_patient_records = paginator.page(paginator.num_pages)
 
-        ctx['patient_records'] = patient_records
+        ctx['patient_records'] = self._get_search_result(paginate_patient_records)
+        ctx['paginate_patient_records'] = paginate_patient_records
 
         query = self.request.GET.copy()
         if 'page' in query:

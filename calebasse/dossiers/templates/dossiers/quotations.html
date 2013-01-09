@@ -76,16 +76,16 @@
 {% if request.GET %}
 <div class="pagination">
     <span class="step-links">
-        {% if patient_records.has_previous %}
-            <a href="?{{ query }}&page={{ patient_records.previous_page_number }}">««</a>
+        {% if paginate_patient_records.has_previous %}
+            <a href="?{{ query }}&page={{ paginate_patient_records.previous_page_number }}">««</a>
         {% endif %}
 
         <span class="current">
-            page {{ patient_records.number }} de {{ patient_records.paginator.num_pages }}
+            page {{ paginate_patient_records.number }} de {{ paginate_patient_records.paginator.num_pages }}
         </span>
 
-        {% if patient_records.has_next %}
-            <a href="?{{ query }}&page={{ patient_records.next_page_number }}">»»</a>
+        {% if paginate_patient_records.has_next %}
+            <a href="?{{ query }}&page={{ paginate_patient_records.next_page_number }}">»»</a>
         {% endif %}
     </span>
 </div>
