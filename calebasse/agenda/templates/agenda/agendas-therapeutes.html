@@ -8,11 +8,18 @@
 <button id='print-button'>Imprimer</button>
 {% endblock %}
 
+
 {% block agenda-content %}
+<button id="uncheck-all" type="button">Tout décocher</button>
+<button id="check-all" type="button" style="display: none">Tout cocher</button>
+
 {% for worker_agenda in workers_agenda %}
 {% if worker_agenda.appointments %}
 <div class="worker-agenda">
-  <h2>{{service_name }} - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span></h2>
+  <h2>
+    {{service_name }} - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
+    <input type="checkbox" class="printable" checked>
+  </h2>
 <h3>{{ date|date:"DATE_FORMAT" }}</h3>
 
 <span class="remarque">Remarque :</span>
@@ -58,5 +65,36 @@ Validés :  {{ worker_agenda.summary.valides }}
 
 {% endif %}
 {% endfor %}
-
+<script>
+  $(function () {
+    /* Control page break on last printed page */
+    function update_page_break() {
+      $('.worker-agenda').css('page-break-after', 'always');
+      $('.worker-agenda').not('.screen-only').last().css('page-break-after', 'avoid');
+    }
+    update_page_break();
+    $('.printable').on('change', function () {
+      if ($(this).is(':checked')) {
+        $(this).parents('.worker-agenda').removeClass('screen-only');
+      } else {
+        $(this).parents('.worker-agenda').addClass('screen-only');
+      }
+      update_page_break();
+    });
+    $('#uncheck-all').on('click', function () {
+      $('.printable').attr('checked', false);
+      $('.printable').trigger('change');
+      $('#uncheck-all').hide();
+      $('#check-all').show();
+      update_page_break();
+    });
+    $('#check-all').on('click', function () {
+      $('.printable').attr('checked', true);
+      $('.printable').trigger('change');
+      $('#check-all').hide();
+      $('#uncheck-all').show();
+      update_page_break();
+    });
+  });
+</script>
 {% endblock %}
