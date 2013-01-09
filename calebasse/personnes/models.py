@@ -127,7 +127,7 @@ class ExternalWorker(People):
     fax = models.CharField(max_length=30,
             blank=True, null=True, default=None)
     type = models.ForeignKey('ressources.WorkerType',
-            verbose_name=u'Spécialité')
+            verbose_name=u'Spécialité', default=18)
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
     old_service = models.CharField(max_length=256,
@@ -156,7 +156,7 @@ class ExternalTherapist(People):
     fax = models.CharField(max_length=30,
             blank=True, null=True, default=None)
     type = models.ForeignKey('ressources.WorkerType',
-            verbose_name=u'Spécialité')
+            verbose_name=u'Spécialité', default=18)
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
     old_service = models.CharField(max_length=256,
