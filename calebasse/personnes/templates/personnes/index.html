@@ -8,7 +8,7 @@
 {% block content %}
     <h3>Personnel</h3>
     <ul>
-     <li><a href="acces/">Accès</a></li>
+     {% if 'super' in role %}<li><a href="acces/">Accès</a></li>{% endif %}
      <li><a href="gestion/">Administration du personnel</a></li>
      <li><a href="conges/">Congés</a></li>
     </ul>
