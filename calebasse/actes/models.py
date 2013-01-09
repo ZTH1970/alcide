@@ -297,6 +297,9 @@ class Act(models.Model):
 #        return (False, None)
 # END Specific to cmpp healthcare
 
+    def save(self, *args, **kwargs):
+        super(Act, self).save(*args, **kwargs)
+
     def duration(self):
         '''Return a displayable duration for this field.'''
         hours, remainder = divmod(self._duration, 60)

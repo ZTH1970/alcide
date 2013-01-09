@@ -77,12 +77,12 @@ class Appointment(object):
             self.patient_record_id = event.patient.id
             self.patient_record_paper_id = event.patient.paper_id
             self.act_type = event.act_type.name
-            self.act_state = event.act.get_state().state_name
-            if self.act_state not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
+            state = event.get_state()
+            state_name = state.state_name if state else 'NON_VALIDE'
+            display_name = VALIDATION_STATES[state_name]
+            if state_name not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
                 self.act_absence = VALIDATION_STATES.get(self.act_state)
-            state = event.act.get_state()
-            display_name = VALIDATION_STATES[state.state_name]
-            if not state.previous_state and state.state_name == 'NON_VALIDE':
+            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             if not service in services:
                 validation_states = None

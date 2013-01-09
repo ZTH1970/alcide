@@ -31,11 +31,14 @@ class AgendaHomepageView(TemplateView):
     template_name = 'agenda/index.html'
 
     def post(self, request, *args, **kwargs):
-        acte_id = request.POST.get('acte-id')
+        acte_id = request.POST.get('event-id')
         try:
-            act = Act.objects.get(id=acte_id)
+            event = EventWithAct.objects.get(id=acte_id)
+            event = event.today_occurrence(self.date)
+            act = event.act
             if not act.validation_locked:
                 state_name = request.POST.get('act_state')
+                act.save()
                 act.set_state(state_name, request.user)
         except Act.DoesNotExist:
             pass
@@ -262,6 +265,8 @@ class AgendaServiceActValidationView(TemplateView):
             if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             actes.append((act, state, display_name))
+            if not act.id:
+                act.save()
         validation_states = dict(VALIDATION_STATES)
         if self.service.name != 'CMPP' and \
                 'ACT_DOUBLE' in validation_states:
