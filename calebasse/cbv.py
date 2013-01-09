@@ -9,6 +9,8 @@ from django.core.urlresolvers import resolve
 from django.core.exceptions import ImproperlyConfigured
 
 from calebasse.ressources.models import Service
+from calebasse.middleware.request import get_request
+from calebasse.utils import is_super_user, is_validator
 
 HOME_SERVICE_COOKIE = 'home-service'
 
@@ -59,6 +61,13 @@ class ServiceViewMixin(object):
             context['next_day'] = self.date + relativedelta(days=1)
             context['previous_month'] = self.date + relativedelta(months=-1)
             context['next_month'] = self.date + relativedelta(months=1)
+
+        context['role'] = None
+        user = get_request().user
+        if is_super_user(user):
+            context['role'] = ['super', 'validator']
+        elif is_validator(user):
+            context['role'] = ['validator']
         return context
 
 
