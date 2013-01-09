@@ -356,7 +356,9 @@ class HolidayQuerySet(query.QuerySet):
                           |models.Q(service__isnull=True))
 
     def for_service_workers(self, service):
-        return self.filter(worker__services=service)
+        return self.filter(models.Q(worker__services=service)
+                |models.Q(service=service)
+                |models.Q(worker__isnull=True, service__isnull=True))
 
     def future(self):
         return self.filter(end_date__gte=date.today())
@@ -418,7 +420,7 @@ class Holiday(BaseModelMixin, models.Model):
                 ret += u" (jusqu'à {0})".format(time2french(self.end_time))
         return ret
 
-    def to_interval(self, date):
+    def to_interval(self, date=None):
         if date == self.start_date:
             start_time = self.start_time or datetime_time(8, 0)
         else:

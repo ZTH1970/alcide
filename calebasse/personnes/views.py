@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 from datetime import date
+from interval import IntervalSet
 
 from dateutil.relativedelta import relativedelta
 
@@ -8,6 +9,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 
 from calebasse import cbv, models as cb_models
 from calebasse.ressources.models import Service
@@ -227,33 +229,67 @@ class HolidayView(cbv.TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(HolidayView, self).get_context_data(**kwargs)
-        end_date = date.today() + relativedelta(months=self.months)
-        qs = models.Holiday.objects.future().select_related('worker')
+        form = forms.HolidaySearchForm(data=self.request.GET)
+
         today = date.today()
-        future_qs = qs.for_period(today, end_date).select_related('worker')
-        group_qs = models.Holiday.objects.for_service(self.service).select_related()
-        current_qs = qs.today()
-        form = self.get_form()
-        if form.is_valid() and form.cleaned_data.get('start_date'):
-            cleaned_data = form.cleaned_data
-            start_date = cleaned_data['start_date']
-            end_date = cleaned_data['end_date']
-            future_qs = models.Holiday.objects \
-                    .for_period(start_date, end_date) \
-                    .for_service_workers(self.service)
-            group_qs = group_qs.for_period(start_date, end_date)
-            current_qs = []
-        ctx['end_date'] = end_date
-        ctx['current_holidays'] = current_qs
-        future_holidays = defaultdict(lambda:[])
-        for holiday in future_qs:
-            key = (holiday.start_date.year, holiday.start_date.month, holiday.start_date.strftime('%B'))
-            future_holidays[key].append(holiday)
-        ctx['future_holidays'] = [ {
-            'date': date(day=1, month=key[1], year=key[0]),
-            'holidays': future_holidays[key]
-          } for key in sorted(future_holidays.keys()) ]
-        ctx['group_holidays'] = group_qs.order_by('-start_date')
+        filter_start_date = today
+        filter_end_date = date.today() + relativedelta(months=self.months)
+
+        if form.is_valid():
+            if form.cleaned_data.get('start_date'):
+                filter_start_date = form.cleaned_data.get('start_date')
+            if form.cleaned_data.get('end_date'):
+                filter_end_date = form.cleaned_data.get('end_date')
+
+        workers = models.Worker.objects.filter(enabled=True)
+        holidays = models.Holiday.objects \
+                .filter(end_date__gte=filter_start_date,
+                        start_date__lte=filter_end_date) \
+                .select_related('worker', 'service')
+        holiday_by_worker = defaultdict(lambda: [])
+        all_holidays = holidays.filter(worker__isnull=True)
+
+        for worker in workers:
+            holiday_by_worker[worker] = list(all_holidays)
+
+        for holiday in holidays.filter(worker__isnull=False):
+            holiday_by_worker[holiday.worker].append(holiday)
+
+        def holiday_url(holiday):
+            if holiday.worker:
+                return reverse('worker-holidays-update', kwargs=dict(
+                    service=self.service.slug, pk=holiday.worker.pk))
+            else:
+                slug = holiday.service.slug if holiday.service else self.service.slug
+                return reverse('group-holiday-update', kwargs=dict(
+                    service=slug))
+
+        currents = []
+        futures = defaultdict(lambda: [])
+        for worker, holidays in holiday_by_worker.iteritems():
+            for holiday in holidays:
+                url = holiday_url(holiday)
+                holiday_tpl = dict(worker=worker.display_name, holiday=holiday, url=url)
+                if holiday.start_date <= today <= holiday.end_date:
+                    currents.append(holiday_tpl)
+                start_date = max(holiday.start_date, filter_start_date)
+                month_name = start_date.strftime('%B')
+                key = start_date.year, start_date.month, month_name
+                futures[key].append(holiday_tpl)
+
+        future_holidays = []
+        for key in sorted(futures.keys()):
+            future_holidays.append(dict(
+                month=key[2],
+                holidays=futures[key]))
+        future_holidays2 = []
+        for i in range(0, len(future_holidays), 2):
+            future_holidays2.append(future_holidays[i:i+2])
+
+        ctx['end_date'] = filter_end_date
+        ctx['current_holidays'] = currents
+        ctx['future_holidays'] = future_holidays2
+        ctx['group_holidays'] = all_holidays.order_by('-start_date')
         ctx['search_form'] = form
         return ctx
 

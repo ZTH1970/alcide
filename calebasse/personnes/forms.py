@@ -182,10 +182,7 @@ class HolidaySearchForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(HolidaySearchForm, self).clean()
-        if cleaned_data.get('start_date') or cleaned_data.get('end_date'):
-            if not cleaned_data.get('start_date') \
-                   or not cleaned_data.get('end_date'):
-                raise forms.ValidationError(u'Vous devez fournir une date de début et de fin')
+        if cleaned_data.get('start_date') and cleaned_data.get('end_date'):
             if cleaned_data['start_date'] > cleaned_data['end_date']:
                 raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
         return cleaned_data
