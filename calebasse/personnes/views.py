@@ -12,6 +12,8 @@ from django.contrib import messages
 from calebasse import cbv, models as cb_models
 from calebasse.ressources.models import Service
 
+from calebasse.decorators import super_user_only
+
 import forms
 import models
 
@@ -23,7 +25,6 @@ FILTER_CRITERIA = (
         'email',
         'userworker__worker__display_name',
 )
-
 
 class AccessView(cbv.ListView):
     model = User
@@ -108,7 +109,7 @@ class WorkerView(cbv.ListView):
 homepage = cbv.TemplateView.as_view(template_name='personnes/index.html')
 
 
-user_listing = AccessView.as_view()
+user_listing = super_user_only(AccessView.as_view())
 
 
 class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
@@ -119,9 +120,9 @@ class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
     template_name_suffix='_new.html'
 
 
-user_new = UserCreateView.as_view()
-user_update = AccessUpdateView.as_view()
-user_delete = cbv.DeleteView.as_view(model=User)
+user_new = super_user_only(UserCreateView.as_view())
+user_update = super_user_only(AccessUpdateView.as_view())
+user_delete = super_user_only(cbv.DeleteView.as_view(model=User))
 
 
 class WorkerUpdateView(cbv.MultiUpdateView):
