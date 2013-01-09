@@ -53,6 +53,7 @@ if(typeof(String.prototype.trim) === "undefined")
          $menu_element.toggleClass('eo-checkboxwidget-menu-element-selected',
            ! checked);
          $input.prop('checked', ! checked);
+         $input.trigger('change');
          this._refresh();
        }, this));
        /* this.menu.closest('body').on('click.eo-checkboxwidget', $.proxy(function (e) {
