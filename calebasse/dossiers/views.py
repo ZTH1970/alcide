@@ -26,6 +26,7 @@ from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
 
+from calebasse.decorators import validator_only
 
 def get_next_rdv(patient_record):
     next_rdv = {}
@@ -453,7 +454,7 @@ class PatientRecordDeleteView(DeleteView):
     success_url = ".."
     template_name = 'dossiers/patientrecord_confirm_delete.html'
 
-patientrecord_delete = PatientRecordDeleteView.as_view()
+patientrecord_delete = validator_only(PatientRecordDeleteView.as_view())
 
 
 class PatientRecordPaperIDUpdateView(cbv.UpdateView):
