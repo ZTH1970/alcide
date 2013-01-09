@@ -6,6 +6,9 @@ from django.template.defaultfilters import slugify
 from cbv import HOME_SERVICE_COOKIE, TemplateView
 
 from calebasse.ressources.models import Service
+from calebasse.middleware.request import get_request
+from calebasse.utils import is_validator
+
 
 APPLICATIONS = (
         (u'Gestion des dossiers', 'dossiers'),
@@ -27,8 +30,13 @@ class Homepage(TemplateView):
         services = Service.objects.values_list('name', 'slug')
         services = sorted(services, key=lambda tup: tup[0])
         ctx = super(Homepage, self).get_context_data(**kwargs)
+        applications = list(APPLICATIONS)
+#        user = get_request().user
+#        if not is_validator(user):
+#            applications.pop(3)
+#            applications.pop(4)
         ctx.update({
-            'applications': APPLICATIONS,
+            'applications': applications,
             'services': services,
             'service_name': self.service.name,
         })
