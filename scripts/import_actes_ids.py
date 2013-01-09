@@ -13,7 +13,6 @@ import django.core.management
 django.core.management.setup_environ(calebasse.settings)
 
 from django.db import transaction
-from calebasse.agenda.models import EventWithAct
 from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service
@@ -26,6 +25,7 @@ from import_dossiers import map_cs
 db_path = "./scripts/20130104-213225"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
+# dbs = ["F_ST_ETIENNE_CAMSP"]
 
 def _to_datetime(str_date):
     if not str_date:
@@ -127,7 +127,7 @@ def add_invalid(d, reason):
         d['invalid'] += ', '
     d['invalid'] += reason
 
-log = open('import_actes_ids.log', 'a')
+log = open('import_actes_ids.log', 'w+')
 
 @transaction.commit_on_success
 def main():
@@ -151,6 +151,7 @@ def main():
         print >>log, datetime.now(), '===', service.name, '==='
 
         # load workers mapping
+        worker_reverse_idx = {}
         for i, worker in enumerate(workers):
             if service.name == 'CMPP':
                 j = worker.old_cmpp_id
@@ -165,6 +166,7 @@ def main():
                 exit(0)
             if j:
                 workers_idx[j] = worker
+                worker_reverse_idx[worker] = j
         # load act_type mapping
         act_types = ActType.objects.for_service(service)
         act_type_id_not_found = set()
@@ -188,14 +190,16 @@ def main():
 
         def handle_details2(data, idx, details, id_key):
             for detail in details:
-                i = detail[id_key]
+                i = int(detail[id_key])
                 thera_id = detail['thera_id']
                 if i not in idx:
                     continue
                 row = data[idx[i]]
                 if thera_id in workers_idx:
-                    workers = row.setdefault('workers', set())
-                    workers.add(workers_idx[thera_id])
+                    ws = row.setdefault('workers', set())
+                    theras = row.setdefault('theras', set())
+                    ws.add(workers_idx[thera_id])
+                    theras.add(thera_id)
                 else:
                     add_invalid(row, 'unknown thera_id %s' % thera_id)
 
@@ -220,24 +224,31 @@ def main():
                 if not_found:
                     not_found.add(enfant_id)
 
-        # Clean act for this service
         notfound = []
-        for year in range(1990, 2014):
+        for year in range(2012, 2014):
             # create index of already imported acts
             act_idx = defaultdict(lambda: [])
-            for act in Act.objects.filter(date__year=year, patient__service=service):
-                key = (act.date, act.time, act.patient.old_id, act.act_type.old_id)
+            qs = Act.objects.filter(date__year=year, patient__service=service).prefetch_related('doctors')
+            print >>log, datetime.now(), 'importing', qs.count(), 'acts in index for', year
+            for act in qs:
+                ws = tuple(sorted(int(worker_reverse_idx.get(worker, '9999')) for worker in act.doctors.all()))
+                key = (act.date, act.time, act.patient.old_id, act.act_type.old_id, ws)
                 act_idx[key].append((act.id, bool(act.old_id)))
+            print >>log, datetime.now(), 'finished importing'
 
             rows = load_csv2(db, 'actes')
             cols = rows.next()
             total = 0
+            year_rows = []
+            print datetime.now(), 'loading acts', year
             for row in rows:
                 row.setdefault('invalid', '')
                 row.setdefault('workers', set())
+                row.setdefault('theras', set())
                 row['date'] = _to_date(row['date_acte'])
-                if row['date'].year == year:
+                if row['date'].year != year:
                     continue
+                year_rows.append(row)
                 row['time'] = _to_time(row['heure'])
                 row['duration'] = _to_duration(row['duree'])
                 row['is_billed'] = row['marque'] == '1'
@@ -245,7 +256,18 @@ def main():
                 set_enfant(row)
                 set_act_type(row)
                 row['state'] = map_cs[service.name].get(row['cs'], 'VALIDE')
-                key = (row['date'], row['time'], row['enfant_id'], row['type_acte'])
+            print datetime.now(), 'loading details of acts', year
+            year_rows_idx = dict((int(row['id']), i) for i, row in enumerate(year_rows))
+
+            if year_rows:
+                actes_details = load_csv2(db, 'details_actes')
+                cols.extend(['workers','invalid'])
+                actes_details.next()
+                handle_details2(year_rows, year_rows_idx, actes_details, 'acte_id')
+                print datetime.now(), 'importing acts', year
+            for row in year_rows:
+                row['theras'] = tuple(sorted(map(int, row['theras'])))
+                key = (row['date'], row['time'], row['enfant_id'], row['type_acte'], row['theras'])
                 if key in act_idx:
                     acts = act_idx[key]
                     assert len(acts) != 0
@@ -257,15 +279,16 @@ def main():
                         if not has_old_id:
                             Act.objects.filter(id=act_id).update(old_id=row['id'])
                             total += 1
-                            print >>log, datetime.now(), 'imported old_id', row['id'], 'to Act(id=', act_id, ')'
+                            # print >>log, datetime.now(), 'imported old_id', row['id'], 'to Act(id=', act_id, ')'
+                else:
+                    print >>log, datetime.now(), 'act', row['id'], 'not found'
+                    notfound.append(row)
+            print datetime.now(), 'fixed', total, 'acts for', year
             print >>log, datetime.now(), 'Fixed', total, 'acts for', year
+        print datetime.now(), 'Found', len(notfound), 'acts not imported'
         print >>log, datetime.now(), 'Found', len(notfound), 'acts not imported'
 
-        cols.extend(['workers','invalid'])
-        actes_details = load_csv2(db, 'details_actes')
-        actes_details.next()
-        notfound_idx = dict((i, row['id']) for i, row in enumerate(notfound))
-        handle_details2(notfound, notfound_idx, actes_details, 'acte_id')
+        total = 0
         for row in notfound:
             if row['invalid']:
                 print >>log, datetime.now(), 'row invalid', row
@@ -278,10 +301,11 @@ def main():
                     is_billed=row['is_billed'],
                     act_type=row['act_type'],
                     patient=row['enfant'],
-                    validation_locked=row['validation_locked'],
-                    parent_event=row['parent_event'])
+                    validation_locked=row['validation_locked'])
             act.doctors = row['workers']
             ActValidationState.objects.create(act=act, state_name=row['state'], previous_state=None)
+            total += 1
+        print >>log, datetime.now(), 'created', total, 'new acts'
     raise Exception('donothing')
 
 if __name__ == "__main__":
