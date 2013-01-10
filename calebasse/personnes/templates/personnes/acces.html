@@ -17,7 +17,7 @@
     <h3>Rechercher dans les comptes</h3>
     <form>
       <label>Identifiant :
-        <input type="text"/ name='identifier' value="{{ request.GET.identifier }}">
+        <input type="text"/ name='identifier' value="{{ request.GET.identifier }}" class="focus">
       </label>
       {% if request.GET %}
       <div class="search-reset">
