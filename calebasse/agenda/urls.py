@@ -30,7 +30,7 @@ agenda_patterns = patterns('',
                 UpdateEventView.as_view(),
                 name='update-event'),
             url(r'^delete-event/(?P<pk>\d+)$',
-                validator_only(csrf_exempt(DeleteEventView.as_view())),
+                csrf_exempt(DeleteEventView.as_view()),
                 name='delete-event'),
             url(r'^activite-du-service/$',
                 AgendaServiceActivityView.as_view(
