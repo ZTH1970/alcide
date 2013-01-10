@@ -14,7 +14,7 @@
 
 <table class="main" id="activity">
   <thead>
-      <tr> <th>Heure</th> <th>Libellé</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Absence</th> </tr>
+      <tr> <th>Heure</th> <th>Libellé</th> <th>Absence</th> <th>Type d'acte</th> <th>Intervenants</th> </tr>
   </thead>
   <tbody>
     {% for row_appointments in appointments_times %}
@@ -24,14 +24,18 @@
       {% if forloop.counter != 1 %}
       <tr>
         {% endif %}
-        <td {% if appointment.type == 2 %}colspan="2"{% endif %}>{{ appointment.label }}</td>
+        <td {% if appointment.type == 2 %}colspan="2"{% endif %}>{{ appointment.label }}{% if appointment.paper_id %} - {{ appointment.paper_id }} {% endif %}</td>
+        <td>{% if appointment.absent %}{{ appointment.state }}{% endif %}</td>
         {% if appointment.type != 2 %}<td>{{ appointment.act }}</td>{% endif %}
         <td>
+        {% if appointment.len_participants > 10 %}
+        {{ appointment.len_participants }} intervenants
+        {% else %}
         {% for participant in appointment.participants %}
             <span class="lastname">{{ participant.last_name }}</span> {{ participant.first_name }}<br/>
         {% endfor %}
+        {% endif %}
         </td>
-        <td>{% if appointment.absent %}{{ appointment.state }}{% endif %}</td>
       </tr>
       {% endfor %}
     </tr>

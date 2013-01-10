@@ -97,6 +97,7 @@ class AgendaServiceActivityView(TemplateView):
             if event.event_type_id == 1:
                 appointment['type'] = 1
                 appointment['label'] = event.patient.display_name
+                appointment['paper_id'] = event.patient.paper_id
                 appointment['act'] = event.act_type.name
                 appointment['state'] = event.act.get_state()
                 appointment['absent'] = event.act.is_absent()
@@ -108,6 +109,7 @@ class AgendaServiceActivityView(TemplateView):
                     appointment['label'] = '%s - %s' % (event.event_type.label,
                                                         event.title)
             appointment['participants'] = event.participants.all()
+            appointment['len_participants'] = len(appointment['participants'])
             appointments_times[start_datetime]['row'] += 1
             appointments_times[start_datetime]['appointments'].append(appointment)
         context['appointments_times'] = sorted(appointments_times.items())
