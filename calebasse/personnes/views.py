@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.utils.dateformat import format as date_format
 
 from calebasse import cbv, models as cb_models
 from calebasse.ressources.models import Service
@@ -273,7 +274,7 @@ class HolidayView(cbv.TemplateView):
                 if holiday.start_date <= today <= holiday.end_date:
                     currents.append(holiday_tpl)
                 start_date = max(holiday.start_date, filter_start_date)
-                month_name = start_date.strftime('%B')
+                month_name = date_format(start_date, 'F')
                 key = start_date.year, start_date.month, month_name
                 futures[key].append(holiday_tpl)
 
