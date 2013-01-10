@@ -90,8 +90,12 @@ class Appointment(object):
         else:
             self.event_type = event.event_type
             self.workers = event.participants.all()
+        if len(self.workers) > 4 :
+            self.workers_initial = '%d inter.' % len(self.workers)
+        else:
+            for worker in self.workers:
+                self.workers_initial += " " + worker.get_initials()
         for worker in self.workers:
-            self.workers_initial += " " + worker.get_initials()
             self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
 
     def init_free_time(self, length, begin_time):
