@@ -192,7 +192,8 @@ class TimeTableQuerySet(query.QuerySet):
     def current(self, today=None):
         if today is None:
             today = date.today()
-        return self.filter(start_date__lte=today, end_date__gte=today)
+        return self.filter(models.Q(start_date__lte=today) | models.Q(start_date__isnull=True)) \
+                    .filter(models.Q(end_date__gte=today) | models.Q(end_date__isnull=True))
 
     def for_today(self, today=None):
         if today is None:
