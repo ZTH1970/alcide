@@ -120,22 +120,17 @@ class EventTest(TestCase):
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 2)
         self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 0)
-        [o.act for o in occurences]
-        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 2)
         self.assertEqual(occurences[0].act.date, occurences[0].start_datetime.date())
         self.assertEqual(occurences[1].act.date, occurences[1].start_datetime.date())
         appointment2.recurrence_periodicity = None
         appointment2.save()
-        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(),
-                1)
+        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 0)
         appointment2.recurrence_periodicity = 2
         appointment2.recurrence_end_date = date(2020, 10, 16)
         appointment2.save()
         occurences = list(appointment2.all_occurences())
         self.assertEqual(len(occurences), 2)
-        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 1)
         [o.act for o in occurences]
-        self.assertEqual(Act.objects.filter(parent_event=appointment2).count(), 2)
         occurences[1].act.set_state('ANNUL_NOUS', self.creator)
         occurences[0].delete()
         occurences = list(appointment2.all_occurences())
