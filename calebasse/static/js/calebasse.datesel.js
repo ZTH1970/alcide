@@ -2,6 +2,7 @@
   $(function () {
     $('#date-selector').datepicker({
         dateFormat: "DD d MM yy",
+        showWeek: true,
         onClose: function(dateText, inst) {
             console.log('close');
         }
