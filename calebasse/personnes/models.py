@@ -198,7 +198,7 @@ class TimeTableQuerySet(query.QuerySet):
         if today is None:
             today = date.today()
         qs = self.current(today)
-        qs = self.filter(weekday=today.weekday())
+        qs = qs.filter(weekday=today.weekday())
         filters = []
         # week periods
         for week_period in range(1,5):
