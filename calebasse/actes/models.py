@@ -173,6 +173,8 @@ class Act(models.Model):
 
     def set_state(self, state_name, author, auto=False,
             change_state_check=True):
+        if not self.id:
+            self.save()
         if not author:
             raise Exception('Missing author to set state')
         if not state_name in VALIDATION_STATES.keys():
