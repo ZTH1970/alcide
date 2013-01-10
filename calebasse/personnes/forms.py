@@ -60,7 +60,10 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'worker')
+        fields = ('username', 'email', 'password1', 'password2', 'worker', 'groups')
+        widgets = {
+                'groups': forms.CheckboxSelectMultiple,
+        }
 
     def save(self, commit=True):
         instance = super(UserForm, self).save(commit=False)
@@ -77,6 +80,8 @@ class UserForm(forms.ModelForm):
                 else:
                     UserWorker.objects.create(user=instance, worker=worker)
             self.save_m2m = save_m2m
+        if instance.pk:
+            instance.groups = self.cleaned_data['groups']
         if commit:
             instance.save()
             self.save_m2m()
