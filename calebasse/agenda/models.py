@@ -424,34 +424,40 @@ class EventWithAct(Event):
         for act in self.act_set.all():
             if act.date == self.start_datetime.date():
                 return act
-        return self.get_or_create_act()
+        return self.build_act()
 
-    def get_or_create_act(self):
+    def get_state(self):
+        act = self.act
+        if act.id:
+            return act.get_state()
+        return None
+
+    def build_act(self):
         from ..actes.models import Act, ActValidationState
-        today = self.start_datetime.date()
-        act, created = Act.objects.get_or_create(patient=self.patient,
-                time=self.start_datetime.time(),
-                _duration=self.timedelta().seconds // 60,
-                parent_event=getattr(self, 'parent', self),
-                date=today,
-                act_type=self.act_type)
-        self.update_act(act)
-        if created:
+        act = Act()
+        self.init_act(act)
+        old_save = act.save
+        def save(*args, **kwargs):
+            old_save(*args, **kwargs)
+            act.doctors = self.participants.select_subclasses()
             ActValidationState.objects.create(act=act, state_name='NON_VALIDE',
                 author=self.creator, previous_state=None)
+        act.save = save
         return act
 
     def update_act(self, act):
         '''Update an act to match details of the meeting'''
+        self.init_act(act)
+        act.save()
+
+    def init_act(self, act):
         delta = self.timedelta()
         duration = delta.seconds // 60
         act._duration = duration
-        act.doctors = self.participants.select_subclasses()
         act.act_type = self.act_type
         act.patient = self.patient
         act.parent_event = self
         act.date = self.start_datetime.date()
-        act.save()
 
     def save(self, *args, **kwargs):
         '''Force event_type to be patient meeting.'''

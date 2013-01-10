@@ -403,7 +403,8 @@ div#users dd {
 div#users ul {
 	margin-left: 0;
 	padding-left: 0;
-	font-size: 11px;
+	font-size: 13px;
+  line-height: 20px;
 	list-style: none;
 }
 
@@ -572,10 +573,16 @@ div#intervenants ul {
 
 
 #date-selector {
+	margin-top: 0.5em;
 	border: 0;
 	text-align: center;
 	color: #8c8c73;
-  width: 13em;
+	font-size: 20px;
+	width: 13em;
+}
+
+#arrow {
+	font-size: 20px;
 }
 
 table.main {

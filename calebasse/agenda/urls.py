@@ -3,6 +3,8 @@ from django.conf.urls import url, patterns, include
 from calebasse.cbv import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 
+from calebasse.decorators import validator_only
+
 from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         NewEventView, AgendaServiceActivityView, UpdateAppointmentView,
         UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
@@ -28,21 +30,21 @@ agenda_patterns = patterns('',
                 UpdateEventView.as_view(),
                 name='update-event'),
             url(r'^delete-event/(?P<pk>\d+)$',
-                csrf_exempt(DeleteEventView.as_view()),
+                validator_only(csrf_exempt(DeleteEventView.as_view())),
                 name='delete-event'),
             url(r'^activite-du-service/$',
                 AgendaServiceActivityView.as_view(
                     template_name='agenda/service-activity.html'),
                 name='activite-du-service'),
             url(r'^validation-des-actes/$',
-                AgendaServiceActValidationView.as_view(
-                    template_name='agenda/act-validation.html'),
+                validator_only(AgendaServiceActValidationView.as_view(
+                    template_name='agenda/act-validation.html')),
                 name='validation-des-actes'),
             url(r'^validation-des-actes/validation-all/$',
-                AutomatedValidationView.as_view(),
+                validator_only(AutomatedValidationView.as_view()),
                 name='validation-all'),
             url(r'^validation-des-actes/unlock-all/$',
-                UnlockAllView.as_view(),
+                validator_only(UnlockAllView.as_view()),
                 name='unlock-all'),
             url(r'^rendez-vous-periodiques/$',
                 TemplateView.as_view(
@@ -53,8 +55,8 @@ agenda_patterns = patterns('',
                     template_name='agenda/agendas-therapeutes.html'),
                 name='agendas-therapeutes'),
             url(r'^jours-non-verrouilles/$',
-                JoursNonVerrouillesView.as_view(
-                    template_name='agenda/days-not-locked.html'),
+                validator_only(JoursNonVerrouillesView.as_view(
+                    template_name='agenda/days-not-locked.html')),
                 name='days-not-locked'),
             url(r'^ressources/$',
                 RessourcesView.as_view(

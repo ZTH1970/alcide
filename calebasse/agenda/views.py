@@ -19,7 +19,7 @@ from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
 
-from forms import (NewAppointmentForm, NewEventForm, UpdateAppointmentForm)
+from forms import (NewAppointmentForm, NewEventForm, UpdateAppointmentForm, UpdateEventForm)
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -31,11 +31,14 @@ class AgendaHomepageView(TemplateView):
     template_name = 'agenda/index.html'
 
     def post(self, request, *args, **kwargs):
-        acte_id = request.POST.get('acte-id')
+        acte_id = request.POST.get('event-id')
         try:
-            act = Act.objects.get(id=acte_id)
+            event = EventWithAct.objects.get(id=acte_id)
+            event = event.today_occurrence(self.date)
+            act = event.act
             if not act.validation_locked:
                 state_name = request.POST.get('act_state')
+                act.save()
                 act.set_state(state_name, request.user)
         except Act.DoesNotExist:
             pass
@@ -96,6 +99,7 @@ class AgendaServiceActivityView(TemplateView):
                 appointment['label'] = event.patient.display_name
                 appointment['act'] = event.act_type.name
                 appointment['state'] = event.act.get_state()
+                appointment['absent'] = event.act.is_absent()
             else:
                 appointment['type'] = 2
                 if event.event_type.label == 'Autre' and event.title:
@@ -185,7 +189,7 @@ class NewEventView(CreateView):
 
 class UpdateEventView(TodayOccurrenceMixin, UpdateView):
     model = Event
-    form_class = NewEventForm
+    form_class = UpdateEventForm
     template_name = 'agenda/update-event.html'
     success_url = '..'
 
@@ -220,8 +224,9 @@ class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
 
     def acts_of_the_day(self):
-        return [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
-                .today_occurrences(self.date)]
+        acts = [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
+                .today_occurrences(self.date)] + list(Act.objects.filter(date=self.date, parent_event__isnull=True))
+        return sorted(acts, key=lambda a: a.time or datetime.time.min)
 
     def post(self, request, *args, **kwargs):
         if 'unlock-all' in request.POST:
@@ -260,10 +265,16 @@ class AgendaServiceActValidationView(TemplateView):
             if not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             actes.append((act, state, display_name))
-        context['validation_states'] = dict(VALIDATION_STATES)
+            if not act.id:
+                act.save()
+        validation_states = dict(VALIDATION_STATES)
         if self.service.name != 'CMPP' and \
-                'ACT_DOUBLE' in context['validation_states']:
-            context['validation_states'].pop('ACT_DOUBLE')
+                'ACT_DOUBLE' in validation_states:
+            validation_states.pop('ACT_DOUBLE')
+        vs = [('VALIDE', 'Présent')]
+        validation_states.pop('VALIDE')
+        validation_states = vs + sorted(validation_states.items(), key=lambda tup: tup[0])
+        context['validation_states'] = validation_states
         context['actes'] = actes
         context['validation_msg'] = validation_msg
         context['authorized_lock'] = authorized_lock
@@ -350,7 +361,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
                 .prefetch_related(
                         'services',
                         'patient__service',
-                        'act_set__actvalidationstate_set', 
+                        'act_set__actvalidationstate_set',
                         'exceptions', 'participants')
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]
@@ -371,7 +382,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
             holidays_workers[worker.id] = holidays_worker
             daily_appointments = get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, events_worker, holidays_worker)
-            if all(map(lambda x: x.type == 'busy-here', daily_appointments)):
+            if all(map(lambda x: x.holiday, daily_appointments)):
                 continue
             context['workers_agenda'].append({'worker': worker,
                     'appointments': daily_appointments})
@@ -467,7 +478,7 @@ class AjaxWorkerTabView(TemplateView):
                         'patient__addresses__patientcontact_set',
                         'services',
                         'patient__service',
-                        'act_set__actvalidationstate_set', 
+                        'act_set__actvalidationstate_set',
                         'exceptions', 'participants')
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]

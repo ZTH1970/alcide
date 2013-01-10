@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 from calebasse.ressources.models import WorkerType, Service, HolidayType
 
-from models import Worker, UserWorker, TimeTable, Holiday
+from models import Worker, UserWorker, TimeTable, Holiday, ExternalTherapist, ExternalWorker
 
 
 class UserForm(forms.ModelForm):
@@ -60,7 +60,10 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'worker')
+        fields = ('username', 'email', 'password1', 'password2', 'worker', 'groups')
+        widgets = {
+                'groups': forms.CheckboxSelectMultiple,
+        }
 
     def save(self, commit=True):
         instance = super(UserForm, self).save(commit=False)
@@ -77,6 +80,8 @@ class UserForm(forms.ModelForm):
                 else:
                     UserWorker.objects.create(user=instance, worker=worker)
             self.save_m2m = save_m2m
+        if instance.pk:
+            instance.groups = self.cleaned_data['groups']
         if commit:
             instance.save()
             self.save_m2m()
@@ -182,10 +187,7 @@ class HolidaySearchForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(HolidaySearchForm, self).clean()
-        if cleaned_data.get('start_date') or cleaned_data.get('end_date'):
-            if not cleaned_data.get('start_date') \
-                   or not cleaned_data.get('end_date'):
-                raise forms.ValidationError(u'Vous devez fournir une date de début et de fin')
+        if cleaned_data.get('start_date') and cleaned_data.get('end_date'):
             if cleaned_data['start_date'] > cleaned_data['end_date']:
                 raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
         return cleaned_data

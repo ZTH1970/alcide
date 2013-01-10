@@ -34,7 +34,8 @@ class People(BaseModelMixin, models.Model):
 
     objects = InheritanceManager()
     last_name = models.CharField(max_length=128, verbose_name=u'Nom')
-    first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)')
+    first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)',
+        blank=True, null=True)
     display_name = models.CharField(max_length=256,
             verbose_name=u'Nom complet', editable=False)
     gender = models.IntegerField(verbose_name=u"Genre", choices=GENDERS,
@@ -43,7 +44,10 @@ class People(BaseModelMixin, models.Model):
     phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
 
     def save(self, **kwargs):
-        self.display_name = self.first_name + ' ' + self.last_name.upper()
+        if self.first_name:
+            self.display_name = self.first_name + ' ' + self.last_name.upper()
+        else:
+            self.display_name = self.last_name.upper()
         super(People, self).save(**kwargs)
 
     def __unicode__(self):
@@ -52,8 +56,8 @@ class People(BaseModelMixin, models.Model):
     def get_initials(self):
         initials = []
         if self.first_name:
-            initials.append(self.first_name[0].upper())
-        initials.append(self.last_name[0].upper())
+            initials = [name[0].upper() for name in ' '.join(self.first_name.split('-')).split()]
+        initials += [name[0].upper() for name in ' '.join(self.last_name.split('-')).split()]
         return ''.join(initials)
 
     class Meta:
@@ -123,7 +127,7 @@ class ExternalWorker(People):
     fax = models.CharField(max_length=30,
             blank=True, null=True, default=None)
     type = models.ForeignKey('ressources.WorkerType',
-            verbose_name=u'Spécialité')
+            verbose_name=u'Spécialité', default=18)
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
     old_service = models.CharField(max_length=256,
@@ -152,7 +156,7 @@ class ExternalTherapist(People):
     fax = models.CharField(max_length=30,
             blank=True, null=True, default=None)
     type = models.ForeignKey('ressources.WorkerType',
-            verbose_name=u'Spécialité')
+            verbose_name=u'Spécialité', default=18)
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
     old_service = models.CharField(max_length=256,
@@ -188,13 +192,14 @@ class TimeTableQuerySet(query.QuerySet):
     def current(self, today=None):
         if today is None:
             today = date.today()
-        return self.filter(start_date__lte=today, end_date__gte=today)
+        return self.filter(models.Q(start_date__lte=today) | models.Q(start_date__isnull=True)) \
+                    .filter(models.Q(end_date__gte=today) | models.Q(end_date__isnull=True))
 
     def for_today(self, today=None):
         if today is None:
             today = date.today()
         qs = self.current(today)
-        qs = self.filter(weekday=today.weekday())
+        qs = qs.filter(weekday=today.weekday())
         filters = []
         # week periods
         for week_period in range(1,5):
@@ -352,7 +357,9 @@ class HolidayQuerySet(query.QuerySet):
                           |models.Q(service__isnull=True))
 
     def for_service_workers(self, service):
-        return self.filter(worker__services=service)
+        return self.filter(models.Q(worker__services=service)
+                |models.Q(service=service)
+                |models.Q(worker__isnull=True, service__isnull=True))
 
     def future(self):
         return self.filter(end_date__gte=date.today())
@@ -414,7 +421,7 @@ class Holiday(BaseModelMixin, models.Model):
                 ret += u" (jusqu'à {0})".format(time2french(self.end_time))
         return ret
 
-    def to_interval(self, date):
+    def to_interval(self, date=None):
         if date == self.start_date:
             start_time = self.start_time or datetime_time(8, 0)
         else:

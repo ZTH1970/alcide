@@ -6,18 +6,15 @@
     <a href="../..">Retourner à l'accueil</a>
     <button id="new-patientrecord">Nouveau dossier</button>
     <span>
-      Dossiers: <span class="num">{{ stats.dossiers }}</span> -
-      En contact: <span class="num">{{ stats.En_contact }}</span> -
-      Fin d'accueil: <span class="num">{{ stats.Fin_daccueil }}</span> -
-      En diagnostic: <span class="num">{{ stats.Diagnostic }}</span> -
-      En traitement: <span class="num">{{ stats.Traitement }}</span> -
-      Clos: <span class="num">{{ stats.Clos }}</span>
+      {% for name, nb in stats %}
+    {{ name }}: <span class="num">{{ nb }}</span> {% if not forloop.last %} - {% endif %}
+      {% endfor %}
     </span>
         <br>
         <br>&nbsp;
-    <div id="extra-top-links">
-     <a href="quotations">Listing avec quotations</a>
-    </div>
+<!--    <div id="extra-top-links">-->
+<!--     <a href="quotations">Listing avec quotations</a>-->
+<!--    </div>-->
     </span>
 {% endblock %}
 
@@ -114,16 +111,16 @@
 {% if request.GET %}
 <div class="pagination">
     <span class="step-links">
-        {% if patient_records.has_previous %}
-            <a href="?{{ query }}&page={{ patient_records.previous_page_number }}">««</a>
+        {% if paginate_patient_records.has_previous %}
+            <a href="?{{ query }}&page={{ paginate_patient_records.previous_page_number }}">««</a>
         {% endif %}
 
         <span class="current">
-            page {{ patient_records.number }} de {{ patient_records.paginator.num_pages }}
+            page {{ paginate_patient_records.number }} de {{ paginate_patient_records.paginator.num_pages }}
         </span>
 
-        {% if patient_records.has_next %}
-            <a href="?{{ query }}&page={{ patient_records.next_page_number }}">»»</a>
+        {% if paginate_patient_records.has_next %}
+            <a href="?{{ query }}&page={{ paginate_patient_records.next_page_number }}">»»</a>
         {% endif %}
     </span>
 </div>

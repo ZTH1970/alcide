@@ -32,6 +32,7 @@ class Appointment(object):
         self.weight = 0
         self.act_type = None
         self.validation = None
+        self.holiday = False
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -44,7 +45,7 @@ class Appointment(object):
     def __get_initials(self, personns):
         pass
 
-    def init_from_event(self, event, service):
+    def init_from_event(self, event, service, validation_states=None):
         """ """
         delta = event.end_datetime - event.start_datetime
         self.event_id = event.id
@@ -76,27 +77,21 @@ class Appointment(object):
             self.patient_record_id = event.patient.id
             self.patient_record_paper_id = event.patient.paper_id
             self.act_type = event.act_type.name
-            self.act_state = event.act.get_state().state_name
-            if self.act_state not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
-                self.act_absence = VALIDATION_STATES.get(self.act_state)
-            state = event.act.get_state()
-            display_name = VALIDATION_STATES[state.state_name]
-            if not state.previous_state and state.state_name == 'NON_VALIDE':
+            state = event.get_state()
+            state_name = state.state_name if state else 'NON_VALIDE'
+            display_name = VALIDATION_STATES[state_name]
+            if state_name not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
+                self.act_absence = VALIDATION_STATES.get(state_name)
+            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
-            validation_states = None
-            if service in services:
-                validation_states = dict(VALIDATION_STATES)
-                if not 'CMPP' in [s.name for s in services] and \
-                        'ACT_DOUBLE' in validation_states:
-                    validation_states.pop('ACT_DOUBLE')
+            if not service in services:
+                validation_states = None
             self.validation = (event.act, state, display_name, validation_states)
         else:
             self.event_type = event.event_type
             self.workers = event.participants.all()
         for worker in self.workers:
-            if worker.first_name:
-                self.workers_initial += " " + worker.first_name.upper()[0]
-            self.workers_initial += worker.last_name.upper()[0]
+            self.workers_initial += " " + worker.get_initials()
             self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
 
     def init_free_time(self, length, begin_time):
@@ -111,6 +106,10 @@ class Appointment(object):
         self.length = length
         self.__set_time(begin_time)
         self.description = description
+
+    def init_holiday_time(self, title, length, begin_time, description=None):
+        self.init_busy_time(title, length, begin_time, description)
+        self.holiday = True
 
     def init_start_stop(self, title, time):
         """
@@ -136,9 +135,16 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
             appointment.init_free_time(delta_minutes,
                     time(free_time.lower_bound.hour, free_time.lower_bound.minute))
             appointments.append(appointment)
+    validation_states = dict(VALIDATION_STATES)
+    if service.name != 'CMPP' and \
+            'ACT_DOUBLE' in validation_states:
+        validation_states.pop('ACT_DOUBLE')
+    vs = [('VALIDE', 'Présent')]
+    validation_states.pop('VALIDE')
+    validation_states = vs + sorted(validation_states.items(), key=lambda tup: tup[0])
     for event in events:
         appointment = Appointment()
-        appointment.init_from_event(event, service)
+        appointment.init_from_event(event, service, validation_states)
         appointments.append(appointment)
     for holiday in holidays:
         interval = holiday.to_interval(date)
@@ -146,7 +152,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         delta_minutes = delta.seconds / 60
         appointment = Appointment()
         label = u"Congé (%s)" % holiday.holiday_type.name
-        appointment.init_busy_time(label,
+        appointment.init_holiday_time(label,
                     delta_minutes,
                     time(interval.lower_bound.hour, interval.lower_bound.minute),
                     description=holiday.comment)

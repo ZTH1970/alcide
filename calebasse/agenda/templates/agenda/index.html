@@ -13,8 +13,8 @@
     <div id="extra-top-links">
      <a href="activite-du-service">Activité du service</a>
      —
-     <a href="validation-des-actes">Validation des actes</a>
-     —
+     {% if 'validator' in role %}<a href="validation-des-actes">Validation des actes</a>
+     —{% endif %}
 {% comment %}
      <a href="rendez-vous-periodiques">Rendez-vous périodiques</a>
      —

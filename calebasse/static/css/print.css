@@ -8,7 +8,7 @@ html {
 }
 
 div#header, div#splash, div#footer, div#appbar, div#datesel,
-div#djDebugToolbarHandle {
+div#djDebugToolbarHandle, button#uncheck-all, button#check-all, input.printable  {
   display: none;
 }
 
@@ -61,6 +61,10 @@ div.summary {
 
 .print-only {
   display: inherit;
+}
+
+.screen-only {
+  display: none;
 }
 
 div#sidebar {

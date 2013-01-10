@@ -86,7 +86,17 @@ class NewAppointmentForm(forms.ModelForm):
 
 
 class UpdateAppointmentForm(NewAppointmentForm):
-    pass
+    class Meta(NewAppointmentForm.Meta):
+        fields = (
+                'start_datetime',
+                'date',
+                'time',
+                'duration',
+                'patient',
+                'participants',
+                'room',
+                'act_type',
+        )
 
 
 class NewEventForm(forms.ModelForm):
@@ -157,3 +167,18 @@ class NewEventForm(forms.ModelForm):
             self._errors['title'] = self.error_class([
                             u"Ce champ est obligatoire pour les événements de type « Autre »."])
         return cleaned_data
+
+
+class UpdateEventForm(NewEventForm):
+    class Meta(NewEventForm.Meta):
+        fields = (
+                'start_datetime',
+                'title',
+                'date',
+                'time',
+                'duration',
+                'room',
+                'participants',
+                'event_type',
+                'services',
+        )

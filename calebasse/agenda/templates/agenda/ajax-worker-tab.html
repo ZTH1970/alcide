@@ -1,13 +1,12 @@
 {% load url from future %}
-<a class="print" href="#">Imprimer</a>
-<div>
+<div {% if appointment.event_id %}data-event-id="{{ appointment.event_id }}"{% endif %}>
   {% for appointment in worker_agenda.appointments %}
   <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
       {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
     <span class="hour">{{ appointment.begin_hour }}</span>
     {% if appointment.event_type %} — {{ appointment.event_type }}  {% endif %}
     {% if appointment.title %} — {{ appointment.title }}  {% endif %}
-    {% if appointment.length %} — {{ appointment.length }}m {% endif %}
+    {% if appointment.length %} — {{ appointment.length }} mn {% endif %}
     {% if appointment.workers_initial %} —{{ appointment.workers_initial }} {% endif %}
     {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
     {% if appointment.room %} — {{ appointment.room }} {% endif %}
@@ -28,7 +27,7 @@
          {% else %}
            <button title="Éditer un événement" class="edit-event icon-edit" data-event-id="{{ appointment.event_id }}">
          {% endif %}
-        <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-url="{% url 'delete-event' service=service date=date pk=appointment.event_id %}" data-rdv="{{ appointment.title }}"></button>
+        {% if 'validator' in role %}<button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-url="{% url 'delete-event' service=service date=date pk=appointment.event_id %}" data-rdv="{{ appointment.title }}"></button>{% endif %}
         {% endif %}
    </span>
   </h3>
@@ -94,9 +93,9 @@
         {% if not appointment.validation.0.validation_locked and appointment.validation.3 %}
           <form method="post" class="inline-form">
           {% csrf_token %}
-          <input type="hidden" value="{{appointment.validation.0.id}}" name="acte-id">
-          <select data-previous="{{ last_status.state_name }}" name="act_state">
-            {% for state_name, display_state_name in appointment.validation.3.items %}
+          <input type="hidden" value="{{appointment.event_id}}" name="event-id">
+          <select name="act_state">
+            {% for state_name, display_state_name in appointment.validation.3 %}
             <option value="{{ state_name }}" {% if state_name == appointment.validation.1.state_name %}selected{% endif %}>{{ display_state_name }}</option>
             {% endfor %}
           </select>

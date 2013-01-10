@@ -48,7 +48,7 @@
 
 {% block appbar %}
 <h2>Horaire du {{weekday}} de <span class="lastname">{{object.last_name}}</span> {{object.first_name}}</h2>
-  <a href="..">Retour</a>
+  <a href="..">Retour à la page de <span class="lastname">{{object.last_name}}</span> {{object.first_name}}</a>
 {% endblock %}
 
 
@@ -103,7 +103,7 @@
       <button class="enable-on-change">Modifier</button>
       <button id="add-form">Ajouter une ligne</button>
       {% endblock %}
-      <a href="..">{% block back-link %}Retour{% endblock %}</a>
+<!--      <a href="..">{% block back-link %}Retour{% endblock %}</a>-->
     </form>
 {% endblock %}
 

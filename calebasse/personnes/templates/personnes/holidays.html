@@ -14,10 +14,8 @@
   <h4>En cours</h4>
 
   <ul>
-    {% for holiday in current_holidays %}
-    <li><a href="{% url 'worker_update' service=service pk=holiday.worker.pk %}">
-        <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}</a>,
-        {{ holiday }}</li>
+    {% for holiday in current_holidays|dictsort:"worker" %}
+      <li><a href="{{ holiday.url }}">{{ holiday.worker }} {{ holiday.holiday }}</a></li>
     {% endfor %}
   </ul>
 {% endif %}
@@ -26,28 +24,32 @@
   <h4>À venir (jusqu'au {{ end_date|date:"d/m/Y" }})</h4>
 
   <table id="conges-a-venir">
-    <thead>
-      <tr>
-        {% for month in future_holidays %}
-          <th>{{ month.date|date:"F"|capfirst }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        {% for month in future_holidays %}
-          <td>
-            <ul>
-              {% for holiday in month.holidays %}
-              <li><a href="{% url 'worker_update' service=service pk=holiday.worker.pk %}">
-                  <span class="lastname">{{ holiday.worker.last_name }}</span> {{holiday.worker.first_name }}</a>,
-                  {{ holiday }}</li>
-              {% endfor %}
-            </ul>
-          </td>
-        {% endfor %}
-      </tr>
-    </tbody>
+    {% for months in future_holidays %}
+      <thead>
+        <tr>
+          {% for future in months %}
+            <th>{{ future.month|capfirst }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {% for future in months %}
+            <td>
+              <ul>
+                {% for holiday in future.holidays|dictsort:"worker" %}
+                  <li>
+                    <a href="{{ holiday.url }}">
+                      {{ holiday.worker }} {{ holiday.holiday }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+   {% endfor %}
   </table>
 {% endif %}
 
@@ -68,6 +70,7 @@
   <form>
     {{ search_form.non_field_errors }}
     {{ search_form.start_date.errors }}
+    {{ search_form.end_date.errors }}
     <p>Afficher la liste des congés pris entre
       <span id="start-date-datepicker" data-number-of-months="3" data-before-selector="#end-date-datepicker" class="datepicker">{{ search_form.start_date }}</span>
       et

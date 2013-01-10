@@ -1,3 +1,5 @@
+from django.contrib.auth.models import Group
+
 from datetime import timedelta, datetime
 
 __EPOCH = datetime(day=5,month=1,year=1970)
@@ -23,3 +25,29 @@ def weekday_ranks(date):
         return n, 4
     else:
         return n,
+
+def is_super_user(user):
+    if not user or not user.is_authenticated():
+        return False
+    super_group = None
+    try:
+        super_group = Group.objects.get(name='Super utilisateurs')
+    except:
+        return False
+    if super_group in user.groups.all():
+        return True
+    return False
+
+def is_validator(user):
+    if is_super_user(user):
+        return True
+    if not user or not user.is_authenticated():
+        return False
+    validator_group = None
+    try:
+        validator_group = Group.objects.get(name='Administratifs')
+    except:
+        return False
+    if validator_group in user.groups.all():
+        return True
+    return False

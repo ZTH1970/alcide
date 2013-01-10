@@ -54,7 +54,7 @@
            {% csrf_token %}
            <input type="hidden" value="{{acte.id}}" name="acte-id">
            <select data-previous="{{ last_status.state_name }}" name="act_state">
-             {% for state_name, display_state_name in validation_states.items %}
+             {% for state_name, display_state_name in validation_states %}
              <option value="{{ state_name }}" {% if state_name == last_status.state_name %}selected{% endif %}>{{ display_state_name }}</option>
              {% endfor %}
            </select>

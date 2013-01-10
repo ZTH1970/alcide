@@ -31,9 +31,9 @@
         {% else %}Aucun{% endif %}
     </li>
     <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
-      <li><label>Commentaire :</label><br/>
+      <li><label>Commentaire </label> <button class="save enable-on-change" id="btn-maj">✔</button><br/>
       {{ forms.general.comment }}
-      <button id="btn-maj">Mettre à jour</button></li>
+      </li>
     </ul>
   </div>
   <div class="right">
@@ -78,9 +78,9 @@
     </div>
   </form>
 
-    <form method="post" id="create-directory-form" action="create-directory">{% csrf_token %}
-      <button>Créer répertoire patient</button>
-    </form>
+<!--    <form method="post" id="create-directory-form" action="create-directory">{% csrf_token %}-->
+<!--      <button>Créer répertoire patient</button>-->
+<!--    </form>-->
 
   <!-- <div class="notifs">
     <h4>Notifications</h4>
