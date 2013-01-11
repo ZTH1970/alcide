@@ -17,12 +17,12 @@
 {% if worker_agenda.appointments %}
 <div class="worker-agenda">
   <h2>
-    {{service_name }} - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
+    <strong>{{service_name }}</strong> - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
     <input type="checkbox" class="printable" checked>
   </h2>
 <h3>{{ date|date:"DATE_FORMAT" }}</h3>
 
-<span class="remarque">Remarque :</span>
+<!--<span class="remarque">Remarque :</span>-->
 
 <table>
  <thead>
