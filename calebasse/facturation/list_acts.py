@@ -44,7 +44,7 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     if isinstance(end_day, datetime):
         end_day = end_day.date()
     if acts is None:
-        acts = Act.objects.filter(is_billed=False,
+        acts = Act.objects.filter(is_billed=False, is_lost=False,
             patient__service=service).order_by('date')
     # Filter acts according to the date
     i = 0
