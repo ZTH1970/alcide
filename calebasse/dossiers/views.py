@@ -264,7 +264,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 .prefetch_related('participants', 'exceptions__eventwithact', 'act_set__actvalidationstate_set')
         occurrences = []
         for event in qs:
-            occurrences.extend(filter(lambda e: e.start_datetime.date() > today, event.all_occurences(limit=180)))
+            occurrences.extend(filter(lambda e: e.start_datetime.date() >= today, event.all_occurences(limit=180)))
         occurrences = sorted(occurrences, key=lambda e: e.start_datetime)
         for event in occurrences:
             state = None
