@@ -36,7 +36,7 @@
     <div id="actes">
     {% for acte, last_status, last_status_name in actes %}
     <div class="frame acte" id="acte-frame-{{ acte.id }}">
-      <h3>{{ acte.time|time:"H:i" }} - <strong><span class="lastname">{{ acte.patient.last_name }}</span> {{ acte.patient.first_name }}</strong>
+      <h3>{{ acte.start_datetime|date:"H:i" }} - <strong><span class="lastname">{{ acte.patient.last_name }}</span> {{ acte.patient.first_name }}</strong>
           {% if acte.patient.paper_id %} {{ acte.patient.paper_id }} {% endif %}({{ acte.patient.id }}) -
           <strong>{{ acte.act_type }}</strong>
           <p>{% if acte.doctors %}{% for doctor in acte.doctors.all %}<span class="lastname">{{ doctor.last_name }}</span> {{ doctor.first_name }} {% endfor %}{% endif %}</p>

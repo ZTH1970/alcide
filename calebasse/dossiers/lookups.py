@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from ajax_select import LookupChannel
 from calebasse.dossiers.models import PatientRecord, PatientAddress
@@ -6,19 +7,27 @@ from django.core.exceptions import PermissionDenied
 class PatientRecordLookup(LookupChannel):
     model = PatientRecord
     search_field = 'display_name'
+    homonym = False
 
     def get_query(self,q,request):
         qs = super(PatientRecordLookup, self).get_query(q, request)
         if request.COOKIES.has_key('home-service'):
             service = request.COOKIES['home-service'].upper().replace('-', ' ')
             qs = qs.filter(service__name=service)
+        #nb = qs.count()
+        #nb_distinct = qs.distinct('display_name').count()
+        #if nb != nb_distinct:
+        #    self.homonym = True
+        qs.prefetch_related('last_state__status')
         return qs
 
-    def get_result(self,obj):
+    def format_match(self,obj):
+        texte = obj.display_name
         if obj.paper_id:
-            return obj.display_name + u' (' + obj.paper_id + u')'
-        else:
-            return obj.display_name
+            texte += u' (N° : ' + obj.paper_id + u')'
+        if obj.last_state:
+            texte += u' (Statut : %s)' % obj.last_state.status.name
+        return self.format_item_display(texte)
 
     def check_auth(self, request):
         if not request.user.is_authenticated():

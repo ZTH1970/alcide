@@ -75,7 +75,7 @@ def automated_validation(date, service, user, commit=True):
             nb_acts_abs_ess_pps = nb_acts_abs_ess_pps + 1
         if act.is_state('ENF_HOSP'):
             nb_acts_enf_hosp = nb_acts_enf_hosp + 1
-        if act.is_state('ACT_LOST'):
+        if act.is_state('ACT_LOST') or act.is_lost:
             nb_acts_losts = nb_acts_losts + 1
 
     nb_acts_total = len(acts_of_the_day)
@@ -83,7 +83,7 @@ def automated_validation(date, service, user, commit=True):
     if service.name == 'CMPP':
         # Verification des actes en doubles
         acts = [act for act in acts_of_the_day \
-            if act.get_state().state_name in ('VALIDE', 'NON_VALIDE',
+            if not act.is_lost and act.get_state().state_name in ('VALIDE', 'NON_VALIDE',
                 'ACT_DOUBLE')]
         for act in acts:
             if act.patient not in patients:

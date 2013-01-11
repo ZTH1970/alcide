@@ -37,7 +37,7 @@ class People(BaseModelMixin, models.Model):
     first_name = models.CharField(max_length=128, verbose_name=u'Prénom(s)',
         blank=True, null=True)
     display_name = models.CharField(max_length=256,
-            verbose_name=u'Nom complet', editable=False)
+            verbose_name=u'Nom complet', editable=False, db_index=True)
     gender = models.IntegerField(verbose_name=u"Genre", choices=GENDERS,
             max_length=1, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)

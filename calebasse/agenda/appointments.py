@@ -151,6 +151,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         validation_states.pop('ACT_DOUBLE')
     vs = [('VALIDE', 'Présent')]
     validation_states.pop('VALIDE')
+    validation_states.pop('ACT_LOST')
     validation_states = vs + sorted(validation_states.items(), key=lambda tup: tup[0])
     for event in events:
         appointment = Appointment()

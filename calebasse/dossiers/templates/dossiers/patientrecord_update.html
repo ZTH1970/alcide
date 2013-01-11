@@ -437,58 +437,47 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     </div>
 
     <div id="tabs-5"> <!-- Actes passés -->
+
+    <table class="main">
+      <thead>
+          <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> </tr>
+      </thead>
+      <tbody>
         {% for act, state in last_rdvs %}
-        <div class="frame">
-            <h3>{% firstof act.start_datetime|date:"d/m/y H:i" act.date %} {{ act.act_type }}</h3>
-            <ul>
-            {% if act.doctors.all %}
-            <li><label>Praticiens :</label>
-            {% for doctor in act.doctors.all %}
+        <tr>
+          <td>{% firstof act.start_datetime|date:"l d/m/y H:i"|title act.date %}</td>
+          <td>{% if state %}<strong>{{ state }}</strong>{% else %}Non pointé.{% endif %}</td>
+          <td>{{ act.act_type }}</td>
+          <td>{% for doctor in act.doctors.all %}
             {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
-            {% endfor %}
-            </li>
-            {% endif %}
-            {% if act.parent_event.room %}
-            <li>
-            Salle : {{ act.parent_event.room }}
-            </li>
-            {% endif %}
-            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }}.
-            {% else %}
-              Non pointé.
-            {% endif %}
-            </li>
-        </ul>
-        </div>
+            {% endfor %}</td>
+        </tr>
         {% endfor %}
+      </tbody>
+    </table>
     </div>
 
     <div id="tabs-6"> <!-- Prochains rendez-vous -->
+
+    <table class="main">
+      <thead>
+          <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> </tr>
+      </thead>
+      <tbody>
         {% for event, state in next_rdvs %}
-        <div class="frame">
-            <h3>{% firstof event.start_datetime|date:"d/m/y H:i" %} {{ event.act_type }}</h3>
-            <ul>
-            {% if event.participants.all %}
-            <li><label>Praticiens :</label>
-            {% for doctor in event.participants.all %}
-            {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
-            {% endfor %}
-            </li>
-            {% endif %}
-            {% if event.room %}
-            <li>
-            Salle : {{ event.room }}
-            </li>
-            {% endif %}
-            <li>{% if state %}<strong>{{ state }}</strong>, le {{ state.created }}.
-            {% else %}
-              Non pointé.
-            {% endif %}
-            </li>
-        </ul>
-        </div>
+        <tr>
+          <td>{% firstof event.start_datetime|date:"l d/m/y H:i"|title %}</td>
+          <td>{% if state %}<strong>{{ state }}</strong>{% else %}Non pointé.{% endif %}</td>
+          <td>{{ event.act_type }}</td>
+          <td>{% for doctor in event.participants.all %}
+                {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
+                {% endfor %}</td>
+        </tr>
         {% endfor %}
+      </tbody>
+    </table>
     </div>
+
 
     <div id="tabs-7">
         <div class="frame">
