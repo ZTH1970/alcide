@@ -285,7 +285,7 @@ function state_dialog(url, state_title, state_type) {
               var value = "false";
           }
           $.ajax({
-              url: '/api/patientaddress/' + $(this).data("id") + '/?format=json',
+              url: '/api/v1/patientaddress/' + $(this).data("id") + '/?format=json',
               type: 'PATCH',
               contentType: 'application/json',
               data: '{"place_of_life": ' + value + '}',

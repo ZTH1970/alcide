@@ -7,7 +7,7 @@ function enable_events(base) {
           var span = textarea.prev()
           var btn = $(this)
           $.ajax({
-              url: '/api/event/' + $(this).data("event-id") + '/?format=json',
+              url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json',
               type: 'PATCH',
               contentType: 'application/json',
               data: '{"description": "' + textarea.val() + '"}',
@@ -17,6 +17,40 @@ function enable_events(base) {
               }
           });
       });
+      /* TODO: put this in a generic function */
+      $('.input_is_billable').click(function() {
+          if ((this.checked) == false) {
+              var value = "true";
+          } else {
+              var value = "false";
+          }
+          $.ajax({
+              url: '/api/v1/act/' + $(this).data("id") + '/?format=json',
+              type: 'PATCH',
+              contentType: 'application/json',
+              data: '{"switch_billable": ' + value + '}',
+              success: function(data) {
+                  console.log('success');
+              }
+          });
+      });
+      $('.input_is_lost').click(function() {
+          if ((this.checked) == true) {
+              var value = "true";
+          } else {
+              var value = "false";
+          }
+          $.ajax({
+              url: '/api/v1/act/' + $(this).data("id") + '/?format=json',
+              type: 'PATCH',
+              contentType: 'application/json',
+              data: '{"is_lost": ' + value + '}',
+              success: function(data) {
+                  console.log('success');
+              }
+          });
+      });
+
       $(base).find('.appointment').on('click', function() {
           $('.textedit span', this).html('');
       });

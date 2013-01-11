@@ -1,6 +1,7 @@
 
 from tastypie.authorization import DjangoAuthorization
 from tastypie.resources import ModelResource
+from calebasse.actes.models import Act
 from calebasse.agenda.models import Event
 from calebasse.dossiers.models import PatientRecord, PatientAddress
 
@@ -23,7 +24,14 @@ class PatientAddressRessource(ModelResource):
         resource_name = 'patientaddress'
         authorization = DjangoAuthorization()
 
+class ActRessource(ModelResource):
+    class Meta:
+        queryset = Act.objects.all()
+        resource_name = 'act'
+        authorization = DjangoAuthorization()
+
 patientaddress_ressource = PatientAddressRessource()
 event_resource = EventResource()
 patientrecord_resource = PatientRecordRessource()
+act_ressource = ActRessource()
 
