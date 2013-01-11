@@ -262,6 +262,8 @@ class AgendaServiceActValidationView(TemplateView):
         acts_of_the_day = self.acts_of_the_day()
         actes = list()
         for act in acts_of_the_day:
+            if not act.id:
+                act.save()
             state = act.get_state()
             display_name = None
             if state :
@@ -269,8 +271,6 @@ class AgendaServiceActValidationView(TemplateView):
                 if not state.previous_state and state.state_name == 'NON_VALIDE':
                     state = None
             actes.append((act, state, display_name))
-            if not act.id:
-                act.save()
         validation_states = dict(VALIDATION_STATES)
         if self.service.name != 'CMPP' and \
                 'ACT_DOUBLE' in validation_states:
