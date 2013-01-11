@@ -12,13 +12,15 @@ from ..middleware.request import get_request
 from ajax_select import make_ajax_field
 from models import Event, EventWithAct, EventType
 
-class NewAppointmentForm(forms.ModelForm):
+class BaseForm(forms.ModelForm):
     date = forms.DateField(label=u'Date', localize=True)
     time = forms.TimeField(label=u'Heure de début')
     duration = forms.CharField(label=u'Durée',
             help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
-
     participants = make_ajax_field(EventWithAct, 'participants', 'worker-or-group', True)
+
+
+class NewAppointmentForm(BaseForm):
     patient = make_ajax_field(EventWithAct, 'patient', 'patientrecord', False)
 
     class Meta:
@@ -99,15 +101,8 @@ class UpdateAppointmentForm(NewAppointmentForm):
         )
 
 
-class NewEventForm(forms.ModelForm):
-
+class NewEventForm(BaseForm):
     title = forms.CharField(label=u"Complément de l'intitulé", max_length=32, required=False)
-    date = forms.DateField(label=u'Date', localize=True)
-    time = forms.TimeField(label=u'Heure de début')
-    duration = forms.CharField(label=u'Durée',
-            help_text=u'en minutes; vous pouvez utiliser la roulette de votre souris.')
-
-    participants = make_ajax_field(Event, 'participants', 'worker-or-group', True)
 
     class Meta:
         model = Event

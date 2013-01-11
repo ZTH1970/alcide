@@ -80,6 +80,18 @@ function enable_events(base) {
           });
         return false;
       });
+      $(base).on('click', '.update-periodic-rdv', function () {
+        $('.ui-dialog-content').dialog('destroy');
+        $('.ui-dialog-content').empty();
+        generic_ajaxform_dialog('update-periodic-rdv/' + $(this).data('id'),
+          'Modifier un rendez-vous périodique', '#ajax-dlg', '800px', 'Modifier');
+      });
+      $(base).on('click', '.update-periodic-event', function () {
+        $('.ui-dialog-content').dialog('destroy');
+        $('.ui-dialog-content').empty();
+        generic_ajaxform_dialog('update-periodic-event/' + $(this).data('id'),
+          'Modifier un évènement périodique', '#ajax-dlg', '800px', 'Modifier');
+      });
 }
 
 function reorder_disponibility_columns() {

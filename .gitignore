@@ -36,3 +36,6 @@ local_settings.py
 calebasse.sqlite3
 scripts/*/*/*.csv
 scripts/*/*.json
+scripts/*.csv
+scripts/*.json
+calebasse/calebasse.log

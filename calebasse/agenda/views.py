@@ -19,15 +19,17 @@ from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
 
-from forms import (NewAppointmentForm, NewEventForm, UpdateAppointmentForm, UpdateEventForm)
+from forms import (NewAppointmentForm, NewEventForm,
+        UpdateAppointmentForm, UpdateEventForm)
+
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
     return redirect('agenda', date=datetime.date.today().strftime('%Y-%m-%d'),
             service=service)
 
-class AgendaHomepageView(TemplateView):
 
+class AgendaHomepageView(TemplateView):
     template_name = 'agenda/index.html'
 
     def post(self, request, *args, **kwargs):
@@ -62,8 +64,8 @@ class AgendaHomepageView(TemplateView):
 
         return context
 
-class AgendaServiceActivityView(TemplateView):
 
+class AgendaServiceActivityView(TemplateView):
     template_name = 'agenda/service-activity.html'
 
     def get_context_data(self, **kwargs):
@@ -117,7 +119,7 @@ class AgendaServiceActivityView(TemplateView):
 class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateView):
     model = EventWithAct
     form_class = NewAppointmentForm
-    template_name = 'agenda/nouveau-rdv.html'
+    template_name = 'agenda/new-appointment.html'
     success_url = '..'
 
     def get_initial(self):
@@ -134,19 +136,21 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         kwargs['service'] = self.service
         return kwargs
 
+
 class TodayOccurrenceMixin(object):
     def get_object(self, queryset=None):
         o = super(TodayOccurrenceMixin, self).get_object(queryset)
         return o.today_occurrence(self.date)
 
-class UpdateAppointmentView(TodayOccurrenceMixin, UpdateView):
+
+class BaseAppointmentView(UpdateView):
     model = EventWithAct
     form_class = UpdateAppointmentForm
     template_name = 'agenda/update-rdv.html'
     success_url = '..'
 
     def get_initial(self):
-        initial = super(UpdateView, self).get_initial()
+        initial = super(BaseAppointmentView, self).get_initial()
         initial['start_datetime'] = self.date
         initial['date'] = self.object.start_datetime.date()
         initial['time'] = self.object.start_datetime.time()
@@ -160,9 +164,18 @@ class UpdateAppointmentView(TodayOccurrenceMixin, UpdateView):
         return initial
 
     def get_form_kwargs(self):
-        kwargs = super(UpdateAppointmentView, self).get_form_kwargs()
+        kwargs = super(BaseAppointmentView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+
+class UpdateAppointmentView(TodayOccurrenceMixin, BaseAppointmentView):
+    pass
+
+
+class UpdatePeriodicAppointmentView(BaseAppointmentView):
+    form_class = NewAppointmentForm
+    template_name = 'agenda/new-appointment.html'
 
 
 class NewEventView(CreateView):
@@ -187,14 +200,14 @@ class NewEventView(CreateView):
         return kwargs
 
 
-class UpdateEventView(TodayOccurrenceMixin, UpdateView):
+class BaseEventView(UpdateView):
     model = Event
     form_class = UpdateEventForm
     template_name = 'agenda/update-event.html'
     success_url = '..'
 
     def get_initial(self):
-        initial = super(UpdateEventView, self).get_initial()
+        initial = super(BaseEventView, self).get_initial()
         initial['start_datetime'] = self.date
         initial['date'] = self.object.start_datetime.date()
         initial['time'] = self.object.start_datetime.time()
@@ -208,9 +221,19 @@ class UpdateEventView(TodayOccurrenceMixin, UpdateView):
         return initial
 
     def get_form_kwargs(self):
-        kwargs = super(UpdateEventView, self).get_form_kwargs()
+        kwargs = super(BaseEventView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+
+class UpdateEventView(TodayOccurrenceMixin, BaseEventView):
+    pass
+
+
+class UpdatePeriodicEventView(BaseEventView):
+    form_class = NewEventForm
+    template_name = 'agenda/new-event.html'
+
 
 class DeleteEventView(TodayOccurrenceMixin, cbv.DeleteView):
     model = Event
@@ -219,6 +242,7 @@ class DeleteEventView(TodayOccurrenceMixin, cbv.DeleteView):
     def delete(self, request, *args, **kwargs):
         super(DeleteEventView, self).delete(request, *args, **kwargs)
         return HttpResponse(status=204)
+
 
 class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'

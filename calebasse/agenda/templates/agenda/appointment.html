@@ -2,80 +2,65 @@
 {{ form.non_field_errors }}
 {{ form.start_datetime }}
 {{ form.start_datetime.errors }}
-   <table id="new-appointment-table">
-       <tr>
-           <td {% if form.date.field.required %}class="required"{% endif %}>
-           <p class="datepicker">
-           {{ form.date.label_tag }}
-           {{ form.date|add_class:"datepicker-date" }}
-           {{ form.date.errors }}
-           </p>
-           </td>
-           <td {% if form.time.field.required %}class="required"{% endif %}>
-            <p>
-           {{ form.time.label_tag }}
-           {{ form.time }}
-           {{ form.time.errors }}
-           </p>
-           </td>
-           <td {% if form.duration.field.required %}class="required"{% endif %}>
-           <p>
-           {{ form.duration.label_tag }}
-           {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:5" }}
-           {{ form.duration.errors }}
-           <div>
-           {{ form.duration.help_text }}
-           </div>
-           </p>
-           </td>
-       </tr>
-       <tr>
-           <td>
-           <p>
-           {{ form.room.label_tag }}
-           {{ form.room }}
-           {{ form.room.errors }}
-           </p>
-           </td>
-       </tr>
-       <tr>
-           <td {% if form.participants.field.required %}class="required"{% endif %}>
-           <h4>{{ form.participants.label_tag }}</h4>
-           <div id="intervenants">
-           {{ form.participants }}
-           {{ form.participants.errors }}
-           </div>
-           </td>
-           <td {% if form.patient.field.required %}class="required"{% endif %}>
-           <h4>{{ form.patient.label_tag }}</h4>
-           {{ form.patient }}
-           {{ form.patient.errors }}
-           </td>
-           <td {% if form.act_type.field.required %}class="required"{% endif %}>
-           <h4>{{ form.act_type.label_tag }}</h4>
-           {{ form.act_type }}
-           {{ form.act_type.errors }}
-           </td>
-       </tr>
-   </table>
+<table id="new-appointment-table">
+    <tr>
+        <td {% if form.date.field.required %}class="required"{% endif %}>
+        <p class="datepicker">
+        {{ form.date.label_tag }}
+        {{ form.date|add_class:"datepicker-date" }}
+        {{ form.date.errors }}
+        </p>
+        </td>
+        <td {% if form.time.field.required %}class="required"{% endif %}>
+         <p>
+        {{ form.time.label_tag }}
+        {{ form.time }}
+        {{ form.time.errors }}
+        </p>
+        </td>
+        <td {% if form.duration.field.required %}class="required"{% endif %}>
+        <p>
+        {{ form.duration.label_tag }}
+        {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:5" }}
+        {{ form.duration.errors }}
+        <div>
+        {{ form.duration.help_text }}
+        </div>
+        </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <p>
+        {{ form.room.label_tag }}
+        {{ form.room }}
+        {{ form.room.errors }}
+        </p>
+        </td>
+    </tr>
+    <tr>
+        <td {% if form.participants.field.required %}class="required"{% endif %}>
+        <h4>{{ form.participants.label_tag }}</h4>
+        <div id="intervenants">
+        {{ form.participants }}
+        {{ form.participants.errors }}
+        </div>
+        </td>
+        <td {% if form.patient.field.required %}class="required"{% endif %}>
+        <h4>{{ form.patient.label_tag }}</h4>
+        {{ form.patient }}
+        {{ form.patient.errors }}
+        </td>
+        <td {% if form.act_type.field.required %}class="required"{% endif %}>
+        <h4>{{ form.act_type.label_tag }}</h4>
+        {{ form.act_type }}
+        {{ form.act_type.errors }}
+        </td>
+    </tr>
+</table>
 
-<!--   <hr/>-->
-<!--   <table id="new-appointment-table">-->
-<!--       <tr>-->
-<!--           <td {% if form.recurrence_periodicity.field.required %}class="required"{% endif %}>-->
-<!--            <p>-->
-<!--           {{ form.recurrence_periodicity.label_tag }}-->
-<!--           {{ form.recurrence_periodicity }}-->
-<!--           {{ form.recurrence_periodicity.errors }}-->
-<!--           </p>-->
-<!--           </td>-->
-<!--           <td {% if form.recurrence_end_date.field.required %}class="required"{% endif %}>-->
-<!--           <p class="datepicker">-->
-<!--           {{ form.recurrence_end_date.label_tag }}-->
-<!--           {{ form.recurrence_end_date|add_class:"datepicker-date" }}-->
-<!--           {{ form.recurrence_end_date.errors }}-->
-<!--           </p>-->
-<!--           </td>-->
-<!--       </tr>-->
-<!--   </table>-->
-   <!-- <button>Configurer la périodicité</button> -->
+{% if object.exception_to %}
+  <hr/>
+  <div>Occurence du {{object.exception_date}} de la série d'evènements {{ object.exception_to.recurrence_description|lower }}</div>
+  <button type="button" data-id="{{ object.exception_to.id }}" class="update-periodic-rdv">Éditer le rendez-vous périodique</button>
+{% endif %}

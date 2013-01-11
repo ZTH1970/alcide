@@ -71,23 +71,8 @@
   </tr>
 </table>
 
-<hr/>
-
-<table id="new-appointment-table">
-   <tr>
-       <td {% if form.recurrence_periodicity.field.required %}class="required"{% endif %}>
-        <p>
-       {{ form.recurrence_periodicity.label_tag }}
-       {{ form.recurrence_periodicity }}
-       {{ form.recurrence_periodicity.errors }}
-       </p>
-       </td>
-       <td {% if form.recurrence_end_date.field.required %}class="required"{% endif %}>
-       <p class="datepicker">
-       {{ form.recurrence_end_date.label_tag }}
-       {{ form.recurrence_end_date|add_class:"datepicker-date" }}
-       {{ form.recurrence_end_date.errors }}
-       </p>
-       </td>
-   </tr>
-</table>
+{% if object.exception_to %}
+  <hr/>
+  <div>Occurence du {{object.exception_date}} de la série de rendez-vous {{ object.exception_to.recurrence_description|lower }}</div>
+  <button type="button" data-id="{{ object.exception_to.id }}" class="update-periodic-event">Éditer l'évènement périodique</button>
+{% endif %}

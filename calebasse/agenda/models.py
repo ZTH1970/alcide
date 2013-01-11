@@ -381,6 +381,52 @@ class Event(models.Model):
     def is_event_absence(self):
         return False
 
+    RECURRENCE_DESCRIPTION = [
+            u'Tous les %s',      #(1, None, None),
+            u'Un %s sur deux',   #(2, None, None),
+            u'Un %s sur trois',  #(3, None, None),
+            u'Un %s sur quatre', #(4, None, None),
+            u'Un %s sur cinq',   #(5, None, None),
+            u'Le premier %s du mois',   #(None, 0, None),
+            u'Le deuxième %s du mois',  #(None, 1, None),
+            u'Le troisième %s du mois', #(None, 2, None),
+            u'Le quatrième %s du mois', #(None, 3, None),
+            u'Le dernier %s du mois',   #(None, 4, None),
+            u'Les %s les semaines paires',    #(None, None, 0),
+            u'Les %s les semaines impaires', #(None, None, 1)
+    ]
+
+    WEEKDAY_DESRIPTION = [
+            u'lundi',
+            u'mardi',
+            u'mercredi',
+            u'jeudi',
+            u'vendredi',
+            u'samedi',
+            u'dimanche'
+    ]
+
+    def recurrence_description(self):
+        '''Self description of this recurring event'''
+        if not self.recurrence_periodicity:
+            return None
+        parts = []
+        parts.append(self.RECURRENCE_DESCRIPTION[self.recurrence_periodicity] \
+            % self.WEEKDAY_DESRIPTION[self.recurrence_week_day])
+        if self.recurrence_end_date:
+            parts.append(u'du')
+        else:
+            parts.append(u'à partir du')
+        parts.append(self.start_datetime.strftime('%d/%m/%Y'))
+        if self.recurrence_end_date:
+            parts.append(u'au')
+            parts.append(self.recurrence_end_date.strftime('%d/%m/%Y'))
+        return u' '.join(parts)
+
+
+
+
+
     def __unicode__(self):
         return self.title
 
