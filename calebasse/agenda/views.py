@@ -257,9 +257,19 @@ class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
 
     def acts_of_the_day(self):
-        acts = [e.act for e in EventWithAct.objects.filter(patient__service=self.service)
-                .today_occurrences(self.date)] + list(Act.objects.filter(date=self.date, parent_event__isnull=True))
-        return sorted(acts, key=lambda a: a.time or datetime.time.min)
+        acts = list(Act.objects \
+                .filter(date=self.date) \
+                .select_related() \
+                .prefetch_related('doctors', 
+                        'patient__patientcontact',
+                        'actvalidationstate_set__previous_state') \
+                .order_by('time'))
+        event_ids = [ a.parent_event_id for a in acts if a.parent_event_id ]
+        events = EventWithAct.objects.for_today(self.date) \
+                .exclude(id__in=event_ids)
+        events = [ event.today_occurrence(self.date) for event in events ]
+        acts += [ event.act for event in events if event ]
+        return sorted(acts, key=lambda a: (a.time or datetime.time.min, a.id))
 
     def post(self, request, *args, **kwargs):
         if 'unlock-all' in request.POST:
@@ -299,7 +309,7 @@ class AgendaServiceActValidationView(TemplateView):
             display_name = None
             if state :
                 display_name = VALIDATION_STATES[state.state_name]
-                if not state.previous_state and state.state_name == 'NON_VALIDE':
+                if not state.previous_state_id and state.state_name == 'NON_VALIDE':
                     state = None
             actes.append((act, state, display_name))
         validation_states = dict(VALIDATION_STATES)
