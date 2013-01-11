@@ -149,7 +149,7 @@ function toggle_worker(worker_selector) {
         /* load worker appointments tab */
         $('#tabs-worker-' + worker_id).load('ajax-worker-tab/' + worker_id,
             function () {
-	       $(this).children('div').accordion({active: false, autoHeight: false});
+               $(this).children('div').accordion({active: false, autoHeight: false});
                enable_events(this);
             }
         );
@@ -205,7 +205,7 @@ function toggle_ressource(ressource_selector) {
         /* load ressource appointments tab */
         $('#tabs-ressource-' + ressource_id).load('ajax-ressource-tab/' + ressource_id,
             function () {
-	       $(this).children('div').accordion({active: false, autoHeight: false});
+               $(this).children('div').accordion({active: false, autoHeight: false});
                enable_events(this);
             }
         );
@@ -247,7 +247,7 @@ function event_dialog(url, title, width, btn_text) {
                   $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                   $('#id_description').attr('rows', '3');
                   $('#id_description').attr('cols', '30');
-		  var deck = $('#id_participants_on_deck');
+                  var deck = $('#id_participants_on_deck');
                   $(deck).bind('added', function() {
                       var added = $(deck).find('div:last');
                       var t = added.attr('id').indexOf('_group:');
@@ -299,6 +299,9 @@ function event_dialog(url, title, width, btn_text) {
                   $('#filtre input').val('');
                   $('#filtre input').keyup();
                   $('#filtre input').focus();
+              }
+             if (! ($('li.agenda:visible').hasClass('ui-state-active'))) {
+                $('li.agenda:visible:last a.tab').click();
               }
           });
 
@@ -354,16 +357,18 @@ function event_dialog(url, title, width, btn_text) {
       }
 
       $('a.close-tab').click(function() {
+          console.log('close');
           $('#' + $(this).data('target')).click()
+          console.log($(this).data('target'));
       });
 
 
       /* Gestion du filtre sur les utilisateurs */
       $('#filtre input').keyup(function() {
           var filtre = $(this).val();
-	  if ($('#show-everybody').length) {
+          if ($('#show-everybody').length) {
               var everybody = $('#show-everybody').is(':checked');
-	  } else {
+          } else {
               var everybody = true;
           }
           if (filtre) {

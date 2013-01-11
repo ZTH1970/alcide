@@ -14,6 +14,12 @@ class PatientRecordLookup(LookupChannel):
             qs = qs.filter(service__name=service)
         return qs
 
+    def get_result(self,obj):
+        if obj.paper_id:
+            return obj.display_name + u' (' + obj.paper_id + u')'
+        else:
+            return obj.display_name
+
     def check_auth(self, request):
         if not request.user.is_authenticated():
             raise PermissionDenied

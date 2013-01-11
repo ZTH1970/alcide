@@ -34,6 +34,7 @@ class NewAppointmentForm(BaseForm):
                 'participants',
                 'room',
                 'act_type',
+                'description',
                 'recurrence_periodicity',
                 'recurrence_end_date'
         )
@@ -116,12 +117,13 @@ class NewEventForm(BaseForm):
                 'participants',
                 'event_type',
                 'services',
+                'description',
                 'recurrence_periodicity',
                 'recurrence_end_date'
         )
         widgets = {
                 'start_datetime': forms.HiddenInput,
-                'services': forms.CheckboxSelectMultiple
+                'services': forms.CheckboxSelectMultiple,
         }
 
     def __init__(self, instance, service=None, **kwargs):

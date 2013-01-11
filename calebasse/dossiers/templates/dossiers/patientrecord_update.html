@@ -11,6 +11,7 @@
 <script src="{{ STATIC_URL }}filter-widget/js/SelectFilter2.js"></script>
 {% endblock %}
 
+{% block title %}{{ object.last_name }} {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}{% endblock %}
 
 {% block appbar %}
 <h2><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>

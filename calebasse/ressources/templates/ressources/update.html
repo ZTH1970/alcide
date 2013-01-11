@@ -1,5 +1,7 @@
 {% extends "calebasse/simple-form.html" %}
 
+{% block title %}{{ block.super }} - Gestion des ressources {% endblock %}
+
 {% block header %}
   {{ block.super }}
   <span>Gestion des ressources - {{ service_name }}</span>

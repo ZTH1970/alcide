@@ -69,6 +69,15 @@
       </div>
     </td>
   </tr>
+  <tr>
+    <td>
+      <div id="description">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+        {{ form.description.errors }}
+      </div>
+    </td>
+  </tr>
 </table>
 
 {% if object.exception_to %}

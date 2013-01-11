@@ -99,6 +99,7 @@ class AgendaServiceActivityView(TemplateView):
             if event.event_type_id == 1:
                 appointment['type'] = 1
                 appointment['label'] = event.patient.display_name
+                appointment['paper_id'] = event.patient.paper_id
                 appointment['act'] = event.act_type.name
                 appointment['state'] = event.act.get_state()
                 appointment['absent'] = event.act.is_absent()
@@ -110,6 +111,7 @@ class AgendaServiceActivityView(TemplateView):
                     appointment['label'] = '%s - %s' % (event.event_type.label,
                                                         event.title)
             appointment['participants'] = event.participants.all()
+            appointment['len_participants'] = len(appointment['participants'])
             appointments_times[start_datetime]['row'] += 1
             appointments_times[start_datetime]['appointments'].append(appointment)
         context['appointments_times'] = sorted(appointments_times.items())
@@ -286,7 +288,7 @@ class AgendaServiceActValidationView(TemplateView):
         for act in acts_of_the_day:
             state = act.get_state()
             display_name = VALIDATION_STATES[state.state_name]
-            if not state.previous_state and state.state_name == 'NON_VALIDE':
+            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             actes.append((act, state, display_name))
             if not act.id:

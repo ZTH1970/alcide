@@ -89,18 +89,20 @@ function select_add_dialog(opts, $form, form_action)
           select_add_dialog(opts, $form, form_action);
       }
 
-      var buttons = [{
-          text: default_button,
-          click: function () {
-            $form.submit();
-          }
-        },
+      var buttons = [
         {
           text: 'Annuler',
           click: function () {
               $(this).dialog('close');
           }
-        }];
+        },
+        {
+          text: default_button,
+          click: function () {
+            $form.submit();
+          }
+        },
+      ];
       $dialog.css('max-height', $(window).height() - 200);
       $form.load(opts.url, function () {
         $dialog.dialog({
