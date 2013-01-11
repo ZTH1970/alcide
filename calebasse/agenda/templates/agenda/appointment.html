@@ -71,6 +71,15 @@
 
 {% if object.exception_to %}
   <hr/>
-  <div>Occurence du {{object.exception_date}} de la série d'evènements {{ object.exception_to.recurrence_description|lower }}</div>
+  {% if object.id != object.exception_to.id %}
+  <p><em>Attention: cette objet est une exception à un rendez-vous périodique; si
+  vous modifiez ou supprimiez ce rendez-vous périodique, l'exception n'en serait pas
+  affecté.</em></p>
+  {% endif %}
+  <div>Occurence du {{object.exception_date}} d'un rendez-vous périodique
+    {% if object.exception_to.canceled %}<em>supprimé</em> et initialement prévu{% endif %}
+    {{ object.exception_to.recurrence_description|lower }}</div>
+  {% if not object.exception_to.canceled %}
   <button type="button" data-delete-url="{% url 'delete-event' service=service date=date pk=object.exception_to.pk %}" data-id="{{ object.exception_to.id }}" class="update-periodic-rdv">Éditer le rendez-vous périodique</button>
+  {% endif %}
 {% endif %}
