@@ -35,18 +35,28 @@
    <tr data-event-id="{{ appointment.event_id }}">
     <td class="col-time">{{ appointment.begin_hour }}</td>
     <td class="col-duration">{% if appointment.length %}{{ appointment.length }}min{% endif %}</td>
-    <td class="col-record-id">{% if appointment.patient_record_id %}
-      {{ appointment.patient_record_paper_id }}<br/>
-      ({{ appointment.patient_record_id }}){% endif %}
+    <td class="col-record-id">
+    {% if appointment.patient_record_id %}
+      {% if appointment.patient_record_paper_id %}
+      {{ appointment.patient_record_paper_id }}
+      {% else %}
+      Pas de numéro papier.
+      {% endif %}
+    {% endif %}
     </td>
     <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
     <td/>
     <td> {% if appointment.act_absence %}{{ appointment.act_absence }}{% endif %}</td>
     <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
     <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
-    <td> {% for worker in appointment.workers %}
-          <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
-         {% endfor %}
+    <td>
+        {% if appointment.workers and appointment.workers|length > 10 %}
+        {{ appointment.workers|length }} intervenants
+        {% else %}
+            {% for worker in appointment.workers %}
+            <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
+            {% endfor %}
+        {% endif %}
     </td>
    </tr>
    {% endfor %}

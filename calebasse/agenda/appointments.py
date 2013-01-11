@@ -88,6 +88,12 @@ class Appointment(object):
                 validation_states = None
             self.validation = (event.act, state, display_name, validation_states)
         else:
+            if event.event_type.label == 'Autre' and event.title:
+                self.title = event.title
+            else:
+                self.title = '%s' % event.event_type.label
+                if event.title:
+                    self.title += ' - %s' % event.title
             self.event_type = event.event_type
             self.workers = event.participants.all()
         if len(self.workers) > 4 :
