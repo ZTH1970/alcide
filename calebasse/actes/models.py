@@ -32,7 +32,7 @@ class ActValidationState(models.Model):
         editable=False, blank=True, null=True)
     # To record if the validation has be done by the automated validation
     auto = models.BooleanField(default=False,
-            verbose_name=u'Vérouillage')
+            verbose_name=u'Validaté automatiquement')
 
     def __repr__(self):
         return self.state_name + ' ' + str(self.created)
@@ -79,7 +79,6 @@ class Act(models.Model):
     is_billed = models.BooleanField(default=False,
             verbose_name=u'Facturé', db_index=True)
     is_lost = models.BooleanField(default=False,
-            blank=True, null=True,
             verbose_name=u'Acte perdu', db_index=True)
     switch_billable = models.BooleanField(default=False,
             verbose_name=u'Inverser type facturable')
