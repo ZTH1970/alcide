@@ -10,7 +10,7 @@ from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
         UnlockAllView, AgendasTherapeutesView, JoursNonVerrouillesView,
         RessourcesView, AjaxWorkerTabView, AjaxWorkerDisponibilityColumnView,
-        DeleteEventView, UpdatePeriodicEventView, UpdatePeriodicAppointmentView)
+        DeleteOccurrenceView, DeleteEventView, UpdatePeriodicEventView, UpdatePeriodicAppointmentView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -35,6 +35,9 @@ agenda_patterns = patterns('',
             url(r'^update-periodic-event/(?P<pk>\d+)$',
                 UpdatePeriodicEventView.as_view(),
                 name='update-periodic-event'),
+            url(r'^delete-occurrence/(?P<pk>\d+)$',
+                csrf_exempt(DeleteOccurrenceView.as_view()),
+                name='delete-occurrence'),
             url(r'^delete-event/(?P<pk>\d+)$',
                 csrf_exempt(DeleteEventView.as_view()),
                 name='delete-event'),

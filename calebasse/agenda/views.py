@@ -237,7 +237,7 @@ class UpdatePeriodicEventView(BaseEventView):
     template_name = 'agenda/new-event.html'
 
 
-class DeleteEventView(TodayOccurrenceMixin, cbv.DeleteView):
+class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
     model = Event
     success_url = '..'
 
@@ -245,6 +245,13 @@ class DeleteEventView(TodayOccurrenceMixin, cbv.DeleteView):
         super(DeleteEventView, self).delete(request, *args, **kwargs)
         return HttpResponse(status=204)
 
+class DeleteEventView(cbv.DeleteView):
+    model = Event
+    success_url = '..'
+
+    def delete(self, request, *args, **kwargs):
+        super(DeleteEventView, self).delete(request, *args, **kwargs)
+        return HttpResponse(status=204)
 
 class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'

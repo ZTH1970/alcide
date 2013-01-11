@@ -1,4 +1,5 @@
 {% load widget_tweaks %}
+{% load url from future %}
 {{ form.non_field_errors }}
 {{ form.start_datetime }}
 {{ form.start_datetime.errors }}
@@ -58,7 +59,7 @@
            </td>
        </tr>
       <tr>
-        <td>
+        <td colspan="3">
           <div id="description">
             {{ form.description.label_tag }}
             {{ form.description }}
@@ -71,5 +72,5 @@
 {% if object.exception_to %}
   <hr/>
   <div>Occurence du {{object.exception_date}} de la série d'evènements {{ object.exception_to.recurrence_description|lower }}</div>
-  <button type="button" data-id="{{ object.exception_to.id }}" class="update-periodic-rdv">Éditer le rendez-vous périodique</button>
+  <button type="button" data-delete-url="{% url 'delete-event' service=service date=date pk=object.exception_to.pk %}" data-id="{{ object.exception_to.id }}" class="update-periodic-rdv">Éditer le rendez-vous périodique</button>
 {% endif %}
