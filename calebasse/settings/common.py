@@ -238,7 +238,7 @@ AJAX_LOOKUP_CHANNELS = {
 LOGIN_REDIRECT_URL = '/'
 
 # Base directory for generated patient files
-PATIENT_FILES_BASE_DIRECTORY = '/home/jschneider/temp/target/'
+PATIENT_FILES_BASE_DIRECTORY = None
 
 # Client side base directory for generated patient files
 CLIENT_SIDE_PATIENT_FILES_BASE_DIRECTORY =  None
@@ -265,4 +265,4 @@ PATIENT_SUBDIRECTORIES = (
 )
 
 # RTF templates directory
-RTF_TEMPLATES_DIRECTORY = '/home/jschneider/temp/templates/'
+RTF_TEMPLATES_DIRECTORY = None
