@@ -57,7 +57,16 @@
            {{ form.act_type.errors }}
            </td>
        </tr>
-   </table>
+      <tr>
+        <td>
+          <div id="description">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {{ form.description.errors }}
+          </div>
+        </td>
+      </tr>
+</table>
 
 <!--   <hr/>-->
 <!--   <table id="new-appointment-table">-->
