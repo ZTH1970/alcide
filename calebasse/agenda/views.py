@@ -242,7 +242,7 @@ class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
     success_url = '..'
 
     def delete(self, request, *args, **kwargs):
-        super(DeleteEventView, self).delete(request, *args, **kwargs)
+        super(DeleteOccurrenceView, self).delete(request, *args, **kwargs)
         return HttpResponse(status=204)
 
 class DeleteEventView(cbv.DeleteView):
