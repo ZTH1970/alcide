@@ -29,6 +29,8 @@ def weekday_ranks(date):
 def is_super_user(user):
     if not user or not user.is_authenticated():
         return False
+    if user.is_superuser:
+        return True
     super_group = None
     try:
         super_group = Group.objects.get(name='Super utilisateurs')
