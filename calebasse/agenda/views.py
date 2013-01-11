@@ -277,6 +277,7 @@ class AgendaServiceActValidationView(TemplateView):
             validation_states.pop('ACT_DOUBLE')
         vs = [('VALIDE', 'Présent')]
         validation_states.pop('VALIDE')
+        validation_states.pop('ACT_LOST')
         validation_states = vs + sorted(validation_states.items(), key=lambda tup: tup[0])
         context['validation_states'] = validation_states
         context['actes'] = actes
