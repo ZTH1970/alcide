@@ -33,6 +33,7 @@
 
 
     {% if actes %}
+    <h2>Il y a {{ actes|length }} actes.</h2>
     <div id="actes">
     {% for acte, last_status, last_status_name in actes %}
     <div class="frame acte" id="acte-frame-{{ acte.id }}">
