@@ -13,7 +13,7 @@ function enable_events(base) {
               data: '{"description": "' + textarea.val() + '"}',
               success: function(data) {
                   btn.attr('disabled', 'disabled');
-                  span.html('Commentaire modifiée avec succès');
+                  span.html('Commentaire modifié avec succès');
               }
           });
       });
