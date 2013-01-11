@@ -264,7 +264,7 @@ class AgendaServiceActValidationView(TemplateView):
         for act in acts_of_the_day:
             state = act.get_state()
             display_name = VALIDATION_STATES[state.state_name]
-            if not state.previous_state and state.state_name == 'NON_VALIDE':
+            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             actes.append((act, state, display_name))
             if not act.id:
