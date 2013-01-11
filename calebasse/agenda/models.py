@@ -458,6 +458,7 @@ class EventWithAct(Event):
         act.patient = self.patient
         act.parent_event = self
         act.date = self.start_datetime.date()
+        act.time = self.start_datetime.time()
 
     def save(self, *args, **kwargs):
         '''Force event_type to be patient meeting.'''
