@@ -54,7 +54,8 @@ class NewAppointmentForm(forms.ModelForm):
             self.fields['patient'].queryset = \
                     PatientRecord.objects.for_service(service)
             self.fields['act_type'].queryset = \
-                    ActType.objects.for_service(service)
+                    ActType.objects.for_service(service) \
+                    .order_by('name')
 
     def clean_duration(self):
         duration = self.cleaned_data['duration']
