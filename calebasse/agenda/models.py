@@ -39,7 +39,7 @@ class Event(models.Model):
     objects = managers.EventManager()
 
     title = models.CharField(_('Title'), max_length=60, blank=True)
-    description = models.TextField(_('Description'), max_length=100)
+    description = models.TextField(_('Description'), max_length=100, blank=True, null=True)
     event_type = models.ForeignKey(EventType, verbose_name=u"Type d'événement")
     creator = models.ForeignKey(User, verbose_name=_(u'Créateur'), blank=True, null=True)
     create_date = models.DateTimeField(_(u'Date de création'), auto_now_add=True)
@@ -267,7 +267,7 @@ class Event(models.Model):
         # the returned event is "virtual", it must not be saved
         old_save = event.save
         old_participants = list(self.participants.all())
-        def save(*args, **kwargs): 
+        def save(*args, **kwargs):
             event.id = None
             event.event_ptr_id = None
             old_save(*args, **kwargs)
