@@ -255,7 +255,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         Q = models.Q
         today = date.today()
         qs = EventWithAct.objects.filter(patient=ctx['object']) \
-                .filter(exception_to__isnull=True) \
+                .filter(exception_to__isnull=True, canceled=False) \
                 .filter(Q(start_datetime__gte=today)
                         | ( Q(recurrence_periodicity__isnull=False)
                             & (Q(recurrence_end_date__gte=today)
@@ -266,9 +266,6 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         for event in qs:
             occurrences.extend(filter(lambda e: e.start_datetime.date() > today, event.all_occurences(limit=180)))
         occurrences = sorted(occurrences, key=lambda e: e.start_datetime)
-        acts = Act.objects.filter(date__gte=today, patient=ctx['object']) \
-                .prefetch_related('actvalidationstate_set')
-        acts_by_date = dict((act.date, act.time) for act in acts)
         for event in occurrences:
             state = None
             if event.act:
