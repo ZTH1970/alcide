@@ -258,14 +258,15 @@ class AgendaServiceActValidationView(TemplateView):
 
     def acts_of_the_day(self):
         acts = list(Act.objects \
-                .filter(date=self.date) \
+                .filter(date=self.date, patient__service=self.service) \
                 .select_related() \
-                .prefetch_related('doctors', 
+                .prefetch_related('doctors',
                         'patient__patientcontact',
                         'actvalidationstate_set__previous_state') \
                 .order_by('time'))
         event_ids = [ a.parent_event_id for a in acts if a.parent_event_id ]
         events = EventWithAct.objects.for_today(self.date) \
+                .filter(patient__service=self.service) \
                 .exclude(id__in=event_ids)
         events = [ event.today_occurrence(self.date) for event in events ]
         acts += [ event.act for event in events if event ]
