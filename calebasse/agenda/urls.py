@@ -10,7 +10,8 @@ from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         UpdateEventView, AgendaServiceActValidationView, AutomatedValidationView,
         UnlockAllView, AgendasTherapeutesView, JoursNonVerrouillesView,
         RessourcesView, AjaxWorkerTabView, AjaxWorkerDisponibilityColumnView,
-        DeleteOccurrenceView, DeleteEventView, UpdatePeriodicEventView, UpdatePeriodicAppointmentView)
+        DeleteOccurrenceView, DeleteEventView, UpdatePeriodicEventView, UpdatePeriodicAppointmentView,
+        PeriodicEventsView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -77,6 +78,9 @@ agenda_patterns = patterns('',
             url(r'^ajax-worker-disponibility-column/(?P<worker_id>\d+)$',
                 AjaxWorkerDisponibilityColumnView.as_view(),
                 name='ajax-worker-disponibility-column'),
+            url(r'^periodic-events/$',
+                PeriodicEventsView.as_view(),
+                name='periodic-events'),
             )
 
 urlpatterns = patterns('',

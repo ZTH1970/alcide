@@ -180,3 +180,14 @@ class UpdateEventForm(NewEventForm):
                 'event_type',
                 'services',
         )
+
+class PeriodicEventsSearchForm(forms.Form):
+    start_date = forms.DateField(required=True, localize=True)
+    end_date = forms.DateField(required=False, localize=True)
+
+    def clean(self):
+        cleaned_data = super(PeriodicEventsSearchForm, self).clean()
+        if cleaned_data.get('start_date') and cleaned_data.get('end_date'):
+            if cleaned_data['start_date'] > cleaned_data['end_date']:
+                raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
+        return cleaned_data

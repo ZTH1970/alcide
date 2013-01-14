@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+from itertools import chain
 
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -20,7 +21,7 @@ from calebasse.actes.validation import (automated_validation, unlock_all_acts_of
 from calebasse import cbv
 
 from forms import (NewAppointmentForm, NewEventForm,
-        UpdateAppointmentForm, UpdateEventForm)
+        UpdateAppointmentForm, UpdateEventForm, PeriodicEventsSearchForm)
 
 
 def redirect_today(request, service):
@@ -574,3 +575,53 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         context['disponibility'] = Event.objects.daily_disponibilities(self.date,
                 events_workers, [worker], time_tables_workers, holidays_workers)
         return context
+
+
+class PeriodicEventsView(cbv.ListView):
+    model = EventWithAct
+    template_name = 'agenda/periodic-events.html'
+
+    def get_form(self):
+        kwargs = {
+                'initial': {
+                    'start_date': self.date,
+                }
+        }
+        if self.request.GET:
+            kwargs['data'] = self.request.GET
+        self.form = PeriodicEventsSearchForm(**kwargs)
+        return self.form
+
+    def get_queryset(self):
+        qs1 = Event.objects.exclude(event_type_id=1)
+        qs2 = EventWithAct.objects.all()
+        form = self.get_form()
+        qs1 = self.filter_queryset(form, qs1)
+        qs2 = self.filter_queryset(form, qs2)
+        return sorted(chain(qs1, qs2),
+                key=lambda x: (x.start_datetime, x.recurrence_end_date or datetime.date(9999,12,31)))
+
+    def filter_queryset(self, form, qs):
+        start_date = datetime.date.today()
+        end_date = start_date+datetime.timedelta(days=90)
+        if form.is_valid():
+            if form.cleaned_data.get('start_date'):
+                start_date = form.cleaned_data['start_date']
+            if form.cleaned_data.get('end_date'):
+                start_date = form.cleaned_data['end_date']
+            else:
+                end_date = start_date+datetime.timedelta(days=90)
+        qs = qs.filter(services=self.service)
+        qs = qs.filter(recurrence_periodicity__isnull=False)
+        qs = qs.filter(start_datetime__lt=end_date)
+        qs = qs.filter(Q(recurrence_end_date__isnull=True)
+                | Q(recurrence_end_date__gte=start_date))
+        qs = qs.order_by('start_datetime', 'recurrence_end_date')
+        qs = qs.select_related()
+        qs = qs.prefetch_related('participants')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PeriodicEventsView, self).get_context_data(**kwargs)
+        ctx['search_form'] = self.form
+        return ctx

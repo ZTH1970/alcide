@@ -1,0 +1,41 @@
+{% extends "agenda/base.html" %}
+{% load widget_tweaks %}
+{% load url from future %}
+{% load apptags %}
+
+{% block appbar %}
+<h2>Rendez-vous périodiques</h2>
+    <a href="..">Retourner à l'agenda</a>
+<style>
+  div#sidebar form#periodic-events-search-form button {
+    width: inherit;
+  }
+  div#sidebar form#periodic-events-search-form input {
+    width: 5em;
+  }
+  div#sidebar label {
+</style>
+{% endblock %}
+{% block content %}
+<div id="sidebar">
+  <form id="periodic-events-search-form">
+    <div>
+      <label for="start_date">Rendez-vous périodiques possédant des occurences après le&nbsp;:</label>
+      {{ search_form.start_date|add_class:"datepicker-date" }}
+    </div>
+    <div>
+    <label for="end_date">et au moins une occurrence dans les trois qui suivent ou bien avant cette date&nbsp;:</label>
+    {{ search_form.end_date|add_class:"datepicker-date" }}
+    </div>
+    <button>Rechercher</button>
+  </form>
+</div>
+<script>
+  $('.datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+</script>
+<div class="content">
+  {% for event in object_list %}
+  <pre>{{ event }}</pre>
+  {% endfor %}
+</div>
+{% endblock %}
