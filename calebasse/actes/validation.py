@@ -103,10 +103,11 @@ def automated_validation(date, service, user, commit=True):
                     else:
                         acts_t.append(act)
                 for act in acts_t:
-                    if not found_one:
+                    if not found_one or not act.is_billable():
                         if not act.is_state('VALIDE') and commit:
                             act.set_state('VALIDE', author=user, auto=True)
-                        found_one = True
+                        if act.is_billable():
+                            found_one = True
                         nb_acts_validated = nb_acts_validated + 1
                     else:
                         if commit:
