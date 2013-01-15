@@ -3,17 +3,17 @@
 {% block extrascripts %}
 {{ block.super }}
     <script>
-	$(function() {
-		$('#lundi').click(function() {
-			$('#lundi-dlg').dialog({title: 'Plages du lundi',
-				width: '950px',
-				  buttons: [ { text: "Annuler",
-					       click: function() { $(this).dialog("close"); } },
-					     { text: "Valider",
-					       click: function() { $(this).dialog("close"); } }]}
-			);
-			});
-	});
+        $(function() {
+            $('#lundi').click(function() {
+                $('#lundi-dlg').dialog({title: 'Plages du lundi',
+                    width: '950px',
+                    buttons: [ { text: "Annuler",
+                        click: function() { $(this).dialog("close"); } },
+                    { text: "Valider",
+                        click: function() { $(this).dialog("close"); } }]}
+                );
+            });
+        });
 </script>
 {% endblock %}
 

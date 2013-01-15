@@ -2,6 +2,15 @@
 
 {% block extrascripts %}
 <script src="{{ STATIC_URL }}js/calebasse.reset-button.js"></script>
+{{ block.super }}
+<script type="text/javascript">
+    $(function() {
+            $('.icon-minus').click(function() {
+                generic_ajaxform_dialog($(this).data('id') + '/delete', "Supprimer un utilisateur",
+                    '#ajax-dlg', '500px', 'Oui', '..');
+                });
+            });
+</script>
 {% endblock %}
 
 {% block appbar %}
@@ -54,7 +63,7 @@
       <td>{% if worker %}<a href="{{ worker.get_absolute_url }}">{{ worker }}</a>{% else %}-{% endif %}</td>
       {% endwith %}
       <td>{% for role in object.groups.all %}{{ role.name }} {% endfor %}</td>
-      <td><button class="icon-minus"/></td>
+      <td><button class="icon-minus" data-id="{{ object.id }}"/></a></td>
     </tr>
    {% endfor %}
     </tbody>
@@ -89,4 +98,8 @@
   </table>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block dialogs %}
+<div id="ajax-dlg" style="display: none;"></div>
 {% endblock %}

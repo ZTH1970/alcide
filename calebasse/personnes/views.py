@@ -122,10 +122,15 @@ class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
     template_name='calebasse/simple-form.html'
     template_name_suffix='_new.html'
 
+class UserDeleteView(cbv.DeleteView):
+    model = User
+    success_url = "../../"
+    template_name = 'calebasse/generic_confirm_delete.html'
+
 
 user_new = super_user_only(UserCreateView.as_view())
 user_update = super_user_only(AccessUpdateView.as_view())
-user_delete = super_user_only(cbv.DeleteView.as_view(model=User))
+user_delete = super_user_only(UserDeleteView.as_view())
 
 
 class WorkerUpdateView(cbv.MultiUpdateView):
@@ -316,3 +321,7 @@ class GroupHolidayUpdateView(cbv.FormView):
 
 
 group_holiday_update = GroupHolidayUpdateView.as_view()
+
+
+#user_delete = UserCreateView.as_view()
+
