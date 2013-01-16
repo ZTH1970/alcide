@@ -29,13 +29,30 @@ from calebasse.ressources.models import (Service,
 from calebasse.decorators import validator_only
 
 def get_next_rdv(patient_record):
+    Q = models.Q
+    today = date.today()
     next_rdv = {}
     event = Event.objects.next_appointment(patient_record)
     if event:
         next_rdv['start_datetime'] = event.start_datetime
         next_rdv['participants'] = event.participants.all()
         next_rdv['act_type'] = event.eventwithact.act_type
-    return next_rdv
+    qs = EventWithAct.objects.filter(patient=patient_record) \
+                .filter(exception_to__isnull=True, canceled=False) \
+                .filter(Q(start_datetime__gte=today) \
+                | ( Q(recurrence_periodicity__isnull=False) \
+                & (Q(recurrence_end_date__gte=today) \
+                | Q(recurrence_end_date__isnull=True)))) \
+                .select_related() \
+                .prefetch_related('participants', 'exceptions__eventwithact')
+    occurrences = []
+    for event in qs:
+        occurrences.extend(filter(lambda e: e.start_datetime.date() >= today, event.all_occurences(limit=180)))
+    occurrences = sorted(occurrences, key=lambda e: e.start_datetime)
+    if occurrences:
+        return occurrences[0]
+    else:
+        return None
 
 def get_last_rdv(patient_record):
     last_rdv = {}
@@ -271,14 +288,16 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['next_rdvs'].append((event, state))
-        ctx['next_rdv'] = ctx['next_rdvs'][0][0]
+        if ctx['next_rdvs']:
+            ctx['next_rdv'] = ctx['next_rdvs'][0][0]
         ctx['last_rdvs'] = []
         for act in Act.objects.last_acts(ctx['object']).prefetch_related('doctors'):
             state = act.get_state()
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['last_rdvs'].append((act, state))
-        ctx['last_rdv'] = ctx['last_rdvs'][0][0]
+        if ctx['last_rdvs']:
+            ctx['last_rdv'] = ctx['last_rdvs'][0][0]
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":

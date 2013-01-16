@@ -95,7 +95,7 @@
           <td>
               {% if patient_record.next_rdv %}
               {{ patient_record.next_rdv.start_datetime|date:"d/m/Y h:i" }}<br>
-              {% for participant in patient_record.next_rdv.participants %}
+              {% for participant in patient_record.next_rdv.participants.all %}
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.next_rdv.act_type }}
