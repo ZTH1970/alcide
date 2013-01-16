@@ -478,6 +478,12 @@ class EventWithAct(Event):
             return act.get_state()
         return None
 
+    def is_absent(self):
+        act = self.act
+        if act.id:
+            return act.is_absent()
+        return False
+
     def build_act(self):
         from ..actes.models import Act, ActValidationState
         act = Act()
