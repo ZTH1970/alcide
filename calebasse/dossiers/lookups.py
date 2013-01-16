@@ -10,7 +10,8 @@ class PatientRecordLookup(LookupChannel):
     homonym = False
 
     def get_query(self,q,request):
-        qs = super(PatientRecordLookup, self).get_query(q, request)
+        kwargs = { "%s__istartswith" % self.search_field : q }
+        qs = self.model.objects.filter(**kwargs).order_by(self.search_field)
         if request.COOKIES.has_key('home-service'):
             service = request.COOKIES['home-service'].upper().replace('-', ' ')
             qs = qs.filter(service__name=service)
