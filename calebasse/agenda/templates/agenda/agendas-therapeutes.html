@@ -17,10 +17,10 @@
 {% if worker_agenda.appointments %}
 <div class="worker-agenda">
   <h2>
-    <strong>{{service_name }}</strong> - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
+    <strong>{{ service_name }}</strong> - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
     <input type="checkbox" class="printable" checked>
   </h2>
-<h3>{{ date|date:"DATE_FORMAT" }}</h3>
+  <h3>{{ date|date:"DATE_FORMAT" }}</h3>
 
 <!--<span class="remarque">Remarque :</span>-->
 
@@ -46,7 +46,7 @@
     </td>
     <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
     <td/>
-    <td> {% if appointment.act_absence %}{{ appointment.act_absence }}{% endif %}</td>
+    <td> {% if appointment.act_absence %}<strong>{{ appointment.act_absence }}</strong>{% endif %}</td>
     <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
     <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
     <td>
