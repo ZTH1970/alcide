@@ -240,8 +240,6 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
-        ctx['next_rdv'] = get_next_rdv(ctx['object'])
-        ctx['last_rdv'] = get_last_rdv(ctx['object'])
         ctx['initial_state'] = ctx['object'].get_initial_state()
         current_state = ctx['object'].get_current_state()
         if STATES_MAPPING.has_key(current_state.status.type):
@@ -273,12 +271,14 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['next_rdvs'].append((event, state))
+        ctx['next_rdv'] = ctx['next_rdvs'][0][0]
         ctx['last_rdvs'] = []
         for act in Act.objects.last_acts(ctx['object']).prefetch_related('doctors'):
             state = act.get_state()
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['last_rdvs'].append((act, state))
+        ctx['last_rdv'] = ctx['last_rdvs'][0][0]
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":

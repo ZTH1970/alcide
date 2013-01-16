@@ -52,7 +52,7 @@
       <li><label>Prochain rendez-vous :</label>
       {% if next_rdv %}
       {{ next_rdv.start_datetime|date:"d/m/Y" }} -
-      {% for participant in next_rdv.participants %}
+      {% for participant in next_rdv.participants.all %}
       <span class="lastname">{{ participant.last_name }}</span> -
       {% endfor %}
       {{ next_rdv.act_type }}
