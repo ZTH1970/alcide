@@ -444,7 +444,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
       <tbody>
         {% for act, state in last_rdvs %}
         <tr>
-          <td>{% firstof act.start_datetime|date:"l d/m/y H:i"|title act.date %}</td>
+          <td>{% firstof act.start_datetime|date:"l d/m/y H:i"|title act.date|date:"l d/m/y H:i"|title %}</td>
           <td>{% if state %}<strong>{{ state }}</strong>{% else %}Non pointé.{% endif %}</td>
           <td>{{ act.act_type }}</td>
           <td>{% for doctor in act.doctors.all %}
