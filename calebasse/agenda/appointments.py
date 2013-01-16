@@ -80,7 +80,7 @@ class Appointment(object):
             state = event.get_state()
             state_name = state.state_name if state else 'NON_VALIDE'
             display_name = VALIDATION_STATES[state_name]
-            if state_name not in ('NON_VALIDE', 'VALIDE', 'ACT_DOUBLE'):
+            if event.is_absent():
                 self.act_absence = VALIDATION_STATES.get(state_name)
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
