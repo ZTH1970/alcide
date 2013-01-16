@@ -61,8 +61,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <form method="post" id="policyholder-form" class="patientrecordform">{% csrf_token %}
 
             <div class="contact patient">
-                <h4>{% if object.gender == 1 %}M.{% elif object.gender == 2 %}Mme{% endif %}
-                    {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> {% if object.id == object.id %} (PATIENT){% endif %}</h4>
+                <h4>{{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> (Patient)</h4>
                 <div class="right">Assuré
                     <input type="radio"
                     {% if object.policyholder.id == object.id %} checked="checked" {% endif %}
