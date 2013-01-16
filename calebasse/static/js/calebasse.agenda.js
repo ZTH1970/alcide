@@ -360,10 +360,10 @@ function event_dialog(url, title, width, btn_text) {
                   });
                   $(this).dialog({title: title,
                       width: width,
-                      buttons: [ { text: "Fermer",
-                          click: function() { $(this).dialog("close"); } },
+                      buttons: [ 
                       { text: btn_text,
-                          click: function() { $("#rdv form").submit(); } }]});
+                          click: function() { $("#rdv form").submit(); } }
+                  ]});
               });
 }
 
