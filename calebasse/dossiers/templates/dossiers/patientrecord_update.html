@@ -40,9 +40,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <li><a data-id="2" class="atabs" href="#tabs-3">Adresses / contacts</a></li>
     {% if object.service.name == "CMPP" %}
     <li><a data-id="3"  class="atabs" href="#tabs-4">Prise en charge</a></li>
-    {% endif %}
-    {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
+    {% elif object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
     <li><a data-id="3" class="atabs" href="#tabs-4">Notifications</a></li>
+    {% else %}
+    <li style="display: none;"><a data-id="3" class="atabs" href="#tabs-4">Notifications</a></li>
     {% endif %}
     <li><a data-id="4" class="atabs" href="#tabs-5">Actes passés</a>
     <li><a data-id="5" class="atabs" href="#tabs-6">Prochains rendez-vous</a>
