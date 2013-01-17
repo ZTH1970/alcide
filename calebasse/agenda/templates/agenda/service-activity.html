@@ -3,14 +3,14 @@
 {% block body-class %}{{ block.super }} no-left-column{% endblock %}
 
 {% block appbar %}
-<h2>Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT" }}</h2>
+<h2>Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
 <a href="..">Retourner à l'agenda</a>
 <button id='print-button'>Imprimer</button>
 {% endblock %}
 
 {% block agenda-content %}
 
-<h2 class="print-only">Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT" }}</h2>
+<h2 class="print-only">Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
 
 <table class="main" id="activity">
   <thead>

@@ -40,6 +40,14 @@ div.worker-agenda {
   page-break-after: always;
 }
 
+div.worker-agenda table{
+  font-size: 70%;
+}
+
+table#activity{
+  font-size: 80%;
+}
+
 div.worker-agenda h3 {
   display: block;
   margin-top: 0;
