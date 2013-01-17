@@ -88,15 +88,15 @@ div#wrap-large {
 {
 	font-size: 23px;
 	letter-spacing: -1px;
-	padding-top: 30px;
+	padding-top: 24px;
 	margin: 0;
 }
 
 #header span
 {
 	margin: 0;
-	font-size: 10px;
-	font-weight: normal;
+	font-size: 14px;
+	font-weight: bold;
 	color: #FCE2CA;
 }
 
