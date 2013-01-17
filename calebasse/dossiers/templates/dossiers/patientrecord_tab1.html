@@ -40,6 +40,7 @@
     <ul>
       <li><label>Dernier acte :</label>
       {% if last_rdv %}
+      {% if last_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
       {{ last_rdv.start_datetime|date:"d/m/Y" }} -
       {% for participant in last_rdv.participants %}
       <span class="lastname">{{ participant.last_name }}</span> -
@@ -48,9 +49,11 @@
       {% else %}
       Aucun
       {% endif %}
+      {% if last_rdv.is_absent %}</span>{% endif %}
       </li>
       <li><label>Prochain rendez-vous :</label>
       {% if next_rdv %}
+      {% if next_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
       {{ next_rdv.start_datetime|date:"d/m/Y" }} -
       {% for participant in next_rdv.participants.all %}
       <span class="lastname">{{ participant.last_name }}</span> -
@@ -59,6 +62,7 @@
       {% else %}
       Aucun
       {% endif %}
+      {% if next_rdv.is_absent %}</span>{% endif %}
       </li>
     </ul>
     <div class="etat">

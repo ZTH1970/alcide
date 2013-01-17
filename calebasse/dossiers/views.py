@@ -61,6 +61,7 @@ def get_last_rdv(patient_record):
         last_rdv['start_datetime'] = event.start_datetime
         last_rdv['participants'] = event.participants.all()
         last_rdv['act_type'] = event.eventwithact.act_type
+        last_rdv['is_absent'] = event.is_absent()
     return last_rdv
 
 class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
@@ -296,8 +297,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['last_rdvs'].append((act, state))
-        if ctx['last_rdvs']:
-            ctx['last_rdv'] = ctx['last_rdvs'][0][0]
+        ctx['last_rdv'] = get_last_rdv(ctx['object'])
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
