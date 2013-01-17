@@ -411,7 +411,7 @@ class Event(models.Model):
         if not self.recurrence_periodicity:
             return None
         parts = []
-        parts.append(self.RECURRENCE_DESCRIPTION[self.recurrence_periodicity] \
+        parts.append(self.RECURRENCE_DESCRIPTION[self.recurrence_periodicity-1] \
             % self.WEEKDAY_DESRIPTION[self.recurrence_week_day])
         if self.recurrence_end_date:
             parts.append(u'du')
