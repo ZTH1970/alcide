@@ -4,14 +4,16 @@ from ajax_select import LookupChannel
 from calebasse.dossiers.models import PatientRecord, PatientAddress
 from django.core.exceptions import PermissionDenied
 
+from django.db.models import Q
+
 class PatientRecordLookup(LookupChannel):
     model = PatientRecord
     search_field = 'display_name'
     homonym = False
 
     def get_query(self,q,request):
-        kwargs = { "%s__istartswith" % self.search_field : q }
-        qs = self.model.objects.filter(**kwargs).order_by(self.search_field)
+        qs = self.model.objects.filter( Q(first_name__istartswith=q) | \
+                Q(last_name__istartswith=q)).order_by(self.search_field)
         if request.COOKIES.has_key('home-service'):
             service = request.COOKIES['home-service'].upper().replace('-', ' ')
             qs = qs.filter(service__name=service)
