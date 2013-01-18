@@ -54,7 +54,8 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
         acts = acts.filter(date__gte=start_day)
     days_not_locked = sorted(set(acts.values_list('date', flat=True)))
 
-    acts = acts.filter(is_billed=False, valide=True, is_lost=False,
+    acts = Act.objects.filter(validation_locked=True,
+        is_billed=False, valide=True, is_lost=False,
         patient__service=service, date__lte=end_day)
     if start_day:
         acts = acts.filter(date__gte=start_day)
