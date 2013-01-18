@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 
-from calebasse.actes.validation import are_all_acts_of_the_day_locked
+from calebasse.actes.validation import (are_all_acts_of_the_day_locked,
+        get_days_with_acts_not_locked)
 from calebasse.dossiers.models import (CmppHealthCareDiagnostic,
     CmppHealthCareTreatment)
 
@@ -43,42 +44,33 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     from calebasse.actes.models import Act
     if isinstance(end_day, datetime):
         end_day = end_day.date()
-    if acts is None:
-        acts = Act.objects.filter(valide=True, is_billed=False,
-            is_lost=False, patient__service=service)
-    acts = acts.filter(date__lte=end_day)
+    if start_day and isinstance(start_day, datetime):
+        start_day = start_day.date()
+
+    #if acts is None:
+    acts = Act.objects.filter(validation_locked=False,
+        patient__service=service, date__lte=end_day)
     if start_day:
         acts = acts.filter(date__gte=start_day)
     acts = acts.order_by('date')
+    days_not_locked = set(acts.values_list('date', flat=True))
+    acts = acts.filter(is_billed=False, valide=True, is_lost=False)
+    acts = acts.exclude(date__in=days_not_locked)
+
+    # deprecated
     acts_not_locked = {}
-    days_not_locked = []
-    days_locked = []
     acts_not_valide = {}
-    acts_not_billable = {}
+
     acts_pause = {}
+    acts_not_billable = {}
     acts_billable = {}
-    locked = False
     for act in acts:
         if act.pause:
             acts_pause.setdefault(act.patient, []).append(act)
         elif not act.is_billable():
             acts_not_billable.setdefault(act.patient, []).append(act)
         else:
-            current_day = datetime(act.date.year, act.date.month, act.date.day)
-            if current_day in days_locked:
-                locked = True
-            elif current_day in days_not_locked:
-                locked = False
-            else:
-                locked = are_all_acts_of_the_day_locked(current_day, service)
-                if locked:
-                    days_locked.append(current_day)
-                else:
-                    days_not_locked.append(current_day)
-            if not locked:
-                acts_not_locked.setdefault(act.patient, []).append((act, act.date))
-            else:
-                acts_billable.setdefault(act.patient, []).append(act)
+            acts_billable.setdefault(act.patient, []).append(act)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_billable)
 
