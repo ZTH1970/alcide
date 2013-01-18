@@ -44,8 +44,8 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     if isinstance(end_day, datetime):
         end_day = end_day.date()
     if acts is None:
-        acts = Act.objects.filter(is_billed=False, is_lost=False,
-            patient__service=service)
+        acts = Act.objects.filter(valide=True, is_billed=False,
+            is_lost=False, patient__service=service)
     acts = acts.filter(date__lte=end_day)
     if start_day:
         acts = acts.filter(date__gte=start_day)
@@ -63,8 +63,6 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
             acts_pause.setdefault(act.patient, []).append(act)
         elif not act.is_billable():
             acts_not_billable.setdefault(act.patient, []).append(act)
-        elif not act.is_state('VALIDE'):
-            acts_not_valide.setdefault(act.patient, []).append((act, act.get_state()))
         else:
             current_day = datetime(act.date.year, act.date.month, act.date.day)
             if current_day in days_locked:
