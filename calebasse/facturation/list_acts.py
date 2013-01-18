@@ -45,61 +45,42 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
         end_day = end_day.date()
     if acts is None:
         acts = Act.objects.filter(is_billed=False, is_lost=False,
-            patient__service=service).order_by('date')
-    # Filter acts according to the date
-    i = 0
-    for act in acts:
-        # On enlève tous les acts sup au jour de l'end_date
-        if act.date > end_day:
-            acts = acts[:i]
-            break
-        i = i + 1
+            patient__service=service)
+    acts = acts.filter(date__lte=end_day)
     if start_day:
-        i = 0
-        for act in acts:
-            # On enlève tous les acts inf au jour de la start_date
-            if datetime(act.date.year, act.date.month, act.date.day) < \
-                    datetime(start_day.year, start_day.month, start_day.day):
-                break
-            i = i + 1
-        acts = acts[:i]
+        acts = acts.filter(date__gte=start_day)
+    acts = acts.order_by('date')
     acts_not_locked = {}
     days_not_locked = []
+    days_locked = []
     acts_not_valide = {}
     acts_not_billable = {}
     acts_pause = {}
     acts_billable = {}
     locked = False
     for act in acts:
-        current_day = datetime(act.date.year, act.date.month, act.date.day)
-        locked = are_all_acts_of_the_day_locked(current_day, service)
-        if not locked:
-            if not current_day in days_not_locked:
-                days_not_locked.append(current_day)
-            if act.patient in acts_not_locked:
-                acts_not_locked[act.patient].append((act, act.date))
-            else:
-                acts_not_locked[act.patient] = [(act, act.date)]
-        elif not act.is_state('VALIDE'):
-            if act.patient in acts_not_valide:
-                acts_not_valide[act.patient].append((act, act.get_state()))
-            else:
-                acts_not_valide[act.patient] = [(act, act.get_state())]
+        if act.pause:
+            acts_pause.setdefault(act.patient, []).append(act)
         elif not act.is_billable():
-            if act.patient in acts_not_billable:
-                acts_not_billable[act.patient].append(act)
-            else:
-                acts_not_billable[act.patient] = [act]
-        elif act.pause:
-            if act.patient in acts_pause:
-                acts_pause[act.patient].append(act)
-            else:
-                acts_pause[act.patient] = [act]
+            acts_not_billable.setdefault(act.patient, []).append(act)
+        elif not act.is_state('VALIDE'):
+            acts_not_valide.setdefault(act.patient, []).append((act, act.get_state()))
         else:
-            if act.patient in acts_billable:
-                acts_billable[act.patient].append(act)
+            current_day = datetime(act.date.year, act.date.month, act.date.day)
+            if current_day in days_locked:
+                locked = True
+            elif current_day in days_not_locked:
+                locked = False
             else:
-                acts_billable[act.patient] = [act]
+                locked = are_all_acts_of_the_day_locked(current_day, service)
+                if locked:
+                    days_locked.append(current_day)
+                else:
+                    days_not_locked.append(current_day)
+            if not locked:
+                acts_not_locked.setdefault(act.patient, []).append((act, act.date))
+            else:
+                acts_billable.setdefault(act.patient, []).append(act)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_billable)
 

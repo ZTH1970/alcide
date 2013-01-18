@@ -80,6 +80,8 @@ class Act(models.Model):
             verbose_name=u'Facturé', db_index=True)
     is_lost = models.BooleanField(default=False,
             verbose_name=u'Acte perdu', db_index=True)
+    valide = models.BooleanField(default=False,
+            verbose_name=u'Valide', db_index=True)
     switch_billable = models.BooleanField(default=False,
             verbose_name=u'Inverser type facturable')
     healthcare = models.ForeignKey('dossiers.HealthCare',
@@ -161,11 +163,15 @@ class Act(models.Model):
         return False
 
     def get_state(self):
-        states = sorted(self.actvalidationstate_set.all(),
-                key=lambda avs: avs.created, reverse=True)
-        if states:
-            return states[0]
-        return None
+#        states = sorted(self.actvalidationstate_set.all(),
+#                key=lambda avs: avs.created, reverse=True)
+#        if states:
+#            return states[0]
+#        return None
+        try:
+            return self.actvalidationstate_set.latest('created')
+        except:
+            return None
 
     def is_state(self, state_name):
         state = self.get_state()
@@ -184,11 +190,18 @@ class Act(models.Model):
         current_state = self.get_state()
         ActValidationState(act=self, state_name=state_name,
             author=author, previous_state=current_state).save()
+        if state_name == 'VALIDE':
+            self.valide = True
+        else:
+            self.valide = False
+        self.save()
 
     def is_billable(self):
-        if (self.act_type.billable and not self.switch_billable) or \
-                (not self.act_type.billable and self.switch_billable):
+        billable = self.act_type.billable
+        if (billable and not self.switch_billable) or \
+                (not billable and self.switch_billable):
             return True
+        return False
 
     # START Specific to sessad healthcare
     def was_covered_by_notification(self):
