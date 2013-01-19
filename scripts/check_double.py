@@ -18,9 +18,9 @@ def main():
                 nb = same_acts.count()
                 if nb > 1:
                     keep = None
-                    for a in same_actes:
+                    for a in same_acts:
                         state = a.get_state()
-                        if state and state.name != 'NON_VALIDE' and a.validation_locked == True:
+                        if state and state.state_name != 'NON_VALIDE' and a.validation_locked == True:
                             keep = a
                             break
                     if not keep:
