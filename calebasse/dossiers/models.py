@@ -36,12 +36,18 @@ class HealthCare(models.Model):
         app_label = 'dossiers'
 
     start_date = models.DateField(verbose_name=u"Date de début")
+    request_date = models.DateField(verbose_name=u"Date de Demande",
+        blank=True, null=True)
+    agree_date = models.DateField(verbose_name=u"Date de d'accord",
+        blank=True, null=True)
+    insist_date = models.DateField(verbose_name=u"Date de relance",
+        blank=True, null=True)
     patient = models.ForeignKey('dossiers.PatientRecord',
         verbose_name=u'Dossier patient')
     created = models.DateTimeField(u'Création', auto_now_add=True)
     author = \
         models.ForeignKey(User,
-        verbose_name=u'Auteur')
+        verbose_name=u'Auteur', blank=True, null=True)
     comment = models.TextField(max_length=3000, blank=True, null=True, verbose_name=u"Commentaire")
 
     def get_nb_acts_cared(self):
