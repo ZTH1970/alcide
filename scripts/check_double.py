@@ -28,7 +28,13 @@ def main():
                         if lockeds.count() >= 1:
                             keep = lockeds[0]
                         else:
-                            keep = same_acts[0]
+                            for a in same_acts:
+                                state = a.get_state()
+                                if state and state.state_name != 'NON_VALIDE':
+                                    keep = a
+                                    break
+                            if not keep:
+                                keep = same_acts[0]
                     same_acts.exclude(pk=keep.pk).delete()
                     i += 1
     print "Nb actes redondants traites: %d" % i
