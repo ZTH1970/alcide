@@ -1,10 +1,10 @@
-from calebasse.dossiers.models import PatientRecord
-from calebasse.actes.models import Act
-
 import calebasse.settings
 import django.core.management
 
 django.core.management.setup_environ(calebasse.settings)
+
+from calebasse.dossiers.models import PatientRecord
+from calebasse.actes.models import Act
 
 def main():
     seen = []
