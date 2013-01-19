@@ -20,7 +20,7 @@ def main():
                     keep = None
                     for a in same_actes:
                         state = a.get_state()
-                        if state and state.name != 'NON_VALIDE' and a.validation_locked = =True:
+                        if state and state.name != 'NON_VALIDE' and a.validation_locked == True:
                             keep = a
                             break
                     if not keep:
@@ -28,7 +28,7 @@ def main():
                         if lockeds.count() >= 1:
                             keep = lockeds[0]
                         else:
-                            keep = same_actes[0]
+                            keep = same_acts[0]
                     same_acts.exclude(pk=keep.pk).delete()
                     i += 1
     print "Nb actes redondants traites: %d" % i
