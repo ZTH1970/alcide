@@ -70,8 +70,9 @@ class NewAppointmentForm(BaseForm):
         cleaned_data = super(NewAppointmentForm, self).clean()
         if not cleaned_data.get('recurrence_periodicity'):
             cleaned_data['recurrence_end_date'] = None
-        cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
-                cleaned_data['time'])
+        if cleaned_data.has_key('date') and cleaned_data.has_key('time'):
+            cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
+                    cleaned_data['time'])
         return cleaned_data
 
     def save(self, commit=True):
@@ -156,8 +157,9 @@ class NewEventForm(BaseForm):
 
     def clean(self):
         cleaned_data = super(NewEventForm, self).clean()
-        cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
-                cleaned_data['time'])
+        if cleaned_data.has_key('date') and cleaned_data.has_key('time'):
+            cleaned_data['start_datetime'] = datetime.combine(cleaned_data['date'],
+                    cleaned_data['time'])
         if not cleaned_data.get('recurrence_periodicity'):
             cleaned_data['recurrence_end_date'] = None
         event_type = cleaned_data.get('event_type')

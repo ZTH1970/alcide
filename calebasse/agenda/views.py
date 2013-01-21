@@ -3,6 +3,7 @@
 import datetime
 from itertools import chain
 
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponse
@@ -139,6 +140,10 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         kwargs['service'] = self.service
         return kwargs
 
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, u'Rendez-vous enregistré avec succès.')
+        return super(NewAppointmentView, self).form_valid(form)
+
 
 class TodayOccurrenceMixin(object):
     def get_object(self, queryset=None):
@@ -201,6 +206,10 @@ class NewEventView(CreateView):
         kwargs = super(NewEventView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, u'Evénement enregistré avec succès.')
+        return super(NewEventView, self).form_valid(form)
 
 
 class BaseEventView(UpdateView):
