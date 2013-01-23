@@ -617,7 +617,7 @@ class PeriodicEventsView(cbv.ListView):
             if form.cleaned_data.get('start_date'):
                 start_date = form.cleaned_data['start_date']
             if form.cleaned_data.get('end_date'):
-                start_date = form.cleaned_data['end_date']
+                end_date = form.cleaned_data['end_date']
             else:
                 end_date = start_date+datetime.timedelta(days=90)
         qs = qs.filter(services=self.service)
