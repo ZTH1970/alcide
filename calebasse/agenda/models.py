@@ -267,12 +267,14 @@ class Event(models.Model):
         # the returned event is "virtual", it must not be saved
         old_save = event.save
         old_participants = list(self.participants.all())
+        old_services = list(self.services.all())
         def save(*args, **kwargs):
             event.id = None
             event.event_ptr_id = None
             old_save(*args, **kwargs)
             if hasattr(self, 'exceptions_dict'):
                 self.exceptions_dict[event.start_datetime.date()] = event
+            event.services = old_services
             event.participants = old_participants
         event.save = save
         return event
