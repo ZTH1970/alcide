@@ -16,95 +16,97 @@
 {% for worker_agenda in workers_agenda %}
 {% if worker_agenda.appointments %}
 <div class="worker-agenda">
-  <h2>
-    <strong>{{ service_name }}</strong> - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
-    <input type="checkbox" class="printable" checked>
-  </h2>
-  <h3>{{ date|date:"DATE_FORMAT"|title }}</h3>
+    <h2>
+        <strong>{{ service_name }}</strong> - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
+        <input type="checkbox" class="printable" checked>
+    </h2>
+    <h3>{{ date|date:"DATE_FORMAT"|title }}</h3>
 
-<!--<span class="remarque">Remarque :</span>-->
+    <!--<span class="remarque">Remarque :</span>-->
 
-<table>
- <thead>
-  <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Libellé</th><th>Prés.</th>
-       <th>Absence</th>
-       <th>Type d'acte</th> <th>Commentaire</th> <th>Intervenants</th></tr>
- </thead>
- <tbody>
-   {% for appointment in worker_agenda.appointments %}
-   <tr data-event-id="{{ appointment.event_id }}">
-    <td class="col-time">{{ appointment.begin_hour }}</td>
-    <td class="col-duration">{% if appointment.length %}{{ appointment.length }}min{% endif %}</td>
-    <td class="col-record-id">
-    {% if appointment.patient_record_id %}
-      {% if appointment.patient_record_paper_id %}
-      {{ appointment.patient_record_paper_id }}
-      {% else %}
-      Pas de numéro papier.
-      {% endif %}
+    <table>
+        <thead>
+            <tr> <th>Heure</th> <th>Durée</th> <th>N°</th> <th>Libellé</th><th>Prés.</th>
+                <th>Absence</th>
+                <th>Type d'acte</th> <th>Commentaire</th> <th>Intervenants</th></tr>
+        </thead>
+        <tbody>
+            {% for appointment in worker_agenda.appointments %}
+            <tr data-event-id="{{ appointment.event_id }}">
+                <td class="col-time">{{ appointment.begin_hour }}</td>
+                <td class="col-duration">{% if appointment.length %}{{ appointment.length }}min{% endif %}</td>
+                <td class="col-record-id">
+                    {% if appointment.patient_record_id %}
+                    {% if appointment.patient_record_paper_id %}
+                    {{ appointment.patient_record_paper_id }}
+                    {% else %}
+                    Pas de numéro papier.
+                    {% endif %}
+                    {% endif %}
+                </td>
+                <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
+                <td/>
+                    <td> {% if appointment.act_absence %}<strong>{{ appointment.act_absence }}</strong>{% endif %}</td>
+                    <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
+                    <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
+                    <td>
+                        {% if appointment.workers and appointment.workers|length > 10 %}
+                        {{ appointment.workers|length }} intervenants
+                        {% else %}
+                        {% for worker in appointment.workers %}
+                        <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="summary">
+            RDV :      {{ worker_agenda.summary.rdv }} —
+            Présence : {{ worker_agenda.summary.presence }} —
+            Absence :  {{ worker_agenda.summary.absence }} —
+            Doubles :  {{ worker_agenda.summary.doubles }} —
+            Validés :  {{ worker_agenda.summary.valides }}
+            <div class="pagebreak"></div>
+        </div>
+
+    </div> <!-- .worker-agenda -->
+
     {% endif %}
-    </td>
-    <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
-    <td/>
-    <td> {% if appointment.act_absence %}<strong>{{ appointment.act_absence }}</strong>{% endif %}</td>
-    <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
-    <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
-    <td>
-        {% if appointment.workers and appointment.workers|length > 10 %}
-        {{ appointment.workers|length }} intervenants
-        {% else %}
-            {% for worker in appointment.workers %}
-            <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
-            {% endfor %}
-        {% endif %}
-    </td>
-   </tr>
-   {% endfor %}
- </tbody>
-</table>
+    {% endfor %}
+    <script>
+        $(function () {
+            /* Control page break on last printed page */
+            function update_page_break() {
+                $('.pagebreak').css('page-break-after', 'always');
+                $('.pagebreak').not('.screen-only').last().css('page-break-before', 'avoid');
+            }
+            update_page_break();
+            $('.printable').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $(this).parents('.worker-agenda').removeClass('screen-only');
+                    } else {
+                    $(this).parents('.worker-agenda').addClass('screen-only');
+                }
+                update_page_break();
+            });
+            $('#uncheck-all').on('click', function () {
+                $('.printable').attr('checked', false);
+                $('.printable').trigger('change');
+                $('#uncheck-all').hide();
+                $('#check-all').show();
+                update_page_break();
+            });
+            $('#check-all').on('click', function () {
+                $('.printable').attr('checked', true);
+                $('.printable').trigger('change');
+                $('#check-all').hide();
+                $('#uncheck-all').show();
+                update_page_break();
+            });
+        });
+    </script>
+    {% endblock %}
 
-<div class="summary">
-RDV :      {{ worker_agenda.summary.rdv }} —
-Présence : {{ worker_agenda.summary.presence }} —
-Absence :  {{ worker_agenda.summary.absence }} —
-Doubles :  {{ worker_agenda.summary.doubles }} —
-Validés :  {{ worker_agenda.summary.valides }}
-</div>
-
-</div> <!-- .worker-agenda -->
-
-{% endif %}
-{% endfor %}
-<script>
-  $(function () {
-    /* Control page break on last printed page */
-    function update_page_break() {
-      $('.worker-agenda').css('page-break-after', 'always');
-      $('.worker-agenda').not('.screen-only').last().css('page-break-after', 'avoid');
-    }
-    update_page_break();
-    $('.printable').on('change', function () {
-      if ($(this).is(':checked')) {
-        $(this).parents('.worker-agenda').removeClass('screen-only');
-      } else {
-        $(this).parents('.worker-agenda').addClass('screen-only');
-      }
-      update_page_break();
-    });
-    $('#uncheck-all').on('click', function () {
-      $('.printable').attr('checked', false);
-      $('.printable').trigger('change');
-      $('#uncheck-all').hide();
-      $('#check-all').show();
-      update_page_break();
-    });
-    $('#check-all').on('click', function () {
-      $('.printable').attr('checked', true);
-      $('.printable').trigger('change');
-      $('#check-all').hide();
-      $('#uncheck-all').show();
-      update_page_break();
-    });
-  });
-</script>
-{% endblock %}
