@@ -3,39 +3,130 @@
 {% load url from future %}
 {% load apptags %}
 
+{% block extrascripts %}
+{{ block.super }}
+<script>
+  $(function () {
+    var update_periodic_event_url = "{% url 'update-periodic-event' service=service date=date pk=0 %}";
+    var update_periodic_appointment_url = "{% url 'update-periodic-rdv' service=service date=date pk=0 %}";
+
+    $('button.edit-periodic-appointment').on('click', function () {
+      var id = $(this).data('event-id');
+      var title = $(this).data('title');
+      generic_ajaxform_dialog(update_periodic_appointment_url + id,
+        title, '#event-dlg', 950, 'Modifier',
+        "{% url 'periodic-events' service=service date=date %}");
+    });
+    $('button.edit-periodic-event').on('click', function () {
+      var id = $(this).data('event-id');
+      var title = $(this).data('title');
+      generic_ajaxform_dialog(update_periodic_event_url + id,
+        title, '#event-dlg', 950, 'Modifier',
+        "{% url 'periodic-events' service=service date=date %}");
+    });
+  });
+</script>
+{% endblock %}
+
 {% block appbar %}
-<h2>Rendez-vous périodiques</h2>
-    <a href="..">Retourner à l'agenda</a>
+<h2>Rendez-vous périodiques{% if worker %} de {{ worker }}{% endif %}</h2>
+<a href="{% url 'agenda' service=service date=date %}">Retourner à l'agenda</a>
 <style>
   div#sidebar form#periodic-events-search-form button {
     width: inherit;
   }
-  div#sidebar form#periodic-events-search-form input {
+  div#sidebar form#periodic-events-search-form input[type="text"] {
     width: 5em;
   }
-  div#sidebar label {
+  div#sidebar form#periodic-events-search-form ul{
+    padding: 0px;
+    margin: 0px;
+  }
+  div#sidebar form#periodic-events-search-form ul li,
+  div#sidebar form#periodic-events-search-form .field label[for="no_end_date"] {
+    display: block;
+    margin-left: -10px;
+  }
+  div#sidebar div.field {
+    margin-bottom: 1ex;
+  }
+  div#events div.event h3 span.right {
+    position: absolute;
+    right: 25px;
+  }
 </style>
 {% endblock %}
 {% block content %}
 <div id="sidebar">
   <form id="periodic-events-search-form">
-    <div>
+    <div class="field">
       <label for="start_date">Rendez-vous périodiques possédant des occurences après le&nbsp;:</label>
       {{ search_form.start_date|add_class:"datepicker-date" }}
     </div>
-    <div>
-    <label for="end_date">et au moins une occurrence dans les trois qui suivent ou bien avant cette date&nbsp;:</label>
+    <div class="field">
+    <label for="end_date">et au moins une occurrence dans les trois mois qui suivent ou bien avant cette date&nbsp;:</label>
     {{ search_form.end_date|add_class:"datepicker-date" }}
     </div>
+    <div class="field">
+      {{ search_form.event_type }}
+      <label for="no_end_date">{{ search_form.no_end_date }} Sans date de fin</label>
+    </div>
+    <div class="field">
+      <label for="patient">avec le patient:</label>
+      {{ search_form.patient }}
+    </div>
     <button>Rechercher</button>
+    <a href="./">Effacer</a>
   </form>
 </div>
 <script>
   $('.datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
 </script>
 <div class="content">
+  <p>{{ object_list|length }} évènements trouvés.</p>
   {% for event in object_list %}
-  <pre>{{ event }}</pre>
+  <div id="events">
+    <div class="event frame" id="event-frame-{{ event.id }}">
+      <h3>
+        <span>{{ event.recurrence_description }}</span>
+         — 
+        <span class="hour">{{ event.start_datetime.time }}</span>
+        {% if event.title %} — {{ event.title }} {% endif %}
+        {% if event.patient.paper_id %} — {{ event.patient.paper_id }} {% endif %}
+        {% if event.length %} — {{ event.length }} mn {% endif %}
+        {% if event.workers_initial %} — {{ event.workers_initial }} {% endif %}
+        {% if event.room %} — {{ event.room }} {% endif %}
+        <span class="right">
+          {% for other_service in event.services.all %}
+            {% if other_service.name != service_name %}
+              <span class="box {{ other_service.slug }}" title="{{ other_service.name }}"></span>
+            {% endif %}
+          {% endfor %}
+          {% if event.description %}
+            <span title="Un commentaire existe" class="icon-comment"></span>
+          {% endif %}
+         {% if event.event_type_id == 1 %}
+           <button title="Éditer un rendez-vous" class="edit-periodic-appointment icon-edit" data-event-id="{{ event.id }}"></button>
+         {% else %}
+           <button title="Éditer un événement" class="edit-periodic-event icon-edit" data-event-id="{{ event.id }}">
+         {% endif %}
+        </span>
+      </h3>
+      {% if event.act_type %}
+        <p>Type: {{ event.act_type }}</p>
+      {% endif %}
+        <p>Avec: 
+          {% for participant in event.participants.all %}
+            {{ participant }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+    </div>
+  </div>
   {% endfor %}
+</div>
+{% endblock %}
+
+{% block dialogs %}
+<div id="event-dlg" style="display: none">
 </div>
 {% endblock %}

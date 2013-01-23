@@ -10,6 +10,7 @@ from ..ressources.models import ActType
 from ..middleware.request import get_request
 
 from ajax_select import make_ajax_field
+from ajax_select.fields import AutoCompleteSelectField
 from models import Event, EventWithAct, EventType
 
 class BaseForm(forms.ModelForm):
@@ -184,8 +185,17 @@ class UpdateEventForm(NewEventForm):
         )
 
 class PeriodicEventsSearchForm(forms.Form):
-    start_date = forms.DateField(required=True, localize=True)
+    start_date = forms.DateField(localize=True)
     end_date = forms.DateField(required=False, localize=True)
+
+    event_type = forms.MultipleChoiceField(
+            choices=(
+                (0, 'Rendez-vous patient'),
+                (1, 'Autre')),
+            widget=forms.CheckboxSelectMultiple,
+            initial=[0,1])
+    no_end_date = forms.BooleanField(label=u'Sans date de fin', required=False)
+    patient = AutoCompleteSelectField('patientrecord', required=False)
 
     def clean(self):
         cleaned_data = super(PeriodicEventsSearchForm, self).clean()

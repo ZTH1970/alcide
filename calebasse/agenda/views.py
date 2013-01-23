@@ -5,7 +5,7 @@ from itertools import chain
 
 from django.contrib import messages
 from django.db.models import Q
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 
 from calebasse.cbv import TemplateView, CreateView, UpdateView
@@ -590,6 +590,13 @@ class PeriodicEventsView(cbv.ListView):
     model = EventWithAct
     template_name = 'agenda/periodic-events.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if 'worker_id' in kwargs:
+            self.worker = get_object_or_404(Worker, id=kwargs['worker_id'])
+        else:
+            self.worker = None
+        return super(PeriodicEventsView, self).dispatch(request, *args, **kwargs)
+
     def get_form(self):
         kwargs = {
                 'initial': {
@@ -607,10 +614,17 @@ class PeriodicEventsView(cbv.ListView):
         form = self.get_form()
         qs1 = self.filter_queryset(form, qs1)
         qs2 = self.filter_queryset(form, qs2)
+        if form.is_valid():
+            patient = form.cleaned_data.get('patient')
+            if patient is not None:
+                qs1 = qs1.none()
+                qs2 = qs2.filter(patient=patient)
         return sorted(chain(qs1, qs2),
                 key=lambda x: (x.start_datetime, x.recurrence_end_date or datetime.date(9999,12,31)))
 
     def filter_queryset(self, form, qs):
+        if self.worker is not None:
+            qs = qs.filter(participants=self.worker)
         start_date = datetime.date.today()
         end_date = start_date+datetime.timedelta(days=90)
         if form.is_valid():
@@ -620,6 +634,13 @@ class PeriodicEventsView(cbv.ListView):
                 end_date = form.cleaned_data['end_date']
             else:
                 end_date = start_date+datetime.timedelta(days=90)
+            if len(form.cleaned_data.get('event_type')) != 2:
+                if '0' in form.cleaned_data.get('event_type'):
+                    qs = qs.filter(event_type_id=1)
+                else:
+                    qs = qs.exclude(event_type_id=1)
+            if form.cleaned_data.get('no_end_date'):
+                qs = qs.filter(recurrence_end_date__isnull=True)
         qs = qs.filter(services=self.service)
         qs = qs.filter(recurrence_periodicity__isnull=False)
         qs = qs.filter(start_datetime__lt=end_date)
@@ -627,10 +648,11 @@ class PeriodicEventsView(cbv.ListView):
                 | Q(recurrence_end_date__gte=start_date))
         qs = qs.order_by('start_datetime', 'recurrence_end_date')
         qs = qs.select_related()
-        qs = qs.prefetch_related('participants')
+        qs = qs.prefetch_related('participants', 'services')
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super(PeriodicEventsView, self).get_context_data(**kwargs)
         ctx['search_form'] = self.form
+        ctx['worker'] = self.worker
         return ctx

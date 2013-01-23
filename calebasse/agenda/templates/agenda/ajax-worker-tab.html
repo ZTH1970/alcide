@@ -1,4 +1,5 @@
 {% load url from future %}
+<p><a href="{% url 'periodic-events-for-worker' service=service date=date worker_id=worker_agenda.worker.id %}">Rendez-vous périodiques</a></p>
 <div {% if appointment.event_id %}data-event-id="{{ appointment.event_id }}"{% endif %}>
   {% for appointment in worker_agenda.appointments %}
   <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
