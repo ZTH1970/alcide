@@ -11,12 +11,12 @@ from calebasse.utils import is_validator
 
 
 APPLICATIONS = (
-        (u'Gestion des dossiers', 'dossiers'),
-        (u'Agenda', 'agenda'),
-#        (u'Saisie des actes', 'actes'),
-#        (u'Facturation et décompte', 'facturation'),
-        (u'Gestion des personnes', 'personnes'),
-        (u'Gestion des ressources', 'ressources'),
+        (u'Gestion des dossiers', 'dossiers', False),
+        (u'Agenda', 'agenda', False),
+#        (u'Saisie des actes', 'actes', True),
+#        (u'Facturation et décompte', 'facturation', True),
+        (u'Gestion des personnes', 'personnes', True),
+        (u'Gestion des ressources', 'ressources', True),
 )
 
 def redirect_to_homepage(request):
