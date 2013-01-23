@@ -4,6 +4,7 @@
 import os
 import sys
 import csv
+import pdb
 
 from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
@@ -14,6 +15,7 @@ import django.core.management
 django.core.management.setup_environ(calebasse.settings)
 
 from django.contrib.auth.models import User
+from django.db import transaction
 
 from calebasse.agenda.models import Event, EventType
 from calebasse.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact, \
@@ -190,6 +192,7 @@ def get_nir(nir, key, writer, line, service):
     return nir
 
 
+@transaction.commit_manually
 def import_dossiers_phase_1():
     """ """
     print "====== Début à %s ======" % str(datetime.today())
@@ -472,90 +475,152 @@ def import_dossiers_phase_1():
                     a.healthcare = hc
                     a.save()
         # Historique des dossiers, Automatic switch state ? Automated hc creation ?
+        print "--> Lecture table des dossiers..."
+        csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
+        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+        d_cols = csvlines.next()
+        tables_data['dossiers'] = []
+        for line in csvlines:
+            data = _get_dict(d_cols, line)
+            tables_data['dossiers'].append(data)
+        csvfile.close()
+        print "<-- Terminé : dictionnaire avec clé patient prêt"
 
-#            date_accueil = None
-#            date_diagnostic = None
-#            date_traitement = None
-#            date_clos = None
-#            date_bilan = None
-#            date_suivi = None
-#            date_surveillance = None
-#            date_retour = None
-#            fss = []
-#            date_accueil = _to_date(dossier['con_date'])
-#            date_traitement = _to_date(dossier['ins_date'])
-#            date_clos = _to_date(dossier['sor_date'])
-#            if not (date_accueil or date_traitement or date_clos):
-#                # no state date, the record is inconsistent
-#                writer2.writerow([dossier[c].encode('utf-8') for c in d_cols] + [service.name, 'Non', "Aucune date d'état existante"])
-#                continue
-#            # Manage states
-#            if date_accueil and date_traitement and date_accueil >= date_traitement:
-#                date_accueil = None
-#            if date_traitement and date_clos and date_traitement >= date_clos:
-#                date_traitement = None
-#            if date_accueil and date_clos and date_accueil >= date_clos:
-#                date_accueil = None
-#            if "SESSAD" in service.name:
-#                # Il n'y a jamais eu de retour au SESSADs
-#                if date_accueil:
-#                    fss.append((status_accueil, date_accueil, None))
-#                if date_traitement:
-#                    fss.append((status_traitement, date_traitement, None))
-#                if date_clos:
-#                    fss.append((status_clos, date_clos, None))
-#            # Jamais de motif et provenance au retour
-#            elif service.name == 'CAMSP':
-#                date_retour = _to_date(dossier['ret_date'])
-#                if date_accueil:
-#                    fss.append((status_accueil, date_accueil, None))
-#                if not date_retour:
-#                    if date_traitement:
-#                        s = status_bilan
-#                        if dossier['suivi'] == '3':
-#                            s = status_suivi
-#                        elif dossier['suivi'] == '4':
-#                            s = status_surveillance
-##                        fss.append((s, date_traitement, "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
-#                        fss.append((s, date_traitement, ""))
-#                else:
-#                    # Le retour supprime la précédente de clôture, on choisit le retour à j-1
-#                    if date_traitement:
-#                        # c'est l'inscription
-#                        if date_traitement < date_retour:
-#                            fss.append((status_suivi, date_traitement, "Etat de traitement indéterminé (Suivi par défaut)."))
-#                        old_clos_date = date_retour + relativedelta(days=-1)
-#                        fss.append((status_clos, old_clos_date, "La date de clôture est indéterminée (par défaut positionnée à 1 jour avant le retour)."))
-#                        s = status_bilan
-#                        if dossier['suivi'] == '3':
-#                            s = status_suivi
-#                        elif dossier['suivi'] == '4':
-#                            s = status_surveillance
-##                        fss.append((s, date_retour,  "Il peut y avoir plusieurs états de suivi durant cette période de suivi mais ils ne peuvent être déterminés."))
-#                        fss.append((s, date_retour,  ""))
-#                if date_clos:
-#                    if date_retour and date_clos < date_retour:
-#                        print 'La date de clôture ne peut être antérieure à la date de retour!'
-#                    else:
-#                        fss.append((status_clos, date_clos, None))
+        date_accueil = None
+        date_diagnostic = None
+        date_inscription = None
+        date_clos = None
+        date_retour = None
+        fss = []
+
+        pdb.set_trace()
+        FileState.objects.filter(patient__service=service).delete()
+        for dossier in tables_data['dossiers']:
+            patient = None
+            try:
+                patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
+            except:
+                print 'Patient %s non trouve' % dossier['id']
+                continue
+            date_accueil = _to_date(dossier['con_date'])
+            date_inscription = _to_date(dossier['ins_date'])
+            date_clos = _to_date(dossier['sor_date'])
+            date_retour = _to_date(dossier['ret_date'])
+
+            # La vrai date d'inscription c'est le premier acte facturé
+            # donc date_inscription devrait être égale
+            # verification
+            try:
+                real_date_inscription = patient.act_set.filter(is_billed=True).order_by('date')[0].date
+            except:
+                print "Patient %s jamais facture" % dossier['id']
+            else:
+                if date_inscription and real_date_inscription != date_inscription:
+                    print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
+                elif not date_inscription:
+                    print "Pas de date d'inscription, on prend le premier acte pour %s" % dossier['id']
+                    date_inscription = real_date_inscription
+
+            # date d'accueil devrait précéder la date d'inscription
+            # sinon, on l'ignore
+            if (date_accueil and not date_inscription) or (date_accueil and date_inscription and date_accueil < date_inscription):
+                fss.append((status_accueil, date_accueil, None))
+
+            # revoir, si on a un acte non facturé avant le diag, on va avoir l'impression que le dossier a été en traitement, ne faut pas prendre que les actes billed ?
+            # On tente avec que du is_billed.
+            # Lors dossiers qui n'aurant jamsi eu d'acte de facturé, on prend les dates et on fait un historique par défaut comme avant!
+
+            if date_clos and date_inscription and date_clos < date_inscription:
+                print "Cloture avant inscription pour %s, on ne cloture pas" % dossier['id']
+                date_clos = None
+
+            # Historique par les actes
+            history = []
+            d = True
+            for act in patient.act_set.filter(is_billed=True).order_by('date'):
+                tag = act.get_hc_tag()
+                if tag and'D' in tag:
+                    if not history or not d:
+                        history.append(('D', act.date))
+                        d = True
+                else:
+                    if not tag:
+                        print 'Act facture %d sans pc associee, traitement.' % act.id
+                    if d:
+                        history.append(('T', act.date))
+                        d = False
+
+            clos = False
+            inscrit = False
+            tt = None
+            for i in range(len(history)):
+                t, date = history[i]
+                if not inscrit:
+                    inscrit = True
+                    if date_inscription:
+                        if t == 'D':
+                            fss.append((status_diagnostic, date, None))
+                        else:
+                            fss.append((status_traitement, date, None))
+                else:
+                    if not date_clos:
+                        if t == 'D':
+                            fss.append((status_diagnostic, date, None))
+                        else:
+                            fss.append((status_traitement, date, None))
+                    elif not clos:
+                        if t == 'D':
+                            fss.append((status_diagnostic, date, None))
+                        else:
+                            fss.append((status_traitement, date, None))
+                        next_date = None
+                        if i < len(history) - 1:
+                            _, next_date = history[i+1]
+                        if not next_date or clos < next_date:
+                            fss.append((status_clos, date_clos, None))
+                            clos = True
+                    else:
+                        if date_retour and date_retour > date_clos:
+                            if date >= date_retour:
+                                if t == 'D':
+                                    fss.append((status_diagnostic, date, None))
+                                else:
+                                    fss.append((status_traitement, date, None))
+
+            if not fss:
+                print "Pas d'etat pour le dossier patient %s!" % dossier['id']
+            else:
+                fs = FileState(status=fss[0][0], author=creator, previous_state=None)
+                date_selected = fss[0][1]
+                fs.patient = patient
+                fs.date_selected = date_selected
+                fs.comment = fss[0][2]
+                fs.save()
+                patient.last_state = fs
+                patient.save()
+                if len(fss) > 1:
+                    for status, date, comment in fss[1:]:
+                        patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
+
+            # Si reouverture apres date de cloture, passer à cette date en d ou en t
+            # Combinaisons possibles
+            # Mais au final la reouverture n'a d'intérêt que si on a
+            # une date de cloture antérieure
+#            if date_retour and date_clos and date_retour < date_clos:
+#                # accueil, d/t, cloture (date inconnue), d/t, cloture
+#            elif date_retour and date_clos and date_retour > date_clos:
+#                # accueil, d/t, cloture, d/t
+#            elif date_retour and date_clos and date_retour == date_clos:
+#                print "Date de retour et date de clotûre égale pour %s" % dossier['id']
+#            elif date_retour:
+#                # accueil, d/t, cloture (date inconnue), d/t
+#            elif date_clos:
+#                # accueil, d/t, cloture
 #            else:
-#                date_retour = _to_date(dossier['ret_date'])
-#                if date_accueil:
-#                    fss.append((status_accueil, date_accueil, None))
-#                if date_traitement:
-#                    fss.append((status_diagnostic, date_traitement, "Inscription en diag mais pourrait etre en trait. A préciser"))
-#                if (date_retour and date_clos and date_retour > date_clos) or not date_clos:
-#                    if old_id in tables_data['pcs'].keys():
-#                        pcs = tables_data['pcs'][old_id]
-#                        last_pc = pcs[len(pcs)-1]
-#                        if last_pc['genre_pc'] == '2':
-#                            status, date, msg = fss[len(fss)-1]
-#                            last_date = date + relativedelta(days=1)
-#                            fss.append((status_traitement, last_date, "Date à préciser."))
-#                else:
-#                    fss.append((status_clos, date_clos, None))
+#                # accueil, d/t
 
         print "<-- Terminé"
+    transaction.commit()
     print "====== Fin à %s ======" % str(datetime.today())
 
 
