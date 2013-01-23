@@ -28,8 +28,8 @@ APS42 - Accueil
     </div>
 
     <ul id="apps">
-      {% for name, slug in applications %}
-        <li id="{{slug}}"><a href="/{{service}}/{{slug}}/">{{name}}</a></li>
+      {% for name, slug, restriction in applications %}
+        {% if not restriction or 'validator' in role %}<li id="{{slug}}"><a href="/{{service}}/{{slug}}/">{{name}}</a></li>{% endif %}
       {% endfor %}
     </ul>
 
