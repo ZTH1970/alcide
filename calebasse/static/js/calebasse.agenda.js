@@ -7,7 +7,7 @@ function enable_events(base) {
           var span = textarea.prev()
           var btn = $(this)
           $.ajax({
-              url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json',
+              url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
               contentType: 'application/json',
               data: '{"description": "' + textarea.val() + '"}',
