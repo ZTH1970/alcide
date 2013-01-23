@@ -22,7 +22,7 @@
   {% if holiday %}<span class="en-conge">(en congé jusqu'au {{ holiday.end_date|date:"j F" }})</span>{% endif %}
 </h2>
     <a href="..">Retourner à l'administration du personnel</a>
-    <form action="delete" method="post" data-confirmation-msg="Êtes-vous sûr de vouloir supprimer le personnel {{object.last_name}} {{object.first_name}} ?" class="form-with-confirmation">
+    <form action="delete/" method="post" data-confirmation-msg="Êtes-vous sûr de vouloir supprimer le personnel {{object.last_name}} {{object.first_name}} ?" class="form-with-confirmation">
       <button>Supprimer</button>
     </form>
 {% endblock %}
