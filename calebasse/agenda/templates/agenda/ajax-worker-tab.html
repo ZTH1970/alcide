@@ -22,10 +22,12 @@
         {% endif %}
         {% if appointment.event_id %}
         {% if appointment.is_recurrent %} R {% endif %}
-         {% if appointment.patient_record_id %}
-           <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
-         {% else %}
-           <button title="Éditer un événement" class="edit-event icon-edit" data-event-id="{{ appointment.event_id }}">
+         {% if service in appointment.services_names %}
+          {% if appointment.patient_record_id %}
+            <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
+          {% else %}
+            <button title="Éditer un événement" class="edit-event icon-edit" data-event-id="{{ appointment.event_id }}">
+          {% endif %}
          {% endif %}
         <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-url="{% url 'delete-occurrence' service=service date=date pk=appointment.event_id %}" data-rdv="{{ appointment.title }}"></button>
         {% endif %}
@@ -49,7 +51,9 @@
     <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
         <span></span>
         <textarea>{{ appointment.description }}</textarea>
-        <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
+        {% if service in appointment.services_names %}
+          <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
+        {% endif %}
     </div>
     {% else %}
         {% if appointment.description %}

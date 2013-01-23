@@ -33,6 +33,7 @@ class Appointment(object):
         self.act_type = None
         self.validation = None
         self.holiday = False
+        self.services_names = []
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -57,9 +58,10 @@ class Appointment(object):
         self.date = event.start_datetime.date()
         self.__set_time(time(event.start_datetime.hour, event.start_datetime.minute))
         for e_service in services:
+            name = e_service.name.lower().replace(' ', '-')
             if e_service != service:
-                name = e_service.name.lower().replace(' ', '-')
                 self.other_services_names.append(name)
+            self.services_names.append(name)
         if service in services:
             self.type = "busy-here"
         else:
@@ -105,7 +107,6 @@ class Appointment(object):
             self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
 
     def init_free_time(self, length, begin_time):
-        """ """
         self.type = "free"
         self.length = length
         self.__set_time(begin_time)
