@@ -7,7 +7,7 @@ function enable_events(base) {
           var span = textarea.prev()
           var btn = $(this)
           $.ajax({
-              url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json',
+              url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
               contentType: 'application/json',
               data: '{"description": "' + textarea.val() + '"}',
@@ -314,7 +314,7 @@ function toggle_ressource(ressource_selector) {
 function event_dialog(url, title, width, btn_text) {
           $('#rdv').load(url,
               function () {
-                  function onsuccess(response, status, xhr, form) {
+                  /* function onsuccess(response, status, xhr, form) {
                       var parse = $(response);
                       if ($('.errorlist', parse).length != 0) {
                           $('#rdv').html(response);
@@ -324,10 +324,11 @@ function event_dialog(url, title, width, btn_text) {
                           $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                           console.log('error');
                       } else {
-                          console.log('success');
-                          window.location.reload(true);
+                          console.log(xhr);
+                          window.location.href = xhr.redirect;
+                         window.location.reload(true);
                       }
-                  }
+                  } */
                   $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                   $('#id_description').attr('rows', '3');
                   $('#id_description').attr('cols', '30');
@@ -355,8 +356,26 @@ function event_dialog(url, title, width, btn_text) {
                               });
                       });
                   });
-                  $('form', this).ajaxForm({
+                  /* $('form', this).ajaxForm({
                       success: onsuccess
+                  }); */
+                  $("#rdv").submit(function(event) {
+                      /* stop form from submitting normally */
+                      event.preventDefault();
+
+                      var $form = $('form', this);
+                      $.post($form.attr('action'), $form.serialize(),
+                          function (data) {
+                            var parse = $(data);
+                            if ($('.errorlist', parse).length != 0) {
+                                $('#rdv').html(data);
+                                $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+                                console.log('error');
+                            } else {
+                                $('body').html(data);
+                            }
+                          },
+                          "html");
                   });
                   $(this).dialog({title: title,
                       width: width,
@@ -498,3 +517,4 @@ function event_dialog(url, title, width, btn_text) {
     $('#filtre input').keyup();
   });
 })(window.jQuery)
+
