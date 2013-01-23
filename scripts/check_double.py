@@ -64,7 +64,14 @@ def main():
         if parent_event_id and not keep.parent_event:
             keep.parent_event_id = parent_event_id
             keep.save()
-        same_acts.exclude(pk=keep.pk).delete()
+        acts_to_remove = same_acts.exclude(pk=keep.pk)
+        for act in acts_to_remove:
+            if act.parent_event:
+                if act.parent_event.recurrence_periodicity:
+                    print "attention, le parent de %d est un event periodique." % act.id
+                elif act.parent_event != keep.parent_event:
+                    act.parent_event.delete()
+            act.delete()
         if not i % 100:
             percent  = int(round((float(i) / float(total)) * 100))
             out = '\r %20s [%s%s] %3d %%' % ("Traitement des doublons : ", '=' * percent, ' ' * (100 - percent), percent)
