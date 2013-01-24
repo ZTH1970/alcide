@@ -125,8 +125,10 @@ def automated_validation(date, service, user, commit=True):
             nb_acts_validated = nb_acts_validated + 1
 
     for act in acts_of_the_day:
-        if commit and (act.is_lost or act.is_billed) and not act.get_state():
-            act.set_state('VALIDE', author=user, auto=True)
+        if commit and (act.is_lost or act.is_billed):
+            state = act.get_state()
+            if not state or (state and state.state_name == 'NON_VALIDE'):
+                act.set_state('VALIDE', author=user, auto=True)
 
     # Acts locking
     for act in acts_of_the_day:
