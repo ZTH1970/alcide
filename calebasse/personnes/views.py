@@ -223,7 +223,7 @@ worker_schedule_update = WorkerScheduleUpdateView.as_view()
 worker_holidays_update = WorkerHolidaysUpdateView.as_view()
 worker_delete = cbv.DeleteView.as_view(model=models.Worker,
         template_name='calebasse/simple-form.html',
-        success_url='../')
+        success_url='../../')
 
 
 class HolidayView(cbv.TemplateView):
