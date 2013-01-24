@@ -23,6 +23,7 @@
 </h2>
     <a href="..">Retourner à l'administration du personnel</a>
     <form action="delete/" method="post" data-confirmation-msg="Êtes-vous sûr de vouloir supprimer le personnel {{object.last_name}} {{object.first_name}} ?" class="form-with-confirmation">
+      {% csrf_token %}
       <button>Supprimer</button>
     </form>
 {% endblock %}
