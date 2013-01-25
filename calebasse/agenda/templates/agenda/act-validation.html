@@ -62,7 +62,7 @@
            <button {% if last_status %}disabled{% endif %}>Modifier</button>
            </form>
            <label> Facturable : </label>
-           <input class="input_is_billable" data-id="{{acte.id}}" type="checkbox" {% if acte.is_billable %}checked{% endif %}></input>
+           <input class="input_is_billable" data-id="{{acte.id}}" data-switch-billable="{{acte.switch_billable}}" type="checkbox" {% if acte.is_billable %}checked{% endif %}></input>
            <label> Acte perdu : </label>
            <input class="input_is_lost" data-id="{{acte.id}}" type="checkbox" {% if acte.is_lost %}checked{% endif %}></input>
          {% else %}

@@ -19,10 +19,10 @@ function enable_events(base) {
       });
       /* TODO: put this in a generic function */
       $('.input_is_billable').click(function() {
-          if ((this.checked) == false) {
-              var value = "true";
-          } else {
+          if ($(this).data("switch-billable") == "True") {
               var value = "false";
+          } else {
+              var value = "true";
           }
           $.ajax({
               url: '/api/v1/act/' + $(this).data("id") + '/?format=json',
