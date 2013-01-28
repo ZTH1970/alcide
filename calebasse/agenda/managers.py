@@ -40,6 +40,7 @@ class EventQuerySet(InheritanceQuerySet):
         # week ranks
         filters.append(base_q & Q(recurrence_week_rank__in=weekday_ranks(today)))
         qs = self.filter(reduce(Q.__or__, filters))
+        qs = qs.distinct()
         return qs
 
     def today_occurrences(self, today=None):
