@@ -1,8 +1,27 @@
 
+function disable_button(button) {
+  var $button = $(button);
+  old_background_image = $button.css('background-image');
+  old_background_repeat = $button.css('background-repeat');
+  $button.data('old_background_image', old_background_image);
+  $button.data('old_background_repeat', old_background_repeat);
+  $button.attr('disabled', 'disabled');
+  $button.css('background-image', 'url(/static/images/throbber.gif), ' + old_background_image);
+  $button.css('background-repeat', 'no-repeat, ' + old_background_repeat);
+}
+
+function enable_button(button) {
+  var $button = $(button);
+  $button.css('background-image', $button.data('old_background_image'));
+  $button.css('background-repeat', $button.data('old_background_repeat'));
+  $button.removeAttr('disabled');
+}
+
 function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback) {
   $(id).load(url,
       function () {
         function onsuccess(response, status, xhr, form) {
+          enable_button($('#submit-btn'));
           var parse = $(response);
           if ($('.errorlist', parse).length != 0) {
             $(id).html(response);
@@ -40,7 +59,10 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
             click: function() { $(this).dialog("close"); } },
           { text: btn_submit_name,
               id: "submit-btn",
-            click: function() { $(id + " form").submit(); } }]});
+            click: function() {
+              disable_button($('#submit-btn'));
+              $(id + " form").submit(); 
+            } }]});
         if (on_load_callback) {
             on_load_callback($(this));
         }
