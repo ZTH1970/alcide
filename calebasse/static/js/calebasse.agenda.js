@@ -359,6 +359,7 @@ function event_dialog(url, title, width, btn_text) {
                   /* $('form', this).ajaxForm({
                       success: onsuccess
                   }); */
+                  var old_background_image, old_background_repeat, $button;
                   $("#rdv").submit(function(event) {
                       /* stop form from submitting normally */
                       event.preventDefault();
@@ -367,6 +368,9 @@ function event_dialog(url, title, width, btn_text) {
                       $.post($form.attr('action'), $form.serialize(),
                           function (data) {
                             var parse = $(data);
+                            $button.css('background-image', old_background_image);
+                            $button.css('background-repeat', old_background_repeat);
+                            $button.removeAttr('disabled');
                             if ($('.errorlist', parse).length != 0) {
                                 $('#rdv').html(data);
                                 $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
@@ -377,11 +381,20 @@ function event_dialog(url, title, width, btn_text) {
                           },
                           "html");
                   });
+                  var submit = function (ev) {
+                      $button = $(ev.target).parent();
+                      old_background_image = $button.css('background-image');
+                      old_background_repeat = $button.css('background-repeat');
+                      $button.attr('disabled', 'disabled');
+                      $button.css('background-image', 'url(/static/images/throbber.gif), ' + old_background_image);
+                      $button.css('background-repeat', 'no-repeat, ' + old_background_repeat);
+                      $("#rdv form").submit();
+                  };
                   $(this).dialog({title: title,
                       width: width,
                       buttons: [ 
                       { text: btn_text,
-                          click: function() { $("#rdv form").submit(); } }
+                          click: submit }
                   ]});
               });
 }
