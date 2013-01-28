@@ -233,7 +233,7 @@ function toggle_worker(worker_selector) {
         /* load worker appointments tab */
         $('#tabs-worker-' + worker_id).load('ajax-worker-tab/' + worker_id,
             function () {
-               $(this).children('div').accordion({active: false, autoHeight: false});
+               $(this).children('div').accordion({active: false, autoHeight: false, collapsible: true});
                enable_events(this);
             }
         );
