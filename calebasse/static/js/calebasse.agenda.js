@@ -217,15 +217,19 @@ function toggle_worker(worker_selector) {
     }
     else {
         var agendatabs = $.cookie('agenda-worker-tabs');
+        var ok = false;
         $.each(agendatabs, function (i, value) {
             if (value == $(worker_selector).attr('id')) {
                 agendatabs.splice(i, 1);
+                ok = true;
             }
         });
         $.cookie('agenda-worker-tabs', agendatabs, { path: '/' });
     }
     var target = $($(worker_selector).data('target'));
     target.toggle();
+    /* Show the close all button */
+    $('#close-all-agendas').toggle($('li.agenda:visible').length != 0);
 
     var tab = $('#link-tab-worker-' + worker_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
@@ -530,6 +534,11 @@ function event_dialog(url, title, width, btn_text) {
       ($(this).data('previous') == $(this).val()));
     })
     $('#filtre input').keyup();
+    $('#close-all-agendas').click(function () {
+      $('.person-item.active').each(function (i, v) {
+        toggle_worker(v);
+      });
+    });
   });
 })(window.jQuery)
 

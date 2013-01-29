@@ -451,6 +451,7 @@ div#datesel {
 td#dispos {
 	padding-top: 55px;
   vertical-align: top;
+  position: relative;
 }
 
 td#dispos tr.initials {
@@ -462,6 +463,13 @@ td#dispos td {
 	height: 4px;
 	width: 15px;
 	vertical-align: top;
+}
+
+button#close-all-agendas {
+  position: absolute;
+  top: 0px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 td.away {
