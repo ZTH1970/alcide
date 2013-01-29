@@ -379,6 +379,7 @@ function event_dialog(url, title, width, btn_text) {
                       success: onsuccess
                   }); */
                   var old_background_image, old_background_repeat, $button;
+                  var in_submit = false;
                   $("#rdv").submit(function(event) {
                       /* stop form from submitting normally */
                       event.preventDefault();
@@ -397,10 +398,15 @@ function event_dialog(url, title, width, btn_text) {
                             } else {
                                 $('body').html(data);
                             }
+                            in_submit = false;
                           },
                           "html");
                   });
                   var submit = function (ev) {
+                      if (in_submit) {
+                        return;
+                      }
+                      in_submit = true;
                       $button = $(ev.target).parent();
                       old_background_image = $button.css('background-image');
                       old_background_repeat = $button.css('background-repeat');
