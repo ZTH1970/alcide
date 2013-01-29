@@ -325,7 +325,12 @@ function toggle_ressource(ressource_selector) {
 }
 
 
+var in_event = false;
 function event_dialog(url, title, width, btn_text) {
+          if (in_event) { 
+            return;
+          }
+          in_event = true;
           $('#rdv').load(url,
               function () {
                   /* function onsuccess(response, status, xhr, form) {
@@ -409,7 +414,9 @@ function event_dialog(url, title, width, btn_text) {
                       buttons: [ 
                       { text: btn_text,
                           click: submit }
-                  ]});
+                      ],
+                      close: function() { in_event = false; },
+                  });
               });
 }
 
