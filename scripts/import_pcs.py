@@ -5,7 +5,7 @@ import os
 import sys
 import csv
 
-from datetime import datetime, time
+from datetime import datetime, time, date
 from dateutil.relativedelta import relativedelta
 
 import calebasse.settings
