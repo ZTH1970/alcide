@@ -2,6 +2,7 @@
 
 import datetime
 import models
+from django.db import transaction
 
 def get_acts_of_the_day(date, service=None):
     if not isinstance(date, datetime.date):
@@ -45,6 +46,7 @@ def get_days_with_all_acts_locked(start_day, end_day, service=None):
     return sorted(set(date_generator) - set(locked_days))
 
 
+@transaction.commit_manually
 def automated_validation(date, service, user, commit=True):
     nb_acts_double = 0
     nb_acts_validated = 0
@@ -127,7 +129,7 @@ def automated_validation(date, service, user, commit=True):
     for act in acts_of_the_day:
         if commit and (act.is_lost or act.is_billed):
             state = act.get_state()
-            if not state or (state and state.state_name == 'NON_VALIDE'):
+            if not state or state.state_name == 'NON_VALIDE':
                 act.set_state('VALIDE', author=user, auto=True)
 
     # Acts locking
@@ -139,6 +141,7 @@ def automated_validation(date, service, user, commit=True):
         for patient, _ in patients.items():
             patient.create_diag_healthcare(user)
             patient.automated_switch_state(user)
+    transaction.commit()
     return (nb_acts_total, nb_acts_validated, nb_acts_double,
         nb_acts_abs_non_exc, nb_acts_abs_exc, nb_acts_abs_inter, nb_acts_annul_nous,
         nb_acts_annul_famille, nb_acts_reporte, nb_acts_abs_ess_pps,
