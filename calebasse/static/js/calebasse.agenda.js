@@ -122,6 +122,7 @@ function enable_events(base) {
         generic_ajaxform_dialog('update-periodic-rdv/' + id,
           'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
           function (dialog) {
+            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
             var buttons = $(dialog).dialog('option', 'buttons');
             buttons.push({
               text: "Supprimer",
@@ -153,6 +154,7 @@ function enable_events(base) {
         generic_ajaxform_dialog('update-periodic-event/' + id,
           'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
           function (dialog) {
+            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
             var buttons = $(dialog).dialog('option', 'buttons');
             buttons.push({
               text: "Supprimer",
