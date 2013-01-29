@@ -30,6 +30,11 @@ class ServiceViewMixin(object):
     service = None
     date = None
     popup = False
+    cookies_to_clear = [ 'agenda-worker-tabs', 'active-resource-agenda' ]
+
+    def clear_cookies(self, response):
+        for cookie in self.cookies_to_clear:
+            response.delete_cookie(cookie)
 
     def dispatch(self, request, **kwargs):
         self.popup = request.GET.get('popup')
@@ -45,6 +50,7 @@ class ServiceViewMixin(object):
         if self.service:
             result.set_cookie(HOME_SERVICE_COOKIE, self.service.slug,
                     max_age=3600*24*365, httponly=True)
+        self.clear_cookies(result)
         return result
 
     def get_context_data(self, **kwargs):

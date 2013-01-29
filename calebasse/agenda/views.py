@@ -33,6 +33,7 @@ def redirect_today(request, service):
 
 class AgendaHomepageView(TemplateView):
     template_name = 'agenda/index.html'
+    cookies_to_clear = []
 
     def post(self, request, *args, **kwargs):
         acte_id = request.POST.get('event-id')
@@ -125,6 +126,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     form_class = NewAppointmentForm
     template_name = 'agenda/new-appointment.html'
     success_url = '..'
+    cookies_to_clear = []
 
     def get_initial(self):
         initial = super(NewAppointmentView, self).get_initial()
@@ -156,6 +158,7 @@ class BaseAppointmentView(UpdateView):
     form_class = UpdateAppointmentForm
     template_name = 'agenda/update-rdv.html'
     success_url = '..'
+    cookies_to_clear = []
 
     def get_initial(self):
         initial = super(BaseAppointmentView, self).get_initial()
@@ -191,6 +194,7 @@ class NewEventView(CreateView):
     form_class = NewEventForm
     template_name = 'agenda/new-event.html'
     success_url = '..'
+    cookies_to_clear = []
 
     def get_initial(self):
         initial = super(NewEventView, self).get_initial()
@@ -217,6 +221,7 @@ class BaseEventView(UpdateView):
     form_class = UpdateEventForm
     template_name = 'agenda/update-event.html'
     success_url = '..'
+    cookies_to_clear = []
 
     def get_initial(self):
         initial = super(BaseEventView, self).get_initial()
@@ -250,6 +255,7 @@ class UpdatePeriodicEventView(BaseEventView):
 class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
     model = Event
     success_url = '..'
+    cookies_to_clear = []
 
     def delete(self, request, *args, **kwargs):
         super(DeleteOccurrenceView, self).delete(request, *args, **kwargs)
@@ -258,6 +264,7 @@ class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
 class DeleteEventView(cbv.DeleteView):
     model = Event
     success_url = '..'
+    cookies_to_clear = []
 
     def delete(self, request, *args, **kwargs):
         super(DeleteEventView, self).delete(request, *args, **kwargs)
@@ -505,6 +512,7 @@ class RessourcesView(TemplateView):
 class AjaxWorkerTabView(TemplateView):
 
     template_name = 'agenda/ajax-worker-tab.html'
+    cookies_to_clear = []
 
     def get_context_data(self, worker_id, **kwargs):
         context = super(AjaxWorkerTabView, self).get_context_data(**kwargs)
@@ -548,6 +556,7 @@ class AjaxWorkerTabView(TemplateView):
 class AjaxWorkerDisponibilityColumnView(TemplateView):
 
     template_name = 'agenda/ajax-worker-disponibility-column.html'
+    cookies_to_clear = []
 
     def get_context_data(self, worker_id, **kwargs):
         context = super(AjaxWorkerDisponibilityColumnView, self).get_context_data(**kwargs)
