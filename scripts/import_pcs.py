@@ -4,6 +4,7 @@
 import os
 import sys
 import csv
+import pdb
 
 from datetime import datetime, time, date
 from dateutil.relativedelta import relativedelta
@@ -454,6 +455,7 @@ def import_dossiers_phase_1():
         #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
         # Association des actes au healthcare
         i = 0
+        j = 0
         for patient_id, pcs in histo.items():
             patient = None
             try:
@@ -476,7 +478,9 @@ def import_dossiers_phase_1():
                         a.is_billed = True
                     a.healthcare = hc
                     a.save()
+                    j += 1
         print "Acte non trouve %d" % i
+        print "Acte pris en charge %d" % j
         # Historique des dossiers, Automatic switch state ? Automated hc creation ?
         print "--> Lecture table des dossiers..."
         csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
@@ -497,6 +501,7 @@ def import_dossiers_phase_1():
 
         FileState.objects.filter(patient__service=service).delete()
 
+        pdb.set_trace()
         #transaction.commit()
 
         for dossier in tables_data['dossiers']:
