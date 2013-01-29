@@ -237,7 +237,7 @@
             {% else %}
             <div class="frame dossier">
             {% endif %}
-                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
                 <div class="info">
                 </div>
@@ -288,7 +288,7 @@
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats.items %}
             <div class="frame dossier" id="to-hide">
-                <h3><a href="../../dossiers/{{ patient.pk }}/view">
+                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
                 <div class="info">
                 </div>
