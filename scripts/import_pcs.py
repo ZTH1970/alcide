@@ -421,7 +421,7 @@ def import_dossiers_phase_1():
             try:
                 patient = PatientRecord.objects.get(old_id=patient_id, service=service)
             except:
-                print 'Patient %s non trouve' % patient_id
+                print 'Patient %s non trouve (1)' % patient_id
                 continue
             for pc in pcs:
                 start_date = _to_date(pc['periode']['date_debut'])
@@ -458,7 +458,7 @@ def import_dossiers_phase_1():
             try:
                 patient = PatientRecord.objects.get(old_id=patient_id, service=service)
             except:
-                print 'Patient %s non trouve' % patient_id
+                print 'Patient %s non trouve (2)' % patient_id
                 continue
             for pc in pcs:
                 hc = pc['hc']
@@ -504,7 +504,7 @@ def import_dossiers_phase_1():
             try:
                 patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
             except:
-                print 'Patient %s non trouve' % dossier['id']
+                print 'Patient %s non trouve (3)' % dossier['id']
                 continue
             date_accueil = _to_date(dossier['con_date'])
             date_inscription = _to_date(dossier['ins_date'])
@@ -561,7 +561,10 @@ def import_dossiers_phase_1():
             inscrit = False
             tt = None
             for i in range(len(history)):
-                t, date = history[i]
+                t, act_date = history[i]
+                if isinstance(act_date, date):
+                    act_date = datetime(year=act_date.year,
+                        month=act_date.month, day=act_date.day)
                 if not inscrit:
                     inscrit = True
                     if date_inscription:
@@ -574,27 +577,30 @@ def import_dossiers_phase_1():
                 else:
                     if not date_clos:
                         if t == 'D':
-                            fss.append((status_diagnostic, date, None))
+                            fss.append((status_diagnostic, act_date, None))
                         else:
-                            fss.append((status_traitement, date, None))
+                            fss.append((status_traitement, act_date, None))
                     elif not clos:
                         if t == 'D':
-                            fss.append((status_diagnostic, date, None))
+                            fss.append((status_diagnostic, act_date, None))
                         else:
-                            fss.append((status_traitement, date, None))
+                            fss.append((status_traitement, act_date, None))
                         next_date = None
                         if i < len(history) - 1:
                             _, next_date = history[i+1]
+                            if isinstance(next_date, date):
+                                next_date = datetime(year=next_date.year,
+                                    month=next_date.month, day=next_date.day)
                         if not next_date or date_clos < next_date:
                             fss.append((status_clos, date_clos, None))
                             clos = True
                     else:
                         if date_retour and date_retour > date_clos:
-                            if date >= date_retour:
+                            if act_date >= date_retour:
                                 if t == 'D':
-                                    fss.append((status_diagnostic, date, None))
+                                    fss.append((status_diagnostic, act_date, None))
                                 else:
-                                    fss.append((status_traitement, date, None))
+                                    fss.append((status_traitement, act_date, None))
 
             if not fss:
                 print "Pas d'etat pour le dossier patient %s!" % dossier['id']
