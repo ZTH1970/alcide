@@ -230,7 +230,7 @@ def main():
             # create index of already imported acts
             act_idx = defaultdict(lambda: [])
             qs = Act.objects.filter(date__year=year, patient__service=service).prefetch_related('doctors')
-            to_fix += qs.filter(old_id__isnull=True, is_billed=True).count()
+            to_fix += qs.filter(old_id__isnull=True).count()
             print >>log, datetime.now(), 'importing', qs.count(), 'acts in index for', year
             for act in qs:
                 key = (act.date, act.time, act.patient.old_id, act.act_type.old_id, act.is_billed)
@@ -268,8 +268,6 @@ def main():
                 print datetime.now(), 'importing acts', year
             for row in year_rows:
                 row['theras'] = tuple(sorted(map(int, row['theras'])))
-                if not row['is_billed']:
-                    continue
                 key = (row['date'], row['time'], row['enfant_id'], row['type_acte'], row['is_billed'])
                 if key in act_idx:
                     acts = act_idx[key]
