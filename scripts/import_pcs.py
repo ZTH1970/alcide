@@ -402,6 +402,8 @@ def import_dossiers_phase_1():
             print "Nb factures : %d" % len(values['factures'])
             print "Nb actes : %d" % len(values['actes'])
 
+        pdb.set_trace()
+
         #Facturation : 132
         #Nb factures : 280
         #Nb actes : 517
@@ -454,6 +456,9 @@ def import_dossiers_phase_1():
         #CmppHealthCareDiagnostic.objects.bulk_create(HcDiags)
         #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
         # Association des actes au healthcare
+
+        pdb.set_trace()
+
         i = 0
         j = 0
         for patient_id, pcs in histo.items():
@@ -469,8 +474,8 @@ def import_dossiers_phase_1():
                     a = None
                     try:
                         a = Act.objects.get(old_id=act['id'], patient__service=service)
-                    except:
-                        print "Acte non trouve %s" % act['id']
+                    except Exception, e:
+                        print "Acte non trouve %s, exception %s" % (act['id'], str(e))
                         i += 1
                         continue
                     if not a.is_billed:
