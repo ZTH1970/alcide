@@ -41,26 +41,13 @@
       <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouvel événement</button>
       {% endif %}
     {% if appointment.event_id %}
-    {% if appointment.workers %}
-      <p class="workers">
-      Intervenants :
-      {% for worker in appointment.workers %}
-        {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
-      {% endfor %}
-      </p>
-    {% endif %}
-    <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
-        <span></span>
-        {% if service in appointment.services_names or not appointment.services_names %}
-        <textarea>{{ appointment.description }}</textarea>
-          <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
-        {% else %}
-        <p>{{ appointment.description }}</p>
-        {% endif %}
-    </div>
-    {% else %}
-        {% if appointment.description %}
-        <p>{{ appointment.description }}</p>
+        {% if appointment.workers %}
+          <p class="workers">
+          Intervenants :
+          {% for worker in appointment.workers %}
+            {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+          {% endfor %}
+          </p>
         {% endif %}
     {% endif %}
     {% if appointment.patient_record_id %}
@@ -109,8 +96,23 @@
           <button>Modifier</button>
           </form>
         {% endif %}
-     </div>
-     {% endif %}
+       </div>
+    {% endif %}
+    {% if appointment.event_id %}
+        <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
+            <span></span>
+            {% if service in appointment.services_names or not appointment.services_names %}
+            <textarea>{{ appointment.description }}</textarea>
+              <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
+            {% else %}
+            <p>{{ appointment.description }}</p>
+            {% endif %}
+        </div>
+    {% else %}
+        {% if appointment.description %}
+        <p>{{ appointment.description }}</p>
+        {% endif %}
+    {% endif %}
   </div>
   {% endfor %}
 </div>
