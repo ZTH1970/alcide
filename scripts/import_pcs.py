@@ -209,6 +209,7 @@ def import_dossiers_phase_1():
     writer4 = csv.writer(f4, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
     status_accueil = Status.objects.filter(type="ACCUEIL")[0]
+    status_fin_accueil = Status.objects.filter(type="FIN_ACCUEIL")[0]
     status_diagnostic = Status.objects.filter(type="DIAGNOSTIC")[0]
     status_traitement = Status.objects.filter(type="TRAITEMENT")[0]
     status_clos = Status.objects.filter(type="CLOS")[0]
@@ -516,8 +517,8 @@ def import_dossiers_phase_1():
             # verification
             try:
                 real_date_inscription = patient.act_set.filter(is_billed=True).order_by('date')[0].date
-            except:
-                print "Patient %s jamais facture" % dossier['id']
+            except Exception, e:
+                print "Patient %s jamais facture, exception %s" % (dossier['id'], str(e))
             else:
                 if date_inscription and real_date_inscription != date_inscription:
                     print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
@@ -531,7 +532,6 @@ def import_dossiers_phase_1():
             if date_clos :
                 if not date_inscription:
                     print "Cloture sans inscription pour %s, on ne cloture pas" % dossier['id']
-                    date_clos = None
                 if date_inscription and date_clos < date_inscription:
                     print "Cloture avant inscription pour %s, on ne cloture pas" % dossier['id']
                     date_clos = None
@@ -554,53 +554,61 @@ def import_dossiers_phase_1():
                         history.append(('T', act.date))
                         d = False
 
-            if not history and date_inscription:
-                history.append(('D', date_inscription))
-
-            clos = False
-            inscrit = False
-            tt = None
-            for i in range(len(history)):
-                t, act_date = history[i]
-                if isinstance(act_date, date):
-                    act_date = datetime(year=act_date.year,
-                        month=act_date.month, day=act_date.day)
-                if not inscrit:
-                    inscrit = True
-                    if date_inscription:
-                        if t == 'D':
-                            fss.append((status_diagnostic, date_inscription, None))
-                        else:
-                            fss.append((status_traitement, date_inscription, None))
-                        if len(history) == 1 and date_clos:
-                            fss.append((status_clos, date_clos, None))
-                else:
-                    if not date_clos:
-                        if t == 'D':
-                            fss.append((status_diagnostic, act_date, None))
-                        else:
-                            fss.append((status_traitement, act_date, None))
-                    elif not clos:
-                        if t == 'D':
-                            fss.append((status_diagnostic, act_date, None))
-                        else:
-                            fss.append((status_traitement, act_date, None))
-                        next_date = None
-                        if i < len(history) - 1:
-                            _, next_date = history[i+1]
-                            if isinstance(next_date, date):
-                                next_date = datetime(year=next_date.year,
-                                    month=next_date.month, day=next_date.day)
-                        if not next_date or date_clos < next_date:
-                            fss.append((status_clos, date_clos, None))
-                            clos = True
+            if not history:
+                if date_inscription:
+                    fss.append((status_diagnostic, date_inscription, None))
+                if date_retour:
+                    if not date_clos or date_clos < date_retour:
+                        fss.append((status_diagnostic, date_retour, None))
                     else:
-                        if date_retour and date_retour > date_clos:
-                            if act_date >= date_retour:
-                                if t == 'D':
-                                    fss.append((status_diagnostic, act_date, None))
-                                else:
-                                    fss.append((status_traitement, act_date, None))
+                        fss.append((status_clos, date_clos, None))
+                elif date_clos:
+                    fss.append((status_clos, date_clos, None))
+            else:
+                clos = False
+                inscrit = False
+                tt = None
+                for i in range(len(history)):
+                    t, act_date = history[i]
+                    if isinstance(act_date, date):
+                        act_date = datetime(year=act_date.year,
+                            month=act_date.month, day=act_date.day)
+                    if not inscrit:
+                        inscrit = True
+                        if date_inscription:
+                            if t == 'D':
+                                fss.append((status_diagnostic, date_inscription, None))
+                            else:
+                                fss.append((status_traitement, date_inscription, None))
+                            if len(history) == 1 and date_clos:
+                                fss.append((status_clos, date_clos, None))
+                    else:
+                        if not date_clos:
+                            if t == 'D':
+                                fss.append((status_diagnostic, act_date, None))
+                            else:
+                                fss.append((status_traitement, act_date, None))
+                        elif not clos:
+                            if t == 'D':
+                                fss.append((status_diagnostic, act_date, None))
+                            else:
+                                fss.append((status_traitement, act_date, None))
+                            next_date = None
+                            if i < len(history) - 1:
+                                _, next_date = history[i+1]
+                                if isinstance(next_date, date):
+                                    next_date = datetime(year=next_date.year,
+                                        month=next_date.month, day=next_date.day)
+                            if not next_date or date_clos < next_date:
+                                fss.append((status_clos, date_clos, None))
+                                clos = True
+                        else:
+                            if date_retour and date_retour > date_clos:
+                                if act_date >= date_retour:
+                                    if t == 'D':
+                                        fss.append((status_diagnostic, act_date, None))
+                                    else:
+                                        fss.append((status_traitement, act_date, None))
 
             if not fss:
                 print "Pas d'etat pour le dossier patient %s!" % dossier['id']
