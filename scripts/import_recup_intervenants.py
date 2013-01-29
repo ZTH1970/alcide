@@ -78,14 +78,14 @@ def parse_intervenant(data):
     worker.type = worker_type
     worker.save()
     if worker.type.name == u'Stagiaires':
-        username="%s%s" % (worker.first_name[0], worker.last_name)
+        username="%s%s" % (worker.first_name[0].lower(), worker.last_name.lower())
         password = worker.first_name[0].lower() + worker.last_name.lower()
         user = User.objects.filter(username=username)
         if not user:
             for i in range(0, 4):
                 password += str(random.randint(0, 9))
             user = User.objects.create_user(
-                username="%s%s" % (worker.first_name[0], worker.last_name),
+                username=username,
                 password=password,
                 )
             user.first_name = worker.first_name
