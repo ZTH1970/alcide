@@ -43,7 +43,7 @@ def date_generator(from_date, to_date):
 def get_days_with_all_acts_locked(start_day, end_day, service=None):
     locked_days = get_days_with_acts_not_locked(start_day, end_day,
             service)
-    return sorted(set(date_generator) - set(locked_days))
+    return sorted(set(date_generator(start_day, end_day)) - set(locked_days))
 
 
 @transaction.commit_manually
