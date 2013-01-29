@@ -1,3 +1,11 @@
+function delete_prompt(text) {
+  var r = prompt(text + '\n Pour cela veuillez entrer DEL');
+  if (r.toLowerCase().replace(/^\s+|\s+$/g, '') == 'del') {
+    return true;
+  } else {
+    return false;
+  }
+}
 function enable_events(base) {
       $(base).find('.textedit').on('keydown', function() {
           $('button', this).removeAttr("disabled");
@@ -56,7 +64,7 @@ function enable_events(base) {
       });
 
       $(base).find('.remove-appointment').on('click', function() {
-          var r = confirm("Etes-vous sûr de vouloir supprimer le rendez-vous " + $(this).data('rdv') + " ?");
+          var r = delete_prompt("Etes-vous sûr de vouloir supprimer le rendez-vous " + $(this).data('rdv') + " ?");
           if (r == true)
           {
             $.ajax({
@@ -128,7 +136,7 @@ function enable_events(base) {
               text: "Supprimer",
               id: "delete-btn", 
               click: function () {
-                var r = confirm("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
+                var r = delete_prompt("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
                 if (r == true)
                 {
                   $.ajax({
@@ -160,7 +168,7 @@ function enable_events(base) {
               text: "Supprimer",
               id: "delete-btn", 
               click: function () {
-                var r = confirm("Etes-vous sûr de vouloir supprimer cet évènement récurrent ?");
+                var r = delete_prompt("Etes-vous sûr de vouloir supprimer cet évènement récurrent ?");
                 if (r == true)
                 {
                   $.ajax({
