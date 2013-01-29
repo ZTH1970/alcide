@@ -544,6 +544,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         if not current_state:
             raise Exception('Invalid patient record. '
                 'Missing current state.')
+        if isinstance(date_selected, date):
+            date_selected = datetime(year=date_selected.year,
+                month=date_selected.month, day=date_selected.day)
         if date_selected < current_state.date_selected:
             raise Exception('You cannot set a state starting the %s that '
                 'is before the previous state starting at day %s.' % \
