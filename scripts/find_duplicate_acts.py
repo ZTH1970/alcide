@@ -38,7 +38,7 @@ def main():
                 print
             date = key[0]
             print ' = Acte en double le ', date, '='
-            print '{:>6} {:>6} {:>6} {:>6} {:>6} {:>6} {:>6}'.format('act_id', 'ev_id', 'exc_id', 'old_id', 'rr_id', 'rs_id', 'heure')
+            print '{0:>6} {1:>6} {2:>6} {3:>6} {4:>6} {5:>6} {6:>6}'.format('act_id', 'ev_id', 'exc_id', 'old_id', 'rr_id', 'rs_id', 'heure')
             for act in sorted(doubles[key]):
                 total += 1
                 exception_to = ''
