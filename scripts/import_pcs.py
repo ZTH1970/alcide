@@ -4,7 +4,6 @@
 import os
 import sys
 import csv
-import pdb
 
 from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
@@ -192,7 +191,7 @@ def get_nir(nir, key, writer, line, service):
     return nir
 
 
-@transaction.commit_manually
+#@transaction.commit_manually
 def import_dossiers_phase_1():
     """ """
     print "====== Début à %s ======" % str(datetime.today())
@@ -495,8 +494,10 @@ def import_dossiers_phase_1():
         date_clos = None
         date_retour = None
 
-        pdb.set_trace()
         FileState.objects.filter(patient__service=service).delete()
+
+        #transaction.commit()
+
         for dossier in tables_data['dossiers']:
             fss = []
             patient = None
@@ -524,18 +525,16 @@ def import_dossiers_phase_1():
                     print "Pas de date d'inscription, on prend le premier acte pour %s" % dossier['id']
                     date_inscription = real_date_inscription
 
-            # date d'accueil devrait précéder la date d'inscription
-            # sinon, on l'ignore
             if (date_accueil and not date_inscription) or (date_accueil and date_inscription and date_accueil < date_inscription):
                 fss.append((status_accueil, date_accueil, None))
 
-            # revoir, si on a un acte non facturé avant le diag, on va avoir l'impression que le dossier a été en traitement, ne faut pas prendre que les actes billed ?
-            # On tente avec que du is_billed.
-            # Lors dossiers qui n'aurant jamsi eu d'acte de facturé, on prend les dates et on fait un historique par défaut comme avant!
-
-            if date_clos and date_inscription and date_clos < date_inscription:
-                print "Cloture avant inscription pour %s, on ne cloture pas" % dossier['id']
-                date_clos = None
+            if date_clos :
+                if not date_inscription:
+                    print "Cloture sans inscription pour %s, on ne cloture pas" % dossier['id']
+                    date_clos = None
+                if date_inscription and date_clos < date_inscription:
+                    print "Cloture avant inscription pour %s, on ne cloture pas" % dossier['id']
+                    date_clos = None
 
             # Historique par les actes
             history = []
@@ -549,9 +548,14 @@ def import_dossiers_phase_1():
                 else:
                     if not tag:
                         print 'Act facture %d sans pc associee, traitement.' % act.id
+                    else:
+                        print tag
                     if d:
                         history.append(('T', act.date))
                         d = False
+
+            if not history and date_inscription:
+                history.append(('D', date_inscription))
 
             clos = False
             inscrit = False
@@ -562,9 +566,11 @@ def import_dossiers_phase_1():
                     inscrit = True
                     if date_inscription:
                         if t == 'D':
-                            fss.append((status_diagnostic, date, None))
+                            fss.append((status_diagnostic, date_inscription, None))
                         else:
-                            fss.append((status_traitement, date, None))
+                            fss.append((status_traitement, date_inscription, None))
+                        if len(history) == 1 and date_clos:
+                            fss.append((status_clos, date_clos, None))
                 else:
                     if not date_clos:
                         if t == 'D':
@@ -626,7 +632,7 @@ def import_dossiers_phase_1():
 #                # accueil, d/t
 
         print "<-- Terminé"
-    transaction.commit()
+    #transaction.commit()
     print "====== Fin à %s ======" % str(datetime.today())
 
 
