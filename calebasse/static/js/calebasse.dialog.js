@@ -53,6 +53,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
           success: onsuccess,
         });
         $(this).dialog({title: title,
+          modal: true,
           width: width,
           buttons: [ { text: "Annuler",
               id: "close-btn",

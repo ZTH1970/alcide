@@ -410,6 +410,7 @@ function event_dialog(url, title, width, btn_text) {
                       $("#rdv form").submit();
                   };
                   $(this).dialog({title: title,
+                      modal: true,
                       width: width,
                       buttons: [ 
                       { text: btn_text,
