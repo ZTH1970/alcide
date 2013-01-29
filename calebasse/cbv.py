@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django import forms
@@ -68,6 +68,7 @@ class ServiceViewMixin(object):
             context['role'] = ['super', 'validator']
         elif is_validator(user):
             context['role'] = ['validator']
+        context['today'] = date.today()
         return context
 
 
