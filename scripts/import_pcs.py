@@ -468,7 +468,7 @@ def import_dossiers_phase_1():
                 for act in pc['actes']:
                     a = None
                     try:
-                        a = Act.objects.get(old_id=act['id'])
+                        a = Act.objects.get(old_id=act['id'], patient__service=service)
                     except:
                         print "Acte non trouve %s" % act['id']
                         i += 1
@@ -479,8 +479,8 @@ def import_dossiers_phase_1():
                     a.healthcare = hc
                     a.save()
                     j += 1
-        print "Acte non trouve %d" % i
-        print "Acte pris en charge %d" % j
+        print "Actes non trouve %d" % i
+        print "Actes pris en charge %d" % j
         # Historique des dossiers, Automatic switch state ? Automated hc creation ?
         print "--> Lecture table des dossiers..."
         csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
