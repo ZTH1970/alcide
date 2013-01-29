@@ -129,7 +129,6 @@ def add_invalid(d, reason):
 
 log = open('import_actes_ids.log', 'w+')
 
-@transaction.commit_on_success
 def main():
     """ """
 
@@ -225,14 +224,16 @@ def main():
                     not_found.add(enfant_id)
 
         notfound = []
-        for year in range(2012, 2014):
+        act2rows = defaultdict(lambda: [])
+        to_fix = 0
+        for year in range(1990, 2014):
             # create index of already imported acts
             act_idx = defaultdict(lambda: [])
             qs = Act.objects.filter(date__year=year, patient__service=service).prefetch_related('doctors')
+            to_fix += qs.filter(old_id__isnull=True, is_billed=True).count()
             print >>log, datetime.now(), 'importing', qs.count(), 'acts in index for', year
             for act in qs:
-                ws = tuple(sorted(int(worker_reverse_idx.get(worker, '9999')) for worker in act.doctors.all()))
-                key = (act.date, act.time, act.patient.old_id, act.act_type.old_id, ws)
+                key = (act.date, act.time, act.patient.old_id, act.act_type.old_id, act.is_billed)
                 act_idx[key].append((act.id, bool(act.old_id)))
             print >>log, datetime.now(), 'finished importing'
 
@@ -267,7 +268,9 @@ def main():
                 print datetime.now(), 'importing acts', year
             for row in year_rows:
                 row['theras'] = tuple(sorted(map(int, row['theras'])))
-                key = (row['date'], row['time'], row['enfant_id'], row['type_acte'], row['theras'])
+                if not row['is_billed']:
+                    continue
+                key = (row['date'], row['time'], row['enfant_id'], row['type_acte'], row['is_billed'])
                 if key in act_idx:
                     acts = act_idx[key]
                     assert len(acts) != 0
@@ -277,9 +280,8 @@ def main():
                     else:
                         act_id, has_old_id = acts[0]
                         if not has_old_id:
-                            Act.objects.filter(id=act_id).update(old_id=row['id'])
+                            act2rows[act_id].append(row)
                             total += 1
-                            # print >>log, datetime.now(), 'imported old_id', row['id'], 'to Act(id=', act_id, ')'
                 else:
                     print >>log, datetime.now(), 'act', row['id'], 'not found'
                     notfound.append(row)
@@ -287,26 +289,43 @@ def main():
             print >>log, datetime.now(), 'Fixed', total, 'acts for', year
         print datetime.now(), 'Found', len(notfound), 'acts not imported'
         print >>log, datetime.now(), 'Found', len(notfound), 'acts not imported'
+        too_many = 0
+        fixable = 0
+        for act_id in act2rows:
+            rows = act2rows[act_id]
+            if len(rows) != 1:
+                print >>log, datetime.now(), 'Too many or no rows for act', act_id
+                for row in rows:
+                    print >>log, datetime.now(), row
+                print >>log
+                too_many += 1
+            else:
+                Act.objects.filter(id=act_id).update(old_id=rows[0]['id'])
+                fixable += 1
 
-        total = 0
-        for row in notfound:
-            if row['invalid']:
-                print >>log, datetime.now(), 'row invalid', row
-                continue
-            act = Act.objects.create(
-                    old_id=row['id'],
-                    date=row['date'],
-                    time=row['time'],
-                    _duration=row['duration'].seconds // 60,
-                    is_billed=row['is_billed'],
-                    act_type=row['act_type'],
-                    patient=row['enfant'],
-                    validation_locked=row['validation_locked'])
-            act.doctors = row['workers']
-            ActValidationState.objects.create(act=act, state_name=row['state'], previous_state=None)
-            total += 1
-        print >>log, datetime.now(), 'created', total, 'new acts'
-    raise Exception('donothing')
+        print 'Too many rows', too_many
+        print 'Fixable acts', fixable
+        print 'Total', too_many + fixable
+        print 'Unfixed', to_fix - too_many - fixable
+        print 'Not found', len(notfound)
+
+#        for row in notfound:
+#            if row['invalid']:
+#                print >>log, datetime.now(), 'row invalid', row
+#                continue
+#            act = Act.objects.create(
+#                    old_id=row['id'],
+#                    date=row['date'],
+#                    time=row['time'],
+#                    _duration=row['duration'].seconds // 60,
+#                    is_billed=row['is_billed'],
+#                    act_type=row['act_type'],
+#                    patient=row['enfant'],
+#                    validation_locked=row['validation_locked'])
+#            act.doctors = row['workers']
+#            ActValidationState.objects.create(act=act, state_name=row['state'], previous_state=None)
+#            total += 1
+#        print >>log, datetime.now(), 'created', total, 'new acts'
 
 if __name__ == "__main__":
     main()
