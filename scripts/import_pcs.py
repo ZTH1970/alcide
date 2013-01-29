@@ -453,6 +453,7 @@ def import_dossiers_phase_1():
         #CmppHealthCareDiagnostic.objects.bulk_create(HcDiags)
         #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
         # Association des actes au healthcare
+        i = 0
         for patient_id, pcs in histo.items():
             patient = None
             try:
@@ -468,12 +469,14 @@ def import_dossiers_phase_1():
                         a = Act.objects.get(old_id=act['id'])
                     except:
                         print "Acte non trouve %s" % act['id']
+                        i += 1
                         continue
                     if not a.is_billed:
                         print "Acte deja pris en charge mais non facture %s" %a
                         a.is_billed = True
                     a.healthcare = hc
                     a.save()
+        print "Acte non trouve %d" % i
         # Historique des dossiers, Automatic switch state ? Automated hc creation ?
         print "--> Lecture table des dossiers..."
         csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
@@ -491,11 +494,11 @@ def import_dossiers_phase_1():
         date_inscription = None
         date_clos = None
         date_retour = None
-        fss = []
 
         pdb.set_trace()
         FileState.objects.filter(patient__service=service).delete()
         for dossier in tables_data['dossiers']:
+            fss = []
             patient = None
             try:
                 patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
@@ -599,8 +602,11 @@ def import_dossiers_phase_1():
                 patient.last_state = fs
                 patient.save()
                 if len(fss) > 1:
-                    for status, date, comment in fss[1:]:
-                        patient.set_state(status=status, author=creator, date_selected=date, comment=comment)
+                    for status, date_selected, comment in fss[1:]:
+                        try:
+                            patient.set_state(status=status, author=creator, date_selected=date_selected, comment=comment)
+                        except Exception, e:
+                            print "Pour patient %s, exception %s" % (patient, str(e))
 
             # Si reouverture apres date de cloture, passer à cette date en d ou en t
             # Combinaisons possibles
