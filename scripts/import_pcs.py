@@ -585,7 +585,7 @@ def import_dossiers_phase_1():
                         next_date = None
                         if i < len(history) - 1:
                             _, next_date = history[i+1]
-                        if not next_date or clos < next_date:
+                        if not next_date or date_clos < next_date:
                             fss.append((status_clos, date_clos, None))
                             clos = True
                     else:
