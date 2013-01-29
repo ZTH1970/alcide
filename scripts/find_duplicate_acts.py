@@ -51,7 +51,7 @@ def main():
                 print '%06d' % act.id, '%6s' % act.parent_event_id, '%6s' % exception_to, '%6s' % act.old_id, '%6s' % rr_id, '%6s' % rs_id, \
                         '%6s' % act.time.strftime('%H:%M'), act, act.validation_locked, act.actvalidationstate_set.all(), act.patient.service.slug
             print
-            if len([act for act in doubles[key] if act.validation_locked]) == 1 and '--delete' in sys.argv:
+            if '--delete' in sys.argv:
                 x = raw_input('Delete non locked acts ?')
                 if x.lower() == 'y':
                     for act in doubles[key]:
