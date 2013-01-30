@@ -422,7 +422,7 @@ def import_dossiers_phase_1():
             try:
                 patient = PatientRecord.objects.get(old_id=patient_id, service=service)
             except:
-                print 'Patient %s non trouve (1)' % patient_id
+#                print 'Patient %s non trouve (1)' % patient_id
                 continue
             for pc in pcs:
                 start_date = _to_date(pc['periode']['date_debut'])
@@ -431,8 +431,8 @@ def import_dossiers_phase_1():
                 insist_date = _to_date(pc['periode']['date_relance'])
                 act_number = _to_int(pc['periode']['nbr_seances']) or 0
                 if pc['type'] == '1':
-                    if act_number != 6:
-                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
+#                    if act_number != 6:
+#                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
                     hc = CmppHealthCareDiagnostic(start_date=start_date,
                         request_date=request_date,
                         agree_date=agree_date,
@@ -442,8 +442,8 @@ def import_dossiers_phase_1():
                         author=author)
                     HcDiags.append(hc)
                 else:
-                    if act_number != 30:
-                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
+#                    if act_number != 30:
+#                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
                     hc = CmppHealthCareTreatment(start_date=start_date,
                         request_date=request_date,
                         agree_date=agree_date,
@@ -465,7 +465,7 @@ def import_dossiers_phase_1():
             try:
                 patient = PatientRecord.objects.get(old_id=patient_id, service=service)
             except:
-                print 'Patient %s non trouve (2)' % patient_id
+#                print 'Patient %s non trouve (2)' % patient_id
                 continue
             for pc in pcs:
                 hc = pc['hc']
@@ -513,7 +513,7 @@ def import_dossiers_phase_1():
             try:
                 patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
             except:
-                print 'Patient %s non trouve (3)' % dossier['id']
+#                print 'Patient %s non trouve (3)' % dossier['id']
                 continue
             date_accueil = _to_date(dossier['con_date'])
             date_inscription = _to_date(dossier['ins_date'])
@@ -532,7 +532,8 @@ def import_dossiers_phase_1():
 #                print "Patient %s jamais facture, exception %s" % (dossier['id'], str(e))
             else:
                 if date_inscription and real_date_inscription != date_inscription:
-                    print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
+                    pass
+#                    print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
                 elif not date_inscription:
                     print "Pas de date d'inscription, on prend le premier acte pour %s" % dossier['id']
                     date_inscription = real_date_inscription
