@@ -434,6 +434,8 @@ def import_dossiers_phase_1():
                 insist_date = _to_date(pc['periode']['date_relance'])
                 act_number = _to_int(pc['periode']['nbr_seances']) or 0
                 if pc['type'] == '1':
+                    if act_number != 6:
+                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
                     hc = CmppHealthCareDiagnostic(start_date=start_date,
                         request_date=request_date,
                         agree_date=agree_date,
@@ -443,6 +445,8 @@ def import_dossiers_phase_1():
                         author=author)
                     HcDiags.append(hc)
                 else:
+                    if act_number != 30:
+                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
                     hc = CmppHealthCareTreatment(start_date=start_date,
                         request_date=request_date,
                         agree_date=agree_date,
@@ -530,7 +534,8 @@ def import_dossiers_phase_1():
                 real_date_inscription = datetime(year=real_date_inscription.year,
                     month=real_date_inscription.month, day=real_date_inscription.day)
             except Exception, e:
-                print "Patient %s jamais facture, exception %s" % (dossier['id'], str(e))
+                pass
+#                print "Patient %s jamais facture, exception %s" % (dossier['id'], str(e))
             else:
                 if date_inscription and real_date_inscription != date_inscription:
                     print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
@@ -543,7 +548,7 @@ def import_dossiers_phase_1():
 
             if date_clos :
                 if not date_inscription:
-                    print "Cloture sans inscription pour %s, on ne cloture pas" % dossier['id']
+                    print "Cloture sans inscription pour %s" % dossier['id']
                 if date_inscription and date_clos < date_inscription:
                     print "Cloture avant inscription pour %s, on ne cloture pas" % dossier['id']
                     date_clos = None
@@ -553,16 +558,16 @@ def import_dossiers_phase_1():
             d = True
             for act in patient.act_set.filter(is_billed=True).order_by('date'):
                 tag = act.get_hc_tag()
-                if tag and'D' in tag:
-                    print tag
+                if tag and 'D' in tag:
+#                    print tag
                     if not history or not d:
                         history.append(('D', act.date))
                         d = True
                 else:
-                    if not tag:
-                        print 'Patient %d: Act facture %d sans pc associee, traitement.' % (patient.id, act.id)
-                    else:
-                        print tag
+#                    if not tag:
+#                        print 'Patient %d: Act facture %d sans pc associee, traitement.' % (patient.id, act.id)
+#                    else:
+#                        print tag
                     if d:
                         history.append(('T', act.date))
                         d = False
@@ -625,6 +630,7 @@ def import_dossiers_phase_1():
 
             if not fss:
                 print "Pas d'etat pour le dossier patient %s!" % dossier['id']
+                fss.append((status_accueil, datetime.today(), None))
             else:
                 fs = FileState(status=fss[0][0], author=creator, previous_state=None)
                 date_selected = fss[0][1]
