@@ -4,7 +4,6 @@
 import os
 import sys
 import csv
-import pdb
 
 from datetime import datetime, time, date
 from dateutil.relativedelta import relativedelta
@@ -402,8 +401,6 @@ def import_dossiers_phase_1():
             print "Nb factures : %d" % len(values['factures'])
             print "Nb actes : %d" % len(values['actes'])
 
-        pdb.set_trace()
-
         #Facturation : 132
         #Nb factures : 280
         #Nb actes : 517
@@ -461,8 +458,6 @@ def import_dossiers_phase_1():
         #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
         # Association des actes au healthcare
 
-        pdb.set_trace()
-
         i = 0
         j = 0
         for patient_id, pcs in histo.items():
@@ -510,7 +505,6 @@ def import_dossiers_phase_1():
 
         FileState.objects.filter(patient__service=service).delete()
 
-        pdb.set_trace()
         #transaction.commit()
 
         for dossier in tables_data['dossiers']:
