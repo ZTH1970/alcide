@@ -1,4 +1,3 @@
-import ipdb
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
@@ -76,6 +75,7 @@ def parse_intervenant(data):
     elif data['type readable'] == 'Orthophoniste liberal':
         worker_type = WorkerType.objects.get(name=u'Orthophonistes libéraux', intervene=True)
     worker.type = worker_type
+    worker.enabled = True
     worker.save()
     if worker.type.name == u'Stagiaires':
         username="%s%s" % (worker.first_name[0].lower(), worker.last_name.lower())
