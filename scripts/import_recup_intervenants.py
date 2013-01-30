@@ -79,7 +79,7 @@ def parse_intervenant(data):
     worker.save()
     if worker.type.name == u'Stagiaires':
         username="%s%s" % (worker.first_name[0].lower(), worker.last_name.lower())
-        password = worker.first_name[0].lower() + worker.last_name.lower()
+        password = worker.first_name[0].lower() + worker.last_name[0].lower()
         user = User.objects.filter(username=username)
         if not user:
             for i in range(0, 4):
