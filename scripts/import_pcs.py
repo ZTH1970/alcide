@@ -527,6 +527,8 @@ def import_dossiers_phase_1():
             # verification
             try:
                 real_date_inscription = patient.act_set.filter(is_billed=True).order_by('date')[0].date
+                real_date_inscription = datetime(year=real_date_inscription.year,
+                    month=real_date_inscription.month, day=real_date_inscription.day)
             except Exception, e:
                 print "Patient %s jamais facture, exception %s" % (dossier['id'], str(e))
             else:
@@ -552,12 +554,13 @@ def import_dossiers_phase_1():
             for act in patient.act_set.filter(is_billed=True).order_by('date'):
                 tag = act.get_hc_tag()
                 if tag and'D' in tag:
+                    print tag
                     if not history or not d:
                         history.append(('D', act.date))
                         d = True
                 else:
                     if not tag:
-                        print 'Act facture %d sans pc associee, traitement.' % act.id
+                        print 'Patient %d: Act facture %d sans pc associee, traitement.' % (patient.id, act.id)
                     else:
                         print tag
                     if d:
