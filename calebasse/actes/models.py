@@ -87,14 +87,17 @@ class Act(models.Model):
     healthcare = models.ForeignKey('dossiers.HealthCare',
             blank=True,
             null=True,
+            on_delete=models.SET_NULL,
             verbose_name=u'Prise en charge utilisée pour facturer (CMPP)')
     transport_company = models.ForeignKey('ressources.TransportCompany',
             blank=True,
             null=True,
+            on_delete=models.SET_NULL,
             verbose_name=u'Compagnie de transport')
     transport_type = models.ForeignKey('ressources.TransportType',
             blank=True,
             null=True,
+            on_delete=models.SET_NULL,
             verbose_name=u'Type de transport')
     doctors = models.ManyToManyField('personnes.Worker',
             limit_choices_to={'type__intervene': True},
