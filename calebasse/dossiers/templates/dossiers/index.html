@@ -85,7 +85,7 @@
           <td>{% if patient_record.object.pause %}F{% endif %}</td>
           <td>
               {% if patient_record.last_rdv %}
-              {{ patient_record.last_rdv.start_datetime|date:"d/m/Y h:i" }}<br>
+              {{ patient_record.last_rdv.start_datetime|date:"d/m/Y H:i" }}<br>
               {% for participant in patient_record.last_rdv.participants %}
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
@@ -94,7 +94,7 @@
           </td>
           <td>
               {% if patient_record.next_rdv %}
-              {{ patient_record.next_rdv.start_datetime|date:"d/m/Y h:i" }}<br>
+              {{ patient_record.next_rdv.start_datetime|date:"d/m/Y H:i" }}<br>
               {% for participant in patient_record.next_rdv.participants.all %}
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
