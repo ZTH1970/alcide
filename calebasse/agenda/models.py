@@ -373,7 +373,8 @@ class Event(models.Model):
                         if self.canceled:
                             act.delete()
                         else:
-                            eventwithact.update_act(act)
+                            occurrence = eventwithact.today_occurrence(act.date)
+                            occurrence.update_act(act)
                     else:
                         act.delete()
 
