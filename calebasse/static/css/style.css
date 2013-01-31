@@ -448,6 +448,14 @@ div#datesel {
 	width: 500px;
 }
 
+a#datesel-today-link {
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  top: -10px;
+}
+
 td#dispos {
 	padding-top: 55px;
   vertical-align: top;

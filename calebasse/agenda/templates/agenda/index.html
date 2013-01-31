@@ -7,9 +7,6 @@
     <a href="../..">Retourner à l'accueil</a>
     <button class="newevent" data-hour="" data-url="{% url 'new-event' service=service date=date %}">Nouvel événement</button>
     <button class="newrdv" data-hour="" data-url="{% url 'nouveau-rdv' service=service date=date %}">Nouveau rendez-vous patient</button>
-    {% if today != date %}
-      <button id="go-today" type="button" onclick="window.location.href='../{{today.isoformat}}/'">Allez à aujourd'hui</button>
-    {% endif %}
 {% endblock %}
 
 {% block beforecontent %}
