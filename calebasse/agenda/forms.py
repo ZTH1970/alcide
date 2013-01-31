@@ -195,7 +195,7 @@ class PeriodicEventsSearchForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             initial=[0,1])
     no_end_date = forms.BooleanField(label=u'Sans date de fin', required=False)
-    patient = AutoCompleteSelectField('patientrecord', required=False)
+    patient = AutoCompleteSelectField('patientrecord', required=False, help_text='')
 
     def clean(self):
         cleaned_data = super(PeriodicEventsSearchForm, self).clean()
