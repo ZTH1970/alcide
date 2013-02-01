@@ -13,8 +13,15 @@ import django.core.management
 
 django.core.management.setup_environ(calebasse.settings)
 
+import logging
+log_file = "./scripts/import_pcs.log"
+FORMAT = '[%(asctime)s] %(levelname)-8s %(name)s.%(message)s'
+logging.basicConfig(filename=log_file,level=logging.DEBUG, format=FORMAT)
+
 from django.contrib.auth.models import User
 from django.db import transaction
+
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from calebasse.agenda.models import Event, EventType
 from calebasse.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact, \
@@ -30,10 +37,6 @@ from calebasse.actes.models import Act
 
 # Configuration
 db_path = "./scripts/20130104-213225"
-
-#dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-dbs = ["F_ST_ETIENNE_CMPP"]
-
 
 map_cs = {}
 map_cs['CAMSP'] = {
@@ -193,21 +196,6 @@ def get_nir(nir, key, writer, line, service):
 
 #@transaction.commit_manually
 def import_dossiers_phase_1():
-    """ """
-    print "====== Début à %s ======" % str(datetime.today())
-
-#    f1 = open('./scripts/dossiers_ecoles_manuel.csv', 'wb')
-#    writer1 = csv.writer(f1, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-
-#    f2 = open('./scripts/dossiers_manuel.csv', 'wb')
-#    writer2 = csv.writer(f2, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-
-#    f3 = open('./scripts/contacts_manuel.csv', 'wb')
-#    writer3 = csv.writer(f3, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-
-    f4 = open('./scripts/pc_manuel_phase2.csv', 'wb')
-    writer4 = csv.writer(f4, delimiter=';', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-
     status_accueil = Status.objects.filter(type="ACCUEIL")[0]
     status_fin_accueil = Status.objects.filter(type="FIN_ACCUEIL")[0]
     status_diagnostic = Status.objects.filter(type="DIAGNOSTIC")[0]
@@ -218,434 +206,515 @@ def import_dossiers_phase_1():
     status_surveillance = Status.objects.filter(type="SURVEILLANCE")[0]
     creator = User.objects.get(id=1)
 
-    for db in dbs:
-        if "F_ST_ETIENNE_CMPP" == db:
-            service = Service.objects.get(name="CMPP")
-        elif "F_ST_ETIENNE_CAMSP" == db:
-            service = Service.objects.get(name="CAMSP")
-        elif "F_ST_ETIENNE_SESSAD_TED" == db:
-            service = Service.objects.get(name="SESSAD TED")
-        elif "F_ST_ETIENNE_SESSAD" == db:
-            service = Service.objects.get(name="SESSAD DYS")
+    db = "F_ST_ETIENNE_CMPP"
+    service = Service.objects.get(name="CMPP")
 
-        print "====== %s ======" % service.name
-        print datetime.today()
+    pcs_d = {}
 
-        pcs_d = {}
+    msg = "Chargement des actes..."
+    logging.info("%s" % msg)
+    csvfile = open(os.path.join(db_path, db, 'actes.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    pc_cols = csvlines.next()
+    tables_data['actes'] = {}
+    tables_data['actes']['nf'] = []
+    for line in csvlines:
+        data = _get_dict(pc_cols, line)
+        if _exist(line[6]):
+            if line[6] in tables_data['actes'].keys():
+                tables_data['actes'][line[6]].append(data)
+            else:
+                tables_data['actes'][line[6]] = [data]
+        else:
+            tables_data['actes']['nf'].append(data)
+    csvfile.close()
+    msg = "Terminé : dictionnaire avec clé facture prêt"
+    logging.info("%s" % msg)
 
-        print "--> Chargement des actes..."
-        csvfile = open(os.path.join(db_path, db, 'actes.csv'), 'rb')
-        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-        pc_cols = csvlines.next()
-        tables_data['actes'] = {}
-        tables_data['actes']['nf'] = []
-        for line in csvlines:
-            data = _get_dict(pc_cols, line)
-            if _exist(line[6]):
-                if line[6] in tables_data['actes'].keys():
-                    tables_data['actes'][line[6]].append(data)
+    msg = "Chargement des factures..."
+    logging.info("%s" % msg)
+    csvfile = open(os.path.join(db_path, db, 'factures.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    pc_cols = csvlines.next()
+    tables_data['factures'] = {}
+    for line in csvlines:
+        data = _get_dict(pc_cols, line)
+        if line[7] in tables_data['factures'].keys():
+            tables_data['factures'][line[7]].append(data)
+        else:
+            tables_data['factures'][line[7]] = [data]
+    csvfile.close()
+    msg = "Terminé : dictionnaire avec clé période de pc prêt"
+    logging.info("%s" % msg)
+
+    msg = "Lecture de la table des dossiers..."
+    logging.info("%s" % msg)
+    csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    d_cols = csvlines.next()
+    tables_data['dossiers'] = {}
+    for line in csvlines:
+        #Au moins nom et prénom
+        data = _get_dict(d_cols, line)
+        tables_data['dossiers'][line[0]] = data
+    csvfile.close()
+    msg = "Terminé"
+    logging.info("%s" % msg)
+
+    msg = "Chargement des prise en charge..."
+    logging.info("%s" % msg)
+    csvfile = open(os.path.join(db_path, db, 'pc.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    pc_cols = csvlines.next()
+    tables_data['pcs'] = {}
+    i = 0
+    for line in csvlines:
+        data = _get_dict(pc_cols, line)
+        pcs_d[line[0]] = data
+        if line[1] in tables_data['pcs'].keys():
+            tables_data['pcs'][line[1]].append(data)
+        else:
+            tables_data['pcs'][line[1]] = [data]
+        i += 1
+    csvfile.close()
+    msg = "Terminé : dictionnaire avec clé patient prêt"
+    logging.info("%s" % msg)
+
+    msg = "Chargement des periodes prise en charge..."
+    logging.info("%s" % msg)
+    csvfile = open(os.path.join(db_path, db, 'periodes_pc.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    pc_cols = csvlines.next()
+    tables_data['periodes_pcs'] = {}
+    j = 0
+    for line in csvlines:
+        data = _get_dict(pc_cols, line)
+        if line[1] in tables_data['periodes_pcs'].keys():
+            tables_data['periodes_pcs'][line[1]].append(data)
+        else:
+            tables_data['periodes_pcs'][line[1]] = [data]
+        j += 1
+    csvfile.close()
+    msg = "Terminé : dictionnaire avec clé prise en charge prêt"
+    logging.info("%s" % msg)
+
+    msg = "Nombre de patients concernés par une prise en charge: %d" % len(tables_data['pcs'].keys())
+    logging.info("%s" % msg)
+    msg = "Nombre de prises en charges à traiter : %d" % i
+    logging.info("%s" % msg)
+    k = 0
+    l = 0
+    for dossier_id, pcs in tables_data['pcs'].items():
+        if len(pcs) > 1:
+            k += 1
+        else:
+            if pcs[0]['genre_pc'] != '1':
+                l += 1
+    msg = "Nombre de patients qui ont plus d'une prise en charge : %d" % k
+    logging.info("%s" % msg)
+    msg = "Nombre de patients qui n'ont qu'une prise en charge mais qui n'est pas de diagnostic diag : %d" % l
+    logging.info("%s" % msg)
+    msg = "Nombre de periodes pour toutes les prises en charge : %d" % j
+    logging.info("%s" % msg)
+    k = 0
+    l = 0
+    m = 0
+    for pc, periodes in tables_data['periodes_pcs'].items():
+        if len(periodes) > 1:
+            k += 1
+            if pcs_d[pc]['genre_pc'] != '1':
+                l += 1
+    msg = "Nombre de prises en charge qui on plus d'une periode : %d" % k
+    logging.info("%s" % msg)
+    msg = "Nombre de prises en charge diagnostic qui on plus d'une periode : %d" % (k - l)
+    logging.info("%s" % msg)
+    msg = "Nombre de prises en charge traitement qui on plus d'une periode : %d" % l
+    logging.info("%s" % msg)
+
+    j = 0
+    k = 0
+    nb_actes_diag = [0 for i in range(20)]
+    nb_actes_trait = [0 for i in range(100)]
+    periode_ss_fact = []
+    facture_ss_actes = []
+    histo = {}
+    facturations = {}
+    total_factures = []
+    for dossier_id, pcs in tables_data['pcs'].items():
+        histo[dossier_id] = []
+        for pc in pcs:
+            t = pc['genre_pc']
+            for periode in tables_data['periodes_pcs'][pc['id']]:
+                if not _exist(periode['date_debut']):# or _to_date(periode['date_debut']) < datetime(year=2002, month=1, day=1):
+                    continue
+                my_pc = {}
+                my_pc['type'] = t
+                my_pc['periode'] = periode
+                # Il n'y qu'au cmpp où il y a des factures
+                # pour le sessad dy, on ajoute juste les periodes pour indiquer les notifications
+                # Dans les autres services, rien ?
+                factures = tables_data['factures'].get(periode['ppc_id'], None)
+                my_pc['factures'] = []
+                my_pc['actes'] = []
+                if factures:
+                    total_factures += [f['id'] for f in factures]
+                    for facture in factures:
+                        if facture['pc_id'] != pc['id']:
+                            print "%s != %s" % (facture['pc_id'], pc['id'])
+                        num = facture['numero']
+                        actes = tables_data['actes'].get(num, None)
+                        if actes:
+                            my_pc['factures'].append((facture, actes))
+                            my_pc['actes'] += actes
+                            fact_num = facture['numero'][0:3]
+                            if not fact_num in facturations:
+                                facturations[fact_num] = {}
+                                facturations[fact_num]['factures'] = []
+                                facturations[fact_num]['actes'] = []
+                            facturations[fact_num]['factures'].append(facture)
+                            facturations[fact_num]['actes'] += actes
+                        else:
+                            facture_ss_actes.append(facture['id'])
                 else:
-                    tables_data['actes'][line[6]] = [data]
-            else:
-                tables_data['actes']['nf'].append(data)
-        csvfile.close()
-        print "<-- Terminé : dictionnaire avec clé facture prêt"
-
-        print "--> Chargement des factures..."
-        csvfile = open(os.path.join(db_path, db, 'factures.csv'), 'rb')
-        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-        pc_cols = csvlines.next()
-        tables_data['factures'] = {}
-        for line in csvlines:
-            data = _get_dict(pc_cols, line)
-            if line[7] in tables_data['factures'].keys():
-                tables_data['factures'][line[7]].append(data)
-            else:
-                tables_data['factures'][line[7]] = [data]
-        csvfile.close()
-        print "<-- Terminé : dictionnaire avec clé période de pc prêt"
-
-        print "--> Chargement des prise en charge..."
-        csvfile = open(os.path.join(db_path, db, 'pc.csv'), 'rb')
-        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-        pc_cols = csvlines.next()
-        tables_data['pcs'] = {}
-        i = 0
-        for line in csvlines:
-            data = _get_dict(pc_cols, line)
-            pcs_d[line[0]] = data
-            if line[1] in tables_data['pcs'].keys():
-                tables_data['pcs'][line[1]].append(data)
-            else:
-                tables_data['pcs'][line[1]] = [data]
-            i += 1
-        csvfile.close()
-        print "<-- Terminé : dictionnaire avec clé patient prêt"
-
-        print "--> Chargement des periodes prise en charge..."
-        csvfile = open(os.path.join(db_path, db, 'periodes_pc.csv'), 'rb')
-        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-        pc_cols = csvlines.next()
-        tables_data['periodes_pcs'] = {}
-        j = 0
-        for line in csvlines:
-            data = _get_dict(pc_cols, line)
-            if line[1] in tables_data['periodes_pcs'].keys():
-                tables_data['periodes_pcs'][line[1]].append(data)
-            else:
-                tables_data['periodes_pcs'][line[1]] = [data]
-            j += 1
-        csvfile.close()
-        print "<-- Terminé : dictionnaire avec clé prise en charge prêt"
-
-        print "Nombre de patients : %d" % len(tables_data['pcs'].keys())
-        print "Nombre de pc : %d" % i
-        k = 0
-        l = 0
-        for dossier_id, pcs in tables_data['pcs'].items():
-            if len(pcs) > 1:
-                k += 1
-            else:
-                if pcs[0]['genre_pc'] != '1':
-                    l += 1
-        print "Nombre de patient qui ont plus d'une pc : %d" % k
-        print "Nombre de patient qui n'ont qu'une pc mais pas diag : %d" % l
-        print "Nombre de periodes : %d" % j
-        k = 0
-        l = 0
-        m = 0
-        for pc, periodes in tables_data['periodes_pcs'].items():
-            if len(periodes) > 1:
-                k += 1
-                if pcs_d[pc]['genre_pc'] != '1':
-                    l += 1
-        print "Nombre de pc qui on plus d'une periode : %d" % k
-        print "Nombre de pc qui on plus d'une periode qui sont en trait : %d" % l
-
-        i = 0
-        j = 0
-        k = 0
-        nb_actes_diag = [0 for i in range(20)]
-        nb_actes_trait = [0 for i in range(100)]
-        periode_ss_fact = []
-        facture_ss_actes = []
-        histo = {}
-        facturations = {}
-        for dossier_id, pcs in tables_data['pcs'].items():
-            histo[dossier_id] = []
-            for pc in pcs:
-                t = pc['genre_pc']
-                for periode in tables_data['periodes_pcs'][pc['id']]:
-                    if not _exist(periode['date_debut']):# or _to_date(periode['date_debut']) < datetime(year=2002, month=1, day=1):
-                        continue
-                    my_pc = {}
-                    my_pc['type'] = t
-                    my_pc['periode'] = periode
-                    # Il n'y qu'au cmpp où il y a des factures
-                    # pour le sessad dy, on ajoute juste les periodes pour indiquer les notifications
-                    # Dans les autres services, rien ?
-                    factures = tables_data['factures'].get(periode['ppc_id'], None)
-                    my_pc['factures'] = []
-                    my_pc['actes'] = []
-                    if factures:
-                        for facture in factures:
-                            if facture['pc_id'] != pc['id']:
-                                print "%s != %s" % (facture['pc_id'], pc['id'])
-                            num = facture['numero']
-                            actes = tables_data['actes'].get(num, None)
-                            if actes:
-                                my_pc['factures'].append((facture, actes))
-                                my_pc['actes'] += actes
-                                fact_num = facture['numero'][0:3]
-                                if not fact_num in facturations:
-                                    facturations[fact_num] = {}
-                                    facturations[fact_num]['factures'] = []
-                                    facturations[fact_num]['actes'] = []
-                                facturations[fact_num]['factures'].append(facture)
-                                facturations[fact_num]['actes'] += actes
-                            else:
-                                facture_ss_actes.append(facture)
-                    else:
-                        periode_ss_fact.append(periode)
-                        if t == '1':
-                            k += 1
+                    periode_ss_fact.append(periode)
                     if t == '1':
-                        nb_actes_diag[len(my_pc['actes'])] += 1
-                    else:
-                        nb_actes_trait[len(my_pc['actes'])] += 1
-                    histo[dossier_id].append(my_pc)
-                    i += len(my_pc['factures'])
-                    j += len(my_pc['actes'])
-        print "Factures : %d" % i
-        print "Actes : %d" % j
-        # Ca arrive surtout avant car ajout periode auto sans qu'il y ait de facturation derriere
-        print "Periodes sans factures, donc sans actes : %d" % len(periode_ss_fact)
-        print "Periodes sans factures diag : %d" % k
-        print "Periodes sans factures trait : %d" % (len(periode_ss_fact) - k)
-        # Ca arrive aussi
-        print "Factures sans actes, aïe : %d" % len(facture_ss_actes)
+                        k += 1
+                if t == '1':
+                    nb_actes_diag[len(my_pc['actes'])] += 1
+                else:
+                    nb_actes_trait[len(my_pc['actes'])] += 1
+                histo[dossier_id].append(my_pc)
+                j += len(my_pc['actes'])
+    msg = "Nombre de factures : %d" % len(total_factures)
+    logging.info("%s" % msg)
+    diff = len(total_factures) - len(set(total_factures))
+    if diff > 0:
+        msg = "Il y a des factures en doubles : %d" % diff
+        logging.warn("%s" % msg)
+    msg = "Nombre d'actes : %d" % j
+    logging.info("%s" % msg)
+    # Ca arrive surtout avant car ajout periode auto sans qu'il y ait de facturation derriere
+    msg = "Periodes sans factures, donc sans actes : %d" % len(periode_ss_fact)
+    logging.info("%s" % msg)
+    msg = "Periodes sans factures de type diagnostic : %d" % k
+    logging.info("%s" % msg)
+    msg = "Periodes sans factures de type traitraitement : %d" % (len(periode_ss_fact) - k)
+    logging.info("%s" % msg)
+    # Ca arrive aussi
+    msg = "Factures sans actes : %d %s" % (len(facture_ss_actes), str(facture_ss_actes))
+    logging.warn("%s" % msg)
 
-        print "Nombre d'actes par pc diag"
-        i = 0
-        for val in nb_actes_diag:
-            print "%d : %d" % (i, val)
-            i += 1
-        print "Nombre d'actes par pc trait"
-        i = 0
-        for val in nb_actes_trait:
-            print "%d : %d" % (i, val)
-            i += 1
+    msg = "Nombre d'actes par prises en charge de diagnostique :"
+    logging.info("%s" % msg)
+    i = 0
+    for val in nb_actes_diag:
+        msg = "%d : %d" % (i, val)
+        logging.info("%s" % msg)
+        i += 1
+    msg = "Nombre d'actes par prises en charge de traitement :"
+    logging.info("%s" % msg)
+    i = 0
+    for val in nb_actes_trait:
+        msg = "%d : %d" % (i, val)
+        logging.info("%s" % msg)
+        i += 1
 
-        for num, values in facturations.items():
-            print "Facturation : %s" % num
-            print "Nb factures : %d" % len(values['factures'])
-            print "Nb actes : %d" % len(values['actes'])
+    for num, values in facturations.items():
+        msg = "Nombre de facturations : %s" % num
+        logging.info("%s" % msg)
+        msg = "Nombre de factures (hors factures sans actes) : %d" % len(values['factures'])
+        logging.info("%s" % msg)
+        msg = "Nombre d'actes : %d" % len(values['actes'])
+        logging.info("%s" % msg)
 
-        #Facturation : 132
-        #Nb factures : 280
-        #Nb actes : 517
+    author = User.objects.get(pk=1)
 
-        #Facturation : 133
-        #Nb factures : 182
-        #Nb actes : 292
-
-        author = User.objects.get(pk=1)
-
-        # Commencer par péter toutes les healthcare existantes
-        CmppHealthCareDiagnostic.objects.all().delete()
-        CmppHealthCareTreatment.objects.all().delete()
-        # Creation des Healthcare
-        HcDiags = []
-        HcTraits = []
-        for patient_id, pcs in histo.items():
-            patient = None
-            try:
-                patient = PatientRecord.objects.get(old_id=patient_id, service=service)
-            except:
-#                print 'Patient %s non trouve (1)' % patient_id
-                continue
-            for pc in pcs:
-                start_date = _to_date(pc['periode']['date_debut'])
-                request_date = _to_date(pc['periode']['date_demande'])
-                agree_date = _to_date(pc['periode']['date_accord'])
-                insist_date = _to_date(pc['periode']['date_relance'])
-                act_number = _to_int(pc['periode']['nbr_seances']) or 0
-                if pc['type'] == '1':
+    msg = "Suppression de toutes les prises en charge existante dans calebasse..."
+    logging.info("%s" % msg)
+    CmppHealthCareDiagnostic.objects.all().delete()
+    CmppHealthCareTreatment.objects.all().delete()
+    msg = "Terminé"
+    logging.info("%s" % msg)
+    # Creation des Healthcare
+    HcDiags = []
+    HcTraits = []
+    msg = "Création des prises en charge..."
+    logging.info("%s" % msg)
+    for patient_id, pcs in histo.items():
+        patient = None
+        try:
+            patient = PatientRecord.objects.get(old_id=patient_id, service=service)
+        except:
+            msg = "Patient présent dans la table des prises en charge mais pas dans calebasse"
+            logging.error("%s" % msg)
+            msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (patient_id, str(tables_data['dossiers'][patient_id]['nom']), str(tables_data['dossiers'][patient_id]['prenom']))
+            logging.error("%s" % msg)
+            continue
+        for pc in pcs:
+            start_date = _to_date(pc['periode']['date_debut'])
+            request_date = _to_date(pc['periode']['date_demande'])
+            agree_date = _to_date(pc['periode']['date_accord'])
+            insist_date = _to_date(pc['periode']['date_relance'])
+            act_number = _to_int(pc['periode']['nbr_seances']) or 0
+            if pc['type'] == '1':
 #                    if act_number != 6:
 #                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
-                    hc = CmppHealthCareDiagnostic(start_date=start_date,
-                        request_date=request_date,
-                        agree_date=agree_date,
-                        insist_date=insist_date,
-                        patient=patient,
-                        act_number=act_number,
-                        author=author)
-                    HcDiags.append(hc)
-                else:
+                hc = CmppHealthCareDiagnostic(start_date=start_date,
+                    request_date=request_date,
+                    agree_date=agree_date,
+                    insist_date=insist_date,
+                    patient=patient,
+                    act_number=act_number,
+                    author=author)
+                HcDiags.append(hc)
+            else:
 #                    if act_number != 30:
 #                        print "PC diag pour %d avec nombre d'acte pris en charge de %d" % (patient.id, act_number)
-                    hc = CmppHealthCareTreatment(start_date=start_date,
-                        request_date=request_date,
-                        agree_date=agree_date,
-                        insist_date=insist_date,
-                        patient=patient,
-                        act_number=act_number,
-                        author=author)
-                    HcTraits.append(hc)
-                hc.save()
-                pc['hc'] = hc
-        #CmppHealthCareDiagnostic.objects.bulk_create(HcDiags)
-        #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
-        # Association des actes au healthcare
+                hc = CmppHealthCareTreatment(start_date=start_date,
+                    request_date=request_date,
+                    agree_date=agree_date,
+                    insist_date=insist_date,
+                    patient=patient,
+                    act_number=act_number,
+                    author=author)
+                HcTraits.append(hc)
+            hc.save()
+            pc['hc'] = hc
+    msg = "Création des prises en charge terminé"
+    logging.info("%s" % msg)
+    #CmppHealthCareDiagnostic.objects.bulk_create(HcDiags)
+    #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
+    # Association des actes au healthcare
 
-        i = 0
-        j = 0
-        for patient_id, pcs in histo.items():
-            patient = None
-            try:
-                patient = PatientRecord.objects.get(old_id=patient_id, service=service)
-            except:
+    msg = "Association des actes dans calebasse aux prises en charge..."
+    logging.info("%s" % msg)
+    i = 0
+    j = 0
+    for patient_id, pcs in histo.items():
+        patient = None
+        try:
+            patient = PatientRecord.objects.get(old_id=patient_id, service=service)
+        except:
 #                print 'Patient %s non trouve (2)' % patient_id
-                continue
-            for pc in pcs:
-                hc = pc['hc']
-                for act in pc['actes']:
-                    a = None
-                    try:
-                        a = Act.objects.get(old_id=act['id'], patient__service=service)
-                    except Exception, e:
-                        print "Acte non trouve %s, exception %s" % (act['id'], str(e))
-                        i += 1
-                        continue
-                    if not a.is_billed:
-                        print "Acte deja pris en charge mais non facture %s" %a
-                        a.is_billed = True
-                    a.healthcare = hc
-                    a.save()
-                    j += 1
-        print "Actes non trouve %d" % i
-        print "Actes pris en charge %d" % j
-        # Historique des dossiers, Automatic switch state ? Automated hc creation ?
-        print "--> Lecture table des dossiers..."
-        csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
-        csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
-        d_cols = csvlines.next()
-        tables_data['dossiers'] = []
-        for line in csvlines:
-            data = _get_dict(d_cols, line)
-            tables_data['dossiers'].append(data)
-        csvfile.close()
-        print "<-- Terminé : dictionnaire avec clé patient prêt"
+            continue
+        for pc in pcs:
+            hc = pc['hc']
+            for act in pc['actes']:
+                a = None
+                try:
+                    a = Act.objects.get(old_id=act['id'], patient__service=service)
+                except ObjectDoesNotExist:
+                    msg = "Acte pointé par une facture avec ancien ID %s non trouvé" % str(act['id'])
+                    logging.error("%s" % msg)
+                    i += 1
+                    continue
+                except MultipleObjectsReturned:
+                    msg = "Acte pointé par une facture avec ancien ID %s existe plusieurs fois" % str(act['id'])
+                    logging.error("%s" % msg)
+                    i += 1
+                    continue
+                except Exception, e:
+                    msg = "Acte pointé par une facture avec ancien ID %s lève %s" % (str(act['id']), str(e))
+                    logging.error("%s" % msg)
+                    i += 1
+                    continue
+                if not a.is_billed:
+                    msg = "Acte trouvé et pris en charge mais non marqué facturé dans calebasse, marquage facturé (ID acte calebasse : %d)" % a.id
+                    logging.warn("%s" % msg)
+                    a.is_billed = True
+                a.healthcare = hc
+                a.save()
+                j += 1
+    msg = "Actes non trouvés : %d" % i
+    logging.info("%s" % msg)
+    msg = "Actes facturés chez Faure et réimputés dans calebasse aux prises en charge : %d" % j
+    logging.info("%s" % msg)
+    # Historique des dossiers, Automatic switch state ? Automated hc creation ?
 
-        date_accueil = None
-        date_diagnostic = None
-        date_inscription = None
-        date_clos = None
-        date_retour = None
+    print "--> Lecture table des dossiers..."
+    csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
+    csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
+    d_cols = csvlines.next()
+    tables_data['dossiers'] = []
+    for line in csvlines:
+        data = _get_dict(d_cols, line)
+        tables_data['dossiers'].append(data)
+    csvfile.close()
+    print "<-- Terminé : dictionnaire avec clé patient prêt"
 
-        FileState.objects.filter(patient__service=service).delete()
+    date_accueil = None
+    date_diagnostic = None
+    date_inscription = None
+    date_clos = None
+    date_retour = None
 
-        #transaction.commit()
+    msg = "Suppresion des états des dossiers dans calebasse qui ont été importés."
+    logging.info("%s" % msg)
+    FileState.objects.filter(patient__service=service, patient__old_id__isnull=False).delete()
 
-        for dossier in tables_data['dossiers']:
-            fss = []
-            patient = None
-            try:
-                patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
-            except:
-#                print 'Patient %s non trouve (3)' % dossier['id']
-                continue
-            date_accueil = _to_date(dossier['con_date'])
-            date_inscription = _to_date(dossier['ins_date'])
-            date_clos = _to_date(dossier['sor_date'])
-            date_retour = _to_date(dossier['ret_date'])
+    #transaction.commit()
 
-            # La vrai date d'inscription c'est le premier acte facturé
-            # donc date_inscription devrait être égale
-            # verification
-            try:
-                real_date_inscription = patient.act_set.filter(is_billed=True).order_by('date')[0].date
-                real_date_inscription = datetime(year=real_date_inscription.year,
-                    month=real_date_inscription.month, day=real_date_inscription.day)
-            except Exception, e:
-                pass
+    msg = "Création de l'historique d'état des dossiers patients"
+    logging.info("%s" % msg)
+    for dossier in tables_data['dossiers']:
+        fss = []
+        patient = None
+        try:
+            patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
+        except:
+            msg = "Patient présent dans la table des dossiers mais pas dans calebasse"
+            logging.error("%s" % msg)
+            msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+            logging.error("%s" % msg)
+            continue
+        date_accueil = _to_date(dossier['con_date'])
+        date_inscription = _to_date(dossier['ins_date'])
+        date_clos = _to_date(dossier['sor_date'])
+        date_retour = _to_date(dossier['ret_date'])
+
+        # La vrai date d'inscription c'est le premier acte facturé
+        # donc date_inscription devrait être égale
+        # verification
+        try:
+            real_date_inscription = patient.act_set.filter(is_billed=True).order_by('date')[0].date
+            real_date_inscription = datetime(year=real_date_inscription.year,
+                month=real_date_inscription.month, day=real_date_inscription.day)
+        except Exception, e:
+            pass
 #                print "Patient %s jamais facture, exception %s" % (dossier['id'], str(e))
-            else:
-                if date_inscription and real_date_inscription != date_inscription:
-                    pass
+        else:
+            if date_inscription and real_date_inscription != date_inscription:
+                pass
 #                    print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
-                elif not date_inscription:
-                    print "Pas de date d'inscription, on prend le premier acte pour %s" % dossier['id']
-                    date_inscription = real_date_inscription
+            elif not date_inscription:
+                msg = "Pas de date d'inscription, on prend le premier acte pour %s - %s %s " % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+                logging.warn("%s" % msg)
+                date_inscription = real_date_inscription
 
-            if (date_accueil and not date_inscription) or (date_accueil and date_inscription and date_accueil < date_inscription):
-                fss.append((status_accueil, date_accueil, None))
+        if (date_accueil and not date_inscription) or (date_accueil and date_inscription and date_accueil < date_inscription):
+            fss.append((status_accueil, date_accueil, None))
 
-            if date_clos :
-                if not date_inscription:
-                    print "Cloture sans inscription pour %s" % dossier['id']
-                if date_inscription and date_clos < date_inscription:
-                    print "Cloture avant inscription pour %s, on ne cloture pas" % dossier['id']
-                    date_clos = None
+        if date_clos :
+            if not date_inscription:
+                msg = "Dossier clos sans avoir été inscrit : %s - %s %s " % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+                logging.info("%s" % msg)
+            if date_inscription and date_clos < date_inscription:
+                msg = "Dossier %s - %s %s avec une date de clôture antérieure à la date d'inscription, on le clos sans inscription." % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+                logging.error("%s" % msg)
+                date_inscription = None
 
-            # Historique par les actes
-            history = []
-            d = True
-            for act in patient.act_set.filter(is_billed=True).order_by('date'):
-                tag = act.get_hc_tag()
-                if tag and 'D' in tag:
+        # Historique par les actes
+        history = []
+        d = True
+        for act in patient.act_set.filter(is_billed=True).order_by('date'):
+            tag = act.get_hc_tag()
+            if tag and 'D' in tag:
 #                    print tag
-                    if not history or not d:
-                        history.append(('D', act.date))
-                        d = True
-                else:
+                if not history or not d:
+                    history.append(('D', act.date))
+                    d = True
+            else:
 #                    if not tag:
 #                        print 'Patient %d: Act facture %d sans pc associee, traitement.' % (patient.id, act.id)
 #                    else:
 #                        print tag
-                    if d:
-                        history.append(('T', act.date))
-                        d = False
+                if d:
+                    history.append(('T', act.date))
+                    d = False
 
-            if not history:
-                if date_inscription:
-                    fss.append((status_diagnostic, date_inscription, None))
-                if date_retour:
-                    if not date_clos or date_clos < date_retour:
-                        fss.append((status_diagnostic, date_retour, None))
-                    else:
-                        fss.append((status_clos, date_clos, None))
-                elif date_clos:
+        if not history:
+            if date_inscription:
+                fss.append((status_diagnostic, date_inscription, None))
+            if date_retour:
+                if not date_clos or date_clos < date_retour:
+                    fss.append((status_diagnostic, date_retour, None))
+                else:
                     fss.append((status_clos, date_clos, None))
-            else:
-                clos = False
-                inscrit = False
-                tt = None
-                for i in range(len(history)):
-                    t, act_date = history[i]
-                    if isinstance(act_date, date):
-                        act_date = datetime(year=act_date.year,
-                            month=act_date.month, day=act_date.day)
-                    if not inscrit:
-                        inscrit = True
-                        if date_inscription:
-                            if t == 'D':
-                                fss.append((status_diagnostic, date_inscription, None))
-                            else:
-                                fss.append((status_traitement, date_inscription, None))
-                            if len(history) == 1 and date_clos:
-                                fss.append((status_clos, date_clos, None))
-                    else:
-                        if not date_clos:
-                            if t == 'D':
-                                fss.append((status_diagnostic, act_date, None))
-                            else:
-                                fss.append((status_traitement, act_date, None))
-                        elif not clos:
-                            if t == 'D':
-                                fss.append((status_diagnostic, act_date, None))
-                            else:
-                                fss.append((status_traitement, act_date, None))
-                            next_date = None
-                            if i < len(history) - 1:
-                                _, next_date = history[i+1]
-                                if isinstance(next_date, date):
-                                    next_date = datetime(year=next_date.year,
-                                        month=next_date.month, day=next_date.day)
-                            if not next_date or date_clos < next_date:
-                                fss.append((status_clos, date_clos, None))
-                                clos = True
+            elif date_clos:
+                fss.append((status_clos, date_clos, None))
+        else:
+            clos = False
+            inscrit = False
+            tt = None
+            for i in range(len(history)):
+                t, act_date = history[i]
+                if isinstance(act_date, date):
+                    act_date = datetime(year=act_date.year,
+                        month=act_date.month, day=act_date.day)
+                if not inscrit:
+                    inscrit = True
+                    if date_inscription:
+                        if t == 'D':
+                            fss.append((status_diagnostic, date_inscription, None))
                         else:
-                            if date_retour and date_retour > date_clos:
-                                if act_date >= date_retour:
-                                    if t == 'D':
-                                        fss.append((status_diagnostic, act_date, None))
-                                    else:
-                                        fss.append((status_traitement, act_date, None))
+                            fss.append((status_traitement, date_inscription, None))
+                        if len(history) == 1 and date_clos:
+                            fss.append((status_clos, date_clos, None))
+                else:
+                    if not date_clos:
+                        if t == 'D':
+                            fss.append((status_diagnostic, act_date, None))
+                        else:
+                            fss.append((status_traitement, act_date, None))
+                    elif not clos:
+                        if t == 'D':
+                            fss.append((status_diagnostic, act_date, None))
+                        else:
+                            fss.append((status_traitement, act_date, None))
+                        next_date = None
+                        if i < len(history) - 1:
+                            _, next_date = history[i+1]
+                            if isinstance(next_date, date):
+                                next_date = datetime(year=next_date.year,
+                                    month=next_date.month, day=next_date.day)
+                        if not next_date or date_clos < next_date:
+                            fss.append((status_clos, date_clos, None))
+                            clos = True
+                    else:
+                        if date_retour and date_retour > date_clos:
+                            if act_date >= date_retour:
+                                if t == 'D':
+                                    fss.append((status_diagnostic, act_date, None))
+                                else:
+                                    fss.append((status_traitement, act_date, None))
 
-            if not fss:
-                print "Pas d'etat pour le dossier patient %s!" % dossier['id']
-                fss.append((status_accueil, datetime.today(), None))
-            else:
-                fs = FileState(status=fss[0][0], author=creator, previous_state=None)
-                date_selected = fss[0][1]
-                fs.patient = patient
-                fs.date_selected = date_selected
-                fs.comment = fss[0][2]
-                fs.save()
-                patient.last_state = fs
-                patient.save()
-                if len(fss) > 1:
-                    for status, date_selected, comment in fss[1:]:
-                        try:
-                            patient.set_state(status=status, author=creator, date_selected=date_selected, comment=comment)
-                        except Exception, e:
-                            print "Pour patient %s, exception %s" % (patient, str(e))
+        if not fss:
+            msg = "Dossier %s - %s %s sans aucune date ni acte facturé, on le met en accueil aujourd'hui." % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+            logging.error("%s" % msg)
+            fss.append((status_accueil, datetime.today(), None))
+        else:
+            fs = FileState(status=fss[0][0], author=creator, previous_state=None)
+            date_selected = fss[0][1]
+            fs.patient = patient
+            fs.date_selected = date_selected
+            fs.comment = fss[0][2]
+            fs.save()
+            patient.last_state = fs
+            patient.save()
+            if len(fss) > 1:
+                for status, date_selected, comment in fss[1:]:
+                    try:
+                        patient.set_state(status=status, author=creator, date_selected=date_selected, comment=comment)
+                    except Exception, e:
+                        msg = "Dossier %s - %s %s, exception %s lors de l'ajout d'un état %s en date du %s" % (dossier['id'], str(dossier['nom']), str(dossier['prenom']), str(e), str(status), str(date_selected))
+                        logging.error("%s" % msg)
 
-            # Si reouverture apres date de cloture, passer à cette date en d ou en t
-            # Combinaisons possibles
-            # Mais au final la reouverture n'a d'intérêt que si on a
-            # une date de cloture antérieure
+
+#        i = 0
+#        for d in PatientRecord.objects.all():
+#            hcds = CmppHealthCareDiagnostic.objects.filter(patient=d)
+#            if not hcds:
+#                i += 1
+#                print 'Dossier %s sans PC de diag' % d
+#        print 'Il y a %d dossiers sans PC de diag' % i
+
+#        for d in PatientRecord.objects.all():
+#            d.create_diag_healthcare(creator)
+
+        # Si reouverture apres date de cloture, passer à cette date en d ou en t
+        # Combinaisons possibles
+        # Mais au final la reouverture n'a d'intérêt que si on a
+        # une date de cloture antérieure
 #            if date_retour and date_clos and date_retour < date_clos:
 #                # accueil, d/t, cloture (date inconnue), d/t, cloture
 #            elif date_retour and date_clos and date_retour > date_clos:
@@ -659,10 +728,11 @@ def import_dossiers_phase_1():
 #            else:
 #                # accueil, d/t
 
-        print "<-- Terminé"
-    #transaction.commit()
-    print "====== Fin à %s ======" % str(datetime.today())
-
-
 if __name__ == "__main__":
+    msg = "Lancement du script"
+    logging.info("%s" % msg)
+
     import_dossiers_phase_1()
+
+    msg = "Fin du script"
+    logging.info("%s" % msg)
