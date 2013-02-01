@@ -418,9 +418,9 @@ class PatientRecordsHomepageView(cbv.ListView):
         qs = super(PatientRecordsHomepageView, self).get_queryset()
         states = self.request.GET.getlist('states')
         if last_name:
-            qs = qs.filter(last_name__icontains=last_name)
+            qs = qs.filter(last_name__istartswith=last_name)
         if first_name:
-            qs = qs.filter(first_name__icontains=first_name)
+            qs = qs.filter(first_name__istartswith=first_name)
         if paper_id:
             qs = qs.filter(paper_id__startswith=paper_id)
         if id:
