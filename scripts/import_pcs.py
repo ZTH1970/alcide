@@ -14,9 +14,15 @@ import django.core.management
 django.core.management.setup_environ(calebasse.settings)
 
 import logging
-log_file = "./scripts/import_pcs.log"
-FORMAT = '[%(asctime)s] %(levelname)-8s %(name)s.%(message)s'
-logging.basicConfig(filename=log_file,level=logging.DEBUG, format=FORMAT)
+logger = logging.getLogger('import_pcs')
+log_handler = logging.FileHandler("./scripts/import_pcs.log")
+log_handler.setLevel(logging.DEBUG)
+log_handler.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)-8s %(name)s.%(message)s'))
+logger.addHandler(log_handler)
+
+#log_file = "./scripts/import_pcs.log"
+#FORMAT = '[%(asctime)s] %(levelname)-8s %(name)s.%(message)s'
+#logger.basicConfig(filename=log_file,level=logger.DEBUG, format=FORMAT, filemode = 'a')
 
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -212,7 +218,7 @@ def import_dossiers_phase_1():
     pcs_d = {}
 
     msg = "Chargement des actes..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     csvfile = open(os.path.join(db_path, db, 'actes.csv'), 'rb')
     csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
     pc_cols = csvlines.next()
@@ -229,10 +235,10 @@ def import_dossiers_phase_1():
             tables_data['actes']['nf'].append(data)
     csvfile.close()
     msg = "Terminé : dictionnaire avec clé facture prêt"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     msg = "Chargement des factures..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     csvfile = open(os.path.join(db_path, db, 'factures.csv'), 'rb')
     csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
     pc_cols = csvlines.next()
@@ -245,10 +251,10 @@ def import_dossiers_phase_1():
             tables_data['factures'][line[7]] = [data]
     csvfile.close()
     msg = "Terminé : dictionnaire avec clé période de pc prêt"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     msg = "Lecture de la table des dossiers..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
     csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
     d_cols = csvlines.next()
@@ -259,10 +265,10 @@ def import_dossiers_phase_1():
         tables_data['dossiers'][line[0]] = data
     csvfile.close()
     msg = "Terminé"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     msg = "Chargement des prise en charge..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     csvfile = open(os.path.join(db_path, db, 'pc.csv'), 'rb')
     csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
     pc_cols = csvlines.next()
@@ -278,10 +284,10 @@ def import_dossiers_phase_1():
         i += 1
     csvfile.close()
     msg = "Terminé : dictionnaire avec clé patient prêt"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     msg = "Chargement des periodes prise en charge..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     csvfile = open(os.path.join(db_path, db, 'periodes_pc.csv'), 'rb')
     csvlines = csv.reader(csvfile, delimiter=';', quotechar='|')
     pc_cols = csvlines.next()
@@ -296,12 +302,12 @@ def import_dossiers_phase_1():
         j += 1
     csvfile.close()
     msg = "Terminé : dictionnaire avec clé prise en charge prêt"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     msg = "Nombre de patients concernés par une prise en charge: %d" % len(tables_data['pcs'].keys())
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Nombre de prises en charges à traiter : %d" % i
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     k = 0
     l = 0
     for dossier_id, pcs in tables_data['pcs'].items():
@@ -311,11 +317,11 @@ def import_dossiers_phase_1():
             if pcs[0]['genre_pc'] != '1':
                 l += 1
     msg = "Nombre de patients qui ont plus d'une prise en charge : %d" % k
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Nombre de patients qui n'ont qu'une prise en charge mais qui n'est pas de diagnostic diag : %d" % l
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Nombre de periodes pour toutes les prises en charge : %d" % j
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     k = 0
     l = 0
     m = 0
@@ -325,11 +331,11 @@ def import_dossiers_phase_1():
             if pcs_d[pc]['genre_pc'] != '1':
                 l += 1
     msg = "Nombre de prises en charge qui on plus d'une periode : %d" % k
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Nombre de prises en charge diagnostic qui on plus d'une periode : %d" % (k - l)
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Nombre de prises en charge traitement qui on plus d'une periode : %d" % l
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     j = 0
     k = 0
@@ -386,69 +392,69 @@ def import_dossiers_phase_1():
                 histo[dossier_id].append(my_pc)
                 j += len(my_pc['actes'])
     msg = "Nombre de factures : %d" % len(total_factures)
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     diff = len(total_factures) - len(set(total_factures))
     if diff > 0:
         msg = "Il y a des factures en doubles : %d" % diff
-        logging.warn("%s" % msg)
+        logger.warn("%s" % msg)
     msg = "Nombre d'actes : %d" % j
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     # Ca arrive surtout avant car ajout periode auto sans qu'il y ait de facturation derriere
     msg = "Periodes sans factures, donc sans actes : %d" % len(periode_ss_fact)
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Periodes sans factures de type diagnostic : %d" % k
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Periodes sans factures de type traitraitement : %d" % (len(periode_ss_fact) - k)
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     # Ca arrive aussi
     msg = "Factures sans actes : %d %s" % (len(facture_ss_actes), str(facture_ss_actes))
-    logging.warn("%s" % msg)
+    logger.warn("%s" % msg)
 
     msg = "Nombre d'actes par prises en charge de diagnostique :"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     i = 0
     for val in nb_actes_diag:
         msg = "%d : %d" % (i, val)
-        logging.info("%s" % msg)
+        logger.info("%s" % msg)
         i += 1
     msg = "Nombre d'actes par prises en charge de traitement :"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     i = 0
     for val in nb_actes_trait:
         msg = "%d : %d" % (i, val)
-        logging.info("%s" % msg)
+        logger.info("%s" % msg)
         i += 1
 
     for num, values in facturations.items():
         msg = "Nombre de facturations : %s" % num
-        logging.info("%s" % msg)
+        logger.info("%s" % msg)
         msg = "Nombre de factures (hors factures sans actes) : %d" % len(values['factures'])
-        logging.info("%s" % msg)
+        logger.info("%s" % msg)
         msg = "Nombre d'actes : %d" % len(values['actes'])
-        logging.info("%s" % msg)
+        logger.info("%s" % msg)
 
     author = User.objects.get(pk=1)
 
     msg = "Suppression de toutes les prises en charge existante dans calebasse..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     CmppHealthCareDiagnostic.objects.all().delete()
     CmppHealthCareTreatment.objects.all().delete()
     msg = "Terminé"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     # Creation des Healthcare
     HcDiags = []
     HcTraits = []
     msg = "Création des prises en charge..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     for patient_id, pcs in histo.items():
         patient = None
         try:
             patient = PatientRecord.objects.get(old_id=patient_id, service=service)
         except:
             msg = "Patient présent dans la table des prises en charge mais pas dans calebasse"
-            logging.error("%s" % msg)
+            logger.error("%s" % msg)
             msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (patient_id, str(tables_data['dossiers'][patient_id]['nom']), str(tables_data['dossiers'][patient_id]['prenom']))
-            logging.error("%s" % msg)
+            logger.error("%s" % msg)
             continue
         for pc in pcs:
             start_date = _to_date(pc['periode']['date_debut'])
@@ -481,13 +487,13 @@ def import_dossiers_phase_1():
             hc.save()
             pc['hc'] = hc
     msg = "Création des prises en charge terminé"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     #CmppHealthCareDiagnostic.objects.bulk_create(HcDiags)
     #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
     # Association des actes au healthcare
 
     msg = "Association des actes dans calebasse aux prises en charge..."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     i = 0
     j = 0
     for patient_id, pcs in histo.items():
@@ -505,30 +511,30 @@ def import_dossiers_phase_1():
                     a = Act.objects.get(old_id=act['id'], patient__service=service)
                 except ObjectDoesNotExist:
                     msg = "Acte pointé par une facture avec ancien ID %s non trouvé" % str(act['id'])
-                    logging.error("%s" % msg)
+                    logger.error("%s" % msg)
                     i += 1
                     continue
                 except MultipleObjectsReturned:
                     msg = "Acte pointé par une facture avec ancien ID %s existe plusieurs fois" % str(act['id'])
-                    logging.error("%s" % msg)
+                    logger.error("%s" % msg)
                     i += 1
                     continue
                 except Exception, e:
                     msg = "Acte pointé par une facture avec ancien ID %s lève %s" % (str(act['id']), str(e))
-                    logging.error("%s" % msg)
+                    logger.error("%s" % msg)
                     i += 1
                     continue
                 if not a.is_billed:
                     msg = "Acte trouvé et pris en charge mais non marqué facturé dans calebasse, marquage facturé (ID acte calebasse : %d)" % a.id
-                    logging.warn("%s" % msg)
+                    logger.warn("%s" % msg)
                     a.is_billed = True
                 a.healthcare = hc
                 a.save()
                 j += 1
     msg = "Actes non trouvés : %d" % i
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     msg = "Actes facturés chez Faure et réimputés dans calebasse aux prises en charge : %d" % j
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     # Historique des dossiers, Automatic switch state ? Automated hc creation ?
 
     csvfile = open(os.path.join(db_path, db, 'dossiers.csv'), 'rb')
@@ -547,13 +553,13 @@ def import_dossiers_phase_1():
     date_retour = None
 
     msg = "Suppresion des états des dossiers dans calebasse qui ont été importés."
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     FileState.objects.filter(patient__service=service, patient__old_id__isnull=False).delete()
 
     #transaction.commit()
 
     msg = "Création de l'historique d'état des dossiers patients"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
     for dossier in tables_data['dossiers']:
         fss = []
         patient = None
@@ -561,9 +567,9 @@ def import_dossiers_phase_1():
             patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
         except:
             msg = "Patient présent dans la table des dossiers mais pas dans calebasse"
-            logging.error("%s" % msg)
+            logger.error("%s" % msg)
             msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (str(dossier['id']), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')))
-            logging.error("%s" % msg)
+            logger.error("%s" % msg)
             continue
         date_accueil = _to_date(dossier['con_date'])
         date_inscription = _to_date(dossier['ins_date'])
@@ -586,7 +592,7 @@ def import_dossiers_phase_1():
 #                    print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
             elif not date_inscription:
                 msg = "Pas de date d'inscription, on prend le premier acte pour %s - %s %s " % (str(dossier['id'].encode('utf-8')), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')))
-                logging.warn("%s" % msg)
+                logger.warn("%s" % msg)
                 date_inscription = real_date_inscription
 
         if (date_accueil and not date_inscription) or (date_accueil and date_inscription and date_accueil < date_inscription):
@@ -595,10 +601,10 @@ def import_dossiers_phase_1():
         if date_clos :
             if not date_inscription:
                 msg = "Dossier clos sans avoir été inscrit : %s - %s %s " % (str(dossier['id']), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')))
-                logging.info("%s" % msg)
+                logger.info("%s" % msg)
             if date_inscription and date_clos < date_inscription:
                 msg = "Dossier %s - %s %s avec une date de clôture antérieure à la date d'inscription, on le clos sans inscription." % (str(dossier['id']), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')))
-                logging.error("%s" % msg)
+                logger.error("%s" % msg)
                 date_inscription = None
 
         # Historique par les actes
@@ -678,7 +684,7 @@ def import_dossiers_phase_1():
 
         if not fss:
             msg = "Dossier %s - %s %s sans aucune date ni acte facturé, on le met en accueil aujourd'hui." % (str(dossier['id']), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')))
-            logging.error("%s" % msg)
+            logger.error("%s" % msg)
             fss.append((status_accueil, datetime.today(), None))
         else:
             fs = FileState(status=fss[0][0], author=creator, previous_state=None)
@@ -695,7 +701,7 @@ def import_dossiers_phase_1():
                         patient.set_state(status=status, author=creator, date_selected=date_selected, comment=comment)
                     except Exception, e:
                         msg = "Dossier %s - %s %s, exception %s lors de l'ajout d'un état %s en date du %s" % (str(dossier['id']), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')), str(e), str(status), str(date_selected))
-                        logging.error("%s" % msg)
+                        logger.error("%s" % msg)
 
 
 #        i = 0
@@ -728,9 +734,9 @@ def import_dossiers_phase_1():
 
 if __name__ == "__main__":
     msg = "Lancement du script"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
 
     import_dossiers_phase_1()
 
     msg = "Fin du script"
-    logging.info("%s" % msg)
+    logger.info("%s" % msg)
