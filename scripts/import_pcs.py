@@ -564,7 +564,7 @@ def import_dossiers_phase_1():
         except:
             msg = "Patient présent dans la table des dossiers mais pas dans calebasse"
             logging.error("%s" % msg)
-            msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+            msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (str(dossier['id']), str(dossier['nom']), str(dossier['prenom']))
             logging.error("%s" % msg)
             continue
         date_accueil = _to_date(dossier['con_date'])
@@ -587,7 +587,7 @@ def import_dossiers_phase_1():
                 pass
 #                    print "La date d'inscription est differente du premier acte facture pour %s" % dossier['id']
             elif not date_inscription:
-                msg = "Pas de date d'inscription, on prend le premier acte pour %s - %s %s " % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+                msg = "Pas de date d'inscription, on prend le premier acte pour %s - %s %s " % (str(dossier['id']), str(dossier['nom']), str(dossier['prenom']))
                 logging.warn("%s" % msg)
                 date_inscription = real_date_inscription
 
@@ -596,10 +596,10 @@ def import_dossiers_phase_1():
 
         if date_clos :
             if not date_inscription:
-                msg = "Dossier clos sans avoir été inscrit : %s - %s %s " % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+                msg = "Dossier clos sans avoir été inscrit : %s - %s %s " % (str(dossier['id']), str(dossier['nom']), str(dossier['prenom']))
                 logging.info("%s" % msg)
             if date_inscription and date_clos < date_inscription:
-                msg = "Dossier %s - %s %s avec une date de clôture antérieure à la date d'inscription, on le clos sans inscription." % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+                msg = "Dossier %s - %s %s avec une date de clôture antérieure à la date d'inscription, on le clos sans inscription." % (str(dossier['id']), str(dossier['nom']), str(dossier['prenom']))
                 logging.error("%s" % msg)
                 date_inscription = None
 
@@ -679,7 +679,7 @@ def import_dossiers_phase_1():
                                     fss.append((status_traitement, act_date, None))
 
         if not fss:
-            msg = "Dossier %s - %s %s sans aucune date ni acte facturé, on le met en accueil aujourd'hui." % (dossier['id'], str(dossier['nom']), str(dossier['prenom']))
+            msg = "Dossier %s - %s %s sans aucune date ni acte facturé, on le met en accueil aujourd'hui." % (str(dossier['id']), str(dossier['nom']), str(dossier['prenom']))
             logging.error("%s" % msg)
             fss.append((status_accueil, datetime.today(), None))
         else:
@@ -696,7 +696,7 @@ def import_dossiers_phase_1():
                     try:
                         patient.set_state(status=status, author=creator, date_selected=date_selected, comment=comment)
                     except Exception, e:
-                        msg = "Dossier %s - %s %s, exception %s lors de l'ajout d'un état %s en date du %s" % (dossier['id'], str(dossier['nom']), str(dossier['prenom']), str(e), str(status), str(date_selected))
+                        msg = "Dossier %s - %s %s, exception %s lors de l'ajout d'un état %s en date du %s" % (str(dossier['id']), str(dossier['nom']), str(dossier['prenom']), str(e), str(status), str(date_selected))
                         logging.error("%s" % msg)
 
 
