@@ -85,20 +85,24 @@
           <td>{% if patient_record.object.pause %}F{% endif %}</td>
           <td>
               {% if patient_record.last_rdv %}
+              {% if patient_record.last_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
               {{ patient_record.last_rdv.start_datetime|date:"d/m/Y H:i" }}<br>
               {% for participant in patient_record.last_rdv.participants %}
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.last_rdv.act_type }}
+              {% if patient_record.last_rdv.is_absent %}</span>{% endif %}
               {% endif %}
           </td>
           <td>
               {% if patient_record.next_rdv %}
+              {% if patient_record.next_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
               {{ patient_record.next_rdv.start_datetime|date:"d/m/Y H:i" }}<br>
               {% for participant in patient_record.next_rdv.participants.all %}
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.next_rdv.act_type }}
+              {% if patient_record.next_rdv.is_absent %}</span>{% endif %}
               {% endif %}
           </td>
       </tr>
