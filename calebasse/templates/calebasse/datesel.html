@@ -7,4 +7,4 @@
    <a id="arrow" href="{% url url_name date=next_day service=service %}">»</a>&nbsp;
    <a id="arrow" href="{% url url_name date=next_month service=service %}">»»</a>
  </div>
- {% if date != today %}<a id="datesel-today-link" href="../{{today|date:"Y-m-d"}}/">Aujourd'hui<a/>{% endif %}
+ {% if date != today %}<a id="datesel-today-link" href="../{{today|date:"Y-m-d"}}/">Aujourd'hui</a>{% endif %}
