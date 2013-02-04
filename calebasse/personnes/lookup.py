@@ -8,4 +8,14 @@ class Worker(LookupChannel):
 
     def get_query(self,q,request):
         kwargs = { "%s__icontains" % self.search_field : q }
-        return self.model.objects.filter(enabled=True).filter(**kwargs).order_by(self.search_field)
+
+    def get_result(self, obj):
+        return self.format_item_display(obj)
+
+    def format_match(self, obj):
+        return self.format_item_display(obj)
+
+    def format_item_display(self,obj):
+        text = obj.last_name.upper() + ' ' + obj.first_name
+        return unicode(text)
+

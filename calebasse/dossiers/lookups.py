@@ -23,12 +23,21 @@ class PatientRecordLookup(LookupChannel):
         return qs
 
     def format_match(self,obj):
-        texte = obj.display_name
-        if obj.paper_id:
-            texte += u' (N° : ' + obj.paper_id + u')'
-        if obj.last_state:
-            texte += u' (Statut : %s)' % obj.last_state.status.name
         return self.format_item_display(texte)
+
+    def get_result(self, obj):
+        return self.format_item_display(obj)
+
+    def format_match(self, obj):
+        return self.format_item_display(obj)
+
+    def format_item_display(self,obj):
+        text = obj.last_name.upper() + ' ' + obj.first_name
+        if obj.paper_id:
+            text += u' (N° : ' + obj.paper_id + u')'
+        if obj.last_state:
+            text += u' (Statut : %s)' % obj.last_state.status.name
+        return unicode(text)
 
     def check_auth(self, request):
         if not request.user.is_authenticated():
