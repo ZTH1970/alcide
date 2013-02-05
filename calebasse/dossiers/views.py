@@ -25,6 +25,7 @@ from calebasse.dossiers.models import (PatientRecord, PatientContact,
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
+from calebasse.facturation.list_acts import list_acts_for_billing_CMPP_2_per_patient
 
 from calebasse.decorators import validator_only
 
@@ -326,6 +327,25 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
                         STATES_BTN_MAPPER['TRAITEMENT'],
                         STATES_BTN_MAPPER['ACCUEIL']]
+            ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
+            (acts_not_locked, days_not_locked, acts_not_valide,
+            acts_not_billable, acts_pause, acts_per_hc, acts_losts) = \
+                list_acts_for_billing_CMPP_2_per_patient(self.object,
+                    datetime.today(), self.service)
+            ctx['acts_losts'] = acts_losts
+            ctx['acts_pause'] = acts_pause
+            hcs_used = acts_per_hc.keys()
+            if not hcs_used:
+                ctx['hcs'] = [(hc, None) for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date')]
+            else:
+                ctx['hcs'] = []
+                for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date'):
+                    acts = None
+                    if hasattr(hc, 'cmpphealthcarediagnostic') and hc.cmpphealthcarediagnostic in hcs_used:
+                        acts = acts_per_hc[hc.cmpphealthcarediagnostic]
+                    elif hasattr(hc, 'cmpphealthcaretreatment') and hc.cmpphealthcaretreatment in hcs_used:
+                        acts = acts_per_hc[hc.cmpphealthcaretreatment]
+                    ctx['hcs'].append((hc, acts))
         elif ctx['object'].service.name == "CAMSP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
                 ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
@@ -370,8 +390,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             elif ctx['object'].last_state.status.type == "CLOS":
                 ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
                         STATES_BTN_MAPPER['TRAITEMENT']]
-        ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
-        ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
+            ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
         return ctx
 
     def form_valid(self, form):
