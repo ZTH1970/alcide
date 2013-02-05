@@ -270,15 +270,30 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
 
     </div>
 
-    <div id="tabs-4"> <!-- Prise en charge -->
-
+    <div id="tabs-4"> <!-- Prise en charge et notifications -->
     {% if object.service.name == "CMPP" %}
         <p>
         <button id="new-hcdiag-btn">Nouvelle PC diagnostic</button>
         <button id="new-hctrait-btn">Nouvelle PC traitement</button>
         </p>
+        {% if acts_losts %}
+            <p><strong>{{ acts_losts|length }}</strong> actes facturables qui ne peuvent pas être facturés :
+            <ul>
+            {% for act in acts_losts %}
+            <li>{{ act }}</li>
+            {% endfor %}
+            </ul></p>
+        {% endif %}
+        {% if acts_pause %}
+            <p><strong>{{ acts_pause|length }}</strong> actes qui sont en pause :
+            <ul>
+            {% for act in acts_pause %}
+            <li>{{ act }}</li>
+            {% endfor %}
+            </ul></p>
+        {% endif %}
         {% if hcs %}
-            {% for hc in hcs %}
+            {% for hc, acts in hcs %}
                 {% if hc.cmpphealthcarediagnostic %}
                   <div id="patient-diag">
                     <div class="frame">
@@ -286,11 +301,29 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         <button type="button" data-id="{{ hc.id }}" class="del-hcdiag icon-minus" title="Supprimer"></button>
                         <button type="button" data-id="{{ hc.id }}" class="update-hcdiag-btn icon-edit" title="Modifier"></button>
                     </div>
-                      <h3>En diagnostic depuis le {{ hc.start_date }}</h3>
+                      <h3>Prise en charge de diagnostic, débutée le {{ hc.start_date }}</h3>
                       <ul>
-                        <li><label>Actes prévus</label> : {{ hc.cmpphealthcarediagnostic.act_number }}</li>
+                        {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date }}</li>{% endif %}
+                        {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
+                        {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
-                        <li>{% if hc.get_nb_acts_cared %}<strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés.{% else %}Aucun acte facturé.{% endif %}</li>
+                        <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcarediagnostic.act_number }}</strong></li>
+                        {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être prise en charge lors de la prochaine facturation :</li>
+                        <ul>
+                          {% for act in acts %}
+                          <li>{{ act }}</li>
+                          {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% if hc.get_nb_acts_cared %}
+                        <li><strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés :</li>
+                        <ul>
+                          {% for act in hc.act_set.all %}
+                          <li>{{ act }}</li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}<li>Aucun acte facturé.</li>
+                        {% endif %}
                       </ul>
                     </div>
                   </div>
@@ -301,11 +334,30 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         <button type="button" data-id="{{ hc.id }}" class="del-hctrait icon-minus" title="Supprimer"></button>
                         <button type="button" data-id="{{ hc.id }}" class="update-hctrait-btn icon-edit" title="Modifier"></button>
                     </div>
-                      <h3>En traitement depuis le {{ hc.start_date }}{% if hc.end_date %} jusqu'au {{ hc.end_date }}{% endif %}</h3>
+                      <h3>Prise en charge de traitement, débutée le {{ hc.start_date }}{% if hc.end_date %}, se terminant le {{ hc.end_date }}{% endif %}</h3>
                       <ul>
-                        <li><label>Actes prévus</label> : {{ hc.cmpphealthcaretreatment.act_number }}</li>
+                        {% if hc.cmpphealthcaretreatment.end_date %}<li><label>Date de fin</label> : {{ hc.cmpphealthcaretreatment.end_date }}</li>{% endif %}
+                        {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date }}</li>{% endif %}
+                        {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
+                        {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
-                        <li>{% if hc.get_nb_acts_cared %}<strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés.{% else %}Aucun acte facturé.{% endif %}</li>
+                        <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcaretreatment.act_number }}</strong></li>
+                        {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être prise en charge lors de la prochaine facturation :</li>
+                        <ul>
+                          {% for act in acts %}
+                          <li>{{ act }}</li>
+                          {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% if hc.get_nb_acts_cared %}
+                        <li><strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés :</li>
+                        <ul>
+                          {% for act in hc.act_set.all %}
+                          <li>{{ act }}</li>
+                          {% endfor %}
+                        </ul>
+                        {% else %}<li>Aucun acte facturé.</li>
+                        {% endif %}
                       </ul>
                     </div>
                   </div>
@@ -314,130 +366,34 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
         {% endif %}
     {% endif %}
     {% if object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
+        <p>
         <button id="new-notification-btn">Nouvelle notification</button>
+        </p>
+        {% if hcs %}
+            {% for hc in hcs %}
+              <div id="patient-diag">
+                <div class="frame">
+                <div class="buttons">
+                    <button type="button" data-id="{{ hc.id }}" class="del-notification icon-minus" title="Supprimer"></button>
+                    <button type="button" data-id="{{ hc.id }}" class="update-notification-btn icon-edit" title="Modifier"></button>
+                </div>
+                  <h3>Notification</h3>
+                  <ul>
+                    {% if hc.start_date %}<li><label>Date de début</label> : {{ hc.start_date }}</li>{% endif %}
+                    {% if hc.sessadhealthcarenotification.end_date %}<li><label>Date de fin</label> : {{ hc.sessadhealthcarenotification.end_date }}</li>{% endif %}
+                    {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date }}</li>{% endif %}
+                    {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
+                    {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
+                    {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
+                  </ul>
+                </div>
+              </div>
+            {% endfor %}
+        {% endif %}
     {% endif %}
-
-
-<!--      <div id="patient-diag">-->
-<!--        <div class="frame">-->
-<!--          <h3>En diagnostic depuis le 11 juin 2012</h3>-->
-<!--          <ul>-->
-<!--            <li><input size="4" value="6"/> actes prévus</li>-->
-<!--            <li><strong>3</strong> actes réalisés dont <strong>2</strong> facturés <button class="blind">détails</button>-->
-<!--            <ul>-->
-<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>2</strong> actes-->
-<!--              <ul>-->
-<!--                <li>Accueil le 11 juin 2012 - 9h00 - 45 minutes - Bob Leponge</li>-->
-<!--                <li>Dialogue le 12 juin 2012 - 10h00 - 30 minutes - Bob Leponge</li>-->
-<!--              </ul></li>-->
-<!--              <li>Non facturé - <strong>1 acte</strong>-->
-<!--              <ul>-->
-<!--                <li>Dialogue le 13 juin 2012 - 11h00 - 45 minutes - Sandy Kilo</li>-->
-<!--              </ul></li>-->
-<!--            </ul>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--      <div id="patient-traitement">-->
-<!--        <div class="frame">-->
-<!--          <h3>En diagnostic depuis le 6 mars 2012</h3>-->
-<!--          <ul>-->
-<!--            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>-->
-<!--            <ul>-->
-<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes-->
-<!--              <ul>-->
-<!--                <li>...</li>-->
-<!--              </ul></li>-->
-<!--            </ul>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-
-<!--        <div class="frame">-->
-<!--          <h3>En traitement depuis le 11 juin 2012</h3>-->
-<!--          <ul>-->
-<!--            <li><strong>4</strong> actes réalisés <button class="blind">détails</button>-->
-<!--            <ul><li>...</li></ul>-->
-<!--            </li>-->
-<!--            <li>Pas de prise en charge - <button id="add-prise-en-charge-btn">Ajouter une prise en charge</button></li>-->
-<!--          </ul>-->
-<!--        </div>-->
-
-<!--      </div>-->
-
-<!--      <div id="patient-traitement-charge" style="display: none;">-->
-
-<!--        <div class="frame">-->
-<!--          <h3>En diagnostic depuis le 2 avril 2008</h3>-->
-<!--          <ul>-->
-<!--            <li><strong>3</strong> actes réalisés et facturés <button class="blind">détails</button>-->
-<!--            <ul>-->
-<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>3</strong> actes-->
-<!--              <ul>-->
-<!--                <li>...</li>-->
-<!--              </ul></li>-->
-<!--            </ul>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-
-<!--        <div class="frame">-->
-<!--          <h3>En diagnostic depuis le 5 octobre 2010</h3>-->
-<!--          <ul>-->
-<!--            <li><strong>6</strong> actes réalisés et facturés <button class="blind">détails</button>-->
-<!--            <ul>-->
-<!--              <li>Facturation <strong>28</strong> (assuré: Sophie Fonfec) - <strong>6</strong> actes-->
-<!--              <ul>-->
-<!--                <li>...</li>-->
-<!--              </ul></li>-->
-<!--            </ul>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-
-<!--        <div class="frame">-->
-<!--          <h3>En traitement depuis le 12 décembre 2010</h3>-->
-<!--          <ul>-->
-<!--            <li>Prise en charge depuis le 12 décembre 2010-->
-<!--            <ul>-->
-<!--              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>-->
-<!--              <ul><li>...</li></ul></li>-->
-<!--              <li><strong>10</strong> actes réalisés et facturés en prolongation <button class="blind">détails</button>-->
-<!--              <ul><li>...</li></ul></li>-->
-<!--              <li><strong>6</strong> actes réalisés et non pris en charge <button class="blind">détails</button>-->
-<!--              <ul><li>...</li></ul></li>-->
-<!--            </ul>-->
-<!--            </li>-->
-<!--            <li>Prise en charge depuis le 15 décembre 2011-->
-<!--            <ul>-->
-<!--              <li><strong>30</strong> actes réalisés et facturés <button class="blind">détails</button>-->
-<!--              <ul><li>...</li></ul></li>-->
-<!--              <li><strong>6</strong> actes réalisés non facturés <button class="blind">détails</button>-->
-<!--              <ul><li>...</li></ul></li>-->
-<!--              <li><button id="add-prolongation-btn">Ajouter une prolongation</button></li>-->
-<!--            </ul>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-
-
-<!--      </div>-->
-
-<!--      <div id="overlay">-->
-<!--       <p>-->
-<!--       Exemples pour cet onglet :-->
-<!--        <a href="#" onclick="$('#patient-diag').show(); $('#patient-traitement').hide(); $('#patient-traitement-charge').hide();">Patient en diagnostic</a>-->
-<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').show(); $('#patient-traitement-charge').hide();">Patient en traitement</a>-->
-<!--        <a href="#" onclick="$('#patient-diag').hide(); $('#patient-traitement').hide(); $('#patient-traitement-charge').show();">Patient en traitement avec prise en charge</a>-->
-<!--        </p>-->
-<!--      </div>-->
-
     </div>
 
     <div id="tabs-5"> <!-- Actes passés -->
-
     <table class="main">
       <thead>
           <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> </tr>
@@ -458,7 +414,6 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     </div>
 
     <div id="tabs-6"> <!-- Prochains rendez-vous -->
-
     <table class="main">
       <thead>
           <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> </tr>
