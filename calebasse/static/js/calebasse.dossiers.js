@@ -1,5 +1,8 @@
 function add_datepickers(that) {
   $('input#id_start_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  $('input#id_request_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  $('input#id_agree_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  $('input#id_insist_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
   $('input#id_end_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
   $('input#id_date_selected', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
