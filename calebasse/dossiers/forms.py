@@ -302,6 +302,7 @@ class SessadHealthCareNotificationForm(ModelForm):
     class Meta:
         model = SessadHealthCareNotification
         fields = ('start_date', 'end_date',
+                'request_date', 'agree_date', 'insist_date',
                 'comment', 'patient', 'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
