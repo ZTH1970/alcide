@@ -257,7 +257,8 @@ class PatientAddressForm(ModelForm):
 class CmppHealthCareTreatmentForm(ModelForm):
     class Meta:
         model = CmppHealthCareTreatment
-        fields = ('start_date', 'act_number',
+        fields = ('start_date', 'request_date',
+                'agree_date', 'insist_date', 'act_number',
                 'prolongation', 'comment', 'patient', 'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
@@ -267,10 +268,10 @@ class CmppHealthCareTreatmentForm(ModelForm):
 
     def clean(self):
         cleaned_data = super(CmppHealthCareTreatmentForm, self).clean()
-        if cleaned_data.get('act_number') < self.instance.get_nb_acts_cared():
+        if self.instance.pk and cleaned_data.get('act_number') < self.instance.get_nb_acts_cared():
             msg = u"Le nombre d'actes ne peut être inférieur au \
                 nombre d'actes déja pris en charge (%d)." \
-                    % self.get_nb_acts_cared()
+                    % self.instance.get_nb_acts_cared()
             self._errors["act_number"] = self.error_class([msg])
         return cleaned_data
 
@@ -278,7 +279,8 @@ class CmppHealthCareTreatmentForm(ModelForm):
 class CmppHealthCareDiagnosticForm(ModelForm):
     class Meta:
         model = CmppHealthCareDiagnostic
-        fields = ('start_date', 'act_number',
+        fields = ('start_date', 'request_date',
+                'agree_date', 'insist_date', 'act_number',
                 'comment', 'patient', 'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
@@ -288,10 +290,10 @@ class CmppHealthCareDiagnosticForm(ModelForm):
 
     def clean(self):
         cleaned_data = super(CmppHealthCareDiagnosticForm, self).clean()
-        if cleaned_data.get('act_number') < self.instance.get_nb_acts_cared():
+        if self.instance.pk and cleaned_data.get('act_number') < self.instance.get_nb_acts_cared():
             msg = u"Le nombre d'actes ne peut être inférieur au \
                 nombre d'actes déja pris en charge (%d)." \
-                    % self.get_nb_acts_cared()
+                    % self.instance.get_nb_acts_cared()
             self._errors["act_number"] = self.error_class([msg])
         return cleaned_data
 
@@ -368,4 +370,3 @@ class QuotationsForm(Form):
     date_actes_start = forms.DateField(label=u'Date', localize=True)
     date_actes_end = forms.DateField(label=u'Date', localize=True)
     without_quotations = forms.BooleanField()
-
