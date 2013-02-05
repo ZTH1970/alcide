@@ -326,6 +326,10 @@ class Act(models.Model):
         return '%02d:%02d' % (hours, remainder)
 
     def __unicode__(self):
+        if self.time:
+            return u'{0} le {1} à {2} pour {3} avec {4}'.format(
+                    self.act_type, self.date, self.time, self.patient,
+                    ', '.join(map(unicode, self.doctors.all())))
         return u'{0} le {1} pour {2} avec {3}'.format(
                 self.act_type, self.date, self.patient,
                 ', '.join(map(unicode, self.doctors.all())))
