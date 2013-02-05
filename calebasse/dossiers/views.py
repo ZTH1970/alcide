@@ -31,12 +31,12 @@ from calebasse.decorators import validator_only
 def get_next_rdv(patient_record):
     Q = models.Q
     today = date.today()
-    next_rdv = {}
-    event = Event.objects.next_appointment(patient_record)
-    if event:
-        next_rdv['start_datetime'] = event.start_datetime
-        next_rdv['participants'] = event.participants.all()
-        next_rdv['act_type'] = event.eventwithact.act_type
+#    next_rdv = {}
+#    event = Event.objects.next_appointment(patient_record)
+#    if event:
+#        next_rdv['start_datetime'] = event.start_datetime
+#        next_rdv['participants'] = event.participants.all()
+#        next_rdv['act_type'] = event.eventwithact.act_type
     qs = EventWithAct.objects.filter(patient=patient_record) \
                 .filter(exception_to__isnull=True, canceled=False) \
                 .filter(Q(start_datetime__gte=today) \
