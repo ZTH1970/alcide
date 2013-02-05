@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date, datetime
+
 from django.db import models
 from django.db.models import query
 from model_utils import Choices
@@ -498,3 +500,27 @@ class PatientRelatedLink(NamedAbstractModel):
     class Meta:
         verbose_name = u'Type de lien avec le patient (parenté)'
         verbose_name_plural = u'Types de lien avec le patient (parenté)'
+
+
+class PricePerAct(models.Model):
+    price = models.DecimalField(verbose_name=u"Tarif", max_digits=5, decimal_places=2)
+    start_date = models.DateField(verbose_name=u"Prise d'effet")
+
+    class Meta:
+        verbose_name = u"Tarif horaire de l'acte"
+        verbose_name_plural = u"Tarifs horaires de l'acte"
+
+    @classmethod
+    def get_price(cls, at_date=None):
+        if not at_date:
+            at_date = date.today()
+        if isinstance(at_date, datetime):
+            at_date = date(day=at_date.day, month=at_date.month,
+                year=at_date.year)
+        found = cls.objects.filter(start_date__lte = at_date).latest('start_date')
+        if not found:
+            raise Exception('No price to apply')
+        return found.price
+
+    def __unicode__(self):
+        return str(self.price) + ' (' + str(self.start_date) + ')'

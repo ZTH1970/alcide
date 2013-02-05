@@ -8,7 +8,7 @@ from django.db.models import Max
 
 from model_utils import Choices
 
-from calebasse.ressources.models import ServiceLinkedManager
+from calebasse.ressources.models import ServiceLinkedManager, PricePerAct
 
 import list_acts
 
@@ -67,20 +67,21 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
         invoice['ppa'] = PricePerAct.get_price(act.date)
         invoice['year'] = act.date.year
         invoice['acts'] = [(act, hc)]
-        for act, hc in acts[1:]:
-            if invoice['ppa'] != PricePerAct.get_price(act.date) or \
-                    invoice['year'] != act.date.year:
-                invoices[patient].append(invoice)
-                len_invoices = len_invoices + 1
-                len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
-                if not patient.pause:
-                    len_invoices_hors_pause = len_invoices_hors_pause + 1
-                    len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
-                invoice['ppa'] = PricePerAct.get_price(act.date)
-                invoice['year'] = act.date.year
-                invoice['acts'] = [(act, hc)]
-            else:
-                invoice['acts'].append((act, hc))
+        if len(acts) > 1:
+            for act, hc in acts[1:]:
+                if invoice['ppa'] != PricePerAct.get_price(act.date) or \
+                        invoice['year'] != act.date.year:
+                    invoices[patient].append(invoice)
+                    len_invoices = len_invoices + 1
+                    len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
+                    if not patient.pause:
+                        len_invoices_hors_pause = len_invoices_hors_pause + 1
+                        len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+                    invoice['ppa'] = PricePerAct.get_price(act.date)
+                    invoice['year'] = act.date.year
+                    invoice['acts'] = [(act, hc)]
+                else:
+                    invoice['acts'].append((act, hc))
         invoices[patient].append(invoice)
         len_invoices = len_invoices + 1
         len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
@@ -91,24 +92,31 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
         if not patient in invoices:
             invoices[patient] = []
         act, hc = acts[0]
-        invoice = {}
+        invoice = dict()
         invoice['ppa'] = PricePerAct.get_price(act.date)
         invoice['year'] = act.date.year
         invoice['acts'] = [(act, hc)]
-        for act, hc in acts[1:]:
-            if invoice['ppa'] != PricePerAct.get_price(act.date) or \
-                    invoice['year'] != act.date.year:
-                invoices[patient].append(invoice)
-                len_invoices = len_invoices + 1
-                len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
-                if not patient.pause:
-                    len_invoices_hors_pause = len_invoices_hors_pause + 1
-                    len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
-                invoice['price'] = PricePerAct.get_price(act.date)
-                invoice['year'] = act.date.year
-                invoice['acts'] = [(act, hc)]
-            else:
-                invoice['acts'].append((act, hc))
+        if len(acts) > 1:
+            for act, hc in acts[1:]:
+                if invoice['ppa'] != PricePerAct.get_price(act.date) or \
+                        invoice['year'] != act.date.year:
+                    print invoice['ppa']
+                    print PricePerAct.get_price(act.date)
+                    print invoice['year']
+                    print act.date.year
+                    invoices[patient].append(invoice)
+                    print invoice
+                    len_invoices = len_invoices + 1
+                    len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
+                    if not patient.pause:
+                        len_invoices_hors_pause = len_invoices_hors_pause + 1
+                        len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+                    invoice = dict()
+                    invoice['ppa'] = PricePerAct.get_price(act.date)
+                    invoice['year'] = act.date.year
+                    invoice['acts'] = [(act, hc)]
+                else:
+                    invoice['acts'].append((act, hc))
         invoices[patient].append(invoice)
         len_invoices = len_invoices + 1
         len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
@@ -462,54 +470,54 @@ class Invoicing(models.Model):
         return invoicing
 
 
-class PricePerAct(models.Model):
-    price = models.IntegerField()
-    start_date = models.DateField(
-            verbose_name=u"Prise d'effet",
-            default=date(day=5,month=1,year=1970))
-    end_date = models.DateField(
-            verbose_name=u"Fin d'effet",
-            blank=True,
-            null=True)
+#class PricePerAct(models.Model):
+#    price = models.IntegerField()
+#    start_date = models.DateField(
+#            verbose_name=u"Prise d'effet",
+#            default=date(day=5,month=1,year=1970))
+#    end_date = models.DateField(
+#            verbose_name=u"Fin d'effet",
+#            blank=True,
+#            null=True)
 
-    @classmethod
-    def get_price(cls, at_date=None):
-        if not at_date:
-            at_date = date.today()
-        if isinstance(at_date, datetime):
-            at_date = date(day=at_date.day, month=at_date.month,
-                year=at_date.year)
-        found = cls.objects.filter(start_date__lte = at_date).latest('start_date')
-        if not found:
-            raise Exception('No price to apply')
-        return found.price
+#    @classmethod
+#    def get_price(cls, at_date=None):
+#        if not at_date:
+#            at_date = date.today()
+#        if isinstance(at_date, datetime):
+#            at_date = date(day=at_date.day, month=at_date.month,
+#                year=at_date.year)
+#        found = cls.objects.filter(start_date__lte = at_date).latest('start_date')
+#        if not found:
+#            raise Exception('No price to apply')
+#        return found.price
 
-    def __unicode__(self):
-        val = str(self.price) + ' from ' + str(self.start_date)
-        if self.end_date:
-            val = val + ' to ' + str(self.end_date)
-        return val
+#    def __unicode__(self):
+#        val = str(self.price) + ' from ' + str(self.start_date)
+#        if self.end_date:
+#            val = val + ' to ' + str(self.end_date)
+#        return val
 
 
-def add_price(price, start_date=None):
-    price_o = None
-    ppas = PricePerAct.objects.all()
-    if ppas:
-        if not start_date:
-            raise Exception('A start date is mandatory to add a new Price')
-        last_ppa = PricePerAct.objects.latest('start_date')
-        if last_ppa.start_date >= start_date:
-            raise Exception('The new price cannot apply before the price that currently applies.')
-        if last_ppa.end_date and last_ppa.end_date != (start_date + relativedelta(days=-1)):
-            raise Exception('The new price should apply the day after the last price ends.')
-        last_ppa.end_date = start_date + relativedelta(days=-1)
-        last_ppa.save()
-    if not start_date:
-        price_o = PricePerAct(price=price)
-    else:
-        price_o = PricePerAct(price=price, start_date=start_date)
-    price_o.save()
-    return price_o
+#def add_price(price, start_date=None):
+#    price_o = None
+#    ppas = PricePerAct.objects.all()
+#    if ppas:
+#        if not start_date:
+#            raise Exception('A start date is mandatory to add a new Price')
+#        last_ppa = PricePerAct.objects.latest('start_date')
+#        if last_ppa.start_date >= start_date:
+#            raise Exception('The new price cannot apply before the price that currently applies.')
+#        if last_ppa.end_date and last_ppa.end_date != (start_date + relativedelta(days=-1)):
+#            raise Exception('The new price should apply the day after the last price ends.')
+#        last_ppa.end_date = start_date + relativedelta(days=-1)
+#        last_ppa.save()
+#    if not start_date:
+#        price_o = PricePerAct(price=price)
+#    else:
+#        price_o = PricePerAct(price=price, start_date=start_date)
+#    price_o.save()
+#    return price_o
 
 
 class Invoice(models.Model):
@@ -531,4 +539,4 @@ class Invoice(models.Model):
         super(Invoice, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return "Invoice n %d of %d euros for %d acts" % (self.number, self.amount, len(self.acts.all()))
+        return "Facture %d de %d euros (%d actes)" % (self.number, self.amount, len(self.acts.all()))
