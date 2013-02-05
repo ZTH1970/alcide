@@ -130,15 +130,17 @@ class SessadHealthCareNotification(HealthCare):
     class Meta:
         app_label = 'dossiers'
 
-    end_date = models.DateField()
+    end_date = models.DateField(verbose_name=u"Date de fin",
+        blank=True, null=True)
 
     def save(self, **kwargs):
         self.start_date = \
             datetime(self.start_date.year, self.start_date.month,
                 self.start_date.day)
-        self.end_date = \
-            datetime(self.end_date.year, self.end_date.month,
-                self.end_date.day)
+        if self.end_date:
+            self.end_date = \
+                datetime(self.end_date.year, self.end_date.month,
+                    self.end_date.day)
         super(SessadHealthCareNotification, self).save(**kwargs)
 
 reversion.register(CmppHealthCareDiagnostic, follow=['healthcare_ptr'])
