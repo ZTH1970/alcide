@@ -36,9 +36,9 @@ class HealthCare(models.Model):
         app_label = 'dossiers'
 
     start_date = models.DateField(verbose_name=u"Date de début")
-    request_date = models.DateField(verbose_name=u"Date de Demande",
+    request_date = models.DateField(verbose_name=u"Date de demande",
         blank=True, null=True)
-    agree_date = models.DateField(verbose_name=u"Date de d'accord",
+    agree_date = models.DateField(verbose_name=u"Date d'accord",
         blank=True, null=True)
     insist_date = models.DateField(verbose_name=u"Date de relance",
         blank=True, null=True)
@@ -121,7 +121,7 @@ class CmppHealthCareTreatment(HealthCare):
         self.end_date = self.start_date + \
             relativedelta(years=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_YEARS) + \
             relativedelta(months=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_MONTHS) + \
-            relativedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_DAYS)
+            relativedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_DAYS-1)
         super(CmppHealthCareTreatment, self).save(**kwargs)
 
 
