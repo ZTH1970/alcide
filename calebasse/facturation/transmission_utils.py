@@ -3,7 +3,7 @@
 import os
 import sys
 import ldap
-from M2Crypto import X509, SSL
+from M2Crypto import X509, SSL, Rand, SMIME, BIO
 from datetime import datetime
 import base64
 
@@ -54,6 +54,25 @@ def get_certificate(large_regime, dest_organism):
         return certificates[max(certificates)]
     return None
 
+def smime_payload(message, x509, randfile=None):
+    """
+    output s/mime message (headers+payload), encrypted with x509 certificate
+    """
+    if randfile:
+        Rand.load_file(randfile, -1)
+    s = SMIME.SMIME()
+    sk = X509.X509_Stack()
+    sk.push(x509)
+    s.set_x509_stack(sk)
+    s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
+    bio = BIO.MemoryBuffer(message)
+    pkcs7 = s.encrypt(bio)
+    print dir(pkcs7)
+    out = BIO.MemoryBuffer()
+    s.write(out, pkcs7)
+    if randfile:
+        Rand.save_file(randfile)
+    return out.read()
 
 def der2pem(der, type_='CERTIFICATE'):
     return "-----BEGIN %s-----\n%s\n-----END %s-----\n" % \
