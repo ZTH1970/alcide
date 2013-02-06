@@ -20,8 +20,6 @@ LDAP_CA_ATTRS = {
         'delta-crl': ('deltaRevocationList;binary', 'X509 CRL'),
     }
 
-CAPATH = '/var/lib/calebasse/gip-cps.capath/'
-
 RANDFILE = '/var/tmp/randpool.dat'
 
 MAILPATH = '/var/lib/calebasse/mail.out/'
@@ -64,7 +62,6 @@ def get_certificate(large_regime, dest_organism):
         now = datetime.utcnow().replace(tzinfo=None)
         if startdate >= now >= enddate:
             # TODO : add capath + crl validation
-            # CAPATH = '/tmp/gip-cps.capath/'
             # os.execute(openssl verify -CApath CAPATH -crl_check cert.pem)
             certificates[serial] = x509
     if certificates:
@@ -159,13 +156,11 @@ def build_capath(path):
                     fd.write(der2pem(der, LDAP_CA_ATTRS[attr][1]))
                     fd.close()
 
+#
+#
+#
+
 if __name__ == '__main__':
+    # stupid tests...
     build_mail('01','422','000....b2-power')
-    sys.exit(0)
-    if len(sys.argv) > 1:
-        capath = sys.argv[1]
-    else:
-        capath = CAPATH
-    print "get capath certificates in", capath
-    build_capath(capath)
 
