@@ -129,6 +129,7 @@ def build_mail(large_regime, dest_organism, b2, test=True):
         fd.write('%s: %s\n' % (k,v))
     fd.write(smime)
     fd.close()
+    return filename
 
 #
 # CApath construction
@@ -162,5 +163,5 @@ def build_capath(path):
 
 if __name__ == '__main__':
     # stupid tests...
-    build_mail('01','422','000....b2-power')
+    print build_mail('01','422','000....b2-power')
 
