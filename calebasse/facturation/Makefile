@@ -1,4 +1,4 @@
-CAPATH=/var/lib/calebasse/gie-cps.capath/
+CAPATH=/var/lib/calebasse/gip-cps.capath/
 
 capath:
 	mkdir -p $(CAPATH)
