@@ -334,8 +334,9 @@ class Event(models.Model):
                             occurrences.append(occurrence)
                     day += delta
             for exception in self.exceptions.all():
-                if exception.exception_date != exception.start_datetime.date():
-                    occurrences.append(exception.eventwithact if exception.event_type_id == 1 else exception)
+                if not exception.canceled:
+                    if exception.exception_date != exception.start_datetime.date() or exception.exception_date > end_date:
+                        occurrences.append(exception.eventwithact if exception.event_type_id == 1 else exception)
             return sorted(occurrences, key=lambda o: o.start_datetime)
         else:
             return [self]
