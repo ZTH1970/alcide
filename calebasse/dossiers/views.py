@@ -32,18 +32,9 @@ from calebasse.decorators import validator_only
 def get_next_rdv(patient_record):
     Q = models.Q
     today = date.today()
-#    next_rdv = {}
-#    event = Event.objects.next_appointment(patient_record)
-#    if event:
-#        next_rdv['start_datetime'] = event.start_datetime
-#        next_rdv['participants'] = event.participants.all()
-#        next_rdv['act_type'] = event.eventwithact.act_type
     qs = EventWithAct.objects.filter(patient=patient_record) \
-                .filter(exception_to__isnull=True, canceled=False) \
-                .filter(Q(start_datetime__gte=today) \
-                | ( Q(recurrence_periodicity__isnull=False) \
-                & (Q(recurrence_end_date__gte=today) \
-                | Q(recurrence_end_date__isnull=True)))) \
+                .filter(canceled=False) \
+                .filter(Q(start_datetime__gte=today)) \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions__eventwithact')
     occurrences = []
@@ -273,10 +264,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         today = date.today()
         qs = EventWithAct.objects.filter(patient=ctx['object']) \
                 .filter(exception_to__isnull=True, canceled=False) \
-                .filter(Q(start_datetime__gte=today)
-                        | ( Q(recurrence_periodicity__isnull=False)
-                            & (Q(recurrence_end_date__gte=today)
-                               | Q(recurrence_end_date__isnull=True)))) \
+                .filter(Q(start_datetime__gte=today) | Q(recurrence_periodicity__isnull=False)) \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions__eventwithact', 'act_set__actvalidationstate_set')
         occurrences = []
