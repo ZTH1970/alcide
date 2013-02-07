@@ -235,15 +235,15 @@ class Invoicing(models.Model):
                     acts_not_billable.keys() + acts_diagnostic.keys() + acts_treatment.keys() + \
                     acts_losts.keys() + acts_pause.keys())
 
-                patients_stats = {}
+                patients_stats = []
                 len_patient_with_lost_acts = 0
                 len_acts_lost = 0
                 len_patient_acts_paused = 0
                 len_acts_paused = 0
                 for patient in patients:
-                    patients_stats[patient] = {}
+                    dic = {}
                     if patient in invoices.keys():
-                        patients_stats[patient]['invoices'] = invoices[patient]
+                        dic['invoices'] = invoices[patient]
                         if commit and not patient.pause:
                             for invoice in invoices[patient]:
                                 ppa = invoice['ppa']
@@ -262,16 +262,17 @@ class Invoicing(models.Model):
                             pass
                     if patient in acts_losts.keys():
                         # TODO: More details about healthcare
-                        patients_stats[patient]['losts'] = acts_losts[patient]
+                        dic['losts'] = acts_losts[patient]
                         len_patient_with_lost_acts = len_patient_with_lost_acts + 1
                         len_acts_lost = len_acts_lost + len(acts_losts[patient])
                     if patient in acts_pause.keys():
-                        patients_stats[patient]['acts_paused'] = acts_pause[patient]
+                        dic['acts_paused'] = acts_pause[patient]
                         len_patient_acts_paused = len_patient_acts_paused + 1
                         len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                    patients_stats.append((patient, dic))
+                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
 
-
-                len_patients = len(patients_stats.keys())
+                len_patients = len(patients_stats)
 
                 if commit:
                     self.status = Invoicing.STATUS.validated
@@ -296,6 +297,8 @@ class Invoicing(models.Model):
                         patients_stats[invoice.patient]['invoices'] = [invoice]
                     else:
                         patients_stats[invoice.patient]['invoices'].append(invoice)
+                patients_stats = [(p, d) in patients_stats.items()]
+                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 # all patients in the invoicing are invoiced
                 len_patient_invoiced = 0
                 # These stats are not necessary because excluded form the validated invoicing
@@ -324,12 +327,12 @@ class Invoicing(models.Model):
                 len_patient_acts_paused = 0
                 len_acts_paused = 0
                 patients = set(acts_accepted.keys() + acts_pause.keys())
-                patients_stats = {}
+                patients_stats = []
                 for patient in patients:
-                    patients_stats[patient] = {}
+                    dic = {}
                     if patient in acts_accepted.keys():
                         acts = acts_accepted[patient]
-                        patients_stats[patient]['accepted'] = acts
+                        dic['accepted'] = acts
                         if patient.pause:
                             len_patient_pause = len_patient_pause + 1
                             len_acts_pause = len_acts_pause + len(acts)
@@ -340,9 +343,11 @@ class Invoicing(models.Model):
                                 for act in acts:
                                     self.acts.add(act)
                     if patient in acts_pause.keys():
-                        patients_stats[patient]['acts_paused'] = acts_pause[patient]
+                        dic['acts_paused'] = acts_pause[patient]
                         len_patient_acts_paused = len_patient_acts_paused + 1
                         len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                    patients_stats.append((patient, dic))
+                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 if commit:
                     self.status = Invoicing.STATUS.validated
                     self.save()
@@ -364,6 +369,8 @@ class Invoicing(models.Model):
                         len_acts_hors_pause = len_acts_hors_pause + 1
                         patients_stats[act.patient] = {}
                         patients_stats[act.patient]['accepted'] = [act]
+                patients_stats = [(p, d) in patients_stats.items()]
+                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,
                 days_not_locked, len_patient_acts_paused,
@@ -384,12 +391,12 @@ class Invoicing(models.Model):
                 len_patient_missing_notif = 0
                 len_acts_missing_notif = 0
                 patients = set(acts_accepted.keys() + acts_pause.keys())
-                patients_stats = {}
+                patients_stats = []
                 for patient in patients:
-                    patients_stats[patient] = {}
+                    dic = {}
                     if patient in acts_accepted.keys():
                         acts = acts_accepted[patient]
-                        patients_stats[patient]['accepted'] = acts
+                        dic['accepted'] = acts
                         if patient.pause:
                             len_patient_pause = len_patient_pause + 1
                             len_acts_pause = len_acts_pause + len(acts)
@@ -401,18 +408,20 @@ class Invoicing(models.Model):
                                     self.acts.add(act)
                     if patient in acts_missing_valid_notification.keys():
                         acts = acts_missing_valid_notification[patient]
-                        patients_stats[patient]['missings'] = acts
+                        dic['missings'] = acts
                         len_patient_missing_notif = len_patient_missing_notif + 1
                         len_acts_missing_notif = len_acts_missing_notif + len(acts)
-                        if not 'accepted' in patients_stats[patient]:
+                        if not 'accepted' in dic:
                             len_patient_hors_pause = len_patient_hors_pause + 1
                         if commit:
                             for act in acts:
                                 self.acts.add(act)
                     if patient in acts_pause.keys():
-                        patients_stats[patient]['acts_paused'] = acts_pause[patient]
+                        dic['acts_paused'] = acts_pause[patient]
                         len_patient_acts_paused = len_patient_acts_paused + 1
                         len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                    patients_stats.append((patient, dic))
+                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 len_acts_hors_pause = len_acts_hors_pause + len_acts_missing_notif
                 if commit:
                     self.status = Invoicing.STATUS.validated
@@ -437,6 +446,8 @@ class Invoicing(models.Model):
                         len_acts_hors_pause = len_acts_hors_pause + 1
                         patients_stats[act.patient] = {}
                         patients_stats[act.patient]['accepted'] = [act]
+                patients_stats = [(p, d) in patients_stats.items()]
+                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,

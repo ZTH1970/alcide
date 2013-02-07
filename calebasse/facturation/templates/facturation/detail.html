@@ -231,7 +231,7 @@
          avec des actes facturables mais non prise en charge.</label></input>
         </p>
         <div id="dossiers-concernes">
-        {% for patient, detail in patients_stats.items %}
+        {% for patient, detail in patients_stats %}
             {% if patient.pause or "losts" in detail.keys or "acts_paused" in detail.keys %}
              <div class="frame dossier facturable">
             {% else %}
@@ -286,7 +286,7 @@
         </div>
         {% else %}
         <div id="dossiers-concernes">
-        {% for patient, detail in patients_stats.items %}
+        {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
@@ -325,7 +325,7 @@
              <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou avec un acte en pause.</label></input>
             </p>
         <div id="dossiers-concernes">
-        {% for patient, detail in patients_stats.items %}
+        {% for patient, detail in patients_stats %}
             {% if patient.pause or "acts_paused" in detail.keys %}
              <div class="frame dossier facturable">
             {% else %}
@@ -364,7 +364,7 @@
         </div>
         {% else %}
         <div id="dossiers-concernes">
-        {% for patient, detail in patients_stats.items %}
+        {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
                 <h3><a href="../../dossiers/{{ patient.pk }}/view">
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
@@ -398,7 +398,7 @@
              <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou avec un acte en pause.</label></input>
             </p>
         <div id="dossiers-concernes">
-        {% for patient, detail in patients_stats.items %}
+        {% for patient, detail in patients_stats %}
             {% if patient.pause or "acts_paused" in detail.keys %}
              <div class="frame dossier facturable">
             {% else %}
@@ -446,7 +446,7 @@
         </div>
         {% else %}
         <div id="dossiers-concernes">
-        {% for patient, detail in patients_stats.items %}
+        {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
                 <h3><a href="../../dossiers/{{ patient.pk }}/view">
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
