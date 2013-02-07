@@ -96,7 +96,7 @@ def smime_payload(message, x509, randfile=RANDFILE):
 
 def build_mail(large_regime, dest_organism, b2, test=True):
     """
-    build a mail to healt center, with b2-encrypted information
+    build a mail to healt center, with b2-compressed+encrypted information
     """
     now = datetime.utcnow().strftime('%Y%m%d%H%M%S')
     n = 0
@@ -110,7 +110,7 @@ def build_mail(large_regime, dest_organism, b2, test=True):
         raise Exception('too much mails with prefix %s in %s' % (now, MAILPATH))
     # count invoice in the b2 file = lines start with "5"
     nb_invoices = len(re.findall('^5', b2, re.MULTILINE))
-    subject = 'CP%s/%s/%s/%0.5d' % (VVVVVV, EXERCICE, message_id, nb_invoices)
+    subject = 'IR%s/%s/%s/%0.5d' % (VVVVVV, EXERCICE, message_id, nb_invoices)
     mail = {
             'From': SENDER,
             'To': large_regime + dest_organism + '@' + dest_organism + '.' + large_regime + '.rss.fr',
@@ -118,9 +118,9 @@ def build_mail(large_regime, dest_organism, b2, test=True):
             'Subject': subject,
             }
     if test:
-        mail['Content-Description'] = 'CPTEST/B2/Z'
+        mail['Content-Description'] = 'IRISTEST/B2/Z'
     else:
-        mail['Content-Description'] = 'CP/B2/Z'
+        mail['Content-Description'] = 'IRIS/B2/Z'
     x509 = get_certificate(large_regime, dest_organism)
     smime = smime_payload(b2, x509)
 
