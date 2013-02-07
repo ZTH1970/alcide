@@ -90,7 +90,7 @@ def get_certificate(large_regime, dest_organism):
 # IRIS/B2 mail construction
 #
 
-def smime_payload(message, x509, randfile=RANDFILE):
+def smime_payload(message, x509):
     """
     output s/mime message (headers+payload), compressed & encrypted with x509 certificate
     """
@@ -99,21 +99,25 @@ def smime_payload(message, x509, randfile=RANDFILE):
         zmessage = zlib.compress(message)
     else:
         zmessage = message
-    # encrypt
-    if randfile:
-        Rand.load_file(randfile, -1)
-    s = SMIME.SMIME()
-    sk = X509.X509_Stack()
-    sk.push(x509)
-    s.set_x509_stack(sk)
-    s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
-    bio = BIO.MemoryBuffer(zmessage)
-    pkcs7 = s.encrypt(bio)
-    out = BIO.MemoryBuffer()
-    s.write(out, pkcs7)
-    if randfile:
-        Rand.save_file(randfile)
-    return out.read()
+    if MODE_ENCRYPT:
+        # encrypt
+        if RANDFILE:
+            Rand.load_file(RANDFILE, -1)
+        s = SMIME.SMIME()
+        sk = X509.X509_Stack()
+        sk.push(x509)
+        s.set_x509_stack(sk)
+        s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
+        bio = BIO.MemoryBuffer(zmessage)
+        pkcs7 = s.encrypt(bio)
+        out = BIO.MemoryBuffer()
+        s.write(out, pkcs7)
+        if RANDFILE:
+            Rand.save_file(RANDFILE)
+        return out.read()
+    else:
+        # FIXME
+        raise NotImplementedError('MODE_ENCRYPT=False is not implemented')
 
 def build_mail(large_regime, dest_organism, b2):
     """
@@ -187,6 +191,14 @@ def build_capath(path=CAPATH):
 #
 
 if __name__ == '__main__':
+    action = sys.argv[1]
+    if action == 'build_capath':
+        build_capath()
+    if action == 'x509':
+        x509 = get_certificate(sys.argv[2], sys.argv[3])
+        print x509.as_text()
+        print x509.as_pem()
     # stupid tests...
-    print build_mail('01','422','000....b2-power')
+    # print build_mail('01','996','000....b2-power')
+    # print build_mail('01','997','000....b2-power')
 
