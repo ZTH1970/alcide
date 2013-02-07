@@ -122,39 +122,8 @@ function enable_events(base) {
           });
         return false;
       });
-      $(base).on('click', '.update-periodic-rdv', function () {
-        var id = $(this).data('id');
-        var delete_url = $(this).data('delete-url');
-        $('.ui-dialog-content').dialog('destroy');
-        $('.ui-dialog-content').empty();
-        generic_ajaxform_dialog('update-periodic-rdv/' + id,
-          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-            var buttons = $(dialog).dialog('option', 'buttons');
-            buttons.push({
-              text: "Supprimer",
-              id: "delete-btn", 
-              click: function () {
-                var r = delete_prompt("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
-                if (r == true)
-                {
-                  $.ajax({
-                    url: delete_url,
-                    type: 'DELETE',
-                    success: function(data) {
-                        window.location.reload(true);
-                        return false;
-                    }
-                  });
-                }
-              }
-            });
-            $(dialog).dialog('option', 'buttons', buttons);
-          }
-        );
-      });
       $(base).on('click', '.update-periodic-event', function () {
+        $('.ui-icon-closethick').click();
         var id = $(this).data('id');
         var delete_url = $(this).data('delete-url');
         $('.ui-dialog-content').dialog('destroy');
