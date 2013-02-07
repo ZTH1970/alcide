@@ -10,8 +10,21 @@ import zlib
 import ldap
 from M2Crypto import X509, SSL, Rand, SMIME, BIO
 
+
+MODE_TEST = True
+MODE_COMPRESS = True
+MODE_ENCRYPT = True
+
 LDAP_HOST = 'ldap://annuaire.gip-cps.fr'
-LDAP_BASEDN = 'o=gip-cps,c=fr'
+
+if MODE_TEST:
+    LDAP_BASEDN = 'o=gip-cps-test,c=fr'
+    CAPATH = '/var/lib/calebasse/test-gip-cps.capath/'
+else:
+    # production
+    LDAP_BASEDN = 'o=gip-cps,c=fr'
+    CAPATH = '/var/lib/calebasse/gip-cps.capath/'
+
 LDAP_BASEDN_RSS = 'ou=339172288100045,l=Sarthe (72),' + LDAP_BASEDN
 LDAP_X509_ATTR = 'userCertificate;binary'
 LDAP_CA_ATTRS = {
@@ -22,9 +35,14 @@ LDAP_CA_ATTRS = {
 
 RANDFILE = '/var/tmp/randpool.dat'
 
-MAILPATH = '/var/lib/calebasse/mail.out/'
+if MODE_TEST:
+    MAILPATH = '/var/lib/calebasse/test-mail.out/'
+    MESSAGE_ID_RIGHT = 'teletransmission-test.aps42.org'
+else:
+    # production
+    MAILPATH = '/var/lib/calebasse/mail.out/'
+    MESSAGE_ID_RIGHT = 'teletransmission.aps42.org'
 SENDER = 'teletransmission@aps42.org'
-MESSAGE_ID_RIGHT = 'teletransmission.aps42.org'
 VVVVVV = '100500'  # ETS-DT-001-TransportsFlux_SpecsTechCommune_v1.1.pdf
 NUMERO_EMETTEUR = '00000420788606'
 EXERCICE = NUMERO_EMETTEUR
@@ -77,7 +95,10 @@ def smime_payload(message, x509, randfile=RANDFILE):
     output s/mime message (headers+payload), compressed & encrypted with x509 certificate
     """
     # compress
-    zmessage = zlib.compress(message)
+    if MODE_COMPRESS:
+        zmessage = zlib.compress(message)
+    else:
+        zmessage = message
     # encrypt
     if randfile:
         Rand.load_file(randfile, -1)
@@ -94,7 +115,7 @@ def smime_payload(message, x509, randfile=RANDFILE):
         Rand.save_file(randfile)
     return out.read()
 
-def build_mail(large_regime, dest_organism, b2, test=True):
+def build_mail(large_regime, dest_organism, b2):
     """
     build a mail to healt center, with b2-compressed+encrypted information
     """
@@ -117,10 +138,12 @@ def build_mail(large_regime, dest_organism, b2, test=True):
             'Message-ID': '<%s@%s>' % (message_id, MESSAGE_ID_RIGHT),
             'Subject': subject,
             }
-    if test:
-        mail['Content-Description'] = 'IRISTEST/B2/Z'
+    if MODE_TEST:
+        mail['Content-Description'] = 'IRISTEST/B2'
     else:
-        mail['Content-Description'] = 'IRIS/B2/Z'
+        mail['Content-Description'] = 'IRIS/B2'
+    if MODE_COMPRESS:
+        mail['Content-Description'] += '/Z'
     x509 = get_certificate(large_regime, dest_organism)
     smime = smime_payload(b2, x509)
 
@@ -139,7 +162,7 @@ def der2pem(der, type_='CERTIFICATE'):
     return "-----BEGIN %s-----\n%s\n-----END %s-----\n" % \
         (type_, base64.encodestring(der).rstrip(), type_)
 
-def build_capath(path):
+def build_capath(path=CAPATH):
     """
     get all pkiCA from the gip-cps.fr ldap, store them in path
     note: the gip-cps.fr ldap is limited to 10 objects in a response... by chance, there is less than 10 pkiCA ;)
@@ -150,12 +173,14 @@ def build_capath(path):
         dn = ca[0]
         for attr in LDAP_CA_ATTRS:
             if LDAP_CA_ATTRS[attr][0] in ca[1]:
+                n = 0
                 for der in ca[1][LDAP_CA_ATTRS[attr][0]]:
-                    filename = os.path.join(path, '%s.%s.pem' % (dn,attr))
+                    filename = os.path.join(path, '%s.%d.%s.pem' % (dn, n, attr))
                     print "create ", filename
                     fd = open(filename, 'w')
                     fd.write(der2pem(der, LDAP_CA_ATTRS[attr][1]))
                     fd.close()
+                    n += 1
 
 #
 #
