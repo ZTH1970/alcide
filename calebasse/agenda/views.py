@@ -258,10 +258,18 @@ class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
     cookies_to_clear = []
 
     def delete(self, request, *args, **kwargs):
-        super(DeleteOccurrenceView, self).delete(request, *args, **kwargs)
+        self.object = self.get_object()
+        if self.object.event_type == 1 and self.object.act.id \
+                and not self.object.act.is_billed:
+            self.object.act.delete()
+        self.object.delete()
+
         return HttpResponse(status=204)
 
 class DeleteEventView(cbv.DeleteView):
+    """
+    TODO: Remove this class
+    """
     model = Event
     success_url = '..'
     cookies_to_clear = []
