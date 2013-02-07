@@ -33,10 +33,16 @@ def get_next_rdv(patient_record):
     Q = models.Q
     today = date.today()
     qs = EventWithAct.objects.filter(patient=patient_record) \
-                .filter(canceled=False) \
-                .filter(Q(start_datetime__gte=today)) \
-                .select_related() \
-                .prefetch_related('participants', 'exceptions__eventwithact')
+            .filter(exception_to__isnull=True, canceled=False) \
+            .filter(Q(start_datetime__gte=today) \
+            |  Q(exceptions__isnull=False) \
+            | ( Q(recurrence_periodicity__isnull=False) \
+            & (Q(recurrence_end_date__gte=today) \
+            | Q(recurrence_end_date__isnull=True) \
+            ))) \
+            .distinct() \
+            .select_related() \
+            .prefetch_related('participants', 'exceptions__eventwithact')
     occurrences = []
     for event in qs:
         occurrences.extend(filter(lambda e: e.start_datetime.date() >= today, event.all_occurences(limit=180)))
@@ -264,7 +270,13 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         today = date.today()
         qs = EventWithAct.objects.filter(patient=ctx['object']) \
                 .filter(exception_to__isnull=True, canceled=False) \
-                .filter(Q(start_datetime__gte=today) | Q(recurrence_periodicity__isnull=False)) \
+                .filter(Q(start_datetime__gte=today) \
+                |  Q(exceptions__isnull=False) \
+                | ( Q(recurrence_periodicity__isnull=False) \
+                & (Q(recurrence_end_date__gte=today) \
+                | Q(recurrence_end_date__isnull=True) \
+                ))) \
+                .distinct() \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions__eventwithact', 'act_set__actvalidationstate_set')
         occurrences = []
