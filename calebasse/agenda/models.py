@@ -370,15 +370,13 @@ class Event(models.Model):
         if acts:
             eventwithact = self.eventwithact
             for act in acts:
-                if act.is_new():
-                    if self.match_date(act.date):
-                        if self.canceled:
-                            act.delete()
-                        else:
-                            occurrence = eventwithact.today_occurrence(act.date)
-                            occurrence.update_act(act)
-                    else:
-                        act.delete()
+                if act.is_billed:
+                    pass
+                occurrence = eventwithact.today_occurrence(act.date)
+                if occurrence:
+                    occurrence.update_act(act)
+                else:
+                    act.delete()
 
     def to_interval(self):
         return Interval(self.start_datetime, self.end_datetime)
