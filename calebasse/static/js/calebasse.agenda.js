@@ -349,6 +349,7 @@ function event_dialog(url, title, width, btn_text) {
                   }); */
                   var old_background_image, old_background_repeat, $button;
                   var in_submit = false;
+                  $('#rdv').unbind('submit');
                   $("#rdv").submit(function(event) {
                       /* stop form from submitting normally */
                       event.preventDefault();
