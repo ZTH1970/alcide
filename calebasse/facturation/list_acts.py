@@ -323,11 +323,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                 nb_acts_cared = len_acts_cared_diag + count_hcd
                 # Ne doit pas dépasser la limite de prise en charge du hc
                 if nb_acts_cared < hcd.get_act_number() :
-                    if act.patient in acts_diagnostic:
-                        acts_diagnostic[patient]. \
-                            append((act, hcd))
-                    else:
-                        acts_diagnostic[patient] = [(act, hcd)]
+                    acts_diagnostic.setdefault(patient, []).append((act, hcd))
                     count_hcd = count_hcd + 1
                     cared = True
             # The one before the last may be not full.
@@ -335,29 +331,16 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                 # Ce qui seraient prise en charge
                 # ne doit pas dépasser la limite de prise en charge du hc
                 if count_hct_1 < hcts[1].get_act_number() - hcts[1].get_nb_acts_cared():
-                    if act.patient in acts_treatment:
-                        acts_treatment[patient]. \
-                            append((act, hcts[1]))
-                    else:
-                        acts_treatment[patient] = [(act, hcts[1])]
+                    acts_treatment.setdefault(patient, []).append((act, hcts[1]))
                     count_hct_1 = count_hct_1 + 1
                     cared = True
             if not cared and len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
                 if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
-                    if act.patient in acts_treatment:
-                        acts_treatment[patient]. \
-                            append((act, hcts[0]))
-                    else:
-                        acts_treatment[patient] = [(act, hcts[0])]
+                    acts_treatment.setdefault(patient, []).append((act, hcts[0]))
                     count_hct_2 = count_hct_2 + 1
                     cared = True
             if not cared:
-                if act.patient in acts_losts:
-                    acts_losts[patient]. \
-                        append(act)
-                else:
-                    # TODO: give details about rejection
-                    acts_losts[act.patient] = [act]
+                acts_losts.setdefault(patient, []).append(act)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_diagnostic,
         acts_treatment, acts_losts)
