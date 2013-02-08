@@ -276,6 +276,7 @@ class Event(models.Model):
                 self.exceptions_dict[event.start_datetime.date()] = event
             event.services = old_services
             event.participants = old_participants
+            event.save = old_save
         event.save = save
         return event
 
