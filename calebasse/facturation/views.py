@@ -55,7 +55,8 @@ class FacturationDetailView(UpdateView):
             len_patient_invoiced, len_patient_invoiced_hors_pause,
             len_acts_lost, len_patient_with_lost_acts,
             patients_stats, days_not_locked, len_patient_acts_paused,
-                len_acts_paused) = \
+                len_acts_paused, len_acts_lost_missing_policy,
+                len_patient_with_lost_acts_missing_policy) = \
             context['invoicing'].get_stats_or_validate()
             context['len_patients'] = len_patients
             context['len_invoices'] = len_invoices
@@ -73,6 +74,8 @@ class FacturationDetailView(UpdateView):
             context['days_not_locked'] = days_not_locked
             context['len_patient_acts_paused'] = len_patient_acts_paused
             context['len_acts_paused'] = len_acts_paused
+            context['len_acts_lost_missing_policy'] = len_acts_lost_missing_policy
+            context['len_patient_with_lost_acts_missing_policy'] = len_patient_with_lost_acts_missing_policy
         elif self.service.name == 'CAMSP':
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,

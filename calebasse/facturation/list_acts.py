@@ -283,7 +283,13 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
     acts_diagnostic = {}
     acts_treatment = {}
     acts_losts = {}
+    acts_losts_missing_policy = {}
     for patient, acts in acts_billable.items():
+        if not patient.policyholder or \
+                not patient.policyholder.health_center or \
+                not patient.policyholder.social_security_id:
+            acts_losts_missing_policy[patient] = acts
+            continue
         # Date de début de la prise en charge ayant servis au dernier acte facturé
         lasts_billed = Act.objects.filter(patient=patient, is_billed = True, healthcare__isnull=False).order_by('-date')
         last_hc_date = None
@@ -343,7 +349,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                 acts_losts.setdefault(patient, []).append(act)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_diagnostic,
-        acts_treatment, acts_losts)
+        acts_treatment, acts_losts, acts_losts_missing_policy)
 
 def list_acts_for_billing_CMPP_2_per_patient(patient, end_day, service, acts=None):
 
