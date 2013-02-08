@@ -78,7 +78,7 @@
       {{ forms.general.confidential.label_tag }} : {{ forms.general.confidential }}
       <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
       {{ forms.general.pause.label_tag }} : {{ forms.general.pause }}
-      <!-- 3/6 diagnostics -->
+
     </div>
   </form>
 
@@ -86,6 +86,12 @@
 <!--      <button>Créer répertoire patient</button>-->
 <!--    </form>-->
 
+    {% if object.service.name == "CMPP" %}
+    <div class="notifs">
+    <h4>Information sur la prise en charge</h4>
+    <p{% if hc_status.1 %} id="highlight"{% endif %}>{{ hc_status.0 }}</p>
+    </div>
+    {% endif %}
   <!-- <div class="notifs">
     <h4>Notifications</h4>
     <ul>

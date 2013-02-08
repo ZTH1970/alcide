@@ -272,6 +272,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
 
     <div id="tabs-4"> <!-- Prise en charge et notifications -->
     {% if object.service.name == "CMPP" %}
+        <div class="notifs">
+        <h4>Information sur la prise en charge</h4>
+        <p{% if hc_status.1 %} id="highlight"{% endif %}>{{ hc_status.0 }}</p>
+        </div>
         <p>
         <button id="new-hcdiag-btn">Nouvelle PC diagnostic</button>
         <button id="new-hctrait-btn">Nouvelle PC traitement</button>
