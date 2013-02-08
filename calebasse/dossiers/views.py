@@ -301,6 +301,38 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['last_rdv'] = get_last_rdv(ctx['object'])
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
+            ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
+            status = self.object.get_healthcare_status()
+            highlight = False
+            if status[0] == -1:
+                status = 'Indéterminé.'
+                highlight = True
+            elif status[0] == 0:
+                status = "Prise en charge de diagnostic en cours."
+            elif status[0] == 1:
+                status = 'Patient jamais pris en charge.'
+            elif status[0] == 2:
+                status = "Prise en charge de diagnostic complète, faire une demande de prise en charge de traitement."
+                highlight = True
+            elif status[0] == 3:
+                if ctx['can_rediag']:
+                    status = "Prise en charge de traitement expirée. Patient élligible en rediagnostic."
+                    highlight = True
+                else:
+                    status = "Prise en charge de traitement expirée. Demander un renouvellement."
+                    highlight = True
+            elif status[0] == 4:
+                status = "Il existe une prise en charge de traitement mais qui ne prendra effet que le %s." % str(status[1])
+            elif status[0] == 5:
+                status = "Prise en charge de traitement en cours."
+            elif status[0] == 6:
+                status = "Prise en charge de traitement complète mais qui peut être prolongée."
+                highlight = True
+            elif status[0] == 7:
+                status = "Prise en charge de traitement déjà prolongée complète se terminant le %s." % str(status[2])
+            else:
+                status = 'Statut inconnu.'
+            ctx['hc_status'] = (status, highlight)
             if ctx['object'].last_state.status.type == "ACCUEIL":
                 # Inscription automatique au premier acte facturable valide
                 ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
@@ -327,7 +359,6 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
                         STATES_BTN_MAPPER['TRAITEMENT'],
                         STATES_BTN_MAPPER['ACCUEIL']]
-            ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
             (acts_not_locked, days_not_locked, acts_not_valide,
             acts_not_billable, acts_pause, acts_per_hc, acts_losts) = \
                 list_acts_for_billing_CMPP_2_per_patient(self.object,
