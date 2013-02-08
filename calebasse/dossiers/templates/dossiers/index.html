@@ -91,7 +91,7 @@
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.last_rdv.act_type }}
-              {% if patient_record.last_rdv.is_absent %}</span>{% endif %}
+              {% if patient_record.last_rdv.is_absent %} ({{ patient_record.last_rdv.act_state }})</span>{% endif %}
               {% endif %}
           </td>
           <td>
@@ -102,7 +102,7 @@
               <span class="lastname">{{ participant.last_name }}</span> -
               {% endfor %}
               {{ patient_record.next_rdv.act_type }}
-              {% if patient_record.next_rdv.is_absent %}</span>{% endif %}
+              {% if patient_record.next_rdv.is_absent %} ({{ patient_record.next_rdv.act.get_state }})</span>{% endif %}
               {% endif %}
           </td>
       </tr>

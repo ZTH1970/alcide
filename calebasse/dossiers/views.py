@@ -59,6 +59,7 @@ def get_last_rdv(patient_record):
         last_rdv['start_datetime'] = event.start_datetime
         last_rdv['participants'] = event.participants.all()
         last_rdv['act_type'] = event.eventwithact.act_type
+        last_rdv['act_state'] = event.act.get_state()
         last_rdv['is_absent'] = event.is_absent()
     return last_rdv
 

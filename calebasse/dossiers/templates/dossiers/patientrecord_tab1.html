@@ -49,7 +49,7 @@
       {% else %}
       Aucun
       {% endif %}
-      {% if last_rdv.is_absent %}</span>{% endif %}
+      {% if last_rdv.is_absent %} ({{ last_rdv.act_state }})</span>{% endif %}
       </li>
       <li><label>Prochain rendez-vous :</label>
       {% if next_rdv %}
@@ -62,7 +62,7 @@
       {% else %}
       Aucun
       {% endif %}
-      {% if next_rdv.is_absent %}</span>{% endif %}
+      {% if next_rdv.is_absent %} ({{ next_rdv.act.get_state }})</span>{% endif %}
       </li>
     </ul>
     <div class="etat">
