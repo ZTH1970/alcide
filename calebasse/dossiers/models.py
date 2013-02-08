@@ -19,6 +19,7 @@ from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
         NamedAbstractModel, Service)
 from calebasse.actes.validation import are_all_acts_of_the_day_locked
+from calebasse.actes.models import Act
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
 DEFAULT_ACT_NUMBER_TREATMENT = 30
@@ -113,6 +114,9 @@ class CmppHealthCareTreatment(HealthCare):
             raise Exception(u'Prise en charge déja prolongée')
         self.prolongation = value
         self.save()
+
+    def del_prolongation(self):
+        pass
 
     def save(self, **kwargs):
         self.start_date = \
@@ -686,6 +690,62 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     except:
                         pass
                 break
+
+    def get_healthcare_status(self):
+        today = date.today()
+        current_hc_trait = None
+        try:
+            current_hc_trait = CmppHealthCareTreatment.objects.filter(patient=self,start_date__lte=today, end_date__gte=today).latest('start_date')
+        except:
+            pass
+        if not current_hc_trait:
+            current_hc_diag = None
+            try:
+                current_hc_diag = CmppHealthCareDiagnostic.objects.filter(patient=self, start_date__lte=today).latest('start_date')
+            except:
+                pass
+            if current_hc_diag and current_hc_diag.get_act_number() > len(current_hc_diag.act_set.all()):
+
+                #Plus simple et a changer dans la facturation, s'il y une pc de traitemant avec une start date > a la pc diag alors cette pc de diag est finie
+                # Non parce que je peux ajouter une pc de traitement alors que je veux encore facturer sur la diag precedente.
+                # Donc si j'ai un acte facturer en traitement alors la diag ne fonctionne plus.
+                # Dans le fonctionnement normal, si j'ai encore une diag dispo et que je veux fact duirectement en trait, je reduit le nombre d'acte pris en charge.
+                lasts_billed = Act.objects.filter(patient=self, is_billed = True, healthcare__isnull=False).order_by('-date')
+                last_hc_date = None
+                if lasts_billed:
+                    last_hc_date = lasts_billed[0].healthcare.start_date
+                if not last_hc_date or last_hc_date <= current_hc_diag.start_date:
+                    # Prise en charge disponible
+                    return (0, len(current_hc_diag.act_set.all()), current_hc_diag.get_act_number())
+            last_hc_trait = None
+            try:
+                last_hc_trait = CmppHealthCareTreatment.objects.filter(patient=self).latest('start_date')
+            except:
+                pass
+            if not last_hc_trait:
+                if not current_hc_diag:
+                    # Aucune PC
+                    return (1, None)
+                else:
+                    # PC diag full, demander PC trait
+                    return (2, current_hc_diag.get_act_number())
+            if last_hc_trait.end_date < today:
+                # Expirée
+                #Test if rediagable
+                return (3, last_hc_trait.end_date)
+            if last_hc_trait.start_date > today:
+                # N'a pas encore pris effet
+                return (4, last_hc_trait.start_date)
+            return (-1,)
+        if current_hc_trait.get_act_number() > len(current_hc_trait.act_set.all()):
+            # Pris en charge disponible
+            return (5, len(current_hc_trait.act_set.all()), current_hc_trait.get_act_number())
+        # Prise en charge au quota
+        if not current_hc_trait.is_extended():
+            # Peut être prolongée
+            return (6, current_hc_trait.get_act_number())
+        # Prise en charge saturée
+        return (7, current_hc_trait.get_act_number(), current_hc_trait.end_date())
     # END Specific to cmpp healthcare
 
 reversion.register(PatientRecord, follow=['people_ptr'])
