@@ -45,6 +45,9 @@ class WorkerOrGroupLookup(LookupChannel):
         return self.format_item_display(obj)
 
     def format_item_display(self,obj):
-        text = obj.last_name.upper() + ' ' + obj.first_name
+        if isinstance(obj, FakeGroup):
+            text = obj.label
+        else:
+            text = obj.last_name.upper() + ' ' + obj.first_name
         return unicode(text)
 
