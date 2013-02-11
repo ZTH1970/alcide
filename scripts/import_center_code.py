@@ -248,15 +248,15 @@ def import_dossiers_phase_1():
         for pc in tables_data['pcs']:
             if _exist(pc['centre']) and _exist(pc['contact_id']):
                 while len(pc['centre']) < 4:
-                    pc['centre'] = ['0', last_pc['centre']]
-                    pc['centre'] = ''.join(last_pc['centre'])
+                    pc['centre'] = ['0', pc['centre']]
+                    pc['centre'] = ''.join(pc['centre'])
                 contact = None
                 try:
                     contact = PatientContact.objects.get(old_contact_id=pc['contact_id'])
                 except Exception, e:
                     i += 1
-                    msg = "Contact %s non trouve pour patient %s avec centre %s" % (pc['contact_id'], pc['enfant_id'], pc['centre'])
-                    logger.warn("%s" % msg)
+                    #msg = "Contact %s non trouve pour patient %s avec centre %s" % (pc['contact_id'], pc['enfant_id'], pc['centre'])
+                    #logger.warn("%s" % msg)
                     # On cherche le patient
                     try:
                         patient = PatientRecord.objects.get(old_id=pc['enfant_id'], service=service)
@@ -264,7 +264,7 @@ def import_dossiers_phase_1():
                             msg = "Patient %s avec centre %s n'a pas de policyholder ?" % (pc['enfant_id'], pc['centre'])
                             logger.error("%s" % msg)
                         else:
-                            if not patient.policyholder.other_health_center:
+                            if not patient.policyholder.other_health_center or patient.policyholder.other_health_center == '0000':
                                 patient.policyholder.other_health_center = pc['centre']
                                 patient.policyholder.save()
                             elif patient.policyholder.other_health_center != pc['centre']:
