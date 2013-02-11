@@ -256,9 +256,9 @@ def import_dossiers_phase_1():
                     logger.warn("%s" % msg)
                     # On cherche le patient
                     try:
-                        patient = PatientRecord.objects.get(old_id=pc['enfant_id'])
+                        patient = PatientRecord.objects.get(old_id=pc['enfant_id'], service=service)
                         if not patient.policyholder:
-                            msg = "Patient %s avec centre %s non trouve n'a pas de policyholder ?" % (pc['enfant_id'], pc['centre'])
+                            msg = "Patient %s avec centre %s n'a pas de policyholder ?" % (pc['enfant_id'], pc['centre'])
                             logger.err("%s" % msg)
                         else:
                             if not patient.policyholder.other_health_center:
