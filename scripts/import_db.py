@@ -12,7 +12,7 @@ django.core.management.setup_environ(calebasse.settings)
 
 from django.contrib.auth.models import User
 
-from calebasse.actes.models import EventAct
+#from calebasse.actes.models import EventAct
 from calebasse.agenda.models import Event, EventType
 from calebasse.dossiers.models import PatientRecord, Status, FileState
 from calebasse.ressources.models import Service
@@ -20,10 +20,10 @@ from calebasse.personnes.models import Worker, Holiday
 from calebasse.ressources.models import WorkerType
 
 # Configuration
-db_path = "/home/jschneider/temp/20121219-174113/"
+db_path = "/home/jschneider/apps/calebasse/scripts/20130104-213225/"
 
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
-tables = ["discipline", "intervenants", "dossiers", "rs", "notes", "ev", "conge"]
+tables = ["rs", "rr"]
 
 
 # Global mappers. This dicts are used to map a Faure id with a calebasse object.
@@ -96,29 +96,16 @@ def dossiers_mapper(tables_data, service):
                 patient.save()
 
 def rs_mapper(tables_data, service):
-    global dossiers
+    if service.name == "CMPP":
+        for line in tables_data['rs']:
+            if line['id'] == '32436':
+                print line
 
-    event_type = EventType.objects.get(
-                label=u"Rendez-vous patient"
-                )
-
-    for line in tables_data['rs']:
-        if dossiers.has_key(line['enfant_id']):
-            patient = dossiers[line['enfant_id']]
-            strdate = line['date_rdv'][:-13] + ' ' + line['heure'][11:-4]
-            date = datetime.strptime(strdate, "%Y-%m-%d %H:%M:%S")
-
-             # TODO: add act_type
-#            act_event = EventAct.objects.get_or_create(
-#                    title=line['libelle'],
-#                    event_type=event_type,
-#                    patient=patient,
-#                    act_type=act_type,
-#                    date=date
-#                    )
-        else:
-            # TODO: if no patient add event
-            pass
+def rr_mapper(tables_data, service):
+    if service.name == "CMPP":
+        for line in tables_data['rr']:
+            if line['id'] == '650':
+                print line
 
 
 def conge_mapper(tables_data, service):
