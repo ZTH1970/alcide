@@ -243,8 +243,6 @@ def import_dossiers_phase_1():
         csvfile.close()
         print "<-- Terminé"
 
-        i = 0
-        j = 0
         for pc in tables_data['pcs']:
             if _exist(pc['centre']) and _exist(pc['contact_id']):
                 while len(pc['centre']) < 4:
@@ -254,10 +252,6 @@ def import_dossiers_phase_1():
                 try:
                     contact = PatientContact.objects.get(old_contact_id=pc['contact_id'])
                 except Exception, e:
-                    i += 1
-                    #msg = "Contact %s non trouve pour patient %s avec centre %s" % (pc['contact_id'], pc['enfant_id'], pc['centre'])
-                    #logger.warn("%s" % msg)
-                    # On cherche le patient
                     try:
                         patient = PatientRecord.objects.get(old_id=pc['enfant_id'], service=service)
                         if not patient.policyholder:
@@ -276,11 +270,6 @@ def import_dossiers_phase_1():
                 if contact:
                     contact.other_health_center = pc['centre']
                     contact.save()
-                    j += 1
-        msg = 'Contact non trouve : %d' % i
-        logger.info("%s" % msg)
-        msg = 'Code sauvé : %d' % j
-        logger.info("%s" % msg)
 
     print "====== Fin à %s ======" % str(datetime.today())
 
