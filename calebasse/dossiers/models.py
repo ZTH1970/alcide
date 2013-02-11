@@ -771,4 +771,6 @@ def create_patient(first_name, last_name, service, creator,
     fs.save()
     patient.last_state = fs
     patient.save()
+    patient.policyholder = patient.patientcontact
+    patient.save()
     return patient
