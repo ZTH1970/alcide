@@ -58,10 +58,10 @@ function state_dialog(url, state_title, state_type) {
         $("#search").click();
     });
     $('#id_general-pause').click(function() {
-        $('#btn-maj').click();
+        $('#general-form').submit();
     });
     $('#id_general-confidential').click(function() {
-        $('#btn-maj').click();
+        $('#general-form').submit();
     });
     $('.policyholder-radio').click(function() {
         $("#policyholder-form").submit();

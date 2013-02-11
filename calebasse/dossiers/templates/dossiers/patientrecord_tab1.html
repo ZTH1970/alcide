@@ -1,8 +1,10 @@
+
+<form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
 <div class="left">
   <ul>
     <li>
     <label>N° dossier papier :</label> {{ object.paper_id|default_if_none:"Non renseigné" }}
-    <button id="update-paper-id-btn" class="icon-edit" title="Modifier"></button>
+    <button id="update-paper-id-btn" type='button' class="icon-edit" title="Modifier"></button>
     </li>
     <li><label>N° dossier informatique :</label> {{ object.id }}</li>
     <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
@@ -30,7 +32,6 @@
         </ul>
         {% else %}Aucun{% endif %}
     </li>
-    <form method="post" id="general-form" class="patientrecordform">{% csrf_token %}
       <li><label>Commentaire </label> <button class="save enable-on-change" id="btn-maj">✔</button><br/>
       {{ forms.general.comment }}
       </li>
@@ -41,28 +42,28 @@
       <li><label>Dernier acte :</label>
       {% if last_rdv %}
       {% if last_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
-      {{ last_rdv.start_datetime|date:"d/m/Y" }} -
-      {% for participant in last_rdv.participants %}
-      <span class="lastname">{{ participant.last_name }}</span> -
-      {% endfor %}
-      {{ last_rdv.act_type }}
-      {% else %}
-      Aucun
-      {% endif %}
-      {% if last_rdv.is_absent %} ({{ last_rdv.act_state }})</span>{% endif %}
+        {{ last_rdv.start_datetime|date:"d/m/Y" }} -
+        {% for participant in last_rdv.participants %}
+        <span class="lastname">{{ participant.last_name }}</span> -
+        {% endfor %}
+        {{ last_rdv.act_type }}
+        {% else %}
+        Aucun
+        {% endif %}
+        {% if last_rdv.is_absent %} ({{ last_rdv.act_state }})</span>{% endif %}
       </li>
       <li><label>Prochain rendez-vous :</label>
       {% if next_rdv %}
       {% if next_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
-      {{ next_rdv.start_datetime|date:"d/m/Y" }} -
-      {% for participant in next_rdv.participants.all %}
-      <span class="lastname">{{ participant.last_name }}</span> -
-      {% endfor %}
-      {{ next_rdv.act_type }}
-      {% else %}
-      Aucun
-      {% endif %}
-      {% if next_rdv.is_absent %} ({{ next_rdv.act.get_state }})</span>{% endif %}
+        {{ next_rdv.start_datetime|date:"d/m/Y" }} -
+        {% for participant in next_rdv.participants.all %}
+        <span class="lastname">{{ participant.last_name }}</span> -
+        {% endfor %}
+        {{ next_rdv.act_type }}
+        {% else %}
+        Aucun
+        {% endif %}
+        {% if next_rdv.is_absent %} ({{ next_rdv.act.get_state }})</span>{% endif %}
       </li>
     </ul>
     <div class="etat">
