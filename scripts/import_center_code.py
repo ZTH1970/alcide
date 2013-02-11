@@ -254,6 +254,22 @@ def import_dossiers_phase_1():
                     i += 1
                     msg = "Contact %s non trouve pour patient %s avec centre %s" % (pc['contact_id'], pc['enfant_id'], pc['centre'])
                     logger.warn("%s" % msg)
+                    # On cherche le patient
+                    try:
+                        patient = PatientRecord.objects.get(old_id=pc['enfant_id'])
+                        if not patient.policyholder:
+                            msg = "Patient %s avec centre %s non trouve n'a pas de policyholder ?" % (pc['enfant_id'], pc['centre'])
+                            logger.err("%s" % msg)
+                        else:
+                            if not patient.policyholder.other_health_center:
+                                patient.policyholder.other_health_center = pc['centre']
+                                patient.policyholder.save()
+                            elif patient.policyholder.other_health_center != pc['centre']:
+                                msg = "Patient %s avec centre %s a un policyholder avec centre %s different" % (pc['enfant_id'], pc['centre'], patient.policyholder.other_health_center)
+                                logger.err("%s" % msg)
+                    except Exception, e:
+                        msg = "Patient %s avec centre %s non trouve" % (pc['enfant_id'], pc['centre'])
+                        logger.warn("%s" % msg)
                 if contact:
                     contact.other_health_center = pc['centre']
                     contact.save()
