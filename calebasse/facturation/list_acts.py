@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from collections import defaultdict
+
+from django.db.models import Q
 
 from calebasse.actes.models import Act
 from calebasse.dossiers.models import (CmppHealthCareDiagnostic,
@@ -73,13 +76,25 @@ def list_acts_for_billing_first_round(end_day, service, start_day=None, acts=Non
     acts_pause = {}
     acts_not_billable = {}
     acts_billable = {}
-    for act in acts:
-        if act.pause:
-            acts_pause.setdefault(act.patient, []).append(act)
-        elif not act.is_billable():
-            acts_not_billable.setdefault(act.patient, []).append(act)
-        else:
-            acts_billable.setdefault(act.patient, []).append(act)
+
+
+    pause_query = Q(pause=True)
+    billable_query = Q(act_type__billable=True, switch_billable=False) | \
+            Q(act_type__billable=False, switch_billable=True)
+
+    paused_acts = acts.filter(pause_query).select_related('patient', 'act_type')
+    not_billable_acts = acts.filter(~pause_query & ~billable_query).select_related('patient', 'act_type')
+    billable_acts = acts.filter(~pause_query & billable_query)
+    billable_acts = billable_acts.select_related('act_type', 'patient__policyholder__health_center').prefetch_related('patient__act_set', 'patient__act_set__healthcare')
+
+    for act in paused_acts:
+        acts_pause.setdefault(act.patient, []).append(act)
+
+    for act in not_billable_acts:
+        acts_not_billable.setdefault(act.patient, []).append(act)
+
+    for act in billable_acts:
+        acts_billable.setdefault(act.patient, []).append(act)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_billable)
 
@@ -282,6 +297,20 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
     acts_treatment = {}
     acts_losts = {}
     acts_losts_missing_policy = {}
+    patient_ids = [p.id for p in acts_billable]
+    # compute latest hcds using one query
+    latest_hcd = {}
+    hcds = CmppHealthCareDiagnostic.objects.filter(patient_id__in=patient_ids).order_by('-start_date').select_related(depth=1).prefetch_related('act_set')
+    for hcd in hcds:
+        if hcd.patient not in latest_hcd:
+            latest_hcd[hcd.patient] = hcd
+    # compute two latest hcts using one query
+    latest_hcts = defaultdict(lambda:[])
+    hcts = CmppHealthCareTreatment.objects.filter(patient_id__in=patient_ids).order_by('-start_date').select_related(depth=1).prefetch_related('act_set')
+    for hct in hcts:
+        if hct.patient not in latest_hcts or len(latest_hcts[hct.patient]) < 2:
+            latest_hcts[hct.patient].append(hct)
+
     for patient, acts in acts_billable.items():
         if not patient.policyholder or \
                 not patient.policyholder.health_center or \
@@ -289,15 +318,14 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
             acts_losts_missing_policy[patient] = acts
             continue
         # Date de début de la prise en charge ayant servis au dernier acte facturé
-        lasts_billed = Act.objects.filter(patient=patient, is_billed = True, healthcare__isnull=False).order_by('-date')
+        lasts_billed = sorted(filter(lambda a: a.is_billed and a.healthcare is not None, patient.act_set.all()), key=lambda a: a.date, reverse=True)
         last_hc_date = None
         if lasts_billed:
             last_hc_date = lasts_billed[0].healthcare.start_date
         hcd = None
         len_acts_cared_diag = 0
         try:
-            hcd = CmppHealthCareDiagnostic.objects.\
-                filter(patient=patient).latest('start_date')
+            hcd = latest_hcd.get(patient)
             if not last_hc_date or last_hc_date <= hcd.start_date:
                 # actes prise en charge par ce hc
                 len_acts_cared_diag = len(hcd.act_set.all())
@@ -309,13 +337,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
         '''
             We take in account the two last treatment healthcare
         '''
-        hcts = None
-        len_acts_cared_trait = 0
-        try:
-            hcts = CmppHealthCareTreatment.objects.\
-                filter(patient=patient).order_by('-start_date')
-        except:
-            pass
+        hcts = latest_hcts.get(patient, [])
         # acts are all billable and chronologically ordered
         count_hcd = 0
         count_hct_1 = 0
