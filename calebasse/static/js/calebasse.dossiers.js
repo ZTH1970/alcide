@@ -113,7 +113,7 @@ function state_dialog(url, state_title, state_type) {
 
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',
-            '#dossier-dlg', '500px', 'Ajouter', false, function(that) {
+            '#dossier-dlg', '700px', 'Ajouter', false, function(that) {
                     $('input#id_date_selected', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
                     $(that).find('#id_last_name').keyup(function() {
                             var val = $(this).val();

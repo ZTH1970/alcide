@@ -33,10 +33,16 @@ class PatientRecordLookup(LookupChannel):
 
     def format_item_display(self,obj):
         text = obj.last_name.upper() + ' ' + obj.first_name
+        if obj.paper_id or obj.last_state:
+            text += u' ('
         if obj.paper_id:
-            text += u' (N° : ' + obj.paper_id + u')'
+            text += obj.paper_id
+            if obj.last_state:
+                text += u' - '
         if obj.last_state:
-            text += u' (Statut : %s)' % obj.last_state.status.name
+            text += obj.last_state.status.name
+        if obj.paper_id or obj.last_state:
+            text += u')'
         return unicode(text)
 
     def check_auth(self, request):
