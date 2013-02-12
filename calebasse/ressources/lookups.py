@@ -18,7 +18,7 @@ class FakeGroup:
 
 class WorkerOrGroupLookup(LookupChannel):
     model = Worker
-    search_field = 'display_name'
+    search_field = 'last_name'
 
     def get_query(self, q, request):
         service = None
@@ -31,11 +31,11 @@ class WorkerOrGroupLookup(LookupChannel):
                 pass
 
         if service:
-            kwargs = { "%s__icontains" % self.search_field : q }
+            kwargs = { "%s__istartswith" % self.search_field : q }
             group = FakeGroup('group:%s' % service.id, service.name)
             return itertools.chain([group], self.model.objects.for_service(service.id).order_by('last_name'))
 
-        kwargs = { "%s__icontains" % self.search_field : q }
+        kwargs = { "%s__istartswith" % self.search_field : q }
         return self.model.objects.filter(enabled=True).filter(**kwargs).order_by('last_name')
 
     def get_result(self, obj):
