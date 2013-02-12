@@ -51,7 +51,17 @@ class InvoiceTemplate(object):
         self.template_path = template_path
         self.fields = {}
         self.flatten = False
+        self.stack = []
         self.i = 0
+
+    def push(self):
+        self.stack.append(self.fields.copy())
+
+    def pop(self):
+        self.fields = self.stack.pop()
+
+    def peek(self):
+        self.fields = self.stack[-1].copy()
 
     def feed(self, field, value):
         self.fields[field] = value
