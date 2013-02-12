@@ -301,8 +301,7 @@ class Invoicing(models.Model):
                         patients_stats[invoice.patient]['invoices'] = [invoice]
                     else:
                         patients_stats[invoice.patient]['invoices'].append(invoice)
-                patients_stats = [(p, d) in patients_stats.items()]
-                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
+                patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 # all patients in the invoicing are invoiced
                 len_patient_invoiced = 0
                 # These stats are not necessary because excluded form the validated invoicing
@@ -376,8 +375,7 @@ class Invoicing(models.Model):
                         len_acts_hors_pause = len_acts_hors_pause + 1
                         patients_stats[act.patient] = {}
                         patients_stats[act.patient]['accepted'] = [act]
-                patients_stats = [(p, d) in patients_stats.items()]
-                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
+                patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,
                 days_not_locked, len_patient_acts_paused,
@@ -453,8 +451,7 @@ class Invoicing(models.Model):
                         len_acts_hors_pause = len_acts_hors_pause + 1
                         patients_stats[act.patient] = {}
                         patients_stats[act.patient]['accepted'] = [act]
-                patients_stats = [(p, d) in patients_stats.items()]
-                patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
+                patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
