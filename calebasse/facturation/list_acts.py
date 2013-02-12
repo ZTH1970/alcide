@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from calebasse.actes.models import Act
-from calebasse.actes.validation import (are_all_acts_of_the_day_locked,
-        get_days_with_acts_not_locked)
 from calebasse.dossiers.models import (CmppHealthCareDiagnostic,
     CmppHealthCareTreatment)
 
