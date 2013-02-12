@@ -39,6 +39,32 @@ class ServiceLinkedAbstractModel(models.Model):
     class Meta:
         abstract = True
 
+DEST_TYPE = {
+    # code grand regime: type destinataire
+    '01': 'CT', # regime general
+    '02': 'MA', # agricole
+    '03': 'SR', # independant
+    '04': 'CF', # sncf
+    '05': 'RP', # ratp
+    '06': 'EN', # invalide marine
+    '07': 'RM', # minier
+    '08': 'CM', # militaire
+    '10': 'CE', # notaires
+    '12': 'CI', # cci paris
+    '14': 'AN', # assemblee nationale
+    '15': 'SE', # senat
+    '16': 'PB', # port autonome bordeaux
+    '90': 'CC', # cultes
+    '91': 'SM', # ensuite toutes les mutuelles nationales
+    '92': 'SM',
+    '93': 'SM',
+    '94': 'SM',
+    '95': 'SM',
+    '96': 'SM',
+    '99': 'SM',
+}
+
+
 class HealthCenter(NamedAbstractModel):
     class Meta:
         verbose_name = u'Centre d\'assurance maladie'
@@ -76,6 +102,12 @@ class HealthCenter(NamedAbstractModel):
     accounting_number = models.CharField(max_length=30,
              null=True, blank=True)
     correspondant = models.CharField(max_length=80)
+
+    def b2_000(self):
+        '''
+        renvoie le numéro destinataire selon la norme B2, type 000
+        '''
+        return DEST_TYPE[self.large_regime.code] + '000000' + self.large_regime.code[0:2] + self.computer_center_code[0:3] + self.dest_organism[0:3]
 
 
 class LargeRegime(NamedAbstractModel):
