@@ -2,6 +2,7 @@
 
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
+from decimal import Decimal
 
 from django.db import models
 from django.db.models import Max
@@ -568,6 +569,10 @@ class Invoice(models.Model):
         for act in self.acts.all():
             res = max(res, act.date)
         return res
+
+    @property
+    def decimal_amount(self):
+        return Decimal(self.amout) / Decimal(100)
 
     def __unicode__(self):
         return "Facture %d de %d euros (%d actes)" % (self.number, self.amount, len(self.acts.all()))
