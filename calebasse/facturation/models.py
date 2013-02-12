@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Q
 
 from model_utils import Choices
 
@@ -127,6 +127,8 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
 # The firts cmpp invoicing with calebasse
 INVOICING_OFFSET = 134
 
+from memory_profiler import profile
+
 class Invoicing(models.Model):
     '''Represent a batch of invoices:
 
@@ -197,6 +199,8 @@ class Invoicing(models.Model):
         else:
             raise RuntimeError('Unknown service', self.service)
 
+
+    @profile
     def get_stats_or_validate(self, commit=False):
         '''
             If the invoicing is in state open or closed and commit is False
@@ -246,14 +250,35 @@ class Invoicing(models.Model):
                     if patient in invoices.keys():
                         dic['invoices'] = invoices[patient]
                         if commit and not patient.pause:
+                            invoice_kwargs = dict(
+                                    patient_id=patient.id,
+                                    patient_last_name=patient.last_name,
+                                    patient_first_name=patient.first_name,
+                                    patient_social_security_id=patient.social_security_id,
+                                    patient_birthdate=patient.birthdate,
+                                    patient_twinning_rank=patient.twinning_rank,
+                                    patient_healthcenter=patient.health_center,
+                                    patient_other_health_center=patient.other_health_center)
+                            if patient.policy_holder != patient.patientcontact:
+                                policy_holder = patient.policy_holder
+                                invoice_kwargs.update(dict(
+                                    policy_holder_id=policy_holder.id,
+                                    policy_holder_last_name=policy_holder.last_name,
+                                    policy_holder_first_name=policy_holder.first_name,
+                                    policy_holder_social_security_id=policy_holder.social_security_id,
+                                    policy_holder_healthcenter=policy_holder.health_center))
                             for invoice in invoices[patient]:
                                 ppa = invoice['ppa']
                                 acts = invoice['acts']
                                 amount = ppa * len(acts)
-                                in_o = Invoice(patient=patient,
-                                    invoicing=self,
-                                    ppa=invoice['ppa'],
-                                    amount=amount)
+                                in_o = Invoice(
+                                        invoicing=self,
+                                        ppa=invoice['ppa'],
+                                        amount=amount,
+                                        **invoice_kwargs)
+                                in_o.batch = Invoice.objects.new_batch_number(
+                                            health_center=in_o.health_center,
+                                            invoicing=self)
                                 in_o.save()
                                 for act, hc in acts:
                                     act.is_billed = True
@@ -537,10 +562,74 @@ class Invoicing(models.Model):
 #    return price_o
 
 
+PREVIOUS_MAX_BATCH_NUMBERS = {
+    'CF00000004001110': 34,
+    'CT00000001016421': 1,
+    'CT00000001016422': 141,
+    'CT00000001025691': 20,
+    'CT00000002011011': 8,
+    'CT00000002381421': 15,
+    'MA00000002381421': 48,
+    'SM00000091007381': 98,
+    'SM00000092001422': 14,
+    'SM00000092001691': 13,
+    'SM00000099038939': 24,
+}
+
+
+class InvoiceManager(models.Manager):
+    def new_batch_number(self, health_center, invoicing):
+        '''Compute the next batch number for the given health center'''
+        global PREVIOUS_MAX_BATCH_NUMBERS
+        agg = self \
+                .filter(invoicing__seq_id__lt=invoicing.seq_id) \
+                .filter(
+                    Q(patient_healthcenter=health_center,
+                        policy_holder_healthcenter__isnull=True)|
+                    Q(policy_holder_healthcenter=health_center)) \
+                        .aggregate(Max('batch'))
+        max_bn = agg['batch__max']
+        if max_bn is None:
+            max_bn = PREVIOUS_MAX_BATCH_NUMBERS.get(health_center.b2_000(), 0)
+        return max_bn + 1
+
+
 class Invoice(models.Model):
     number = models.IntegerField(blank=True, null=True)
+    batch = models.IntegerField(blank=True, null=True)
+    # the patient can be modified (or even deleted) after invoice creation, so
+    # we copy his informations here
+    patient_id = models.IntegerField(blank=True, null=True)
+    patient_last_name = models.CharField(max_length=128,
+            verbose_name=u'Nom du patient')
+    patient_first_name = models.CharField(max_length=128,
+            verbose_name=u'Prénom(s) du patient', blank=True, null=True)
+    patient_social_security_id = models.CharField(max_length=13,
+            verbose_name=u"NIR", null=True, blank=True)
+    patient_birthdate = models.DateField(verbose_name=u"Date de naissance",
+            null=True, blank=True)
+    patient_twinning_rank = models.IntegerField(
+        verbose_name=u"Rang (gémellité)",
+        null=True, blank=True)
+    patient_healthcenter = models.ForeignKey('ressources.HealthCenter',
+            verbose_name=u"Centre d'assurance maladie",
+            related_name='related_by_patient_invoices',
+            null=True, blank=True)
+    patient_other_health_center = models.CharField(
+        verbose_name=u"Centre spécifique", max_length=4, null=True, blank=True)
+    # policy holder informations
+    policy_holder_id = models.IntegerField(blank=True, null=True)
+    policy_holder_last_name = models.CharField(max_length=128,
+            verbose_name=u'Nom de l\'assuré', blank=True)
+    policy_holder_first_name = models.CharField(max_length=128,
+            verbose_name=u'Prénom(s) de l\' assuré', blank=True)
+    policy_holder_social_security_id = models.CharField(max_length=13,
+            verbose_name=u"NIR de l\'assuré", blank=True)
+    policy_holder_healthcenter = models.ForeignKey('ressources.HealthCenter',
+            verbose_name=u"Centre d'assurance maladie de l\'assuré",
+            related_name='related_by_policy_holder_invoices',
+            null=True, blank=True)
     created = models.DateTimeField(u'Création', auto_now_add=True)
-    patient = models.ForeignKey('dossiers.PatientRecord')
     invoicing = models.ForeignKey('facturation.Invoicing',
         on_delete='PROTECT')
     acts = models.ManyToManyField('actes.Act')
@@ -561,6 +650,10 @@ class Invoice(models.Model):
         for act in self.acts.all():
             res = min(res, act.date)
         return res
+
+    @property
+    def health_center(self):
+        return self.policy_holder_healthcenter or self.patient_healthcenter
 
     @property
     def end_date(self):
