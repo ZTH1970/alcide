@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'calebasse.personnes',
     'calebasse.ressources',
     'calebasse.middleware.request',
+    'south',
 )
 
 INTERNAL_IPS=('127.0.0.1',)

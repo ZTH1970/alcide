@@ -103,3 +103,7 @@ class WeekRankField(models.PositiveIntegerField):
             defaults['initial'] = self.get_default()
         defaults.update(kwargs)
         return forms.MultipleChoiceField(**defaults)
+
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^calebasse\.models\..*Field"])
+
