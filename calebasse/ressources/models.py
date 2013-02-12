@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date, datetime
+import bisect
 
 from django.db import models
 from django.db.models import query
@@ -533,14 +534,29 @@ class PatientRelatedLink(NamedAbstractModel):
         verbose_name = u'Type de lien avec le patient (parenté)'
         verbose_name_plural = u'Types de lien avec le patient (parenté)'
 
-
 class PricePerAct(models.Model):
     price = models.DecimalField(verbose_name=u"Tarif", max_digits=5, decimal_places=2)
     start_date = models.DateField(verbose_name=u"Prise d'effet")
 
+    class Pricing(object):
+        def __init__(self, ppas):
+            ppas = ppas.order_by('start_date')
+            self.dates = [ppa.start_date for ppa in ppas]
+            self.ppas = list(ppas)
+
+        def price_at_date(self, date):
+            i = bisect.bisect(self.dates, date)
+            if i == 0:
+                raise RuntimeError('No price existed at date %s' % date)
+            return self.ppas[i-1]
+
     class Meta:
         verbose_name = u"Tarif horaire de l'acte"
         verbose_name_plural = u"Tarifs horaires de l'acte"
+
+    @classmethod
+    def pricing(cls):
+        return cls.Pricing(cls.objects.all())
 
     @classmethod
     def get_price(cls, at_date=None):
