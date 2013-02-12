@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings
 from django.db import models
+from django.db.models import Min, Max, Q
 from django.contrib.auth.models import User
 
 import reversion
@@ -747,6 +748,22 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         # Prise en charge saturée
         return (7, current_hc_trait.get_act_number(), current_hc_trait.end_date())
     # END Specific to cmpp healthcare
+
+
+    @property
+    def entry_date(self):
+        d = self.filestate_set.filter(
+                Q(status__type='DIAGNOSTIC') |
+                Q(status__type='TRAITEMENT')). \
+                        aggregate(Min('date_selected'))['date_selected__min']
+        return d and d.date()
+
+    @property
+    def exit_date(self):
+        d = self.filestate_set.filter(status__type='CLOS'). \
+                    aggregate(Max('date_selected'))['date_selected__max']
+        return d and d.date()
+
 
 reversion.register(PatientRecord, follow=['people_ptr'])
 
