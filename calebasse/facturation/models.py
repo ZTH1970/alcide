@@ -555,5 +555,19 @@ class Invoice(models.Model):
             self.number = max_number + 1
         super(Invoice, self).save(*args, **kwargs)
 
+    @property
+    def start_date(self):
+        res = date.max
+        for act in self.acts.all():
+            res = min(res, act.date)
+        return res
+
+    @property
+    def end_date(self):
+        res = date.min
+        for act in self.acts.all():
+            res = max(res, act.date)
+        return res
+
     def __unicode__(self):
         return "Facture %d de %d euros (%d actes)" % (self.number, self.amount, len(self.acts.all()))
