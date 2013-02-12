@@ -61,16 +61,17 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
     len_invoices_hors_pause = 0
     len_acts_invoiced = 0
     len_acts_invoiced_hors_pause = 0
+    pricing = PricePerAct.pricing()
     for patient, acts in acts_diagnostic.items():
         invoices[patient] = []
         act, hc = acts[0]
         invoice = {}
-        invoice['ppa'] = PricePerAct.get_price(act.date)
+        invoice['ppa'] = pricing.price_at_date(act.date)
         invoice['year'] = act.date.year
         invoice['acts'] = [(act, hc)]
         if len(acts) > 1:
             for act, hc in acts[1:]:
-                if invoice['ppa'] != PricePerAct.get_price(act.date) or \
+                if invoice['ppa'] != pricing.price_at_date(act.date) or \
                         invoice['year'] != act.date.year:
                     invoices[patient].append(invoice)
                     len_invoices = len_invoices + 1
@@ -78,7 +79,7 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                     if not patient.pause:
                         len_invoices_hors_pause = len_invoices_hors_pause + 1
                         len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
-                    invoice['ppa'] = PricePerAct.get_price(act.date)
+                    invoice['ppa'] = pricing.price_at_date(act.date)
                     invoice['year'] = act.date.year
                     invoice['acts'] = [(act, hc)]
                 else:
@@ -89,17 +90,18 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
         if not patient.pause:
             len_invoices_hors_pause = len_invoices_hors_pause + 1
             len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+    pricing = PricePerAct.pricing()
     for patient, acts in acts_treatment.items():
         if not patient in invoices:
             invoices[patient] = []
         act, hc = acts[0]
         invoice = dict()
-        invoice['ppa'] = PricePerAct.get_price(act.date)
+        invoice['ppa'] = pricing.price_at_date(act.date)
         invoice['year'] = act.date.year
         invoice['acts'] = [(act, hc)]
         if len(acts) > 1:
             for act, hc in acts[1:]:
-                if invoice['ppa'] != PricePerAct.get_price(act.date) or \
+                if invoice['ppa'] != pricing.price_at_date(act.date) or \
                         invoice['year'] != act.date.year:
                     invoices[patient].append(invoice)
                     len_invoices = len_invoices + 1
@@ -108,7 +110,7 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                         len_invoices_hors_pause = len_invoices_hors_pause + 1
                         len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
                     invoice = dict()
-                    invoice['ppa'] = PricePerAct.get_price(act.date)
+                    invoice['ppa'] = pricing.price_at_date(act.date)
                     invoice['year'] = act.date.year
                     invoice['acts'] = [(act, hc)]
                 else:
