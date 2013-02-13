@@ -163,7 +163,8 @@ def build_batches(invoicing):
     return batches_by_health_center
 
 
-def render_invoicing(service, invoicing, delete=False):
+def render_invoicing(invoicing, delete=False):
+    service = invoicing.service
     now = datetime.datetime.now()
     batches_by_health_center = build_batches(invoicing)
     centers = sorted(batches_by_health_center.keys())
