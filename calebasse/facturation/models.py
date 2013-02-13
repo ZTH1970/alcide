@@ -696,5 +696,10 @@ class Invoice(models.Model):
     def decimal_ppa(self):
         return Decimal(self.ppa) / Decimal(100)
 
+    @property
+    def kind(self):
+        tag = self.acts.all()[0].get_hc_tag()
+        return tag[0]
+
     def __unicode__(self):
         return "Facture %d de %d euros (%d actes)" % (self.number, self.amount, len(self.acts.all()))
