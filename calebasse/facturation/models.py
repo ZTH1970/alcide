@@ -327,11 +327,11 @@ class Invoicing(models.Model):
                             patient = PatientRecord.objects.get(id=invoice.patient_id)
                         except:
                             patient = PatientRecord(last_name=patient_last_name, first_name=patient_first_name)
-                        patients[patient_id] = patient
+                        patients[invoice.patient_id] = patient
                         len_patients = len_patients + 1
                         patients_stats[patient] = {}
                     else:
-                        patient = patients[patient_id]
+                        patient = patients[invoice.patient_id]
                     patients_stats[patient]['invoices'].setdefault(patient, []).append(invoice)
                 patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 # all patients in the invoicing are invoiced
