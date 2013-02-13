@@ -598,6 +598,7 @@ class InvoiceManager(models.Manager):
         '''Compute the next batch number for the given health center'''
         global PREVIOUS_MAX_BATCH_NUMBERS
         agg = self \
+                .filter(invoicing__service=invoicing.service) \
                 .filter(invoicing__seq_id__lt=invoicing.seq_id) \
                 .filter(
                     Q(patient_healthcenter=health_center,
