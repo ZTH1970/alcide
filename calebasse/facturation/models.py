@@ -592,6 +592,7 @@ class InvoiceManager(models.Manager):
 
 
 class Invoice(models.Model):
+    objects = InvoiceManager()
     number = models.IntegerField(blank=True, null=True)
     batch = models.IntegerField(blank=True, null=True)
     # the patient can be modified (or even deleted) after invoice creation, so
