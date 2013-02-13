@@ -31,7 +31,6 @@ class PdfTk(object):
                 other_fields.append((k[0], k[1] if isinstance(v, bool) else v))
         with tempfile.NamedTemporaryFile() as temp_fdf:
             fdf = forge_fdf("", string_fields, other_fields, [], [])
-            print fdf
             temp_fdf.write(fdf)
             temp_fdf.flush()
             args = [pdf_file, 'fill_form', temp_fdf.name, 'output', output_file]
