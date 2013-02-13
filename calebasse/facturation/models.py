@@ -256,7 +256,9 @@ class Invoicing(models.Model):
                                     patient_birthdate=patient.birthdate,
                                     patient_twinning_rank=patient.twinning_rank,
                                     patient_healthcenter=patient.health_center,
-                                    patient_other_health_center=patient.other_health_center or '')
+                                    patient_other_health_center=patient.other_health_center or '',
+                                    patient_entry_date=patient.entry_date,
+                                    patient_exit_date=patient.exit_date)
                             if patient.policyholder != patient.patientcontact:
                                 policy_holder = patient.policyholder
                                 try:
@@ -630,6 +632,10 @@ class Invoice(models.Model):
             verbose_name=u"Centre d'assurance maladie",
             related_name='related_by_patient_invoices',
             null=True, blank=True)
+    patient_entry_date = models.DateField(verbose_name=u'Date d\'entrée du patient',
+            blank=True, null=True)
+    patient_exit_date = models.DateField(verbose_name=u'Date de sortie du patient',
+            blank=True, null=True)
     patient_other_health_center = models.CharField(
         verbose_name=u"Centre spécifique", max_length=4, default='',
         blank=True)
