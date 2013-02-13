@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import tempfile
 
 from calebasse.pdftk import PdfTk
@@ -47,7 +48,9 @@ class InvoiceTemplate(object):
     buttons = [ ABSENCE_SIGNATURE, PRISE_EN_CHARGE, ACCIDENT_CAUSE_TIERS, 
             PART_OBLIG, PART_COMPL ]
 
-    def __init__(self, template_path=None, flatten=False):
+    def __init__(self, template_path=None, prefix='tmp', suffix='', flatten=False):
+        self.prefix = prefix
+        self.suffix = suffix
         self.template_path = template_path
         self.fields = {}
         self.flatten = False
@@ -83,12 +86,25 @@ class InvoiceTemplate(object):
     def get_template_path(self):
         return self.template_path or 'template.pdf'
 
-    def generate(self, flatten=False):
+    def generate(self, flatten=False, wait=True, delete=False):
         flatten = self.flatten or flatten
-        with tempfile.NamedTemporaryFile(delete=False) as temp_out_pdf:
-            pdftk = PdfTk()
-            pdftk.form_fill(self.get_template_path(), self.fields, temp_out_pdf.name, flatten=flatten)
-            return temp_out_pdf.name
+        with tempfile.NamedTemporaryFile(prefix=self.prefix,
+                suffix=self.suffix, delete=False) as temp_out_pdf:
+            try:
+                pdftk = PdfTk(prefix=self.prefix)
+                result = pdftk.form_fill(self.get_template_path(), self.fields, temp_out_pdf.name, flatten=flatten, wait=wait, delete=delete)
+                if wait:
+                    return temp_out_pdf.name
+                else:
+                    result, temp_out_fdf = result
+                    return temp_out_pdf.name, result, temp_out_fdf
+            except:
+                if delete:
+                    try:
+                        os.unlink(temp_out_pdf.name)
+                    except:
+                        pass
+                raise
 
 if __name__ == '__main__':
     import sys

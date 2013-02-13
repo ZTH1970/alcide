@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import os.path
 import tempfile
 import datetime
@@ -6,10 +7,11 @@ from decimal import Decimal
 from collections import defaultdict
 
 from xhtml2pdf.pisa import CreatePDF
-from django.template.loader import render_to_string
+from django.template import loader, Context
 
 from invoice_template import InvoiceTemplate
 from ..pdftk import PdfTk
+
 
 class Batch(object):
     def __init__(self, number, invoices):
@@ -22,34 +24,59 @@ class Batch(object):
         self.start_date = min(invoice.start_date for invoice in invoices)
         self.end_date = max(invoice.end_date for invoice in invoices)
 
-def render_to_pdf_file(template, ctx):
-    temp = tempfile.NamedTemporaryFile(delete=False)
-    html = render_to_string(template, ctx)
-    CreatePDF(html, temp)
-    temp.flush()
-    return temp.name
 
-def header_file(service, batches,
-        header_template='facturation/bordereau.html'):
+def render_to_pdf_file(templates, ctx, prefix='tmp', delete=False):
+    temp = tempfile.NamedTemporaryFile(prefix=prefix, suffix='.pdf',
+            delete=False)
+    try:
+        t = loader.select_template(templates)
+        html = t.render(Context(ctx))
+        CreatePDF(html, temp)
+        temp.flush()
+        return temp.name
+    except:
+        if delete:
+            try:
+                os.unlink(temp.name)
+            except:
+                pass
+        raise
+
+
+def header_file(service, invoicing, health_center, batches,
+        header_service_template='facturation/bordereau-%s.html',
+        header_template='facturation/bordereau.html',
+        delete=False):
     synthesis = {
             'total': sum(batch.total for batch in batches),
             'number_of_acts': sum(batch.number_of_acts for batch in batches),
             'number_of_invoices': sum(batch.number_of_invoices for batch in batches),
     }
     ctx = {
+            'now': datetime.datetime.now(),
+            'health_center': health_center,
             'service': service,
             'batches': batches,
             'synthesis': synthesis,
     }
-    return render_to_pdf_file(header_template, ctx)
+    prefix = '%s-invoicing-%s-healthcenter-%s-' % (
+            service.slug, invoicing.id, health_center.id)
+    return render_to_pdf_file(
+            (header_service_template % service.slug,
+            header_template), ctx, prefix=prefix, delete=delete)
 
-def invoice_files(service, batch, invoice):
+
+def invoice_files(service, invoicing, batch, invoice):
     template_path = os.path.join(
             os.path.dirname(__file__),
             'static',
             'facturation',
             'invoice.pdf')
-    tpl = InvoiceTemplate(template_path=template_path)
+    tpl = InvoiceTemplate(
+            template_path=template_path,
+            prefix='%s-invoicing-%s-invoice-%s-'
+                % ( service.slug, invoicing.id, invoice.id),
+            suffix='-%s.pdf' % datetime.datetime.now())
     tpl.feed(InvoiceTemplate.NUM_FINESS, '420788606')
     tpl.feed(InvoiceTemplate.IDENTIFICATION_ETABLISSEMENT,
             '''%s SAINT ETIENNE
@@ -76,8 +103,12 @@ def invoice_files(service, batch, invoice):
     #   health_center.dest_organism,
     #   health_center.name)
     # tpl.feed(InvoiceTemplate.CODE_ORGANISME, code_organisme)
-    tpl.feed(InvoiceTemplate.DATE_ENTREE, invoice.start_date.strftime('%d/%m/%Y'))
-    tpl.feed(InvoiceTemplate.DATE_SORTIE, invoice.end_date.strftime('%d/%m/%Y'))
+    if invoice.patient_entry_date is not None:
+        tpl.feed(InvoiceTemplate.DATE_ENTREE,
+                invoice.patient_entry_date.strftime('%d/%m/%Y'))
+    if invoice.patient_exit_date is not None:
+        tpl.feed(InvoiceTemplate.DATE_SORTIE,
+                invoice.patient_exit_date.strftime('%d/%m/%Y'))
     tpl.feed(InvoiceTemplate.ABSENCE_SIGNATURE, True)
     if invoice.policy_holder_id:
         tpl.feed(InvoiceTemplate.NOM_ASSURE, u' '.join((
@@ -98,19 +129,24 @@ def invoice_files(service, batch, invoice):
         prestation = u'SNS' if hc_tag.startswith('T') else u'SD'
         d = act.date.strftime('%d/%m/%Y')
         total1 += invoice.decimal_ppa
-        tpl.feed_line(u'19', u'320', prestation, d, d, invoice.decimal_ppa, 1, invoice.decimal_ppa)
+        tpl.feed_line(u'19', u'320', prestation, d, d, invoice.decimal_ppa, 1,
+                invoice.decimal_ppa)
     for act in acts[12:24]:
         hc_tag = act.get_hc_tag()
         prestation = u'SNS' if hc_tag.startswith('T') else u'SD'
         d = act.date.strftime('%d/%m/%Y')
         total2 += invoice.decimal_ppa
-        tpl.feed_line(u'19', u'320', prestation, d, d, invoice.decimal_ppa, 1, invoice.decimal_ppa)
+        tpl.feed_line(u'19', u'320', prestation, d, d, invoice.decimal_ppa, 1,
+                invoice.decimal_ppa)
     tpl.feed(InvoiceTemplate.SOUSTOTAL1, total1)
     if total2 != Decimal(0):
         tpl.feed(InvoiceTemplate.SOUSTOTAL2, total2)
-    assert invoice.decimal_amount == (total1+total2), "decimal_amount(%s) != total1+total2(%s), ppa: %s len(acts): %s" % (invoice.decimal_amount, total1+total2, invoice.ppa, len(acts))
+    assert invoice.decimal_amount == (total1+total2), "decimal_amount(%s) != " \
+        "total1+total2(%s), ppa: %s len(acts): %s" % (invoice.decimal_amount,
+    total1+total2, invoice.ppa, len(acts))
     tpl.feed(InvoiceTemplate.TOTAL2, total1+total2)
-    return [tpl.generate()]
+    return [tpl.generate(flatten=True, wait=False)]
+
 
 def build_batches(invoicing):
     invoices = invoicing.invoice_set.order_by('number')
@@ -126,27 +162,68 @@ def build_batches(invoicing):
         batches_by_health_center[batch.health_center].append(batch)
     return batches_by_health_center
 
-def render_invoicing(service, invoicing):
+
+def render_invoicing(service, invoicing, delete=False):
+    now = datetime.datetime.now()
     batches_by_health_center = build_batches(invoicing)
     centers = sorted(batches_by_health_center.keys())
+    all_files = []
+    all_others = []
+    output_file = None
+    try:
+        for center in centers:
+            files, others = batches_files(service, invoicing, center,
+                batches_by_health_center[center], delete=delete)
+            all_files.extend(files)
+            all_others.extend(others)
+            print 'all_files', all_files
+        output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
+                (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
+        pdftk = PdfTk()
+        pdftk.concat(all_files, output_file.name)
+        return output_file.name
+    except:
+        if delete and output_file:
+            try:
+                os.unlink(output_file.name)
+            except:
+                pass
+        raise
+    finally:
+        # eventual cleanup
+        if delete:
+            for path in all_files+all_others:
+                try:
+                    os.unlink(path)
+                except:
+                    pass
+
+
+
+def batches_files(service, invoicing, health_center, batches, delete=False):
     files = []
-    for center in centers:
-        files.extend(batches_files(service, batches_by_health_center[center]))
-    output_file = tempfile.NamedTemporaryFile(delete=False)
-    pdftk = PdfTk()
-    pdftk.concat(files, output_file.name)
-    return output_file.name
+    procs = []
+    others = []
+    try:
+        files.append(header_file(service, invoicing, health_center, batches, delete=delete))
 
+        for batch in batches:
+            for invoice in batch.invoices:
+                for name, proc, temp_fdf in invoice_files(service, invoicing, batch,
+                        invoice):
+                    files.append(name)
+                    procs.append(proc)
+                    others.append(temp_fdf)
+        for proc in procs:
+            proc.wait()
+        return files, others
+    except:
+        # cleanup
+        if delete:
+            for path in files+others:
+                try:
+                    os.unlink(path)
+                except:
+                    pass
+        raise
 
-def batches_files(service, batches):
-    files = []
-    files.append(header_file(service, batches))
-    for batch in batches:
-        for invoice in batch.invoices:
-            files.extend(invoice_files(service, batch, invoice))
-    return files
-
-
-if __name__ == '__main__':
-    import os
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")

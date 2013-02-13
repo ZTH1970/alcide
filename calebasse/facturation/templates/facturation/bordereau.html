@@ -84,10 +84,10 @@
     <div id="title">Bordereau de facturation</div>
     <div id="date">
       <div>
-        Édité le 19/02/2013 à 15:56:56
+        Édité le {{ now|date:"d/m/Y" }} à {{ now|time:"H:i:s" }}
       </div>
       <div>
-        N&deg;&nbsp;:&nbsp;FIXME-NUMBER
+         N&deg;: 410{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.code|stringformat:"03s" }}
       </div>
     </div>
     <div id="header-box">
@@ -95,6 +95,7 @@
           <table style="padding: 3px; border: 0.5px solid black; height: 5cm;">
             <tr style="padding-top: 3px; padding-bottom: 2px; line-height: 50%; background-color: #EEEEEE; margin-bottom: 3cm"><td> Établissement</td></tr>
             <tr><td style="height: 5cm; display: block;">
+            {% block payee %}
             {{ service.name }} SAINT ETIENNE</br>
             Finess: 420788606 MT: 19 DMT: 320</br>
             66/68, RUE MARENGO</br>
@@ -106,6 +107,7 @@
             </br>
             </br>
             </br>
+            {% endblock %}
         </td></tr>
         </table>
       </div>
@@ -114,12 +116,16 @@
             <tr style="padding-top: 3px; padding-bottom: 2px; line-height: 50%; background-color: #EEEEEE;"><td>Caisse destinataire</td></tr>
             <tr>
               <td>
-                SNCF</br>
-            66/68, RUE MARENGO</br>
-            42000 SAINT-ETIENNE</br>
-            Tél.: xx.xx.xx.xx.xx</br>
-        <p>N&deg;: FIXME-NUMERO</p>
-        <p>N&deg; de compte: FIXME-NUMERO DE COMPTE</p>
+                {{ health_center.name }}<br/>
+                {{ health_center.address }}<br/>
+                {% if health_center.address_complement %}
+                  {{ health_center.address_complement }}<br/>
+                {% endif %}
+                {{ health_center.zip_code }} {{ health_center.city }}<br/>
+                {% if health_center.phone %}
+                Tél.: {{ health_center.phone }}</br>
+                {% endif %}
+                <p>N&deg; de compte: 410{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.code|stringformat:"03s" }}</p>
         </td></tr>
         </table>
       </div>
@@ -128,15 +134,17 @@
             <tr style="padding-top: 3px; padding-bottom: 2px; line-height: 50%; background-color: #EEEEEE;"><td>Banque de règlement</td></tr>
             <tr>
               <td>
+                {% block bank %}
                 Banque&nbsp;: FIXME-BANK</br>
                 RIB&nbsp; FIXME-RIB
+                {% endblock %}
               </td>
             </tr>
         </table>
       </div>
     </div>
     <div id="content">
-      {% for batch in batches }}
+      {% for batch in batches %}
       <div style="text-align: left;">
         <h1>Lot n&deg;&nbsp;:&nbsp;{{ batch.number }}</h1>
       </div>
@@ -158,11 +166,11 @@
             {% for invoice in batch.invoices %}
             <tr>
               <td>{{ invoice.number }}</td>
-              <td>{{ invoice.patient.display_name }}</td>
-              <td>{{ invoice.patient.policy_holder.social_security_id }}</td>
-              <td></td>
-              <td>{{ invoice.start_date }}</td>
-              <td>{{ invoice.end_date }}</td>
+              <td>{{ invoice.patient_first_name}} {{ invoice.patient_last_name }}</td>
+              <td>{% firstof invoice.policy_holder_social_security_id invoice.patient_social_security_id %}</td>
+              <td>{{ invoice.kind }}</td>
+              <td>{{ invoice.start_date|date:"d/m/Y" }}</td>
+              <td>{{ invoice.end_date|date:"d/m/Y" }}</td>
               <td>{{ invoice.decimal_amount|floatformat:2 }}</td>
             </tr>
             {% endfor %}
@@ -170,17 +178,20 @@
       </table>
       <div style="text-align: right; border: none;">
         <p><b>Lot n&deg;&nbsp;:&nbsp;{{ batch.number }} [ {{ batch.number_of_invoices }} factures ] [ {{ batch.number_of_acts}} actes ] Total = {{ batch.total|floatformat:2 }} €</b></p>
-
       </div>
+      {% endfor %}
       <div style="text-align: right; border: none;">
-        <p><b>Synthèse caisse destinataire&nbsp;:&nbsp;[ 4 factures ] [ 7 actes ] Total = 1 169,03 euros</b></p>
+        <p><b>Synthèse caisse destinataire&nbsp;:&nbsp;[ {{ synthesis.number_of_invoices }} factures ] [ {{ synthesis.number_of_acts }} actes ] Total = {{ synthesis.total|floatformat:2 }} euros</b></p>
       </div>
       <table style="border: none;">
         <tr><td style="width: 20cm">&nbsp;</td>
-          <td style="padding: 3px; text-align:left; border: 1px solid black">Signature du directeur: Mme Serre</br>
+          <td style="padding: 3px; text-align:left; border: 1px solid black">
+            {% block signature %}
+            Signature du directeur: Mme Serre</br>
             </br>
             </br>
             </br>
+            {% endblock %}
           </td>
         </tr>
       </table>
