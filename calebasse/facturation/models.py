@@ -127,8 +127,6 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
 # The firts cmpp invoicing with calebasse
 INVOICING_OFFSET = 134
 
-from memory_profiler import profile
-
 class Invoicing(models.Model):
     '''Represent a batch of invoices:
 
@@ -200,7 +198,6 @@ class Invoicing(models.Model):
             raise RuntimeError('Unknown service', self.service)
 
 
-    @profile
     def get_stats_or_validate(self, commit=False):
         '''
             If the invoicing is in state open or closed and commit is False
