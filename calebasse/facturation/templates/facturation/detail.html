@@ -30,10 +30,11 @@
         {% if invoicing.status == "validated" %}
             <button id="teletrans-btn">Télétransmission à l'assurance maladie</button>
             <button id="expcompt-btn">Export comptabilité</button>
+            <button onclick="window.location.href=window.location.href+'download/'">Imprimer</button>
         {% endif %}
     {% else %}
         {% if show_validation_btn %}<button id="validate">Valider ce décompte</button>{% endif %}
-        {% if invoicing.status == "validated" %}<button id="print-btn">Imprimer</button>{% endif %}
+        {% if invoicing.status == "validated" %}<button id="print-btn" onclick="">Imprimer</button>{% endif %}
     {% endif %}
 {% endblock %}
 

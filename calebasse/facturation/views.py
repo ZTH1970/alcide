@@ -5,13 +5,14 @@ from calebasse.facturation import forms
 
 from datetime import date, datetime
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.files import File
 
 from calebasse.cbv import TemplateView, UpdateView
 
 from models import Invoicing
 from calebasse.ressources.models import Service
-
+from invoice_header import render_invoicing
 
 def display_invoicing(request, *args, **kwargs):
     if request.method == 'POST':
@@ -156,3 +157,19 @@ class ValidationFacturationView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ValidationFacturationView, self).get_context_data(**kwargs)
         return context
+
+class FacturationDownloadView(cbv.DetailView):
+    context_object_name = "invoicing"
+    model = Invoicing
+
+    def get(self, *args, **kwargs):
+        invoicing = self.get_object()
+        path = render_invoicing(invoicing, delete=False)
+        content = File(file(path))
+        response = HttpResponse(content,'application/pdf')
+        response['Content-Length'] = content.size
+        response['Content-Disposition'] = 'attachment; filename="facturation-%s.pdf"' % invoicing.seq_id
+        return response
+
+
+

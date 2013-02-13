@@ -124,6 +124,9 @@ class M2MFormMixin(object):
             form.save_m2m()
         return res
 
+class DetailView(M2MFormMixin, AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
+        detail.DetailView):
+    pass
 
 class CreateView(M2MFormMixin, AppTemplateFirstMixin, ModelNameMixin, ServiceViewMixin,
         edit.CreateView):
