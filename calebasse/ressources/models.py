@@ -547,8 +547,8 @@ class PricePerAct(models.Model):
         def price_at_date(self, date):
             i = bisect.bisect(self.dates, date)
             if i == 0:
-                raise RuntimeError('No price existed at date %s' % date)
-            return self.ppas[i-1]
+                raise RuntimeError('No existing price at date %s' % date)
+            return self.ppas[i-1].price
 
     class Meta:
         verbose_name = u"Tarif horaire de l'acte"
