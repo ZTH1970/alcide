@@ -188,7 +188,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         appointment.weight = 1
         appointments.append(appointment)
 
-    return sorted(appointments, key=lambda app: (app.begin_time, app.weight))
+    return sorted(appointments, key=lambda app: (app.begin_time, app.weight, app.event_id))
 
 def get_daily_usage(date, ressource, service, occurrences):
     """
