@@ -15,3 +15,8 @@ load:
 	createdb calebasse
 	scp aps-prod:/home/calebasse/$(LAST_DUMP) .
 	bzip2 -dc ./$(LAST_DUMP) | psql calebasse
+
+reload:
+	dropdb calebasse
+	createdb calebasse
+	bzip2 -dc ./$(LAST_DUMP) | psql calebasse
