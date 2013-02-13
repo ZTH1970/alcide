@@ -177,7 +177,6 @@ def render_invoicing(invoicing, delete=False):
                 batches_by_health_center[center], delete=delete)
             all_files.extend(files)
             all_others.extend(others)
-            print 'all_files', all_files
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                 (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
         pdftk = PdfTk()
