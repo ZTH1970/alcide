@@ -274,12 +274,12 @@ class Invoicing(models.Model):
                                     policy_holder_healthcenter=policy_holder.health_center,
                                     policy_holder_address=address))
                             for invoice in invoices[patient]:
-                                ppa = invoice['ppa']
+                                ppa = invoice['ppa'] * 100
                                 acts = invoice['acts']
                                 amount = ppa * len(acts)
                                 in_o = Invoice(
                                         invoicing=self,
-                                        ppa=invoice['ppa'],
+                                        ppa=ppa,
                                         amount=amount,
                                         **invoice_kwargs)
                                 in_o.batch = Invoice.objects.new_batch_number(
@@ -683,7 +683,11 @@ class Invoice(models.Model):
 
     @property
     def decimal_amount(self):
-        return Decimal(self.amout) / Decimal(100)
+        return Decimal(self.amount) / Decimal(100)
+
+    @property
+    def decimal_ppa(self):
+        return Decimal(self.ppa) / Decimal(100)
 
     def __unicode__(self):
         return "Facture %d de %d euros (%d actes)" % (self.number, self.amount, len(self.acts.all()))
