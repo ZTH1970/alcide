@@ -27,3 +27,10 @@ LARGE_REGIME_CHOICES=(
         ('99', '99 AUTRES MUTUELLES'),
 )
 
+TYPE_OF_CONTRACT_CHOICES = (
+        # Codification dans B2, nom
+        ('89', 'CMU - Couverture maladie universelle'),
+        ('04', 'AME - Aide médicale d\'État'),
+        #('XX', 'ACS - Aide pour une complémentaire santé'),
+)
+

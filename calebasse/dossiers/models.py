@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 
 import reversion
 
-from calebasse.choices import LARGE_REGIME_CHOICES
+from calebasse.choices import LARGE_REGIME_CHOICES, TYPE_OF_CONTRACT_CHOICES
 from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
@@ -271,6 +271,10 @@ class PatientContact(People):
             null=True, blank=True)
     other_health_center = models.CharField(verbose_name=u"Centre spécifique",
             max_length=4,
+            null=True, blank=True)
+    type_of_contract = models.CharField(max_length=2,
+            verbose_name=u"Type de contrat spécifique",
+            choices=TYPE_OF_CONTRACT_CHOICES,
             null=True, blank=True)
     job = models.ForeignKey('ressources.Job',
             related_name="job",
