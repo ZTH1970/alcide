@@ -762,8 +762,11 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                         aggregate(Min('date_selected'))['date_selected__min']
         return d and d.date()
 
+
     @property
     def exit_date(self):
+        if self.last_state.status.type != 'CLOS':
+            return None
         d = self.filestate_set.filter(status__type='CLOS'). \
                     aggregate(Max('date_selected'))['date_selected__max']
         return d and d.date()
