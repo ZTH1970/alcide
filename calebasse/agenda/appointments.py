@@ -44,9 +44,6 @@ class Appointment(object):
         else:
             self.begin_hour = None
 
-    def __get_initials(self, personns):
-        pass
-
     def init_from_event(self, event, service, validation_states=None):
         """ """
         delta = event.end_datetime - event.start_datetime
@@ -104,7 +101,7 @@ class Appointment(object):
             self.workers_initial = '%d inter.' % len(self.workers)
         else:
             for worker in self.workers:
-                self.workers_initial += " " + worker.get_initials()
+                self.workers_initial += " " + worker.worker.initials
         for worker in self.workers:
             self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
 

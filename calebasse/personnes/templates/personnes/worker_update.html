@@ -50,7 +50,11 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
       <p>
       {% for field in forms.id %}
       {{ field.label_tag  }} : {{ field }}
+      {% if field.name == 'gender' %}
+      </p><p>
+      {% endif %}
       {% endfor %}
+      </p>
     </div>
   </form>
 

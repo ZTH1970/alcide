@@ -74,6 +74,8 @@ class WorkerQuerySet(query.QuerySet):
 
 class Worker(People):
     objects = PassThroughManager.for_queryset_class(WorkerQuerySet)()
+
+    initials = models.CharField(max_length=5, verbose_name=u'Initiales', default='')
     type = models.ForeignKey('ressources.WorkerType',
             verbose_name=u'Type de personnel')
     services = models.ManyToManyField('ressources.Service', blank=True, null=True)
@@ -87,6 +89,11 @@ class Worker(People):
             verbose_name=u'Ancien ID au SESSAD TED', blank=True, null=True)
     old_sessad_ted_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID au SESSAD DYS', blank=True, null=True)
+
+    def save(self, **kwargs):
+        if not self.initials:
+            self.initials = self.get_initials()
+        super(Worker, self).save(**kwargs)
 
     def is_active(self):
         return self.enabled

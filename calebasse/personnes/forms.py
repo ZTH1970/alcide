@@ -106,7 +106,10 @@ class WorkerSearchForm(forms.Form):
 class WorkerIdForm(forms.ModelForm):
     class Meta:
         model = Worker
-        fields = ('last_name', 'first_name', 'gender', 'type', 'enabled')
+        fields = ('last_name', 'first_name', 'initials', 'gender', 'type', 'enabled')
+        widgets = {
+                'initials': forms.TextInput(attrs={'size': 6}),
+                }
 
 class WorkerServiceForm(forms.ModelForm):
     class Meta:

@@ -596,7 +596,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         events_workers = {worker.id: events}
         holidays_workers = {worker.id: holidays_worker}
 
-        context['initials'] = worker.get_initials()
+        context['initials'] = worker.initials
         context['worker_id'] = worker.id
         context['disponibility'] = Event.objects.daily_disponibilities(self.date,
                 events_workers, [worker], time_tables_workers, holidays_workers)
