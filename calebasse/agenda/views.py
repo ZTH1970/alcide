@@ -78,12 +78,12 @@ class AgendaServiceActivityView(TemplateView):
         events = Event.objects.for_today(self.date) \
                 .exclude(event_type_id=1) \
                 .filter(services=self.service) \
-                .order_by('start_datetime') \
+                .order_by('start_datetime', 'id') \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions')
         eventswithact = EventWithAct.objects.for_today(self.date) \
                 .filter(services=self.service) \
-                .order_by('start_datetime') \
+                .order_by('start_datetime', 'id') \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions')
         events = [ e.today_occurrence(self.date) for e in events ] \
