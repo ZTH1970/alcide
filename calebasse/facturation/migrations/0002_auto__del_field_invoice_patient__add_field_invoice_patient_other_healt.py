@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
         db.add_column('facturation_invoice', 'patient_other_health_center', self.gf('django.db.models.fields.CharField')(max_length=4, null=True, blank=True), keep_default=False)
 
         # Adding field 'Invoice.patient_last_name'
-        db.add_column('facturation_invoice', 'patient_last_name', self.gf('django.db.models.fields.CharField')(default=NotImplemented, max_length=128), keep_default=False)
+        db.add_column('facturation_invoice', 'patient_last_name', self.gf('django.db.models.fields.CharField')(default='', max_length=128), keep_default=False)
 
         # Adding field 'Invoice.patient_twinning_rank'
         db.add_column('facturation_invoice', 'patient_twinning_rank', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
@@ -26,7 +26,7 @@ class Migration(SchemaMigration):
         db.add_column('facturation_invoice', 'policy_holder_healthcenter', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='related_by_policy_holder_invoices', null=True, to=orm['ressources.HealthCenter']), keep_default=False)
 
         # Adding field 'Invoice.policy_holder_social_security_id'
-        db.add_column('facturation_invoice', 'policy_holder_social_security_id', self.gf('django.db.models.fields.CharField')(default=NotImplemented, max_length=13, blank=True), keep_default=False)
+        db.add_column('facturation_invoice', 'policy_holder_social_security_id', self.gf('django.db.models.fields.CharField')(default='', max_length=13, blank=True), keep_default=False)
 
         # Adding field 'Invoice.batch'
         db.add_column('facturation_invoice', 'batch', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
@@ -44,13 +44,13 @@ class Migration(SchemaMigration):
         db.add_column('facturation_invoice', 'policy_holder_id', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
 
         # Adding field 'Invoice.policy_holder_first_name'
-        db.add_column('facturation_invoice', 'policy_holder_first_name', self.gf('django.db.models.fields.CharField')(default=NotImplemented, max_length=128, blank=True), keep_default=False)
+        db.add_column('facturation_invoice', 'policy_holder_first_name', self.gf('django.db.models.fields.CharField')(default='', max_length=128, blank=True), keep_default=False)
 
         # Adding field 'Invoice.patient_healthcenter'
         db.add_column('facturation_invoice', 'patient_healthcenter', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='related_by_patient_invoices', null=True, to=orm['ressources.HealthCenter']), keep_default=False)
 
         # Adding field 'Invoice.policy_holder_last_name'
-        db.add_column('facturation_invoice', 'policy_holder_last_name', self.gf('django.db.models.fields.CharField')(default=NotImplemented, max_length=128, blank=True), keep_default=False)
+        db.add_column('facturation_invoice', 'policy_holder_last_name', self.gf('django.db.models.fields.CharField')(default='', max_length=128, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
