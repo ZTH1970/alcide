@@ -12,6 +12,7 @@ class PdfTk(object):
         return self._pdftk_path or '/usr/bin/pdftk'
 
     def do(self, args):
+        print 'do', args
         args = [self.pdftk_path] + args
         proc = subprocess.Popen(args)
         return proc.wait()

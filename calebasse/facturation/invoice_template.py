@@ -85,10 +85,10 @@ class InvoiceTemplate(object):
 
     def generate(self, flatten=False):
         flatten = self.flatten or flatten
-        with tempfile.NamedTemporaryFile() as temp_out_pdf:
+        with tempfile.NamedTemporaryFile(delete=False) as temp_out_pdf:
             pdftk = PdfTk()
-            pdftk.fill(self.get_template_path(), self.fields, temp_out_pdf.name, flatten=flatten)
-            return temp_out_pdf.read()
+            pdftk.form_fill(self.get_template_path(), self.fields, temp_out_pdf.name, flatten=flatten)
+            return temp_out_pdf.name
 
 if __name__ == '__main__':
     import sys
@@ -102,11 +102,11 @@ if __name__ == '__main__':
         args = sys.argv[3:]
     except IndexError:
         print 'Usage: python', __file__, 'template.pdf outfile.pdf NOM_BENFICIAIRE="Benjamin Dauvergne"'
-    tpl = InvoiceTemplate(infile)
-    for arg in args:
-        key, value = arg.split('=')
-        key = getattr(InvoiceTemplate, key)
-        value = unicode(value, locale_encoding)
-        tpl.feed(key, value)
-    with open(outfile, 'w') as f:
-        f.write(tpl.generate())
+    else:
+        tpl = InvoiceTemplate(infile)
+        for arg in args:
+            key, value = arg.split('=')
+            key = getattr(InvoiceTemplate, key)
+            value = unicode(value, locale_encoding)
+            tpl.feed(key, value)
+            print tpl.generate()
