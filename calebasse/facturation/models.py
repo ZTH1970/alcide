@@ -259,8 +259,8 @@ class Invoicing(models.Model):
                                     patient_twinning_rank=patient.twinning_rank,
                                     patient_healthcenter=patient.health_center,
                                     patient_other_health_center=patient.other_health_center)
-                            if patient.policy_holder != patient.patientcontact:
-                                policy_holder = patient.policy_holder
+                            if patient.policyholder != patient.patientcontact:
+                                policy_holder = patient.policyholder
                                 invoice_kwargs.update(dict(
                                     policy_holder_id=policy_holder.id,
                                     policy_holder_last_name=policy_holder.last_name,
