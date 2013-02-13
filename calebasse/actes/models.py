@@ -135,21 +135,21 @@ class Act(models.Model):
 
     def get_hc_tag(self):
         if self.healthcare:
+            beg = None
             try:
                 self.healthcare.cmpphealthcaretreatment
-                return 'T'
+                beg = 'T'
             except:
                 pass
             try:
                 self.healthcare.cmpphealthcarediagnostic
-                acts = self.healthcare.act_set.order_by('date')
-                i = 1
-                for act in acts:
-                    if act.id == self.id:
-                        return 'D' + str(i)
-                    i = i + 1
+                beg = 'D'
             except:
                 pass
+            if beg:
+                acts = list(self.healthcare.act_set.order_by('date').values_list('id', flat=True))
+                beg += str(acts.index(self.id) + 1)
+                return beg
         return None
 
     def is_new(self):
