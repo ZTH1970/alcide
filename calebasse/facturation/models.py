@@ -330,9 +330,10 @@ class Invoicing(models.Model):
                         patients[invoice.patient_id] = patient
                         len_patients = len_patients + 1
                         patients_stats[patient] = {}
+                        patients_stats[patient]['invoices'] = []
                     else:
                         patient = patients[invoice.patient_id]
-                    patients_stats[patient]['invoices'].setdefault(patient, []).append(invoice)
+                    patients_stats[patient]['invoices'].append(invoice)
                 patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 # all patients in the invoicing are invoiced
                 len_patient_invoiced = 0
