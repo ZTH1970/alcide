@@ -316,15 +316,22 @@ class Invoicing(models.Model):
                 patients_stats = {}
                 days_not_locked = []
                 invoices = self.invoice_set.all()
+                patients = {}
                 for invoice in invoices:
                     len_invoices = len_invoices + 1
                     len_acts_invoiced = len_acts_invoiced + len(invoice.acts.all())
-                    if not invoice.patient in patients_stats:
+                    patient = None
+                    if not invoice.patient_id in patients.keys():
+                        try:
+                            patient = PatientRecord.objects.get(id=invoice.patient_id)
+                        except:
+                            patient = PatientRecord(last_name=patient_last_name, first_name=patient_first_name)
+                        patients[patient_id] = patient
                         len_patients = len_patients + 1
-                        patients_stats[invoice.patient] = {}
-                        patients_stats[invoice.patient]['invoices'] = [invoice]
+                        patients_stats[patient] = {}
                     else:
-                        patients_stats[invoice.patient]['invoices'].append(invoice)
+                        patient = patients[patient_id]
+                    patients_stats[patient]['invoices'].setdefault(patient, []).append(invoice)
                 patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 # all patients in the invoicing are invoiced
                 len_patient_invoiced = 0
