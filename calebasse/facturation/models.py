@@ -608,11 +608,11 @@ class Invoice(models.Model):
     # we copy his informations here
     patient_id = models.IntegerField(blank=True, null=True)
     patient_last_name = models.CharField(max_length=128,
-            verbose_name=u'Nom du patient')
+            verbose_name=u'Nom du patient', default='', blank=True)
     patient_first_name = models.CharField(max_length=128,
-            verbose_name=u'Prénom(s) du patient', blank=True, null=True)
+            verbose_name=u'Prénom(s) du patient', default='', blank=True)
     patient_social_security_id = models.CharField(max_length=13,
-            verbose_name=u"NIR", null=True, blank=True)
+            verbose_name=u"NIR", default='', blank=True)
     patient_birthdate = models.DateField(verbose_name=u"Date de naissance",
             null=True, blank=True)
     patient_twinning_rank = models.IntegerField(
@@ -623,19 +623,23 @@ class Invoice(models.Model):
             related_name='related_by_patient_invoices',
             null=True, blank=True)
     patient_other_health_center = models.CharField(
-        verbose_name=u"Centre spécifique", max_length=4, null=True, blank=True)
+        verbose_name=u"Centre spécifique", max_length=4, default='',
+        blank=True)
     # policy holder informations
     policy_holder_id = models.IntegerField(blank=True, null=True)
     policy_holder_last_name = models.CharField(max_length=128,
-            verbose_name=u'Nom de l\'assuré', blank=True)
+            verbose_name=u'Nom de l\'assuré', default='', blank=True)
     policy_holder_first_name = models.CharField(max_length=128,
-            verbose_name=u'Prénom(s) de l\' assuré', blank=True)
+            verbose_name=u'Prénom(s) de l\' assuré', default='', blank=True)
     policy_holder_social_security_id = models.CharField(max_length=13,
-            verbose_name=u"NIR de l\'assuré", blank=True)
+            verbose_name=u"NIR de l\'assuré", default='', blank=True)
     policy_holder_healthcenter = models.ForeignKey('ressources.HealthCenter',
             verbose_name=u"Centre d'assurance maladie de l\'assuré",
             related_name='related_by_policy_holder_invoices',
             null=True, blank=True)
+    policy_holder_address = models.CharField(max_length=128,
+            verbose_name=u'Adresse de l\'assuré', default='', blank=True)
+
     created = models.DateTimeField(u'Création', auto_now_add=True)
     invoicing = models.ForeignKey('facturation.Invoicing',
         on_delete='PROTECT')
