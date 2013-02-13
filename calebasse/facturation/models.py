@@ -9,6 +9,7 @@ from django.db.models import Max, Q
 
 from model_utils import Choices
 
+from calebasse.dossiers.models import PatientRecord
 from calebasse.ressources.models import ServiceLinkedManager, PricePerAct
 
 import list_acts
