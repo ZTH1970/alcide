@@ -259,12 +259,20 @@ class Invoicing(models.Model):
                                     patient_other_health_center=patient.other_health_center)
                             if patient.policyholder != patient.patientcontact:
                                 policy_holder = patient.policyholder
+                                try:
+                                    address = unicode(policy_holder.adresses.get(place_of_life=True))
+                                except:
+                                    try:
+                                        address = unicode(policy_holder.adresses.all()[0])
+                                    except:
+                                        address = u''
                                 invoice_kwargs.update(dict(
                                     policy_holder_id=policy_holder.id,
                                     policy_holder_last_name=policy_holder.last_name,
                                     policy_holder_first_name=policy_holder.first_name,
                                     policy_holder_social_security_id=policy_holder.social_security_id,
-                                    policy_holder_healthcenter=policy_holder.health_center))
+                                    policy_holder_healthcenter=policy_holder.health_center,
+                                    policy_holder_address=address))
                             for invoice in invoices[patient]:
                                 ppa = invoice['ppa']
                                 acts = invoice['acts']
