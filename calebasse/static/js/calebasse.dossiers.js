@@ -188,7 +188,7 @@ function state_dialog(url, state_title, state_type) {
 
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
-            '#ajax-dlg', '800px', 'Ajouter', null, nir_check);
+            '#ajax-dlg', '900px', 'Ajouter', null, nir_check);
     });
     $('.update-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
