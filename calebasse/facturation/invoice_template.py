@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import tempfile
-import subprocess
-from fdfgen import forge_fdf
+
+from calebasse.pdftk import PdfTk
 
 class InvoiceTemplate(object):
     NUM_FINESS = u'n° finess'
@@ -80,35 +80,15 @@ class InvoiceTemplate(object):
         self.feed(self.MONTANT % i, montant)
         self.i += 1
 
-    def get_pdftk_path(self):
-        return '/usr/bin/pdftk'
-
     def get_template_path(self):
         return self.template_path or 'template.pdf'
 
     def generate(self, flatten=False):
         flatten = self.flatten or flatten
-        string_fields = []
-        other_fields = []
-        for k, v in self.fields.iteritems():
-            if isinstance(k, basestring):
-                string_fields.append((k, v))
-            else:
-                other_fields.append((k[0], k[1] if isinstance(v, bool) else v))
-        fdf = forge_fdf("", string_fields, other_fields, [], [])
-        with tempfile.NamedTemporaryFile() as temp_fdf:
-            with tempfile.NamedTemporaryFile() as temp_out_pdf:
-                temp_fdf.write(fdf)
-                temp_fdf.flush()
-                args = [self.get_pdftk_path(), 
-                    self.template_path, 'fill_form',
-                    temp_fdf.name, 'output', temp_out_pdf.name]
-                if flatten:
-                    args.append('flatten')
-                proc = subprocess.Popen(args)
-                proc.wait()
-                temp_fdf.close()
-                return temp_out_pdf.read()
+        with tempfile.NamedTemporaryFile() as temp_out_pdf:
+            pdftk = PdfTk()
+            pdftk.fill(self.get_template_path(), self.fields, temp_out_pdf.name, flatten=flatten)
+            return temp_out_pdf.read()
 
 if __name__ == '__main__':
     import sys
