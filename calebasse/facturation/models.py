@@ -252,11 +252,11 @@ class Invoicing(models.Model):
                                     patient_id=patient.id,
                                     patient_last_name=patient.last_name,
                                     patient_first_name=patient.first_name,
-                                    patient_social_security_id=patient.social_security_id,
+                                    patient_social_security_id=patient.social_security_id or '',
                                     patient_birthdate=patient.birthdate,
                                     patient_twinning_rank=patient.twinning_rank,
                                     patient_healthcenter=patient.health_center,
-                                    patient_other_health_center=patient.other_health_center)
+                                    patient_other_health_center=patient.other_health_center or '')
                             if patient.policyholder != patient.patientcontact:
                                 policy_holder = patient.policyholder
                                 try:
