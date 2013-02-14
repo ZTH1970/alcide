@@ -75,7 +75,7 @@ class WorkerQuerySet(query.QuerySet):
 class Worker(People):
     objects = PassThroughManager.for_queryset_class(WorkerQuerySet)()
 
-    initials = models.CharField(max_length=5, verbose_name=u'Initiales', default='')
+    initials = models.CharField(max_length=5, verbose_name=u'Initiales', default='', blank=True)
     type = models.ForeignKey('ressources.WorkerType',
             verbose_name=u'Type de personnel')
     services = models.ManyToManyField('ressources.Service', blank=True, null=True)
