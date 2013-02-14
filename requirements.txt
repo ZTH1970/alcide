@@ -11,3 +11,4 @@ django-debug-toolbar
 m2crypto
 python-ldap
 fdfgen
+xhtml2pdf
