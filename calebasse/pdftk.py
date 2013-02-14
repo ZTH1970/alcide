@@ -22,7 +22,11 @@ class PdfTk(object):
             return proc
 
     def concat(self, input_files, output_file, wait=True):
-        args = input_files + ['cat', 'output', output_file, 'compress']
+        args = input_files + ['cat', 'output', output_file, 'compress', 'flatten']
+        return self.do(args, wait=wait)
+
+    def background(self, input_file, background_file, output_file, wait=True):
+        args = [input_file, 'background', background_file, 'output', output_file, 'compress']
         return self.do(args, wait=wait)
 
     def form_fill(self, pdf_file, fields, output_file, flatten=False, wait=True, delete=False):

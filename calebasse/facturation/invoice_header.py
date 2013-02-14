@@ -77,75 +77,76 @@ def invoice_files(service, invoicing, batch, invoice):
             prefix='%s-invoicing-%s-invoice-%s-'
                 % ( service.slug, invoicing.id, invoice.id),
             suffix='-%s.pdf' % datetime.datetime.now())
-    tpl.feed(InvoiceTemplate.NUM_FINESS, '420788606')
-    tpl.feed(InvoiceTemplate.IDENTIFICATION_ETABLISSEMENT,
-            '''%s SAINT ETIENNE
+    health_center = invoice.health_center
+    code_organisme = u'%s - %s %s' % (
+      health_center.large_regime.code,
+      health_center.dest_organism,
+      health_center.name)
+    ctx = {
+            'NUM_FINESS': '420788606',
+            'NUM_LOT': unicode(batch.number),
+            'NUM_FACTURE': unicode(invoice.number),
+            'NUM_ENTREE': unicode(invoice.patient_id),
+            'IDENTIFICATION_ETABLISSEMENT': '''%s SAINT ETIENNE
 66/68, RUE MARENGO
-42000 SAINT ETIENNE''' % service.name)
-    tpl.feed(InvoiceTemplate.NUM_LOT, unicode(batch.number))
-    tpl.feed(InvoiceTemplate.NUM_FACTURE, unicode(invoice.number))
-    tpl.feed(InvoiceTemplate.NUM_ENTREE, unicode(invoice.patient_id))
-    tpl.feed(InvoiceTemplate.DATE_ELABORATION, 
-            datetime.datetime.now().strftime('%d/%m/%Y'))
-    tpl.feed(InvoiceTemplate.NOM_BENEFICIAIRE,
-            u' '.join((invoice.patient_first_name,
-                invoice.patient_last_name)))
-    tpl.feed(InvoiceTemplate.DATE_NAISSANCE_RANG,
-            u' '.join((unicode(invoice.patient_birthdate),
-                unicode(invoice.patient_twinning_rank))))
-    tpl.feed(InvoiceTemplate.IMMAT_CLE, invoice.patient_social_security_id)
-    # FIXME le nir de qui du patient ou de l'assuré ?
-    #tpl.feed(InvoiceTemplate.IMMAT_CLE, )
-    # FIXME quel healthcenter ?
-    # healthcenter = None
-    # code_organisme = '%s - %s %s' % (
-    #   health_center.large_regime.code,
-    #   health_center.dest_organism,
-    #   health_center.name)
-    # tpl.feed(InvoiceTemplate.CODE_ORGANISME, code_organisme)
+42000 SAINT ETIENNE''' % service.name,
+            'DATE_ELABORATION': datetime.datetime.now().strftime('%d/%m/%Y'),
+            'NOM_BENEFICIAIRE': u' '.join((invoice.patient_first_name,
+                invoice.patient_last_name)),
+            'NIR_BENEFICIAIRE': invoice.patient_social_security_id,
+            'DATE_NAISSANCE_RANG': u' '.join(
+                (unicode(invoice.patient_birthdate),
+                    unicode(invoice.patient_twinning_rank))),
+            'CODE_ORGANISME':  code_organisme,
+            'ABSENCE_SIGNATURE': True,
+    }
     if invoice.patient_entry_date is not None:
-        tpl.feed(InvoiceTemplate.DATE_ENTREE,
-                invoice.patient_entry_date.strftime('%d/%m/%Y'))
+        ctx['DATE_ENTREE'] = invoice.patient_entry_date.strftime('%d/%m/%Y')
     if invoice.patient_exit_date is not None:
-        tpl.feed(InvoiceTemplate.DATE_SORTIE,
-                invoice.patient_exit_date.strftime('%d/%m/%Y'))
-    tpl.feed(InvoiceTemplate.ABSENCE_SIGNATURE, True)
+        ctx['DATE_SORTIE'] = invoice.patient_exit_date.strftime('%d/%m/%Y')
     if invoice.policy_holder_id:
-        tpl.feed(InvoiceTemplate.NOM_ASSURE, u' '.join((
-            invoice.policy_holder_first_name,
-            invoice.policy_holder_last_name)))
-        tpl.feed(InvoiceTemplate.IMMAT_CLE,
-            invoice.policy_holder_social_security_id)
-        tpl.feed(InvoiceTemplate.ADRESSE1, invoice.policy_holder_address[:47])
-        tpl.feed(InvoiceTemplate.ADRESSE2,
-                invoice.policy_holder_address[47:47+104])
+        address = invoice.policy_holder_address
+        address = address[:40] + '\n' + address[40:80] + '\n' + address[80:120]
+        ctx.update({
+                'NOM_ASSURE': u' '.join((
+                    invoice.policy_holder_first_name,
+                    invoice.policy_holder_last_name)),
+                'NIR_ASSURE': invoice.policy_holder_social_security_id,
+                'ADRESSE_ASSURE': address,
+            })
     total1 = Decimal(0)
     total2 = Decimal(0)
     acts = invoice.acts.order_by('date')
     if len(acts) > 24:
         raise RuntimeError('Too much acts in invoice %s' % invoice.id)
+    tableau1 = []
+    tableau2 = []
     for act in acts[:12]:
         hc_tag = act.get_hc_tag()
         prestation = u'SNS' if hc_tag.startswith('T') else u'SD'
         d = act.date.strftime('%d/%m/%Y')
         total1 += invoice.decimal_ppa
-        tpl.feed_line(u'19', u'320', prestation, d, d, invoice.decimal_ppa, 1,
-                invoice.decimal_ppa)
+        tableau1.append([u'19', u'320', prestation, d, d, invoice.decimal_ppa,
+            1, invoice.decimal_ppa, act.get_hc_tag()])
     for act in acts[12:24]:
         hc_tag = act.get_hc_tag()
         prestation = u'SNS' if hc_tag.startswith('T') else u'SD'
         d = act.date.strftime('%d/%m/%Y')
         total2 += invoice.decimal_ppa
-        tpl.feed_line(u'19', u'320', prestation, d, d, invoice.decimal_ppa, 1,
-                invoice.decimal_ppa)
-    tpl.feed(InvoiceTemplate.SOUSTOTAL1, total1)
+        tableau2.append([u'19', u'320', prestation, d, d, invoice.decimal_ppa,
+            1, invoice.decimal_ppa, act.get_hc_tag()])
+    ctx.update({
+            'TABLEAU1': tableau1,
+            'TABLEAU2': tableau2,
+        })
+    ctx['SOUS_TOTAL1'] = total1
     if total2 != Decimal(0):
-        tpl.feed(InvoiceTemplate.SOUSTOTAL2, total2)
+        ctx['SOUS_TOTAL2'] = total2
     assert invoice.decimal_amount == (total1+total2), "decimal_amount(%s) != " \
         "total1+total2(%s), ppa: %s len(acts): %s" % (invoice.decimal_amount,
     total1+total2, invoice.ppa, len(acts))
-    tpl.feed(InvoiceTemplate.TOTAL2, total1+total2)
-    return [tpl.generate(flatten=True, wait=False)]
+    ctx['TOTAL'] = total1+total2
+    return [tpl.generate(ctx)]
 
 
 def build_batches(invoicing):
@@ -169,17 +170,15 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     batches_by_health_center = build_batches(invoicing)
     centers = sorted(batches_by_health_center.keys())
     all_files = []
-    all_others = []
     output_file = None
     try:
         for center in centers:
             if headers is not True and headers is not False and headers != center:
                 continue
-            files, others = batches_files(service, invoicing, center,
+            files = batches_files(service, invoicing, center,
                 batches_by_health_center[center], delete=delete,
                 headers=headers, invoices=invoices)
             all_files.extend(files)
-            all_others.extend(others)
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                 (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
         pdftk = PdfTk()
@@ -195,7 +194,7 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     finally:
         # eventual cleanup
         if delete:
-            for path in all_files+all_others:
+            for path in all_files:
                 try:
                     os.unlink(path)
                 except:
@@ -206,8 +205,6 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
 def batches_files(service, invoicing, health_center, batches, delete=False,
         headers=True, invoices=True):
     files = []
-    procs = []
-    others = []
     try:
         if headers:
             files.append(header_file(service, invoicing, health_center, batches, delete=delete))
@@ -218,18 +215,12 @@ def batches_files(service, invoicing, health_center, batches, delete=False,
                     # if invoices is a sequence, skip unlisted invoices
                     if invoices is not True and invoice not in invoices:
                         continue
-                    for name, proc, temp_fdf in invoice_files(service, invoicing, batch,
-                            invoice):
-                        files.append(name)
-                        procs.append(proc)
-                        others.append(temp_fdf)
-            for proc in procs:
-                proc.wait()
-        return files, others
+                    files.extend(invoice_files(service, invoicing, batch, invoice))
+        return files
     except:
         # cleanup
         if delete:
-            for path in files+others:
+            for path in files:
                 try:
                     os.unlink(path)
                 except:

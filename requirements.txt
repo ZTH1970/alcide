@@ -10,5 +10,4 @@ interval == 1.0.0
 django-debug-toolbar
 m2crypto
 python-ldap
-fdfgen
 xhtml2pdf

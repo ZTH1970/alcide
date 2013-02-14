@@ -3,101 +3,177 @@
 import os
 import tempfile
 
-from calebasse.pdftk import PdfTk
+import cairo
+import pango
+import pangocairo
+import pyPdf
+from StringIO import StringIO
+
+from ..pdftk import PdfTk
+
 
 class InvoiceTemplate(object):
-    NUM_FINESS = u'n° finess'
-    IDENTIFICATION_ETABLISSEMENT = u'identification établissement'
-    NUM_LOT = u'n°lot'
-    NUM_FACTURE = u'n°facture'
-    NUM_ENTREE = u'n°entrée'
-    NUM_FEUILLET = u'n°feuillet'
-    DATE_ELABORATION = u'date élaboration'
-    NOM_BENEFICIAIRE = u'nom bénéficiaire'
-    DATE_NAISSANCE_RANG = u'date naissance+rang'
-    CODE_ORGANISME = u'code organisme'
-    DATE_ENTREE = u'date entrée'
-    DATE_PRESENCE = u'date présence'
-    DATE_SORTIE = u'date sortie'
-    NOM_ASSURE = u'nom assuré'
-    IMMAT_CLE = u'immat+clé'
-    ADRESSE1 = u'adresse1'
-    ADRESSE2 = u'adresse2'
-    NUM_OU_DATE_AT = u'n° ou date AT'
-    DATE_ACCIDENT = u'date accident'
-    MAX_LINES = 24 # i + 1
-    MT = u'MT%d'   # mode de traitement
-    DMT = u'DMT%d' # discipline médico-tarifaire
-    PR = u'PR%d'   # prestation
+    fields = {
+            'NUM_FINESS': {
+                'type': 'text',
+                'pos': (380, 72),
+            },
+            'NUM_LOT': {
+                'type': 'text',
+                'pos': (570, 85),
+            },
+            'NUM_FACTURE': {
+                'type': 'text',
+                'pos': (570, 96),
+            },
+            'NUM_ENTREE': {
+                'type': 'text',
+                'pos': (570, 107),
+            },
+            'ABSENCE_SIGNATURE': {
+                'type': 'bool',
+                'pos': (672.5, 130),
+            },
+            'IDENTIFICATION_ETABLISSEMENT': {
+                'type': 'multiline',
+                'pos': (45, 85),
+            },
+            'DATE_ELABORATION': {
+                'type': 'text',
+                'pos': (720, 58),
+            },
+            'NOM_BENEFICIAIRE': {
+                'pos': (150, 144),
+            },
+            'NIR_BENEFICIAIRE': {
+                'pos': (130, 163),
+            },
+            'DATE_NAISSANCE_RANG': {
+                'pos': (350 ,163),
+            },
+            'CODE_ORGANISME': {
+                'pos': (170, 175),
+            },
+            'DATE_ENTREE': {
+                'pos': (92, 187),
+            },
+            'DATE_SORTIE': {
+                'pos': (360, 187),
+            },
+            'NOM_ASSURE': {
+                'pos': (530, 144),
+            },
+            'NIR_ASSURE': {
+                'pos': (520, 163),
+            },
+            'ADRESSE_ASSURE': {
+                'pos': (460, 177),
+            },
+            'TABLEAU1': {
+                'type': 'array',
+                'y': 323,
+                'lineheight': 12,
+                'cols': [
+                    38,
+                    65,
+                    91.5,
+                    114,
+                    172,
+                    240,
+                    303,
+                    333,
+                    414.5] },
+            'TABLEAU2': {
+                'type': 'array',
+                'y': 323,
+                'lineheight': 12,
+                'x': 395.5,
+                'cols': [
+                    38,
+                    65,
+                    91.5,
+                    114,
+                    172,
+                    240,
+                    303,
+                    333,
+                    414.5] },
+            'SOUS_TOTAL1': {
+                    'pos': (340, 475),
+            },
+            'SOUS_TOTAL2': {
+                    'pos': (740, 475),
+            },
+            'TOTAL': {
+                    'pos': (330, 500),
+            },
+    }
 
-    DATE_DEBUT = u'DATE%d' # % i*2+1
-    DATE_FIN = u'DATE%d' # i*2+2
-    PRIX = u'PRIX%d' # prix
-    QUANT = u'QUANT%d' # quantite
-    MONTANT = u'MONTANT%d' # montant
-    SOUSTOTAL1 = u'SOUSTOTAL1'
-    SOUSTOTAL2 = u'SOUSTOTAL2'
-    TOTAL1 = u'TOTAL1'
-    TOTAL2 = u'TOTAL2'
-
-    ABSENCE_SIGNATURE = (u'absence signature', 'Oui')
-    PRISE_EN_CHARGE = (u'prise en charge', 'AT', 'L 115', 'accident tiers')
-    ACCIDENT_CAUSE_TIERS = (u'accident causé tiers', 'non')
-    PART_OBLIG = (u'PART OBLIG', 'Oui')
-    PART_COMPL = (u'PART COMPL', 'Oui')
-    buttons = [ ABSENCE_SIGNATURE, PRISE_EN_CHARGE, ACCIDENT_CAUSE_TIERS, 
-            PART_OBLIG, PART_COMPL ]
-
-    def __init__(self, template_path=None, prefix='tmp', suffix='', flatten=False):
+    def __init__(self, template_path=None, prefix='tmp', suffix=''):
         self.prefix = prefix
         self.suffix = suffix
         self.template_path = template_path
-        self.fields = {}
-        self.flatten = False
-        self.stack = []
-        self.i = 0
 
-    def push(self):
-        self.stack.append(self.fields.copy())
+    def draw_field(self, ctx, field, value, size=7):
+        _type = field.get('type', 'text')
+        if _type == 'bool':
+            x, y = field['pos']
+            if value:
+                ctx.move_to(x, y-10)
+                pangocairo_context = pangocairo.CairoContext(ctx)
+                pangocairo_context.set_antialias(cairo.ANTIALIAS_SUBPIXEL)
 
-    def pop(self):
-        self.fields = self.stack.pop()
+                layout = pangocairo_context.create_layout()
+                font = pango.FontDescription("Georgia %s" % size)
+                layout.set_font_description(font)
 
-    def peek(self):
-        self.fields = self.stack[-1].copy()
+                layout.set_text(u'\u2714')
+                pangocairo_context.update_layout(layout)
+                pangocairo_context.show_layout(layout)
+        if _type in ('text', 'multiline'):
+            x, y = field['pos']
+            ctx.move_to(x, y)
+            pangocairo_context = pangocairo.CairoContext(ctx)
+            pangocairo_context.set_antialias(cairo.ANTIALIAS_SUBPIXEL)
 
-    def feed(self, field, value):
-        self.fields[field] = value
+            layout = pangocairo_context.create_layout()
+            font = pango.FontDescription("Georgia Bold %s" % size)
+            layout.set_font_description(font)
 
-    def feed_line(self, mt, dmt, prestation, date_debut, date_fin, prix, quant, montant):
-        i = self.i + 1
-        k = self.i * 2 + 1
-        j = self.i * 2 + 2
-        self.feed(self.MT % i, mt)
-        self.feed(self.DMT % i, dmt)
-        self.feed(self.PR % i, prestation)
-        self.feed(self.DATE_DEBUT % k, date_debut)
-        self.feed(self.DATE_FIN % j, date_fin)
-        self.feed(self.PRIX % i, prix)
-        self.feed(self.QUANT % i, quant)
-        self.feed(self.MONTANT % i, montant)
-        self.i += 1
+            layout.set_text(unicode(value))
+            pangocairo_context.update_layout(layout)
+            pangocairo_context.show_layout(layout)
+        if _type == 'array':
+            field = field.copy()
+            y = field['y']
+            offset = field.get('x', 0)
+            for row in value:
+                for x, v in zip(field['cols'], row):
+                    sub = {
+                            'pos': (offset+x, y),
+                    }
+                    self.draw_field(ctx, sub, v, 7)
+                y += field['lineheight']
 
-    def get_template_path(self):
-        return self.template_path or 'template.pdf'
-
-    def generate(self, flatten=False, wait=True, delete=False):
-        flatten = self.flatten or flatten
+    def generate(self, content, delete=True):
+        width, height = 842,595
         with tempfile.NamedTemporaryFile(prefix=self.prefix,
                 suffix=self.suffix, delete=False) as temp_out_pdf:
             try:
-                pdftk = PdfTk(prefix=self.prefix)
-                result = pdftk.form_fill(self.get_template_path(), self.fields, temp_out_pdf.name, flatten=flatten, wait=wait, delete=delete)
-                if wait:
-                    return temp_out_pdf.name
-                else:
-                    result, temp_out_fdf = result
-                    return temp_out_pdf.name, result, temp_out_fdf
+                overlay = tempfile.NamedTemporaryFile(prefix='overlay',
+                        suffix='.pdf')
+                surface = cairo.PDFSurface (overlay.name, width, height)
+                ctx = cairo.Context (surface)
+                ctx.set_source_rgb(0, 0, 0)
+                for key, value in content.iteritems():
+                    field = self.fields[key]
+                    self.draw_field(ctx, field, value)
+                ctx.show_page()
+                surface.finish()
+                pdftk = PdfTk()
+                pdftk.background(overlay.name, self.template_path, temp_out_pdf.name)
+                overlay.close()
+                return temp_out_pdf.name
             except:
                 if delete:
                     try:
@@ -105,24 +181,3 @@ class InvoiceTemplate(object):
                     except:
                         pass
                 raise
-
-if __name__ == '__main__':
-    import sys
-    import locale
-
-    locale.setlocale(locale.LC_ALL, '')
-    locale_encoding = locale.nl_langinfo(locale.CODESET)
-    try:
-        infile = sys.argv[1]
-        outfile = sys.argv[2]
-        args = sys.argv[3:]
-    except IndexError:
-        print 'Usage: python', __file__, 'template.pdf outfile.pdf NOM_BENFICIAIRE="Benjamin Dauvergne"'
-    else:
-        tpl = InvoiceTemplate(infile)
-        for arg in args:
-            key, value = arg.split('=')
-            key = getattr(InvoiceTemplate, key)
-            value = unicode(value, locale_encoding)
-            tpl.feed(key, value)
-            print tpl.generate()
