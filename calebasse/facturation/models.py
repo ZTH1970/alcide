@@ -273,6 +273,7 @@ class Invoicing(models.Model):
                                     policy_holder_last_name=policy_holder.last_name,
                                     policy_holder_first_name=policy_holder.first_name,
                                     policy_holder_social_security_id=policy_holder.social_security_id,
+                                    policy_holder_other_health_center=policy_holder.other_health_center or '',
                                     policy_holder_healthcenter=policy_holder.health_center,
                                     policy_holder_address=address))
                             for invoice in invoices[patient]:
@@ -652,6 +653,9 @@ class Invoice(models.Model):
             verbose_name=u"Centre d'assurance maladie de l\'assuré",
             related_name='related_by_policy_holder_invoices',
             null=True, blank=True)
+    policy_holder_other_health_center = models.CharField(
+            verbose_name=u"Centre spécifique de l\'assuré", max_length=4,
+            default='', blank=True)
     policy_holder_address = models.CharField(max_length=128,
             verbose_name=u'Adresse de l\'assuré', default='', blank=True)
 
