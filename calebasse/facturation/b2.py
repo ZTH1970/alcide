@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # TODO / FIXME
-# - code CCCC dans le type 2
 # - lever une exception lorsque nb_lines dépasse 999 (et autres compteurs)
 
 import os
@@ -66,8 +65,6 @@ def write128(output_file, line):
 def write_invoice(output_file, invoice):
     invoice_lines = 0
     start_date = invoice.start_date
-    # FIXME IMPORTANT/URGENT -- CCCC = other_ de policy_holder à ajouter dans
-    # le modele invoice
     start_2 = '2' + NUMERO_EMETTEUR + ' ' + \
             invoice.policy_holder_social_security_id + \
             get_control_key(invoice.policy_holder_social_security_id) + \
@@ -75,7 +72,7 @@ def write_invoice(output_file, invoice):
             '1' + ('%0.9d' % invoice.patient_id) + \
             invoice.policy_holder_healthcenter.large_regime.code + \
             invoice.policy_holder_healthcenter.dest_organism + \
-            'CCCC' + \
+            (invoice.policy_holder_other_health_center or '0000') + \
             '1' + b2date(start_date) + '000000' + \
             invoice.policy_holder_healthcenter.dest_organism + '000' + \
             '10' + ' ' +  \
@@ -128,14 +125,14 @@ def write_invoice(output_file, invoice):
 def b2(seq_id, batches):
     to = batches[0].health_center.b2_000()
     total = sum(b.total for b in batches)
+    first_batch = min(b.number for b in batches)
 
     # B2 veut un identifiant de fichier sur 6 caractères alphanum
-    hexdigest = hashlib.sha256('%s%s%s%s' % (seq_id, NUMERO_EMETTEUR, to, total)).hexdigest()
+    hexdigest = hashlib.sha256('%s%s%s%s%s' % (seq_id, first_batch, NUMERO_EMETTEUR, to, total)).hexdigest()
     file_id = base64.encodestring(hexdigest).upper()[0:6]
 
     utcnow = datetime.datetime.utcnow()
-    prefix = '%s-%s-%s-%s.' % (NUMERO_EMETTEUR, utcnow.strftime('%y%m%d%H%M'), to,
-            file_id)
+    prefix = '%s-%s-%s-%s.' % (NUMERO_EMETTEUR, to, first_batch, file_id)
     output_file = tempfile.NamedTemporaryFile(suffix='.b2tmp',
             prefix=prefix, dir=OUTPUT_DIRECTORY, delete=False)
     nb_lines = 0
