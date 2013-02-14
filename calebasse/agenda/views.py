@@ -330,7 +330,10 @@ class AgendaServiceActValidationView(TemplateView):
         actes = list()
         for act in acts_of_the_day:
             if not act.id:
-                act.save()
+                if act.date < datetime.date(2013, 1, 1):
+                    continue
+                else:
+                    act.save()
             state = act.get_state()
             display_name = None
             if state :
