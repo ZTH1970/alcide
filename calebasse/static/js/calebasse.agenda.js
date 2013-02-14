@@ -14,11 +14,13 @@ function enable_events(base) {
           var textarea = $(this).prev();
           var span = textarea.prev()
           var btn = $(this)
+          var data = {description: textarea.val() };
+          var data = JSON.stringify(data);
           $.ajax({
               url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
               contentType: 'application/json',
-              data: '{"description": "' + textarea.val() + '"}',
+              data: data,
               success: function(data) {
                   btn.attr('disabled', 'disabled');
                   span.html('Commentaire modifié avec succès');
