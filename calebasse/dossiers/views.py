@@ -218,6 +218,7 @@ class StateFormView(cbv.FormView):
     form_class = forms.StateForm
     success_url = './view#tab=0'
 
+
     def post(self, request, *args, **kwarg):
         self.user = request.user
         return super(StateFormView, self).post(request, *args, **kwarg)
@@ -657,6 +658,12 @@ delete_mdph_response = \
 
 
 class UpdatePatientStateView(cbv.UpdateView):
+
+    def get_initial(self):
+        initial = super(UpdatePatientStateView, self).get_initial()
+        initial['date_selected'] = self.object.date_selected.date()
+        return initial
+
     def get(self, request, *args, **kwargs):
         if kwargs.has_key('patientrecord_id'):
             request.session['patientrecord_id'] = kwargs['patientrecord_id']
