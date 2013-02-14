@@ -163,7 +163,7 @@ def build_batches(invoicing):
     return batches_by_health_center
 
 
-def render_invoicing(invoicing, delete=False):
+def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     service = invoicing.service
     now = datetime.datetime.now()
     batches_by_health_center = build_batches(invoicing)
@@ -173,8 +173,11 @@ def render_invoicing(invoicing, delete=False):
     output_file = None
     try:
         for center in centers:
+            if headers is not True and headers is not False and headers != center:
+                continue
             files, others = batches_files(service, invoicing, center,
-                batches_by_health_center[center], delete=delete)
+                batches_by_health_center[center], delete=delete,
+                headers=headers, invoices=invoices)
             all_files.extend(files)
             all_others.extend(others)
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
@@ -200,22 +203,28 @@ def render_invoicing(invoicing, delete=False):
 
 
 
-def batches_files(service, invoicing, health_center, batches, delete=False):
+def batches_files(service, invoicing, health_center, batches, delete=False,
+        headers=True, invoices=True):
     files = []
     procs = []
     others = []
     try:
-        files.append(header_file(service, invoicing, health_center, batches, delete=delete))
+        if headers:
+            files.append(header_file(service, invoicing, health_center, batches, delete=delete))
 
-        for batch in batches:
-            for invoice in batch.invoices:
-                for name, proc, temp_fdf in invoice_files(service, invoicing, batch,
-                        invoice):
-                    files.append(name)
-                    procs.append(proc)
-                    others.append(temp_fdf)
-        for proc in procs:
-            proc.wait()
+        if invoices:
+            for batch in batches:
+                for invoice in batch.invoices:
+                    # if invoices is a sequence, skip unlisted invoices
+                    if invoices is not True and invoice not in invoices:
+                        continue
+                    for name, proc, temp_fdf in invoice_files(service, invoicing, batch,
+                            invoice):
+                        files.append(name)
+                        procs.append(proc)
+                        others.append(temp_fdf)
+            for proc in procs:
+                proc.wait()
         return files, others
     except:
         # cleanup
@@ -226,4 +235,3 @@ def batches_files(service, invoicing, health_center, batches, delete=False):
                 except:
                     pass
         raise
-
