@@ -89,20 +89,20 @@ class HealthCenter(NamedAbstractModel):
             null=True, default=True)
     health_fund = models.CharField(verbose_name=u"Numéro de la caisse",
             max_length=3)
-    active = models.BooleanField(default=True)
-    address = models.CharField(max_length=120)
+    active = models.BooleanField(default=True, verbose_name=u"Active")
+    address = models.CharField(max_length=120, verbose_name=u"Adresse")
     address_complement = models.CharField(max_length=120, blank=True,
-            null=True, default=None)
-    zip_code = models.CharField(max_length=8)
-    city = models.CharField(max_length=80)
-    phone = models.CharField(max_length=30)
+            null=True, default=None, verbose_name=u"Adresse complémentaire")
+    zip_code = models.CharField(max_length=8, verbose_name=u"Code postal")
+    city = models.CharField(max_length=80, verbose_name=u"Ville")
+    phone = models.CharField(max_length=30, verbose_name=u"Téléphone")
     fax = models.CharField(max_length=30,
-            null=True, blank=True)
+            null=True, blank=True, verbose_name=u"Fax")
     email = models.EmailField(
-            null=True, blank=True)
+            null=True, blank=True, verbose_name=u"Courriel")
     accounting_number = models.CharField(max_length=30,
-             null=True, blank=True)
-    correspondant = models.CharField(max_length=80)
+             null=True, blank=True, verbose_name=u"Numéro de compte")
+    correspondant = models.CharField(max_length=80, verbose_name=u"Correspondant")
 
     def b2_000(self):
         '''
