@@ -30,9 +30,9 @@ def social_security_id_full(nir):
             nir = ''.join(nir)
             minus = 2000000
         nir = int(nir) - minus
-        return old + '%0.2d' % (97 - (nir % 97))
+        return old + ' %0.2d' % (97 - (nir % 97))
     except Exception, e:
-        return old + '00'
+        return old + ' 00'
 
 def quarter_start_and_end_dates(today=None):
     '''Returns the first and last day of the current quarter'''
