@@ -11,6 +11,7 @@ from django.template import loader, Context
 
 from invoice_template import InvoiceTemplate
 from ..pdftk import PdfTk
+from b2 import get_control_key
 
 
 class Batch(object):
@@ -93,7 +94,7 @@ def invoice_files(service, invoicing, batch, invoice):
             'DATE_ELABORATION': datetime.datetime.now().strftime('%d/%m/%Y'),
             'NOM_BENEFICIAIRE': u' '.join((invoice.patient_first_name,
                 invoice.patient_last_name)),
-            'NIR_BENEFICIAIRE': invoice.patient_social_security_id,
+            'NIR_BENEFICIAIRE': invoice.patient_social_security_id_full,
             'DATE_NAISSANCE_RANG': u' '.join(
                 (unicode(invoice.patient_birthdate),
                     unicode(invoice.patient_twinning_rank))),
@@ -111,7 +112,7 @@ def invoice_files(service, invoicing, batch, invoice):
                 'NOM_ASSURE': u' '.join((
                     invoice.policy_holder_first_name,
                     invoice.policy_holder_last_name)),
-                'NIR_ASSURE': invoice.policy_holder_social_security_id,
+                'NIR_ASSURE': invoice.policy_holder_social_security_id_full,
                 'ADRESSE_ASSURE': address,
             })
     total1 = Decimal(0)

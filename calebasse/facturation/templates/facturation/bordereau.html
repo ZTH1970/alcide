@@ -167,7 +167,7 @@
             <tr>
               <td>{{ invoice.number }}</td>
               <td>{{ invoice.patient_first_name}} {{ invoice.patient_last_name }}</td>
-              <td>{% firstof invoice.policy_holder_social_security_id invoice.patient_social_security_id %}</td>
+              <td>{% firstof invoice.policy_holder_social_security_id_full invoice.patient_social_security_id_full %}</td>
               <td>{{ invoice.kind }}</td>
               <td>{{ invoice.start_date|date:"d/m/Y" }}</td>
               <td>{{ invoice.end_date|date:"d/m/Y" }}</td>

@@ -14,6 +14,26 @@ from calebasse.ressources.models import ServiceLinkedManager, PricePerAct
 
 import list_acts
 
+def social_security_id_full(nir):
+    old = nir
+    try:
+        # Corse dpt 2A et 2B
+        minus = 0
+        if nir[6] in ('A', 'a'):
+            nir = [c for c in nir]
+            nir[6] = '0'
+            nir = ''.join(nir)
+            minus = 1000000
+        elif nir[6] in ('B', 'b'):
+            nir = [c for c in nir]
+            nir[6] = '0'
+            nir = ''.join(nir)
+            minus = 2000000
+        nir = int(nir) - minus
+        return old + '%0.2d' % (97 - (nir % 97))
+    except Exception, e:
+        return old + '00'
+
 def quarter_start_and_end_dates(today=None):
     '''Returns the first and last day of the current quarter'''
     if today is None:
@@ -709,6 +729,20 @@ class Invoice(models.Model):
     def kind(self):
         tag = self.acts.all()[0].get_hc_tag()
         return tag[0]
+
+    @property
+    def patient_social_security_id_full(self):
+        if self.patient_social_security_id:
+            return social_security_id_full(self.patient_social_security_id)
+        else:
+            return ''
+
+    @property
+    def policy_holder_social_security_id_full(self):
+        if self.policy_holder_social_security_id:
+            return social_security_id_full(self.policy_holder_social_security_id)
+        else:
+            return ''
 
     def __unicode__(self):
         return "Facture %d de %d euros (%d actes)" % (self.number, self.amount, len(self.acts.all()))
