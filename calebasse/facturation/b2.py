@@ -20,7 +20,7 @@ NORME = 'CP  '
 TYPE_EMETTEUR = 'TE'
 NUMERO_EMETTEUR = '420788606'
 APPLICATION = 'TR'
-MESSAGE = 'ENTROUVERT CALEBASSE V 2013 1'
+MESSAGE = 'ENTROUVERT 0143350135 CALEBASSE 1301'
 MESSAGE = MESSAGE + ' '*(37-len(MESSAGE))
 
 CATEGORIE = '189'
@@ -73,7 +73,7 @@ def write_invoice(output_file, invoice):
             invoice.policy_holder_healthcenter.large_regime.code + \
             invoice.policy_holder_healthcenter.dest_organism + \
             (invoice.policy_holder_other_health_center or '0000') + \
-            '1' + b2date(start_date) + '000000' + \
+            '3' + b2date(start_date) + '000000' + \
             invoice.policy_holder_healthcenter.dest_organism + '000' + \
             '10' + ' ' +  \
             b2date(start_date) + \
