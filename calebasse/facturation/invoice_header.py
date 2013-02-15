@@ -12,6 +12,7 @@ from django.template import loader, Context
 
 from invoice_template import InvoiceTemplate
 from ..pdftk import PdfTk
+from batches import build_batches
 
 class Counter(object):
     def __init__(self, initial_value=0):
@@ -23,18 +24,6 @@ class Counter(object):
 
     def __str__(self):
         return str(self.counter)
-
-
-class Batch(object):
-    def __init__(self, number, invoices):
-        self.number = number
-        self.health_center = invoices[0].health_center
-        self.invoices = invoices
-        self.number_of_invoices = len(invoices)
-        self.total = sum(invoice.decimal_amount for invoice in invoices)
-        self.number_of_acts = sum(len(invoice.acts.all()) for invoice in invoices)
-        self.start_date = min(invoice.start_date for invoice in invoices)
-        self.end_date = max(invoice.end_date for invoice in invoices)
 
 
 def render_to_pdf_file(templates, ctx, prefix='tmp', delete=False):
@@ -169,21 +158,6 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     total1+total2, invoice.ppa, len(acts))
     ctx['TOTAL'] = total1+total2
     return [tpl.generate(ctx)]
-
-
-def build_batches(invoicing):
-    invoices = invoicing.invoice_set.order_by('number')
-    prebatches = defaultdict(lambda:[])
-    for invoice in invoices:
-        prebatches[invoice.batch].append(invoice)
-    batches = []
-    for batch_number in sorted(prebatches.keys()):
-        batches.append(Batch(batch_number,
-            prebatches[batch_number]))
-    batches_by_health_center = defaultdict(lambda:[])
-    for batch in batches:
-        batches_by_health_center[batch.health_center].append(batch)
-    return batches_by_health_center
 
 
 def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
