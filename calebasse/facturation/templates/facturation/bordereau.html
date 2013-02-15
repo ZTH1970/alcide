@@ -100,7 +100,7 @@
         Édité le {{ now|date:"d/m/Y" }} à {{ now|time:"H:i:s" }}
       </div>
       <div>
-         N&deg;: 411{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.health_fund|stringformat:"03s" }}
+         N&deg;: {{ health_center.accounting_number }}
       </div>
     </div>
     <div id="header-box">
@@ -138,7 +138,7 @@
                 {% if health_center.phone %}
                 Tél.: {{ health_center.phone }}</br>
                 {% endif %}
-                <p>N&deg; de compte: 411{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.health_fund|stringformat:"03s" }}</p>
+                <p>N&deg; de compte: {{ health_center.accounting_number }}</p>
         </td></tr>
         </table>
       </div>
