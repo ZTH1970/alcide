@@ -120,6 +120,8 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
             'ABSENCE_SIGNATURE': True,
             'ADRESSE_ASSURE': address,
             'SUBTITLE': subtitle,
+            'PART_OBLIGATOIRE': True,
+            'PART_COMPLEMENTAIRE': True,
     }
     if counter is not None:
         ctx['COUNTER'] = counter.increment()

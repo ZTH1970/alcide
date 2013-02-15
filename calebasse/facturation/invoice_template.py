@@ -117,6 +117,15 @@ class InvoiceTemplate(object):
                     'size': 10,
                     'border': True,
             },
+            'PART_OBLIGATOIRE': {
+                    'pos': (490, 500),
+                    'type': 'bool',
+            },
+            'PART_COMPLEMENTAIRE': {
+                    'pos': (630, 500),
+                    'type': 'bool',
+            },
+
     }
 
     def __init__(self, template_path=None, prefix='tmp', suffix=''):
