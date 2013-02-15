@@ -109,6 +109,14 @@ class InvoiceTemplate(object):
             'TOTAL': {
                     'pos': (330, 500),
             },
+            'COUNTER': {
+                    'pos': (800, 570),
+            },
+            'SUBTITLE': {
+                    'pos': (300, 50),
+                    'size': 10,
+                    'border': True,
+            },
     }
 
     def __init__(self, template_path=None, prefix='tmp', suffix=''):
@@ -145,6 +153,18 @@ class InvoiceTemplate(object):
 
             layout.set_text(unicode(value))
             pangocairo_context.update_layout(layout)
+            if field.get('border'):
+                a, b, width, height = layout.get_pixel_extents()[1]
+                ctx.save()
+                ctx.set_source_rgb(1, 1, 1)
+                ctx.rectangle(x-2, y-2, width+4, height+4)
+                ctx.fill()
+                ctx.set_source_rgb(0, 0, 0)
+                ctx.rectangle(x-2, y-2, width+4, height+4)
+                ctx.set_line_width(0.1)
+                ctx.stroke()
+                ctx.restore()
+            ctx.move_to(x, y)
             pangocairo_context.show_layout(layout)
         if _type == 'array':
             field = field.copy()

@@ -36,6 +36,11 @@
           width: 9.75cm;
           right: 0px;
         }
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 0cm;
+          height: 0.5cm;
+        }
         @frame {
           top: 6cm;
           margin: 1cm;
@@ -45,11 +50,19 @@
         @frame {
           margin: 2cm 1cm;
         }
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 0cm;
+          height: 0.5cm;
+        }
       }
       h1, div {
         display: block;
       }
       table tr.batch-columns-header td {
+        text-align: center;
+      }
+      #footer {
         text-align: center;
       }
       #title {
@@ -87,7 +100,7 @@
         Édité le {{ now|date:"d/m/Y" }} à {{ now|time:"H:i:s" }}
       </div>
       <div>
-         N&deg;: 410{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.code|stringformat:"03s" }}
+         N&deg;: 411{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.health_fund|stringformat:"03s" }}
       </div>
     </div>
     <div id="header-box">
@@ -125,7 +138,7 @@
                 {% if health_center.phone %}
                 Tél.: {{ health_center.phone }}</br>
                 {% endif %}
-                <p>N&deg; de compte: 410{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.code|stringformat:"03s" }}</p>
+                <p>N&deg; de compte: 411{{ health_center.large_regime.code|stringformat:"02s" }}{{ health_center.health_fund|stringformat:"03s" }}</p>
         </td></tr>
         </table>
       </div>
@@ -166,7 +179,7 @@
             {% for invoice in batch.invoices %}
             <tr>
               <td>{{ invoice.number }}</td>
-              <td>{{ invoice.patient_first_name}} {{ invoice.patient_last_name }}</td>
+              <td>{{ invoice.patient_first_name}} {{ invoice.patient_last_name|upper }}</td>
               <td>{% firstof invoice.policy_holder_social_security_id_full invoice.patient_social_security_id_full %}</td>
               <td>{{ invoice.kind }}</td>
               <td>{{ invoice.start_date|date:"d/m/Y" }}</td>
@@ -195,6 +208,9 @@
           </td>
         </tr>
       </table>
+    </div>
+    <div id="footer">
+      {% if counter %}{{ counter.increment }}.{% endif %}<pdf:pagenumber/>
     </div>
   </body>
 </html>

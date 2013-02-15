@@ -11,7 +11,17 @@ from django.template import loader, Context
 
 from invoice_template import InvoiceTemplate
 from ..pdftk import PdfTk
-from b2 import get_control_key
+
+class Counter(object):
+    def __init__(self, initial_value=0):
+        self.counter = initial_value
+
+    def increment(self):
+        self.counter += 1
+        return (self.counter-1)
+
+    def __str__(self):
+        return str(self.counter)
 
 
 class Batch(object):
@@ -47,7 +57,8 @@ def render_to_pdf_file(templates, ctx, prefix='tmp', delete=False):
 def header_file(service, invoicing, health_center, batches,
         header_service_template='facturation/bordereau-%s.html',
         header_template='facturation/bordereau.html',
-        delete=False):
+        delete=False,
+        counter=None):
     synthesis = {
             'total': sum(batch.total for batch in batches),
             'number_of_acts': sum(batch.number_of_acts for batch in batches),
@@ -59,6 +70,7 @@ def header_file(service, invoicing, health_center, batches,
             'service': service,
             'batches': batches,
             'synthesis': synthesis,
+            'counter': counter,
     }
     prefix = '%s-invoicing-%s-healthcenter-%s-' % (
             service.slug, invoicing.id, health_center.id)
@@ -67,7 +79,7 @@ def header_file(service, invoicing, health_center, batches,
             header_template), ctx, prefix=prefix, delete=delete)
 
 
-def invoice_files(service, invoicing, batch, invoice):
+def invoice_files(service, invoicing, batch, invoice, counter=None):
     template_path = os.path.join(
             os.path.dirname(__file__),
             'static',
@@ -83,6 +95,12 @@ def invoice_files(service, invoicing, batch, invoice):
       health_center.large_regime.code,
       health_center.dest_organism,
       health_center.name)
+    address = invoice.policy_holder_address
+    address = address[:40] + '\n' + address[40:80] + '\n' + address[80:120]
+    if invoice.acts.all()[0].get_hc_tag()[0] == 'D':
+        subtitle = 'DIAGNOSTIC'
+    else:
+        subtitle = 'TRAITEMENT'
     ctx = {
             'NUM_FINESS': '420788606',
             'NUM_LOT': unicode(batch.number),
@@ -93,27 +111,28 @@ def invoice_files(service, invoicing, batch, invoice):
 42000 SAINT ETIENNE''' % service.name,
             'DATE_ELABORATION': datetime.datetime.now().strftime('%d/%m/%Y'),
             'NOM_BENEFICIAIRE': u' '.join((invoice.patient_first_name,
-                invoice.patient_last_name)),
+                invoice.patient_last_name.upper())),
             'NIR_BENEFICIAIRE': invoice.patient_social_security_id_full,
             'DATE_NAISSANCE_RANG': u' '.join(
                 (unicode(invoice.patient_birthdate),
                     unicode(invoice.patient_twinning_rank))),
             'CODE_ORGANISME':  code_organisme,
             'ABSENCE_SIGNATURE': True,
+            'ADRESSE_ASSURE': address,
+            'SUBTITLE': subtitle,
     }
+    if counter is not None:
+        ctx['COUNTER'] = counter.increment()
     if invoice.patient_entry_date is not None:
         ctx['DATE_ENTREE'] = invoice.patient_entry_date.strftime('%d/%m/%Y')
     if invoice.patient_exit_date is not None:
         ctx['DATE_SORTIE'] = invoice.patient_exit_date.strftime('%d/%m/%Y')
-    if invoice.policy_holder_id:
-        address = invoice.policy_holder_address
-        address = address[:40] + '\n' + address[40:80] + '\n' + address[80:120]
+    if invoice.policy_holder_id != invoice.patient_id:
         ctx.update({
                 'NOM_ASSURE': u' '.join((
                     invoice.policy_holder_first_name,
-                    invoice.policy_holder_last_name)),
+                    invoice.policy_holder_last_name.upper())),
                 'NIR_ASSURE': invoice.policy_holder_social_security_id_full,
-                'ADRESSE_ASSURE': address,
             })
     total1 = Decimal(0)
     total2 = Decimal(0)
@@ -172,13 +191,14 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     centers = sorted(batches_by_health_center.keys())
     all_files = []
     output_file = None
+    counter = Counter(1)
     try:
         for center in centers:
             if headers is not True and headers is not False and headers != center:
                 continue
             files = batches_files(service, invoicing, center,
                 batches_by_health_center[center], delete=delete,
-                headers=headers, invoices=invoices)
+                headers=headers, invoices=invoices, counter=counter)
             all_files.extend(files)
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                 (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
@@ -204,11 +224,12 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
 
 
 def batches_files(service, invoicing, health_center, batches, delete=False,
-        headers=True, invoices=True):
+        headers=True, invoices=True, counter=None):
     files = []
     try:
         if headers:
-            files.append(header_file(service, invoicing, health_center, batches, delete=delete))
+            files.append(header_file(service, invoicing, health_center,
+                batches, delete=delete, counter=counter))
 
         if invoices:
             for batch in batches:
@@ -216,7 +237,7 @@ def batches_files(service, invoicing, health_center, batches, delete=False,
                     # if invoices is a sequence, skip unlisted invoices
                     if invoices is not True and invoice not in invoices:
                         continue
-                    files.extend(invoice_files(service, invoicing, batch, invoice))
+                    files.extend(invoice_files(service, invoicing, batch, invoice, counter=counter))
         return files
     except:
         # cleanup
