@@ -21,6 +21,6 @@ def build_batches(invoicing):
     batches_by_health_center = defaultdict(lambda:[])
     for health_center, batch_number in sorted(prebatches.keys()):
         batches_by_health_center[health_center].append(Batch(batch_number,
-            prebatches[batch_number]))
+            prebatches[(health_center, batch_number)]))
     return batches_by_health_center
 
