@@ -303,6 +303,13 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 state = None
             ctx['last_rdvs'].append((act, state))
         ctx['last_rdv'] = get_last_rdv(ctx['object'])
+
+        ctx['missing_policy'] = False
+        if not self.object.policyholder or \
+                not self.object.policyholder.health_center or \
+                not self.object.policyholder.social_security_id:
+            ctx['missing_policy'] = True
+
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
             ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
