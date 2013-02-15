@@ -107,10 +107,6 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                 else:
                     invoice['acts'].append((act, hc))
         invoices[patient].append(invoice)
-        if patient.id == 17879:
-            print patient
-            print acts
-            print invoices[patient]
         len_invoices = len_invoices + 1
         len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
         if not patient.pause:
