@@ -17,13 +17,10 @@ def build_batches(invoicing):
     invoices = invoicing.invoice_set.order_by('number')
     prebatches = defaultdict(lambda:[])
     for invoice in invoices:
-        prebatches[invoice.batch].append(invoice)
-    batches = []
-    for batch_number in sorted(prebatches.keys()):
-        batches.append(Batch(batch_number,
-            prebatches[batch_number]))
+        prebatches[(invoice.health_center, invoice.batch)].append(invoice)
     batches_by_health_center = defaultdict(lambda:[])
-    for batch in batches:
-        batches_by_health_center[batch.health_center].append(batch)
+    for health_center, batch_number in sorted(prebatches.keys()):
+        batches_by_health_center[health_center].append(Batch(batch_number,
+            prebatches[batch_number]))
     return batches_by_health_center
 
