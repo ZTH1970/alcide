@@ -266,7 +266,9 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             state = current_state.status.name
         ctx['current_state'] = current_state
         ctx['service_id'] = self.service.id
-        ctx['states'] = FileState.objects.filter(patient=self.object).filter(status__services=self.service)
+        ctx['states'] = FileState.objects.filter(patient=self.object) \
+                .filter(status__services=self.service) \
+                .order_by('-date_selected')
         ctx['next_rdvs'] = []
         Q = models.Q
         today = date.today()
