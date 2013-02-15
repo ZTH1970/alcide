@@ -269,6 +269,14 @@ class Invoicing(models.Model):
                     if patient in invoices.keys():
                         dic['invoices'] = invoices[patient]
                         if commit and not patient.pause:
+                            policy_holder = patient.policyholder
+                            try:
+                                address = unicode(policy_holder.addresses.filter(place_of_life=True)[0])
+                            except:
+                                try:
+                                    address = unicode(policy_holder.addresses.all()[0])
+                                except:
+                                    address = u''
                             invoice_kwargs = dict(
                                     patient_id=patient.id,
                                     patient_last_name=patient.last_name,
@@ -279,24 +287,14 @@ class Invoicing(models.Model):
                                     patient_healthcenter=patient.health_center,
                                     patient_other_health_center=patient.other_health_center or '',
                                     patient_entry_date=patient.entry_date,
-                                    patient_exit_date=patient.exit_date)
-                            if patient.policyholder != patient.patientcontact:
-                                policy_holder = patient.policyholder
-                                try:
-                                    address = unicode(policy_holder.adresses.get(place_of_life=True))
-                                except:
-                                    try:
-                                        address = unicode(policy_holder.adresses.all()[0])
-                                    except:
-                                        address = u''
-                                invoice_kwargs.update(dict(
+                                    patient_exit_date=patient.exit_date,
                                     policy_holder_id=policy_holder.id,
                                     policy_holder_last_name=policy_holder.last_name,
                                     policy_holder_first_name=policy_holder.first_name,
                                     policy_holder_social_security_id=policy_holder.social_security_id,
                                     policy_holder_other_health_center=policy_holder.other_health_center or '',
                                     policy_holder_healthcenter=policy_holder.health_center,
-                                    policy_holder_address=address))
+                                    policy_holder_address=address)
                             for invoice in invoices[patient]:
                                 ppa = invoice['ppa'] * 100
                                 acts = invoice['acts']
