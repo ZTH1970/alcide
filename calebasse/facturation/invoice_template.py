@@ -118,11 +118,11 @@ class InvoiceTemplate(object):
                     'border': True,
             },
             'PART_OBLIGATOIRE': {
-                    'pos': (490, 500),
+                    'pos': (495, 513),
                     'type': 'bool',
             },
             'PART_COMPLEMENTAIRE': {
-                    'pos': (630, 500),
+                    'pos': (632, 513),
                     'type': 'bool',
             },
 
