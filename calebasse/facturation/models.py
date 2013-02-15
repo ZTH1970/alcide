@@ -66,7 +66,7 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
     for patient, acts in acts_diagnostic.items():
         invoices[patient] = []
         act, hc = acts[0]
-        invoice = {}
+        invoice = dict()
         invoice['ppa'] = pricing.price_at_date(act.date)
         invoice['year'] = act.date.year
         invoice['acts'] = [(act, hc)]
@@ -80,12 +80,17 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                     if not patient.pause:
                         len_invoices_hors_pause = len_invoices_hors_pause + 1
                         len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+                    invoice = dict()
                     invoice['ppa'] = pricing.price_at_date(act.date)
                     invoice['year'] = act.date.year
                     invoice['acts'] = [(act, hc)]
                 else:
                     invoice['acts'].append((act, hc))
         invoices[patient].append(invoice)
+        if patient.id == 17879:
+            print patient
+            print acts
+            print invoices[patient]
         len_invoices = len_invoices + 1
         len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
         if not patient.pause:
