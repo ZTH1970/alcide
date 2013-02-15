@@ -3,6 +3,7 @@ import os
 import os.path
 import tempfile
 import datetime
+import textwrap
 from decimal import Decimal
 from collections import defaultdict
 
@@ -95,8 +96,7 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
       health_center.large_regime.code,
       health_center.dest_organism,
       health_center.name)
-    address = invoice.policy_holder_address
-    address = address[:40] + '\n' + address[40:80] + '\n' + address[80:120]
+    address = textwrap.fill(invoice.policy_holder_address, 40)
     if invoice.acts.all()[0].get_hc_tag()[0] == 'D':
         subtitle = 'DIAGNOSTIC'
     else:
