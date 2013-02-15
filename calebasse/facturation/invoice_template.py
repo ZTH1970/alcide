@@ -71,6 +71,7 @@ class InvoiceTemplate(object):
             },
             'TABLEAU1': {
                 'type': 'array',
+                'size': 6,
                 'y': 323,
                 'lineheight': 12,
                 'cols': [
@@ -85,6 +86,7 @@ class InvoiceTemplate(object):
                     414.5] },
             'TABLEAU2': {
                 'type': 'array',
+                'size': 6,
                 'y': 323,
                 'lineheight': 12,
                 'x': 395.5,
@@ -116,6 +118,7 @@ class InvoiceTemplate(object):
 
     def draw_field(self, ctx, field, value, size=7):
         _type = field.get('type', 'text')
+        size = field.get('size', size)
         if _type == 'bool':
             x, y = field['pos']
             if value:
@@ -151,6 +154,7 @@ class InvoiceTemplate(object):
                 for x, v in zip(field['cols'], row):
                     sub = {
                             'pos': (offset+x, y),
+                            'size': size,
                     }
                     self.draw_field(ctx, sub, v, 7)
                 y += field['lineheight']
