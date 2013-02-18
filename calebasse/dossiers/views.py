@@ -666,7 +666,7 @@ delete_mdph_response = \
         success_url = '../../view#tab=6')
 
 
-class UpdatePatientStateView(cbv.UpdateView):
+class UpdatePatientStateView(cbv.ServiceFormMixin, cbv.UpdateView):
 
     def get_initial(self):
         initial = super(UpdatePatientStateView, self).get_initial()

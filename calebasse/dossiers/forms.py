@@ -66,6 +66,11 @@ class PatientStateForm(ModelForm):
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
                 }
 
+    def __init__(self, service=None, *args, **kwargs):
+        self.service = service
+        super(PatientStateForm, self).__init__(*args, **kwargs)
+        self.fields['status'].queryset = Status.objects.filter(services=service)
+
     def clean_date_selected(self):
         date_selected = self.cleaned_data['date_selected']
         next_state = self.instance.get_next_state()
