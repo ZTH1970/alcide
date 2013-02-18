@@ -678,13 +678,22 @@ class UpdatePatientStateView(cbv.ServiceFormMixin, cbv.UpdateView):
             request.session['patientrecord_id'] = kwargs['patientrecord_id']
         return super(UpdatePatientStateView, self).get(request, *args, **kwargs)
 
+class DeletePatientView(cbv.DeleteView):
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object != self.object.patient.last_state:
+            self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())
+
+
 update_patient_state = \
     UpdatePatientStateView.as_view(model=FileState,
         template_name = 'dossiers/generic_form.html',
         success_url = '../../view#tab=0',
         form_class=forms.PatientStateForm)
 delete_patient_state = \
-    cbv.DeleteView.as_view(model=FileState,
+    DeletePatientView.as_view(model=FileState,
         template_name = 'dossiers/generic_confirm_delete.html',
         success_url = '../../view#tab=0')
 

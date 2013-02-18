@@ -536,7 +536,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     {% for state in states %}
     <dt><b>{{ state.date_selected|date:"d/m/Y" }}</b> <!--<small>(date info: {{ state.created|date:"d/m/Y" }})</small>-->
       <button data-id="{{ state.id }}" class="update-patient-state-btn icon-edit" title="Modifier"></button>
-      <button data-id="{{ state.id }}" class="del-patient-state-btn icon-remove"></button>
+      {% if state != object.last_state %}<button data-id="{{ state.id }}" class="del-patient-state-btn icon-remove"></button>{% endif %}
     </dt>
     <dd>
     <p><b>{{ state.status.name }}</b>{% if state.comment %}; <label>commentaire:</label> {{ state.comment }}{% endif %}</p>
