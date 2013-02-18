@@ -10,7 +10,6 @@ import zlib
 import ldap
 from M2Crypto import X509, SSL, Rand, SMIME, BIO
 
-
 MODE_TEST = True
 MODE_COMPRESS = True
 MODE_ENCRYPT = True
@@ -119,22 +118,18 @@ def smime_payload(message, x509):
         # FIXME
         raise NotImplementedError('MODE_ENCRYPT=False is not implemented')
 
-def build_mail(large_regime, dest_organism, b2):
+def build_mail(large_regime, dest_organism, b2_filename):
     """
     build a mail to healt center, with b2-compressed+encrypted information
     """
-    now = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-    n = 0
-    while n < 99999:
-        n += 1
-        message_id = '%s%0.5d' % (now, n)
-        filename = os.path.join(MAILPATH, message_id)
-        if not os.path.exists(filename):
-            break
-    else:
-        raise Exception('too much mails with prefix %s in %s' % (now, MAILPATH))
+    b2_fd = open(b2_filename, 'r')
+    b2 = b2_fd.read()
+    b2_fd.close()
+
+    message_id = datetime.utcnow().strftime('%Y%m%d%H%M%S')
     # count invoice in the b2 file = lines start with "5"
-    nb_invoices = len(re.findall('^5', b2, re.MULTILINE))
+    nb_invoices = [b2[x*128] for x in range(len(b2)/128)].count('5')
+
     subject = 'IR%s/%s/%s/%0.5d' % (VVVVVV, EXERCICE, message_id, nb_invoices)
     mail = {
             'From': SENDER,
@@ -151,6 +146,7 @@ def build_mail(large_regime, dest_organism, b2):
     x509 = get_certificate(large_regime, dest_organism)
     smime = smime_payload(b2, x509)
 
+    filename = b2_filename + '-mail'
     fd = open(filename, 'w')
     for k,v in mail.items():
         fd.write('%s: %s\n' % (k,v))
@@ -185,12 +181,16 @@ def build_capath(path=CAPATH):
                     fd.write(der2pem(der, LDAP_CA_ATTRS[attr][1]))
                     fd.close()
                     n += 1
+    os.chdir(path)
+    os.system('c_rehash .')
+
 
 #
 #
 #
 
-if __name__ == '__main__':
+
+if __name__ == '__main__' and (len(sys.argv) > 1):
     action = sys.argv[1]
     if action == 'build_capath':
         build_capath()
@@ -198,6 +198,9 @@ if __name__ == '__main__':
         x509 = get_certificate(sys.argv[2], sys.argv[3])
         print x509.as_text()
         print x509.as_pem()
+    if MODE_TEST and (action == 'test'):
+        print build_mail('01', '996', 'test.b2')
+
     # stupid tests...
     # print build_mail('01','996','000....b2-power')
     # print build_mail('01','997','000....b2-power')
