@@ -11,9 +11,9 @@ import hashlib
 import base64
 
 from batches import build_batches
+from transmission_utils import build_mail
 
-#OUTPUT_DIRECTORY = '/var/lib/calebasse/B2/'
-OUTPUT_DIRECTORY = '/var/tmp/'
+OUTPUT_DIRECTORY = '/var/lib/calebasse/B2/'
 
 NORME = 'CP  '
 
@@ -123,7 +123,8 @@ def write_invoice(output_file, invoice):
     return invoice_lines
 
 def b2(seq_id, batches):
-    to = batches[0].health_center.b2_000()
+    hc = batches[0].health_center
+    to = hc.b2_000()
     total = sum(b.total for b in batches)
     first_batch = min(b.number for b in batches)
 
@@ -182,19 +183,28 @@ def b2(seq_id, batches):
     old_filename = output_file.name
     output_file.close()
 
-    filename = os.path.join(OUTPUT_DIRECTORY, prefix + 'b2')
-    os.rename(old_filename, filename)
-    return filename
+    b2_filename = os.path.join(OUTPUT_DIRECTORY, prefix + 'b2')
+    os.rename(old_filename, b2_filename)
+    
+    # create S/MIME mail
+    mail_filename = build_mail(hc.large_regime.code, hc.dest_organism, b2_filename)
+
+    return b2_filename, mail_filename
 
 if __name__ == '__main__':
-    sys.path.append('/home/thomas/dev/aps42/ve/calebasse')
+    sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
     from calebasse.facturation.models import Invoicing
 
-    invoicing = Invoicing.objects.filter(seq_id=sys.argv[1])[0]
+    try:
+        invoicing = Invoicing.objects.filter(seq_id=sys.argv[1])[0]
+    except IndexError:
+        raise RuntimeError('Facture introuvable')
     print 'Facturation', invoicing.seq_id
     batches = build_batches(invoicing)
     for hc in batches:
-        print b2(invoicing.seq_id, batches[hc])
+        b2_filename, mail_filename = b2(invoicing.seq_id, batches[hc])
+        print '  B2    :', b2_filename
+        print '  smime :', mail_filename
 
 
