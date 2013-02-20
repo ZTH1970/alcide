@@ -109,11 +109,15 @@ def smime_payload(message, x509):
         s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
         bio = BIO.MemoryBuffer(zmessage)
         pkcs7 = s.encrypt(bio)
-        out = BIO.MemoryBuffer()
-        s.write(out, pkcs7)
         if RANDFILE:
             Rand.save_file(RANDFILE)
-        return out.read()
+
+        # hack: get only the encrypted part of the m2crypto output
+        out_bio = BIO.MemoryBuffer()
+        pkcs7.write(out_bio)
+        out = out_bio.read()
+        out = out[len('-----BEGIN PKCS7-----')+1:-(len('-----END PKCS7-----')+1)]
+        return out
     else:
         # FIXME
         raise NotImplementedError('MODE_ENCRYPT=False is not implemented')
@@ -131,11 +135,14 @@ def build_mail(large_regime, dest_organism, b2_filename):
     nb_invoices = [b2[x*128] for x in range(len(b2)/128)].count('5')
 
     subject = 'IR%s/%s/%s/%0.5d' % (VVVVVV, EXERCICE, message_id, nb_invoices)
+    delimiter = '_ENTROUVERT-CALEBASSE-B2-%s' % message_id
     mail = {
             'From': SENDER,
             'To': large_regime + dest_organism + '@' + dest_organism + '.' + large_regime + '.rss.fr',
             'Message-ID': '<%s@%s>' % (message_id, MESSAGE_ID_RIGHT),
             'Subject': subject,
+            'Mime-Version': '1.0',
+            'Content-Type': 'multipart/mixed; boundary="%s"' % delimiter,
             }
     if MODE_TEST:
         mail['Content-Description'] = 'IRISTEST/B2'
@@ -150,7 +157,14 @@ def build_mail(large_regime, dest_organism, b2_filename):
     fd = open(filename, 'w')
     for k,v in mail.items():
         fd.write('%s: %s\n' % (k,v))
+    fd.write('\n')
+    fd.write('--%s\n' % delimiter)
+    fd.write('Content-Type=application/pkcs7-mime; smime-type=enveloped-data; name="smime.p7m"\n')
+    fd.write('Content-Transfer-Encoding: base64\n')
+    fd.write('Content-Disposition: attachment; filename="smime.p7m"\n')
+    fd.write('\n')
     fd.write(smime)
+    fd.write('--%s\n' % delimiter)
     fd.close()
     return filename
 
