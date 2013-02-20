@@ -10,7 +10,7 @@ import zlib
 import ldap
 from M2Crypto import X509, SSL, Rand, SMIME, BIO
 
-MODE_TEST = True
+MODE_TEST = False
 MODE_COMPRESS = True
 MODE_ENCRYPT = True
 
