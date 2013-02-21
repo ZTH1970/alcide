@@ -1324,6 +1324,9 @@ div.pagination {
 form#periodic-events-search-form button {
   width: inherit;
 }
+form#periodic-events-search-form input.hasDatepicker {
+  width: 74%;
+}
 form#periodic-events-search-form ul{
   padding: 0px;
   margin: 0px;
