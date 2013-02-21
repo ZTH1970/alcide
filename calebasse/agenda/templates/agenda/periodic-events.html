@@ -38,11 +38,12 @@
 <div id="sidebar">
   <form id="periodic-events-search-form">
     <div class="field">
-      <label for="start_date">Rendez-vous périodiques possédant des occurences après le&nbsp;:</label>
+      <label for="start_date">Rendez-vous périodiques possédant une occurence dans les trois mois qui suivent le&nbsp;:</label>
       {{ search_form.start_date|add_class:"datepicker-date" }}
     </div>
+    <p>OU</p>
     <div class="field">
-    <label for="end_date">et au moins une occurrence dans les trois mois qui suivent ou bien avant cette date&nbsp;:</label>
+    <label for="end_date">Rendez-vous périodiques possèdant une occurence avant le&nbsp;:</label>
     {{ search_form.end_date|add_class:"datepicker-date" }}
     </div>
     <div class="field">
