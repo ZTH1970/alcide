@@ -57,8 +57,7 @@
 
 {% block content %}
 <div id="sidebar">
-  <form method="post" id="search-form">
-    {% csrf_token %}
+  <form method="get" id="search-form">
     <div>
       <h3>Rechercher dans les actes</h3>
       <h4>Patient</h4>
@@ -92,8 +91,8 @@
       <th>Dossier</th>
       <th>État</th>
       <th>Type d'acte</th>
-      <th>Validation</th>
-      <th>Facturation</th>
+      <th>Validé</th>
+      <th>Facturé</th>
       <th>Intervenants</th>
       <th>Heure</th>
       <th>Durée</th>
@@ -111,10 +110,10 @@
             {{ act.patient.first_name }}
             <span class="lastname">{{ act.patient.last_name }}</span>
         </td>
-        <td>FIXME: c'est quoi état ?</td>
-        <td>({{ act.act_type.id }}) {{ act.act_type }}</td>
         <td>{{ act.get_state }}</td>
-        <td>FIXME: facturation !!</td>
+        <td>({{ act.act_type.id }}) {{ act.act_type }}</td>
+        <td>{{ act.valide|yesno:"Oui,Non," }}</td>
+        <td>{{ act.is_billed|yesno:"Oui,Non,None" }}</td>
         <td>
             {% for doctor in act.doctors.all %}
             ({{ doctor.id }}) {{ doctor }}
@@ -123,67 +122,10 @@
             {% endif %}
             {% endfor %}
         </td>
-        <td>{{ act.parent_event.start_time|date:"H:i" }}</td>
+        <td>{{ act.time|date:"H:i" }}</td>
         <td>{{ act.duration }}</td>
       </tr>
     {% endfor %}
-    <!--
-    <tr>
-      <td>1234 Bob Léponge</td>
-      <td>Traitement</td>
-      <td>(11) Ortophonie</td>
-      <td>Validé</td>
-      <td>123-123456</td>
-      <td>(10) Peyrard</td>
-      <td>17:15</td>
-      <td>00:45</td>
-    </tr>
-
-    <tr class="non-factu">
-      <td>2345 Cindy Lop</td>
-      <td>Traitement</td>
-      <td>(29) Travail perso</td>
-      <td>Non facturable<br/>Validé</td>
-      <td></td>
-      <td>(62) Grangy<br/>(81) Blondiau</td>
-      <td>10:00</td>
-      <td>01:00</td>
-    </tr>
-
-
-    <tr class="non-factu">
-      <td>3456 Mark Spencer</td>
-      <td>Traitement</td>
-      <td>(29) Travail perso</td>
-      <td>Non facturable<br/>Absence non excusée</td>
-      <td></td>
-      <td>(62) Grangy<br/>(81) Blondiau</td>
-      <td>11:00</td>
-      <td>01:00</td>
-    </tr>
-
-    <tr>
-      <td>4567 John Doe</td>
-      <td>Diagnostic</td>
-      <td>(10) Entretien</td>
-      <td>Validé</td>
-      <td>124-en cours</td>
-      <td>(5) Roudon</td>
-      <td>14:15</td>
-      <td>00:45</td>
-    </tr>
-
-    <tr class="non-factu">
-      <td>5678 Philippe Maurice</td>
-      <td>Traitement</td>
-      <td>(16) Groupe langage</td>
-      <td>Validé</td>
-      <td>Acte perdu</td>
-      <td>(11) Douare</td>
-      <td>14:00</td>
-      <td>01:00</td>
-    </tr>
-    -->
     </tbody>
   </table>
 </div>

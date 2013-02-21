@@ -19,10 +19,11 @@ class ActListingView(ListView):
 
     def get_queryset(self):
         qs = super(ActListingView, self).get_queryset()
-        self.get_search_form()
+        #self.get_search_form()
+        self.search_form = forms.ActSearchForm()
         qs = qs.filter(patient__service=self.service)
         qs = qs.filter(date=self.date)
-        if self.request.method == 'POST' and self.search_form.is_valid():
+        if self.search_form.is_valid():
             cd = self.search_form.cleaned_data
             last_name = cd['last_name']
             if last_name:
@@ -35,30 +36,30 @@ class ActListingView(ListView):
             doctor_name = cd['doctor_name']
             if doctor_name:
                 qs = qs.filter(doctors__last_name__icontains=doctor_name)
-            filters = cd['filters']
-            if 'non-invoicable' in filters:
-                pass # FIXME
-            if 'absent-or-canceled' in filters:
-                pass # FIXME
-            if 'lost' in filters:
-                pass # FIXME
-            if 'invoiced' in filters:
-                pass # FIXME
-            if 'last-invoicing' in filters:
-                pass # FIXME
-            if 'current-invoicing' in filters:
-                pass # FIXME
+#            filters = cd['filters']
+#            if 'non-invoicable' in filters:
+#                pass # FIXME
+#            if 'absent-or-canceled' in filters:
+#                pass # FIXME
+#            if 'lost' in filters:
+#                pass # FIXME
+#            if 'invoiced' in filters:
+#                pass # FIXME
+#            if 'last-invoicing' in filters:
+#                pass # FIXME
+#            if 'current-invoicing' in filters:
+#                pass # FIXME
         return qs
 
-    def get_search_form(self):
-        if self.request.method == 'POST':
-            self.search_form = forms.ActSearchForm(data=self.request.POST)
-        else:
-            self.search_form = forms.ActSearchForm()
-        return self.search_form
+    #def get_search_form(self):
+    #    if self.request.method == 'POST':
+    #        self.search_form = forms.ActSearchForm(data=self.request.POST)
+    #    else:
+    #        self.search_form = forms.ActSearchForm()
+    #    return self.search_form
 
-    def post(self, *args, **kwargs):
-        return self.get(*args, **kwargs)
+   # def post(self, *args, **kwargs):
+   #     return self.get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(ActListingView, self).get_context_data(**kwargs)
