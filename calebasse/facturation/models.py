@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import tempfile
 
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
@@ -13,6 +14,7 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.ressources.models import ServiceLinkedManager, PricePerAct
 
 import list_acts
+import progor
 
 def social_security_id_full(nir):
     old = nir
@@ -546,6 +548,67 @@ class Invoicing(models.Model):
             status=Invoicing.STATUS.open)
         invoicing.save()
         return invoicing
+
+    def export_for_accounting(self):
+        '''
+            Il faut separer les ecritures pour l'année en cours et les années
+            passées.
+        '''
+        def add_ecriture(health_center, amount):
+            accounting_number = '0' + health_center.accounting_number[1:]
+            '''Le nom du compte ne devrait pas etre important et seul compter
+            le numéro de compte'''
+            name = health_center.name
+            if len(name) > 30:
+                name = name[0:30]
+            ecriture = progor.EcritureComptable(date, accounting_number,
+                name, cycle, debit=amount)
+            imputation = progor.ImputationAnalytique(debit=amount)
+            ecriture.add_imputation(imputation)
+            journal.add_ecriture(ecriture)
+        journal = progor.IdentificationJournal()
+        ecritures_current = dict()
+        ecritures_past = dict()
+        total_current = 0
+        total_past = 0
+        date = self.end_date.strftime("%d/%m/%Y")
+        cycle = str(self.seq_id)
+        invoice_year = datetime(self.end_date.year, 1, 1).date()
+        for invoice in self.invoice_set.all():
+            if invoice.end_date < invoice_year:
+                ecritures_past.setdefault(invoice.health_center, 0)
+                ecritures_past[invoice.health_center] += invoice.amount
+                total_past += invoice.amount
+            else:
+                ecritures_current.setdefault(invoice.health_center, 0)
+                ecritures_current[invoice.health_center] += invoice.amount
+                total_current += invoice.amount
+        '''Ce qui est facturé aux caisses est en débit'''
+        for health_center, amount in ecritures_past.items():
+            add_ecriture(health_center, amount)
+        for health_center, amount in ecritures_current.items():
+            add_ecriture(health_center, amount)
+        '''On équilibre avec du produit en crédit'''
+        #Produit années précédentes
+        if total_past:
+            ecriture = progor.EcritureComptable(date, '77200000',
+                'PRODUITS EXERCICES ANTERIEURS', cycle, credit=total_past, type_compte='0')
+            imputation = progor.ImputationAnalytique(credit=total_past)
+            ecriture.add_imputation(imputation)
+            journal.add_ecriture(ecriture)
+        #Produit année en cours
+        ecriture = progor.EcritureComptable(date, '73130000',
+            'PRODUITS EXERCICE', cycle, credit=total_current, type_compte='0')
+        imputation = progor.ImputationAnalytique(credit=total_current)
+        ecriture.add_imputation(imputation)
+        journal.add_ecriture(ecriture)
+        content = journal.render()
+        service = self.service
+        now = datetime.now()
+        output_file = tempfile.NamedTemporaryFile(prefix='%s-export-%s-' %
+                (service.slug, self.id), suffix='-%s.txt' % now, delete=False)
+        output_file.write(content)
+        return output_file.name
 
 
 #class PricePerAct(models.Model):
