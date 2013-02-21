@@ -31,30 +31,6 @@
 {% block appbar %}
 <h2>Rendez-vous périodiques{% if worker %} de {{ worker }}{% endif %}</h2>
 <a href="{% url 'agenda' service=service date=date %}">Retourner à l'agenda</a>
-<style>
-  div#sidebar form#periodic-events-search-form button {
-    width: inherit;
-  }
-  div#sidebar form#periodic-events-search-form input[type="text"] {
-    width: 5em;
-  }
-  div#sidebar form#periodic-events-search-form ul{
-    padding: 0px;
-    margin: 0px;
-  }
-  div#sidebar form#periodic-events-search-form ul li,
-  div#sidebar form#periodic-events-search-form .field label[for="no_end_date"] {
-    display: block;
-    margin-left: -10px;
-  }
-  div#sidebar div.field {
-    margin-bottom: 1ex;
-  }
-  div#events div.event h3 span.right {
-    position: absolute;
-    right: 25px;
-  }
-</style>
 {% endblock %}
 {% block content %}
 <div id="sidebar">
