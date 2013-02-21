@@ -639,6 +639,10 @@ class PeriodicEventsView(cbv.ListView):
             if patient is not None:
                 qs1 = qs1.none()
                 qs2 = qs2.filter(patient=patient)
+            worker = form.cleaned_data.get('worker')
+            if worker is not None:
+                qs1 = qs1.filter(participants=worker)
+                qs2 = qs2.filter(participants=worker)
         return sorted(chain(qs1, qs2),
                 key=lambda x: (x.start_datetime, x.recurrence_end_date or datetime.date(9999,12,31)))
 
