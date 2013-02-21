@@ -209,7 +209,7 @@ function select_add_dialog(opts, $form, form_action)
         if ($input.is('.hasDatepicker')) {
           return true;
         }
-        $input.datepicker({dateFormat: 'd/m/yy' });
+        $input.datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
         if (months) {
           $input.datepicker("option", "numberOfMonths", months);
         }
