@@ -171,5 +171,15 @@ class FacturationDownloadView(cbv.DetailView):
         response['Content-Disposition'] = 'attachment; filename="facturation-%s.pdf"' % invoicing.seq_id
         return response
 
+class FacturationExportView(cbv.DetailView):
+    context_object_name = "invoicing"
+    model = Invoicing
 
-
+    def get(self, *args, **kwargs):
+        invoicing = self.get_object()
+        path = invoicing.export_for_accounting()
+        content = File(file(path))
+        response = HttpResponse(content,'text/plain')
+        response['Content-Length'] = content.size
+        response['Content-Disposition'] = 'attachment; filename="export-%s.txt"' % invoicing.seq_id
+        return response

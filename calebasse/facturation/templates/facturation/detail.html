@@ -29,7 +29,7 @@
         {% if invoicing.status == "closed" %}<button id="validate"">Valider cette facturation</button>{% endif %}
         {% if invoicing.status == "validated" %}
             <button id="teletrans-btn">Télétransmission à l'assurance maladie</button>
-            <button id="expcompt-btn">Export comptabilité</button>
+            <button onclick="window.location.href=window.location.href+'export/'">Export comptabilité</button>
             <button onclick="window.location.href=window.location.href+'download/'">Imprimer</button>
         {% endif %}
     {% else %}
