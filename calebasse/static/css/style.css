@@ -1321,7 +1321,8 @@ div.pagination {
 .icon-circle-arrow-right:before   { content: "\f0a9"; }
 
 /* periodic event search form */
-form#periodic-events-search-form button {
+
+form#periodic-events-search-form button.ui-datepicker-trigger {
   width: inherit;
 }
 form#periodic-events-search-form input.hasDatepicker {

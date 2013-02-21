@@ -5,6 +5,8 @@
 
 {% block extrascripts %}
 {{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}/js/calebasse.reset-button.js">
+</script>
 <script>
   $(function () {
     var update_periodic_event_url = "{% url 'update-periodic-event' service=service date=date pk=0 %}";
@@ -55,8 +57,14 @@
       <label for="patient">avec le participant:</label>
       {{ search_form.worker }}
     </div>
-    <button>Rechercher</button>
-    <a href="./">Effacer</a>
+    {% if request.GET %}
+    <div class="search-reset">
+    <button id="search">Rechercher</button>
+    <button id="reset" class="icon-remove-sign" title="Réinitialiser"></button>
+    </div>
+    {% else %}
+    <button id="search">Rechercher</button>
+    {% endif %}
   </form>
 </div>
 <script>
