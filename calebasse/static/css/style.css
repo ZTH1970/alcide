@@ -1340,3 +1340,6 @@ div.event h3 span.right {
   position: absolute;
   right: 25px;
 }
+#periodic-events-search-form label {
+  display: block;
+}
