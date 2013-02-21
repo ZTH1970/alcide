@@ -625,7 +625,7 @@ class PeriodicEventsView(cbv.ListView):
         }
         if self.request.GET:
             kwargs['data'] = self.request.GET
-        self.form = PeriodicEventsSearchForm(**kwargs)
+        self.form = PeriodicEventsSearchForm(prefix='periodic-events-search-form', **kwargs)
         return self.form
 
     def get_queryset(self):
