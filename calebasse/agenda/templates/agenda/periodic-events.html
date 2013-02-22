@@ -72,7 +72,9 @@
   $('.datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
 </script>
 <div class="content">
-  <p>{{ object_list|length }} évènements trouvés.</p>
+  {% if request.GET %}
+  <p>{{ object_list|length }} évènement(s) trouvé(s).</p>
+  {% endif %}
   {% for event in object_list %}
   <div id="events">
     <div class="event frame" id="event-frame-{{ event.id }}">
@@ -112,6 +114,14 @@
     </div>
   </div>
   {% endfor %}
+  {% if not request.GET %}
+    <div class="big-msg-info">
+      Utilisez le formulaire de recherche sur la gauche de l'écran pour afficher
+      les rendez-vous périodiques correspondants.
+    </div>
+  {% elif not object_list %}
+    <div>Pas de résultat pour votre recherche</div>
+  {% endif %}
 </div>
 {% endblock %}
 

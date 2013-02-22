@@ -632,6 +632,8 @@ class PeriodicEventsView(cbv.ListView):
         qs1 = Event.objects.exclude(event_type_id=1)
         qs2 = EventWithAct.objects.all()
         form = self.get_form()
+        if not self.request.GET:
+            return ()
         qs1 = self.filter_queryset(form, qs1)
         qs2 = self.filter_queryset(form, qs2)
         if form.is_valid():
