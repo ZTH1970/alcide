@@ -10,9 +10,8 @@ import zlib
 import ldap
 from M2Crypto import X509, SSL, Rand, SMIME, BIO
 
-MODE_TEST = False
+MODE_TEST = True
 MODE_COMPRESS = True
-MODE_ENCRYPT = True
 
 LDAP_HOST = 'ldap://annuaire.gip-cps.fr'
 
@@ -89,38 +88,48 @@ def get_certificate(large_regime, dest_organism):
 # IRIS/B2 mail construction
 #
 
-def smime_payload(message, x509):
-    """
-    output s/mime message (headers+payload), compressed & encrypted with x509 certificate
-    """
+def mime(message):
     # compress
     if MODE_COMPRESS:
         zmessage = zlib.compress(message)
     else:
         zmessage = message
-    if MODE_ENCRYPT:
-        # encrypt
-        if RANDFILE:
-            Rand.load_file(RANDFILE, -1)
-        s = SMIME.SMIME()
-        sk = X509.X509_Stack()
-        sk.push(x509)
-        s.set_x509_stack(sk)
-        s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
-        bio = BIO.MemoryBuffer(zmessage)
-        pkcs7 = s.encrypt(bio)
-        if RANDFILE:
-            Rand.save_file(RANDFILE)
-
-        # hack: get only the encrypted part of the m2crypto output
-        out_bio = BIO.MemoryBuffer()
-        pkcs7.write(out_bio)
-        out = out_bio.read()
-        out = out[len('-----BEGIN PKCS7-----')+1:-(len('-----END PKCS7-----')+1)]
-        return out
+    if MODE_TEST:
+        content_description = 'IRISTEST/B2'
     else:
-        # FIXME
-        raise NotImplementedError('MODE_ENCRYPT=False is not implemented')
+        content_description = 'IRIS/B2'
+    if MODE_COMPRESS:
+        content_description += '/Z'
+    return "Content-Type: application/EDI-consent\n" + \
+            "Content-Transfer-Encoding: base64\n" + \
+            "Content-Description: " + content_description + "\n" + \
+            "\n" + base64.encodestring(zmessage).rstrip()
+
+def smime(message, x509):
+    """
+    output s/mime message (headers+payload), encrypted with x509 certificate
+    """
+    # encrypt
+    if RANDFILE:
+        Rand.load_file(RANDFILE, -1)
+    s = SMIME.SMIME()
+    sk = X509.X509_Stack()
+    sk.push(x509)
+    s.set_x509_stack(sk)
+    s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
+    bio = BIO.MemoryBuffer(message)
+    pkcs7 = s.encrypt(bio)
+    if RANDFILE:
+        Rand.save_file(RANDFILE)
+
+    # hack: get only the encrypted part of the m2crypto output
+    out_bio = BIO.MemoryBuffer()
+    pkcs7.write(out_bio)
+    out = out_bio.read()
+    out = out[len('-----BEGIN PKCS7-----')+1:-(len('-----END PKCS7-----')+1)]
+    return 'Content-Type=application/pkcs7-mime; smime-type=enveloped-data; name="smime.p7m"\n' + \
+            'Content-Transfer-Encoding: base64\n' + \
+            'Content-Disposition: attachment; filename="smime.p7m"\n\n' + out
 
 def build_mail(large_regime, dest_organism, b2_filename):
     """
@@ -130,28 +139,21 @@ def build_mail(large_regime, dest_organism, b2_filename):
     b2 = b2_fd.read()
     b2_fd.close()
 
-    message_id = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    stamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
     # count invoice in the b2 file = lines start with "5"
     nb_invoices = [b2[x*128] for x in range(len(b2)/128)].count('5')
 
-    subject = 'IR%s/%s/%s/%0.5d' % (VVVVVV, EXERCICE, message_id, nb_invoices)
-    delimiter = '_ENTROUVERT-CALEBASSE-B2-%s' % message_id
+    subject = 'IR%s/%s/%s/%0.5d' % (VVVVVV, EXERCICE, stamp, nb_invoices)
+    delimiter = '_ENTROUVERT-CALEBASSE-B2-%s' % stamp
     mail = {
             'From': SENDER,
             'To': large_regime + dest_organism + '@' + dest_organism + '.' + large_regime + '.rss.fr',
-            'Message-ID': '<%s@%s>' % (message_id, MESSAGE_ID_RIGHT),
+            'Message-ID': '<%s@%s>' % (stamp, MESSAGE_ID_RIGHT),
             'Subject': subject,
             'Mime-Version': '1.0',
             'Content-Type': 'multipart/mixed; boundary="%s"' % delimiter,
             }
-    if MODE_TEST:
-        mail['Content-Description'] = 'IRISTEST/B2'
-    else:
-        mail['Content-Description'] = 'IRIS/B2'
-    if MODE_COMPRESS:
-        mail['Content-Description'] += '/Z'
-    x509 = get_certificate(large_regime, dest_organism)
-    smime = smime_payload(b2, x509)
+    smime_part = smime(mime(b2), get_certificate(large_regime, dest_organism))
 
     filename = b2_filename + '-mail'
     fd = open(filename, 'w')
@@ -159,11 +161,7 @@ def build_mail(large_regime, dest_organism, b2_filename):
         fd.write('%s: %s\n' % (k,v))
     fd.write('\n')
     fd.write('--%s\n' % delimiter)
-    fd.write('Content-Type=application/pkcs7-mime; smime-type=enveloped-data; name="smime.p7m"\n')
-    fd.write('Content-Transfer-Encoding: base64\n')
-    fd.write('Content-Disposition: attachment; filename="smime.p7m"\n')
-    fd.write('\n')
-    fd.write(smime)
+    fd.write(smime_part)
     fd.write('--%s\n' % delimiter)
     fd.close()
     return filename
@@ -214,8 +212,4 @@ if __name__ == '__main__' and (len(sys.argv) > 1):
         print x509.as_pem()
     if MODE_TEST and (action == 'test'):
         print build_mail('01', '996', 'test.b2')
-
-    # stupid tests...
-    # print build_mail('01','996','000....b2-power')
-    # print build_mail('01','997','000....b2-power')
 
