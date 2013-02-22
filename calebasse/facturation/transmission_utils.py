@@ -121,15 +121,9 @@ def smime(message, x509):
     pkcs7 = s.encrypt(bio)
     if RANDFILE:
         Rand.save_file(RANDFILE)
-
-    # hack: get only the encrypted part of the m2crypto output
-    out_bio = BIO.MemoryBuffer()
-    pkcs7.write(out_bio)
-    out = out_bio.read()
-    out = out[len('-----BEGIN PKCS7-----')+1:-(len('-----END PKCS7-----')+1)]
-    return 'Content-Type=application/pkcs7-mime; smime-type=enveloped-data; name="smime.p7m"\n' + \
-            'Content-Transfer-Encoding: base64\n' + \
-            'Content-Disposition: attachment; filename="smime.p7m"\n\n' + out
+    out = BIO.MemoryBuffer()
+    s.write(out, pkcs7)
+    return out.read()
 
 def build_mail(large_regime, dest_organism, b2_filename):
     """
