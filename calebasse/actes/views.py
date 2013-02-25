@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Q
 from django.shortcuts import redirect
 
 from calebasse.cbv import ListView
@@ -28,14 +29,33 @@ class ActListingView(ListView):
         doctor_name = self.request.GET.get('doctor_name')
         filters = self.request.GET.getlist('filters')
         if last_name:
-            print last_name
             qs = qs.filter(patient__last_name__istartswith=last_name)
         if patient_record_id:
             qs = qs.filter(patient__id=int(patient_record_id))
         if doctor_name:
             qs = qs.filter(doctors__last_name__icontains=doctor_name)
+        if 'valide' in filters:
+            qs = qs.filter(valide=True)
+        if 'non-valide' in filters:
+            qs = qs.filter(valide=False)
+        #if 'absent-or-canceled' in filters:
+        #    qs = qs.filter()
+        if 'is-billable' in filters:
+            qs = qs.filter(
+                    (Q(act_type__billable=True) & Q(switch_billable=False)) | \
+                    (Q(act_type__billable=False) & Q(switch_billable=True))
+                    )
+        if 'non-invoicable' in filters:
+            pass
+        if 'invoiced' in filters:
+            pass
         if 'lost' in filters:
             qs = qs.filter(is_lost=True)
+        if 'pause-invoicing' in filters:
+            qs = qs.filter(pause=True)
+        if 'invoiced' in filters:
+            qs = qs.filter(is_billed=True)
+
         return qs
 
     def get_context_data(self, **kwargs):
@@ -45,3 +65,4 @@ class ActListingView(ListView):
 
 act_listing = ActListingView.as_view()
 act_new = agenda_views.NewAppointmentView.as_view()
+

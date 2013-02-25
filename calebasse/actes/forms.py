@@ -5,15 +5,15 @@ from django import forms
 class ActSearchForm(forms.Form):
     STATES = (
             ('valide', u'Validé'),
-            ('non-invoicable', u'Non facturable'),
-            ('is-billable', u'Facturable'),
+            ('non-valide', u'Non validé'),
             ('absent-or-canceled', u'Absent ou annulés'),
+            ('is-billable', u'Facturable'),
+            ('non-invoicable', u'Non facturable'),
+            ('invoiced', u'Inversion de facturabilité'),
             ('lost', u'Perdus'),
             ('pause-invoicing', u'Pause facturation'),
             ('invoiced', u'Facturé'),
-            ('invoiced', u'Inversion de facturabilité'),
-#            ('last-invoicing', u'Dernière facturation'),
-            ('current-invoicing', u'Facturation en cours')
+#            ('current-invoicing', u'Facturation en cours')
             )
 
     INITIAL = [x[0] for x in STATES]
@@ -24,5 +24,4 @@ class ActSearchForm(forms.Form):
 
     doctor_name = forms.CharField(required=False)
     filters = forms.MultipleChoiceField(choices=STATES,
-            widget=forms.CheckboxSelectMultiple,
-            initial=INITIAL)
+            widget=forms.CheckboxSelectMultiple)
