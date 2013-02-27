@@ -38,17 +38,16 @@ class ActListingView(ListView):
             qs = qs.filter(valide=True)
         if 'non-valide' in filters:
             qs = qs.filter(valide=False)
-        #if 'absent-or-canceled' in filters:
-        #    qs = qs.filter()
+        if 'absent-or-canceled' in filters:
+            # TODO : how to filter this without change the model ?
+            pass
         if 'is-billable' in filters:
             qs = qs.filter(
                     (Q(act_type__billable=True) & Q(switch_billable=False)) | \
                     (Q(act_type__billable=False) & Q(switch_billable=True))
                     )
-        if 'non-invoicable' in filters:
-            pass
-        if 'invoiced' in filters:
-            pass
+        if 'switch-billable' in filters:
+            qs = qs.filter(switch_billable=True)
         if 'lost' in filters:
             qs = qs.filter(is_lost=True)
         if 'pause-invoicing' in filters:
@@ -56,7 +55,7 @@ class ActListingView(ListView):
         if 'invoiced' in filters:
             qs = qs.filter(is_billed=True)
 
-        return qs
+        return qs.select_related()
 
     def get_context_data(self, **kwargs):
         ctx = super(ActListingView, self).get_context_data(**kwargs)

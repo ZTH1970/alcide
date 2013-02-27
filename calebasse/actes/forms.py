@@ -6,10 +6,10 @@ class ActSearchForm(forms.Form):
     STATES = (
             ('valide', u'Validé'),
             ('non-valide', u'Non validé'),
-            ('absent-or-canceled', u'Absent ou annulés'),
+#            ('absent-or-canceled', u'Absent ou annulés'),
             ('is-billable', u'Facturable'),
             ('non-invoicable', u'Non facturable'),
-            ('invoiced', u'Inversion de facturabilité'),
+            ('switch-billable', u'Inversion de facturabilité'),
             ('lost', u'Perdus'),
             ('pause-invoicing', u'Pause facturation'),
             ('invoiced', u'Facturé'),
