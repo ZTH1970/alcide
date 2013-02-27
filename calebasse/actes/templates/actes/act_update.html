@@ -1,0 +1,36 @@
+{% load widget_tweaks %}
+<form action="{{ request.get_full_path}}" method="post">
+{% csrf_token %}
+<p>1234 Bob Leponge (Traitement)</p>
+<p><select><option>(11) Ortophonie</option></select></p>
+<p>8 août 2012 - 17:15 - 45 minutes</p>
+
+<table>
+  <tr><td width="50%">
+      <h4>Intervenants</h4>
+      <div id="intervenants">
+        <ul>
+          <li><input type="checkbox" value="Bob Léponge" checked="checked">Bob Léponge</input></li>
+          <li><input type="checkbox" value="Sandy Kilo" checked="checked">Sandy Kilo</input></li>
+        </ul>
+        <a href="#">Ajouter</a><br/>
+        <a href="#">Tout le monde</a>
+      </div>
+    </td>
+
+    <td width="50%">
+
+      <ul>
+        <li>Rendez-vous pris le 5 juillet 2012 à 10:36</li>
+        <li>Acte validé le 10 août 2012 à 9h10</li>
+        <li>En cours de facturation (123) <button class="flat">Acte perdu</button></li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<br/>
+<br/>
+<textarea cols="50">Bla bla bla</textarea>
+</form>
+

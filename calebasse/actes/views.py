@@ -3,7 +3,7 @@ import datetime
 from django.db.models import Q
 from django.shortcuts import redirect
 
-from calebasse.cbv import ListView
+from calebasse.cbv import ListView, UpdateView
 from calebasse.agenda import views as agenda_views
 
 import models
@@ -64,4 +64,12 @@ class ActListingView(ListView):
 
 act_listing = ActListingView.as_view()
 act_new = agenda_views.NewAppointmentView.as_view()
+
+class UpdateActView(UpdateView):
+    model = models.Act
+    form_class = forms.ActUpdate
+    template_name = 'actes/act_update.html'
+    success_url = '..'
+
+update_act = UpdateActView.as_view()
 

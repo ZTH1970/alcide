@@ -2,6 +2,8 @@
 
 from django import forms
 
+from calebasse.actes.models import Act
+
 class ActSearchForm(forms.Form):
     STATES = (
             ('valide', u'Validé'),
@@ -25,3 +27,10 @@ class ActSearchForm(forms.Form):
     doctor_name = forms.CharField(required=False)
     filters = forms.MultipleChoiceField(choices=STATES,
             widget=forms.CheckboxSelectMultiple)
+
+class ActUpdate(forms.ModelForm):
+    class Meta:
+        model = Act
+
+
+        
