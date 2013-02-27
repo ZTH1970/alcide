@@ -5,13 +5,15 @@ import sys
 import re
 import base64
 from datetime import datetime
-import zlib
+import gzip
+import StringIO
 
 import ldap
 from M2Crypto import X509, SSL, Rand, SMIME, BIO
 
 MODE_TEST = False
 MODE_COMPRESS = True
+MODE_ENCRYPT = True
 
 LDAP_HOST = 'ldap://annuaire.gip-cps.fr'
 
@@ -91,7 +93,12 @@ def get_certificate(large_regime, dest_organism):
 def mime(message):
     # compress
     if MODE_COMPRESS:
-        zmessage = zlib.compress(message)
+        sio = StringIO.StringIO()
+        gzf = gzip.GzipFile(fileobj=sio, mode='wb', filename='B2.gz')
+        gzf.write(message)
+        gzf.close()
+        zmessage = sio.getvalue()
+        sio.close()
     else:
         zmessage = message
     if MODE_TEST:
@@ -103,7 +110,7 @@ def mime(message):
     return "Content-Type: application/EDI-consent\n" + \
             "Content-Transfer-Encoding: base64\n" + \
             "Content-Description: " + content_description + "\n" + \
-            "\n" + base64.encodestring(zmessage).rstrip()
+            "\n" + base64.encodestring(zmessage)
 
 def smime(message, x509):
     """
@@ -147,7 +154,9 @@ def build_mail(large_regime, dest_organism, b2_filename):
             'Mime-Version': '1.0',
             'Content-Type': 'multipart/mixed; boundary="%s"' % delimiter,
             }
-    smime_part = smime(mime(b2), get_certificate(large_regime, dest_organism))
+    mime_part = mime(b2)
+    if MODE_ENCRYPT:
+        mime_part = smime(mime(b2), get_certificate(large_regime, dest_organism))
 
     filename = b2_filename + '-mail'
     fd = open(filename, 'w')
@@ -155,8 +164,8 @@ def build_mail(large_regime, dest_organism, b2_filename):
         fd.write('%s: %s\n' % (k,v))
     fd.write('\n')
     fd.write('--%s\n' % delimiter)
-    fd.write(smime_part)
-    fd.write('--%s\n' % delimiter)
+    fd.write(mime_part)
+    fd.write('--%s--\n' % delimiter)
     fd.close()
     return filename
 
