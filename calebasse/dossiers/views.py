@@ -682,8 +682,14 @@ class DeletePatientView(cbv.DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object != self.object.patient.last_state:
-            self.object.delete()
+        if self.object == self.object.patient.last_state:
+            status = self.object.patient.filestate_set.all().order_by('-created')
+            if len(status) > 1:
+                self.object.patient.last_state = status[1]
+            else:
+                # TODO return an error here
+                return HttpResponseRedirect(self.get_success_url())
+        self.object.delete()
         return HttpResponseRedirect(self.get_success_url())
 
 
