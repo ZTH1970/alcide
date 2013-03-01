@@ -2,7 +2,7 @@
 from ajax_select import LookupChannel
 from models import Worker
 
-class Worker(LookupChannel):
+class WorkerLookup(LookupChannel):
     model = Worker
     search_field = 'display_name'
 
@@ -20,3 +20,10 @@ class Worker(LookupChannel):
         text = obj.last_name.upper() + ' ' + obj.first_name
         return unicode(text)
 
+class IntervenantLookup(WorkerLookup):
+    model = Worker
+    search_field = 'display_name'
+
+    def get_query(self,q,request):
+        qs = super(IntervenantLookup, self).get_query(q,request)
+        return qs.filter(type__intervene=True)

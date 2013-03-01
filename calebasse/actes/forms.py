@@ -3,6 +3,7 @@
 from django import forms
 
 from calebasse.actes.models import Act
+from ajax_select import make_ajax_field
 
 class ActSearchForm(forms.Form):
     STATES = (
@@ -29,8 +30,14 @@ class ActSearchForm(forms.Form):
             widget=forms.CheckboxSelectMultiple)
 
 class ActUpdate(forms.ModelForm):
+    doctors = make_ajax_field(Act, 'doctors', 'intervenant', True)
     class Meta:
         model = Act
+        fields = ('act_type', 'doctors', 'is_lost', 'pause', 'switch_billable', 'comment',
+                'valide')
+        widgets = {
+                'comment': forms.Textarea(attrs={'cols': 52, 'rows': 4}),
+                }
 
 
         

@@ -10,7 +10,7 @@
   $(function() {
     $('table#actes tr').click(function() {
         generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
-            '#acte-dlg', '500px', 'Enregistrer', '..');
+            '#acte-dlg', '700px', 'Enregistrer', '..');
     });
     $('.date').datepicker();
     $('#new-acte').click(function() {

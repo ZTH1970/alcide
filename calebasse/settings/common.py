@@ -226,7 +226,8 @@ LOGGING = {
 # AJAX Select
 AJAX_LOOKUP_CHANNELS = {
     #   pass a dict with the model and the field to search against
-    'worker' : ('calebasse.personnes.lookup', 'Worker'),
+    'worker' : ('calebasse.personnes.lookup', 'WorkerLookup'),
+    'intervenant' : ('calebasse.personnes.lookup', 'IntervenantLookup'),
     #'patientrecord'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
     #'coordinators'  : {'model':'dossiers.PatientRecord', 'search_field':'display_name'}
     'patientrecord' : ('calebasse.dossiers.lookups', 'PatientRecordLookup'),
