@@ -140,7 +140,8 @@ def build_mail(large_regime, dest_organism, b2_filename):
     b2 = b2_fd.read()
     b2_fd.close()
 
-    stamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    utcnow = datetime.utcnow()
+    stamp = utcnow.strftime('%Y%m%d%H%M%S') + utcnow.strftime('%f')[:5]
     # count invoice in the b2 file = lines start with "5"
     nb_invoices = [b2[x*128] for x in range(len(b2)/128)].count('5')
 

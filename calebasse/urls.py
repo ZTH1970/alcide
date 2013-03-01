@@ -44,3 +44,10 @@ urlpatterns = patterns('',
         include(service_patterns))),
     url(r'^lookups/', include('ajax_select.urls')),
 )
+
+from django.conf import settings
+if settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()
+
+
