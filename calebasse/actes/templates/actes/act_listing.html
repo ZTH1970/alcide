@@ -9,8 +9,12 @@
 <script>
   $(function() {
     $('table#actes tr').click(function() {
+        if ($(this).data('isbilled') == "False") {
         generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
             '#acte-dlg', '700px', 'Enregistrer', '..');
+        } else {
+            alert('Vous ne pouvez pas éditer un acte déjà facturé')
+        }
     });
     $('.date').datepicker();
     $('#new-acte').click(function() {
@@ -93,12 +97,9 @@
     </thead>
     <tbody>
       {% for act in object_list %}
-      {% comment %}
-      FIXME: comment mettre la classe non-factu ?
-      <tr class="non-factu">
-      {% endcomment %}
-      <tr data-id="{{ act.id }}">
-        <td>
+      <tr data-id="{{ act.id }}" data-isbilled="{{ act.is_billed }}"
+      {% if not act.is_billed %}class="non-factu"{% endif %}>
+        <td>1
             {{ act.patient.id }}
             {{ act.patient.first_name }}
             <span class="lastname">{{ act.patient.last_name }}</span>
