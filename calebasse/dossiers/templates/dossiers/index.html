@@ -76,9 +76,9 @@
 
       {% for patient_record in patient_records %}
       <tr style="display: table-row;" class="pr-line {{ patient_record.state_class }}" data-link="{{ patient_record.object.id }}/view">
-          <td>{{ patient_record.object.paper_id|default_if_none:"" }}</td>
+          <td>{{ patient_record.object.paper_id|default_if_none:"" }} </td>
           <td>{{ patient_record.object.id }}</td>
-          <td><span class="lastname">{{ patient_record.object.last_name }}</span></td>
+          <td>{% if patient_record.object.confidential %}<span title="Dossier confidentiel" class="icon-lock" style="margin-right: 5px;"></span>{% endif %}<span class="lastname">{{ patient_record.object.last_name }}</span></td>
           <td>{{ patient_record.object.first_name }}</td>
           <td>{{ patient_record.object.birthdate|date:"d/m/Y" }}</td>
           <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>

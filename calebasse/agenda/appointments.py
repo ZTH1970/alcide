@@ -21,6 +21,7 @@ class Appointment(object):
         self.is_billed = False
         self.convocation_sent = None
         self.other_services_names = []
+        self.patient = None
         self.patient_record_id = None
         self.patient_record_paper_id = None
         self.event_id = None

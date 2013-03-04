@@ -1310,6 +1310,7 @@ div.pagination {
 }
 
 .icon-edit:before                 { content: "\f044"; }
+.icon-lock:before                 { content: "\f023"; }
 .icon-remove-sign:before          { content: "\f057"; }
 .icon-remove:before               { content: "\f00d"; }
 .icon-minus:before                { content: "\f068"; }
@@ -1346,4 +1347,10 @@ div.event h3 span.right {
 }
 #periodic-events-search-form label {
   display: block;
+}
+.icon-confidential {
+    height: 19px;
+    width: 19px;
+    margin-top: 1px;
+    display: inline-block;
 }

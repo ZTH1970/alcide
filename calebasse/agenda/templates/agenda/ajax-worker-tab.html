@@ -23,6 +23,9 @@
         {% endif %}
         {% if appointment.event_id %}
         {% if appointment.is_recurrent %} R {% endif %}
+          {% if appointment.patient.confidential %}
+          <span title="Dossier confidentiel" class="icon-lock"></span>
+          {% endif %}
          {% if service in appointment.services_names or not appointment.services_names %}
           {% if appointment.patient_record_id %}
             <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
