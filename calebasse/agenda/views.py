@@ -1,3 +1,4 @@
+import ipdb
 # -*- coding: utf-8 -*-
 
 import datetime
@@ -204,6 +205,8 @@ class NewEventView(CreateView):
         initial['time'] = self.request.GET.get('time')
         initial['event_type'] = 2
         initial['room'] = self.request.GET.get('room')
+        if not initial.has_key('services'):
+            initial['services'] = [self.service]
         return initial
 
     def get_form_kwargs(self):
