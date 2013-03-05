@@ -75,7 +75,7 @@ def write_invoice(output_file, invoice):
             (invoice.policy_holder_other_health_center or '0000') + \
             '3' + b2date(start_date) + '000000' + \
             invoice.policy_holder_healthcenter.dest_organism + '000' + \
-            '10' + ' ' +  \
+            '10' + '3' +  \
             b2date(start_date) + \
             '000000000' + ' ' + \
             b2date(invoice.patient_birthdate) + \
