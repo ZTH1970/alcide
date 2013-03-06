@@ -203,8 +203,10 @@ if __name__ == '__main__':
     print 'Facturation', invoicing.seq_id
     batches = build_batches(invoicing)
     for hc in batches:
-        b2_filename, mail_filename = b2(invoicing.seq_id, batches[hc])
-        print '  B2    :', b2_filename
-        print '  smime :', mail_filename
+        # XXX : pour l'instant, faire un fichier par batch...
+        for b in batches[hc]:
+            b2_filename, mail_filename = b2(invoicing.seq_id, [b])
+            print '  B2    :', b2_filename
+            print '  smime :', mail_filename
 
 
