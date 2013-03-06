@@ -191,7 +191,7 @@ class PeriodicEventsSearchForm(forms.Form):
     event_type = forms.MultipleChoiceField(
             choices=(
                 (0, 'Rendez-vous patient'),
-                (1, 'Autre')),
+                (1, 'Évènement')),
             widget=forms.CheckboxSelectMultiple,
             initial=[0,1])
     no_end_date = forms.BooleanField(label=u'Sans date de fin', required=False)
