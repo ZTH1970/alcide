@@ -79,7 +79,7 @@
   <div id="events">
     <div class="event frame" id="event-frame-{{ event.id }}">
       <h3>
-        <span>{{ event.recurrence_description }}</span>
+        <span>{% if event.patient %}Rendez-vous patient{% else %}Évènement{% endif %}: {{ event.recurrence_description|lower }}</span>
          — 
         <span class="hour">{{ event.start_datetime.time }}</span>
         {% if event.title %} — {{ event.title }} {% endif %}
