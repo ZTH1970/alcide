@@ -756,11 +756,12 @@ class Invoice(models.Model):
     ppa = models.IntegerField()
 
     def save(self, *args, **kwargs):
-        invoicing = self.invoicing
-        self.number = invoicing.seq_id * 1000000 + 1
-        max_number = invoicing.invoice_set.aggregate(Max('number'))['number__max']
-        if max_number:
-            self.number = max_number + 1
+        if not self.number:
+            invoicing = self.invoicing
+            self.number = invoicing.seq_id * 1000000 + 1
+            max_number = invoicing.invoice_set.aggregate(Max('number'))['number__max']
+            if max_number:
+                self.number = max_number + 1
         super(Invoice, self).save(*args, **kwargs)
 
     @property
