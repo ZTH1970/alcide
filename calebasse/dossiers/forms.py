@@ -6,8 +6,10 @@ from datetime import date
 
 from django import forms
 from django.conf import settings
-from django.forms import ModelForm, Form
+from django.forms import ModelForm, Form, widgets
 import django.contrib.admin.widgets
+
+from django.core.exceptions import ValidationError
 
 from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
@@ -181,15 +183,25 @@ class FollowUpForm(ModelForm):
         model = PatientRecord
         fields = ('coordinators', 'externaldoctor', 'externalintervener')
 
+def validate_twinning_rank(value):
+    try:
+        int(value)
+    except (ValueError, TypeError):
+        raise ValidationError('')
+    if int(value) <= 0:
+        raise ValidationError(u'Le rang doit être supérieur ou égal à 1')
+
 class PatientContactForm(ModelForm):
     health_org = forms.CharField(label=u"Numéro de l'organisme destinataire", required=False)
+    twinning_rank = forms.IntegerField(label=u"Rang (gémellité)", initial=1,
+            validators=[validate_twinning_rank],
+            widget=widgets.TextInput(attrs={'size': 4}))
 
     class Meta:
         model = PatientContact
         widgets = {
                 'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 'key': forms.TextInput(attrs={'size': 4}),
-                'twinning_rank': forms.TextInput(attrs={'size': 4}),
                 'health_org': forms.TextInput(attrs={'size': 9}),
                 'addresses': forms.CheckboxSelectMultiple(),
                 }
@@ -202,6 +214,7 @@ class PatientContactForm(ModelForm):
             self.fields['health_org'].initial = self.instance.health_center.large_regime.code + self.instance.health_center.health_fund + self.instance.health_center.code
         if self.patient:
             self.fields['addresses'].queryset = self.patient.addresses
+
 
     def clean(self):
         cleaned_data = super(PatientContactForm, self).clean()
