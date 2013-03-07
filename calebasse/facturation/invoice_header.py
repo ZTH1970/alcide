@@ -172,10 +172,11 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
         for center in centers:
             if headers is not True and headers is not False and headers != center:
                 continue
-            files = batches_files(service, invoicing, center,
-                batches_by_health_center[center], delete=delete,
-                headers=headers, invoices=invoices, counter=counter)
-            all_files.extend(files)
+            for batch in batches_by_health_center[center]:
+                files = batches_files(service, invoicing, center,
+                    [batch], delete=delete,
+                    headers=headers, invoices=invoices, counter=counter)
+                all_files.extend(files)
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                 (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
         pdftk = PdfTk()
