@@ -46,7 +46,6 @@ class Appointment(object):
             self.begin_hour = None
 
     def init_from_event(self, event, service, validation_states=None):
-        """ """
         delta = event.end_datetime - event.start_datetime
         self.event_id = event.id
         self.length = delta.seconds / 60
@@ -211,7 +210,7 @@ def get_daily_usage(date, ressource, service, occurrences):
             appointments.append(appointment)
     for occurrence in occurrences:
         appointment = Appointment()
-        appointment.init_from_occurrence(occurrence, service)
+        appointment.init_from_event(occurrence, service)
         appointments.append(appointment)
 
     return sorted(appointments, key=lambda app: (app.begin_time, app.weight))
