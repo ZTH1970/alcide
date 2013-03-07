@@ -109,6 +109,7 @@
           {{ form.thirdparty_payer.errors }}
         </td>
       </tr>
+      {% if object.id != request.session.patientrecord_id or not object %}
       <tr>
         <td>
           {{ form.addresses.label_tag }} :
@@ -116,6 +117,7 @@
           {{ form.addresses.errors }}
         </td>
       </tr>
+      {% endif %}
     </tbody>
   </table>
   <p>

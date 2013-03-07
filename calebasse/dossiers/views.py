@@ -85,7 +85,7 @@ new_patient_record = NewPatientRecordView.as_view()
 
 class RecordPatientRecordIdMixing(object):
     def dispatch(self, request, *args, **kwargs):
-        self.patientrecord_id = request.session['patientrecord_id'] = kwargs['patientrecord_id']
+        self.patientrecord_id = request.session['patientrecord_id'] = int(kwargs['patientrecord_id'])
         return super(RecordPatientRecordIdMixing, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
