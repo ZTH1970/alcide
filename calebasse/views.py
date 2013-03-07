@@ -13,7 +13,7 @@ from calebasse.utils import is_validator
 APPLICATIONS = (
         (u'Gestion des dossiers', 'dossiers', False),
         (u'Agenda', 'agenda', False),
-#        (u'Saisie des actes', 'actes', True),
+        (u'Saisie des actes', 'actes', True),
 #        (u'Facturation et décompte', 'facturation', True),
         (u'Gestion des personnes', 'personnes', True),
         (u'Gestion des ressources', 'ressources', True),

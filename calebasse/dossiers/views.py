@@ -686,6 +686,7 @@ class DeletePatientView(cbv.DeleteView):
             status = self.object.patient.filestate_set.all().order_by('-created')
             if len(status) > 1:
                 self.object.patient.last_state = status[1]
+                self.object.patient.save()
             else:
                 # TODO return an error here
                 return HttpResponseRedirect(self.get_success_url())
