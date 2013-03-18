@@ -14,7 +14,7 @@ APPLICATIONS = (
         (u'Gestion des dossiers', 'dossiers', False),
         (u'Agenda', 'agenda', False),
 #        (u'Saisie des actes', 'actes', True),
-#        (u'Facturation et décompte', 'facturation', True),
+        (u'Facturation et décompte', 'facturation', True),
         (u'Gestion des personnes', 'personnes', True),
         (u'Gestion des ressources', 'ressources', True),
 )
@@ -31,10 +31,6 @@ class Homepage(TemplateView):
         services = sorted(services, key=lambda tup: tup[0])
         ctx = super(Homepage, self).get_context_data(**kwargs)
         applications = list(APPLICATIONS)
-#        user = get_request().user
-#        if not is_validator(user):
-#            applications.pop(3)
-#            applications.pop(4)
         ctx.update({
             'applications': applications,
             'services': services,
