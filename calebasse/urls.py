@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic.simple import redirect_to
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 
@@ -49,5 +48,3 @@ from django.conf import settings
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += staticfiles_urlpatterns()
-
-
