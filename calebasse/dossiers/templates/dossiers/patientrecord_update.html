@@ -314,7 +314,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
                         {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
-                        <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcarediagnostic.act_number }}</strong></li>
+                        <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcarediagnostic.get_act_number }}</strong></li>
                         {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
                         <ul>
                           {% for act in acts %}
@@ -348,7 +348,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
                         {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
-                        <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcaretreatment.act_number }}</strong></li>
+                        <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcaretreatment.get_act_number }}</strong></li>
                         {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
                         <ul>
                           {% for act in acts %}
