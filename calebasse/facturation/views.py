@@ -10,7 +10,7 @@ from django.core.files import File
 
 from calebasse.cbv import TemplateView, UpdateView
 
-from models import Invoicing
+from models import Invoicing, Invoice
 from calebasse.ressources.models import Service
 from invoice_header import render_invoicing
 
@@ -38,6 +38,29 @@ class FacturationHomepageView(TemplateView):
         context['last'] = last
         return context
 
+class FacturationRebillView(cbv.FormView):
+    template_name = 'facturation/rebill.html'
+    form_class = forms.FacturationRebillForm
+    success_url = '../..'
+
+    def post(self, request, *args, **kwarg):
+        print 'post'
+        print request.POST
+        return super(FacturationRebillView, self).post(request, *args, **kwarg)
+
+    def form_valid(self, form):
+        print 'form valid'
+        print form.data
+        invoice = Invoice.objects.get(id=form.data['invoice_id'])
+        for act in invoice.acts.all():
+            act.is_billed = False
+            act.healthcare = None
+            act.save()
+        invoice.rejected = True
+        invoice.save()
+        return super(FacturationRebillView, self).form_valid(form)
+
+rebill_form = FacturationRebillView.as_view()
 
 class FacturationDetailView(UpdateView):
 
@@ -127,7 +150,6 @@ class CloseInvoicingView(cbv.FormView):
         return super(CloseInvoicingView, self).post(request, *args, **kwarg)
 
     def form_valid(self, form):
-        print form.data
         service = Service.objects.get(name=form.data['service_name'])
         invoicing = Invoicing.objects.get(id=form.data['invoicing_id'])
         date_selected = datetime.strptime(form.data['date'], "%d/%m/%Y")

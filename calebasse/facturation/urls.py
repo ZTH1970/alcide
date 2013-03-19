@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from views import (FacturationHomepageView, FacturationDetailView,
     ValidationFacturationView, close_form, display_invoicing,
-    FacturationDownloadView, FacturationExportView)
+    FacturationDownloadView, FacturationExportView, rebill_form)
 
 urlpatterns = patterns('calebasse.facturation.views',
     url(r'^$', FacturationHomepageView.as_view()),
@@ -14,4 +14,5 @@ urlpatterns = patterns('calebasse.facturation.views',
         ValidationFacturationView.as_view(),
         name='validate-facturation'),
     url(r'^(?P<pk>\d+)/clore$', close_form),
+    url(r'^(?P<pk>\d+)/rebill/$', rebill_form),
 )

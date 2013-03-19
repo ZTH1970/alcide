@@ -754,6 +754,7 @@ class Invoice(models.Model):
     acts = models.ManyToManyField('actes.Act')
     amount = models.IntegerField()
     ppa = models.IntegerField()
+    rejected = models.BooleanField(verbose_name=u"Rejeté", default=False)
 
     def save(self, *args, **kwargs):
         if not self.number:

@@ -319,12 +319,19 @@
                   <li>Actes facturés <button class="blind">détails</button>
                     <ul>
                         {% for invoice in value %}
-                        <li>Facture {{ invoice.number }}
+                        <li>{% if invoice.rejected %}Facture {{ invoice.number }} <strong>rejetée</strong>
                           <ul>
                           {% for act in invoice.acts.all %}
-                            <li>{{ act.get_hc_tag }} : {{ act.date }} {{ act.act_type }} <button>Refacturer</button></li>
+                            <li>{{ act.date }} {{ act.act_type }} </li>
                           {% endfor %}
                           </ul>
+                          {% else %}Facture {{ invoice.number }} <button data-id="{{ invoice.id }}" class="rebill-btn">Rejeter cette facture</button>
+                          <ul>
+                          {% for act in invoice.acts.all %}
+                            <li>{{ act.get_hc_tag }} : {{ act.date }} {{ act.act_type }} </li>
+                          {% endfor %}
+                          </ul>
+                          {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
@@ -498,6 +505,9 @@
 
 {% block dialogs %}
 <div id="change-record" style="display: none;" data-id="{{ invoicing.id }}" data-service-name="{{ service_name }}">
+ </div>
+
+<div id="rebill" style="display: none;"  data-id="">
  </div>
 
 <div id="validate-dialog" title="Validation {% if service_name == "CMPP" %}de la facturation{% else %}du décompte{% endif %}">
