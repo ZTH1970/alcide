@@ -514,12 +514,12 @@ class MDPHResponse(models.Model):
 
 class HolidayType(NamedAbstractModel):
     for_group = models.BooleanField(
-            verbose_name=u'Congé de groupe',
+            verbose_name=u'Absence de groupe',
             blank=True)
 
     class Meta:
-        verbose_name = u'Type de congé'
-        verbose_name_plural = u'Types de congé'
+        verbose_name = u"Type d'absence"
+        verbose_name_plural = u"Types d'absence"
 
 class PatientRelatedLink(NamedAbstractModel):
     old_camsp_id = models.CharField(max_length=256,
