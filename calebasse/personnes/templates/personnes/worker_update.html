@@ -113,6 +113,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             {% elif holiday.service %}
             (congés annuels)
             {% endif %}
+            ({{ holiday.holiday_type }})
             {% if holiday.comment %}
             « {{ holiday.comment }} »
             {% endif %}
