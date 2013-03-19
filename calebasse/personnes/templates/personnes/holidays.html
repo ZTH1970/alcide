@@ -8,6 +8,33 @@
 {% endblock %}
 
 {% block content %}
+<h3>Absences de groupe</h3>
+<p>
+  <a href="groupe/">Gestion des absences de groupe</a>
+</p>
+{% if group_holidays %}
+<ul>
+  {% for holiday in group_holidays %}
+    <li>{{ holiday|capfirst }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<h3>Affichage interactif</h3>
+
+  <form>
+    {{ search_form.non_field_errors }}
+    {{ search_form.start_date.errors }}
+    {{ search_form.end_date.errors }}
+    <p>Afficher la liste des absences pris entre
+      <span id="start-date-datepicker" data-number-of-months="3" data-before-selector="#end-date-datepicker" class="datepicker">{{ search_form.start_date }}</span>
+      et
+      <span id="end-date-datepicker" class="datepicker" data-number-of-months="3" data-after-selector="#start-date-datepicker">{{ search_form.end_date }}</span>
+      <button class="enable-on-change">Valider</button>
+      <button class="reset">Effacer</button>
+    </p>
+  </form>
+
 <h3>Absences en cours et à venir</h3>
 
 {% if current_holidays %}
@@ -53,30 +80,4 @@
   </table>
 {% endif %}
 
-<h3>Absences de groupe</h3>
-<p>
-  <a href="groupe/">Gestion des absences de groupe</a>
-</p>
-{% if group_holidays %}
-<ul>
-  {% for holiday in group_holidays %}
-    <li>{{ holiday|capfirst }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
-
-<h3>Affichage interactif</h3>
-
-  <form>
-    {{ search_form.non_field_errors }}
-    {{ search_form.start_date.errors }}
-    {{ search_form.end_date.errors }}
-    <p>Afficher la liste des absences pris entre
-      <span id="start-date-datepicker" data-number-of-months="3" data-before-selector="#end-date-datepicker" class="datepicker">{{ search_form.start_date }}</span>
-      et
-      <span id="end-date-datepicker" class="datepicker" data-number-of-months="3" data-after-selector="#start-date-datepicker">{{ search_form.end_date }}</span>
-      <button class="enable-on-change">Valider</button>
-      <button class="reset">Effacer</button>
-    </p>
-  </form>
 {% endblock %}
