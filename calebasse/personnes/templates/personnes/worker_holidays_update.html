@@ -1,7 +1,7 @@
 {% extends "personnes/simple-form.html" %}
 
 {% block appbar %}
-<h2>Congés de <span class="lastname">{{object.last_name}}</span> {{object.first_name}}</h2>
+<h2>Absences de <span class="lastname">{{object.last_name}}</span> {{object.first_name}}</h2>
   <a href="..">Retour à la page de <span class="lastname">{{object.last_name}}</span> {{object.first_name}}</a>
 {% endblock %}
 
@@ -20,7 +20,7 @@
               <td><label class="required">Date de fin</label></td>
               <td><label>Heure de début</label></td>
               <td><label>Heure de fin</label></td>
-              <td><label class="required">Type de congé</label></td>
+              <td><label class="required">Type d'absence</label></td>
               <td><label>Commentaire</label></td>
               <td><label>Supprimer</label></td>
             </tr>
@@ -51,8 +51,8 @@
       <button class="enable-on-change">Modifier</button>
       <button id="add-form">Ajouter une ligne</button>
       {% endblock %}
-      <a href="..">{% block back-link %}Retour{% endblock %}</a>
     </form>
+    <p><a href="..">{% block back-link %}Retour à la page de <span class="lastname">{{object.last_name}}</span> {{object.first_name}}{% endblock %}</a></p>
 {% endblock %}
 
 {% block page-end %}

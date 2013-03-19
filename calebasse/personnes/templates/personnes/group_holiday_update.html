@@ -1,8 +1,8 @@
 {% extends "personnes/simple-form.html" %}
 
 {% block appbar %}
-<h2>Congés du {{service_name}}</h2>
-  <a href="..">Retour à la gestion des congés</a>
+<h2>Absences de groupe</h2>
+  <a href="..">Retour à la gestion des absences</a>
 {% endblock %}
 
 
@@ -20,7 +20,7 @@
               <td><label class="required">Date de fin</label></td>
               <td><label>Heure de début</label></td>
               <td><label>Heure de fin</label></td>
-              <td><label class="required">Type de congé</label></td>
+              <td><label class="required">Type d'absence</label></td>
               <td><label>Commentaire</label></td>
               <td><label>Tous les services</label></td>
               <td><label>Supprimer</label></td>
@@ -57,6 +57,7 @@
       <button id="add-form">Ajouter une ligne</button>
       {% endblock %}
     </form>
+<p><a href="..">{% block back-link %}Retour à la gestion des absences{% endblock %}</a></p>
 {% endblock %}
 
 {% block page-end %}
