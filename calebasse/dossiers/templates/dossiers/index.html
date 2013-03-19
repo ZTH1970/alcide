@@ -63,7 +63,6 @@
         <th rowspan="2">Prénom</th>
         <th rowspan="2">Date de naissance</th>
         <th rowspan="2">État du dossier</th>
-        <th rowspan="2"><span title="Information à propos de la prise en charge">I</span> / <span title="Dossier en pause facturation">F</span></th>
         <th rowspan="2">Dernier acte</th>
         <th rowspan="2">Prochain rendez-vous</th>
       </tr>
@@ -82,7 +81,6 @@
           <td>{{ patient_record.object.first_name }}</td>
           <td>{{ patient_record.object.birthdate|date:"d/m/Y" }}</td>
           <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>
-          <td>{% if patient_record.object.pause %}F{% endif %}</td>
           <td>
               {% if patient_record.last_rdv %}
               {% if patient_record.last_rdv.is_absent %}<span style="font-weight: bold;">{% endif %}
