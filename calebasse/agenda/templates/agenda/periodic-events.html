@@ -8,6 +8,10 @@
 <script type="text/javascript" src="{{ STATIC_URL }}/js/calebasse.reset-button.js">
 </script>
 <script>
+  function add_datepickers(that) {
+    $('input#id_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+    $('input#id_recurrence_end_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  }
   $(function () {
     var update_periodic_event_url = "{% url 'update-periodic-event' service=service date=date pk=0 %}";
     var update_periodic_appointment_url = "{% url 'update-periodic-rdv' service=service date=date pk=0 %}";
@@ -17,14 +21,14 @@
       var title = $(this).data('title');
       generic_ajaxform_dialog(update_periodic_appointment_url + id,
         title, '#event-dlg', 950, 'Modifier',
-        "{% url 'periodic-events' service=service date=date %}");
+        "{% url 'periodic-events' service=service date=date %}", add_datepickers);
     });
     $('button.edit-periodic-event').on('click', function () {
       var id = $(this).data('event-id');
       var title = $(this).data('title');
       generic_ajaxform_dialog(update_periodic_event_url + id,
         title, '#event-dlg', 950, 'Modifier',
-        "{% url 'periodic-events' service=service date=date %}");
+        "{% url 'periodic-events' service=service date=date %}", add_datepickers);
     });
   });
 </script>
@@ -80,7 +84,7 @@
     <div class="event frame" id="event-frame-{{ event.id }}">
       <h3>
         <span>{% if event.patient %}Rendez-vous patient{% else %}Évènement{% endif %}: {{ event.recurrence_description|lower }}</span>
-         — 
+         —
         <span class="hour">{{ event.start_datetime.time }}</span>
         {% if event.title %} — {{ event.title }} {% endif %}
         {% if event.patient.paper_id %} — {{ event.patient.paper_id }} {% endif %}
@@ -106,7 +110,7 @@
       {% if event.act_type %}
         <p>Type: {{ event.act_type }}</p>
       {% endif %}
-        <p>Avec: 
+        <p>Avec:
           {% for participant in event.participants.all %}
             {{ participant }}{% if not forloop.last %}, {% endif %}
           {% endfor %}
