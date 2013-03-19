@@ -44,13 +44,9 @@ class FacturationRebillView(cbv.FormView):
     success_url = '../..'
 
     def post(self, request, *args, **kwarg):
-        print 'post'
-        print request.POST
         return super(FacturationRebillView, self).post(request, *args, **kwarg)
 
     def form_valid(self, form):
-        print 'form valid'
-        print form.data
         invoice = Invoice.objects.get(id=form.data['invoice_id'])
         for act in invoice.acts.all():
             act.is_billed = False
