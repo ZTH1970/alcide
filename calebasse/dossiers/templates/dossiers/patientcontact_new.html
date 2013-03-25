@@ -2,6 +2,7 @@
 
 <form action="{{ request.get_full_path }}" enctype="multipart/form-data" method="post">
   {% csrf_token %}
+    {{ form.errors }}
   <table>
     <tbody>
       <tr>
@@ -109,15 +110,13 @@
           {{ form.thirdparty_payer.errors }}
         </td>
       </tr>
-      {% if object.id != request.session.patientrecord_id or not object %}
-      <tr>
+      <tr {% if object.id == request.session.patientrecord_id %}style="display: none;"{%endif%}>
         <td>
           {{ form.addresses.label_tag }} :
           {{ form.addresses }}
           {{ form.addresses.errors }}
         </td>
       </tr>
-      {% endif %}
     </tbody>
   </table>
   <p>
