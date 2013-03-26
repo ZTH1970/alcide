@@ -32,6 +32,7 @@
 $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
 </script>
 {% endif %}
+<ul class="messages" style="display: none;"></ul>
 
 <div id="tabs">
   <ul>
@@ -165,6 +166,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                 <button type="button" data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
             </div>
             <div class="right">
+                <ul class="ajax_messages" style="display: none;"></ul>
                 <input type="checkbox" data-id="{{ address.id }}" class="place_of_life" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
             </div>
             {% if address.phone %}<p><span class="icon-home-space">{{ address.phone }}</span></p>{% endif %}

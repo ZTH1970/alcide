@@ -1261,7 +1261,7 @@ a [class^="icon-"], a [class*=" icon-"] {
 	clear: both;
 }
 
-ul.messages {
+ul.messages, ul.ajax_messages {
 	position: absolute;
 	width: 30em;
 	top: 10px;
@@ -1280,7 +1280,7 @@ ul.messages {
 	-webkit-border-radius: 10px;
 }
 
-ul.messages li {
+ul.messages li, ul.ajax_messages li {
 	padding: 1ex;
 	margin: 1ex;
 	border-size: 0px;

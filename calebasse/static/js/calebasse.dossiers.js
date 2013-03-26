@@ -287,13 +287,16 @@ function state_dialog(url, state_title, state_type) {
           } else {
               var value = "false";
           }
+          var prev = $(this).prev();
           $.ajax({
               url: '/api/v1/patientaddress/' + $(this).data("id") + '/?format=json',
               type: 'PATCH',
               contentType: 'application/json',
               data: '{"place_of_life": ' + value + '}',
               success: function(data) {
-                  console.log('success');
+                (prev).show();
+                (prev).html('<li>Modification appliquée avec succés</li>');
+                $('.ajax_messages').delay(1500).fadeOut('slow');
               }
           });
       });

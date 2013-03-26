@@ -140,6 +140,7 @@ class NewPatientAddressView(cbv.CreateView):
         patientaddress = form.save()
         patientrecord = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
         patientrecord.addresses.add(patientaddress)
+        messages.add_message(self.request, messages.INFO, u'Nouvelle adresse enregistrée avec succès.')
         return HttpResponseRedirect(self.get_success_url())
 
 new_patient_address = NewPatientAddressView.as_view()
@@ -149,6 +150,10 @@ class UpdatePatientAddressView(cbv.UpdateView):
     form_class = forms.PatientAddressForm
     template_name = 'dossiers/patientaddress_new.html'
     success_url = '../../view#tab=2'
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.INFO, u'Modification enregistrée avec succès.')
+        return super(UpdatePatientAddressView, self).form_valid(form)
 
 update_patient_address = UpdatePatientAddressView.as_view()
 
