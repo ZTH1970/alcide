@@ -13,14 +13,15 @@ class EventResource(ModelResource):
         resource_name = 'event'
         authorization = DjangoAuthorization()
 
-    def obj_get(self, request, **kwargs):
+    def obj_get(self, bundle, **kwargs):
         '''If a date parameter is passed, use it to specialize the Event
            instance for this date.'''
+        request = bundle.request
         date = None
         if 'date' in request.GET:
             date = request.GET['date']
             date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-        obj = super(EventResource, self).obj_get(request, **kwargs)
+        obj = super(EventResource, self).obj_get(bundle, **kwargs)
         if date:
             obj = obj.today_occurrence(date)
         return obj
