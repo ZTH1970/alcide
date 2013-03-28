@@ -40,6 +40,7 @@ class ActListingView(ListView):
             qs = qs.filter(valide=False)
         if 'absent-or-canceled' in filters:
             # TODO : how to filter this without change the model ?
+            pass
         if 'is-billable' in filters:
             qs = qs.filter(
                     (Q(act_type__billable=True) & Q(switch_billable=False)) | \
