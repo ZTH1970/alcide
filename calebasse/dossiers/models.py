@@ -181,7 +181,9 @@ class FileState(models.Model):
         verbose_name=u'Auteur')
     comment = models.TextField(max_length=3000, blank=True, null=True)
     previous_state = models.ForeignKey('FileState',
-        verbose_name=u'Etat précédent', blank=True, null=True)
+            on_delete=models.SET_NULL,
+            verbose_name=u'Etat précédent',
+            blank=True, null=True)
 
     def get_next_state(self):
         try:
