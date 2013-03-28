@@ -88,8 +88,10 @@
       <th>Dossier</th>
       <th>État</th>
       <th>Type d'acte</th>
-      <th>Validé</th>
       <th>Facturé</th>
+      <th>Facturable</th>
+      <th>Perdu</th>
+      <th>Pause</th>
       <th>Intervenants</th>
       <th>Heure</th>
       <th>Durée</th>
@@ -106,8 +108,10 @@
         </td>
         <td>{{ act.get_state }}</td>
         <td>({{ act.act_type.id }}) {{ act.act_type }}</td>
-        <td>{{ act.valide|yesno:"Oui,Non," }}</td>
-        <td>{{ act.is_billed|yesno:"Oui,Non,None" }}</td>
+        <td>{% if act.invoice_set.all %}{{ act.invoice_set.all.0.number }}{% endif %}</td>
+        <td>{{ act.is_billable|yesno:"Oui,Non," }}{% if act.switch_billable %} (I){% endif %}</td>
+        <td>{{ act.is_lost|yesno:"Oui,Non," }}</td>
+        <td>{{ act.pause|yesno:"Oui,Non," }}</td>
         <td>
             {% for doctor in act.doctors.all %}
             ({{ doctor.id }}) {{ doctor }}

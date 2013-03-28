@@ -7,9 +7,9 @@ from ajax_select import make_ajax_field
 
 class ActSearchForm(forms.Form):
     STATES = (
-            ('valide', u'Validé'),
+            ('valide', u'Validés'),
             ('non-valide', u'Non validé'),
-#            ('absent-or-canceled', u'Absent ou annulés'),
+            ('absent-or-canceled', u'Absent ou annulés'),
             ('is-billable', u'Facturable'),
             ('non-invoicable', u'Non facturable'),
             ('switch-billable', u'Inversion de facturabilité'),

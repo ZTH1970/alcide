@@ -81,7 +81,7 @@ class Act(models.Model):
     is_lost = models.BooleanField(default=False,
             verbose_name=u'Acte perdu', db_index=True)
     valide = models.BooleanField(default=False,
-            verbose_name=u'Valide', db_index=True)
+            verbose_name=u'Validé', db_index=True)
     switch_billable = models.BooleanField(default=False,
             verbose_name=u'Inverser type facturable')
     healthcare = models.ForeignKey('dossiers.HealthCare',
