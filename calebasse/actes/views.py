@@ -35,12 +35,17 @@ class ActListingView(ListView):
         if doctor_name:
             qs = qs.filter(doctors__last_name__icontains=doctor_name)
         if 'valide' in filters:
-            qs = qs.filter(valide=True)
-        if 'non-valide' in filters:
-            qs = qs.filter(valide=False)
+            qs = qs.exclude(last_validation_state__state_name__exact='VALIDE')
+        if 'pointe' in filters:
+            qs = qs.filter(last_validation_state__isnull=False). \
+                    exclude(last_validation_state__state_name__exact='NON_VALIDE')
+        if 'non-pointe' in filters:
+            qs = qs.filter(Q(last_validation_state__isnull=True) | \
+                    Q(last_validation_state__state_name__exact='NON_VALIDE'))
         if 'absent-or-canceled' in filters:
-            # TODO : how to filter this without change the model ?
-            pass
+            qs = qs.filter(last_validation_state__state_name__in=('ABS_NON_EXC',
+                'ABS_EXC', 'ABS_INTER', 'ANNUL_NOUS',
+                'ANNUL_FAMILLE', 'REPORTE', 'ABS_ESS_PPS', 'ENF_HOSP'))
         if 'is-billable' in filters:
             qs = qs.filter(
                     (Q(act_type__billable=True) & Q(switch_billable=False)) | \

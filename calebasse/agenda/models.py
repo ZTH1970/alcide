@@ -497,8 +497,10 @@ class EventWithAct(Event):
             old_save(*args, **kwargs)
             act.comment = self.description
             act.doctors = self.participants.select_subclasses()
-            ActValidationState.objects.create(act=act, state_name='NON_VALIDE',
-                author=self.creator, previous_state=None)
+            last_validation_state = ActValidationState.objects.create(
+                    act=act, state_name='NON_VALIDE',
+                    author=self.creator, previous_state=None)
+            act.last_validation_state = last_validation_state
         act.save = save
         return act
 

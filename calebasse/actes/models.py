@@ -47,9 +47,12 @@ class ActManager(models.Manager):
         return self.filter(date=today)
 
     def create_act(self, author=None, **kwargs):
-        act = self.create(**kwargs)
-        ActValidationState.objects.create(act=act,state_name='NON_VALIDE',
-            author=author, previous_state=None)
+        act = Act(**kwargs)
+        last_validation_state = ActValidationState.objects.create(
+                act=act,state_name='NON_VALIDE',
+                author=author, previous_state=None)
+        act.last_validation_state = last_validation_state
+        act.save()
         return act
 
     def next_acts(self, patient_record, today=None):
@@ -80,6 +83,10 @@ class Act(models.Model):
             verbose_name=u'Facturé', db_index=True)
     is_lost = models.BooleanField(default=False,
             verbose_name=u'Acte perdu', db_index=True)
+    last_validation_state = models.ForeignKey(ActValidationState,
+            related_name='+',
+            null=True, default=None,
+            on_delete=models.SET_NULL)
     valide = models.BooleanField(default=False,
             verbose_name=u'Validé', db_index=True)
     switch_billable = models.BooleanField(default=False,
@@ -166,15 +173,7 @@ class Act(models.Model):
         return False
 
     def get_state(self):
-#        states = sorted(self.actvalidationstate_set.all(),
-#                key=lambda avs: avs.created, reverse=True)
-#        if states:
-#            return states[0]
-#        return None
-        try:
-            return self.actvalidationstate_set.latest('created')
-        except:
-            return None
+        return self.last_validation_state
 
     def is_state(self, state_name):
         state = self.get_state()
@@ -191,8 +190,11 @@ class Act(models.Model):
         if not state_name in VALIDATION_STATES.keys():
             raise Exception("Etat d'acte non existant %s")
         current_state = self.get_state()
-        ActValidationState(act=self, state_name=state_name,
-            author=author, previous_state=current_state).save()
+        last_validation_state = ActValidationState(act=self,
+                state_name=state_name,
+                author=author,
+                previous_state=current_state).save()
+        self.last_validation_state = last_validation_state
         if state_name == 'VALIDE':
             self.valide = True
         else:
@@ -355,53 +357,9 @@ class Act(models.Model):
         ordering = ['-date', 'patient']
 
 
-class EventActManager(EventManager):
-
-    def create_patient_appointment(self, creator, title, patient, participants,
-            act_type, service, start_datetime, end_datetime, description='',
-            room=None, note=None, **rrule_params):
-        """
-        This method allow you to create a new patient appointment quickly
-
-        Args:
-            title: patient appointment title (str)
-            patient: Patient object
-            participants: List of CalebasseUser (therapists)
-            act_type: ActType object
-            service: Service object. Use session service by defaut
-            start_datetime: datetime with the start date and time
-            end_datetime: datetime with the end date and time
-            freq, count, until, byweekday, rrule_params:
-            follow the ``dateutils`` API (see http://labix.org/python-dateutil)
-
-        Example:
-            Look at calebasse.agenda.tests.EventTest (test_create_appointments
-            method)
-        """
-
-        event_type, created = EventType.objects.get_or_create(
-                label=u"Rendez-vous patient"
-                )
-
-        act_event = EventAct.objects.create(
-                title=title,
-                event_type=event_type,
-                patient=patient,
-                act_type=act_type,
-                date=start_datetime,
-                )
-        act_event.doctors = participants
-        ActValidationState(act=act_event, state_name='NON_VALIDE',
-            author=creator, previous_state=None).save()
-
-        return self._set_event(act_event, participants, description,
-                services=[service], start_datetime=start_datetime,
-                end_datetime=end_datetime,
-                room=room, note=note, **rrule_params)
-
-
 class ValidationMessage(ServiceLinkedAbstractModel):
     validation_date = models.DateTimeField()
     what = models.CharField(max_length=256)
     who = models.ForeignKey(User)
     when = models.DateTimeField(auto_now_add=True)
+
