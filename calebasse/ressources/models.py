@@ -103,6 +103,9 @@ class HealthCenter(NamedAbstractModel):
     accounting_number = models.CharField(max_length=30,
              null=True, blank=True, verbose_name=u"Numéro de compte")
     correspondant = models.CharField(max_length=80, verbose_name=u"Correspondant")
+    hc_invoice = models.ForeignKey('HealthCenter',
+            verbose_name=u"Centre pour facturation (optionnel)",
+            null=True, blank=True, default=None)
 
     def b2_000(self):
         '''
