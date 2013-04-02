@@ -190,10 +190,11 @@ class Act(models.Model):
         if not state_name in VALIDATION_STATES.keys():
             raise Exception("Etat d'acte non existant %s")
         current_state = self.get_state()
-        last_validation_state = ActValidationState(act=self,
+        last_validation_state = ActValidationState.objects.create(
+                act=self,
                 state_name=state_name,
                 author=author,
-                previous_state=current_state).save()
+                previous_state=current_state)
         self.last_validation_state = last_validation_state
         if state_name == 'VALIDE':
             self.valide = True
