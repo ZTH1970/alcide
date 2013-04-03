@@ -1,6 +1,6 @@
 import datetime
 
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 from calebasse.actes.models import Act
 from calebasse.agenda.models import Event
@@ -11,7 +11,7 @@ class EventResource(ModelResource):
     class Meta:
         queryset = Event.objects.all()
         resource_name = 'event'
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
     def obj_get(self, bundle, **kwargs):
         '''If a date parameter is passed, use it to specialize the Event
@@ -30,19 +30,19 @@ class PatientRecordRessource(ModelResource):
     class Meta:
         queryset = PatientRecord.objects.all()
         resource_name = 'patientrecord'
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 class PatientAddressRessource(ModelResource):
     class Meta:
         queryset = PatientAddress.objects.all()
         resource_name = 'patientaddress'
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 class ActRessource(ModelResource):
     class Meta:
         queryset = Act.objects.all()
         resource_name = 'act'
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 patientaddress_ressource = PatientAddressRessource()
 event_resource = EventResource()
