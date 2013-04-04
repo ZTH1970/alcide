@@ -501,6 +501,7 @@ class EventWithAct(Event):
                     act=act, state_name='NON_VALIDE',
                     author=self.creator, previous_state=None)
             act.last_validation_state = last_validation_state
+            old_save(*args, **kwargs)
         act.save = save
         return act
 
