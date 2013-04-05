@@ -266,6 +266,8 @@ class Invoicing(models.Model):
                 len_acts_paused = 0
                 len_patient_with_lost_acts_missing_policy = 0
                 len_acts_losts_missing_policy = 0
+                batches = {}
+                last_batch = {}
                 for patient in patients:
                     dic = {}
                     if patient in invoices.keys():
@@ -306,15 +308,41 @@ class Invoicing(models.Model):
                                         ppa=ppa,
                                         amount=amount,
                                         **invoice_kwargs)
-                                in_o.batch = Invoice.objects.new_batch_number(
-                                            health_center=in_o.health_center,
-                                            invoicing=self)
                                 in_o.save()
                                 for act, hc in acts:
                                     act.is_billed = True
                                     act.healthcare = hc
                                     act.save()
                                     in_o.acts.add(act)
+
+                                # calcule le numero de lot pour cette facture
+                                hc = in_o.health_center
+                                hc_dest = hc.hc_invoice or hc
+                                dest = hc_dest.large_regime.code + ' ' + hc_dest.dest_organism
+                                if dest not in batches:
+                                    batches[dest] = {}
+                                if hc not in batches[dest]:
+                                    nb1 = Invoice.objects.new_batch_number(health_center=hc_dest, invoicing=self)
+                                    nb2 = Invoice.objects.new_batch_number(health_center=hc, invoicing=self)
+                                    nb = max(nb1, nb2, last_batch.get(dest,0) + 1)
+                                    last_batch[dest] = nb
+                                    batches[dest][hc] = [{ 'batch': nb, 'size': 2, 'invoices': [], }]
+                                # pas plus de 950 lignes par lot (le fichier B2 final ne doit
+                                # pas depasser 999 lignes au total) :
+                                b = batches[dest][hc].pop()
+                                b2_size = in_o.acts.count() + 2
+                                if (b['size'] + b2_size) > 950:
+                                    batches[dest][hc].append(b)
+                                    nb = last_batch.get(dest, 0) + 1
+                                    last_batch[dest] = nb
+                                    b = {'batch': nb, 'size': 2, 'invoices': []}
+                                b['invoices'].append(in_o)
+                                b['size'] += b2_size
+                                batches[dest][hc].append(b)
+
+                                in_o.batch = b['batch']
+                                in_o.save()
+
                             pass
                     if patient in acts_losts.keys():
                         # TODO: More details about healthcare
@@ -698,6 +726,8 @@ class InvoiceManager(models.Manager):
         max_bn = agg['batch__max']
         if max_bn is None:
             max_bn = PREVIOUS_MAX_BATCH_NUMBERS.get(health_center.b2_000(), 0)
+        else:
+            max_bn = max(max_bn, PREVIOUS_MAX_BATCH_NUMBERS.get(health_center.b2_000(), 0))
         return max_bn + 1
 
 
