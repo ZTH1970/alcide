@@ -34,7 +34,7 @@
         {% endif %}
     {% else %}
         {% if show_validation_btn %}<button id="validate">Valider ce décompte</button>{% endif %}
-        {% if invoicing.status == "validated" %}<button id="print-btn" onclick="">Imprimer</button>{% endif %}
+        {% if invoicing.status == "validated" %}<button id="print-btn" onclick="window.location.href=window.location.href+'download/'">Imprimer</button>{% endif %}
     {% endif %}
 {% endblock %}
 
