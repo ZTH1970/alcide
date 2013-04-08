@@ -439,7 +439,6 @@ def list_acts_for_billing_CMPP_2_per_patient(patient, end_day, service, acts=Non
                     cared = True
             if not cared and len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
                 if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
-                    print
                     acts_per_hc[hcts[0]].append(act)
                     count_hct_2 = count_hct_2 + 1
                     cared = True
