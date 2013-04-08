@@ -159,6 +159,20 @@ class TransportCompany(NamedAbstractModel):
         verbose_name_plural = u'Compagnies de transport'
 
 
+class ManagementCode(NamedAbstractModel):
+    class Meta:
+        verbose_name = u'Code de gestion'
+        verbose_name_plural = u'Codes de gestion'
+
+    def __unicode__(self):
+        return self.code + ' ' + self.name
+
+    code = models.CharField(verbose_name=u"Code",
+            max_length=10)
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+
+
 class UninvoicableCode(models.Model):
     class Meta:
         verbose_name = u'Code de non-facturation'
