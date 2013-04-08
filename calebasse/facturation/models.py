@@ -386,7 +386,7 @@ class Invoicing(models.Model):
                         try:
                             patient = PatientRecord.objects.get(id=invoice.patient_id)
                         except:
-                            patient = PatientRecord(last_name=patient_last_name, first_name=patient_first_name)
+                            patient = PatientRecord(last_name=invoice.patient_last_name, first_name=invoice.patient_first_name)
                         patients[invoice.patient_id] = patient
                         len_patients = len_patients + 1
                         patients_stats[patient] = {}
@@ -439,8 +439,45 @@ class Invoicing(models.Model):
                             len_patient_hors_pause = len_patient_hors_pause + 1
                             len_acts_hors_pause = len_acts_hors_pause + len(acts)
                             if commit:
+                                policy_holder = patient.policyholder
+                                try:
+                                    address = unicode(policy_holder.addresses.filter(place_of_life=True)[0])
+                                except:
+                                    try:
+                                        address = unicode(policy_holder.addresses.all()[0])
+                                    except:
+                                        address = u''
+                                invoice_kwargs = dict(
+                                        patient_id=patient.id,
+                                        patient_last_name=patient.last_name,
+                                        patient_first_name=patient.first_name,
+                                        patient_social_security_id=patient.social_security_id or '',
+                                        patient_birthdate=patient.birthdate,
+                                        patient_twinning_rank=patient.twinning_rank,
+                                        patient_healthcenter=patient.health_center,
+                                        patient_other_health_center=patient.other_health_center or '',
+                                        patient_entry_date=patient.entry_date,
+                                        patient_exit_date=patient.exit_date,
+                                        policy_holder_id=policy_holder.id,
+                                        policy_holder_last_name=policy_holder.last_name,
+                                        policy_holder_first_name=policy_holder.first_name,
+                                        policy_holder_social_security_id=policy_holder.social_security_id or '',
+                                        policy_holder_other_health_center=policy_holder.other_health_center or '',
+                                        policy_holder_healthcenter=policy_holder.health_center,
+                                        policy_holder_address=address)
+                                if policy_holder.management_code:
+                                    management_code = policy_holder.management_code
+                                    invoice_kwargs['policy_holder_management_code'] = management_code.code
+                                    invoice_kwargs['policy_holder_management_code_name'] = management_code.name
+                                invoice = Invoice(
+                                        invoicing=self,
+                                        ppa=0, amount=0,
+                                        **invoice_kwargs)
+                                invoice.save()
                                 for act in acts:
-                                    self.acts.add(act)
+                                    act.is_billed = True
+                                    act.save()
+                                    invoice.acts.add(act)
                     if patient in acts_pause.keys():
                         dic['acts_paused'] = acts_pause[patient]
                         len_patient_acts_paused = len_patient_acts_paused + 1
@@ -460,15 +497,17 @@ class Invoicing(models.Model):
                 len_acts_paused = 0
                 days_not_locked = []
                 patients_missing_policy = []
-                for act in self.acts.all():
-                    if act.patient in patients_stats.keys():
-                        patients_stats[act.patient]['accepted'].append(act)
-                        len_acts_hors_pause = len_acts_hors_pause + 1
-                    else:
-                        len_patient_hors_pause = len_patient_hors_pause + 1
-                        len_acts_hors_pause = len_acts_hors_pause + 1
-                        patients_stats[act.patient] = {}
-                        patients_stats[act.patient]['accepted'] = [act]
+                invoices = self.invoice_set.all()
+                for invoice in invoices:
+                    len_patient_hors_pause = len_patient_hors_pause + 1
+                    len_acts_hors_pause = len_acts_hors_pause + len(invoice.acts.all())
+                    patient = None
+                    try:
+                        patient = PatientRecord.objects.get(id=invoice.patient_id)
+                    except:
+                        patient = PatientRecord(last_name=invoice.patient_last_name, first_name=invoice.patient_first_name)
+                    patients_stats[patient] = {}
+                    patients_stats[patient]['accepted'] = invoice.acts.all()
                 patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,
@@ -497,8 +536,10 @@ class Invoicing(models.Model):
                 patients_missing_notif = []
                 for patient in patients:
                     dic = {}
+                    acts_to_commit = []
                     if patient in acts_accepted.keys():
                         acts = acts_accepted[patient]
+                        acts_to_commit.extend(acts)
                         dic['accepted'] = acts
                         if patient.pause:
                             len_patient_pause = len_patient_pause + 1
@@ -506,32 +547,67 @@ class Invoicing(models.Model):
                         else:
                             len_patient_hors_pause = len_patient_hors_pause + 1
                             len_acts_hors_pause = len_acts_hors_pause + len(acts)
-                            if commit:
-                                for act in acts:
-                                    self.acts.add(act)
                     if patient in acts_missing_valid_notification.keys():
                         patients_missing_notif.append(patient)
                         acts = acts_missing_valid_notification[patient]
+                        acts_to_commit.extend(acts)
                         dic['missings'] = acts
                         len_patient_missing_notif = len_patient_missing_notif + 1
                         len_acts_missing_notif = len_acts_missing_notif + len(acts)
-                        if not 'accepted' in dic:
-                            if patient.pause:
+                        if patient.pause:
+                            if not 'accepted' in dic:
                                 len_patient_pause = len_patient_pause + 1
-                                len_acts_pause = len_acts_pause + len(acts)
-                            else:
+                            len_acts_pause = len_acts_pause + len(acts)
+                        else:
+                            if not 'accepted' in dic:
                                 len_patient_hors_pause = len_patient_hors_pause + 1
-                                len_acts_hors_pause = len_acts_hors_pause + len(acts)
-                        if commit:
-                            for act in acts:
-                                self.acts.add(act)
+                            len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                    if commit and acts_to_commit:
+                        policy_holder = patient.policyholder
+                        try:
+                            address = unicode(policy_holder.addresses.filter(place_of_life=True)[0])
+                        except:
+                            try:
+                                address = unicode(policy_holder.addresses.all()[0])
+                            except:
+                                address = u''
+                        invoice_kwargs = dict(
+                                patient_id=patient.id,
+                                patient_last_name=patient.last_name,
+                                patient_first_name=patient.first_name,
+                                patient_social_security_id=patient.social_security_id or '',
+                                patient_birthdate=patient.birthdate,
+                                patient_twinning_rank=patient.twinning_rank,
+                                patient_healthcenter=patient.health_center,
+                                patient_other_health_center=patient.other_health_center or '',
+                                patient_entry_date=patient.entry_date,
+                                patient_exit_date=patient.exit_date,
+                                policy_holder_id=policy_holder.id,
+                                policy_holder_last_name=policy_holder.last_name,
+                                policy_holder_first_name=policy_holder.first_name,
+                                policy_holder_social_security_id=policy_holder.social_security_id or '',
+                                policy_holder_other_health_center=policy_holder.other_health_center or '',
+                                policy_holder_healthcenter=policy_holder.health_center,
+                                policy_holder_address=address)
+                        if policy_holder.management_code:
+                            management_code = policy_holder.management_code
+                            invoice_kwargs['policy_holder_management_code'] = management_code.code
+                            invoice_kwargs['policy_holder_management_code_name'] = management_code.name
+                        invoice = Invoice(
+                                invoicing=self,
+                                ppa=0, amount=0,
+                                **invoice_kwargs)
+                        invoice.save()
+                        for act in acts_to_commit:
+                            act.is_billed = True
+                            act.save()
+                            invoice.acts.add(act)
                     if patient in acts_pause.keys():
                         dic['acts_paused'] = acts_pause[patient]
                         len_patient_acts_paused = len_patient_acts_paused + 1
                         len_acts_paused = len_acts_paused + len(acts_pause[patient])
                     patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
-                len_acts_hors_pause = len_acts_hors_pause + len_acts_missing_notif
                 if commit:
                     self.status = Invoicing.STATUS.validated
                     self.save()
@@ -548,15 +624,17 @@ class Invoicing(models.Model):
                 days_not_locked = []
                 patients_missing_policy = []
                 patients_missing_notif = []
-                for act in self.acts.all():
-                    if act.patient in patients_stats.keys():
-                        patients_stats[act.patient]['accepted'].append(act)
-                        len_acts_hors_pause = len_acts_hors_pause + 1
-                    else:
-                        len_patient_hors_pause = len_patient_hors_pause + 1
-                        len_acts_hors_pause = len_acts_hors_pause + 1
-                        patients_stats[act.patient] = {}
-                        patients_stats[act.patient]['accepted'] = [act]
+                invoices = self.invoice_set.all()
+                for invoice in invoices:
+                    len_patient_hors_pause = len_patient_hors_pause + 1
+                    len_acts_hors_pause = len_acts_hors_pause + len(invoice.acts.all())
+                    patient = None
+                    try:
+                        patient = PatientRecord.objects.get(id=invoice.patient_id)
+                    except:
+                        patient = PatientRecord(last_name=invoice.patient_last_name, first_name=invoice.patient_first_name)
+                    patients_stats[patient] = {}
+                    patients_stats[patient]['accepted'] = invoice.acts.all()
                 patients_stats = sorted(patients_stats.items(), key=lambda patient: (patient[0].last_name, patient[0].first_name))
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
@@ -791,6 +869,10 @@ class Invoice(models.Model):
             default='', blank=True)
     policy_holder_address = models.CharField(max_length=128,
             verbose_name=u'Adresse de l\'assuré', default='', blank=True)
+    policy_holder_management_code = models.CharField(max_length=10,
+            verbose_name=u'Code de gestion', default='', blank=True)
+    policy_holder_management_code_name = models.CharField(max_length=256,
+            verbose_name=u'Libellé du code de gestion', default='', blank=True)
 
     created = models.DateTimeField(u'Création', auto_now_add=True)
     invoicing = models.ForeignKey('facturation.Invoicing',
