@@ -198,7 +198,6 @@ class PatientContactForm(ModelForm):
         self.patient = kwargs.pop('patient', None)
         super(PatientContactForm, self).__init__(*args,**kwargs)
         if self.instance and self.instance.health_center:
-            print self.instance.health_center
             self.fields['health_org'].initial = self.instance.health_center.large_regime.code + self.instance.health_center.health_fund + self.instance.health_center.code
         if self.patient:
             self.fields['addresses'].queryset = self.patient.addresses
