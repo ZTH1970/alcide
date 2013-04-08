@@ -122,8 +122,7 @@ def write_invoice(output_file, invoice):
 
     return invoice_lines
 
-def b2(seq_id, batches):
-    hc = batches[0].health_center
+def b2(seq_id, hc, batches):
     to = hc.b2_000()
     total = sum(b.total for b in batches)
     first_batch = min(b.number for b in batches)
@@ -171,6 +170,11 @@ def b2(seq_id, batches):
         nb_lines += 1
         nb_batches += 1
 
+    if nb_lines > 990:
+        # FIXME grouper les lots comme y fo pour que ca n'arrive jamais
+        print "[FIXME] TROP DE LIGNES -- ", nb_lines
+        raise
+
     end_999 = '999' +  TYPE_EMETTEUR + '00000' + NUMERO_EMETTEUR + \
             filler(6) + to + filler(6) + APPLICATION + \
             file_id + \
@@ -203,10 +207,11 @@ if __name__ == '__main__':
     print 'Facturation', invoicing.seq_id
     batches = build_batches(invoicing)
     for hc in batches:
-        # XXX : pour l'instant, faire un fichier par batch...
+        print 'pour', hc
         for b in batches[hc]:
-            b2_filename, mail_filename = b2(invoicing.seq_id, [b])
-            print '  B2    :', b2_filename
-            print '  smime :', mail_filename
+            print '  lot', b
+        b2_filename, mail_filename = b2(invoicing.seq_id, hc, batches[hc])
+        print '  B2    :', b2_filename
+        print '  smime :', mail_filename
 
 
