@@ -100,7 +100,8 @@ class FacturationDetailView(UpdateView):
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,
                 days_not_locked, len_patient_acts_paused,
-                len_acts_paused) = context['invoicing'].get_stats_or_validate()
+                len_acts_paused, patients_missing_policy) = \
+                    context['invoicing'].get_stats_or_validate()
             if context['invoicing'].status == Invoicing.STATUS.closed and \
                     date.today() > context['invoicing'].end_date:
                 context['show_validation_btn'] = True
@@ -112,12 +113,14 @@ class FacturationDetailView(UpdateView):
             context['days_not_locked'] = days_not_locked
             context['len_patient_acts_paused'] = len_patient_acts_paused
             context['len_acts_paused'] = len_acts_paused
+            context['patients_missing_policy'] = patients_missing_policy
         elif 'SESSAD' in self.service.name:
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
                 patients_stats, days_not_locked,
-                len_patient_acts_paused, len_acts_paused) = \
+                len_patient_acts_paused, len_acts_paused,
+                patients_missing_policy, patients_missing_notif) = \
                     context['invoicing'].get_stats_or_validate()
             if context['invoicing'].status == Invoicing.STATUS.closed and \
                     date.today() > context['invoicing'].end_date:
@@ -134,6 +137,8 @@ class FacturationDetailView(UpdateView):
             context['days_not_locked'] = days_not_locked
             context['len_patient_acts_paused'] = len_patient_acts_paused
             context['len_acts_paused'] = len_acts_paused
+            context['patients_missing_policy'] = patients_missing_policy
+            context['patients_missing_notif'] = patients_missing_notif
         return context
 
 
