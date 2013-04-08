@@ -138,6 +138,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                                 <li><label>Centre spécifique :</label>
                                 {{ object.other_health_center }}</li>
                             {% endif %}
+                            {% if object.management_code %}
+                                <li><label>Code de gestion :</label>
+                                {{ object.management_code }}</li>
+                            {% endif %}
                             <li><label>Tiers-payant :</label>
                                 {% if object.thirdparty_payer %}
                                     Oui
@@ -247,6 +251,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                             {% if contact.health_center %}
                                 <li><label>Centre de santé :</label>
                                 {{ contact.health_center }}</li>
+                            {% endif %}
+                            {% if contact.management_code %}
+                                <li><label>Code de gestion :</label>
+                                {{ contact.management_code }}</li>
                             {% endif %}
                             <li><label>Tiers-payant :</label>
                                 {% if contact.thirdparty_payer %}
