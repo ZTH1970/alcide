@@ -764,7 +764,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     def entry_date(self):
         d = self.filestate_set.filter(
                 Q(status__type='DIAGNOSTIC') |
-                Q(status__type='TRAITEMENT')). \
+                Q(status__type='TRAITEMENT') |
+                Q(status__type='SUIVI')). \
                         aggregate(Min('date_selected'))['date_selected__min']
         return d and d.date()
 
