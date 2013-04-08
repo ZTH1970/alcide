@@ -39,6 +39,8 @@
           {{ form.twinning_rank.errors }}
         </td>
       </tr>
+  </table>
+  <table>
       <tr>
          <td>
           {{ form.parente.label_tag }} :<br>
@@ -62,12 +64,16 @@
           {{ form.phone }}
           {{ form.phone.errors }}
         </td>
+      </tr>
+      <tr>
         <td>
           {{ form.email.label_tag }} :<br>
           {{ form.email }}
           {{ form.email.errors }}
         </td>
       </tr>
+  </table>
+  <table>
       <tr>
         <td id="social-security-id">
           {{ form.social_security_id.label_tag }} :<br>
@@ -75,6 +81,8 @@
           {{ form.social_security_id.errors }}
           <p id="nir-key">Clé : <span>-</span></p>
         </td>
+      </tr>
+      <tr>
         <td>
           {{ form.begin_rights.label_tag }} :<br>
           {{ form.begin_rights }}
@@ -97,17 +105,26 @@
           {{ form.other_health_center }}
           {{ form.other_health_center.errors }}
         </td>
+      </tr>
+      <tr>
         <td>
           {{ form.type_of_contract.label_tag }} :<br>
           {{ form.type_of_contract }}
           {{ form.type_of_contract.errors }}
         </td>
-      </tr>
-      <tr>
         <td>
           {{ form.thirdparty_payer.label_tag }} :<br>
           {{ form.thirdparty_payer }}
           {{ form.thirdparty_payer.errors }}
+        </td>
+      </tr>
+  </table>
+  <table>
+      <tr>
+        <td>
+          {{ form.management_code.label_tag }} :<br>
+          {{ form.management_code }}
+          {{ form.management_code.errors }}
         </td>
       </tr>
       <tr {% if object.id == request.session.patientrecord_id %}style="display: none;"{%endif%}>
