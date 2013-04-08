@@ -279,6 +279,9 @@ class PatientContact(People):
             verbose_name=u"Type de contrat spécifique",
             choices=TYPE_OF_CONTRACT_CHOICES,
             null=True, blank=True)
+    management_code = models.ForeignKey('ressources.ManagementCode',
+            verbose_name=u"Code de gestion",
+            null=True, blank=True)
     job = models.ForeignKey('ressources.Job',
             related_name="job",
             verbose_name=u"Profession",
