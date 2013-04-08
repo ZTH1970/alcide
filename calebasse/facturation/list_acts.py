@@ -129,23 +129,23 @@ def list_acts_for_billing_CAMSP(start_day, end_day, service, acts=None):
                 start_day, acts=acts)
     acts_bad_state = {}
     acts_accepted = {}
-    for patient, acts in acts_billable.items():
+    patients_missing_policy = []
+    for patient, acts in acts_billable.iteritems():
         for act in acts:
             if patient.was_in_state_at_day(act.date, 'SUIVI'):
-                if act.patient in acts_accepted:
-                    acts_accepted[act.patient].append(act)
-                else:
-                    acts_accepted[act.patient] = [act]
+                acts_accepted.setdefault(act.patient, []).append(act)
             else:
-                if act.patient in acts_bad_state:
-                    acts_bad_state[act.patient]. \
-                        append((act, 'NOT_ACCOUNTABLE_STATE'))
-                else:
-                    acts_bad_state[act.patient] = \
-                        [(act, 'NOT_ACCOUNTABLE_STATE')]
+                acts_bad_state.setdefault(act.patient, []).\
+                    append((act, 'NOT_ACCOUNTABLE_STATE'))
+    for patient in acts_accepted.keys():
+        if not patient.policyholder or \
+                not patient.policyholder.health_center or \
+                not patient.policyholder.management_code or \
+                not patient.policyholder.social_security_id:
+            patients_missing_policy.append(patient)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_bad_state,
-        acts_accepted)
+        acts_accepted, patients_missing_policy)
 
 
 def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
@@ -181,31 +181,29 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
     acts_bad_state = {}
     acts_missing_valid_notification = {}
     acts_accepted = {}
-    for patient, acts in acts_billable.items():
+    patients_missing_policy = []
+    for patient, acts in acts_billable.iteritems():
         for act in acts:
             if patient.was_in_state_at_day(act.date,
                     'TRAITEMENT'):
                 if not act.was_covered_by_notification():
-                    if act.patient in acts_missing_valid_notification:
-                        acts_missing_valid_notification[act.patient]. \
-                            append(act)
-                    else:
-                        acts_missing_valid_notification[act.patient] = [act]
+                    acts_missing_valid_notification.\
+                        setdefault(act.patient, []).append(act)
                 else:
-                    if act.patient in acts_accepted:
-                        acts_accepted[act.patient].append(act)
-                    else:
-                        acts_accepted[act.patient] = [act]
+                    acts_accepted.setdefault(act.patient, []).append(act)
             else:
-                if act.patient in acts_bad_state:
-                    acts_bad_state[act.patient]. \
-                        append((act, 'NOT_ACCOUNTABLE_STATE'))
-                else:
-                    acts_bad_state[act.patient] = \
-                        [(act, 'NOT_ACCOUNTABLE_STATE')]
+                acts_bad_state.setdefault(act.patient, []).\
+                    append((act, 'NOT_ACCOUNTABLE_STATE'))
+    for patient in acts_accepted.keys():
+        if not patient.policyholder or \
+                not patient.policyholder.health_center or \
+                not patient.policyholder.management_code or \
+                not patient.policyholder.social_security_id:
+            patients_missing_policy.append(patient)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_bad_state,
-        acts_missing_valid_notification, acts_accepted)
+        acts_missing_valid_notification, acts_accepted,
+        patients_missing_policy)
 
 
 def list_acts_for_billing_CMPP(end_day, service, acts=None):
