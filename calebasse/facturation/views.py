@@ -125,8 +125,6 @@ class FacturationDetailView(UpdateView):
             if context['invoicing'].status == Invoicing.STATUS.closed and \
                     date.today() > context['invoicing'].end_date:
                 context['show_validation_btn'] = True
-            #XXX: Supressimer ligne suivante
-            context['show_validation_btn'] = True
             context['len_patient_pause'] = len_patient_pause
             context['len_patient_hors_pause'] = len_patient_hors_pause
             context['len_acts_pause'] = len_acts_pause
