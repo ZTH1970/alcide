@@ -418,7 +418,7 @@ class Invoicing(models.Model):
             if self.status in Invoicing.STATUS.closed:
                 (acts_not_locked, days_not_locked, acts_not_valide,
                 acts_not_billable, acts_pause, acts_bad_state,
-                acts_accepted) = self.list_for_billing()
+                acts_accepted, patients_missing_policy) = self.list_for_billing()
                 len_patient_pause = 0
                 len_patient_hors_pause = 0
                 len_acts_pause = 0
@@ -459,6 +459,7 @@ class Invoicing(models.Model):
                 len_patient_acts_paused = 0
                 len_acts_paused = 0
                 days_not_locked = []
+                patients_missing_policy = []
                 for act in self.acts.all():
                     if act.patient in patients_stats.keys():
                         patients_stats[act.patient]['accepted'].append(act)
@@ -472,12 +473,13 @@ class Invoicing(models.Model):
             return (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,
                 days_not_locked, len_patient_acts_paused,
-                len_acts_paused)
+                len_acts_paused, patients_missing_policy)
         else:
             if self.status in Invoicing.STATUS.closed:
                 (acts_not_locked, days_not_locked, acts_not_valide,
                 acts_not_billable, acts_pause, acts_bad_state,
-                acts_missing_valid_notification, acts_accepted) = \
+                acts_missing_valid_notification, acts_accepted,
+                patients_missing_policy) = \
                     self.list_for_billing()
 
                 len_patient_pause = 0
@@ -488,8 +490,11 @@ class Invoicing(models.Model):
                 len_acts_paused = 0
                 len_patient_missing_notif = 0
                 len_acts_missing_notif = 0
-                patients = set(acts_accepted.keys() + acts_pause.keys())
+                patients = set(acts_accepted.keys() + \
+                    acts_missing_valid_notification.keys() + \
+                    acts_pause.keys())
                 patients_stats = []
+                patients_missing_notif = []
                 for patient in patients:
                     dic = {}
                     if patient in acts_accepted.keys():
@@ -505,12 +510,18 @@ class Invoicing(models.Model):
                                 for act in acts:
                                     self.acts.add(act)
                     if patient in acts_missing_valid_notification.keys():
+                        patients_missing_notif.append(patient)
                         acts = acts_missing_valid_notification[patient]
                         dic['missings'] = acts
                         len_patient_missing_notif = len_patient_missing_notif + 1
                         len_acts_missing_notif = len_acts_missing_notif + len(acts)
                         if not 'accepted' in dic:
-                            len_patient_hors_pause = len_patient_hors_pause + 1
+                            if patient.pause:
+                                len_patient_pause = len_patient_pause + 1
+                                len_acts_pause = len_acts_pause + len(acts)
+                            else:
+                                len_patient_hors_pause = len_patient_hors_pause + 1
+                                len_acts_hors_pause = len_acts_hors_pause + len(acts)
                         if commit:
                             for act in acts:
                                 self.acts.add(act)
@@ -535,6 +546,8 @@ class Invoicing(models.Model):
                 len_patient_missing_notif = 0
                 len_acts_missing_notif = 0
                 days_not_locked = []
+                patients_missing_policy = []
+                patients_missing_notif = []
                 for act in self.acts.all():
                     if act.patient in patients_stats.keys():
                         patients_stats[act.patient]['accepted'].append(act)
@@ -549,7 +562,8 @@ class Invoicing(models.Model):
                 len_acts_pause, len_acts_hors_pause,
                 len_patient_missing_notif, len_acts_missing_notif,
                 patients_stats, days_not_locked,
-                len_patient_acts_paused, len_acts_paused)
+                len_patient_acts_paused, len_acts_paused,
+                patients_missing_policy, patients_missing_notif)
 
     def save(self, *args, **kwargs):
         if not self.seq_id:
