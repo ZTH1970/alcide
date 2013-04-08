@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      @page then {
+        @frame {
+          margin: 2cm 1cm;
+        }
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 0cm;
+          height: 0.5cm;
+        }
+      }
+      #content td {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title">Bordereau des actes par patient</div>
+    <div id="date">
+      <div>
+        Édité le {{ now|date:"d/m/Y" }} à {{ now|time:"H:i:s" }}
+      </div>
+    </div>
+    <div id="header-box">
+      <div id="payee-header">
+          <table style="padding: 3px; border: 0.5px solid black; height: 5cm;">
+            <tr style="padding-top: 3px; padding-bottom: 2px; line-height: 50%; background-color: #EEEEEE; margin-bottom: 3cm"><td> Établissement</td></tr>
+            <tr><td style="height: 5cm; display: block;">
+            {% block payee %}
+            {{ service.name }} de SAINT-ETIENNE</br>
+            66/68, RUE MARENGO</br>
+            42000 SAINT-ETIENNE</br>
+            Tél.: 04 77 92 05 70</br>
+            </br>
+            Période du {{ start_date|date:"d/m/Y" }} au {{ end_date|date:"d/m/Y" }}</br>
+            </br>
+            Nombre de dossiers : {{ total_files }}</br>
+            Nombre d'actes : {{ total_acts }}</br>
+            </br>
+            </br>
+            </br>
+            {% endblock %}
+        </td></tr>
+        </table>
+      </div>
+    <div id="content">
+      <div style="border: 0.5px solid black; padding-top: 2px; padding-bottom: 3px; line-height: 50%;">
+      <pdf:nexttemplate name="then"/>
+      <table>
+          <thead style="border: none;">
+            <tr class="batch-columns-header" style="background-color: #EEEEEE;">
+              <td>Code gestion</td>
+              <td>Assuré</td>
+              <td>NIR + Clé</td>
+              <td>Nom caisse</td>
+              <td>TP</td>
+              <td>Num caisse</td>
+              <td>Centre</td>
+              <td>Numéro</td>
+              <td>Enfant</td>
+              <td>Naissance</td>
+              <td>Inscription</td>
+              <td>Sortie</td>
+              <td>Actes</td>
+            </tr>
+          </thead>
+          <tbody class="batch-content" style="border: none;">
+            {% for patient in patients %}
+            <tr>
+              <td>{% if patient.code %}{{ patient.code }}{% endif %}</td>
+              <td>{% if patient.policy_holder %}{{ patient.policy_holder }}{% endif %}</td>
+              <td>{% if patient.nir %}{{ patient.nir }}{% endif %}</td>
+              <td>{% if patient.health_center %}{{ patient.health_center }}{% endif %}</td>
+              <td>{% if patient.tp %}{{ patient.tp }}{% endif %}</td>
+              <td>{% if patient.cai %}{{ patient.cai }}{% endif %}</td>
+              <td>{% if patient.cen %}{{ patient.cen }}{% endif %}</td>
+              <td>{% if patient.number %}{{ patient.number }}{% endif %}</td>
+              <td>{% if patient.name %}{{ patient.name }}{% endif %}</td>
+              <td>{% if patient.birth_date %}{{ patient.birth_date }}{% endif %}</td>
+              <td>{% if patient.inscription_date %}{{ patient.inscription_date }}{% endif %}</td>
+              <td>{% if patient.sortie_date %}{{ patient.sortie_date }}{% endif %}</td>
+              <td>{% if patient.nb_actes %}{{ patient.nb_actes }}{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    <div id="footer">
+      {% if counter %}{{ counter.increment }}.{% endif %}<pdf:pagenumber/>
+    </div>
+  </body>
+</html>

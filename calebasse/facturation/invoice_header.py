@@ -13,6 +13,7 @@ from django.template import loader, Context
 from invoice_template import InvoiceTemplate
 from ..pdftk import PdfTk
 from batches import build_batches
+from calebasse.utils import get_nir_control_key
 
 class Counter(object):
     def __init__(self, initial_value=0):
@@ -159,24 +160,119 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     ctx['TOTAL'] = total1+total2
     return [tpl.generate(ctx)]
 
+def render_not_cmpp_header(invoicing, counter):
+    header_template='facturation/bordereau_not_cmpp_header.html'
+    management_codes = dict()
+    total_acts = 0
+    for invoice in invoicing.invoice_set.all():
+        total_acts += invoice.acts.count()
+        if invoice.policy_holder_management_code:
+            management_codes.setdefault(invoice.policy_holder_management_code, []).append(invoice)
+    list_management_codes = list()
+    for mc, invoices in management_codes.iteritems():
+        dic = dict()
+        dic['code'] = mc
+        dic['title'] = invoices[0].policy_holder_management_code_name
+        dic['nb_files'] = len(invoices)
+        nb_acts = 0
+        for invoice in invoices:
+            nb_acts += invoice.acts.count()
+        dic['nb_acts'] = nb_acts
+        list_management_codes.append(dic)
+    list_management_codes.sort(key=lambda dic: dic['code'])
+    ctx = {
+            'now': datetime.datetime.now(),
+            'service': invoicing.service,
+            'start_date': invoicing.start_date,
+            'end_date': invoicing.end_date,
+            'counter': counter,
+            'list_management_codes': list_management_codes,
+            'total_files': invoicing.invoice_set.count(),
+            'total_acts': total_acts
+    }
+    prefix = '%s-invoicing-header-%s' % (
+            invoicing.service.slug, invoicing.id)
+    return render_to_pdf_file(
+            (header_template, ), ctx, prefix=prefix, delete=True)
+
+def render_not_cmpp_content(invoicing, counter):
+    header_template='facturation/bordereau_not_cmpp_content.html'
+    total_acts = 0
+    list_patients = list()
+    for invoice in invoicing.invoice_set.all():
+        total_acts += invoice.acts.count()
+        policy_holder = ''
+        if invoice.policy_holder_last_name and invoice.policy_holder_first_name:
+            policy_holder = invoice.policy_holder_last_name.upper() + ' ' + invoice.policy_holder_first_name
+        nir = None
+        if invoice.policy_holder_social_security_id:
+            nir = invoice.policy_holder_social_security_id + ' ' + str(get_nir_control_key(invoice.policy_holder_social_security_id))
+        health_center = ''
+        tp = ''
+        cai = ''
+        if invoice.policy_holder_healthcenter:
+            health_center = invoice.policy_holder_healthcenter.name
+            if invoice.policy_holder_healthcenter.large_regime:
+                tp = invoice.policy_holder_healthcenter.large_regime.code
+            cai = invoice.policy_holder_healthcenter.health_fund
+        name = ''
+        if invoice.patient_last_name and invoice.patient_first_name:
+            name = invoice.patient_last_name.upper() + ' ' + invoice.patient_first_name
+        list_patients.append({\
+              'code' : invoice.policy_holder_management_code,
+              'policy_holder': policy_holder,
+              'nir': nir,
+              'health_center': health_center,
+              'tp': tp,
+              'cai': cai,
+              'cen': invoice.policy_holder_other_health_center,
+              'number': invoice.patient_id,
+              'name': name,
+              'birth_date': invoice.patient_birthdate,
+              'inscription_date': invoice.patient_entry_date,
+              'sortie_date': invoice.patient_exit_date,
+              'nb_actes': invoice.acts.count()})
+    list_patients.sort(key=lambda dic: dic['code'])
+    ctx = {
+            'now': datetime.datetime.now(),
+            'service': invoicing.service,
+            'start_date': invoicing.start_date,
+            'end_date': invoicing.end_date,
+            'counter': counter,
+            'total_files': invoicing.invoice_set.count(),
+            'total_acts': total_acts,
+            'patients': list_patients
+    }
+    prefix = '%s-invoicing-content-%s' % (
+            invoicing.service.slug, invoicing.id)
+    return render_to_pdf_file(
+            (header_template, ), ctx, prefix=prefix, delete=True)
+
 
 def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     service = invoicing.service
     now = datetime.datetime.now()
-    batches_by_health_center = build_batches(invoicing)
-    centers = sorted(batches_by_health_center.keys())
-    all_files = []
     output_file = None
-    counter = Counter(1)
+    all_files = []
     try:
-        for center in centers:
-            if headers is not True and headers is not False and headers != center:
-                continue
-            for batch in batches_by_health_center[center]:
-                files = batches_files(service, invoicing, center,
-                    [batch], delete=delete,
-                    headers=headers, invoices=invoices, counter=counter)
-                all_files.extend(files)
+        if service.name == 'CMPP':
+            batches_by_health_center = build_batches(invoicing)
+            centers = sorted(batches_by_health_center.keys())
+            counter = Counter(1)
+            for center in centers:
+                if headers is not True and headers is not False and headers != center:
+                    continue
+                for batch in batches_by_health_center[center]:
+                    files = batches_files(service, invoicing, center,
+                        [batch], delete=delete,
+                        headers=headers, invoices=invoices, counter=counter)
+                    all_files.extend(files)
+        else:
+            counter = Counter(1)
+            header = render_not_cmpp_header(invoicing, counter)
+            all_files.append(header)
+            content = render_not_cmpp_content(invoicing, counter)
+            all_files.append(content)
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                 (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
         pdftk = PdfTk()
@@ -197,7 +293,6 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
                     os.unlink(path)
                 except:
                     pass
-
 
 
 def batches_files(service, invoicing, health_center, batches, delete=False,
