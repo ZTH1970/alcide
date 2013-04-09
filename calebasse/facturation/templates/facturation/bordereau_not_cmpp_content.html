@@ -2,14 +2,30 @@
 <html>
   <head>
     <style>
-      @page then {
+      @page one{
+        size: a4 landscape;
         @frame {
-          margin: 2cm 1cm;
+          margin: 1cm 1cm 1cm 1cm;
         }
         @frame footer {
           -pdf-frame-content: footer;
           bottom: 0cm;
-          height: 0.5cm;
+          right: 1cm;
+          left: 1cm;
+          height: 1.5cm;
+        }
+      }
+      @page then{
+        size: a4 landscape;
+        @frame {
+          margin: 1cm 1cm 1cm 1cm;
+        }
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 0cm;
+          right: 1cm;
+          left: 1cm;
+          height: 1.5cm;
         }
       }
       #content td {
@@ -17,6 +33,7 @@
       }
     </style>
   </head>
+      <pdf:nexttemplate name="one"/>
   <body>
     <div id="title">Bordereau des actes par patient</div>
     <div id="date">
@@ -79,16 +96,18 @@
               <td>{% if patient.cen %}{{ patient.cen }}{% endif %}</td>
               <td>{% if patient.number %}{{ patient.number }}{% endif %}</td>
               <td>{% if patient.name %}{{ patient.name }}{% endif %}</td>
-              <td>{% if patient.birth_date %}{{ patient.birth_date }}{% endif %}</td>
-              <td>{% if patient.inscription_date %}{{ patient.inscription_date }}{% endif %}</td>
-              <td>{% if patient.sortie_date %}{{ patient.sortie_date }}{% endif %}</td>
+              <td>{% if patient.birth_date %}{{ patient.birth_date|date:"d/m/Y" }}{% endif %}</td>
+              <td>{% if patient.inscription_date %}{{ patient.inscription_date|date:"d/m/Y" }}{% endif %}</td>
+              <td>{% if patient.sortie_date %}{{ patient.sortie_date|date:"d/m/Y" }}{% endif %}</td>
               <td>{% if patient.nb_actes %}{{ patient.nb_actes }}{% endif %}</td>
             </tr>
             {% endfor %}
           </tbody>
       </table>
     <div id="footer">
-      {% if counter %}{{ counter.increment }}.{% endif %}<pdf:pagenumber/>
+      Bordereau des actes par patient page <pdf:pagenumber/>
+      </br>{{ service.name }} de SAINT-ETIENNE
+      </br>Période du {{ start_date|date:"d/m/Y" }} au {{ end_date|date:"d/m/Y" }}
     </div>
   </body>
 </html>

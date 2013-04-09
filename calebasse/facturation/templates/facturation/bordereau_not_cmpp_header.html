@@ -3,6 +3,7 @@
   <head>
     <style>
       @page then {
+        size: a4 landscape;
         @frame {
           margin: 2cm 1cm;
         }
@@ -70,7 +71,7 @@
           </tbody>
       </table>
     <div id="footer">
-      {% if counter %}{{ counter.increment }}.{% endif %}<pdf:pagenumber/>
+      Bordereau des actes par code de gestion page <pdf:pagenumber/>
     </div>
   </body>
 </html>
