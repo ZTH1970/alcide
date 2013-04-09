@@ -160,7 +160,7 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     ctx['TOTAL'] = total1+total2
     return [tpl.generate(ctx)]
 
-def render_not_cmpp_header(invoicing, counter):
+def render_not_cmpp_header(invoicing):
     header_template='facturation/bordereau_not_cmpp_header.html'
     management_codes = dict()
     total_acts = 0
@@ -185,7 +185,6 @@ def render_not_cmpp_header(invoicing, counter):
             'service': invoicing.service,
             'start_date': invoicing.start_date,
             'end_date': invoicing.end_date,
-            'counter': counter,
             'list_management_codes': list_management_codes,
             'total_files': invoicing.invoice_set.count(),
             'total_acts': total_acts
@@ -195,15 +194,17 @@ def render_not_cmpp_header(invoicing, counter):
     return render_to_pdf_file(
             (header_template, ), ctx, prefix=prefix, delete=True)
 
-def render_not_cmpp_content(invoicing, counter):
+def render_not_cmpp_content(invoicing):
     header_template='facturation/bordereau_not_cmpp_content.html'
     total_acts = 0
     list_patients = list()
     for invoice in invoicing.invoice_set.all():
         total_acts += invoice.acts.count()
         policy_holder = ''
-        if invoice.policy_holder_last_name and invoice.policy_holder_first_name:
-            policy_holder = invoice.policy_holder_last_name.upper() + ' ' + invoice.policy_holder_first_name
+        if invoice.policy_holder_last_name:
+            policy_holder = invoice.policy_holder_last_name.upper()
+            if invoice.policy_holder_first_name:
+                policy_holder += ' ' + invoice.policy_holder_first_name
         nir = None
         if invoice.policy_holder_social_security_id:
             nir = invoice.policy_holder_social_security_id + ' ' + str(get_nir_control_key(invoice.policy_holder_social_security_id))
@@ -216,8 +217,10 @@ def render_not_cmpp_content(invoicing, counter):
                 tp = invoice.policy_holder_healthcenter.large_regime.code
             cai = invoice.policy_holder_healthcenter.health_fund
         name = ''
-        if invoice.patient_last_name and invoice.patient_first_name:
-            name = invoice.patient_last_name.upper() + ' ' + invoice.patient_first_name
+        if invoice.patient_last_name:
+            name = invoice.patient_last_name.upper()
+            if invoice.patient_first_name:
+                name += ' ' + invoice.patient_first_name
         list_patients.append({\
               'code' : invoice.policy_holder_management_code,
               'policy_holder': policy_holder,
@@ -238,7 +241,6 @@ def render_not_cmpp_content(invoicing, counter):
             'service': invoicing.service,
             'start_date': invoicing.start_date,
             'end_date': invoicing.end_date,
-            'counter': counter,
             'total_files': invoicing.invoice_set.count(),
             'total_acts': total_acts,
             'patients': list_patients
@@ -268,10 +270,9 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
                         headers=headers, invoices=invoices, counter=counter)
                     all_files.extend(files)
         else:
-            counter = Counter(1)
-            header = render_not_cmpp_header(invoicing, counter)
+            header = render_not_cmpp_header(invoicing)
             all_files.append(header)
-            content = render_not_cmpp_content(invoicing, counter)
+            content = render_not_cmpp_content(invoicing)
             all_files.append(content)
         output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                 (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
