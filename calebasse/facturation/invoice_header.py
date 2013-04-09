@@ -235,7 +235,7 @@ def render_not_cmpp_content(invoicing):
               'inscription_date': invoice.patient_entry_date,
               'sortie_date': invoice.patient_exit_date,
               'nb_actes': invoice.acts.count()})
-    list_patients.sort(key=lambda dic: dic['code'])
+    list_patients.sort(key=lambda dic: dic['policy_holder'])
     ctx = {
             'now': datetime.datetime.now(),
             'service': invoicing.service,
