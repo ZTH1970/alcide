@@ -413,7 +413,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     <div id="tabs-5"> <!-- Actes passés -->
     <table class="main">
       <thead>
-          <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <!--<th>Commentaire</th> --></tr>
+          <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
       </thead>
       <tbody>
         {% for act, state in last_rdvs %}
@@ -424,7 +424,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
           <td>{% for doctor in act.doctors.all %}
             {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}</td>
-<!--          <td>{{ act.comment }}</td>-->
+          <td>{% if act.comment %}{{ act.comment }}{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>
