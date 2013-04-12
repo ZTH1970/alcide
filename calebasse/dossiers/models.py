@@ -88,7 +88,8 @@ class CmppHealthCareTreatment(HealthCare):
 
     act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT,
             verbose_name=u"Nombre d'actes couverts")
-    end_date = models.DateField(verbose_name=u"Date de fin")
+    end_date = models.DateField(verbose_name=u"Date de fin",
+        blank=True, null=True)
     prolongation = models.IntegerField(default=0,
             verbose_name=u'Prolongation')
 
@@ -124,10 +125,11 @@ class CmppHealthCareTreatment(HealthCare):
         self.start_date = \
             datetime(self.start_date.year, self.start_date.month,
                 self.start_date.day)
-        self.end_date = self.start_date + \
-            relativedelta(years=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_YEARS) + \
-            relativedelta(months=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_MONTHS) + \
-            relativedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_DAYS-1)
+        if not self.end_date:
+            self.end_date = self.start_date + \
+                relativedelta(years=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_YEARS) + \
+                relativedelta(months=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_MONTHS) + \
+                relativedelta(days=VALIDITY_PERIOD_TREATMENT_HEALTHCARE_DAYS-1)
         super(CmppHealthCareTreatment, self).save(**kwargs)
 
 
