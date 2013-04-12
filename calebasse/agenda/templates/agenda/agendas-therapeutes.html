@@ -46,36 +46,36 @@
                 </td>
                 <td> {% if appointment.title %}{{ appointment.title }}{% endif %}</td>
                 <td/>
-                    <td> {% if appointment.act_absence %}<strong>{{ appointment.act_absence }}</strong>{% endif %}</td>
-                    <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
-                    <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
-                    <td>
-                        {% if appointment.workers and appointment.workers|length > 10 %}
-                        {{ appointment.workers|length }} intervenants
-                        {% else %}
-                        {% for worker in appointment.workers %}
-                        <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
-                        {% endfor %}
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <td> {% if appointment.act_absence %}<strong>{{ appointment.act_absence }}</strong>{% endif %}</td>
+                <td> {% if appointment.act_type %}{{ appointment.act_type }}{% endif %}</td>
+                <td> {% if appointment.description %}{{ appointment.description }}{% endif %}</td>
+                <td>
+                    {% if appointment.workers and appointment.workers|length > 10 %}
+                    {{ appointment.workers|length }} intervenants
+                    {% else %}
+                    {% for worker in appointment.workers %}
+                    <span class="lastname">{{ worker.last_name }}</span> {{ worker.first_name }}<br/>
+                    {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-        <div class="summary">
-            RDV :      {{ worker_agenda.summary.rdv }} —
-            Présence : {{ worker_agenda.summary.presence }} —
-            Absence :  {{ worker_agenda.summary.absence }} —
-            Doubles :  {{ worker_agenda.summary.doubles }} —
-            Validés :  {{ worker_agenda.summary.valides }}
-            <div class="pagebreak"></div>
-        </div>
+    <div class="summary">
+        RDV :      {{ worker_agenda.summary.rdv }} —
+        Présence : {{ worker_agenda.summary.presence }} —
+        Absence :  {{ worker_agenda.summary.absence }} —
+        Doubles :  {{ worker_agenda.summary.doubles }} —
+        Validés :  {{ worker_agenda.summary.valides }}
+        <div class="pagebreak"></div>
+    </div>
 
-    </div> <!-- .worker-agenda -->
+</div> <!-- .worker-agenda -->
 
-    {% endif %}
-    {% endfor %}
+{% endif %}
+{% endfor %}
     <script>
         $(function () {
             /* Control page break on last printed page */
@@ -108,5 +108,6 @@
             });
         });
     </script>
-    {% endblock %}
 
+<button id='print-button' class='screen-only'>Imprimer</button>
+{% endblock %}
