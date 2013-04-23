@@ -22,7 +22,7 @@ from list_acts import (list_acts_for_billing_CAMSP,
     list_acts_for_billing_SESSAD, list_acts_for_billing_CMPP,
     list_acts_for_billing_CMPP_2)
 
-from models import add_price, PricePerAct, Invoicing
+from models import PricePerAct, Invoicing
 
 
 class FacturationTest(TestCase):
