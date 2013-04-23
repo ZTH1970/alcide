@@ -641,28 +641,35 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             expirée depuis moins d'un an donc renouvelable.
 
         """
-        acts = self.act_set.order_by('date')
-        hcds = CmppHealthCareDiagnostic.objects.filter(patient=self).order_by('-start_date')
-        if not hcds:
+        acts = Act.objects.filter(validation_locked=False,
+            patient__service=self.service)
+        days_not_locked = sorted(set(acts.values_list('date', flat=True)))
+        acts = self.act_set.filter(validation_locked=True,
+            valide=True, is_lost=False, is_billed=False)
+        acts = acts.exclude(date__in=days_not_locked)
+        acts = acts.order_by('date')
+        pause_query = Q(pause=True)
+        billable_query = Q(act_type__billable=True, switch_billable=False) | \
+                Q(act_type__billable=False, switch_billable=True)
+        billable_acts = acts.filter(~pause_query & billable_query)
+
+        if not CmppHealthCareDiagnostic.objects.filter(patient=self).exists() \
+                and billable_acts:
             # Pas de prise en charge, on recherche l'acte facturable le plus
             # ancien, on crée une pc diag à la même date.
-            for act in acts:
-                if act.is_state('VALIDE') and act.is_billable():
-                    CmppHealthCareDiagnostic(patient=self, author=modifier,
-                        start_date=act.date).save()
-                    break
+            CmppHealthCareDiagnostic(patient=self, author=modifier,
+                start_date=billable_acts[0].date).save()
         else:
-            # On recherche l'acte facturable non facturé le plus ancien et
-            # l'on regarde s'il a plus d'un an
+            # On recherche l'acte facturable non facturé le plus ancien après
+            # le dernier acte facturé et on regarde s'il a plus d'un an
             try:
                 last_billed_act = self.act_set.filter(is_billed=True).\
                     latest('date')
-                if last_billed_act:
-                    for act in acts:
-                        if act.is_state('VALIDE') and \
-                                act.is_billable() and \
-                                (act.date - last_billed_act.date).days >= 365:
-                            return True
+                if last_billed_act and billable_acts:
+                    billable_acts = billable_acts.filter(date__gte=last_billed_act.date)
+                    if billable_acts and (billable_acts[0].date - last_billed_act.date).days >= 365:
+                        return True
+                    return False
             except:
                 pass
         return False
