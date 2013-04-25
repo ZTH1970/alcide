@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 
 from calebasse.cbv import ListView, UpdateView
-from calebasse.agenda import views as agenda_views
+from calebasse.agenda.views import NewAppointmentView
 
 import models
 import forms
@@ -68,7 +68,7 @@ class ActListingView(ListView):
         return ctx
 
 act_listing = ActListingView.as_view()
-act_new = agenda_views.NewAppointmentView.as_view()
+act_new = NewAppointmentView.as_view()
 
 class UpdateActView(UpdateView):
     model = models.Act

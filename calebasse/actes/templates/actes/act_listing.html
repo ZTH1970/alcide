@@ -1,11 +1,9 @@
 {% extends "calebasse/base.html" %}
-
 {% load url from future %}
 
 {% block extrascripts %}
 {{ block.super }}
 <script src="{{ STATIC_URL }}js/calebasse.datesel.js"></script>
-<script src="{{ STATIC_URL }}js/calebasse.dialog.js"></script>
 <script>
   $(function() {
     $('table#actes tr').click(function() {
@@ -17,15 +15,9 @@
         }
     });
     $('.date').datepicker();
-    $('#new-acte').click(function() {
-      $('#new-acte-dlg').dialog({title: 'Nouvel acte',
-        width: '550px',
-        buttons: [ { text: "Fermer",
-          click: function() { $(this).dialog("close"); } },
-        { text: "Ajouter",
-          click: function() { $(this).dialog("close"); } }
-        ]}
-      );
+    $('.new-act').click(function() {
+        generic_ajaxform_dialog($(this).data('url'), 'Nouvel acte',
+        '#acte-dlg', '850px', 'Ajouter', '..');
     });
     $('#search-form input[type="checkbox"]').on('change', function () {
       $('#search-form').submit();
@@ -44,10 +36,10 @@
 <div id="appbar">
   <h2>Saisie des actes</h2>
   <a href="../..">Retourner à l'accueil</a>
-  <button class="dialog-button"
-          data-url="nouvel-acte/"
-          data-default-button="Ajouter"
-      >Ajouter un acte</button>
+  <button class="new-act"
+      data-url="{% url 'act-new' service=service date=date %}">
+      Ajouter un acte
+  </button>
 </div>
 {% endblock %}
 
