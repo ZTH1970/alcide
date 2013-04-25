@@ -1,6 +1,7 @@
 import datetime
 
 from django.db.models import Q
+from django.views.generic.edit import ModelFormMixin
 from django.shortcuts import redirect
 
 from calebasse.cbv import ListView, UpdateView
@@ -67,8 +68,16 @@ class ActListingView(ListView):
         ctx['search_form'] = self.search_form
         return ctx
 
+class NewAct(NewAppointmentView):
+    success_url = '.'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.act.save()
+        return ModelFormMixin.form_valid(self, form)
+
 act_listing = ActListingView.as_view()
-act_new = NewAppointmentView.as_view()
+act_new = NewAct.as_view()
 
 class UpdateActView(UpdateView):
     model = models.Act
