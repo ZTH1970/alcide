@@ -335,7 +335,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                     status = "Prise en charge de traitement expirée. Patient élligible en rediagnostic."
                     highlight = True
                 else:
-                    status = "Prise en charge de traitement expirée. Demander un renouvellement."
+                    status = "Prise en charge de traitement expirée. La demande d'un renouvellement est possible."
                     highlight = True
             elif status[0] == 4:
                 status = "Il existe une prise en charge de traitement mais qui ne prendra effet que le %s." % str(status[1])
