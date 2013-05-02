@@ -746,6 +746,8 @@ class GenerateRtfFormView(cbv.FormView):
                }
         for i, line in enumerate(form.cleaned_data.get('address').splitlines()):
             vars['AD%d' % (11+i)] = line
+            if i == 4:
+                break
         make_doc_from_template(from_path, to_path, vars)
 
         client_dir = patient.get_client_side_directory(self.service.name)
