@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
+from django.conf import settings
 
 from calebasse.cbv import TemplateView, CreateView, UpdateView
 from calebasse.agenda.models import Event, EventType, EventWithAct
@@ -564,6 +565,8 @@ class AjaxWorkerTabView(TemplateView):
         context['worker_agenda'] = {'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, events, holidays_worker)}
+        if settings.RTF_TEMPLATES_DIRECTORY:
+            context['mail'] = True
         return context
 
 class AjaxWorkerDisponibilityColumnView(TemplateView):
