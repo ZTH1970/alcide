@@ -2,6 +2,7 @@ import os
 import os.path
 import re
 import contextlib
+import tempfile
 
 __ALL__ = [ 'DocTemplateError', 'make_doc_from_template' ]
 
@@ -69,7 +70,7 @@ def variables_to_rtf(variables):
     return dict(((k, unicode_to_rtf(v)) for k,v in variables.iteritems()))
 
 
-def make_doc_from_template(from_path, to_path, variables):
+def make_doc_from_template(from_path, to_path, variables, persistent):
     '''Use file from_path as a template to combine with the variables
        dictionary and place the result in the file to_path.
        Encode value of variable into encoding of UTF-8 for the RTF file format.
@@ -84,10 +85,18 @@ def make_doc_from_template(from_path, to_path, variables):
     if os.path.exists(to_path):
         raise DocTemplateError('Destination file already exists', repr(to_path))
     variables = variables_to_rtf(variables)
-    with open(to_path, 'w') as to_file:
-        with open(from_path) as from_file:
-            with delete_on_error(to_file):
-                to_file.write(replace_variables(from_file.read(), variables))
+    if persistent:
+        with open(to_path, 'w') as to_file:
+            with open(from_path) as from_file:
+                with delete_on_error(to_file):
+                    to_file.write(replace_variables(from_file.read(), variables))
+    else:
+        with tempfile.NamedTemporaryFile(prefix=to_path,
+                delete=False) as to_file:
+            with open(from_path) as from_file:
+                with delete_on_error(to_file):
+                    to_file.write(replace_variables(from_file.read(), variables))
+    return to_file.name
 
 if __name__ == '__main__':
     import sys
