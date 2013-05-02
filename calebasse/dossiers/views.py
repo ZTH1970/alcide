@@ -12,6 +12,7 @@ from django.views.generic import View
 from django.views.generic.edit import DeleteView, FormMixin
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.files import File
 
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
@@ -736,7 +737,20 @@ class GenerateRtfFormView(cbv.FormView):
         template_filename = form.cleaned_data.get('template_filename')
         dest_filename = datetime.now().strftime('%Y-%m-%d--%H:%M:%S') + '--' + template_filename
         from_path = os.path.join(settings.RTF_TEMPLATES_DIRECTORY, template_filename)
-        to_path = os.path.join(patient.get_ondisk_directory(self.service.name), dest_filename)
+        to_path = ''
+        persistent = True
+        if settings.USE_PATIENT_FILE_RTF_REPOSITORY_DIRECTORY \
+                or settings.RTF_REPOSITORY_DIRECTORY:
+            if settings.USE_PATIENT_FILE_RTF_REPOSITORY_DIRECTORY:
+                to_path = patient.get_ondisk_directory(self.service.name)
+            if settings.RTF_REPOSITORY_DIRECTORY:
+                to_path = os.path.join(to_path,
+                    settings.RTF_REPOSITORY_DIRECTORY)
+            to_path = os.path.join(to_path, dest_filename)
+        else:
+            # else : use temporary files
+            persistent = False
+            to_path = dest_filename
         vars = {'AD11': '', 'AD12': '', 'AD13': '', 'AD14': '', 'AD15': '',
                 'JOU1': datetime.today().strftime('%d/%m/%Y'),
                 'VIL1': u'Saint-Étienne',
@@ -748,13 +762,14 @@ class GenerateRtfFormView(cbv.FormView):
             vars['AD%d' % (11+i)] = line
             if i == 4:
                 break
-        make_doc_from_template(from_path, to_path, vars)
+        filename = make_doc_from_template(from_path, to_path, vars, persistent)
 
         client_dir = patient.get_client_side_directory(self.service.name)
         if not client_dir:
-            response = HttpResponse(mimetype='text/rtf')
+            content = File(file(filename))
+            response = HttpResponse(content,'text/rtf')
+            response['Content-Length'] = content.size
             response['Content-Disposition'] = 'attachment; filename="%s"' % dest_filename
-            response.write(file(to_path).read())
             return response
         else:
             class LocalFileHttpResponseRedirect(HttpResponseRedirect):

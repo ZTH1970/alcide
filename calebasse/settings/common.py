@@ -268,3 +268,8 @@ PATIENT_SUBDIRECTORIES = (
 
 # RTF templates directory
 RTF_TEMPLATES_DIRECTORY = None
+# Use patient home dictrory for RTF files generated
+# PATIENT_FILES_BASE_DIRECTORY must be set to work
+USE_PATIENT_FILE_RTF_REPOSITORY_DIRECTORY = False
+# RTF files generated directory
+RTF_REPOSITORY_DIRECTORY = None
