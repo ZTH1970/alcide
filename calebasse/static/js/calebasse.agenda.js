@@ -115,9 +115,15 @@ function enable_events(base) {
                       { text: "Générer",
                           click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
              $(this).find('.addresses input[type=radio]').change(function() {
-               var address = $(this).data('contact-first-name') + ' ' + $(this).data('contact-last-name') + '\n';
-               address += $(this).data('address-number') + ' ' + $(this).data('address-street') + '\n';
-               address += $(this).data('address-zip-code') + ' ' + $(this).data('address-city')
+               var address = '';
+               if ($(this).data('contact-gender')){address += $(this).data('contact-gender') + ' ';}
+               if ($(this).data('contact-first-name')){address += $(this).data('contact-first-name') + ' ';}
+               if ($(this).data('contact-last-name')){address += $(this).data('contact-last-name') + '\n';}
+               if ($(this).data('address-number')){address += $(this).data('address-number') + ' ';}
+               if ($(this).data('address-street')){address += $(this).data('address-street') + '\n';}
+               if ($(this).data('address-address-complement')){address += $(this).data('address-address-complement') + '\n';}
+               if ($(this).data('address-zip-code')){address += $(this).data('address-zip-code') + ' ';}
+               if ($(this).data('address-city')){address += $(this).data('address-city') + '\n';}
                $('#id_address').val(address);
              });
              $('.addresses input[type=radio]').first().click();
@@ -135,7 +141,7 @@ function enable_events(base) {
             var buttons = $(dialog).dialog('option', 'buttons');
             buttons.push({
               text: "Supprimer",
-              id: "delete-btn", 
+              id: "delete-btn",
               click: function () {
                 var r = delete_prompt("Etes-vous sûr de vouloir supprimer cet évènement récurrent ?");
                 if (r == true)
@@ -166,7 +172,7 @@ function enable_events(base) {
             var buttons = $(dialog).dialog('option', 'buttons');
             buttons.push({
               text: "Supprimer",
-             id: "delete-btn", 
+             id: "delete-btn",
               click: function () {
                 var r = delete_prompt("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
                 if (r == true)
@@ -327,7 +333,7 @@ function toggle_ressource(ressource_selector) {
 
 var in_event = false;
 function event_dialog(url, title, width, btn_text) {
-          if (in_event) { 
+          if (in_event) {
             return;
           }
           in_event = true;
@@ -419,7 +425,7 @@ function event_dialog(url, title, width, btn_text) {
                   $(this).dialog({title: title,
                       modal: true,
                       width: width,
-                      buttons: [ 
+                      buttons: [
                       { text: btn_text,
                           click: submit }
                       ],
@@ -564,4 +570,3 @@ function event_dialog(url, title, width, btn_text) {
     });
   });
 })(window.jQuery)
-
