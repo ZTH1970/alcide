@@ -29,7 +29,8 @@ from views import (patientrecord_home, patient_record, state_form,
         delete_mdph_response,
         generate_rtf_form,
         patientrecord_quotations,
-        create_directory)
+        create_directory,
+        prescription_transport)
 from forms import EditPatientRecordForm
 
 urlpatterns = patterns('',
@@ -68,4 +69,5 @@ urlpatterns = patterns('',
         url(r'^(?P<patientrecord_id>\d+)/mdph_response/(?P<pk>\d+)/del$', delete_mdph_response),
         url(r'^(?P<patientrecord_id>\d+)/generate$', generate_rtf_form),
         url(r'^(?P<patientrecord_id>\d+)/create-directory$', create_directory),
+        url(r'^(?P<patientrecord_id>\d+)/prescription-transport$', prescription_transport),
 )

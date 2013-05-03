@@ -13,10 +13,12 @@ from django.views.generic.edit import DeleteView, FormMixin
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files import File
+from django.forms import Form
 
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
 from calebasse.dossiers import forms
+from calebasse.dossiers.transport import render_transport
 from calebasse.agenda.models import Event, EventWithAct
 from calebasse.actes.models import Act
 from calebasse.agenda.appointments import Appointment
@@ -859,3 +861,27 @@ class CreateDirectoryView(View, cbv.ServiceViewMixin):
         return HttpResponseRedirect('view')
 
 create_directory = CreateDirectoryView.as_view()
+
+class GenerateTransportPrescriptionFormView(cbv.FormView):
+    template_name = 'dossiers/generate_transport_prescription_form.html'
+    form_class = Form
+    success_url = './view#tab=1'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(GenerateTransportPrescriptionFormView, self).get_context_data(**kwargs)
+        ctx['object'] = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        return ctx
+
+    def form_valid(self, form):
+        patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        address = PatientAddress.objects.get(id=form.data['address_id'])
+        path = render_transport(patient, address)
+        content = File(file(path))
+        response = HttpResponse(content,'application/pdf')
+        response['Content-Length'] = content.size
+        response['Content-Disposition'] = \
+            'attachment; filename="cerfa-transport-%s-%s.pdf"' \
+            % (patient.last_name.upper(), patient.first_name)
+        return response
+
+prescription_transport = GenerateTransportPrescriptionFormView.as_view()
