@@ -307,9 +307,21 @@ function state_dialog(url, state_title, state_type) {
     $('button.blind').click(function() {
       $(this).next().toggle('blind');
     });
+    $('#prescription-transport-btn').click(function() {
+        $('#ajax-dlg').load('prescription-transport',
+          function () {
+             $(this).dialog({title: 'Prescription de transport', width: '500px',
+                      buttons: [ { text: "Fermer",
+                          click: function() { $(this).dialog("close"); } },
+                      { text: "Prescrire",
+                          click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
+             $('.addresses input[type=radio]').first().click();
+         });
+         return false;
+    });
     var tabid = $.url($(location).attr('href')).fparam('tab');
-    if (tabid) {
+      if (tabid) {
         $tabs.tabs('select',  parseInt(tabid));
-    }
-  });
+      }
+    });
 })(window.jQuery)

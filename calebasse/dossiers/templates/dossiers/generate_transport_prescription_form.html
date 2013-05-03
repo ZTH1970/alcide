@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+
+    <form action="{{ request.get_full_path }}" method="post">
+      {% csrf_token %}
+
+    <h2>Patient {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span></h2>
+    {% if object.id != object.policyholder.id %}<strong>Assuré {{ object.policyholder.first_name }} <span class="lastname">{{ object.policyholder.last_name }}</span></strong>{% endif %}
+
+    {% if not object.policyholder.addresses.all %}
+        L'assuré n'a pas d'adresse connue.
+    {% else %}
+    <h2>Adresse</h2>
+
+    <ul class="addresses">
+      {% for address in object.policyholder.addresses.all %}
+        <li><input type="radio" name="address_id" id="address_{{ address.id }}" value="{{ address.id }}"><label for="address_{{ address.id }}">{% if address.display_name %}{{ address.display_name }}{% else %}Adresse non renseignée.{% endif %}</label></input></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    </form>
