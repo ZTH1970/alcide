@@ -1298,6 +1298,10 @@ input.hasDatepicker {
         text-align: right;
 }
 
+.align-center {
+        text-align: center;
+}
+
 div.pagination {
   margin-top: 1em;
   text-align: center;
