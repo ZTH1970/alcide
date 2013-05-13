@@ -23,7 +23,7 @@ def delete_on_error(f):
         raise
 
 
-def replace_variables(template, variables):
+def replace_variables(template, variables, ignore_unused=True):
     '''Lookup all substring looking like @XXX9 in the string template, and
        replace them by the value of the key XXX9 in the dictionary variables.
 
@@ -37,10 +37,11 @@ def replace_variables(template, variables):
     given_vars = set(variables.keys())
     if given_vars != needed_vars:
         missing = needed_vars - given_vars
-        unused = given_vars - needed_vars
-        raise DocTemplateError(
-            'Mismatch between given and needed variables: missing={0} unused={1}'
-            .format(map(repr, missing), map(repr, unused)))
+        if missing or not ignore_unused:
+            unused = given_vars - needed_vars
+            raise DocTemplateError(
+                'Mismatch between given and needed variables: missing={0} unused={1}'
+                .format(map(repr, missing), map(repr, unused)))
     def variable_replacement(match_obj):
         return variables[match_obj.group(0)[1:]]
     return re.sub(VARIABLE_RE, variable_replacement, template)
