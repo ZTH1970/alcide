@@ -734,8 +734,10 @@ class GenerateRtfFormView(cbv.FormView):
             ctx['appointment'] = appointment
         return ctx
 
-    def form_valid(self, form):
-        patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+    def form_valid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        patient = ctx['object']
+        appointment = ctx['appointment']
         template_filename = form.cleaned_data.get('template_filename')
         dest_filename = datetime.now().strftime('%Y-%m-%d--%H:%M:%S') + '--' + template_filename
         from_path = os.path.join(settings.RTF_TEMPLATES_DIRECTORY, template_filename)
@@ -753,18 +755,54 @@ class GenerateRtfFormView(cbv.FormView):
             # else : use temporary files
             persistent = False
             to_path = dest_filename
-        vars = {'AD11': '', 'AD12': '', 'AD13': '', 'AD14': '', 'AD15': '',
-                'JOU1': datetime.today().strftime('%d/%m/%Y'),
-                'VIL1': u'Saint-Étienne',
-                'PRE1': form.cleaned_data.get('first_name'),
-                'NOM1': form.cleaned_data.get('last_name'),
-                'DPA1': form.cleaned_data.get('appointment_intervenants')
-               }
+        variables = {'AD11': '', 'AD12': '', 'AD13': '', 'AD14': '',
+            'AD15': '', 'AD18': '',
+            'JOU1': datetime.today().strftime('%d/%m/%Y'),
+            'VIL1': u'Saint-Étienne',
+            'RDV1': '', 'HEU1': '', 'THE1': '', 'DPA1': '',
+            'NOM1': '', 'PRE1': '', 'NAI1': '', 'NUM2': '',
+            'NOM2': '', 'PRE2': '', 'TPA1': '', 'NSS1': '',
+            'TR01': '', 'TR02': '', 'TR03': '', 'TR04': '', 'TR05': '',
+            'AD16': '', 'AD17': '', 'AD19': '',
+            'AD21': '', 'AD22': '', 'AD23': '', 'AD24': '', 'AD25': '',
+            'AD26': '', 'AD27': '', 'AD28': '', 'AD29': '',
+        }
+        if appointment:
+            variables['RDV1'] = appointment.date
+            variables['HEU1'] = appointment.begin_hour
+            variables['THE1'] = ' '.join([str(i) for i in appointment.workers])# ou DPA1?
+            variables['DPA1'] = variables['THE1']
+        if patient:
+            variables['NOM1'] = patient.last_name
+            variables['PRE1'] = patient.first_name
+            if patient.birthdate :
+                variables['NAI1'] = patient.birthdate.strftime('%d/%m/%Y')
+            variables['NUM2'] = patient.paper_id
+            if patient.policyholder:
+                variables['NOM2'] = patient.policyholder.last_name
+                variables['PRE2'] = patient.policyholder.first_name
+                variables['TPA1'] = patient.policyholder.health_center.name
+                if patient.policyholder.social_security_id:
+                    key = str(patient.policyholder.get_control_key())
+                    if len(key) == 1:
+                        key = '0' + key
+                    variables['NSS1'] = \
+                        ' '.join([patient.policyholder.social_security_id,
+                            key])
+            if patient.transportcompany:
+                variables['TR01'] = patient.transportcompany.name
+                variables['TR02'] = patient.transportcompany.address
+                variables['TR03'] = patient.transportcompany.address_complement
+                variables['TR04'] = patient.transportcompany.zip_code
+                variables['TR05'] = patient.transportcompany.city
+        variables['AD18'] = form.cleaned_data.get('phone_address') or ''
         for i, line in enumerate(form.cleaned_data.get('address').splitlines()):
-            vars['AD%d' % (11+i)] = line
+            variables['AD%d' % (11+i)] = line
             if i == 4:
                 break
-        filename = make_doc_from_template(from_path, to_path, vars, persistent)
+
+        filename = make_doc_from_template(from_path, to_path, variables,
+            persistent)
 
         client_dir = patient.get_client_side_directory(self.service.name)
         if not client_dir:

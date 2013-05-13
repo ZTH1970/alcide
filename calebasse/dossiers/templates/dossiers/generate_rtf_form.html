@@ -16,10 +16,6 @@ errors:
 
 <h3>Patient</h3>
 
-<input type="hidden" name="first_name" value="{{ object.first_name }}" />
-<input type="hidden" name="last_name" value="{{ object.last_name }}" />
-<input type="hidden" name="birthdate" value="{{ object.birthdate|date:"d/m/Y" }}" />
-
 <ul>
  <li>{{ object.first_name }} <span class="lastname">{{ object.last_name }}</span></li>
  {% if object.birthdate %}
@@ -31,7 +27,7 @@ errors:
 
 <ul class="addresses">
   {% for address in object.addresses.all %}
-  {% if address.place_of_life %}<li>{{ address.display_name }}
+  {% if address.place_of_life %}<li>{{ address.display_name }}{% if address.phone %}(Tél : {{ address.phone }}){% endif %}
   <ul>
     {% for contact in address.patientcontact_set.all  %}
     <li><input type="radio" name="contact" id="contact_{{ address.id }}_{{ contact.id }}"
@@ -40,10 +36,11 @@ errors:
                {% if address.address_complement %}data-address-address-complement="{{ address.address_complement }}"{% endif %}
                {% if address.zip_code %}data-address-zip-code="{{ address.zip_code }}"{% endif %}
                {% if address.city %}data-address-city="{{ address.city }}"{% endif %}
+               {% if address.phone %}data-address-phone="{{ address.phone }}"{% endif %}
                {% if contact.gender %}data-contact-gender={% if contact.gender == 1 %}"Monsieur"{% elif contact.gender == 2 %}"Madame"{% endif %}{% endif %}
                {% if contact.first_name %}data-contact-first-name="{{ contact.first_name }}"{% endif %}
                {% if contact.last_name %}data-contact-last-name="{{ contact.last_name }}"{% endif %}
-       ><label for="contact_{{ address.id }}_{{ contact.id }}">{% if contact.gender == 1 %}M. {% elif contact.gender == 2 %}Mme {% endif %}{% if contact.first_name %}{{ contact.first_name }} {% endif %}<span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</label></input></li>
+       ><label for="contact_{{ address.id }}_{{ contact.id }}">{% if contact.gender == 1 %}M. {% elif contact.gender == 2 %}Mme {% endif %}{% if contact.first_name %}{{ contact.first_name }} {% endif %}<span class="lastname">{{ contact.last_name }}</span>{% if contact.mobile %} (Perso : {{ contact.mobile }}){% endif %}{% if contact.phone %} (Pro : {{ contact.phone }}){% endif %}{% if contact.id == object.id %} (PATIENT){% endif %}{% if object.policyholder.id == contact.id %} (ASSURE){% endif %}</label></input></li>
     {% endfor %}
   </ul>
   </li>{% endif %}
@@ -52,12 +49,10 @@ errors:
 
 {{ form.address }}
 
+<p><label>Téléphone : </label><input id="id_phone_address" type="text" name="phone_address" value=""/></p>
+
 {% if appointment %}
 <h3>Rendez-vous</h3>
-
-<input type="hidden" name="appointment_date" value="{{ appointment.date }}" />
-<input type="hidden" name="appointment_begin_hour" value="{{ appointment.begin_hour }}" />
-<input type="hidden" name="appointment_intervenants" value="{% for worker in appointment.workers %}{{ worker.first_name }} {{ worker.last_name }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}" />
 
 <ul>
  <li>Date : {{ appointment.date }}</li>

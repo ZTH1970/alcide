@@ -125,6 +125,7 @@ function enable_events(base) {
                if ($(this).data('address-zip-code')){address += $(this).data('address-zip-code') + ' ';}
                if ($(this).data('address-city')){address += $(this).data('address-city') + '\n';}
                $('#id_address').val(address);
+               $('#id_phone_address').val($(this).attr('data-address-phone'));
              });
              $('.addresses input[type=radio]').first().click();
           });
