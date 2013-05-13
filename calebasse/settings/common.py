@@ -252,6 +252,7 @@ PATIENT_SUBDIRECTORIES = (
     u'Courriers',
     u'Demande',
     u'Demandes prises en charge',
+    u'Educateur spécialisé',
     u'Ergothérapie',
     u'Groupe',
     u'Kinésithérapie',
