@@ -357,6 +357,10 @@ class GenerateRtfForm(Form):
     address = forms.CharField(widget=forms.Textarea(attrs={'rows':5}), required=False)
     phone_address = forms.CharField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        super(GenerateRtfForm, self).__init__(*args, **kwargs)
+        self.fields['template_filename'].choices = AvailableRtfTemplates()
+
 class QuotationsForm(Form):
 
     def __init__(self, service=None, *args, **kwargs):
