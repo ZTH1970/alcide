@@ -9,10 +9,10 @@
     $('table#actes tr').click(function() {
         if ($(this).data('isbilled') == "False") {
             generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
-            '#acte-dlg', '700px', 'Enregistrer', '..');
+            '#acte-dlg', '700px', 'Enregistrer', '.');
         } else if ($(this).data('oldbilled') == "True") {
             generic_ajaxform_dialog($(this).data('id') + '/rebill', "Refacturer cet acte de l'ancienne facturation) ?",
-            '#acte-dlg', '700px', 'Refacturer', '..');
+            '#acte-dlg', '700px', 'Refacturer', '.');
         } else {
             alert('Vous ne pouvez pas éditer un acte déjà facturé.');
         }
