@@ -8,10 +8,13 @@
   $(function() {
     $('table#actes tr').click(function() {
         if ($(this).data('isbilled') == "False") {
-        generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
+            generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
             '#acte-dlg', '700px', 'Enregistrer', '..');
+        } else if ($(this).data('oldbilled') == "True") {
+            generic_ajaxform_dialog($(this).data('id') + '/rebill', "Refacturer cet acte de l'ancienne facturation) ?",
+            '#acte-dlg', '700px', 'Refacturer', '..');
         } else {
-            alert('Vous ne pouvez pas éditer un acte déjà facturé')
+            alert('Vous ne pouvez pas éditer un acte déjà facturé.');
         }
     });
     $('.date').datepicker();
@@ -92,7 +95,7 @@
     <tbody>
       {% for act in object_list %}
       <tr data-id="{{ act.id }}" data-isbilled="{{ act.is_billed }}"
-      {% if not act.is_billed %}class="non-factu"{% endif %}>
+      {% if not act.is_billed %}class="non-factu"{% else %}{% if not act.invoice_set.all.0.number %}data-oldbilled="True"{% endif %}{% endif %}>
         <td>1
             {{ act.patient.id }}
             {{ act.patient.first_name }}
@@ -100,7 +103,7 @@
         </td>
         <td>{{ act.get_state }}</td>
         <td>({{ act.act_type.id }}) {{ act.act_type }}</td>
-        <td>{% if act.invoice_set.all %}{{ act.invoice_set.all.0.number }}{% endif %}</td>
+        <td>{% if act.is_billed %}{% if act.invoice_set.all %}{{ act.invoice_set.all.0.number }}{% else %}Ancienne facturation{% endif %}{% endif %}</td>
         <td>{{ act.is_billable|yesno:"Oui,Non," }}{% if act.switch_billable %} (I){% endif %}</td>
         <td>{{ act.is_lost|yesno:"Oui,Non," }}</td>
         <td>{{ act.pause|yesno:"Oui,Non," }}</td>

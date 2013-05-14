@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.views.generic.edit import ModelFormMixin
 from django.shortcuts import redirect
 
-from calebasse.cbv import ListView, UpdateView
+from calebasse.cbv import ListView, UpdateView, FormView
 from calebasse.agenda.views import NewAppointmentView
 
 import models
@@ -87,3 +87,16 @@ class UpdateActView(UpdateView):
 
 update_act = UpdateActView.as_view()
 
+class RebillActView(UpdateView):
+    model = models.Act
+    template_name = 'actes/act_rebill.html'
+    success_url = '..'
+
+    def post(self, request, *args, **kwarg):
+        act = models.Act.objects.get(pk=kwarg['pk'])
+        act.is_billed = False
+        act.healthcare = None
+        act.save()
+        return super(RebillActView, self).post(request, *args, **kwarg)
+
+rebill_act = RebillActView.as_view()
