@@ -781,7 +781,8 @@ class GenerateRtfFormView(cbv.FormView):
             if patient.policyholder:
                 variables['NOM2'] = patient.policyholder.last_name
                 variables['PRE2'] = patient.policyholder.first_name
-                variables['TPA1'] = patient.policyholder.health_center.name
+                if patient.policyholder.health_center:
+                    variables['TPA1'] = patient.policyholder.health_center.name
                 if patient.policyholder.social_security_id:
                     key = str(patient.policyholder.get_control_key())
                     if len(key) == 1:
