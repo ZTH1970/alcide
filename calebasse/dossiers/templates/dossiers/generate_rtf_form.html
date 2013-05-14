@@ -27,7 +27,7 @@ errors:
 
 <ul class="addresses">
   {% for address in object.addresses.all %}
-  {% if address.place_of_life %}<li>{{ address.display_name }}{% if address.phone %}(Tél : {{ address.phone }}){% endif %}
+  <li>{{ address.display_name }}{% if address.phone %}(Tél : {{ address.phone }}){% endif %}
   <ul>
     {% for contact in address.patientcontact_set.all  %}
     <li><input type="radio" name="contact" id="contact_{{ address.id }}_{{ contact.id }}"
@@ -43,7 +43,7 @@ errors:
        ><label for="contact_{{ address.id }}_{{ contact.id }}">{% if contact.gender == 1 %}M. {% elif contact.gender == 2 %}Mme {% endif %}{% if contact.first_name %}{{ contact.first_name }} {% endif %}<span class="lastname">{{ contact.last_name }}</span>{% if contact.mobile %} (Perso : {{ contact.mobile }}){% endif %}{% if contact.phone %} (Pro : {{ contact.phone }}){% endif %}{% if contact.id == object.id %} (PATIENT){% endif %}{% if object.policyholder.id == contact.id %} (ASSURE){% endif %}</label></input></li>
     {% endfor %}
   </ul>
-  </li>{% endif %}
+  </li>
   {% endfor %}
 </ul>
 
