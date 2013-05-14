@@ -39,5 +39,3 @@ class ActUpdate(forms.ModelForm):
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 52, 'rows': 4}),
                 }
-
-
