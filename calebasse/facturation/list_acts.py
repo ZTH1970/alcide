@@ -342,15 +342,14 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
         count_hct_2 = 0
         for act in acts:
             cared = False
-            if hcd and hcd.start_date <= act.date:
-                # Ce qui seraient prise en charge
-                nb_acts_cared = len_acts_cared_diag + count_hcd
-                # Ne doit pas dépasser la limite de prise en charge du hc
-                if nb_acts_cared < hcd.get_act_number() :
-                    acts_diagnostic.setdefault(patient, []).append((act, hcd))
-                    count_hcd = count_hcd + 1
+            # If there is overlapping between hc period the more recent must
+            # be used ! That should not happen with hct but might between
+            # hcd and hct.
+            if len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
+                if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
+                    acts_treatment.setdefault(patient, []).append((act, hcts[0]))
+                    count_hct_2 = count_hct_2 + 1
                     cared = True
-            # The one before the last may be not full.
             if not cared and len(hcts) > 1 and hcts[1] and hcts[1].start_date <= act.date and hcts[1].end_date >= act.date:
                 # Ce qui seraient prise en charge
                 # ne doit pas dépasser la limite de prise en charge du hc
@@ -358,10 +357,13 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                     acts_treatment.setdefault(patient, []).append((act, hcts[1]))
                     count_hct_1 = count_hct_1 + 1
                     cared = True
-            if not cared and len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
-                if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
-                    acts_treatment.setdefault(patient, []).append((act, hcts[0]))
-                    count_hct_2 = count_hct_2 + 1
+            if not cared and hcd and hcd.start_date <= act.date:
+                # Ce qui seraient prise en charge
+                nb_acts_cared = len_acts_cared_diag + count_hcd
+                # Ne doit pas dépasser la limite de prise en charge du hc
+                if nb_acts_cared < hcd.get_act_number() :
+                    acts_diagnostic.setdefault(patient, []).append((act, hcd))
+                    count_hcd = count_hcd + 1
                     cared = True
             if not cared:
                 acts_losts.setdefault(patient, []).append(act)
@@ -421,15 +423,14 @@ def list_acts_for_billing_CMPP_2_per_patient(patient, end_day, service, acts=Non
             acts_per_hc[hcts[1]] = []
         for act in acts:
             cared = False
-            if hcd and hcd.start_date <= act.date:
-                # Ce qui seraient prise en charge
-                nb_acts_cared = len_acts_cared_diag + count_hcd
-                # Ne doit pas dépasser la limite de prise en charge du hc
-                if nb_acts_cared < hcd.get_act_number() :
-                    acts_per_hc[hcd].append(act)
-                    count_hcd = count_hcd + 1
+            # If there is overlapping between hc period the more recent must
+            # be used ! That should not happen with hct but might between
+            # hcd and hct.
+            if len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
+                if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
+                    acts_per_hc[hcts[0]].append(act)
+                    count_hct_2 = count_hct_2 + 1
                     cared = True
-            # The one before the last may be not full.
             if not cared and len(hcts) > 1 and hcts[1] and hcts[1].start_date <= act.date and hcts[1].end_date >= act.date:
                 # Ce qui seraient prise en charge
                 # ne doit pas dépasser la limite de prise en charge du hc
@@ -437,10 +438,13 @@ def list_acts_for_billing_CMPP_2_per_patient(patient, end_day, service, acts=Non
                     acts_per_hc[hcts[1]].append(act)
                     count_hct_1 = count_hct_1 + 1
                     cared = True
-            if not cared and len(hcts) > 0 and hcts[0] and hcts[0].start_date <= act.date and hcts[0].end_date >= act.date:
-                if count_hct_2 < hcts[0].get_act_number() - hcts[0].get_nb_acts_cared():
-                    acts_per_hc[hcts[0]].append(act)
-                    count_hct_2 = count_hct_2 + 1
+            if not cared and hcd and hcd.start_date <= act.date:
+                # Ce qui seraient prise en charge
+                nb_acts_cared = len_acts_cared_diag + count_hcd
+                # Ne doit pas dépasser la limite de prise en charge du hc
+                if nb_acts_cared < hcd.get_act_number() :
+                    acts_per_hc[hcd].append(act)
+                    count_hcd = count_hcd + 1
                     cared = True
             if not cared:
                 acts_losts.append(act)
