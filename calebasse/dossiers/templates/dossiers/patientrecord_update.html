@@ -318,11 +318,11 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         <button type="button" data-id="{{ hc.id }}" class="del-hcdiag icon-minus" title="Supprimer"></button>
                         <button type="button" data-id="{{ hc.id }}" class="update-hcdiag-btn icon-edit" title="Modifier"></button>
                     </div>
-                      <h3>Prise en charge de diagnostic, débutée le {{ hc.start_date }}</h3>
+                      <h3>Prise en charge de diagnostic, débutée le {{ hc.start_date|date:"d/m/Y" }}</h3>
                       <ul>
-                        {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date }}</li>{% endif %}
-                        {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
-                        {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
+                        {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
+                        {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date|date:"d/m/Y" }}</li>{% endif %}
+                        {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date|date:"d/m/Y" }}</li>{% endif %}
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
                         <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcarediagnostic.get_act_number }}</strong></li>
                         {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
@@ -351,12 +351,12 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         <button type="button" data-id="{{ hc.id }}" class="del-hctrait icon-minus" title="Supprimer"></button>
                         <button type="button" data-id="{{ hc.id }}" class="update-hctrait-btn icon-edit" title="Modifier"></button>
                     </div>
-                      <h3>Prise en charge de traitement, débutée le {{ hc.start_date }}{% if hc.end_date %}, se terminant le {{ hc.end_date }}{% endif %}</h3>
+                      <h3>Prise en charge de traitement, débutée le {{ hc.start_date|date:"d/m/Y" }}{% if hc.end_date %}, se terminant le {{ hc.end_date|date:"d/m/Y" }}{% endif %}</h3>
                       <ul>
-                        {% if hc.cmpphealthcaretreatment.end_date %}<li><label>Date de fin</label> : {{ hc.cmpphealthcaretreatment.end_date }}</li>{% endif %}
-                        {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date }}</li>{% endif %}
-                        {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
-                        {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
+                        {% if hc.cmpphealthcaretreatment.end_date %}<li><label>Date de fin</label> : {{ hc.cmpphealthcaretreatment.end_date|date:"d/m/Y" }}</li>{% endif %}
+                        {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
+                        {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date|date:"d/m/Y" }}</li>{% endif %}
+                        {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date|date:"d/m/Y" }}</li>{% endif %}
                         {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
                         <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcaretreatment.get_act_number }}</strong></li>
                         {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
@@ -396,11 +396,11 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                 </div>
                   <h3>Notification</h3>
                   <ul>
-                    {% if hc.start_date %}<li><label>Date de début</label> : {{ hc.start_date }}</li>{% endif %}
-                    {% if hc.sessadhealthcarenotification.end_date %}<li><label>Date de fin</label> : {{ hc.sessadhealthcarenotification.end_date }}</li>{% endif %}
-                    {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date }}</li>{% endif %}
-                    {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date }}</li>{% endif %}
-                    {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date }}</li>{% endif %}
+                    {% if hc.start_date %}<li><label>Date de début</label> : {{ hc.start_date|date:"d/m/Y" }}</li>{% endif %}
+                    {% if hc.sessadhealthcarenotification.end_date %}<li><label>Date de fin</label> : {{ hc.sessadhealthcarenotification.end_date|date:"d/m/Y" }}</li>{% endif %}
+                    {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
+                    {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date|date:"d/m/Y" }}</li>{% endif %}
+                    {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date|date:"d/m/Y" }}</li>{% endif %}
                     {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
                   </ul>
                 </div>

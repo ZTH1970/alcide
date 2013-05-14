@@ -331,10 +331,11 @@ class Act(models.Model):
     def __unicode__(self):
         if self.time:
             return u'{0} le {1} à {2} pour {3} avec {4}'.format(
-                    self.act_type, self.date, self.time, self.patient,
+                    self.act_type, self.date.strftime('%d/%m/%Y'),
+                    self.time.strftime('%H:%M'), self.patient,
                     ', '.join(map(unicode, self.doctors.all())))
         return u'{0} le {1} pour {2} avec {3}'.format(
-                self.act_type, self.date, self.patient,
+                self.act_type, self.date.strftime('%d/%m/%Y'), self.patient,
                 ', '.join(map(unicode, self.doctors.all())))
 
     def __repr__(self):
@@ -363,4 +364,3 @@ class ValidationMessage(ServiceLinkedAbstractModel):
     what = models.CharField(max_length=256)
     who = models.ForeignKey(User)
     when = models.DateTimeField(auto_now_add=True)
-
