@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files import File
 from django.forms import Form
+from django.utils import formats
 
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
@@ -757,7 +758,7 @@ class GenerateRtfFormView(cbv.FormView):
             to_path = dest_filename
         variables = {'AD11': '', 'AD12': '', 'AD13': '', 'AD14': '',
             'AD15': '', 'AD18': '',
-            'JOU1': datetime.today().strftime('%d/%m/%Y'),
+            'JOU1': formats.date_format(datetime.today(), "DATE_FORMAT"),
             'VIL1': u'Saint-Étienne',
             'RDV1': '', 'HEU1': '', 'THE1': '', 'DPA1': '',
             'NOM1': '', 'PRE1': '', 'NAI1': '', 'NUM2': '',
