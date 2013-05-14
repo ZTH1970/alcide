@@ -925,8 +925,9 @@ class GenerateTransportPrescriptionFormView(cbv.FormView):
         response = HttpResponse(content,'application/pdf')
         response['Content-Length'] = content.size
         response['Content-Disposition'] = \
-            'attachment; filename="cerfa-transport-%s-%s.pdf"' \
-            % (patient.last_name.upper(), patient.first_name)
+            'attachment; filename="%s--prescription-transport-%s-%s.pdf"' \
+            % (datetime.now().strftime('%Y-%m-%d--%H:%M:%S'),
+                patient.last_name.upper(), patient.first_name)
         return response
 
 prescription_transport = GenerateTransportPrescriptionFormView.as_view()
