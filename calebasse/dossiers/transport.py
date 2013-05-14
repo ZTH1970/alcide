@@ -4,7 +4,7 @@ import datetime
 from transport_template import TransportTemplate
 
 
-def render_transport(patient, address):
+def render_transport(patient, address, date=None):
     template_path = os.path.join(
             os.path.dirname(__file__),
             'static',
@@ -13,10 +13,12 @@ def render_transport(patient, address):
     tpl = TransportTemplate(
             template_path=template_path,
             prefix='transport_filled', suffix='.pdf')
+    if not date:
+        date = datetime.datetime.now()
     ctx = {
             'NOM_BENEFICIAIRE': u' '.join(patient.last_name.upper()),
             'PRENOM_BENEFICIAIRE': u' '.join(patient.first_name),
-            'DATE': datetime.datetime.now().strftime('%d%m%Y'),
+            'DATE': date.strftime('%d%m%Y'),
             'LIEU': 'Saint-Etienne',
             'IDENTIFICATION_ETABLISSEMENT': '''%s SAINT ETIENNE
 66/68, RUE MARENGO

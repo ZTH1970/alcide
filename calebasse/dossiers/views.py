@@ -915,7 +915,12 @@ class GenerateTransportPrescriptionFormView(cbv.FormView):
     def form_valid(self, form):
         patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
         address = PatientAddress.objects.get(id=form.data['address_id'])
-        path = render_transport(patient, address)
+        date = None
+        try:
+            date = datetime.strptime(form.data['date'], "%d/%m/%Y")
+        except:
+            pass
+        path = render_transport(patient, address, date)
         content = File(file(path))
         response = HttpResponse(content,'application/pdf')
         response['Content-Length'] = content.size
