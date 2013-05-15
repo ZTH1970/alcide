@@ -55,6 +55,90 @@ class TransportTemplate(object):
             'ADRESSE_BENEFICIAIRE': {
                 'pos': (92, 891),
             },
+            'SITUATION_CHOICE_1': {
+                'pos': (393, 264),
+                'type': 'bool',
+            },
+            'SITUATION_CHOICE_2': {
+                'pos': (393, 280),
+                'type': 'bool',
+            },
+            'SITUATION_CHOICE_3': {
+                'pos': (719, 264),
+                'type': 'bool',
+            },
+            'SITUATION_CHOICE_4': {
+                'pos': (719, 280),
+                'type': 'bool',
+            },
+            'SITUATION_DATE': {
+                'pos': (610, 299),
+                'size': 8,
+            },
+            'TRAJET_TEXT': {
+                'pos': (84, 340),
+                'size': 8,
+            },
+            'TRAJET_CHOICE_1': {
+                'pos': (201, 396),
+                'type': 'bool',
+            },
+            'TRAJET_CHOICE_2': {
+                'pos': (454, 396),
+                'type': 'bool',
+            },
+            'TRAJET_CHOICE_3': {
+                'pos': (719, 396),
+                'type': 'bool',
+            },
+            'TRAJET_CHOICE_4': {
+                'pos': (201, 419),
+                'type': 'bool',
+            },
+            'TRAJET_NUMBER': {
+                'pos': (305, 409),
+                'size': 8,
+            },
+            'PC_CHOICE_1': {
+                'pos': (567, 435),
+                'type': 'bool',
+            },
+            'PC_CHOICE_2': {
+                'pos': (642, 435),
+                'type': 'bool',
+            },
+            'MODE_CHOICE_1': {
+                'pos': (321, 484),
+                'type': 'bool',
+            },
+            'MODE_CHOICE_2': {
+                'pos': (321, 499),
+                'type': 'bool',
+            },
+            'MODE_CHOICE_3': {
+                'pos': (321, 515),
+                'type': 'bool',
+            },
+            'MODE_CHOICE_4': {
+                'pos': (568, 528),
+                'type': 'bool',
+            },
+            'MODE_CHOICE_5': {
+                'pos': (642, 528),
+                'type': 'bool',
+            },
+            'MODE_CHOICE_6': {
+                'pos': (321, 546),
+                'type': 'bool',
+            },
+            'CDTS_CHOICE_1': {
+                'pos': (404, 565),
+                'type': 'bool',
+            },
+            'CDTS_CHOICE_2': {
+                'pos': (567, 563),
+                'type': 'bool',
+            },
     }
 
     def __init__(self, template_path=None, prefix='tmp', suffix=''):
