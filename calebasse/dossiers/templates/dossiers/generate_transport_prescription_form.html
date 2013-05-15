@@ -3,19 +3,63 @@
     <form action="{{ request.get_full_path }}" method="post">
       {% csrf_token %}
 
-    <h2>Patient {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span></h2>
-    {% if object.id != object.policyholder.id %}<strong>Assuré {{ object.policyholder.first_name }} <span class="lastname">{{ object.policyholder.last_name }}</span></strong>{% endif %}
+    <p><strong>Patient</strong> {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span></p>
 
+    {% if object.id != object.policyholder.id %}<p><strong>Assuré</strong> {{ object.policyholder.first_name }} <span class="lastname">{{ object.policyholder.last_name }}</span></p>{% endif %}
+
+    <p><strong>Adresse</strong>
     {% if not object.policyholder.addresses.all %}
         L'assuré n'a pas d'adresse connue.
     {% else %}
-    <h2>Adresse</h2>
-
     <ul class="addresses">
       {% for address in object.policyholder.addresses.all %}
         <li><input type="radio" name="address_id" id="address_{{ address.id }}" value="{{ address.id }}"><label for="address_{{ address.id }}">{% if address.display_name %}{{ address.display_name }}{% else %}Adresse non renseignée.{% endif %}</label></input></li>
       {% endfor %}
     </ul>
     {% endif %}
-    <p><label>Etablie le : </label><input id="id_date" type="text" name="date" value="{% now "d/m/Y" %}"/></p>
+    </p>
+
+    <p><strong>Dans quelle situation permettant la prise en charge du transport se trouve votre patient ? (plusieurs choix possibles)</strong><br/>
+    <ul>
+    <li>Hospitalisation (entrée-sortie) <input type="checkbox" name="situation_choice_1" value="situation_choice_1" {% if choices.situation_choice_1 %}checked{% endif %}/></li>
+    <li>Nécessité d'être allongé ou sous surveillance <input type="checkbox" name="situation_choice_2" value="situation_choice_2" {% if choices.situation_choice_2 %}checked{% endif %}/></li>
+    <li>Soins liés à une affection de longue durée <input type="checkbox" name="situation_choice_3" value="situation_choice_3" {% if choices.situation_choice_3 %}checked{% endif %}/></li>
+    <li>Soins liés à un AT/MP <input type="checkbox" name="situation_choice_4" value="situation_choice_4" {% if choices.situation_choice_4 %}checked{% endif %}/></li>
+    </ul>
+    Date de l’accident du travail ou de la maladie professionnelle <input id="id_situation_date" type="text" name="situation_date" value="{{ choices.situation_date }}" %}"/>
+    </p>
+
+    <p><strong>Quel trajet doit effectuer le patient ? (précisez l'adresse du lieu de départ et du lieu d'arrivée ainsi que le nom de la structure de soins)</strong><br/>
+    <em>(Maximum 3 lignes de 110 caractères.)</em>
+    <textarea id="id_address" rows="3" cols="60" name="trajet_text">{{ choices.trajet_text }}</textarea><br/>
+    Transport aller <input type="checkbox" name="trajet_choice_1" value="trajet_choice_1" {% if choices.trajet_choice_1 %}checked{% endif %}/> Transport retour <input type="checkbox" name="trajet_choice_2" value="trajet_choice_2" {% if choices.trajet_choice_2 %}checked{% endif %}/> Transport aller-retour <input type="checkbox" name="trajet_choice_3" value="trajet_choice_3" {% if choices.trajet_choice_3 %}checked{% endif %}/><br/>
+    Transport itératif <input type="checkbox" name="trajet_choice_4" value="trajet_choice_4" {% if choices.trajet_choice_4 %}checked{% endif %}/> Nombre <input id="id_trajet_nombre" type="text" name="trajet_number" value="{{ choices.trajet_number }}" %}"/>
+    </p>
+
+    <p><strong>Ce transport est-il lié à une condition de prise en charge à 100% ? (grossesse de plus de 6 mois, ALD exonérante, AT/MP, autre... Se référer à la notice)</strong><br/>
+    Oui <input type="checkbox" name="pc_choice_1" value="pc_choice_1" {% if choices.pc_choice_1 %}checked{% endif %}/> Non <input type="checkbox" name="pc_choice_2" value="pc_choice_2" {% if choices.pc_choice_2 %}checked{% endif %}/>
+    </p>
+
+    <p><strong>Quel mode de transport prescrivez-vous, en vous reportant au référentiel médical détaillé dans la notice ?</strong><br/>
+    <ul>
+    <li>Ambulance <input type="checkbox" name="mode_choice_1" value="mode_choice_1" {% if choices.mode_choice_1 %}checked{% endif %}/></li>
+    <li>Transport assis professionnalisé (VSL, taxi) <input type="checkbox" name="mode_choice_2" value="mode_choice_2" {% if choices.mode_choice_2 %}checked{% endif %}/></li>
+    <li>Transport en commun (bus, train...) <input type="checkbox" name="mode_choice_3" value="mode_choice_3" {% if choices.mode_choice_3 %}checked{% endif %}/> (complétez la ligne ci-dessous)
+        <ul>Dans ce cas, l’état de santé du patient nécessite-t-il une personne accompagnante ?
+        <li>Oui <input type="checkbox" name="mode_choice_4" value="mode_choice_4" {% if choices.mode_choice_4 %}checked{% endif %}/> Non <input type="checkbox" name="mode_choice_5" value="mode_choice_5" {% if choices.mode_choice_5 %}checked{% endif %}/></li>
+        </ul>
+    </li>
+    <li>Moyen de transport individuel <input type="checkbox" name="mode_choice_6" value="mode_choice_6" {% if choices.mode_choice_6 %}checked{% endif %}/></li>
+    </ul>
+    </p>
+
+    <p><strong>Conditions particulières</strong><br/>
+    Appel du centre 15 <input type="checkbox" name="cdts_choice_1" value="cdts_choice_1" {% if choices.cdts_choice_1 %}checked{% endif %}/> Nécessité d'une asepsie rigoureuse <input type="checkbox" name="cdts_choice_2" value="cdts_choice_2" {% if choices.cdts_choice_2 %}checked{% endif %}/>
+    </p>
+
+    <p><strong>Signature</strong><br/>
+    A <input id="id_lieu" type="text" name="lieu" value="{{ lieu }}" %}"/> Etablie le <input id="id_date" type="text" name="date" value="{{ date }}" %}"/><br/>
+    <textarea id="id_id_etab" rows="3" cols="30" name="id_etab">{{ id_etab }}</textarea>
+    </p>
+
     </form>
