@@ -25,7 +25,8 @@ from calebasse.actes.models import Act
 from calebasse.agenda.appointments import Appointment
 from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
-        CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare)
+        CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare,
+        TransportPrescriptionLog)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
@@ -444,6 +445,10 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
                         STATES_BTN_MAPPER['TRAITEMENT']]
             ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
+        try:
+            ctx['last_prescription'] = TransportPrescriptionLog.objects.filter(patient=ctx['object']).latest('created')
+        except:
+            pass
         return ctx
 
     def form_valid(self, form):
@@ -909,19 +914,35 @@ class GenerateTransportPrescriptionFormView(cbv.FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super(GenerateTransportPrescriptionFormView, self).get_context_data(**kwargs)
-        ctx['object'] = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+        ctx['lieu'] = 'Saint-Etienne'
+        ctx['date'] = formats.date_format(datetime.today(), "SHORT_DATE_FORMAT")
+        ctx['id_etab'] = '''%s SAINT ETIENNE
+66/68, RUE MARENGO
+42000 SAINT ETIENNE''' % ctx['service'].upper()
+        try:
+            patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
+            ctx['object'] = patient
+            last_log = TransportPrescriptionLog.objects.filter(patient=patient).latest('created')
+            if last_log:
+                ctx['choices'] = last_log.get_choices()
+                if 'lieu' in ctx['choices'] and ctx['choices']['lieu']:
+                    ctx['lieu'] = ctx['choices']['lieu']
+                if 'date' in ctx['choices'] and ctx['choices']['date']:
+                    ctx['date'] = ctx['choices']['date']
+                if 'id_etab' in ctx['choices'] and ctx['choices']['id_etab']:
+                    ctx['id_etab'] = ctx['choices']['id_etab']
+        except:
+            pass
         return ctx
 
     def form_valid(self, form):
         patient = PatientRecord.objects.get(id=self.kwargs['patientrecord_id'])
         address = PatientAddress.objects.get(id=form.data['address_id'])
-        date = None
-        try:
-            date = datetime.strptime(form.data['date'], "%d/%m/%Y")
-        except:
-            pass
-        path = render_transport(patient, address, date)
+        path = render_transport(patient, address, form.data)
         content = File(file(path))
+        log = TransportPrescriptionLog(patient=patient)
+        log.set_choices(form.data)
+        log.save()
         response = HttpResponse(content,'application/pdf')
         response['Content-Length'] = content.size
         response['Content-Disposition'] = \

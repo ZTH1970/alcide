@@ -1,10 +1,9 @@
 import os
-import datetime
 
 from transport_template import TransportTemplate
 
 
-def render_transport(patient, address, date=None):
+def render_transport(patient, address, data={}):
     template_path = os.path.join(
             os.path.dirname(__file__),
             'static',
@@ -13,16 +12,35 @@ def render_transport(patient, address, date=None):
     tpl = TransportTemplate(
             template_path=template_path,
             prefix='transport_filled', suffix='.pdf')
-    if not date:
-        date = datetime.datetime.now()
-    ctx = {
-            'NOM_BENEFICIAIRE': u' '.join(patient.last_name.upper()),
-            'PRENOM_BENEFICIAIRE': u' '.join(patient.first_name),
-            'DATE': date.strftime('%d%m%Y'),
-            'LIEU': 'Saint-Etienne',
-            'IDENTIFICATION_ETABLISSEMENT': '''%s SAINT ETIENNE
-66/68, RUE MARENGO
-42000 SAINT ETIENNE''' % patient.service.name,
+    name = ''
+    if patient.last_name:
+        name = patient.last_name.upper()
+    ctx = {'NOM_BENEFICIAIRE': name,
+        'PRENOM_BENEFICIAIRE': patient.first_name or '',
+        'DATE': data.get('date', ''),
+        'LIEU': data.get('lieu', ''),
+        'IDENTIFICATION_ETABLISSEMENT': data.get('id_etab', ''),
+        'SITUATION_CHOICE_1': 'situation_choice_1' in data,
+        'SITUATION_CHOICE_2': 'situation_choice_2' in data,
+        'SITUATION_CHOICE_3': 'situation_choice_3' in data,
+        'SITUATION_CHOICE_4': 'situation_choice_4' in data,
+        'SITUATION_DATE': data.get('situation_date', ''),
+        'TRAJET_TEXT': data.get('trajet_text', ''),
+        'TRAJET_CHOICE_1': 'trajet_choice_1' in data,
+        'TRAJET_CHOICE_2': 'trajet_choice_2' in data,
+        'TRAJET_CHOICE_3': 'trajet_choice_3' in data,
+        'TRAJET_CHOICE_4': 'trajet_choice_4' in data,
+        'TRAJET_NUMBER': data.get('trajet_number', ''),
+        'PC_CHOICE_1': 'pc_choice_1' in data,
+        'PC_CHOICE_2': 'pc_choice_2' in data,
+        'MODE_CHOICE_1': 'mode_choice_1' in data,
+        'MODE_CHOICE_2': 'mode_choice_2' in data,
+        'MODE_CHOICE_3': 'mode_choice_3' in data,
+        'MODE_CHOICE_4': 'mode_choice_4' in data,
+        'MODE_CHOICE_5': 'mode_choice_5' in data,
+        'MODE_CHOICE_6': 'mode_choice_6' in data,
+        'CDTS_CHOICE_1': 'cdts_choice_1' in data,
+        'CDTS_CHOICE_2': 'cdts_choice_2' in data,
         }
     if patient.policyholder.id != patient.id:
         policy_holder_full_name = ''
@@ -31,7 +49,7 @@ def render_transport(patient, address, date=None):
                 patient.policyholder.last_name.upper() + ' '
         if patient.policyholder.first_name:
             policy_holder_full_name += patient.policyholder.first_name
-        ctx['NOM_ASSURE'] = u' '.join(policy_holder_full_name)
+        ctx['NOM_ASSURE'] = policy_holder_full_name
     if patient.policyholder.social_security_id:
         ctx['NIR_ASSURE'] = \
             u'  '.join(patient.policyholder.social_security_id)
@@ -46,5 +64,5 @@ def render_transport(patient, address, date=None):
             u'  '.join(patient.policyholder.other_health_center
                 or patient.policyholder.health_center.code)
     if address:
-        ctx['ADRESSE_BENEFICIAIRE'] = u' '.join(address.display_name)
+        ctx['ADRESSE_BENEFICIAIRE'] = address.display_name
     return tpl.generate(ctx)
