@@ -53,8 +53,11 @@ def render_transport(patient, address, data={}):
     if patient.policyholder.social_security_id:
         ctx['NIR_ASSURE'] = \
             u'  '.join(patient.policyholder.social_security_id)
+        key = str(patient.policyholder.get_control_key())
+        if len(key) == 1:
+            key = '0' + key
         ctx['NIR_KEY_ASSURE'] = \
-            u'  '.join(str(patient.policyholder.get_control_key()))
+            u'  '.join(key)
     if patient.policyholder.health_center:
         ctx['CODE_ORGANISME_1'] = \
             u'  '.join(patient.policyholder.health_center.large_regime.code)
