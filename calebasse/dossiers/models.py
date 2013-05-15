@@ -5,6 +5,7 @@ import os
 
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
+from cPickle import loads, dumps
 
 from django import forms
 from django.conf import settings
@@ -31,6 +32,22 @@ VALIDITY_PERIOD_TREATMENT_HEALTHCARE_MONTHS = 0
 VALIDITY_PERIOD_TREATMENT_HEALTHCARE_YEARS = 1
 
 logger = logging.getLogger('calebasse.dossiers')
+
+
+class TransportPrescriptionLog(models.Model):
+    patient = models.ForeignKey('dossiers.PatientRecord',
+        verbose_name=u'Dossier patient')
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+    choices = models.CharField(max_length = 4096, null=True, blank=True)
+
+    def get_choices(self):
+        if not self.choices:
+            return dict()
+        return loads(str(self.choices))
+
+    def set_choices(self, choices=None):
+        if choices and isinstance(choices, dict):
+            self.choices = dumps(choices)
 
 
 class HealthCare(models.Model):
