@@ -163,13 +163,15 @@
       title="Ajouter {% if field.label.lower == "type de transport" %}un{% else %}une{% endif %} {{ field.label.lower }}">+</button>
     {% endfor %}
     </p>
-<!--    <table>-->
-<!--      <tr><td><button type="button">Attestation</button></td> <td><button type="button">Prescription</td></tr>-->
-<!--        <tr><td>Dernière attestation le 25/07/2012 <button>Historique</button></td>-->
-<!--          <td>Dernière prescription le 25/07/2012 <button>Historique</button></td></tr>-->
-<!--      </table>-->
-<!--      <input type="hidden"  name="tab"  value="1">-->
-    <p class="align-center"><br/><button id="prescription-transport-btn">Prescription de transport</button></p>
+    <br/><table>
+      <tr>
+        <td><!--<button id="attestation-transport-btn">Attestation de transport</button>--></td><td><button id="prescription-transport-btn">Prescription de transport</button></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>{% if last_prescription %} Dernière prescription le {{ last_prescription.created }}{% endif %}</td>
+      </tr>
+    </table>
     </div>
   </form>
 
