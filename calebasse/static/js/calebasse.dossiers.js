@@ -310,7 +310,7 @@ function state_dialog(url, state_title, state_type) {
     $('#prescription-transport-btn').click(function() {
         $('#ajax-dlg').load('prescription-transport',
           function () {
-             $(this).dialog({title: 'Prescription de transport', width: '500px',
+             $(this).dialog({title: 'Prescription de transport', width: '800px',
                       buttons: [ { text: "Fermer",
                           click: function() { $(this).dialog("close"); } },
                       { text: "Prescrire",
