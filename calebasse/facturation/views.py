@@ -96,6 +96,7 @@ class FacturationDetailView(UpdateView):
             context['len_acts_paused'] = len_acts_paused
             context['len_acts_lost_missing_policy'] = len_acts_lost_missing_policy
             context['len_patient_with_lost_acts_missing_policy'] = len_patient_with_lost_acts_missing_policy
+            context['some_stats'] = context['invoicing'].get_stats_per_price_per_year()
         elif self.service.name == 'CAMSP':
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,

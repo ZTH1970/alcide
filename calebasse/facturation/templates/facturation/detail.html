@@ -112,11 +112,23 @@
         {% else %}
         <ul>
             {% if len_acts_invoiced %}
-              <li>Actes facturés : {{ len_acts_invoiced }}
+              <li>{{ len_acts_invoiced }} actes facturés pour un montant de {{ some_stats.total.1 }}.
                 <ul>
                   <li>Dossiers concernés : {{ len_patients }}</li>
                   <li>Nombre de factures : {{ len_invoices }}</li>
                 </ul>
+              </li>
+              <li>Détail par année et par tarif des actes :
+                <table class="main">
+                  <thead><tr><th>Tarif</th><th>Année</th><th>Actes</th><th>Montant</th></tr></thead>
+                  <tbody>
+                  {% for year, x in some_stats.detail.items %}
+                  {% for ppa, stats in x.items %}
+                  <tr><td>{{ ppa }}</td><td>{{ year }}</td><td>{{ stats.0 }}</td><td>{{ stats.1 }}</td></tr>
+                  {% endfor %}
+                  {% endfor %}
+                  </tbody>
+                </table>
               </li>
             {% else %}
               <li>Pas d'actes facturés pour cette facturation.</li>
