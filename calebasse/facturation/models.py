@@ -221,6 +221,35 @@ class Invoicing(models.Model):
         else:
             raise RuntimeError('Unknown service', self.service)
 
+    def get_stats_per_price_per_year(self):
+        stats_final = dict()
+        stats_final['total'] = (0, 0)
+        stats_final['detail'] = dict()
+        if self.service.name != 'CMPP' or \
+                self.status in (Invoicing.STATUS.open,
+                Invoicing.STATUS.closed):
+            return stats_final
+        stats = stats_final['detail']
+        invoices = self.invoice_set.all()
+        for invoice in invoices:
+            if not invoice.acts:
+                continue
+            # All acts of an invoice are the same year and at the same price
+            year = invoice.acts.all()[0].date.year
+            ppa = invoice.decimal_ppa
+            if year not in stats:
+                stats[year] = dict()
+            if ppa not in stats[year]:
+                stats[year][ppa] = (0, 0)
+            nb_acts, amount = stats[year][ppa]
+            nb_acts += invoice.acts.count()
+            amount += invoice.decimal_amount
+            stats[year][ppa] = (nb_acts, amount)
+            nb_acts_f, amount_f = stats_final['total']
+            nb_acts_f += invoice.acts.count()
+            amount_f += invoice.decimal_amount
+            stats_final['total'] = (nb_acts_f, amount_f)
+        return stats_final
 
     def get_stats_or_validate(self, commit=False):
         '''
