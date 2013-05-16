@@ -127,6 +127,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     form_class = NewAppointmentForm
     template_name = 'agenda/new-appointment.html'
     success_url = '..'
+    success_msg = u'Rendez-vous enregistré avec succès.'
     cookies_to_clear = []
 
     def get_initial(self):
@@ -144,7 +145,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         return kwargs
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.INFO, u'Rendez-vous enregistré avec succès.')
+        messages.add_message(self.request, messages.INFO, self.success_msg)
         return super(NewAppointmentView, self).form_valid(form)
 
 

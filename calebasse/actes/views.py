@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.db.models import Q
@@ -70,11 +72,12 @@ class ActListingView(ListView):
 
 class NewAct(NewAppointmentView):
     success_url = '.'
+    success_msg = u'Acte enregistré avec succès.'
 
     def form_valid(self, form):
-        self.object = form.save()
+        result = super(NewAct, self).form_valid(form)
         self.object.act.save()
-        return ModelFormMixin.form_valid(self, form)
+        return result
 
 act_listing = ActListingView.as_view()
 act_new = NewAct.as_view()
