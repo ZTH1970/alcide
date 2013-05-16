@@ -834,8 +834,6 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def _get_search_result(self, paginate_patient_records):
         patient_records = []
         for patient_record in paginate_patient_records:
-            next_rdv = get_next_rdv(patient_record)
-            last_rdv = get_last_rdv(patient_record)
             current_state = patient_record.get_current_state()
             state = current_state.status.name
             state_class = current_state.status.type.lower()
@@ -859,12 +857,12 @@ class PatientRecordsQuotationsView(cbv.ListView):
 
         try:
             date_actes_start = datetime.strptime(form.data['date_actes_start'], "%d/%m/%Y")
-            qs = qs.filter(act_set__date__gte=date_actes_start.date())
+            qs = qs.filter(act__date__gte=date_actes_start.date()).distinct()
         except (ValueError, KeyError):
             pass
         try:
             date_actes_end = datetime.strptime(form.data['date_actes_end'], "%d/%m/%Y")
-            qs = qs.filter(act_set__date__lte=date_actes_end.date())
+            qs = qs.filter(act__date__lte=date_actes_end.date()).distinct()
         except (ValueError, KeyError):
             pass
         qs = qs.filter(service=self.service).order_by('last_name').prefetch_related()
