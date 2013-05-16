@@ -232,7 +232,7 @@ class Invoicing(models.Model):
         stats = stats_final['detail']
         invoices = self.invoice_set.all()
         for invoice in invoices:
-            if not invoice.acts:
+            if not invoice.acts.count():
                 continue
             # All acts of an invoice are the same year and at the same price
             year = invoice.acts.all()[0].date.year
