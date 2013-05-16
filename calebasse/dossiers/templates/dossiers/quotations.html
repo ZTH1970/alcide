@@ -15,10 +15,10 @@
     <label>Sans quotations <input name="without_quotations" type="checkbox"
     {% if request.GET.without_quotations == 'on' %}checked="checked"{% endif %}/></label>
 
-    <h3>Période</h3>
-    Du
+    <h3>Avec au moins un acte (optionnel)</h3>
+    Après (jj/mm/aaaa)
     <label><input name="date_actes_start" type="text" value="{{ request.GET.date_actes_start }}"></label>
-    Au
+    Avant (jj/mm/aaaa)
     <label><input name="date_actes_end" type="text" value="{{ request.GET.date_actes_end }}"></label>
     {% if request.GET %}
     <div class="search-reset">
