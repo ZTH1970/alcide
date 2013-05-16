@@ -448,12 +448,14 @@ class CodeCFTMEA(NamedAbstractModel):
     code = models.IntegerField(verbose_name=u"Code")
     axe = models.IntegerField(verbose_name=u"Axe", choices=AXIS,
             max_length=1)
+    ordering_code = models.CharField(max_length=20, blank=True, null=True,
+            verbose_name=u"Classification")
 
     def __unicode__(self):
-        return "%d %s" % (self.code, self.name)
+        return "%s %s" % (self.ordering_code, self.name)
 
     class Meta:
-        ordering = ['code']
+        ordering = ['ordering_code']
         verbose_name = u'Code CFTMEA'
         verbose_name_plural = u'Codes CFTMEA'
 
