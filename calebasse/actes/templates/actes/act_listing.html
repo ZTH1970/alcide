@@ -5,18 +5,35 @@
 {{ block.super }}
 <script src="{{ STATIC_URL }}js/calebasse.datesel.js"></script>
 <script>
-  $(function() {
-    $('table#actes tr').click(function() {
-        if ($(this).data('isbilled') == "False") {
-            generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
-            '#acte-dlg', '700px', 'Enregistrer', '.');
-        } else if ($(this).data('oldbilled') == "True") {
-            generic_ajaxform_dialog($(this).data('id') + '/rebill', "Refacturer cet acte de l'ancienne facturation) ?",
-            '#acte-dlg', '700px', 'Refacturer', '.');
-        } else {
-            alert('Vous ne pouvez pas éditer un acte déjà facturé.');
-        }
-    });
+    $(function() {
+        $('table#actes tr').click(function() {
+            if ($(this).data('isbilled') == "False")
+            {
+                var id = $(this).data('id');
+                generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
+                '#acte-dlg', '700px', 'Modifier', '.',
+                function (dialog) {
+                    var buttons = $(dialog).dialog('option', 'buttons');
+                    buttons.push({
+                        text: "Supprimer",
+                        id: "delete-btn",
+                        click: function () {
+                            $(dialog).dialog('close');
+                            generic_ajaxform_dialog(id + '/delete', "Supprimer l'acte",
+                            '#acte-dlg', '500px', 'Oui', '..');
+
+                        }
+                    });
+                    $(dialog).dialog('option', 'buttons', buttons);
+                }
+                );
+                } else if ($(this).data('oldbilled') == "True") {
+                generic_ajaxform_dialog($(this).data('id') + '/rebill', "Refacturer cet acte de l'ancienne facturation) ?",
+                '#acte-dlg', '700px', 'Refacturer', '.');
+                } else {
+                alert('Vous ne pouvez pas éditer un acte déjà facturé.');
+            }
+        });
     $('.date').datepicker();
     $('.new-act').click(function() {
         generic_ajaxform_dialog($(this).data('url'), 'Nouvel acte',

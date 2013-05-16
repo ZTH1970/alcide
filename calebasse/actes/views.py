@@ -2,11 +2,12 @@
 
 import datetime
 
+from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Q
 from django.views.generic.edit import ModelFormMixin
 from django.shortcuts import redirect
 
-from calebasse.cbv import ListView, UpdateView, FormView
+from calebasse.cbv import ListView, UpdateView, FormView, DeleteView
 from calebasse.agenda.views import NewAppointmentView
 
 import models
@@ -81,6 +82,22 @@ class NewAct(NewAppointmentView):
 
 act_listing = ActListingView.as_view()
 act_new = NewAct.as_view()
+
+class DeleteActView(DeleteView):
+    model = models.Act
+    template_name = 'actes/confirm_delete.html'
+    success_url = '..'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.event:
+            self.object.event.delete()
+        if not self.object.is_billed:
+            self.object.delete()
+
+        return HttpResponse(status=204)
+
+delete_act = DeleteActView.as_view()
 
 class UpdateActView(UpdateView):
     model = models.Act
