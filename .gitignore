@@ -39,3 +39,6 @@ scripts/*/*.json
 scripts/*.csv
 scripts/*.json
 calebasse/calebasse.log
+
+# Databases
+*.bz2
