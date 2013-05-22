@@ -907,6 +907,8 @@ class Invoice(models.Model):
     invoicing = models.ForeignKey('facturation.Invoicing',
         on_delete='PROTECT')
     acts = models.ManyToManyField('actes.Act')
+    list_dates = models.CharField(max_length=512, blank=True, null=True)
+    first_tag = models.CharField(max_length=128, blank=True, null=True)
     amount = models.IntegerField()
     ppa = models.IntegerField()
     rejected = models.BooleanField(verbose_name=u"Rejeté", default=False)
