@@ -962,8 +962,9 @@ class Invoice(models.Model):
 
     @property
     def kind(self):
-        tag = self.acts.all()[0].get_hc_tag()
-        return tag[0]
+        if not self.first_tag:
+            return None
+        return self.first_tag[0]
 
     @property
     def patient_social_security_id_full(self):
