@@ -16,6 +16,7 @@ from ..pdftk import PdfTk
 from batches import build_batches
 from calebasse.utils import get_nir_control_key
 
+
 class Counter(object):
     def __init__(self, initial_value=0):
         self.counter = initial_value
@@ -281,12 +282,13 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
             content = render_not_cmpp_content(invoicing)
             all_files.append(content)
         output_file = None
-        if settings.INVOICING_DIRECTORY and os.path.exists(to_path):
+        if settings.INVOICING_DIRECTORY and settings.INVOICING_DIRECTORY != '':
             to_path = os.path.join(settings.INVOICING_DIRECTORY, service.name)
-            to_path = os.path.join(to_path, '%s-facturation-%s-%s.pdf' \
-                % (service.slug, invoicing.seq_id, now))
-            output_file = open(to_path, 'w')
-        else:
+            if os.path.exists(to_path):
+                to_path = os.path.join(to_path, '%s-facturation-%s-%s.pdf' \
+                    % (service.slug, invoicing.seq_id, now))
+                output_file = open(to_path, 'w')
+        if not output_file:
             output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                     (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
         pdftk = PdfTk()

@@ -173,7 +173,10 @@ class Act(models.Model):
         return False
 
     def get_state(self):
-        return self.last_validation_state
+        try:
+            return self.last_validation_state
+        except:
+            return None
 
     def is_state(self, state_name):
         state = self.get_state()
