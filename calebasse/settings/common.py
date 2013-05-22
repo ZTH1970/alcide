@@ -240,7 +240,7 @@ AJAX_LOOKUP_CHANNELS = {
 LOGIN_REDIRECT_URL = '/'
 
 # Base directory for generated patient files
-PATIENT_FILES_BASE_DIRECTORY = '/Donnees/devs/aps42/ajouravecdb_aprendre/test_file/serveur_base_dir/'
+PATIENT_FILES_BASE_DIRECTORY = None
 
 # Client side base directory for generated patient files
 CLIENT_SIDE_PATIENT_FILES_BASE_DIRECTORY =  None
@@ -268,7 +268,7 @@ PATIENT_SUBDIRECTORIES = (
 )
 
 # RTF templates directory
-RTF_TEMPLATES_DIRECTORY = '/Donnees/devs/aps42/ajouravecdb_aprendre/test_file/rtf_dir/'
+RTF_TEMPLATES_DIRECTORY = None
 # Use patient home dictrory for RTF files generated
 # PATIENT_FILES_BASE_DIRECTORY must be set to work
 USE_PATIENT_FILE_RTF_REPOSITORY_DIRECTORY = False
