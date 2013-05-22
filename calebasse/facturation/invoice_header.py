@@ -281,8 +281,8 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
             content = render_not_cmpp_content(invoicing)
             all_files.append(content)
         output_file = None
-        to_path = os.path.join(settings.INVOICING_DIRECTORY, service.name)
         if settings.INVOICING_DIRECTORY and os.path.exists(to_path):
+            to_path = os.path.join(settings.INVOICING_DIRECTORY, service.name)
             to_path = os.path.join(to_path, '%s-facturation-%s-%s.pdf' \
                 % (service.slug, invoicing.seq_id, now))
             output_file = open(to_path, 'w')
