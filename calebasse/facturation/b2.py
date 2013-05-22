@@ -9,6 +9,7 @@ import tempfile
 import datetime
 import hashlib
 import base64
+from datetime import datetime
 
 from batches import build_batches
 from transmission_utils import build_mail
@@ -85,14 +86,16 @@ def write_invoice(output_file, invoice):
     write128(output_file, start_2)
     invoice_lines += 1
     nb_type3 = 0
-    for act in invoice.acts.all():
-        prestation = u'SNS  ' if act.get_hc_tag().startswith('T') else u'SD   '
+    kind = invoice.first_tag[0]
+    prestation = u'SNS' if kind == 'T' else u'SD'
+    for date in invoice.list_dates:
         line_3 = '3' + NUMERO_EMETTEUR + ' ' + \
                 invoice.policy_holder_social_security_id + \
                 get_control_key(invoice.policy_holder_social_security_id) + \
                 '000' + ('%0.9d' % invoice.number) + \
                 '19' + '320' + \
-                b2date(act.date) + b2date(act.date) + \
+                b2date(datetime.strptime(date, "%d/%m/%Y")) + \
+                b2date(datetime.strptime(date, "%d/%m/%Y")) + \
                 prestation + '001' + \
                 ' ' + '00100' +  ' ' + '00000' + \
                 ('%0.7d' % invoice.ppa) + \
@@ -189,7 +192,7 @@ def b2(seq_id, hc, batches):
 
     b2_filename = os.path.join(OUTPUT_DIRECTORY, prefix + 'b2')
     os.rename(old_filename, b2_filename)
-    
+
     # create S/MIME mail
     mail_filename = build_mail(hc.large_regime.code, hc.dest_organism, b2_filename)
 
@@ -213,5 +216,3 @@ if __name__ == '__main__':
         b2_filename, mail_filename = b2(invoicing.seq_id, hc, batches[hc])
         print '  B2    :', b2_filename
         print '  smime :', mail_filename
-
-
