@@ -414,7 +414,8 @@ class Invoicing(models.Model):
                 patients = {}
                 for invoice in invoices:
                     len_invoices = len_invoices + 1
-                    len_acts_invoiced = len_acts_invoiced + len(invoice.acts.all())
+                    if invoice.list_dates:
+                        len_acts_invoiced += len(invoice.list_dates.split('$'))
                     patient = None
                     if not invoice.patient_id in patients.keys():
                         try:
@@ -536,7 +537,8 @@ class Invoicing(models.Model):
                 invoices = self.invoice_set.all()
                 for invoice in invoices:
                     len_patient_hors_pause = len_patient_hors_pause + 1
-                    len_acts_hors_pause = len_acts_hors_pause + len(invoice.acts.all())
+                    if invoice.list_dates:
+                        len_acts_hors_pause += len(invoice.list_dates.split('$'))
                     patient = None
                     try:
                         patient = PatientRecord.objects.get(id=invoice.patient_id)
@@ -665,7 +667,8 @@ class Invoicing(models.Model):
                 invoices = self.invoice_set.all()
                 for invoice in invoices:
                     len_patient_hors_pause = len_patient_hors_pause + 1
-                    len_acts_hors_pause = len_acts_hors_pause + len(invoice.acts.all())
+                    if invoice.list_dates:
+                        len_acts_hors_pause += len(invoice.list_dates.split('$'))
                     patient = None
                     try:
                         patient = PatientRecord.objects.get(id=invoice.patient_id)
