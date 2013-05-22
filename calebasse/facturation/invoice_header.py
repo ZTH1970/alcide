@@ -163,7 +163,7 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     ctx['SOUS_TOTAL1'] = total1
     if total2 != Decimal(0):
         ctx['SOUS_TOTAL2'] = total2
-    ctx['TOTAL'] = decimal_amount
+    ctx['TOTAL'] = invoice.decimal_amount
     return [tpl.generate(ctx)]
 
 def render_not_cmpp_header(invoicing):
