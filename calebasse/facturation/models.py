@@ -232,17 +232,18 @@ class Invoicing(models.Model):
         stats = stats_final['detail']
         invoices = self.invoice_set.all()
         for invoice in invoices:
-            if not invoice.acts.count():
+            if not invoice.list_dates:
                 continue
             # All acts of an invoice are the same year and at the same price
-            year = invoice.acts.all()[0].date.year
+            dates = invoice.list_dates.split('$')
+            year = datetime.strptime(dates[0], "%d/%m/%Y").year
             ppa = invoice.decimal_ppa
             if year not in stats:
                 stats[year] = dict()
             if ppa not in stats[year]:
                 stats[year][ppa] = (0, 0)
             nb_acts, amount = stats[year][ppa]
-            nb_acts += invoice.acts.count()
+            nb_acts += len(dates)
             amount += invoice.decimal_amount
             stats[year][ppa] = (nb_acts, amount)
             nb_acts_f, amount_f = stats_final['total']
