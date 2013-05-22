@@ -9,6 +9,7 @@ from collections import defaultdict
 
 from xhtml2pdf.pisa import CreatePDF
 from django.template import loader, Context
+from django.conf import settings
 
 from invoice_template import InvoiceTemplate
 from ..pdftk import PdfTk
@@ -279,8 +280,15 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
             all_files.append(header)
             content = render_not_cmpp_content(invoicing)
             all_files.append(content)
-        output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
-                (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
+        output_file = None
+        to_path = os.path.join(settings.INVOICING_DIRECTORY, service.name)
+        if settings.INVOICING_DIRECTORY and os.path.exists(to_path):
+            to_path = os.path.join(to_path, '%s-facturation-%s-%s.pdf' \
+                % (service.slug, invoicing.seq_id, now))
+            output_file = open(to_path, 'w')
+        else:
+            output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
+                    (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
         pdftk = PdfTk()
         pdftk.concat(all_files, output_file.name)
         return output_file.name

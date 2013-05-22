@@ -274,3 +274,6 @@ RTF_TEMPLATES_DIRECTORY = None
 USE_PATIENT_FILE_RTF_REPOSITORY_DIRECTORY = False
 # RTF files generated directory
 RTF_REPOSITORY_DIRECTORY = None
+
+# Invoicing file saving directory
+INVOICING_DIRECTORY = None
