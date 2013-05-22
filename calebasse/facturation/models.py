@@ -332,10 +332,12 @@ class Invoicing(models.Model):
                                 ppa = invoice['ppa'] * 100
                                 acts = invoice['acts']
                                 amount = ppa * len(acts)
+                                list_dates = '$'.join([act.date.strftime('%d/%m/%Y') for act, hc in acts])
                                 in_o = Invoice(
                                         invoicing=self,
                                         ppa=ppa,
                                         amount=amount,
+                                        list_dates = list_dates,
                                         **invoice_kwargs)
                                 in_o.save()
                                 for act, hc in acts:
@@ -343,6 +345,8 @@ class Invoicing(models.Model):
                                     act.healthcare = hc
                                     act.save()
                                     in_o.acts.add(act)
+                                in_o.first_tag = acts[0][0].get_hc_tag()
+                                in_o.save()
 
                                 # calcule le numero de lot pour cette facture
                                 hc = in_o.health_center
@@ -498,9 +502,11 @@ class Invoicing(models.Model):
                                     management_code = policy_holder.management_code
                                     invoice_kwargs['policy_holder_management_code'] = management_code.code
                                     invoice_kwargs['policy_holder_management_code_name'] = management_code.name
+                                list_dates = '$'.join([act.date.strftime('%d/%m/%Y') for act in acts])
                                 invoice = Invoice(
                                         invoicing=self,
                                         ppa=0, amount=0,
+                                        list_dates=list_dates,
                                         **invoice_kwargs)
                                 invoice.save()
                                 for act in acts:
@@ -622,9 +628,11 @@ class Invoicing(models.Model):
                             management_code = policy_holder.management_code
                             invoice_kwargs['policy_holder_management_code'] = management_code.code
                             invoice_kwargs['policy_holder_management_code_name'] = management_code.name
+                        list_dates = '$'.join([act.date.strftime('%d/%m/%Y') for act in acts])
                         invoice = Invoice(
                                 invoicing=self,
                                 ppa=0, amount=0,
+                                list_dates=list_dates,
                                 **invoice_kwargs)
                         invoice.save()
                         for act in acts_to_commit:
