@@ -87,7 +87,9 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
       health_center.dest_organism,
       health_center.name)
     address = textwrap.fill(invoice.policy_holder_address, 40)
-    if invoice.acts.all()[0].get_hc_tag()[0] == 'D':
+    if not invoice.first_tag:
+        subtitle = 'INDEFINI'
+    elif invoice.first_tag[0] == 'D':
         subtitle = 'DIAGNOSTIC'
     else:
         subtitle = 'TRAITEMENT'
@@ -128,25 +130,31 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
             })
     total1 = Decimal(0)
     total2 = Decimal(0)
-    acts = invoice.acts.order_by('date')
-    if len(acts) > 24:
-        raise RuntimeError('Too much acts in invoice %s' % invoice.id)
     tableau1 = []
     tableau2 = []
-    for act in acts[:12]:
-        hc_tag = act.get_hc_tag()
-        prestation = u'SNS' if hc_tag.startswith('T') else u'SD'
-        d = act.date.strftime('%d/%m/%Y')
-        total1 += invoice.decimal_ppa
-        tableau1.append([u'19', u'320', prestation, d, d, invoice.decimal_ppa,
-            1, invoice.decimal_ppa, act.get_hc_tag()])
-    for act in acts[12:24]:
-        hc_tag = act.get_hc_tag()
-        prestation = u'SNS' if hc_tag.startswith('T') else u'SD'
-        d = act.date.strftime('%d/%m/%Y')
-        total2 += invoice.decimal_ppa
-        tableau2.append([u'19', u'320', prestation, d, d, invoice.decimal_ppa,
-            1, invoice.decimal_ppa, act.get_hc_tag()])
+    dates = []
+    if invoice.list_dates:
+        dates = invoice.list_dates.split('$')
+    if dates:
+        if len(dates) > 24:
+            raise RuntimeError('Too much acts in invoice %s' % invoice.id)
+        kind = 'X'
+        offset = 0
+        prestation = u'X'
+        if invoice.first_tag:
+            kind = invoice.first_tag[0]
+            offset = int(invoice.first_tag[1:])
+            prestation = u'SNS' if kind == 'T' else u'SD'
+        for date in dates[:12]:
+            tableau1.append([u'19', u'320', prestation, date, date,
+                invoice.decimal_ppa, 1, invoice.decimal_ppa, kind + str(offset)])
+            total1 += invoice.decimal_ppa
+            offset += 1
+        for date in dates[12:24]:
+            tableau2.append([u'19', u'320', prestation, date, date,
+                invoice.decimal_ppa, 1, invoice.decimal_ppa, kind + str(offset)])
+            total2 += invoice.decimal_ppa
+            offset += 1
     ctx.update({
             'TABLEAU1': tableau1,
             'TABLEAU2': tableau2,
@@ -154,10 +162,7 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     ctx['SOUS_TOTAL1'] = total1
     if total2 != Decimal(0):
         ctx['SOUS_TOTAL2'] = total2
-    assert invoice.decimal_amount == (total1+total2), "decimal_amount(%s) != " \
-        "total1+total2(%s), ppa: %s len(acts): %s" % (invoice.decimal_amount,
-    total1+total2, invoice.ppa, len(acts))
-    ctx['TOTAL'] = total1+total2
+    ctx['TOTAL'] = decimal_amount
     return [tpl.generate(ctx)]
 
 def render_not_cmpp_header(invoicing):
