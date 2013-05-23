@@ -97,11 +97,11 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                 if invoice['ppa'] != pricing.price_at_date(act.date) or \
                         invoice['year'] != act.date.year:
                     invoices[patient].append(invoice)
-                    len_invoices = len_invoices + 1
-                    len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
+                    len_invoices += 1
+                    len_acts_invoiced += len(invoice['acts'])
                     if not patient.pause:
-                        len_invoices_hors_pause = len_invoices_hors_pause + 1
-                        len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+                        len_invoices_hors_pause += 1
+                        len_acts_invoiced_hors_pause += len(invoice['acts'])
                     invoice = dict()
                     invoice['ppa'] = pricing.price_at_date(act.date)
                     invoice['year'] = act.date.year
@@ -109,11 +109,11 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                 else:
                     invoice['acts'].append((act, hc))
         invoices[patient].append(invoice)
-        len_invoices = len_invoices + 1
-        len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
+        len_invoices += 1
+        len_acts_invoiced += len(invoice['acts'])
         if not patient.pause:
-            len_invoices_hors_pause = len_invoices_hors_pause + 1
-            len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+            len_invoices_hors_pause += 1
+            len_acts_invoiced_hors_pause += len(invoice['acts'])
     pricing = PricePerAct.pricing()
     for patient, acts in acts_treatment.items():
         if not patient in invoices:
@@ -128,11 +128,11 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                 if invoice['ppa'] != pricing.price_at_date(act.date) or \
                         invoice['year'] != act.date.year:
                     invoices[patient].append(invoice)
-                    len_invoices = len_invoices + 1
-                    len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
+                    len_invoices += 1
+                    len_acts_invoiced += len(invoice['acts'])
                     if not patient.pause:
-                        len_invoices_hors_pause = len_invoices_hors_pause + 1
-                        len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+                        len_invoices_hors_pause += 1
+                        len_acts_invoiced_hors_pause += len(invoice['acts'])
                     invoice = dict()
                     invoice['ppa'] = pricing.price_at_date(act.date)
                     invoice['year'] = act.date.year
@@ -140,11 +140,11 @@ def build_invoices_from_acts(acts_diagnostic, acts_treatment):
                 else:
                     invoice['acts'].append((act, hc))
         invoices[patient].append(invoice)
-        len_invoices = len_invoices + 1
-        len_acts_invoiced = len_acts_invoiced + len(invoice['acts'])
+        len_invoices += 1
+        len_acts_invoiced += len(invoice['acts'])
         if not patient.pause:
-            len_invoices_hors_pause = len_invoices_hors_pause + 1
-            len_acts_invoiced_hors_pause = len_acts_invoiced_hors_pause + len(invoice['acts'])
+            len_invoices_hors_pause += 1
+            len_acts_invoiced_hors_pause += len(invoice['acts'])
     return (invoices, len_invoices, len_invoices_hors_pause,
         len_acts_invoiced, len_acts_invoiced_hors_pause)
 
@@ -385,21 +385,21 @@ class Invoicing(models.Model):
                     if patient in acts_losts.keys():
                         # TODO: More details about healthcare
                         dic['losts'] = acts_losts[patient]
-                        len_patient_with_lost_acts = len_patient_with_lost_acts + 1
-                        len_acts_lost = len_acts_lost + len(acts_losts[patient])
+                        len_patient_with_lost_acts += 1
+                        len_acts_lost += len(acts_losts[patient])
                     if patient in acts_pause.keys():
                         dic['acts_paused'] = acts_pause[patient]
-                        len_patient_acts_paused = len_patient_acts_paused + 1
-                        len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                        len_patient_acts_paused += 1
+                        len_acts_paused += len(acts_pause[patient])
                     if patient in acts_losts_missing_policy.keys():
                         # TODO: More details about healthcare
                         dic['losts_missing_policy'] = acts_losts_missing_policy[patient]
-                        len_patient_with_lost_acts_missing_policy = len_patient_with_lost_acts_missing_policy + 1
-                        len_acts_losts_missing_policy = len_acts_losts_missing_policy + len(acts_losts_missing_policy[patient])
+                        len_patient_with_lost_acts_missing_policy += 1
+                        len_acts_losts_missing_policy += len(acts_losts_missing_policy[patient])
                     if patient in acts_losts_missing_birthdate.keys():
                         dic['losts_missing_birthdate'] = acts_losts_missing_birthdate[patient]
-                        len_patient_with_lost_acts_missing_birthdate = len_patient_with_lost_acts_missing_birthdate + 1
-                        len_acts_losts_missing_birthdate = len_acts_losts_missing_birthdate + len(acts_losts_missing_birthdate[patient])
+                        len_patient_with_lost_acts_missing_birthdate += 1
+                        len_acts_losts_missing_birthdate += len(acts_losts_missing_birthdate[patient])
                     patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
 
@@ -480,11 +480,11 @@ class Invoicing(models.Model):
                         acts = acts_accepted[patient]
                         dic['accepted'] = acts
                         if patient.pause:
-                            len_patient_pause = len_patient_pause + 1
-                            len_acts_pause = len_acts_pause + len(acts)
+                            len_patient_pause += 1
+                            len_acts_pause += len(acts)
                         else:
-                            len_patient_hors_pause = len_patient_hors_pause + 1
-                            len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                            len_patient_hors_pause += 1
+                            len_acts_hors_pause += len(acts)
                             if commit:
                                 policy_holder = patient.policyholder
                                 try:
@@ -529,8 +529,8 @@ class Invoicing(models.Model):
                                     invoice.acts.add(act)
                     if patient in acts_pause.keys():
                         dic['acts_paused'] = acts_pause[patient]
-                        len_patient_acts_paused = len_patient_acts_paused + 1
-                        len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                        len_patient_acts_paused += 1
+                        len_acts_paused += len(acts_pause[patient])
                     patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 if commit:
@@ -548,7 +548,7 @@ class Invoicing(models.Model):
                 patients_missing_policy = []
                 invoices = self.invoice_set.all()
                 for invoice in invoices:
-                    len_patient_hors_pause = len_patient_hors_pause + 1
+                    len_patient_hors_pause += 1
                     if invoice.list_dates:
                         len_acts_hors_pause += len(invoice.list_dates.split('$'))
                     patient = None
@@ -592,26 +592,26 @@ class Invoicing(models.Model):
                         acts_to_commit.extend(acts)
                         dic['accepted'] = acts
                         if patient.pause:
-                            len_patient_pause = len_patient_pause + 1
-                            len_acts_pause = len_acts_pause + len(acts)
+                            len_patient_pause += 1
+                            len_acts_pause += len(acts)
                         else:
-                            len_patient_hors_pause = len_patient_hors_pause + 1
-                            len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                            len_patient_hors_pause += 1
+                            len_acts_hors_pause += len(acts)
                     if patient in acts_missing_valid_notification.keys():
                         patients_missing_notif.append(patient)
                         acts = acts_missing_valid_notification[patient]
                         acts_to_commit.extend(acts)
                         dic['missings'] = acts
-                        len_patient_missing_notif = len_patient_missing_notif + 1
-                        len_acts_missing_notif = len_acts_missing_notif + len(acts)
+                        len_patient_missing_notif += 1
+                        len_acts_missing_notif += len(acts)
                         if patient.pause:
                             if not 'accepted' in dic:
-                                len_patient_pause = len_patient_pause + 1
-                            len_acts_pause = len_acts_pause + len(acts)
+                                len_patient_pause += 1
+                            len_acts_pause += len(acts)
                         else:
                             if not 'accepted' in dic:
-                                len_patient_hors_pause = len_patient_hors_pause + 1
-                            len_acts_hors_pause = len_acts_hors_pause + len(acts)
+                                len_patient_hors_pause += 1
+                            len_acts_hors_pause += len(acts)
                     if commit and acts_to_commit:
                         policy_holder = patient.policyholder
                         try:
@@ -656,8 +656,8 @@ class Invoicing(models.Model):
                             invoice.acts.add(act)
                     if patient in acts_pause.keys():
                         dic['acts_paused'] = acts_pause[patient]
-                        len_patient_acts_paused = len_patient_acts_paused + 1
-                        len_acts_paused = len_acts_paused + len(acts_pause[patient])
+                        len_patient_acts_paused += 1
+                        len_acts_paused += len(acts_pause[patient])
                     patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
                 if commit:
@@ -678,7 +678,7 @@ class Invoicing(models.Model):
                 patients_missing_notif = []
                 invoices = self.invoice_set.all()
                 for invoice in invoices:
-                    len_patient_hors_pause = len_patient_hors_pause + 1
+                    len_patient_hors_pause += 1
                     if invoice.list_dates:
                         len_acts_hors_pause += len(invoice.list_dates.split('$'))
                     patient = None
