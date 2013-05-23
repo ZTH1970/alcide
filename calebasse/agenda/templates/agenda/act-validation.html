@@ -45,12 +45,12 @@
       </h3>
       <div>
          <span>
-         {% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }}. {% if acte.is_billed %}<strong>Acte facturé</strong>{% endif %}
+         {% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }}.
          {% else %}
            Non pointé.
          {% endif %}
          </span>
-         {% if not acte.validation_locked %}
+         {% if not acte.validation_locked and not acte.is_billed %}
            <form method="post" class="inline-form">
            {% csrf_token %}
            <input type="hidden" value="{{acte.id}}" name="acte-id">
@@ -66,7 +66,10 @@
            <label> Acte perdu : </label>
            <input class="input_is_lost" data-id="{{acte.id}}" type="checkbox" {% if acte.is_lost %}checked{% endif %}></input>
          {% else %}
-         {% if acte.is_billable %}Facturable{% else %}Non facturable{% endif %}. {% if acte.is_lost %}Acte perdu.{% endif %}
+             {% if acte.is_billed %}<strong>Acte facturé</strong>
+             {% else%}
+                {% if acte.is_billable %}Facturable{% else %}Non facturable{% endif %}. {% if acte.is_lost %}Acte perdu.{% endif %}
+             {% endif %}
          {% endif %}
       </div>
     </div>
