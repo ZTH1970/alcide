@@ -288,6 +288,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
         <li><span{% if hc_status.1 %} id="highlight"{% endif %}>{{ hc_status.0 }}</span></li>
         {% if object.pause %}<li><span id="highlight">Le dossier est en pause facturation.</span></li>{% endif %}
         {% if missing_policy %}<li><span id="highlight">Informations d'assuré sociale manquantes.</span></li>{% endif %}
+        {% if missing_birthdate %}<li><span id="highlight">Date de naissance manquante.</span></li>{% endif %}
         </div>
         <p>
         <button id="new-hcdiag-btn">Nouvelle PC diagnostic</button>

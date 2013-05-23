@@ -321,6 +321,9 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 not self.object.policyholder.health_center or \
                 not self.object.policyholder.social_security_id:
             ctx['missing_policy'] = True
+        ctx['missing_birthdate'] = False
+        if not self.object.birthdate:
+            ctx['missing_birthdate'] = True
 
         ctx['status'] = []
         if ctx['object'].service.name == "CMPP":
