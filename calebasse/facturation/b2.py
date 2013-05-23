@@ -135,7 +135,7 @@ def b2(seq_id, hc, batches):
     file_id = base64.encodestring(hexdigest).upper()[0:6]
 
     utcnow = datetime.datetime.utcnow()
-    prefix = '%s-%s-%s-%s.' % (NUMERO_EMETTEUR, to, first_batch, file_id)
+    prefix = '%s-%s-%s-%s-%s.' % (seq_id, NUMERO_EMETTEUR, to, first_batch, file_id)
     output_file = tempfile.NamedTemporaryFile(suffix='.b2tmp',
             prefix=prefix, dir=OUTPUT_DIRECTORY, delete=False)
     nb_lines = 0
@@ -213,6 +213,6 @@ if __name__ == '__main__':
         print 'pour', hc
         for b in batches[hc]:
             print '  lot', b
-        b2_filename, mail_filename = b2(invoicing.seq_id, hc, batches[hc])
-        print '  B2    :', b2_filename
-        print '  smime :', mail_filename
+            b2_filename, mail_filename = b2(invoicing.seq_id, hc, [b])
+	    print '  B2    :', b2_filename
+            print '  smime :', mail_filename
