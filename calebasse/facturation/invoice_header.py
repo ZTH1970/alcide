@@ -284,10 +284,11 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
         output_file = None
         if settings.INVOICING_DIRECTORY and settings.INVOICING_DIRECTORY != '':
             to_path = os.path.join(settings.INVOICING_DIRECTORY, service.name)
-            if os.path.exists(to_path):
-                to_path = os.path.join(to_path, '%s-facturation-%s-%s.pdf' \
-                    % (service.slug, invoicing.seq_id, now))
-                output_file = open(to_path, 'w')
+            if not os.path.exists(to_path):
+                os.makedirs(to_path)
+            to_path = os.path.join(to_path, '%s-facturation-%s-%s.pdf' \
+                % (service.slug, invoicing.seq_id, now.strftime('%d%m%Y-%H%M')))
+            output_file = open(to_path, 'w')
         if not output_file:
             output_file = tempfile.NamedTemporaryFile(prefix='%s-invoicing-%s-' %
                     (service.slug, invoicing.id), suffix='-%s.pdf' % now, delete=False)
