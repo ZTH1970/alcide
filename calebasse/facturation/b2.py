@@ -9,7 +9,6 @@ import tempfile
 import datetime
 import hashlib
 import base64
-from datetime import datetime
 
 from batches import build_batches
 from transmission_utils import build_mail
@@ -87,15 +86,15 @@ def write_invoice(output_file, invoice):
     invoice_lines += 1
     nb_type3 = 0
     kind = invoice.first_tag[0]
-    prestation = u'SNS' if kind == 'T' else u'SD'
-    for date in invoice.list_dates:
+    prestation = u'SNS  ' if kind == 'T' else u'SD   '
+    for date in invoice.list_dates.split('$'):
         line_3 = '3' + NUMERO_EMETTEUR + ' ' + \
                 invoice.policy_holder_social_security_id + \
                 get_control_key(invoice.policy_holder_social_security_id) + \
                 '000' + ('%0.9d' % invoice.number) + \
                 '19' + '320' + \
-                b2date(datetime.strptime(date, "%d/%m/%Y")) + \
-                b2date(datetime.strptime(date, "%d/%m/%Y")) + \
+                b2date(datetime.datetime.strptime(date, "%d/%m/%Y")) + \
+                b2date(datetime.datetime.strptime(date, "%d/%m/%Y")) + \
                 prestation + '001' + \
                 ' ' + '00100' +  ' ' + '00000' + \
                 ('%0.7d' % invoice.ppa) + \
