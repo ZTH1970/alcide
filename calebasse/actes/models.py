@@ -188,6 +188,8 @@ class Act(models.Model):
             change_state_check=True):
         if not self.id:
             self.save()
+        if self.is_billed:
+            raise Exception('Billed act state can not be modified')
         if not author:
             raise Exception('Missing author to set state')
         if not state_name in VALIDATION_STATES.keys():
