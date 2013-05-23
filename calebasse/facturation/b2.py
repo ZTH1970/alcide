@@ -213,5 +213,5 @@ if __name__ == '__main__':
         for b in batches[hc]:
             print '  lot', b
             b2_filename, mail_filename = b2(invoicing.seq_id, hc, [b])
-	    print '  B2    :', b2_filename
+            print '  B2    :', b2_filename
             print '  smime :', mail_filename
