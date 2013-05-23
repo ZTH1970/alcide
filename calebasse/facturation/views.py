@@ -71,12 +71,14 @@ class FacturationDetailView(UpdateView):
         context = super(FacturationDetailView, self).get_context_data(**kwargs)
         if self.service.name == 'CMPP':
             (len_patients, len_invoices, len_invoices_hors_pause,
-            len_acts_invoiced, len_acts_invoiced_hors_pause,
-            len_patient_invoiced, len_patient_invoiced_hors_pause,
-            len_acts_lost, len_patient_with_lost_acts,
-            patients_stats, days_not_locked, len_patient_acts_paused,
-                len_acts_paused, len_acts_lost_missing_policy,
-                len_patient_with_lost_acts_missing_policy) = \
+                len_acts_invoiced, len_acts_invoiced_hors_pause,
+                len_patient_invoiced, len_patient_invoiced_hors_pause,
+                len_acts_lost, len_patient_with_lost_acts, patients_stats,
+                days_not_locked, len_patient_acts_paused,
+                len_acts_paused, len_acts_losts_missing_policy,
+                len_patient_with_lost_acts_missing_policy,
+                len_acts_losts_missing_birthdate,
+                len_patient_with_lost_acts_missing_birthdate) = \
             context['invoicing'].get_stats_or_validate()
             context['len_patients'] = len_patients
             context['len_invoices'] = len_invoices
@@ -94,8 +96,10 @@ class FacturationDetailView(UpdateView):
             context['days_not_locked'] = days_not_locked
             context['len_patient_acts_paused'] = len_patient_acts_paused
             context['len_acts_paused'] = len_acts_paused
-            context['len_acts_lost_missing_policy'] = len_acts_lost_missing_policy
+            context['len_acts_losts_missing_policy'] = len_acts_losts_missing_policy
             context['len_patient_with_lost_acts_missing_policy'] = len_patient_with_lost_acts_missing_policy
+            context['len_acts_losts_missing_birthdate'] = len_acts_losts_missing_birthdate
+            context['len_patient_with_lost_acts_missing_birthdate'] = len_patient_with_lost_acts_missing_birthdate
             context['some_stats'] = context['invoicing'].get_stats_per_price_per_year()
         elif self.service.name == 'CAMSP':
             (len_patient_pause, len_patient_hors_pause,

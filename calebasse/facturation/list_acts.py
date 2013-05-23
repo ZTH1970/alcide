@@ -295,6 +295,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
     acts_treatment = {}
     acts_losts = {}
     acts_losts_missing_policy = {}
+    acts_losts_missing_birthdate = {}
     patient_ids = [p.id for p in acts_billable]
     # compute latest hcds using one query
     latest_hcd = {}
@@ -314,6 +315,9 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                 not patient.policyholder.health_center or \
                 not patient.policyholder.social_security_id:
             acts_losts_missing_policy[patient] = acts
+            continue
+        if not patient.birthdate:
+            acts_losts_missing_birthdate[patient] = acts
             continue
         # Date de début de la prise en charge ayant servis au dernier acte facturé
         lasts_billed = sorted(filter(lambda a: a.is_billed and a.healthcare is not None, patient.act_set.all()), key=lambda a: a.date, reverse=True)
@@ -369,7 +373,8 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
                 acts_losts.setdefault(patient, []).append(act)
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_diagnostic,
-        acts_treatment, acts_losts, acts_losts_missing_policy)
+        acts_treatment, acts_losts, acts_losts_missing_policy,
+        acts_losts_missing_birthdate)
 
 def list_acts_for_billing_CMPP_2_per_patient(patient, end_day, service, acts=None):
 

@@ -54,14 +54,14 @@
         {% if invoicing.status == "open" or invoicing.status == "closed" %}
         <ul>
             {% if len_acts_invoiced_hors_pause %}
-              <li>Actes facturables hors dossiers en pause ou avec des informations de sécurité sociale manquantes : {{ len_acts_invoiced_hors_pause }}
+              <li>Actes facturables maintenant : {{ len_acts_invoiced_hors_pause }}
                 <ul>
                   <li>Dossiers concernés : {{ len_patient_invoiced_hors_pause }}</li>
                   <li>Nombre de factures : {{ len_invoices_hors_pause }}</li>
                 </ul>
               </li>
             {% else %}
-              <li>Pas d'actes facturables pour des dossiers hors pause.</li>
+              <li>Pas d'actes facturables maintenant.</li>
             {% endif %}
 
             {% if len_acts_invoiced_pause %}
@@ -75,14 +75,24 @@
               <li>Pas d'actes facturables pour des dossiers en pause.</li>
             {% endif %}
 
-            {% if len_acts_lost_missing_policy %}
-              <li>Actes de dossiers avec des informations de sécurité sociale manquantes : {{ len_acts_lost_missing_policy }}
+            {% if len_acts_losts_missing_policy %}
+              <li>Actes de dossiers avec des informations de sécurité sociale manquantes : {{ len_acts_losts_missing_policy }}
                 <ul>
                   <li>Dossiers concernés : {{ len_patient_with_lost_acts_missing_policy }}</li>
                 </ul>
               </li>
             {% else %}
               <li>Pas d'actes pour des dossiers avec des informations de sécurité sociale manquantes.</li>
+            {% endif %}
+
+            {% if len_acts_losts_missing_birthdate %}
+              <li>Actes de dossiers dont le patient n'a pas de date de naissance d'indiquée : {{ len_acts_losts_missing_birthdate }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_with_lost_acts_missing_birthdate }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes pour des dossiers dont le patient n'a pas de date de naissance d'indiquée.</li>
             {% endif %}
 
             {% if len_acts_lost %}
@@ -260,12 +270,11 @@
         <h3>Dossiers concernés</h3>
         {% if invoicing.status == "open" or invoicing.status == "closed" %}
         <p id="filtre-dossiers">
-         <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation ou
-         avec des actes facturables mais non prise en charge.</label></input>
+         <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers avec des actes facturables qui ne peuvent être facturés maintenant.</label></input>
         </p>
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats %}
-            {% if patient.pause or "losts" in detail.keys or "acts_paused" in detail.keys or "losts_missing_policy" in detail.keys %}
+            {% if patient.pause or "losts" in detail.keys or "acts_paused" in detail.keys or "losts_missing_policy" in detail.keys or "losts_missing_birthdate" in detail.keys %}
              <div class="frame dossier facturable">
             {% else %}
             <div class="frame dossier">
@@ -277,6 +286,7 @@
                 {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
                 {% if "losts" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
                 {% if "losts_missing_policy" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des informations de sécurité sociale manquantes.</span></p>{% endif %}
+                {% if "losts_missing_birthdate" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Date de naissance manquante pour le patient.</span></p>{% endif %}
                 {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
                 <ul>
                 {% for key, value in detail.items %}
@@ -305,7 +315,16 @@
                   </li>
                   {% endif %}
                   {% if key == "losts_missing_policy" %}
-                  <li>Actes facturables <button class="blind">détails</button>
+                  <li>Actes facturables mais le dossier présente des informations de sécurité sociale manquantes.<button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "losts_missing_birthdate" %}
+                  <li>Actes facturables mais le patient n'a pas de date de naissance d'indiquée.<button class="blind">détails</button>
                     <ul>
                       {% for act in value %}
                         <li>{{ act.date }} {{ act.act_type }}</li>

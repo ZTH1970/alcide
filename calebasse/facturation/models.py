@@ -273,7 +273,8 @@ class Invoicing(models.Model):
                 (acts_not_locked, days_not_locked, acts_not_valide,
                     acts_not_billable, acts_pause, acts_diagnostic,
                     acts_treatment, acts_losts,
-                    acts_losts_missing_policy) = \
+                    acts_losts_missing_policy,
+                    acts_losts_missing_birthdate) = \
                         self.list_for_billing()
 
                 (invoices, len_invoices, len_invoices_hors_pause,
@@ -287,7 +288,8 @@ class Invoicing(models.Model):
 
                 patients = set(acts_not_locked.keys() + acts_not_valide.keys() + \
                     acts_not_billable.keys() + acts_diagnostic.keys() + acts_treatment.keys() + \
-                    acts_losts.keys() + acts_pause.keys() + acts_losts_missing_policy.keys())
+                    acts_losts.keys() + acts_pause.keys() + acts_losts_missing_policy.keys() + \
+                    acts_losts_missing_birthdate.keys())
 
                 patients_stats = []
                 len_patient_with_lost_acts = 0
@@ -296,6 +298,8 @@ class Invoicing(models.Model):
                 len_acts_paused = 0
                 len_patient_with_lost_acts_missing_policy = 0
                 len_acts_losts_missing_policy = 0
+                len_patient_with_lost_acts_missing_birthdate = 0
+                len_acts_losts_missing_birthdate = 0
                 batches = {}
                 last_batch = {}
                 for patient in patients:
@@ -392,6 +396,10 @@ class Invoicing(models.Model):
                         dic['losts_missing_policy'] = acts_losts_missing_policy[patient]
                         len_patient_with_lost_acts_missing_policy = len_patient_with_lost_acts_missing_policy + 1
                         len_acts_losts_missing_policy = len_acts_losts_missing_policy + len(acts_losts_missing_policy[patient])
+                    if patient in acts_losts_missing_birthdate.keys():
+                        dic['losts_missing_birthdate'] = acts_losts_missing_birthdate[patient]
+                        len_patient_with_lost_acts_missing_birthdate = len_patient_with_lost_acts_missing_birthdate + 1
+                        len_acts_losts_missing_birthdate = len_acts_losts_missing_birthdate + len(acts_losts_missing_birthdate[patient])
                     patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
 
@@ -442,13 +450,17 @@ class Invoicing(models.Model):
                 len_acts_paused = 0
                 len_patient_with_lost_acts_missing_policy = 0
                 len_acts_losts_missing_policy = 0
+                len_patient_with_lost_acts_missing_birthdate = 0
+                len_acts_losts_missing_birthdate = 0
             return (len_patients, len_invoices, len_invoices_hors_pause,
                 len_acts_invoiced, len_acts_invoiced_hors_pause,
                 len_patient_invoiced, len_patient_invoiced_hors_pause,
                 len_acts_lost, len_patient_with_lost_acts, patients_stats,
                 days_not_locked, len_patient_acts_paused,
                 len_acts_paused, len_acts_losts_missing_policy,
-                len_patient_with_lost_acts_missing_policy)
+                len_patient_with_lost_acts_missing_policy,
+                len_acts_losts_missing_birthdate,
+                len_patient_with_lost_acts_missing_birthdate)
         elif self.service.name == 'CAMSP':
             if self.status in Invoicing.STATUS.closed:
                 (acts_not_locked, days_not_locked, acts_not_valide,
