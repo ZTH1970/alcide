@@ -5,16 +5,24 @@
 
 import os
 import sys
+import re
+import glob
 import tempfile
+import time
 import datetime
 import hashlib
 import base64
+from smtplib import SMTP, SMTPException
+
 
 from batches import build_batches
 from transmission_utils import build_mail
 
 OUTPUT_DIRECTORY = '/var/lib/calebasse/B2/'
 
+#
+# B2 informations
+#
 NORME = 'CP  '
 
 TYPE_EMETTEUR = 'TE'
@@ -28,6 +36,17 @@ STATUT = '60'
 MODE_TARIF = '05'
 NOM = 'CMPP SAINT ETIENNE'
 NOM = NOM + ' '*(40-len(NOM))
+
+#
+# mailing
+#
+B2FILES = OUTPUT_DIRECTORY + '*-mail'
+FROM = 'teletransmission@aps42.org'
+SMTP_LOGIN = 'teletransmission'
+SMTP_PASSWORD = os.environ.get('CALEBASSE_B2_SMTP_PASSWD')
+# if there is a CALEBASSE_B2_DEBUG_TO environment variable, send all B2 mails
+# to this address instead of real ones (yy.xxx@xxx.yy.rss.fr)
+DEBUG_TO = os.environ.get('CALEBASSE_B2_DEBUG_TO')
 
 
 def filler(n, car=' '):
@@ -197,10 +216,50 @@ def b2(seq_id, hc, batches):
 
     return b2_filename, mail_filename
 
+
+def sendmail(mail):
+    if DEBUG_TO:
+        toaddr = DEBUG_TO
+        print '(debug mode, sending to', toaddr, ')'
+    else:
+        toaddr = re.search('\nTo: +(.*)\n', mail, re.MULTILINE).group(1)
+    fromaddr = FROM
+
+    smtp = SMTP('mail.aps42.org',587)
+    if DEBUG_TO:
+        smtp.set_debuglevel(1)
+    if SMTP_LOGIN:
+        smtp.login(SMTP_LOGIN, SMTP_PASSWORD)
+    ret = smtp.sendmail(fromaddr, toaddr, mail)
+    smtp.close()
+    return ret
+
+def sendall():
+    if not SMTP_PASSWORD:
+        print 'CALEBASSE_B2_SMTP_PASSWD envvar is missing...'
+        return
+    for mail_filename in glob.glob(B2FILES):
+        print 'sending', mail_filename
+        mail = open(mail_filename).read()
+        try:
+            sendmail(mail)
+        except SMTPException as e:
+            print '        SMTP ERROR:', e
+        else:
+            print '        sent'
+            os.rename(mail_filename, mail_filename + '-sent')
+        time.sleep(10)
+
+
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
     from calebasse.facturation.models import Invoicing
+
+    if len(sys.argv) < 2:
+        print 'just (re)send all mails...'
+        sendall()
+        sys.exit(0)
 
     try:
         invoicing = Invoicing.objects.filter(seq_id=sys.argv[1])[0]
@@ -215,3 +274,5 @@ if __name__ == '__main__':
             b2_filename, mail_filename = b2(invoicing.seq_id, hc, [b])
             print '  B2    :', b2_filename
             print '  smime :', mail_filename
+    sendall()
+
