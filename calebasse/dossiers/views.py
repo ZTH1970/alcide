@@ -819,7 +819,8 @@ class GenerateRtfFormView(cbv.FormView):
             content = File(file(filename))
             response = HttpResponse(content,'text/rtf')
             response['Content-Length'] = content.size
-            response['Content-Disposition'] = 'attachment; filename="%s"' % dest_filename
+            response['Content-Disposition'] = 'attachment; filename="%s"' \
+                % dest_filename.encode('utf-8')
             return response
         else:
             class LocalFileHttpResponseRedirect(HttpResponseRedirect):
