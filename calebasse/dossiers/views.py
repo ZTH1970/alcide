@@ -947,10 +947,12 @@ class GenerateTransportPrescriptionFormView(cbv.FormView):
         log.save()
         response = HttpResponse(content,'application/pdf')
         response['Content-Length'] = content.size
-        response['Content-Disposition'] = \
-            'attachment; filename="%s--prescription-transport-%s-%s.pdf"' \
+        dest_filename = "%s--prescription-transport-%s-%s.pdf" \
             % (datetime.now().strftime('%Y-%m-%d--%H:%M:%S'),
-                patient.last_name.upper(), patient.first_name)
+            patient.last_name.upper().encode('utf-8'),
+            patient.first_name.encode('utf-8'))
+        response['Content-Disposition'] = \
+            'attachment; filename="%s"' % dest_filename
         return response
 
 prescription_transport = GenerateTransportPrescriptionFormView.as_view()
