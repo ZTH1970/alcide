@@ -85,8 +85,8 @@ def automated_validation(date, service, user, commit=True):
     if service.name == 'CMPP':
         # Verification des actes en doubles
         acts = [act for act in acts_of_the_day \
-            if not act.is_lost and act.get_state().state_name in ('VALIDE', 'NON_VALIDE',
-                'ACT_DOUBLE')]
+            if not act.is_lost and (act.is_state('VALIDE') or
+                act.is_state('NON_VALIDE') or act.is_state('ACT_DOUBLE'))]
         for act in acts:
             if act.patient not in patients:
                 patients[act.patient] = []
