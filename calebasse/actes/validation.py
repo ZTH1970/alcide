@@ -79,6 +79,8 @@ def automated_validation(date, service, user, commit=True):
             nb_acts_enf_hosp = nb_acts_enf_hosp + 1
         if act.is_state('ACT_LOST') or act.is_lost:
             nb_acts_losts = nb_acts_losts + 1
+        if not act.get_state():
+            act.set_state('VALIDE', author=user, auto=True)
 
     nb_acts_total = len(acts_of_the_day)
     patients = {}
