@@ -775,7 +775,17 @@ class GenerateRtfFormView(cbv.FormView):
             'AD16': '', 'AD17': '', 'AD19': '',
             'AD21': '', 'AD22': '', 'AD23': '', 'AD24': '', 'AD25': '',
             'AD26': '', 'AD27': '', 'AD28': '', 'AD29': '',
+            'RDV2': '' ,
         }
+        list_rdvs = []
+        for act in Act.objects.last_acts(patient):
+            state = act.get_state()
+            if state and state.state_name in ('VALIDE', 'ACT_DOUBLE'):
+                rdv = "\t- %s" % formats.date_format(act.date, "DATE_FORMAT")
+                if act.time:
+                    rdv += " à %s" % formats.date_format(act.time, "TIME_FORMAT")
+                list_rdvs.append(rdv)
+        variables['RDV2'] = '\par'.join(list_rdvs)
         if appointment:
             variables['RDV1'] = appointment.date
             variables['HEU1'] = appointment.begin_hour
