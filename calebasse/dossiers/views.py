@@ -268,6 +268,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
+        ctx['object'].create_diag_healthcare(self.request.user)
+        ctx['object'].automated_switch_state(self.request.user)
         ctx['initial_state'] = ctx['object'].get_initial_state()
         current_state = ctx['object'].get_current_state()
         if STATES_MAPPING.has_key(current_state.status.type):
