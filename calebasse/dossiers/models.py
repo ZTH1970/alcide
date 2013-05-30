@@ -80,6 +80,8 @@ class CmppHealthCareDiagnostic(HealthCare):
         app_label = 'dossiers'
 
     act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_DIAGNOSTIC, verbose_name=u"Nombre d'actes couverts")
+    end_date = models.DateField(verbose_name=u"Date de fin",
+        blank=True, null=True)
 
     def get_act_number(self):
         return self.act_number
@@ -692,41 +694,61 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         return False
 
     def automated_switch_state(self, modifier):
-        # Quel est le dernier acte facturable.
-        acts = self.act_set.order_by('-date')
-        # Si cet acte peut-être pris en charge en diagnostic c'est un acte de
-        # diagnostic, sinon c'est un acte de traitement.
-        last_state_services = self.last_state.status.\
-                services.values_list('name', flat=True)
-        cmpp = Service.objects.get(name='CMPP')
-        for act in acts:
-            if act.is_state('VALIDE') and act.is_billable() and \
-                    act.date >= self.get_state().date_selected.date() and \
-                    are_all_acts_of_the_day_locked(act.date):
-                cared, hc = act.is_act_covered_by_diagnostic_healthcare()
-                if hc:
-                    if (self.last_state.status.type == "ACCUEIL" \
-                            or self.last_state.status.type == "TRAITEMENT") \
-                            and "CMPP" in last_state_services:
-                        status = Status.objects.filter(type="DIAGNOSTIC").\
-                                filter(services__name='CMPP')[0]
-                        try:
-                            self.set_state(status, modifier,
-                                date_selected=act.date)
-                        except:
-                            pass
-                # Sinon, si le dossier est en diag, s'il ne peut être couvert
-                # en diag, il est en traitement.
-                elif self.last_state.status.type == "DIAGNOSTIC" and \
-                        "CMPP" in last_state_services:
-                    status = Status.objects.filter(type="TRAITEMENT").\
-                            filter(services__name='CMPP')[0]
-                    try:
-                        self.set_state(status, modifier,
-                                date_selected=act.date)
-                    except:
-                        pass
-                break
+        def state_switcher(diag, act):
+            if diag and (self.last_state.status.type == "ACCUEIL" or
+                    self.last_state.status.type == "TRAITEMENT"):
+                status = Status.objects.get(type="DIAGNOSTIC",
+                    services__name='CMPP')
+                try:
+                    self.set_state(status, modifier, date_selected=act.date)
+                except:
+                    pass
+            elif not diag and (self.last_state.status.type == "ACCUEIL" or
+                    self.last_state.status.type == "DIAGNOSTIC"):
+                status = Status.objects.get(type="TRAITEMENT",
+                    services__name='CMPP')
+                try:
+                    self.set_state(status, modifier, date_selected=act.date)
+                except:
+                    pass
+        # Only for CMPP and open files
+        if not self.service.name == 'CMPP' or \
+                self.last_state.status.type == "CLOS":
+            return
+        # Nothing to do if no act after the last state date
+        last_acts = self.act_set.filter(date__gt=self.last_state.date_selected)
+        if not last_acts:
+            return
+        # If the last act is billed, look at the healthcare type
+        last_act = last_acts.latest('date')
+        if last_act.is_billed:
+            if not last_act.healthcare:
+                # Billed but no healthcare, coming from imported billed acts
+                return
+            diag = False
+            if hasattr(last_act.healthcare, 'cmpphealthcarediagnostic'):
+                diag = True
+            return state_switcher(diag, last_act)
+        # Last act not billed, let's look if it is billable
+        from calebasse.facturation import list_acts
+        (acts_not_locked, days_not_locked, acts_not_valide,
+        acts_not_billable, acts_pause, acts_per_hc, acts_losts) = \
+            list_acts.list_acts_for_billing_CMPP_per_patient(self,
+                datetime.today(), self.service)
+        last_hc = None
+        last_act_hc = None
+        for hc, acts in acts_per_hc.iteritems():
+            if len(acts) and (not last_act_hc or
+                    acts[-1].date > last_act_hc.date):
+                last_hc = hc
+                last_act_hc = acts[-1]
+        # There is an act after the last state so either it is diag
+        # or it is treament
+        diag = False
+        if last_act_hc and last_hc and last_act_hc.id == last_act.id and \
+                hasattr(last_hc, 'cmpphealthcarediagnostic'):
+            diag = True
+        return state_switcher(diag, last_act)
 
     def get_healthcare_status(self):
         today = date.today()
