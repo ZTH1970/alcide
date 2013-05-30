@@ -206,63 +206,6 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
         patients_missing_policy)
 
 
-def list_acts_for_billing_CMPP(end_day, service, acts=None):
-    """Used to sort acts billable by specific service requirements.
-
-    For the CMPP, acts are billable if
-
-    acts = acts_not_locked + \
-        acts_not_valide + \
-            acts_not_billable + \
-                acts_diagnostic + \
-                    acts_treatment + \
-                        acts_losts
-
-    :param end_day: formatted date that gives the last day when acts are taken
-        in account.
-    :type end_day: datetime
-    :param service: service in which acts are dealt with.
-    :type service: calebasse.ressources.Service
-
-    :returns: a list of dictionnaries where patients are the keys and values
-        are lists of acts. The second element of this list in not a dict but
-        a list of the days where are all days are not locked.
-    :rtype: list
-    """
-
-    acts_not_locked, days_not_locked, acts_not_valide, \
-        acts_not_billable, acts_pause, acts_billable = \
-            list_acts_for_billing_first_round(end_day, service, acts=acts)
-    acts_diagnostic = {}
-    acts_treatment = {}
-    acts_losts = {}
-    for patient, acts in acts_billable.items():
-        for act in acts:
-            cared, hc = act.is_act_covered_by_diagnostic_healthcare()
-            if cared:
-                if act.patient in acts_diagnostic:
-                    acts_diagnostic[act.patient]. \
-                        append((act, hc))
-                else:
-                    acts_diagnostic[act.patient] = [(act, hc)]
-            else:
-                cared, hc = act.is_act_covered_by_treatment_healthcare()
-                if cared:
-                    if act.patient in acts_treatment:
-                        acts_treatment[act.patient]. \
-                            append((act, hc))
-                    else:
-                        acts_treatment[act.patient] = [(act, hc)]
-                else:
-                    if act.patient in acts_losts:
-                        acts_losts[act.patient]. \
-                            append(act)
-                    else:
-                        acts_losts[act.patient] = [act]
-    return (acts_not_locked, days_not_locked, acts_not_valide,
-        acts_not_billable, acts_pause, acts_diagnostic,
-        acts_treatment, acts_losts)
-
 def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
     """Used to sort acts billable by specific service requirements.
 
