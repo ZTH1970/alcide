@@ -20,7 +20,7 @@ from calebasse.personnes.models import Worker
 
 from list_acts import (list_acts_for_billing_CAMSP,
     list_acts_for_billing_SESSAD, list_acts_for_billing_CMPP,
-    list_acts_for_billing_CMPP_2)
+    list_acts_for_billing_CMPP)
 
 from models import PricePerAct, Invoicing
 
@@ -254,7 +254,7 @@ class FacturationTest(TestCase):
         hct.save()
         hct.add_prolongation()
 
-        billing_cmpp = list_acts_for_billing_CMPP_2(datetime(2020, 11, 30), service_cmpp)
+        billing_cmpp = list_acts_for_billing_CMPP(datetime(2020, 11, 30), service_cmpp)
 
         self.assertEqual(len(billing_cmpp[5][patient_a]), 6)
         self.assertEqual(len(billing_cmpp[6][patient_a]), 40)

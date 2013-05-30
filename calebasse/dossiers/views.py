@@ -30,7 +30,7 @@ from calebasse.dossiers.models import (PatientRecord, PatientContact,
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
-from calebasse.facturation.list_acts import list_acts_for_billing_CMPP_2_per_patient
+from calebasse.facturation.list_acts import list_acts_for_billing_CMPP_per_patient
 
 from calebasse.decorators import validator_only
 
@@ -387,7 +387,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                         STATES_BTN_MAPPER['ACCUEIL']]
             (acts_not_locked, days_not_locked, acts_not_valide,
             acts_not_billable, acts_pause, acts_per_hc, acts_losts) = \
-                list_acts_for_billing_CMPP_2_per_patient(self.object,
+                list_acts_for_billing_CMPP_per_patient(self.object,
                     datetime.today(), self.service)
             ctx['acts_losts'] = acts_losts
             ctx['acts_pause'] = acts_pause

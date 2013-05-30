@@ -206,7 +206,7 @@ def list_acts_for_billing_SESSAD(start_day, end_day, service, acts=None):
         patients_missing_policy)
 
 
-def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
+def list_acts_for_billing_CMPP(end_day, service, acts=None):
     """Used to sort acts billable by specific service requirements.
 
     For the CMPP, acts are billable if
@@ -319,7 +319,7 @@ def list_acts_for_billing_CMPP_2(end_day, service, acts=None):
         acts_treatment, acts_losts, acts_losts_missing_policy,
         acts_losts_missing_birthdate)
 
-def list_acts_for_billing_CMPP_2_per_patient(patient, end_day, service, acts=None):
+def list_acts_for_billing_CMPP_per_patient(patient, end_day, service, acts=None):
 
     acts_not_locked, days_not_locked, acts_not_valide, \
         acts_not_billable, acts_pause, acts_billable = \

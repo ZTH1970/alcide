@@ -210,7 +210,7 @@ class Invoicing(models.Model):
             if not end_date:
                 today = date.today()
                 end_date = date(day=today.day, month=today.month, year=today.year)
-            return list_acts.list_acts_for_billing_CMPP_2(end_date,
+            return list_acts.list_acts_for_billing_CMPP(end_date,
                     service=self.service)
         elif self.service.name == 'CAMSP':
             return list_acts.list_acts_for_billing_CAMSP(self.start_date,
