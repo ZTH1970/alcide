@@ -357,16 +357,16 @@
                 <ul>
                 {% for key, value in detail.items %}
                   {% if key == "invoices" %}
-                  <li>Actes facturés <button class="blind">détails</button>
+                  <li>Actes facturés
                     <ul>
                         {% for invoice in value %}
-                        <li>{% if invoice.rejected %}Facture {{ invoice.number }} <strong>rejetée</strong>
+                        <li>{% if invoice.rejected %}Facture {{ invoice.number }} <strong>rejetée</strong> <button class="blind">détails</button>
                           <ul>
                           {% for act in invoice.acts.all %}
                             <li>{{ act.date }} {{ act.act_type }} </li>
                           {% endfor %}
                           </ul>
-                          {% else %}Facture {{ invoice.number }} <button data-id="{{ invoice.id }}" class="rebill-btn">Rejeter cette facture</button>
+                          {% else %}Facture {{ invoice.number }} <button data-id="{{ invoice.id }}" class="rebill-btn">Rejeter cette facture</button> <button class="blind">détails</button>
                           <ul>
                           {% for act in invoice.acts.all %}
                             <li>{{ act.get_hc_tag }} : {{ act.date }} {{ act.act_type }} </li>
