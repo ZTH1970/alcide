@@ -304,7 +304,8 @@ def list_acts_for_billing_CMPP(end_day, service, acts=None):
                     acts_treatment.setdefault(patient, []).append((act, hcts[1]))
                     count_hct_1 = count_hct_1 + 1
                     cared = True
-            if not cared and hcd and hcd.start_date <= act.date:
+            if not cared and hcd and hcd.start_date <= act.date and \
+                    (not hcd.end_date or hcd.end_date >= act.date):
                 # Ce qui seraient prise en charge
                 nb_acts_cared = len_acts_cared_diag + count_hcd
                 # Ne doit pas dépasser la limite de prise en charge du hc
@@ -386,7 +387,8 @@ def list_acts_for_billing_CMPP_per_patient(patient, end_day, service, acts=None)
                     acts_per_hc[hcts[1]].append(act)
                     count_hct_1 = count_hct_1 + 1
                     cared = True
-            if not cared and hcd and hcd.start_date <= act.date:
+            if not cared and hcd and hcd.start_date <= act.date and \
+                    (not hcd.end_date or hcd.end_date >= act.date):
                 # Ce qui seraient prise en charge
                 nb_acts_cared = len_acts_cared_diag + count_hcd
                 # Ne doit pas dépasser la limite de prise en charge du hc
