@@ -284,7 +284,7 @@ class CmppHealthCareDiagnosticForm(ModelForm):
     class Meta:
         model = CmppHealthCareDiagnostic
         fields = ('start_date', 'request_date',
-                'agree_date', 'insist_date', 'act_number',
+                'agree_date', 'insist_date', 'end_date', 'act_number',
                 'comment', 'patient', 'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),

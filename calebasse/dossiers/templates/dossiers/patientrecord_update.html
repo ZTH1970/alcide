@@ -319,8 +319,9 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         <button type="button" data-id="{{ hc.id }}" class="del-hcdiag icon-minus" title="Supprimer"></button>
                         <button type="button" data-id="{{ hc.id }}" class="update-hcdiag-btn icon-edit" title="Modifier"></button>
                     </div>
-                      <h3>Prise en charge de diagnostic, débutée le {{ hc.start_date|date:"d/m/Y" }}</h3>
+                      <h3>Prise en charge de diagnostic, débutée le {{ hc.start_date|date:"d/m/Y" }}{% if hc.cmpphealthcarediagnostic.end_date %}, se terminant le {{ hc.cmpphealthcarediagnostic.end_date|date:"d/m/Y" }}{% endif %}</h3>
                       <ul>
+                        {% if hc.cmpphealthcarediagnostic.end_date %}<li><label>Date de fin</label> : {{ hc.cmpphealthcarediagnostic.end_date|date:"d/m/Y" }}</li>{% endif %}
                         {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
                         {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date|date:"d/m/Y" }}</li>{% endif %}
                         {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date|date:"d/m/Y" }}</li>{% endif %}
