@@ -742,13 +742,14 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     acts[-1].date > last_act_hc.date):
                 last_hc = hc
                 last_act_hc = acts[-1]
-        # There is an act after the last state so either it is diag
+        # There is a billable act after the last state so either it is diag
         # or it is treament
-        diag = False
-        if last_act_hc and last_hc and last_act_hc.id == last_act.id and \
-                hasattr(last_hc, 'cmpphealthcarediagnostic'):
-            diag = True
-        return state_switcher(diag, last_act)
+        if last_act_hc and last_hc and \
+                last_act_hc.date > self.last_state.date_selected:
+            if hasattr(last_hc, 'cmpphealthcarediagnostic'):
+                state_switcher(True, last_act_hc)
+            else:
+                state_switcher(False, last_act_hc)
 
     def get_healthcare_status(self):
         today = date.today()
