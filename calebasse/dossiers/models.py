@@ -745,7 +745,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         # There is a billable act after the last state so either it is diag
         # or it is treament
         if last_act_hc and last_hc and \
-                last_act_hc.date > self.last_state.date_selected:
+                last_act_hc.date > self.last_state.date_selected.date():
             if hasattr(last_hc, 'cmpphealthcarediagnostic'):
                 state_switcher(True, last_act_hc)
             else:
