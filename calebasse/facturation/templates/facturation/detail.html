@@ -140,6 +140,16 @@
                   </tbody>
                 </table>
               </li>
+              <li>Détail des lots :
+                <table class="main">
+                  <thead><tr><th>Centre</th><th>Numéro de lot</th><th>Nombre de factures</th><th>Nombre d'actes</th><th>Montant facturé</th><th>Montant des rejets</th><th>Somme perçue</th></tr></thead>
+                  <tbody>
+                  {% for hc, batch, amount_rejected, versement in batches %}
+                  <tr><td>{{ hc.name }}</td><td>{{ batch.number }}</td><td>{{ batch.number_of_invoices }}</td><td>{{ batch.number_of_acts }}</td><td>{{ batch.total }}</td><td>{{ amount_rejected }}</td><td>{{ versement }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </li>
             {% else %}
               <li>Pas d'actes facturés pour cette facturation.</li>
             {% endif %}

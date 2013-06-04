@@ -16,6 +16,8 @@ from calebasse.ressources.models import ServiceLinkedManager, PricePerAct
 import list_acts
 import progor
 
+from batches import build_batches
+
 def social_security_id_full(nir):
     old = nir
     try:
@@ -220,6 +222,17 @@ class Invoicing(models.Model):
                     self.end_date, service=self.service)
         else:
             raise RuntimeError('Unknown service', self.service)
+
+    def get_batches(self):
+        batches = list()
+        for hc, bs in build_batches(self).iteritems():
+            for batch in bs:
+                amount_rejected = sum([invoice.decimal_amount
+                    for invoice in batch.invoices
+                    if invoice.rejected])
+                versement = batch.total - amount_rejected
+                batches.append((hc, batch, amount_rejected, versement))
+        return batches
 
     def get_stats_per_price_per_year(self):
         stats_final = dict()
