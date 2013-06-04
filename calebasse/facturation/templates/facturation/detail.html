@@ -280,7 +280,7 @@
             <div class="frame dossier">
             {% endif %}
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
@@ -351,7 +351,7 @@
         {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
                 <h3>{% if patient.pk %}<a href="../../dossiers/{{ patient.pk }}/view" target="_blank">{% endif %}
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}{% if patient.pk %}({{ patient.pk }}) {% endif %}{{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span>{% if patient.pk %}</a>{% endif %}</h3>
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}{% if patient.pk %}({{ patient.pk }}) {% endif %}<span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}{% if patient.pk %}</a>{% endif %}</h3>
                 <div class="info">
                 </div>
                 <ul>
@@ -401,7 +401,7 @@
             <div class="frame dossier">
             {% endif %}
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
@@ -437,7 +437,7 @@
         {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 <ul>
@@ -475,7 +475,7 @@
             <div class="frame dossier">
             {% endif %}
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
@@ -521,7 +521,7 @@
         {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) {{ patient.first_name }} <span class="lastname">{{ patient.last_name }}</span></a></h3>
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 <ul>
