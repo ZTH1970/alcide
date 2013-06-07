@@ -1,3 +1,4 @@
+import ipdb
 # -*- coding: utf-8 -*-
 
 import datetime
@@ -10,6 +11,7 @@ from django.shortcuts import redirect
 from calebasse.cbv import ListView, UpdateView, FormView, DeleteView
 from calebasse.agenda.views import NewAppointmentView
 
+import copy
 import models
 import forms
 
@@ -104,6 +106,15 @@ class UpdateActView(UpdateView):
     form_class = forms.ActUpdate
     template_name = 'actes/act_update.html'
     success_url = '..'
+
+    def form_valid(self, form):
+        result = super(UpdateView, self).form_valid(form)
+        if self.object.event:
+            doctors = copy.copy(self.object.doctors.all())
+            self.object.event.participants =  doctors
+            self.object.event.act_type =  act_type
+            self.object.save()
+        return result
 
 update_act = UpdateActView.as_view()
 
