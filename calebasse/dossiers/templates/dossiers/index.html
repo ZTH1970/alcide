@@ -10,12 +10,8 @@
     {{ name }}: <span class="num">{{ nb }}</span> {% if not forloop.last %} - {% endif %}
       {% endfor %}
     </span>
-        <br>
-        <br>&nbsp;
-    <div id="extra-top-links">
-     <a href="quotations">Listing avec quotations</a>
-    </div>
-    </span>
+    <br>
+    <br>&nbsp;
 {% endblock %}
 
 {% block content %}
@@ -52,6 +48,10 @@
 <!--      <li><button>Éligibles pour un rediagnostic</button></li>-->
 <!--    </ul>-->
     </form>
+  </div>
+    <br>
+  <div>
+    <a href="quotations">Page des quotations</a>
   </div>
 </div>
 <div class="content">
