@@ -129,7 +129,7 @@
                 </ul>
               </li>
               <li>Détail par année et par tarif des actes :
-                <table class="main">
+                <table class="basic">
                   <thead><tr><th>Tarif</th><th>Année</th><th>Actes</th><th>Montant</th></tr></thead>
                   <tbody>
                   {% for year, x in some_stats.detail.items %}
@@ -141,7 +141,7 @@
                 </table>
               </li>
               <li>Détail des lots :
-                <table class="main">
+                <table class="basic">
                   <thead><tr><th>Centre</th><th>Numéro de lot</th><th>Nombre de factures</th><th>Nombre d'actes</th><th>Montant facturé</th><th>Montant des rejets</th><th>Somme perçue</th></tr></thead>
                   <tbody>
                   {% for hc, batch, amount_rejected, versement in batches %}
