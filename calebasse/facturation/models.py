@@ -413,7 +413,8 @@ class Invoicing(models.Model):
                         dic['losts_missing_birthdate'] = acts_losts_missing_birthdate[patient]
                         len_patient_with_lost_acts_missing_birthdate += 1
                         len_acts_losts_missing_birthdate += len(acts_losts_missing_birthdate[patient])
-                    patients_stats.append((patient, dic))
+                    if dic:
+                        patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
 
                 len_patients = len(patients_stats)
