@@ -14,7 +14,7 @@
 {% block title %}{{ object.last_name }} {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% endblock %}
 
 {% block appbar %}
-<h2><strong><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}</strong></h2>
+<h2><strong>{% if current_state.status.type == 'CLOS' %}<span id="highlight">{% endif %}<span class="lastname">{{ object.last_name }}</span> {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% if current_state.status.type == 'CLOS' %} clos</span>{% endif %}</strong></h2>
 <span id="ajax-redirect" data-url="{{ object.id }}/view"/>
 <a href="..">Retourner aux dossiers</a>
 {% if 'validator' in role %}{% if object.can_be_deleted %}<button type="button" id="patientrecord-delete">Supprimer</button>{% endif %}{% endif %}
