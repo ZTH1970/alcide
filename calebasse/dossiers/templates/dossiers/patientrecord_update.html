@@ -11,10 +11,10 @@
 <script src="{{ STATIC_URL }}filter-widget/js/SelectFilter2.js"></script>
 {% endblock %}
 
-{% block title %}{{ object.last_name }} {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}{% endblock %}
+{% block title %}{{ object.last_name }} {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% endblock %}
 
 {% block appbar %}
-<h2><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }} - Dossier {{ object.paper_id|default_if_none:"" }}</h2>
+<h2><span class="lastname">{{ object.last_name }}</span> {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}</h2>
 <span id="ajax-redirect" data-url="{{ object.id }}/view"/>
 <a href="..">Retourner aux dossiers</a>
 {% if 'validator' in role %}{% if object.can_be_deleted %}<button type="button" id="patientrecord-delete">Supprimer</button>{% endif %}{% endif %}
