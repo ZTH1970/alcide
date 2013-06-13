@@ -5,13 +5,6 @@
 {{ form.start_datetime.errors }}
    <table id="new-appointment-table">
        <tr>
-           <td {% if form.date.field.required %}class="required"{% endif %}>
-           <p class="datepicker">
-           {{ form.date.label_tag }}
-           {{ form.date|add_class:"datepicker-date" }}
-           {{ form.date.errors }}
-           </p>
-           </td>
            <td {% if form.time.field.required %}class="required"{% endif %}>
             <p>
            {{ form.time.label_tag }}
@@ -27,6 +20,13 @@
            <div>
            {{ form.duration.help_text }}
            </div>
+           </p>
+           </td>
+           <td {% if form.date.field.required %}class="required"{% endif %}>
+           <p class="datepicker">
+           {{ form.date.label_tag }}
+           {{ form.date|add_class:"datepicker-date" }}
+           {{ form.date.errors }}
            </p>
            </td>
        </tr>
