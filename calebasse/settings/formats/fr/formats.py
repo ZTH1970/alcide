@@ -1,4 +1,5 @@
 DATE_FORMAT = 'l d F Y'
+DATE_FORMAT_W = 'l d F Y (W)'
 SHORT_DATE_FORMAT = 'j/n/Y'
 TIME_FORMAT = 'H:i'
 DATE_INPUT_FORMATS = ('%d/%m/%Y', '%d/%m/%Y', '%Y-%m-d')
