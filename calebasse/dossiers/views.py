@@ -328,6 +328,9 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             ctx['missing_birthdate'] = True
 
         ctx['status'] = []
+        close_btn = STATES_BTN_MAPPER['CLOS']
+        if 'next_rdv' in ctx:
+            close_btn = STATES_BTN_MAPPER['CLOS_RDV']
         if ctx['object'].service.name == "CMPP":
             ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
             status = self.object.get_healthcare_status()
@@ -374,13 +377,13 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             elif ctx['object'].last_state.status.type == "DIAGNOSTIC":
                 # Passage automatique en traitement
                 ctx['status'] = [STATES_BTN_MAPPER['TRAITEMENT'],
-                        STATES_BTN_MAPPER['CLOS'],
+                        close_btn,
                         STATES_BTN_MAPPER['ACCUEIL']]
             elif ctx['object'].last_state.status.type == "TRAITEMENT":
                 # Passage automatique en diagnostic si on ajoute une prise en charge diagnostic,
                 # ce qui est faisable dans l'onglet prise en charge par un bouton visible sous conditions
                 ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
-                        STATES_BTN_MAPPER['CLOS'],
+                        close_btn,
                         STATES_BTN_MAPPER['ACCUEIL']]
             elif ctx['object'].last_state.status.type == "CLOS":
                 # Passage automatique en diagnostic ou traitement
@@ -414,19 +417,19 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                         STATES_BTN_MAPPER['BILAN'],
                         STATES_BTN_MAPPER['SURVEILLANCE'],
                         STATES_BTN_MAPPER['SUIVI'],
-                        STATES_BTN_MAPPER['CLOS']]
+                        close_btn]
             elif ctx['object'].last_state.status.type == "BILAN":
                 ctx['status'] = [STATES_BTN_MAPPER['SURVEILLANCE'],
                         STATES_BTN_MAPPER['SUIVI'],
-                        STATES_BTN_MAPPER['CLOS'],
+                        close_btn,
                         STATES_BTN_MAPPER['ACCUEIL']]
             elif ctx['object'].last_state.status.type == "SURVEILLANCE":
                 ctx['status'] = [STATES_BTN_MAPPER['SUIVI'],
-                        STATES_BTN_MAPPER['CLOS'],
+                        close_btn,
                         STATES_BTN_MAPPER['ACCUEIL'],
                         STATES_BTN_MAPPER['BILAN']]
             elif ctx['object'].last_state.status.type == "SUIVI":
-                ctx['status'] = [STATES_BTN_MAPPER['CLOS'],
+                ctx['status'] = [close_btn,
                         STATES_BTN_MAPPER['ACCUEIL'],
                         STATES_BTN_MAPPER['BILAN'],
                         STATES_BTN_MAPPER['SURVEILLANCE']]
@@ -442,9 +445,9 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
                 ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
                         STATES_BTN_MAPPER['TRAITEMENT'],
-                        STATES_BTN_MAPPER['CLOS']]
+                        close_btn]
             elif ctx['object'].last_state.status.type == "TRAITEMENT":
-                ctx['status'] = [STATES_BTN_MAPPER['CLOS'],
+                ctx['status'] = [close_btn,
                         STATES_BTN_MAPPER['ACCUEIL']]
             elif ctx['object'].last_state.status.type == "CLOS":
                 ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],

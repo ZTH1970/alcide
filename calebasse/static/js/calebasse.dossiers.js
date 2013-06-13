@@ -26,6 +26,11 @@ function state_dialog(url, state_title, state_type) {
                         window.location.reload(true);
                     }
                 }
+                if (state_type == 'CLOS_RDV') {
+                  var message = $('p.message')
+                  message.append($('<span id="highlight">Attention ce patient a encore des rendez-vous de planifiés !</span>'));
+                  state_type = 'CLOS';
+                }
                 $('input.date', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
                 $('form', this).ajaxForm({
                     success: onsuccess,
@@ -77,6 +82,9 @@ function state_dialog(url, state_title, state_type) {
 
     $('#close-patientrecord').click(function() {
         state_dialog('update-state', 'Clore', 'CLOS');
+    });
+    $('#close-rdv-patientrecord').click(function() {
+        state_dialog('update-state', 'Clore', 'CLOS_RDV');
     });
     $('#reopen-patientrecord').click(function() {
         state_dialog('update-state', 'Réaccueil', 'ACCUEIL');

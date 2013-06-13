@@ -2,6 +2,7 @@
 
 <form action="{{ request.get_full_path }}" method="post">
   {% csrf_token %}
+   <p class="message"/>
    <p>
    <label for="id_date">Date :</label>
    {{ form.date.errors }}

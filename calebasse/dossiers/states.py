@@ -37,6 +37,7 @@ STATES_BTN_MAPPER = {
         'DIAGNOSTIC': ('diagnostic-patientrecord', 'En diagnostic'),
         'TRAITEMENT': ('traitement-patientrecord', 'En traitement'),
         'CLOS': ('close-patientrecord', 'Clore'),
+        'CLOS_RDV': ('close-rdv-patientrecord', 'Clore'),
         'BILAN': ('bilan-patientrecord', 'En bilan'),
         'SURVEILLANCE': ('surveillance-patientrecord', 'En surveillance'),
         'SUIVI': ('suivi-patientrecord', 'En suivi'),
@@ -91,4 +92,3 @@ STATES_BTN_MAPPER = {
 
 #STATES_MAPPING = dict(CMPP_STATES, **CAMSP_STATES)
 #STATES_MAPPING = dict(STATES_MAPPING, **SESSAD_STATES)
-
