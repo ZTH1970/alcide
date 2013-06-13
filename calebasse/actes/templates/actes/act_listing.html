@@ -131,14 +131,14 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             <span class="lastname">{{ act.patient.last_name }}</span>
         </td>
         <td>{{ act.get_state }}</td>
-        <td>({{ act.act_type.id }}) {{ act.act_type }}</td>
+        <td>{{ act.act_type }}</td>
         <td>{% if act.is_billed %}{% if act.invoice_set.all %}{{ act.invoice_set.all.0.number }}{% else %}Ancienne facturation{% endif %}{% endif %}</td>
         <td>{{ act.is_billable|yesno:"Oui,Non," }}{% if act.switch_billable %} (I){% endif %}</td>
         <td>{{ act.is_lost|yesno:"Oui,Non," }}</td>
         <td>{{ act.pause|yesno:"Oui,Non," }}</td>
         <td>
             {% for doctor in act.doctors.all %}
-            ({{ doctor.id }}) {{ doctor }}
+            {{ doctor }}
             {% if not forloop.last %}
             <br/>
             {% endif %}
