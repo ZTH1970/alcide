@@ -116,7 +116,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                             {% endif %}
                             {% if object.birthdate %}
                                 <li><label>Date de naissance :</label>
-                                {{ object.birthdate }}</li>
+                                {{ object.birthdate|date:"SHORT_DATE_FORMAT" }}</li>
                             {% endif %}
                             {% if object.birthplace %}
                                 <li><label>Lieu de naissance :</label>
@@ -234,7 +234,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                             {% endif %}
                             {% if contact.birthdate %}
                                 <li><label>Date de naissance :</label>
-                                {{ contact.birthdate }}</li>
+                                {{ contact.birthdate|date:"SHORT_DATE_FORMAT" }}</li>
                             {% endif %}
                             {% if contact.birthplace %}
                                 <li><label>Lieu de naissance :</label>
