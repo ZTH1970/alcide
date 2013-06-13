@@ -63,10 +63,31 @@ function rebill_dialog(url, invoice_id) {
     $('#hide-dossiers-cb').change(function() {
       var val = $(this).is(':checked');
       if ($(this).is(':checked')) {
-        $('#dossiers-concernes div.dossier:not(.facturable)').hide('fold');
+        $('#dossiers-concernes div.dossier:not(.not_facturable)').hide('fold');
       } else {
         $('#dossiers-concernes div.dossier').show('fold');
       }
+    });
+    $("input[name='dossiers_filter']").change(function() {
+        val = $("input[name='dossiers_filter']:checked").val()
+        if (val == 'pause') {
+            $('#dossiers-concernes div.dossier').show();
+            $('#dossiers-concernes div.dossier:not(.pause)').hide();
+        } else if (val == 'losts') {
+            $('#dossiers-concernes div.dossier').show();
+            $('#dossiers-concernes div.dossier:not(.losts)').hide();
+        } else if (val == 'acts_paused') {
+            $('#dossiers-concernes div.dossier').show();
+            $('#dossiers-concernes div.dossier:not(.acts_paused)').hide();
+        } else if (val == 'missing_policy') {
+            $('#dossiers-concernes div.dossier').show();
+            $('#dossiers-concernes div.dossier:not(.missing_policy)').hide();
+        } else if (val == 'missing_birthdate') {
+            $('#dossiers-concernes div.dossier').show();
+            $('#dossiers-concernes div.dossier:not(.missing_birthdate)').hide();
+        } else {
+            $('#dossiers-concernes div.dossier').show();
+        }
     });
     $('#close-invoicing').click(function() {
         close_dialog('clore');

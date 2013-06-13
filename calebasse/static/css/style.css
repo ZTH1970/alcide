@@ -928,12 +928,12 @@ button.blind {
 
 span.hi-fact { color: red; }
 
-div.dossier.facturable h3 {
+div.dossier.not_facturable h3 {
   background: #ccc url(ui-bg-red.png) 50% 50% repeat-x;
   color: white;
 }
 
-div.dossier.facturable a {
+div.dossier.not_facturable a {
   color: white;
 }
 

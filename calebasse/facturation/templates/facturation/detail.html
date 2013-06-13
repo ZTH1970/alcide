@@ -280,15 +280,37 @@
         <h3>Dossiers concernés</h3>
         {% if invoicing.status == "open" or invoicing.status == "closed" %}
         <p id="filtre-dossiers">
-         <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers avec des actes facturables qui ne peuvent être facturés maintenant.</label></input>
+         <input type="radio" name="dossiers_filter" value="pause" group="filter"><label>N'afficher que les dossiers en pause facturation.</label></input></br>
+         <input type="radio" name="dossiers_filter" value="losts" group="filter"><label>N'afficher que les dossiers présentant des actes facturables non pris en charge.</label></input></br>
+         <input type="radio" name="dossiers_filter" value="acts_paused" group="filter"><label>N'afficher que les dossiers présentant des actes facturables en pause facturation.</label></input></br>
+         <input type="radio" name="dossiers_filter" value="missing_policy" group="filter"><label>N'afficher que les dossiers présentant des informations de sécurité sociale manquantes.</label></input></br>
+         <input type="radio" name="dossiers_filter" value="missing_birthdate" group="filter"><label>N'afficher que les dossiers pour lesquels il manque une date de naissance pour le patient.</label></input></br>
+         <input type="radio" name="dossiers_filter" value="all" group="filter" checked="checked"><label>Afficher tous les dossiers.</label></input>
         </p>
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats %}
-            {% if patient.pause or "losts" in detail.keys or "acts_paused" in detail.keys or "losts_missing_policy" in detail.keys or "losts_missing_birthdate" in detail.keys %}
-             <div class="frame dossier facturable">
+            {% if patient.pause %}
+            <div class="frame dossier not_facturable pause">
             {% else %}
-            <div class="frame dossier">
+              {% if "losts" in detail.keys %}
+              <div class="frame dossier not_facturable losts">
+              {% else %}
+                {% if "acts_paused" in detail.keys %}
+                <div class="frame dossier not_facturable acts_paused">
+                {% else %}
+                  {% if "losts_missing_policy" in detail.keys %}
+                  <div class="frame dossier not_facturable missing_policy">
+                  {% else %}
+                    {% if "losts_missing_birthdate" in detail.keys %}
+                    <div class="frame dossier not_facturable missing_birthdate">
+                    {% else %}
+                    <div class="frame dossier">
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
             {% endif %}
+
                 <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
