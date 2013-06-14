@@ -64,9 +64,9 @@
           <td><span class="lastname">{{ patient_record.object.last_name }}</span></td>
           <td>{{ patient_record.object.first_name }}</td>
           <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>
-          <td>{% for mise in patient_record.object.mises_1.all %}{{ mise }} {% endfor %}</td>
-          <td>{% for mise in patient_record.object.mises_2.all %}{{ mise }} {% endfor %}</td>
-          <td>{% for mise in patient_record.object.mises_3.all %}{{ mise }} {% endfor %}</td>
+          <td>{% for mise in patient_record.object.mises_1.all %}{{ mise }}<br/>{% endfor %}</td>
+          <td>{% for mise in patient_record.object.mises_2.all %}{{ mise }}<br/>{% endfor %}</td>
+          <td>{% for mise in patient_record.object.mises_3.all %}{{ mise }}<br/>{% endfor %}</td>
       </tr>
       {% endfor %}
 
