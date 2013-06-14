@@ -792,7 +792,7 @@ class GenerateRtfFormView(cbv.FormView):
                 list_rdvs.append(rdv)
         variables['RDV2'] = '\par'.join(list_rdvs)
         if appointment:
-            variables['RDV1'] = appointment.date
+            variables['RDV1'] = formats.date_format(appointment.date, "DATE_FORMAT")
             variables['HEU1'] = appointment.begin_hour
             variables['THE1'] = ' '.join([str(i) for i in appointment.workers])# ou DPA1?
             variables['DPA1'] = variables['THE1']
