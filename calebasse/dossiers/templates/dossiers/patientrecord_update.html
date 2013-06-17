@@ -250,7 +250,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                             {% endif %}
                             {% if contact.health_center %}
                                 <li><label>Centre de santé :</label>
-                                {{ contact.health_center }}</li>
+                                {{ contact.health_center }} ({{ contact.health_center.address }} {{ contact.health_center.address_complement }} {{ contact.health_center.zip_code }} {{ contact.health_center.city }})</li>
                             {% endif %}
                             {% if contact.management_code %}
                                 <li><label>Code de gestion :</label>
