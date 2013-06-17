@@ -29,7 +29,7 @@ class SearchForm(Form):
     folder_id = forms.CharField(label=u'Numéro de dossier', required=False)
     social_security_id = forms.CharField(label=u"Numéro d'assuré social", required=False)
     states = forms.ModelMultipleChoiceField(queryset=Status.objects.all(),
-            initial=Status.objects.all(),
+            initial=Status.objects.exclude(type='CLOS'),
             widget=forms.CheckboxSelectMultiple(attrs={'class':'checkbox_state'}))
 
     def __init__(self, service=None, *args, **kwargs):
