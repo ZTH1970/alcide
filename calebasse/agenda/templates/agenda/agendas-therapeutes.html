@@ -62,17 +62,9 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <div class="summary">
-        RDV :      {{ worker_agenda.summary.rdv }} —
-        Présence : {{ worker_agenda.summary.presence }} —
-        Absence :  {{ worker_agenda.summary.absence }} —
-        Doubles :  {{ worker_agenda.summary.doubles }} —
-        Validés :  {{ worker_agenda.summary.valides }}
-        <div class="pagebreak"></div>
-    </div>
-
 </div> <!-- .worker-agenda -->
+<br/>
+<div class="pagebreak"></div>
 
 {% endif %}
 {% endfor %}
@@ -81,7 +73,7 @@
             /* Control page break on last printed page */
             function update_page_break() {
                 $('.pagebreak').css('page-break-after', 'always');
-                $('.pagebreak').not('.screen-only').last().css('page-break-before', 'avoid');
+                $('.pagebreak').not('.screen-only').last().css('page-break-after', 'avoid');
             }
             update_page_break();
             $('.printable').on('change', function () {

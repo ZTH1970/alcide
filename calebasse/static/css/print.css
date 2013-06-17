@@ -35,11 +35,6 @@ div#content div.worker-agenda h2 {
   background: none;
 }
 
-div.worker-agenda {
-  clear: both;
-  page-break-after: always;
-}
-
 div.worker-agenda table{
   font-size: 70%;
 }
