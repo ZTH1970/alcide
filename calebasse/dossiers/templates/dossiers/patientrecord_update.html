@@ -413,6 +413,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
     </div>
 
     <div id="tabs-5"> <!-- Actes passés -->
+    {% for state, last_rdvs in history %}
+    <div class="frame">
+    <h3>{{ state.status.name }} depuis le {{ state.date_selected|date:"SHORT_DATE_FORMAT" }}</h3>
+    {% if last_rdvs %}
     <table class="basic">
       <thead>
           <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
@@ -431,6 +435,9 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
         {% endfor %}
       </tbody>
     </table>
+    {% endif %}
+    </div>
+    {% endfor %}
     </div>
 
     <div id="tabs-6"> <!-- Prochains rendez-vous -->

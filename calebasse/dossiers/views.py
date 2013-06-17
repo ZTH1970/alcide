@@ -316,6 +316,20 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['last_rdvs'].append((act, state))
+        history = []
+        i = 0
+        for state in ctx['object'].filestate_set.order_by('-date_selected'):
+            acts = []
+            try:
+                while ctx['last_rdvs'][i][0].date >= state.date_selected.date():
+                    acts.append(ctx['last_rdvs'][i])
+                    i += 1
+            except:
+                pass
+            history.append((state, acts))
+        if i < len(ctx['last_rdvs']) -1:
+            history.append((None, ctx['last_rdvs'][i:]))
+        ctx['history'] = history
         ctx['last_rdv'] = get_last_rdv(ctx['object'])
 
         ctx['missing_policy'] = False
