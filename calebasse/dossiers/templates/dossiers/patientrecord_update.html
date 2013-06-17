@@ -132,7 +132,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                             {% endif %}
                             {% if object.health_center %}
                                 <li><label>Caisse :</label>
-                                {{ object.health_center }}</li>
+                                {{ object.health_center }} ({{ object.health_center.address }} {{ object.health_center.address_complement }} {{ object.health_center.zip_code }} {{ object.health_center.city }})</li>
                             {% endif %}
                             {% if object.other_health_center %}
                                 <li><label>Centre spécifique :</label>
