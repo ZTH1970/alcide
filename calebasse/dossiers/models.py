@@ -805,7 +805,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             # Peut être prolongée
             return (6, current_hc_trait.get_act_number())
         # Prise en charge saturée
-        return (7, current_hc_trait.get_act_number(), current_hc_trait.end_date())
+        return (7, current_hc_trait.get_act_number(), current_hc_trait.end_date)
     # END Specific to cmpp healthcare
 
 
