@@ -111,8 +111,8 @@ class UpdateActView(UpdateView):
         if self.object.event:
             doctors = copy.copy(self.object.doctors.all())
             self.object.event.participants =  doctors
-            self.object.event.act_type =  act_type
-            self.object.save()
+            self.object.event.act_type =  self.object.act_type
+            self.object.event.save()
         return result
 
 update_act = UpdateActView.as_view()
