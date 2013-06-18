@@ -10,13 +10,13 @@ class ActSearchForm(forms.Form):
             ('pointe', u'Pointés'),
             ('non-pointe', u'Non pointés'),
             ('valide', u'Validés'),
-            ('absent-or-canceled', u'Absent ou annulés'),
-            ('is-billable', u'Facturable'),
-            ('non-invoicable', u'Non facturable'),
-            ('switch-billable', u'Inversion de facturabilité'),
+            ('absent-or-canceled', u'Absents ou annulés'),
+            ('is-billable', u'Facturables'),
+            ('non-invoicable', u'Non facturables'),
+            ('switch-billable', u'Avec facturabilité inversée'),
             ('lost', u'Perdus'),
-            ('pause-invoicing', u'Pause facturation'),
-            ('invoiced', u'Facturé'),
+            ('pause-invoicing', u'En pause facturation'),
+            ('invoiced', u'Facturés'),
 #            ('current-invoicing', u'Facturation en cours')
             )
 
