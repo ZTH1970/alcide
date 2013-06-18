@@ -374,8 +374,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 status = "Prise en charge de traitement complète mais qui peut être prolongée."
                 highlight = True
             elif status[0] == 7:
-                status = "Prise en charge de traitement complète et déjà prolongée, se terminant le %s." % \
-                    formats.date_format(status[2], "SHORT_DATE_FORMAT")
+                status = "Prise en charge de traitement déjà prolongée complète se terminant le %s." % str(status[2])
             else:
                 status = 'Statut inconnu.'
             ctx['hc_status'] = (status, highlight)
@@ -928,106 +927,6 @@ class PatientRecordsQuotationsView(cbv.ListView):
 
 patientrecord_quotations = PatientRecordsQuotationsView.as_view()
 
-
-class PatientRecordsWaintingQueueView(cbv.ListView):
-    model = PatientRecord
-    template_name = 'dossiers/waiting_queue.html'
-
-    def _get_search_result(self, paginate_patient_records,
-            all_patient_records):
-        patient_records = []
-        for p in all_patient_records:
-            print p
-        if paginate_patient_records:
-            first = paginate_patient_records[0]
-            position = 0
-            for p in all_patient_records:
-                if first.id == p.id:
-                    break
-                position += 1
-            print " %s is %d " %(first, position)
-            print "Confirm position : %s " % all_patient_records[position]
-            print "Start looping found pation"
-            for patient_record in paginate_patient_records:
-                print "treating %s" % patient_record
-                while patient_record.id != all_patient_records[position].id:
-                    position += 1
-                print "Position found: %d" % position
-                print "Confirm position : %s " % all_patient_records[position]
-                patient_records.append(
-                        {
-                            'object': patient_record,
-                            'position': position,
-                            }
-                        )
-        return patient_records
-
-    def get_queryset(self):
-        form = forms.QuotationsForm(data=self.request.GET or None)
-        qs = super(PatientRecordsWaintingQueueView, self).get_queryset()
-
-        first_name = self.request.GET.get('first_name')
-        last_name = self.request.GET.get('last_name')
-        paper_id = self.request.GET.get('paper_id')
-        id = self.request.GET.get('id')
-        social_security_id = self.request.GET.get('social_security_id')
-        qs = qs.filter(service=self.service,
-            last_state__status__type='ACCUEIL').order_by(
-            'last_state__date_selected')
-        # Pour filtre sur c, d, Z, le filtre sur le nom change l'ordre
-        print qs.count()
-        for p in qs:
-            print p
-        if last_name:
-            qs = qs.filter(last_name__istartswith=last_name)
-        if first_name:
-            qs = qs.filter(first_name__istartswith=first_name)
-        if paper_id:
-            qs = qs.filter(paper_id__startswith=paper_id)
-        if id:
-            qs = qs.filter(id__startswith=id)
-        if social_security_id:
-            qs = qs.filter(models.Q(social_security_id__startswith=social_security_id) | \
-                models.Q(contacts__social_security_id__startswith=social_security_id))
-        qs = qs.order_by(
-            'last_state__date_selected')
-        print qs.count()
-        for p in qs:
-            print p
-        return qs
-
-    def get_context_data(self, **kwargs):
-        ctx = super(PatientRecordsWaintingQueueView, self).get_context_data(**kwargs)
-        ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None,
-                service=self.service)
-        patient_records = []
-        page = self.request.GET.get('page')
-        paginator = Paginator(ctx['object_list'].filter(), 50)
-        try:
-            paginate_patient_records = paginator.page(page)
-        except PageNotAnInteger:
-            paginate_patient_records = paginator.page(1)
-        except EmptyPage:
-            paginate_patient_records = paginator.page(paginator.num_pages)
-
-        all_patient_records = PatientRecord.objects.filter(
-                service=self.service,
-                last_state__status__type='ACCUEIL').order_by(
-                'last_state__date_selected')
-        ctx['patient_records'] = self._get_search_result(
-            paginate_patient_records, all_patient_records)
-        ctx['paginate_patient_records'] = paginate_patient_records
-        ctx['len_patient_records'] = \
-            all_patient_records.count()
-
-        query = self.request.GET.copy()
-        if 'page' in query:
-            del query['page']
-        ctx['query'] = query.urlencode()
-
-        return ctx
-
-patientrecord_waiting_queue = PatientRecordsWaintingQueueView.as_view()
 
 class CreateDirectoryView(View, cbv.ServiceViewMixin):
     def post(self, request, *args, **kwargs):
