@@ -762,13 +762,14 @@ class Invoicing(models.Model):
         cycle = str(self.seq_id)
         invoice_year = datetime(self.end_date.year, 1, 1).date()
         for invoice in self.invoice_set.all():
+            hc = invoice.health_center.hc_invoice or invoice.health_center
             if invoice.end_date < invoice_year:
-                ecritures_past.setdefault(invoice.health_center, 0)
-                ecritures_past[invoice.health_center] += invoice.amount
+                ecritures_past.setdefault(hc, 0)
+                ecritures_past[hc] += invoice.amount
                 total_past += invoice.amount
             else:
-                ecritures_current.setdefault(invoice.health_center, 0)
-                ecritures_current[invoice.health_center] += invoice.amount
+                ecritures_current.setdefault(hc, 0)
+                ecritures_current[hc] += invoice.amount
                 total_current += invoice.amount
         '''Ce qui est facturé aux caisses est en débit'''
         for health_center, amount in ecritures_past.items():
