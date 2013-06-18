@@ -374,7 +374,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 status = "Prise en charge de traitement complète mais qui peut être prolongée."
                 highlight = True
             elif status[0] == 7:
-                status = "Prise en charge de traitement déjà prolongée complète se terminant le %s." % str(status[2])
+                status = "Prise en charge de traitement complète et déjà prolongée, se terminant le %s." % \
+                    formats.date_format(status[2], "SHORT_DATE_FORMAT")
             else:
                 status = 'Statut inconnu.'
             ctx['hc_status'] = (status, highlight)
