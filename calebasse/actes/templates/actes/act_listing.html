@@ -125,8 +125,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
       {% for act in object_list %}
       <tr data-id="{{ act.id }}" data-isbilled="{{ act.is_billed }}"
       {% if not act.is_billed %}class="non-factu"{% else %}{% if not act.invoice_set.all.0.number %}data-oldbilled="True"{% endif %}{% endif %}>
-        <td>1
-            {{ act.patient.id }}
+        <td>{{ act.patient.paper_id }} ({{ act.patient.id }})
             {{ act.patient.first_name }}
             <span class="lastname">{{ act.patient.last_name }}</span>
         </td>
