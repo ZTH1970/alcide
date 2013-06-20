@@ -62,9 +62,10 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="summary">
+        <div class="pagebreak"></div>
+    </div>
 </div> <!-- .worker-agenda -->
-<br/>
-<div class="pagebreak"></div>
 
 {% endif %}
 {% endfor %}
@@ -73,7 +74,7 @@
             /* Control page break on last printed page */
             function update_page_break() {
                 $('.pagebreak').css('page-break-after', 'always');
-                $('.pagebreak').not('.screen-only').last().css('page-break-after', 'avoid');
+                $('.pagebreak').not('.screen-only').last().css('page-break-before', 'avoid');
             }
             update_page_break();
             $('.printable').on('change', function () {
