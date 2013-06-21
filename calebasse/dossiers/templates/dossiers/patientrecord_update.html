@@ -448,13 +448,13 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
       <tbody>
         {% for event, state in next_rdvs %}
         <tr>
-          <td>{% firstof event.start_datetime|date:"d/m/y H:i"|title %}</td>
+          <td>{% firstof event.start_datetime|date:"l d/m/y H:i"|title %}</td>
           <td>{% if state %}{% if state.state_name != 'VALIDE' %}<strong>{% endif %}{{ state }}{% if state.state_name != 'VALIDE' %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
           <td>{{ event.act_type }}</td>
           <td>{% for doctor in event.participants.all %}
                 {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
                 {% endfor %}</td>
-          <td>{{ event.description }}</td>
+          <td class="width-limited">{{ event.description }}</td>
         </tr>
         {% endfor %}
       </tbody>
