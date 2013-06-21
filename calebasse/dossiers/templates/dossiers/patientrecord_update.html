@@ -492,10 +492,10 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
           <td>{{ act.date|date:"SHORT_DATE_FORMAT" }} {{ act.time|date:"H:i" }}</td>
           <td>{% if state %}{% if act.is_absent %}<strong>{% endif %}{{ state }}{% if act.is_absent %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
           <td>{{ act.act_type }}</td>
-          <td>{% for doctor in act.doctors.all %}
+          <td class="width-limited">{% for doctor in act.doctors.all %}
             {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
             {% endfor %}</td>
-          <td>{% if act.comment %}{{ act.comment }}{% endif %}</td>
+          <td class="width-limited">{% if act.comment %}{{ act.comment }}{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -516,7 +516,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
           <td>{% firstof event.start_datetime|date:"l d/m/y H:i"|title %}</td>
           <td>{% if state %}{% if state.state_name != 'VALIDE' %}<strong>{% endif %}{{ state }}{% if state.state_name != 'VALIDE' %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
           <td>{{ event.act_type }}</td>
-          <td>{% for doctor in event.participants.all %}
+          <td class="width-limited">{% for doctor in event.participants.all %}
                 {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
                 {% endfor %}</td>
           <td class="width-limited">{{ event.description }}</td>
