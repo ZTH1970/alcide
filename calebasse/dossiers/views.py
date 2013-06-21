@@ -412,17 +412,21 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             ctx['acts_losts'] = acts_losts
             ctx['acts_pause'] = acts_pause
             hcs_used = acts_per_hc.keys()
+            hcs = None
             if not hcs_used:
-                ctx['hcs'] = [(hc, None) for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date')]
+                hcs = [(hc, None) for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date')]
             else:
-                ctx['hcs'] = []
+                hcs = []
                 for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date'):
                     acts = None
                     if hasattr(hc, 'cmpphealthcarediagnostic') and hc.cmpphealthcarediagnostic in hcs_used:
                         acts = acts_per_hc[hc.cmpphealthcarediagnostic]
                     elif hasattr(hc, 'cmpphealthcaretreatment') and hc.cmpphealthcaretreatment in hcs_used:
                         acts = acts_per_hc[hc.cmpphealthcaretreatment]
-                    ctx['hcs'].append((hc, acts))
+                    hcs.append((hc, acts))
+            ctx['hcs'] = []
+            for hc, acts in hcs:
+                ctx['hcs'].append((hc, acts, hc.act_set.order_by('date', 'time')))
         elif ctx['object'].service.name == "CAMSP":
             if ctx['object'].last_state.status.type == "ACCUEIL":
                 ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
