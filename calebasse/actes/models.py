@@ -257,6 +257,14 @@ class Act(models.Model):
         else:
             self.delete()
 
+    def get_invoice_number(self):
+        try:
+            if self.is_billed:
+                return self.invoice_set.order_by('-number')[0].number
+        except:
+            pass
+        return None
+
     class Meta:
         verbose_name = u"Acte"
         verbose_name_plural = u"Actes"
