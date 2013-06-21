@@ -151,7 +151,7 @@ body.sessad-dys #splash { background-image: url(../images/sky-birds.jpg); }
 }
 
 #service-links a {
-	padding: 1em 2px;
+	padding: 0.6em 2px;
 	border: 1px outset #ccc;
 	color: white;
 	text-decoration: none;
@@ -511,6 +511,33 @@ div.agenda ul {
 
 div.agenda span.hour {
 	padding-left: 20px;
+    display : inline-block;
+    min-width: 80px;
+}
+
+div.agenda span.length {
+    display : inline-block;
+    min-width: 90px;
+}
+
+div.agenda span.title {
+    display : inline-block;
+    min-width: 320px;
+}
+
+div.agenda span.participants {
+    display : inline-block;
+    min-width: 150px;
+}
+
+div.agenda span.act_type {
+    display : inline-block;
+	font-size: 80%;
+    min-width: 230px;
+}
+
+div.agenda span.room {
+    display : inline-block;
 }
 
 div.agenda h3.info {
@@ -649,6 +676,14 @@ table.basic th {
 
 table.basic td {
 	text-align: left;
+}
+
+table.basic td.width-limited {
+	width: 400px;
+}
+
+table.basic td.width-limited-300 {
+	width: 300px;
 }
 
 table.basic tr:nth-child(odd) td {
@@ -969,47 +1004,70 @@ ul#apps {
 ul#apps li {
 	display: block;
 	float: left;
-	margin-right: 1em;
+	margin-top: 1em;
+	margin-right: 3em;
 }
 
 ul#apps li a {
 	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
+	display: block;
+	width: 160px;
+	height: 40px;
+	padding-top: 0px;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	padding-bottom: 10px;
 }
 
-ul#apps li a {
+ul#apps li a#img {
 	display: block;
-	width: 120px;
+	width: 160px;
 	height: 40px;
 	padding-top: 80px;
 	font-weight: bold;
 	text-align: center;
-	border: 1px dotted #666;
+	border: 1px dotted #fff;
 	text-decoration: none;
 }
 
-ul#apps li a:hover {
-	border: 1px solid #333;
+/*ul#apps li a:hover {*/
+/*	border: 1px solid #333;*/
+/*}*/
+
+li.apps {
+	border: 1px solid #bbb;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
-li#agenda a { background-image: url(icon-calendar.png); }
-li#agenda:hover a:hover { background-image: url(icon-calendar-hover.png); }
+li.apps:hover {
+	border: 1px solid #777;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
 
-li#personnes a { background-image: url(icon-personnes.png); }
-li#personnes a:hover { background-image: url(icon-personnes-hover.png); }
+li#agenda a#img { background-image: url(icon-calendar.png); }
+li#agenda:hover a#img:hover { background-image: url(icon-calendar-hover.png); }
 
-li#dossiers a { background-image: url(icon-dossiers.png); }
-li#dossiers a:hover { background-image: url(icon-dossiers-hover.png); }
+li#personnes a#img { background-image: url(icon-personnes.png); }
+li#personnes a#img:hover { background-image: url(icon-personnes-hover.png); }
 
-li#actes a { background-image: url(icon-actes.png); }
-li#actes a:hover { background-image: url(icon-actes-hover.png); }
+li#dossiers a#img { background-image: url(icon-dossiers.png); }
+li#dossiers a#img:hover { background-image: url(icon-dossiers-hover.png); }
 
-li#ressources a { background-image: url(icon-ressources.png); }
-li#ressources a:hover { background-image: url(icon-ressources-hover.png); }
+li#actes a#img { background-image: url(icon-actes.png); }
+li#actes a#img:hover { background-image: url(icon-actes-hover.png); }
 
-li#facturation a { background-image: url(icon-facturation.png); }
-li#facturation a:hover { background-image: url(icon-facturation-hover.png); }
+li#ressources a#img { background-image: url(icon-ressources.png); }
+li#ressources a#img:hover { background-image: url(icon-ressources-hover.png); }
+
+li#facturation a#img { background-image: url(icon-facturation.png); }
+li#facturation a#img:hover { background-image: url(icon-facturation-hover.png); }
 
 div.agenda a.print {
 	display: block;
