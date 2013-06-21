@@ -15,7 +15,7 @@
         {% if object.addresses.all %}
         <ul>
           {% for address in object.addresses.all %}
-          {% if address.place_of_life %}<li>{{ address.display_name }}</li>{% endif %}
+          {% if address.place_of_life %}<li>✔ {{ address.display_name }}</li>{% endif %}
           {% endfor %}
         </ul>
         {% else %}Aucun{% endif %}
