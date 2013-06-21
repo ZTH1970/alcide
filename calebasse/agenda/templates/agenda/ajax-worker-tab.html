@@ -1,16 +1,17 @@
 {% load url from future %}
+{% load apptags %}
 <p><a href="{% url 'periodic-events-for-worker' service=service date=date worker_id=worker_agenda.worker.id %}">Rendez-vous périodiques</a></p>
 <div {% if appointment.event_id %}data-event-id="{{ appointment.event_id }}"{% endif %}>
   {% for appointment in worker_agenda.appointments %}
   <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
       {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
     <span class="hour">{{ appointment.begin_hour }}</span>
-    {% if appointment.title %} — {{ appointment.title }} {% endif %}
-    {% if appointment.patient.paper_id %} — {{ appointment.patient.paper_id }} {% endif %}
-    {% if appointment.length %} — {{ appointment.length }} mn {% endif %}
-    {% if appointment.workers_initial %} — {{ appointment.workers_initial }} {% endif %}
-    {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
-    {% if appointment.room %} — {{ appointment.room }} {% endif %}
+    <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} mn{% endif %}</span>
+    <span class="title">{% if appointment.title %}{{ appointment.title }}{% endif %}
+    {% if appointment.patient.paper_id %} {{ appointment.patient.paper_id }} {% endif %}</span>
+    <span class="participants">{% if appointment.workers_initial %}{{ appointment.workers_initial }}{% endif %}</span>
+    <span class="act_type">{% if appointment.act_type %}{{ appointment.act_type|trunc_act_type }}{% endif %}</span>
+    <span class="room">{% if appointment.room %}{{ appointment.room }}{% endif %}</span>
     <span class="right">
         {% for service_name in appointment.other_services_names %}
         <span class="box {{ service_name }}" title="{{ service_name }}"></span>
