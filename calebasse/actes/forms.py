@@ -3,6 +3,7 @@
 from django import forms
 
 from calebasse.actes.models import Act
+from calebasse.ressources.models import ActType
 from ajax_select import make_ajax_field
 
 class ActSearchForm(forms.Form):
@@ -39,3 +40,10 @@ class ActUpdate(forms.ModelForm):
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 52, 'rows': 4}),
                 }
+
+    def __init__(self, instance, service=None, **kwargs):
+        super(ActUpdate, self).__init__(instance=instance, **kwargs)
+        if instance.patient.service:
+            self.fields['act_type'].queryset = \
+                    ActType.objects.for_service(instance.patient.service) \
+                    .order_by('name')
