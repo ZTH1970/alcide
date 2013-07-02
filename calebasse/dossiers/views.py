@@ -932,6 +932,86 @@ class PatientRecordsQuotationsView(cbv.ListView):
 
 patientrecord_quotations = PatientRecordsQuotationsView.as_view()
 
+class PatientRecordsWaitingQueueView(cbv.ListView):
+    model = PatientRecord
+    template_name = 'dossiers/waiting_queue.html'
+
+    def _get_search_result(self, paginate_patient_records,
+            all_patient_records):
+        patient_records = []
+        if paginate_patient_records:
+            first = paginate_patient_records[0]
+            position = 1
+            while first.id != all_patient_records[position - 1].id:
+                position += 1
+            for patient_record in paginate_patient_records:
+                while patient_record.id != all_patient_records[position - 1].id:
+                    position += 1
+                patient_records.append(
+                        {
+                            'object': patient_record,
+                            'position': position,
+                            }
+                        )
+        return patient_records
+
+    def get_queryset(self):
+        form = forms.QuotationsForm(data=self.request.GET or None)
+        qs = super(PatientRecordsWaitingQueueView, self).get_queryset()
+        first_name = self.request.GET.get('first_name')
+        last_name = self.request.GET.get('last_name')
+        paper_id = self.request.GET.get('paper_id')
+        id = self.request.GET.get('id')
+        social_security_id = self.request.GET.get('social_security_id')
+        qs = qs.filter(service=self.service,
+            last_state__status__type='ACCUEIL')
+        if last_name:
+            qs = qs.filter(last_name__istartswith=last_name)
+        if first_name:
+            qs = qs.filter(first_name__istartswith=first_name)
+        if paper_id:
+            qs = qs.filter(paper_id__startswith=paper_id)
+        if id:
+            qs = qs.filter(id__startswith=id)
+        if social_security_id:
+            qs = qs.filter(models.Q(
+                social_security_id__startswith=social_security_id)
+                | models.Q(
+                contacts__social_security_id__startswith=social_security_id))
+        qs = qs.order_by('last_state__date_selected', 'created')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordsWaitingQueueView, self).get_context_data(**kwargs)
+        ctx['search_form'] = forms.QuotationsForm(data=self.request.GET or None,
+                service=self.service)
+        patient_records = []
+        page = self.request.GET.get('page')
+        paginator = Paginator(ctx['object_list'].filter(), 50)
+        try:
+            paginate_patient_records = paginator.page(page)
+        except PageNotAnInteger:
+            paginate_patient_records = paginator.page(1)
+        except EmptyPage:
+            paginate_patient_records = paginator.page(paginator.num_pages)
+
+        all_patient_records = PatientRecord.objects.filter(
+                service=self.service,
+                last_state__status__type='ACCUEIL').order_by(
+                'last_state__date_selected', 'created')
+        ctx['patient_records'] = self._get_search_result(
+            paginate_patient_records, all_patient_records)
+        ctx['paginate_patient_records'] = paginate_patient_records
+        ctx['len_patient_records'] = all_patient_records.count()
+
+        query = self.request.GET.copy()
+        if 'page' in query:
+            del query['page']
+        ctx['query'] = query.urlencode()
+
+        return ctx
+
+patientrecord_waiting_queue = PatientRecordsWaitingQueueView.as_view()
 
 class CreateDirectoryView(View, cbv.ServiceViewMixin):
     def post(self, request, *args, **kwargs):
