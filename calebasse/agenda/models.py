@@ -10,6 +10,7 @@ from django import forms
 
 from calebasse.agenda import managers
 from calebasse.utils import weeks_since_epoch, weekday_ranks
+from calebasse.personnes.models import Holiday
 from interval import Interval
 
 __all__ = (
@@ -384,6 +385,17 @@ class Event(models.Model):
     def is_event_absence(self):
         return False
 
+    def get_missing_participants(self):
+        missing_participants = []
+        for participant in self.participants.all():
+            holidays = None
+            worker = participant.worker
+            holidays = Holiday.objects.for_worker(worker) \
+                  .for_timed_period(self.start_datetime.date(), self.start_datetime.time(), self.end_datetime.time())
+            if holidays:
+                missing_participants.append(participant)
+        return missing_participants
+
     RECURRENCE_DESCRIPTION = [
             u'Tous les %s',      #(1, None, None),
             u'Un %s sur deux',   #(2, None, None),
@@ -425,10 +437,6 @@ class Event(models.Model):
             parts.append(u'au')
             parts.append(self.recurrence_end_date.strftime('%d/%m/%Y'))
         return u' '.join(parts)
-
-
-
-
 
     def __unicode__(self):
         return self.title

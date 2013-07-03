@@ -307,7 +307,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
                 state = event.act.get_state()
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
-            ctx['next_rdvs'].append((event, state))
+            ctx['next_rdvs'].append((event, state, event.get_missing_participants()))
         if ctx['next_rdvs']:
             ctx['next_rdv'] = ctx['next_rdvs'][0][0]
         ctx['last_rdvs'] = []
@@ -315,7 +315,12 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             state = act.get_state()
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
-            ctx['last_rdvs'].append((act, state))
+            missing_workers = []
+            try:
+                missing_workers = [participant.worker for participant in act.event.get_missing_participants()]
+            except:
+                pass
+            ctx['last_rdvs'].append((act, state, missing_workers))
         history = []
         i = 0
         for state in ctx['object'].filestate_set.order_by('-date_selected'):

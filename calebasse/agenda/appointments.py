@@ -70,8 +70,10 @@ class Appointment(object):
         self.description = event.description
         self.workers_initial = ""
         self.workers_code = []
+        self.workers = event.participants.all()
+        self.len_workers = event.participants.count()
+        self.workers_absent = event.get_missing_participants()
         if event.event_type.id == 1:
-            self.workers = event.participants.all()
             self.convocation_sent = event.convocation_sent
             self.patient = event.patient
             self.patient_record_id = event.patient.id
@@ -96,12 +98,6 @@ class Appointment(object):
                 if event.title:
                     self.title += ' - %s' % event.title
             self.event_type = event.event_type
-            self.workers = event.participants.all()
-        if len(self.workers) > 4 :
-            self.workers_initial = '%d inter.' % len(self.workers)
-        else:
-            for worker in self.workers:
-                self.workers_initial += " " + worker.worker.initials
         for worker in self.workers:
             self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
 

@@ -380,6 +380,19 @@ class HolidayQuerySet(query.QuerySet):
     def for_period(self, start_date, end_date):
         return self.filter(start_date__lte=end_date, end_date__gte=start_date)
 
+    def for_timed_period(self, date, start_time, end_time):
+        filter_query = models.Q(start_date__lt=date, end_date__gt=date) \
+            | models.Q(start_date=date, start_time__isnull=True, end_date__gt=date) \
+            | models.Q(start_date=date, start_time__lt=end_time, end_date__gt=date) \
+            | models.Q(start_date__lt=date, end_date=date, end_time__isnull=True) \
+            | models.Q(start_date__lt=date, end_date=date, end_time__gt=start_time) \
+            | models.Q(start_date=date, end_date=date, start_time__isnull=True, end_time__isnull=True) \
+            | models.Q(start_date=date, end_date=date, start_time__isnull=True, end_time__gt=start_time) \
+            | models.Q(start_date=date, end_date=date, start_time__lt=end_time, end_time__isnull=True) \
+            | models.Q(start_date=date, end_date=date, start_time__lte=start_time, end_time__gt=start_time) \
+            | models.Q(start_date=date, end_date=date, start_time__lt=end_time, end_time__gte=end_time)
+        return self.filter(filter_query)
+
 def time2french(time):
     if time.minute:
         return '{0}h{1}'.format(time.hour, time.minute)

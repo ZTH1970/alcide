@@ -116,6 +116,7 @@ class AgendaServiceActivityView(TemplateView):
                                                         event.title)
             appointment['participants'] = event.participants.filter(worker__enabled=True)
             appointment['len_participants'] = len(appointment['participants'])
+            appointment['workers_absent'] = event.get_missing_participants()
             appointments_times[start_datetime]['row'] += 1
             appointments_times[start_datetime]['appointments'].append(appointment)
         context['appointments_times'] = sorted(appointments_times.items())
@@ -566,6 +567,7 @@ class AjaxWorkerTabView(TemplateView):
         context['worker_agenda'] = {'worker': worker,
                     'appointments': get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, events, holidays_worker)}
+
         if settings.RTF_TEMPLATES_DIRECTORY:
             context['mail'] = True
         return context

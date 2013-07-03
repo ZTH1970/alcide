@@ -9,10 +9,27 @@
     <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} mn{% endif %}</span>
     <span class="title">{% if appointment.title %}{{ appointment.title }}{% endif %}
     {% if appointment.patient.paper_id %} {{ appointment.patient.paper_id }} {% endif %}</span>
-    <span class="participants">{% if appointment.workers_initial %}{{ appointment.workers_initial }}{% endif %}</span>
+    <span class="participants">
+    {% if appointment.len_workers > 4 %}
+        {% if appointment.workers_absent %}<span class="absent" title="Au moins un intervenant est absent">{% endif %}
+        {{ appointment.len_workers }} inter.
+        {% if appointment.workers_absent %}</span>{% endif %}
+    {% else %}
+        {% if appointment.workers %}
+          {% for worker in appointment.workers %}
+            {% if worker in appointment.workers_absent %}<span class="absent" title="Absent">{% endif %}
+            {{ worker.worker.initials }}{% if not forloop.last %} {% endif %}
+            {% if worker in appointment.workers_absent %}</span>{% endif %}
+          {% endfor %}
+        {% endif %}
+    {% endif %}
+    </span>
     <span class="act_type">{% if appointment.act_type %}{{ appointment.act_type|trunc_act_type }}{% endif %}</span>
     <span class="room">{% if appointment.room %}{{ appointment.room }}{% endif %}</span>
     <span class="right">
+        {% if appointment.workers_absent %}
+        <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>
+        {% endif %}
         {% for service_name in appointment.other_services_names %}
         <span class="box {{ service_name }}" title="{{ service_name }}"></span>
         {% endfor %}
@@ -53,7 +70,9 @@
           <p class="workers">
           Intervenants :
           {% for worker in appointment.workers %}
+            {% if worker in appointment.workers_absent %}<span class="absent" title="Absent">{% endif %}
             {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+            {% if worker in appointment.workers_absent %}</span>{% endif %}
           {% endfor %}
           </p>
         {% endif %}

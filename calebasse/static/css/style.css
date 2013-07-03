@@ -492,6 +492,11 @@ td.busy {
 	background: red;
 }
 
+span.absent{
+	color: red;
+	font-style: italic;
+}
+
 td#agendas {
 	vertical-align: top;
 	width: 100%;
@@ -1400,6 +1405,7 @@ div.pagination {
 .icon-user-space:before           { content: "\f007 "; }
 .icon-circle-arrow-left:before    { content: "\f0a8"; }
 .icon-circle-arrow-right:before   { content: "\f0a9"; }
+.icon-warning-sign:before       { content: "\f071" }
 
 /* periodic event search form */
 
