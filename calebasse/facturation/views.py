@@ -13,6 +13,8 @@ from calebasse.cbv import TemplateView, UpdateView
 from models import Invoicing, Invoice
 from calebasse.ressources.models import Service
 from invoice_header import render_invoicing
+from b2 import b2_is_configured, get_all_infos, buildall, sendmail
+from noemie import noemie_mails, noemie_from_mail
 
 def display_invoicing(request, *args, **kwargs):
     if request.method == 'POST':
@@ -210,3 +212,56 @@ class FacturationExportView(cbv.DetailView):
         response['Content-Length'] = content.size
         response['Content-Disposition'] = 'attachment; filename="export-%s.txt"' % invoicing.seq_id
         return response
+
+
+class FacturationTransmissionView(UpdateView):
+    context_object_name = "invoicing"
+    model = Invoicing
+    template_name = 'facturation/transmission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(FacturationTransmissionView, self).get_context_data(**kwargs)
+        context['b2_is_configured'] = b2_is_configured()
+        try:
+            context['b2'] = get_all_infos(context['invoicing'].seq_id)
+        except IOError, e:
+            context['error_message'] = e
+        return context
+
+class FacturationTransmissionBuildView(cbv.DetailView):
+    context_object_name = "invoicing"
+    model = Invoicing
+
+    def get(self, *args, **kwargs):
+        invoicing = self.get_object()
+        if b2_is_configured() and invoicing.status == "validated":
+            buildall(invoicing.seq_id)
+        return HttpResponseRedirect('..')
+
+class FacturationTransmissionMailView(UpdateView):
+    context_object_name = "invoicing"
+    model = Invoicing
+
+    def get(self, *args, **kwargs):
+        invoicing = self.get_object()
+        if b2_is_configured() and invoicing.status == "validated":
+            sendmail(invoicing.seq_id, oneb2=kwargs.get('b2'))
+        return HttpResponseRedirect('..')
+
+
+class FacturationNoemieView(TemplateView):
+    template_name = 'facturation/noemie.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(FacturationNoemieView, self).get_context_data(**kwargs)
+        context['b2_is_configured'] = b2_is_configured()
+        if b2_is_configured():
+            name = kwargs.get('name')
+            try:
+                if name:
+                    context['noemie'] = noemie_from_mail(name)
+                else:
+                    context['noemies'] = noemie_mails()
+            except IOError, e:
+                context['error_message'] = e
+        return context

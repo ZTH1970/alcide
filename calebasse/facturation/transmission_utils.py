@@ -159,16 +159,16 @@ def build_mail(large_regime, dest_organism, b2_filename):
     if MODE_ENCRYPT:
         mime_part = smime(mime(b2), get_certificate(large_regime, dest_organism))
 
-    filename = b2_filename + '-mail'
-    fd = open(filename, 'w')
+    fd = StringIO.StringIO()
     for k,v in mail.items():
         fd.write('%s: %s\n' % (k,v))
     fd.write('\n')
     fd.write('--%s\n' % delimiter)
     fd.write(mime_part)
     fd.write('--%s--\n' % delimiter)
+    ret = fd.getvalue()
     fd.close()
-    return filename
+    return ret
 
 #
 # CApath construction

@@ -277,3 +277,26 @@ RTF_REPOSITORY_DIRECTORY = None
 
 # Invoicing file saving directory
 INVOICING_DIRECTORY = None
+
+# IRIS/B2 transmission
+# B2_TRANSMISSION = {
+#    'output_directory': '/var/lib/calebasse/B2/',
+#    # B2 informations
+#    'nom': 'CMPP FOOBAR',                      # mandatory
+#    'numero_emetteur': '123456789',            # mandatory
+#    'norme': 'CP  ',
+#    'type_emetteur': 'TE',
+#    'application': 'TR',
+#    'categorie': '189',
+#    'statut': '60',
+#    'mode_tarif': '05',
+#    'message': 'ENTROUVERT 0143350135 CALEBASSE 1307',
+#    # SMTP configuration
+#    'smtp_from': 'transmission@domain.net',    # mandatory
+#    'smtp_host': '127.0.0.1',
+#    'smtp_port': 25,
+#    'smtp_login': '',
+#    'smtp_password': '',
+#    # delay between two mails, in seconds, or None
+#    'smtp_delay': None,
+# }

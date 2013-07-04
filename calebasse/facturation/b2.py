@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# TODO / FIXME
-# - lever une exception lorsque nb_lines dépasse 999 (et autres compteurs)
-
 import os
 import sys
 import re
@@ -12,42 +9,83 @@ import time
 import datetime
 import hashlib
 import base64
+import json
 from smtplib import SMTP, SMTPException
 
-
+from calebasse.facturation.models import Invoicing
 from batches import build_batches
 from transmission_utils import build_mail
 
-OUTPUT_DIRECTORY = '/var/lib/calebasse/B2/'
+DEFAULT_OUTPUT_DIRECTORY = '/var/lib/calebasse/B2'
+DEFAULT_NORME = 'CP  '
+DEFAULT_TYPE_EMETTEUR = 'TE'
+DEFAULT_APPLICATION = 'TR'
+DEFAULT_CATEGORIE = '189'
+DEFAULT_STATUT = '60'
+DEFAULT_MODE_TARIF = '05'
+DEFAULT_MESSAGE = 'ENTROUVERT 0143350135 CALEBASSE 1307'
 
-#
+# B2 informations / configuration
+# from settings.py :
+# B2_TRANSMISSION = {
+#     'nom': 'CMPP FOOBAR',
+#     'numero_emetteur': '123456789',
+#     'smtp_from': 'transmission@domaine.fr',
+#     ...
+# }
+
+try:
+    from django.conf import settings
+    b2_transmission_settings = settings.B2_TRANSMISSION or {}
+except (ImportError, AttributeError):
+    b2_transmission_settings = {}
+
 # B2 informations
-#
-NORME = 'CP  '
+NORME = b2_transmission_settings.get('norme', DEFAULT_NORME)
 
-TYPE_EMETTEUR = 'TE'
-NUMERO_EMETTEUR = '420788606'
-APPLICATION = 'TR'
-MESSAGE = 'ENTROUVERT 0143350135 CALEBASSE 1301'
-MESSAGE = MESSAGE + ' '*(37-len(MESSAGE))
+TYPE_EMETTEUR = b2_transmission_settings.get('type_emetteur', DEFAULT_TYPE_EMETTEUR)
+NUMERO_EMETTEUR = b2_transmission_settings.get('numero_emetteur')
+APPLICATION = b2_transmission_settings.get('application', DEFAULT_APPLICATION)
 
-CATEGORIE = '189'
-STATUT = '60'
-MODE_TARIF = '05'
-NOM = 'CMPP SAINT ETIENNE'
+CATEGORIE = b2_transmission_settings.get('categorie', DEFAULT_CATEGORIE)
+STATUT = b2_transmission_settings.get('statut', DEFAULT_STATUT)
+MODE_TARIF = b2_transmission_settings.get('mode_tarif', DEFAULT_MODE_TARIF)
+
+NOM = b2_transmission_settings.get('nom', '')[:40]
 NOM = NOM + ' '*(40-len(NOM))
 
-#
-# mailing
-#
-B2FILES = OUTPUT_DIRECTORY + '*-mail'
-FROM = 'teletransmission@aps42.org'
-SMTP_LOGIN = 'teletransmission'
-SMTP_PASSWORD = os.environ.get('CALEBASSE_B2_SMTP_PASSWD')
-# if there is a CALEBASSE_B2_DEBUG_TO environment variable, send all B2 mails
-# to this address instead of real ones (yy.xxx@xxx.yy.rss.fr)
-DEBUG_TO = os.environ.get('CALEBASSE_B2_DEBUG_TO')
+MESSAGE = b2_transmission_settings.get('message', DEFAULT_MESSAGE)[:37]
+MESSAGE = MESSAGE + ' '*(37-len(MESSAGE))
 
+# b2 output
+OUTPUT_DIRECTORY = b2_transmission_settings.get('output_directory', DEFAULT_OUTPUT_DIRECTORY)
+
+# mailing
+SMTP_FROM = b2_transmission_settings.get('smtp_from')
+SMTP_HOST = b2_transmission_settings.get('smtp_host', '127.0.0.1')
+SMTP_PORT = b2_transmission_settings.get('smtp_port', 25)
+SMTP_LOGIN = b2_transmission_settings.get('smtp_login')
+SMTP_PASSWORD = b2_transmission_settings.get('smtp_password')
+SMTP_DELAY = b2_transmission_settings.get('smtp_delay')
+
+# if "smtp_debug_to" setting is present, send all B2 mails to this address
+# instead of real ones (yy.xxx@xxx.yy.rss.fr) and output SMTP dialog
+DEBUG_TO = b2_transmission_settings.get('smtp_debug_to')
+
+
+def b2_is_configured():
+    if 'nom' in b2_transmission_settings and \
+            'numero_emetteur' in b2_transmission_settings and \
+            'smtp_from' in b2_transmission_settings:
+        return True
+    return False
+
+def b2_output_directory():
+    if not os.path.isdir(OUTPUT_DIRECTORY):
+        raise IOError('B2 output directory (%s) is not a directory' % OUTPUT_DIRECTORY)
+    if not os.access(OUTPUT_DIRECTORY, os.R_OK + os.W_OK + os.X_OK):
+        raise IOError('B2 output directory (%s) is not accessible (rwx)' % OUTPUT_DIRECTORY)
+    return OUTPUT_DIRECTORY
 
 def filler(n, car=' '):
     return car*n
@@ -77,7 +115,7 @@ def get_control_key(nir):
 
 def write128(output_file, line):
     if len(line) != 128:
-        raise RuntimeError('length of this B2 line is %d != 128 : <<%s>>' %
+        raise RuntimeError('length of this B2 line is %d != 128 : "%s"' %
                 (len(line), line))
     output_file.write(line)
 
@@ -148,16 +186,32 @@ def b2(seq_id, hc, batches):
     total = sum(b.total for b in batches)
     first_batch = min(b.number for b in batches)
 
+    output_dir = os.path.join(b2_output_directory(), '%s' % seq_id)
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+
+    infos = {
+            'seq_id': seq_id,
+            'hc': u'%s' % hc,
+            'hc_b2': to,
+            'batches': [],
+            'total': float(total)
+            }
+
     # B2 veut un identifiant de fichier sur 6 caractères alphanum
     hexdigest = hashlib.sha256('%s%s%s%s%s' % (seq_id, first_batch, NUMERO_EMETTEUR, to, total)).hexdigest()
     file_id = base64.encodestring(hexdigest).upper()[0:6]
-
-    utcnow = datetime.datetime.utcnow()
     prefix = '%s-%s-%s-%s-%s.' % (seq_id, NUMERO_EMETTEUR, to, first_batch, file_id)
+
+    b2_filename = os.path.join(output_dir, prefix + 'b2')
+    assert not os.path.isfile(b2_filename), 'B2 file "%s" already exists' % b2_filename
+
     output_file = tempfile.NamedTemporaryFile(suffix='.b2tmp',
-            prefix=prefix, dir=OUTPUT_DIRECTORY, delete=False)
+            prefix=prefix, dir=output_dir, delete=False)
+
     nb_lines = 0
 
+    utcnow = datetime.datetime.utcnow()
     start_000 = '000' +  TYPE_EMETTEUR + '00000' + NUMERO_EMETTEUR + \
             filler(6) + to + filler(6) + APPLICATION + \
             file_id + b2date(utcnow) + NORME + 'B2' + filler(15) + \
@@ -174,6 +228,14 @@ def b2(seq_id, hc, batches):
                 ' ' + '062007' + 'U' + filler(2+3+1+34)
         write128(output_file, start_1)
         nb_lines += 1
+
+        infos['batches'].append({
+            'batch': batch.number,
+            'hc': u'%s' % batch.health_center,
+            'total': float(batch.total),
+            'number_of_invoices': batch.number_of_invoices,
+            'number_of_acts': batch.number_of_acts
+            })
 
         for i in batch.invoices:
             nb_lines += write_invoice(output_file, i)
@@ -192,8 +254,6 @@ def b2(seq_id, hc, batches):
         nb_batches += 1
 
     if nb_lines > 990:
-        # FIXME grouper les lots comme y fo pour que ca n'arrive jamais
-        print "[FIXME] TROP DE LIGNES -- ", nb_lines
         raise
 
     end_999 = '999' +  TYPE_EMETTEUR + '00000' + NUMERO_EMETTEUR + \
@@ -208,71 +268,102 @@ def b2(seq_id, hc, batches):
     old_filename = output_file.name
     output_file.close()
 
-    b2_filename = os.path.join(OUTPUT_DIRECTORY, prefix + 'b2')
+    b2_filename = os.path.join(output_dir, prefix + 'b2')
     os.rename(old_filename, b2_filename)
 
     # create S/MIME mail
-    mail_filename = build_mail(hc.large_regime.code, hc.dest_organism, b2_filename)
+    fd = open(b2_filename + '-mail', 'w')
+    fd.write(build_mail(hc.large_regime.code, hc.dest_organism, b2_filename))
+    fd.close()
 
-    return b2_filename, mail_filename
+    # create info file (json)
+    basename = os.path.basename(b2_filename)
+    infos['files'] = {
+            'b2': basename,
+            'self': basename + '-info',
+            'mail': basename + '-mail'
+            }
+    fd = open(b2_filename + '-info', 'w')
+    json.dump(infos, fd, sort_keys=True, indent=4, separators=(',', ': '))
+    fd.close()
+
+    return b2_filename
+
+def buildall(seq_id):
+    try:
+        invoicing = Invoicing.objects.filter(seq_id=seq_id)[0]
+    except IndexError:
+        raise RuntimeError('Facture introuvable')
+    batches = build_batches(invoicing)
+    for hc in batches:
+        for b in batches[hc]:
+            b2_filename = b2(invoicing.seq_id, hc, [b])
 
 
-def sendmail(mail):
+def sendmail_raw(mail):
     if DEBUG_TO:
         toaddr = DEBUG_TO
         print '(debug mode, sending to', toaddr, ')'
     else:
         toaddr = re.search('\nTo: +(.*)\n', mail, re.MULTILINE).group(1)
-    fromaddr = FROM
 
-    smtp = SMTP('mail.aps42.org',587)
+    smtp = SMTP(SMTP_HOST, SMTP_PORT)
     if DEBUG_TO:
         smtp.set_debuglevel(1)
-    if SMTP_LOGIN:
+    smtp.ehlo()
+    if SMTP_LOGIN and SMTP_PASSWORD:
+        smtp.starttls()
+        smtp.ehlo()
         smtp.login(SMTP_LOGIN, SMTP_PASSWORD)
-    ret = smtp.sendmail(fromaddr, toaddr, mail)
+    smtp.sendmail(SMTP_FROM, toaddr, mail)
     smtp.close()
-    return ret
+    return toaddr, "%s:%s" % (SMTP_HOST, SMTP_PORT)
 
-def sendall():
-    if not SMTP_PASSWORD:
-        print 'CALEBASSE_B2_SMTP_PASSWD envvar is missing...'
-        return
-    for mail_filename in glob.glob(B2FILES):
-        print 'sending', mail_filename
+def sendmail(seq_id, oneb2=None):
+    output_dir = os.path.join(b2_output_directory(), '%s' % seq_id)
+    if oneb2:
+        filename = os.path.join(output_dir, oneb2 + '-mail')
+        if os.path.isfile(filename + '-sent'): # resent
+            os.rename(filename + '-sent', filename)
+        filenames = [filename]
+    else:
+        filenames = glob.glob(os.path.join(output_dir, '*.b2-mail'))
+    for mail_filename in filenames:
+        log = open(mail_filename + '.log', 'a')
+        log.write('%s mail %s\n' % (datetime.datetime.now(), os.path.basename(mail_filename)))
         mail = open(mail_filename).read()
         try:
-            sendmail(mail)
+            to, via = sendmail_raw(mail)
         except SMTPException as e:
-            print '        SMTP ERROR:', e
+            log.write('%s SMTP ERROR: %s\n' % (datetime.datetime.now(), e))
         else:
-            print '        sent'
+            log.write('%s OK, MAIL SENT TO %s VIA %s\n' % (datetime.datetime.now(), to, via))
             os.rename(mail_filename, mail_filename + '-sent')
-        time.sleep(10)
+            os.utime(mail_filename + '-sent', None) # touch
+        log.close()
+        if SMTP_DELAY:
+            time.sleep(SMTP_DELAY) # Exchange, I love you.
 
 
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
-    from calebasse.facturation.models import Invoicing
-
-    if len(sys.argv) < 2:
-        print 'just (re)send all mails...'
-        sendall()
-        sys.exit(0)
-
-    try:
-        invoicing = Invoicing.objects.filter(seq_id=sys.argv[1])[0]
-    except IndexError:
-        raise RuntimeError('Facture introuvable')
-    print 'Facturation', invoicing.seq_id
-    batches = build_batches(invoicing)
-    for hc in batches:
-        print 'pour', hc
-        for b in batches[hc]:
-            print '  lot', b
-            b2_filename, mail_filename = b2(invoicing.seq_id, hc, [b])
-            print '  B2    :', b2_filename
-            print '  smime :', mail_filename
-    sendall()
-
+def get_all_infos(seq_id):
+    output_dir = os.path.join(b2_output_directory(), '%s' % seq_id)
+    infos = []
+    for mail_filename in glob.glob(os.path.join(output_dir, '*.b2-info')):
+        fd = open(mail_filename, 'r')
+        info = json.load(fd)
+        stats = os.stat(os.path.join(output_dir, info['files']['b2']))
+        info['creation_date'] = datetime.datetime.fromtimestamp(stats.st_mtime)
+        try:
+            stats = os.stat(os.path.join(output_dir, info['files']['mail'] + '-sent'))
+            info['mail_date'] = datetime.datetime.fromtimestamp(stats.st_mtime)
+        except:
+            pass
+        try:
+            fd = open(os.path.join(output_dir, info['files']['mail'] + '.log'), 'r')
+            info['mail_log'] = fd.read()
+            fd.close()
+        except:
+            pass
+        infos.append(info)
+        fd.close()
+    return infos
