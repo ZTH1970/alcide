@@ -945,10 +945,7 @@ class PatientRecordsWaitingQueueView(cbv.ListView):
             all_patient_records):
         patient_records = []
         if paginate_patient_records:
-            first = paginate_patient_records[0]
             position = 1
-            while first.id != all_patient_records[position - 1].id:
-                position += 1
             for patient_record in paginate_patient_records:
                 while patient_record.id != all_patient_records[position - 1].id:
                     position += 1
