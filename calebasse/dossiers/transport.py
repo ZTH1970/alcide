@@ -52,19 +52,19 @@ def render_transport(patient, address, data={}):
         ctx['NOM_ASSURE'] = policy_holder_full_name
     if patient.policyholder.social_security_id:
         ctx['NIR_ASSURE'] = \
-            u'  '.join(patient.policyholder.social_security_id)
+            u' '.join(patient.policyholder.social_security_id)
         key = str(patient.policyholder.get_control_key())
         if len(key) == 1:
             key = '0' + key
         ctx['NIR_KEY_ASSURE'] = \
-            u'  '.join(key)
+            u' '.join(key)
     if patient.policyholder.health_center:
         ctx['CODE_ORGANISME_1'] = \
-            u'  '.join(patient.policyholder.health_center.large_regime.code)
+            u' '.join(patient.policyholder.health_center.large_regime.code)
         ctx['CODE_ORGANISME_2'] = \
-            u'  '.join(patient.policyholder.health_center.dest_organism)
+            u' '.join(patient.policyholder.health_center.dest_organism)
         ctx['CODE_ORGANISME_3'] = \
-            u'  '.join(patient.policyholder.other_health_center
+            u' '.join(patient.policyholder.other_health_center
                 or patient.policyholder.health_center.code)
     if address:
         ctx['ADRESSE_BENEFICIAIRE'] = address.display_name
