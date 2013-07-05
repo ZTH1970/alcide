@@ -298,7 +298,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             <p><strong>{{ acts_losts|length }}</strong> actes facturables qui ne peuvent pas être facturés :
             <table class="basic">
               <thead>
-                  <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
+                  <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
               </thead>
               <tbody>
                 {% for act in acts_losts %}
@@ -310,6 +310,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                       {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
                       {% endfor %}</td>
                   <td>{{ act.comment|default_if_none:"" }}</td>
+                  <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -342,7 +343,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
                         <table class="basic">
                           <thead>
-                              <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
+                              <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
                           </thead>
                           <tbody>
                             {% for act in acts %}
@@ -354,6 +355,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                                   {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
                                   {% endfor %}</td>
                               <td>{{ act.comment|default_if_none:"" }}</td>
+                              <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
                             </tr>
                             {% endfor %}
                           </tbody>
@@ -401,7 +403,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                         {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
                         <table class="basic">
                           <thead>
-                              <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
+                              <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
                           </thead>
                           <tbody>
                             {% for act in acts %}
@@ -413,6 +415,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
                                   {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
                                   {% endfor %}</td>
                               <td>{{ act.comment|default_if_none:"" }}</td>
+                              <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
                             </tr>
                             {% endfor %}
                           </tbody>
