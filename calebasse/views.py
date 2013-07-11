@@ -17,6 +17,7 @@ APPLICATIONS = (
         (u'Facturation et décompte', 'facturation', True),
         (u'Gestion des personnes', 'personnes', True),
         (u'Gestion des ressources', 'ressources', True),
+        (u'Statistiques', 'statistics', False),
 )
 
 def redirect_to_homepage(request):

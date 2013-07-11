@@ -24,6 +24,7 @@ service_patterns = patterns('',
     url(r'^facturation/', include('calebasse.facturation.urls')),
     url(r'^personnes/', include('calebasse.personnes.urls')),
     url(r'^ressources/', include('calebasse.ressources.urls')),
+    url(r'^statistics/', include('calebasse.statistics.urls')),
 )
 
 urlpatterns = patterns('',
