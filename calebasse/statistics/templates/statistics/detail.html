@@ -1,0 +1,45 @@
+{% extends "ressources/base.html" %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Statistiques - {{ service_name }}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Statistique {{ dn }}</h2>
+  <a href="../..">Retourner aux statistiques</a>
+<span id="ajax-redirect" data-url="{{ url }}"/>
+{% endblock %}
+
+{% block content %}
+    {% if data %}
+    <table class="basic">
+      <thead>
+          <tr>
+          {% for col in data.0 %}
+          <th>{{ col }}</th>
+          {% endfor %}
+          </tr>
+      </thead>
+      <tbody>
+        {% for values in data.1 %}
+        <tr>
+            {% for value in values %}
+                {% if value.id %}
+                <td>{{ value }}</td>
+                {% else %}
+                <td>
+                    <ul>
+                        {% for val in value %}
+                        <li>{{ val }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+{% endblock %}
