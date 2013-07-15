@@ -2,9 +2,13 @@
   $(function() {
     $('.stats').click(function() {
         var url = 'form/' + this.id;
-        generic_ajaxform_dialog(url, 'Choix des parametres',
-            '#stat-form', '700px', 'Extraire', false,
-          function (dialog) {
+        $('#ajax-dlg').load(url,
+          function () {
+             $(this).dialog({title: 'Choix des parametres', width: '700px',
+                      buttons: [ { text: "Fermer",
+                          click: function() { $(this).dialog("close"); } },
+                      { text: "Extraire",
+                          click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
               var deck = $('#id_participants_on_deck');
               $(deck).bind('added', function() {
                   var added = $(deck).find('div:last');
@@ -29,7 +33,8 @@
                           });
                   });
               });
-          });
+         });
+         return false;
     });
   });
 })(window.jQuery)
