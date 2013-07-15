@@ -66,12 +66,10 @@ def render_to_csv(data):
                 writer.writerow(d)
             return temp_out_csv.name
         except:
-            if delete:
-                try:
-                    os.unlink(temp_out_pdf.name)
-                except:
-                    pass
-            raise
+            try:
+                os.unlink(temp_out_pdf.name)
+            except:
+                pass
 
 class Statistic(models.Model):
     patients = models.ManyToManyField('dossiers.PatientRecord',
