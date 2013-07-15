@@ -49,8 +49,12 @@
            </td>
            <td {% if form.patient.field.required %}class="required"{% endif %}>
            <h4>{{ form.patient.label_tag }}</h4>
+           {% if object.exception_to and not object.exception_to.canceled %}
+           {{ object.patient }}
+           {% else %}
            {{ form.patient }}
            {{ form.patient.errors }}
+           {% endif %}
            </td>
            <td {% if form.act_type.field.required %}class="required"{% endif %}>
            <h4>{{ form.act_type.label_tag }}</h4>

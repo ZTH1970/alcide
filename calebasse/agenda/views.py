@@ -22,7 +22,7 @@ from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
 
-from forms import (NewAppointmentForm, NewEventForm,
+from forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
         UpdateAppointmentForm, UpdateEventForm, PeriodicEventsSearchForm)
 
 
@@ -184,13 +184,17 @@ class BaseAppointmentView(UpdateView):
 
 
 class UpdateAppointmentView(TodayOccurrenceMixin, BaseAppointmentView):
-    pass
+
+    def get_form_class(self):
+        if self.object.exception_to and not self.object.exception_to.canceled:
+            return UpdatePeriodicAppointmentForm
+        else:
+            return self.form_class
 
 
 class UpdatePeriodicAppointmentView(BaseAppointmentView):
     form_class = NewAppointmentForm
     template_name = 'agenda/new-appointment.html'
-
 
 class NewEventView(CreateView):
     model = Event

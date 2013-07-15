@@ -90,6 +90,21 @@ class NewAppointmentForm(BaseForm):
             appointment.services = [self.service]
         return appointment
 
+class UpdatePeriodicAppointmentForm(NewAppointmentForm):
+
+    def __init__(self, instance, service=None, **kwargs):
+        super(UpdatePeriodicAppointmentForm, self).__init__(instance,
+                service, **kwargs)
+        if instance and instance.pk:
+            self.fields['patient'].required = False
+            self.fields['patient'].widget.attrs['disabled'] = 'disabled'
+
+    def clean_patient(self):
+        instance = getattr(self, 'instance', None)
+        if instance:
+            return instance.patient
+        else:
+            return self.cleaned_data.get('patient', None)
 
 class UpdateAppointmentForm(NewAppointmentForm):
     class Meta(NewAppointmentForm.Meta):
