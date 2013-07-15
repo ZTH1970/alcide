@@ -159,7 +159,6 @@ INSTALLED_APPS = (
     'calebasse.facturation',
     'calebasse.personnes',
     'calebasse.ressources',
-    'calebasse.statistics',
     'calebasse.middleware.request',
     'south',
 )

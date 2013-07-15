@@ -1074,9 +1074,6 @@ li#ressources a#img:hover { background-image: url(icon-ressources-hover.png); }
 li#facturation a#img { background-image: url(icon-facturation.png); }
 li#facturation a#img:hover { background-image: url(icon-facturation-hover.png); }
 
-li#statistics a#img { background-image: url(icon-statistics.png); }
-li#statistics a#img:hover { background-image: url(icon-statistics-hover.png); }
-
 div.agenda a.print {
 	display: block;
 	text-align: right;
