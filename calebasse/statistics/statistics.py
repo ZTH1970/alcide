@@ -61,7 +61,9 @@ def render_to_csv(data):
         try:
             writer = csv.writer(temp_out_csv, delimiter=';', quotechar='|',
                 quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(['a', 'b'])
+            writer.writerow(data[0])
+            for d in data[1]:
+                writer.writerow(d)
             return temp_out_csv.name
         except:
             if delete:
