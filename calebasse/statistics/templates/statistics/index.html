@@ -1,5 +1,4 @@
-{% extends "statistics/base.html" %}
-{% load url from future %}
+{% extends "ressources/base.html" %}
 
 {% block header %}
   {{ block.super }}
@@ -13,16 +12,8 @@
 
 {% block content %}
     <ul>
-     {% for category, stats in statistics.iteritems %}
-         <h3>{{ category }}</h3>
-         {% for n, dn in stats %}
-         <button id="{{ n }}" class="stats">{{ dn }}</button>
-         {% endfor %}
+     {% for statistic in statistics %}
+     <li><a href="{{ statistic }}">{{ statistic }}</a></li>
      {% endfor %}
     </ul>
-{% endblock %}
-
-{% block dialogs %}
-<div id="stat-form" style="display: none;">
- </div>
 {% endblock %}
