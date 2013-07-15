@@ -8,6 +8,7 @@ from statistics import Statistic
 
 
 class StatForm(Form):
+    display_or_export = forms.BooleanField(label=u'Exporter', required=False, localize=True)
     start_date = forms.DateField(label=u'Date de début', required=False, localize=True)
     end_date = forms.DateField(label=u'Date de fin', required=False, localize=True)
     patients = make_ajax_field(Statistic, 'patients', 'patientrecord', True)

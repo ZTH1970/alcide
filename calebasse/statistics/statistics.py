@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
+import tempfile
+import csv
+
 from collections import OrderedDict
 from datetime import datetime
 
@@ -52,6 +56,20 @@ def patients_per_worker_for_period_per_service(statistic):
     data.append(values)
     return data
 
+def render_to_csv(data):
+    with tempfile.NamedTemporaryFile(delete=False) as temp_out_csv:
+        try:
+            writer = csv.writer(temp_out_csv, delimiter=';', quotechar='|',
+                quoting=csv.QUOTE_MINIMAL)
+            writer.writerow(['a', 'b'])
+            return temp_out_csv.name
+        except:
+            if delete:
+                try:
+                    os.unlink(temp_out_pdf.name)
+                except:
+                    pass
+            raise
 
 class Statistic(models.Model):
     patients = models.ManyToManyField('dossiers.PatientRecord',
@@ -100,3 +118,7 @@ class Statistic(models.Model):
     def get_data(self):
         func = globals()[self.name]
         return func(self)
+
+    def get_file(self):
+        data = self.get_data()
+        return render_to_csv(data)
