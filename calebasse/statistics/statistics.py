@@ -27,8 +27,9 @@ def patients_per_worker_for_period_per_service(statistic):
     if not (statistic.in_start_date and statistic.in_end_date
             and statistic.in_service):
         return None
+    data_tables = []
     data = []
-    data.append(['Intervenants', 'Patients'])
+    data.append(['Intervenants', 'Nombre', 'Patients'])
     values = []
     # Get all acts in the period with a patient in the service
     # Make a dic with intervene for keys
@@ -47,29 +48,16 @@ def patients_per_worker_for_period_per_service(statistic):
         for intervene in act.doctors.all():
             if statistic.in_participants:
                 if intervene in statistic.in_participants:
-                    analyse.setdefault(intervene, []).append(act.patient)
+                    analyse.setdefault(intervene, []).append(str(act.patient))
             else:
-                analyse.setdefault(intervene, []).append(act.patient)
+                analyse.setdefault(intervene, []).append(str(act.patient))
     o_analyse = OrderedDict(sorted(analyse.items(), key=lambda t: t[0]))
     for intervene, patients in o_analyse.iteritems():
-        values.append([intervene, list(set(patients))])
+        lst = list(set(patients))
+        values.append([str(intervene), len(lst), lst])
     data.append(values)
-    return data
-
-def render_to_csv(data):
-    with tempfile.NamedTemporaryFile(delete=False) as temp_out_csv:
-        try:
-            writer = csv.writer(temp_out_csv, delimiter=';', quotechar='|',
-                quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(data[0])
-            for d in data[1]:
-                writer.writerow(d)
-            return temp_out_csv.name
-        except:
-            try:
-                os.unlink(temp_out_pdf.name)
-            except:
-                pass
+    data_tables.append(data)
+    return data_tables
 
 class Statistic(models.Model):
     patients = models.ManyToManyField('dossiers.PatientRecord',
@@ -117,8 +105,25 @@ class Statistic(models.Model):
 
     def get_data(self):
         func = globals()[self.name]
-        return func(self)
+        self.data = func(self)
+        return self.data
+
+    def render_to_csv(self):
+        with tempfile.NamedTemporaryFile(delete=False) as temp_out_csv:
+            try:
+                writer = csv.writer(temp_out_csv, delimiter=';', quotechar='|',
+                    quoting=csv.QUOTE_MINIMAL)
+                for data in self.data:
+                    writer.writerow(data[0])
+                    for d in data[1]:
+                        writer.writerow(d)
+                return temp_out_csv.name
+            except:
+                try:
+                    os.unlink(temp_out_pdf.name)
+                except:
+                    pass
 
     def get_file(self):
-        data = self.get_data()
-        return render_to_csv(data)
+        self.get_data()
+        return self.render_to_csv()

@@ -16,7 +16,7 @@
      {% for category, stats in statistics.iteritems %}
          <h3>{{ category }}</h3>
          {% for n, dn in stats %}
-         <button id="{{ n }}" class="stats">{{ dn }}</button>
+         <button id="{{ n }}" class="stats">{{ dn }}</button><br/>
          {% endfor %}
      {% endfor %}
     </ul>

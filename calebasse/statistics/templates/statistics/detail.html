@@ -1,4 +1,5 @@
 {% extends "ressources/base.html" %}
+{% load statistics_filters %}
 
 {% block header %}
   {{ block.super }}
@@ -11,7 +12,8 @@
 {% endblock %}
 
 {% block content %}
-    {% if data %}
+    {% if data_tables %}
+    {% for data in data_tables %}
     <table class="basic">
       <thead>
           <tr>
@@ -24,7 +26,7 @@
         {% for values in data.1 %}
         <tr>
             {% for value in values %}
-                {% if value.id %}
+                {% if not value|is_list %}
                 <td>{{ value }}</td>
                 {% else %}
                 <td>
@@ -40,5 +42,6 @@
         {% endfor %}
       </tbody>
     </table>
+    {% endfor %}
     {% endif %}
 {% endblock %}

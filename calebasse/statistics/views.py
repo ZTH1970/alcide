@@ -39,7 +39,7 @@ class StatisticsDetailView(TemplateView):
         inputs['patients'] = self.request.GET.get('patients')
         statistic = Statistic(name, inputs)
         context['dn'] = statistic.display_name
-        context['data'] = statistic.get_data()
+        context['data_tables'] = statistic.get_data()
         return context
 
 
