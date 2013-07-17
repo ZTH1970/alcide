@@ -133,6 +133,10 @@ function enable_events(base) {
       });
       $(base).on('click', '.update-periodic-event', function () {
         $('.ui-icon-closethick').click();
+        // remove the form from previous hidden layer in order to prevent two
+        // elements with 'id_date' id on the page
+        $(this).parent().remove();
+
         var id = $(this).data('id');
         var delete_url = $(this).data('delete-url');
         generic_ajaxform_dialog('update-periodic-event/' + id,
