@@ -642,7 +642,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
    <p>
    <label for="id_date">Date :</label>
    {{ form.date.errors }}
-   <input id="id_date" class="date" name="date" value="{{ state.created|date:"d/m/Y" }}"/>
+   <input id="id_date_{{state.id}}" class="date" name="date" value="{{ state.created|date:"d/m/Y" }}"/>
    </p>
    <p>
     <label for="id_comment">Commentaire :</label>
