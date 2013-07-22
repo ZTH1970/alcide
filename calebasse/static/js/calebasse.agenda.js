@@ -89,7 +89,7 @@ function enable_events(base) {
           event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
       });
       $(base).find('.edit-appointment').click(function() {
-          event_dialog("update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
+          event_dialog("../update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
           return false;
       });
       $(base).find('.newevent').click(function() {
