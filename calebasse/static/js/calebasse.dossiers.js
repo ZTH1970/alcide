@@ -72,7 +72,7 @@ function state_dialog(url, state_title, state_type) {
         $("#policyholder-form").submit();
     });
     $('.pr-line').click(function() {
-        window.open($(this).data('link'), '_newtab');
+        window.open($(this).data('link'), $(this).data('link'));
     });
     $('button#reset').click(function() {
         window.location.href = window.location.pathname;
