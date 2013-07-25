@@ -20,7 +20,7 @@
                         click: function () {
                             $(dialog).dialog('close');
                             generic_ajaxform_dialog(id + '/delete', "Supprimer l'acte",
-                            '#acte-dlg', '500px', 'Oui', '..');
+                            '#acte-dlg', '500px', 'Oui', window.location.href);
 
                         }
                     });
