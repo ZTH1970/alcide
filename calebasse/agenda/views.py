@@ -22,9 +22,9 @@ from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
 
-from forms import (NewAppointmentForm, NewEventForm,
-        UpdateAppointmentForm, UpdateEventForm, PeriodicEventsSearchForm)
-
+from forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
+        DisablePatientAppointmentForm, UpdateAppointmentForm,
+        UpdateEventForm, PeriodicEventsSearchForm)
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -184,11 +184,16 @@ class BaseAppointmentView(UpdateView):
 
 
 class UpdateAppointmentView(TodayOccurrenceMixin, BaseAppointmentView):
-    pass
+
+    def get_form_class(self):
+        if self.object.exception_to and not self.object.exception_to.canceled:
+            return DisablePatientAppointmentForm
+        else:
+            return self.form_class
 
 
 class UpdatePeriodicAppointmentView(BaseAppointmentView):
-    form_class = NewAppointmentForm
+    form_class = UpdatePeriodicAppointmentForm
     template_name = 'agenda/new-appointment.html'
 
 

@@ -35,9 +35,8 @@ div#content div.worker-agenda h2 {
   background: none;
 }
 
-div.worker-agenda {
-  clear: both;
-  page-break-after: always;
+.worker-agenda+.worker-agenda {
+  page-break-before: always;
 }
 
 div.worker-agenda table{

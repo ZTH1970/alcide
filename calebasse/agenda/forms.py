@@ -1,3 +1,4 @@
+import ipdb
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
@@ -90,6 +91,34 @@ class NewAppointmentForm(BaseForm):
             appointment.services = [self.service]
         return appointment
 
+class UpdatePeriodicAppointmentForm(NewAppointmentForm):
+
+    def is_valid(self):
+        acts = self.instance.act_set.filter(is_billed=True).order_by('-date')
+        if acts and self.data.get('recurrence_end_date'):
+            recurrence_end_date = datetime.strptime(self.data['recurrence_end_date'],
+                    '%d/%m/%Y').date()
+            if recurrence_end_date < acts[0].date:
+                self.errors['recurrence_end_date'] = \
+                        u"La date doit être supérieur au dernier acte de la récurrence facturée"
+                return False
+        return super(UpdatePeriodicAppointmentForm, self).is_valid()
+
+class DisablePatientAppointmentForm(NewAppointmentForm):
+
+    def __init__(self, instance, service=None, **kwargs):
+        super(DisablePatientAppointmentForm, self).__init__(instance,
+                service, **kwargs)
+        if instance and instance.pk:
+            self.fields['patient'].required = False
+            self.fields['patient'].widget.attrs['disabled'] = 'disabled'
+
+    def clean_patient(self):
+        instance = getattr(self, 'instance', None)
+        if instance:
+            return instance.patient
+        else:
+            return self.cleaned_data.get('patient', None)
 
 class UpdateAppointmentForm(NewAppointmentForm):
     class Meta(NewAppointmentForm.Meta):

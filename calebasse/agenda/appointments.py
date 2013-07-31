@@ -11,7 +11,6 @@ class Appointment(object):
 
     def __init__(self, title=None, begin_time=None, type=None,
             length=None, description=None, room=None):
-        """ """
         self.title = title
         self.type = type
         self.length = length
