@@ -22,6 +22,12 @@ STATISTICS = {
             'période',
         'category': 'Suivi'
     },
+    'active_patients' :
+        {
+        'display_name': 'Liste des enfants en file active',
+        'category': 'Suivi',
+        'services': ['CMPP',]
+    },
     'annual_activity' :
         {
         'display_name': "Tableaux de l'activité annuelle",
@@ -434,6 +440,39 @@ def patients_per_worker_for_period(statistic):
         values.append([str(intervene), len(lst), lst])
     data.append(values)
     data_tables.append(data)
+    return data_tables
+
+def active_patients(statistic):
+    if not statistic.in_start_date and not statistic.in_service:
+        return None
+    data_tables = []
+    data1 = []
+    data1.append(['Au moins un acte après cette date', 'Jours',
+        'Nombre de dossiers'])
+    data2 = []
+    data2.append(['Nom', 'Prénom', 'N° Dossier'])
+    today = datetime.today().date()
+    patients = Act.objects.filter(date__gte=statistic.in_start_date.date(),
+        date__lte=today, patient__service=statistic.in_service,
+        patient__last_state__status__type__in=('TRAITEMENT',
+            'DIAGNOSTIC')).order_by('patient').distinct('patient').\
+            values_list('patient__last_name', 'patient__first_name',
+            'patient__paper_id')
+    p_list = []
+    for ln, fn, pid in patients:
+        ln = ln or ''
+        if len(ln) > 1:
+            ln = ln[0].upper() + ln[1:].lower()
+        fn = fn or ''
+        if len(fn) > 1:
+            fn = fn[0].upper() + fn[1:].lower()
+        p_list.append((ln, fn, str(pid or '')))
+    data2.append(sorted(p_list,
+        key=lambda k: k[0]+k[1]))
+    data1.append([(statistic.in_start_date.date(),
+        (today-statistic.in_start_date.date()).days, len(data2[1])-1)])
+    data_tables.append(data1)
+    data_tables.append(data2)
     return data_tables
 
 class Statistic(models.Model):
