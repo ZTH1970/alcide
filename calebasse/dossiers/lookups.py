@@ -11,7 +11,10 @@ class PatientRecordLookup(LookupChannel):
 
     def get_query(self,q,request):
         kwargs = { "%s__istartswith" % self.search_field : q }
+        not_closed_filter_field = 'last_state__status__name'
+
         qs = self.model.objects.filter(**kwargs).order_by(self.search_field)
+
         if request.COOKIES.has_key('home-service'):
             service = request.COOKIES['home-service'].upper().replace('-', ' ')
             qs = qs.filter(service__name=service)
@@ -20,6 +23,9 @@ class PatientRecordLookup(LookupChannel):
         #if nb != nb_distinct:
         #    self.homonym = True
         qs.prefetch_related('last_state__status')
+        qs.query.order_by = [not_closed_filter_field, ]
+        qs = qs.order_by('-%s' % not_closed_filter_field)
+
         return qs
 
     def format_match(self,obj):

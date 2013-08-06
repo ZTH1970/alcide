@@ -3,7 +3,7 @@
  <div id="datesel">
    <a id="arrow" href="{% url url_name date=previous_month service=service %}">««</a>&nbsp;
    <a id="arrow" href="{% url url_name date=previous_day service=service %}">«</a>
-   <input data-url="{% url url_name date=date service=service %}" id="date-selector" value="{{ date|date:"DATE_FORMAT"|title }}" readonly="readonly" />
+   <input data-url="{% url url_name date=date service=service %}" id="date-selector" value="{{ date|date:"DATE_FORMAT"|title}} ({{date|date:"W"}})" readonly="readonly" />
    <a id="arrow" href="{% url url_name date=next_day service=service %}">»</a>&nbsp;
    <a id="arrow" href="{% url url_name date=next_month service=service %}">»»</a>
    {% if date != today %}<a id="datesel-today-link" href="{% url url_name service=service date=today %}">Aujourd'hui</a>{% endif %}
