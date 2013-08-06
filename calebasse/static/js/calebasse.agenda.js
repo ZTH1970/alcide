@@ -1,3 +1,5 @@
+COOKIE_PATH = '/cmpp/agenda';
+
 function delete_prompt(text) {
   var r = prompt(text + '\n Pour cela veuillez entrer DEL');
   if (r.toLowerCase().replace(/^\s+|\s+$/g, '') == 'del') {
@@ -224,14 +226,14 @@ function toggle_worker(worker_selector) {
 
     $(worker_selector).toggleClass('active');
     if (!($.cookie('agenda-worker-tabs'))) {
-        $.cookie('agenda-worker-tabs', new Array(), { path: '/' });
+        $.cookie('agenda-worker-tabs', new Array(), {path: COOKIE_PATH});
     }
     if ($(worker_selector).hasClass('active')) {
         var tabs = $.cookie('agenda-worker-tabs');
         if ($.inArray($(worker_selector).attr('id'), tabs) == -1)
         {
             tabs.push($(worker_selector).attr('id'));
-            $.cookie('agenda-worker-tabs', tabs, { path: '/' });
+            $.cookie('agenda-worker-tabs', tabs, { path: COOKIE_PATH });
         }
     }
     else {
@@ -243,7 +245,7 @@ function toggle_worker(worker_selector) {
                 ok = true;
             }
         });
-        $.cookie('agenda-worker-tabs', agendatabs, { path: '/' });
+        $.cookie('agenda-worker-tabs', agendatabs, {path: COOKIE_PATH});
     }
     var target = $($(worker_selector).data('target'));
     target.toggle();
@@ -284,14 +286,14 @@ function toggle_ressource(ressource_selector) {
 
     $(ressource_selector).toggleClass('active');
     if (!($.cookie('agenda-ressource-tabs'))) {
-        $.cookie('agenda-ressource-tabs', new Array(), { path: '/' });
+        $.cookie('agenda-ressource-tabs', new Array(), { path: COOKIE_PATH });
     }
     if ($(ressource_selector).hasClass('active')) {
         var tabs = $.cookie('agenda-ressource-tabs');
         if ($.inArray($(ressource_selector).attr('id'), tabs) == -1)
         {
             tabs.push($(ressource_selector).attr('id'));
-            $.cookie('agenda-ressource-tabs', tabs, { path: '/' });
+            $.cookie('agenda-ressource-tabs', tabs, { path: COOKIE_PATH });
         }
     }
     else {
@@ -301,7 +303,7 @@ function toggle_ressource(ressource_selector) {
                 agendatabs.splice(i, 1);
             }
         });
-        $.cookie('agenda-ressource-tabs', agendatabs, { path: '/' });
+        $.cookie('agenda-ressource-tabs', agendatabs, { path: COOKIE_PATH });
     }
     var target = $($(ressource_selector).data('target'));
     target.toggle();
@@ -462,7 +464,7 @@ function event_dialog(url, title, width, btn_text) {
           });
 
           $('a.tab').click(function() {
-              $.cookie('active-worker-agenda', $(this).data('id'), { path: '/' });
+              $.cookie('active-worker-agenda', $(this).data('id'), { path: COOKIE_PATH });
           });
 
           if ($.cookie('agenda-worker-tabs')) {
@@ -495,7 +497,7 @@ function event_dialog(url, title, width, btn_text) {
           $('div.agenda > div').accordion({active: false, autoHeight: false});
 
           $('a.tab').click(function() {
-              $.cookie('active-ressource-agenda', $(this).data('id'), { path: '/' });
+              $.cookie('active-ressource-agenda', $(this).data('id'), { path: COOKIE_PATH });
           });
 
           if ($.cookie('agenda-ressource-tabs')) {
@@ -517,7 +519,7 @@ function event_dialog(url, title, width, btn_text) {
           var target = '#' + $(this).data('target');
           $(target).click();
           if ($.cookie('active-ressource-agenda') == $(target).data('ressource-id')) {
-              $.cookie('active-ressource-agenda','', { path: '/' });
+              $.cookie('active-ressource-agenda','', { path: COOKIE_PATH });
           }
 
       });
