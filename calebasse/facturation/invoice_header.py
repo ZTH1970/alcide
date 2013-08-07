@@ -46,6 +46,16 @@ def render_to_pdf_file(templates, ctx, prefix='tmp', delete=False):
                 pass
         raise
 
+def details_per_year(service, invoicing,
+                     header_service_template = 'facturation/bordereau-%s.html',
+                     header_template = 'facturation/bordereau-details-par-annee.html',
+                     delete = False):
+    context = {'invoicings': invoicing.get_stats_per_price_per_year()}
+    return render_to_pdf_file((header_service_template % service.slug,
+                               header_template),
+                              context,
+                              delete = delete)
+
 
 def header_file(service, invoicing, health_center, batches,
         header_service_template='facturation/bordereau-%s.html',
@@ -65,6 +75,7 @@ def header_file(service, invoicing, health_center, batches,
             'synthesis': synthesis,
             'counter': counter,
     }
+
     prefix = '%s-invoicing-%s-healthcenter-%s-' % (
             service.slug, invoicing.id, health_center.id)
     return render_to_pdf_file(
@@ -262,7 +273,7 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     service = invoicing.service
     now = datetime.datetime.now()
     output_file = None
-    all_files = []
+    all_files = [details_per_year(service, invoicing)]
     try:
         if service.name == 'CMPP':
             batches_by_health_center = build_batches(invoicing)
