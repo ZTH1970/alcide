@@ -176,7 +176,14 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     if total2 != Decimal(0):
         ctx['SOUS_TOTAL2'] = total2
     ctx['TOTAL'] = invoice.decimal_amount
-    return [tpl.generate(ctx)]
+
+    try:
+        repeat = settings.BATCH_CONTENT_TIMES_IN_INVOINCING_FILE
+    except:
+        repeat = 1
+
+    output = tpl.generate(ctx)
+    return [output for i in xrange(repeat)]
 
 def render_not_cmpp_header(invoicing):
     header_template='facturation/bordereau_not_cmpp_header.html'
@@ -328,8 +335,14 @@ def batches_files(service, invoicing, health_center, batches, delete=False,
     files = []
     try:
         if headers:
-            files.append(header_file(service, invoicing, health_center,
-                batches, delete=delete, counter=counter))
+            header = header_file(service, invoicing, health_center, batches,
+                                 delete=delete, counter=counter)
+
+            try:
+                repeat = settings.BATCH_HEADER_TIMES_IN_INVOICING_FILE
+            except:
+                repeat = 1
+            map(lambda el: files.append(header), xrange(repeat))
 
         if invoices:
             for batch in batches:
@@ -337,6 +350,7 @@ def batches_files(service, invoicing, health_center, batches, delete=False,
                     # if invoices is a sequence, skip unlisted invoices
                     if invoices is not True and invoice not in invoices:
                         continue
+
                     files.extend(invoice_files(service, invoicing, batch, invoice, counter=counter))
         return files
     except:
