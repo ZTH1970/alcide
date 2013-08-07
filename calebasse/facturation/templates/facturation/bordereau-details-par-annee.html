@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      @page {
+        @frame title {
+          -pdf-frame-content: title;
+          margin: 0.5cm;
+          margin-right: 6cm;
+        }
+        @frame {
+          top: 6cm;
+          margin: 1cm;
+        }
+      }
+      @page then {
+        @frame {
+          margin: 2cm 1cm;
+        }
+      }
+      div {
+        display: block;
+      }
+      table tr.batch-columns-header td {
+        text-align: center;
+      }
+      #title {
+        font-size: 3em;
+        line-height: 0cm;
+      }
+      #content td {
+        text-align: center;
+      }
+      #content  {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title">Détail par année et par tarif des actes</div>
+    <div id="content">
+      <div style="border: 0.5px solid black; padding-top: 2px; padding-bottom: 3px; line-height: 50%;">
+        <pdf:nexttemplate name="then"/>
+      <table>
+        <thead style="border: none;">
+            <tr class="batch-columns-header" style="background-color: #EEEEEE;">
+              <td>Tarif</td>
+              <td>Année</td>
+              <td>Actes</td>
+              <td>Montant</td>
+            </tr>
+          </thead>
+          <tbody class="batch-content" style="border: none;">
+            {% for year, x in invoicings.detail.items %}
+            {% for ppa, stats in x.items %}
+            <tr><td>{{ ppa }}</td><td>{{ year }}</td><td>{{ stats.0 }}</td><td>{{ stats.1 }}</td></tr>
+            {% endfor %}
+            {% endfor %}
+          </tbody>
+      </table>
+      </div>
+  </body>
+</html>
