@@ -92,16 +92,15 @@ class NewAppointmentForm(BaseForm):
 
 class UpdatePeriodicAppointmentForm(NewAppointmentForm):
 
-    def is_valid(self):
+    def clean(self):
+        cleaned_data = super(UpdatePeriodicAppointmentForm, self).clean()
         acts = self.instance.act_set.filter(is_billed=True).order_by('-date')
-        if acts and self.data.get('recurrence_end_date'):
-            recurrence_end_date = datetime.strptime(self.data['recurrence_end_date'],
-                    '%d/%m/%Y').date()
+        if acts and cleaned_data.get('recurrence_end_date'):
+            recurrence_end_date = cleaned_data['recurrence_end_date']
             if recurrence_end_date < acts[0].date:
-                self.errors['recurrence_end_date'] = \
-                        u"La date doit être supérieur au dernier acte de la récurrence facturée"
-                return False
-        return super(UpdatePeriodicAppointmentForm, self).is_valid()
+                self._errors['recurrence_end_date'] = self.error_class([
+                            u"La date doit être supérieur au dernier acte facturé de la récurrence"])
+        return cleaned_data
 
 class DisablePatientAppointmentForm(NewAppointmentForm):
 
