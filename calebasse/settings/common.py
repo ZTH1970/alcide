@@ -111,6 +111,8 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'reversion.middleware.RevisionMiddleware',
+    # Entr'ouvert wsgi middleware to expose version
+    'entrouvert.djommon.middleware.VersionMiddleware',
 )
 
 ROOT_URLCONF = 'calebasse.urls'

@@ -11,3 +11,4 @@ django-debug-toolbar
 m2crypto
 python-ldap
 xhtml2pdf
+git+git://repos.entrouvert.org/python-entrouvert.git
