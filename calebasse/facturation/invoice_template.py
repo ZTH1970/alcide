@@ -73,7 +73,7 @@ class InvoiceTemplate(object):
                 'type': 'array',
                 'size': 6,
                 'y': 323,
-                'lineheight': 12,
+                'lineheight': 11,
                 'cols': [
                     38,
                     65,
@@ -88,7 +88,7 @@ class InvoiceTemplate(object):
                 'type': 'array',
                 'size': 6,
                 'y': 323,
-                'lineheight': 12,
+                'lineheight': 11,
                 'x': 395.5,
                 'cols': [
                     38,
