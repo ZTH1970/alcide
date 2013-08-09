@@ -179,6 +179,23 @@ class BaseHolidayForm(forms.ModelForm):
                 'comment': forms.Textarea(attrs={'rows': 3}),
         }
 
+class HolidayForm(forms.ModelForm):
+
+    class Meta:
+        model = Holiday
+        widgets = {
+            'comment': forms.Textarea(attrs = {'rows': 3, 'cols': 18}),
+            'start_date': forms.TextInput(attrs = {'size': 10}),
+            'end_date': forms.TextInput(attrs = {'size': 10}),
+            }
+
+    def clean(self):
+        cleaned_data = super(HolidayForm, self).clean()
+        if cleaned_data.get('start_date') and cleaned_data.get('end_date'):
+            if cleaned_data['start_date'] > cleaned_data['end_date']:
+                raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
+        return cleaned_data
+
 HolidayFormSet = inlineformset_factory(
         Worker, Holiday,
         form=BaseHolidayForm,
