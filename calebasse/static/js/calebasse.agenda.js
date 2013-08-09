@@ -1,4 +1,5 @@
-COOKIE_PATH = '/cmpp/agenda';
+var service = location.pathname.split('/')[1];
+COOKIE_PATH = '/' + service + '/agenda';
 
 function delete_prompt(text) {
   var r = prompt(text + '\n Pour cela veuillez entrer DEL');
