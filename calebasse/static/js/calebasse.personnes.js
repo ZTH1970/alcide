@@ -28,18 +28,15 @@ function add_holiday(worker) {
     params = {'title': 'Ajouter une absence', 'button_close': 'Fermer',
               'button_confirm': 'Ajouter', 'width': '500px'};
 
-    on_success = function(response, status, xhr) {
-        var content_type = xhr.getResponseHeader('content-type');
-      if(content_type.indexOf('html') > -1) {
-            $('#holiday-dlg form').html(response);
-        } else {
+    on_success = function(response) {
+        try {
+            $.parseJSON(response);
             if(!response.err) {
                 var result = response.content;
                 var id = response.id;
                 var li = $("<li id='" + id + "'></li>");
                 var ul = $('<ul></ul>');
                 $.each(result, function(i, e) {
-                    console.log(e);
                     var item = $('<li class="' + e[0] + '">' + e[1] + '</li>');
                     ul.append(item);
                 });
@@ -52,7 +49,10 @@ function add_holiday(worker) {
                 $("#holidays").append(li);
                 $("#holiday-dlg").dialog("close");
             }
+        } catch(e) {
+            $('#holiday-dlg form').html(response);
         }
+
     };
     action(worker, null, 'ajouter', null, null, null, params, on_success);
 };
@@ -81,11 +81,9 @@ function edit_holiday(worker, holiday) {
               'button_close': 'Fermer', 'button_confirm': 'Mettre à jour',
               'width': '500px'}
 
-    on_success = function(response, status, xhr) {
-        var content_type = xhr.getResponseHeader('content-type');
-        if(content_type.indexOf('html') > -1) {
-            $('#holiday-dlg form').html(response);
-        } else {
+    on_success = function(response) {
+        try {
+            $.parseJSON(response);
             if(!response.err) {
                 $.each(response.content, function(i, e) {
                     $('#holidays #' + holiday + ' li.' + e[0]).html(e[1]);
@@ -93,6 +91,11 @@ function edit_holiday(worker, holiday) {
                 $(selector).attr('style', initial_color);
                 $("#holiday-dlg").dialog("close");
             }
-        }}
+        } catch(e) {
+            console.log(e);
+            $('#holiday-dlg form').html(response);
+        }
+
+    }
     action(worker, holiday, 'editer', selector, initial_color,  '#af7', params, on_success);
 };
