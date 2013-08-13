@@ -1,4 +1,6 @@
-var service = location.pathname.split('/')[1];
+var path = location.pathname.split('/');
+var service = path[1];
+var current_date = path[3];
 COOKIE_PATH = '/' + service + '/agenda';
 
 function delete_prompt(text) {
@@ -92,7 +94,7 @@ function enable_events(base) {
           event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
       });
       $(base).find('.edit-appointment').click(function() {
-          event_dialog("update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
+          event_dialog("/" + service + "/agenda/" + current_date + "/update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
           return false;
       });
       $(base).find('.newevent').click(function() {
