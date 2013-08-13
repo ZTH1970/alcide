@@ -185,8 +185,10 @@ class HolidayForm(forms.ModelForm):
         model = Holiday
         widgets = {
             'comment': forms.Textarea(attrs = {'rows': 3, 'cols': 18}),
-            'start_date': forms.TextInput(attrs = {'size': 10}),
-            'end_date': forms.TextInput(attrs = {'size': 10}),
+            'start_date': forms.DateInput(format = '%d/%m/%Y',
+                                          attrs = {'size': 10}),
+            'end_date': forms.DateInput(format = '%d/%m/%Y',
+                                        attrs = {'size': 10})
             }
 
     def clean(self):
