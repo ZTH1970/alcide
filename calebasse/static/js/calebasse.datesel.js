@@ -3,6 +3,16 @@
     $('#date-selector').datepicker({
         dateFormat: "DD d MM yy",
         showWeek: true,
+        beforeShowDay: function(date) {
+            var selected_date = location.pathname.split('/')[3];
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var possible_current = [year + '-' + month + '-' + day,
+                                    year + (month < 10? '-0': '-') + month +
+                                    (day < 10? '-0': '-') + day];
+            return [true, $.inArray(selected_date, possible_current) >= 0 ? 'active-cell': 'unactive-cell']
+        },
         onClose: function(dateText, inst) {
             console.log('close');
         }
