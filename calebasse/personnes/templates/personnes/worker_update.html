@@ -124,7 +124,7 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             <li class="status">Statut</li>
             <li class="type">Type</li>
             <li class="comment">Commentaire</li>
-            <li class="groupe">Groupe</li>
+            <li class="groupe">Groupée</li>
             <li class="actions">Actions</li>
           </ul>
         </li>
@@ -151,11 +151,14 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
             <li class="groupe">
               {% if holiday.holiday_type.for_group %}
               <span class="icon-ok"></span>
-              {% endif %}
-            </li>
-            <li class="actions">
+              </li>
+              <li class="actions"></li>
+              {% else %}
+              </li>
+              <li class="actions">
               <button class="icon-edit" data-action='edit' data-id='{{ holiday.id }}'></button>
               <button class="icon-remove" data-action='delete' data-id='{{ holiday.id }}'></button>
+              {% endif %}
             </li>
           </ul>
         </li>

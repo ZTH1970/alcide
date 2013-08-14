@@ -26,7 +26,7 @@ function action(worker, on, action, selector, original_color, highlight_color, p
 
 function add_holiday(worker) {
     params = {'title': 'Ajouter une absence', 'button_close': 'Fermer',
-              'button_confirm': 'Ajouter', 'width': '500px'};
+              'button_confirm': 'Ajouter', 'width': '550px'};
 
     on_success = function(response) {
         try {
@@ -79,7 +79,7 @@ function edit_holiday(worker, holiday) {
     var initial_color = $(selector).attr('style');
     params = {'title': 'Éditer une absence',
               'button_close': 'Fermer', 'button_confirm': 'Mettre à jour',
-              'width': '500px'}
+              'width': '550px'}
 
     on_success = function(response) {
         try {
