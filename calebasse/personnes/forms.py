@@ -181,6 +181,10 @@ class BaseHolidayForm(forms.ModelForm):
 
 class HolidayForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super(HolidayForm, self).__init__(*args, **kwargs)
+        self.fields['holiday_type'].queryset = HolidayType.objects.filter(for_group = False)
+
     class Meta:
         model = Holiday
         widgets = {
@@ -188,7 +192,7 @@ class HolidayForm(forms.ModelForm):
             'start_date': forms.DateInput(format = '%d/%m/%Y',
                                           attrs = {'size': 10}),
             'end_date': forms.DateInput(format = '%d/%m/%Y',
-                                        attrs = {'size': 10})
+                                        attrs = {'size': 10}),
             }
 
     def clean(self):
