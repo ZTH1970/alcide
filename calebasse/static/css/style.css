@@ -1411,6 +1411,7 @@ div.pagination {
 .icon-circle-arrow-right:before   { content: "\f0a9"; }
 .icon-remove:before   { content: "\f00d"; }
 .icon-warning-sign:before       { content: "\f071" }
+.icon-ok:before {content: "\f00c"}
 
 /* periodic event search form */
 
@@ -1464,8 +1465,13 @@ li.status, li.type, li.actions  {
     width: 10%;
 }
 
+li.groupe {
+    width: 4%;
+    text-align: center;
+}
+
 li.comment {
-    width: 45%;
+    width: 41%;
 }
 
 .caption {
@@ -1477,4 +1483,9 @@ li.comment {
 #holidays ul {
     margin: 0;
     padding: 0 .5em;
+}
+
+#services li {
+    display: inline-block;
+    list-style-type: none;
 }
