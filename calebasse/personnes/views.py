@@ -266,8 +266,8 @@ class HolidayView(cbv.TemplateView):
 
         def holiday_url(holiday):
             if holiday.worker:
-                return reverse('worker-holidays-update', kwargs=dict(
-                    service=self.service.slug, worker_pk=holiday.worker.pk))
+                return reverse('worker_update', kwargs=dict(
+                    service=self.service.slug, pk=holiday.worker.pk))
             else:
                 slug = holiday.service.slug if holiday.service else self.service.slug
                 return reverse('group-holiday-update', kwargs=dict(
