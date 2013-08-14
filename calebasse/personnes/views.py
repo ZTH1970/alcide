@@ -267,7 +267,7 @@ class HolidayView(cbv.TemplateView):
         def holiday_url(holiday):
             if holiday.worker:
                 return reverse('worker-holidays-update', kwargs=dict(
-                    service=self.service.slug, pk=holiday.worker.pk))
+                    service=self.service.slug, worker_pk=holiday.worker.pk))
             else:
                 slug = holiday.service.slug if holiday.service else self.service.slug
                 return reverse('group-holiday-update', kwargs=dict(
@@ -377,8 +377,9 @@ class EditHolidayView(HolidayManagement, cbv.FormView):
         return kwargs
 
     def post(self, request, *args, **kwargs):
-        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
-        obj = self.model.objects.for_worker(worker).get(pk = self.kwargs['pk'])
+        service = models.Service.objects.get(name = kwargs['service'].upper())
+        worker = models.Worker.objects.get(pk = kwargs['worker_pk'])
+        obj = self.model.objects.for_worker(worker).get(pk = kwargs['pk'])
         form = self.form_class(request.POST, instance = obj)
         if form.is_valid():
             return self.form_valid(form)
