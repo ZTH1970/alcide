@@ -10,6 +10,7 @@ user_patterns = patterns('calebasse.personnes.views',
 )
 
 holiday_actions_paterns = patterns('calebasse.personnes.views',
+    url(r'^$', 'worker_holidays_update', name = 'worker-holidays-update'),
     url(r'^(?P<pk>\d+)/editer/?$', 'edit_holiday', name = 'edit_holiday'),
     url(r'^(?P<pk>\d+)/supprimer/?$', 'delete_holiday', name = 'delete_holiday'),
     url(r'^ajouter/?$', 'create_holiday', name = 'create_holiday')
