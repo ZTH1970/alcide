@@ -1463,12 +1463,12 @@ li.status, li.type, li.actions  {
 }
 
 li.groupe {
-    width: 4%;
+    width: 5%;
     text-align: center;
 }
 
 li.comment {
-    width: 41%;
+    width: 40%;
 }
 
 .caption {
