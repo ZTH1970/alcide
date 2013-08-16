@@ -183,7 +183,8 @@ class HolidayForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(HolidayForm, self).__init__(*args, **kwargs)
-        self.fields['holiday_type'].queryset = HolidayType.objects.filter(for_group = False)
+        self.fields['holiday_type'].queryset = \
+            HolidayType.objects.filter(for_group=False)
 
     class Meta:
         model = Holiday

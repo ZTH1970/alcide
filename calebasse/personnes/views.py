@@ -326,11 +326,18 @@ class GroupHolidayUpdateView(cbv.FormView):
 group_holiday_update = GroupHolidayUpdateView.as_view()
 
 class HolidayManagement(object):
+
     def render_to_json(self, id, context, err = 0, **kwargs):
         data = {'err': err, 'id': id, 'content': context}
         response = json.dumps(data)
         kwargs['content_type'] = 'application/json'
         return HttpResponse(response, **kwargs)
+
+    def update_post_data(self, request):
+        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
+        post = request.POST.copy()
+        post.update({'worker': worker.id})
+        return worker, post
 
     def form_valid(self, form):
         form.save()
@@ -352,17 +359,21 @@ class HolidayManagement(object):
             return self.render_to_json(instance.id, context)
         return super(HolidayManagement, self).form_valid(form)
 
-class HolidayCreateView(HolidayManagement, cbv.ServiceFormMixin,
-                        cbv.CreateView):
+class HolidayCreateView(HolidayManagement, cbv.CreateView):
     model = models.Holiday
     form_class = forms.HolidayForm
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(HolidayCreateView, self).get_form_kwargs(*args, **kwargs)
-        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
-        kwargs['initial'] = {'service': self.service, 'worker': worker}
-        del kwargs['service']
         return kwargs
+
+    def post(self, request, *args, **kwargs):
+        worker, post = self.update_post_data(request)
+        form = self.form_class(post)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return super(HolidayCreateView, self).post(request, *args, **kwargs)
 
 create_holiday = HolidayCreateView.as_view()
 
@@ -377,10 +388,9 @@ class EditHolidayView(HolidayManagement, cbv.FormView):
         return kwargs
 
     def post(self, request, *args, **kwargs):
-        service = models.Service.objects.get(name = kwargs['service'].upper())
-        worker = models.Worker.objects.get(pk = kwargs['worker_pk'])
+        worker, post = self.update_post_data(request)
         obj = self.model.objects.for_worker(worker).get(pk = kwargs['pk'])
-        form = self.form_class(request.POST, instance = obj)
+        form = self.form_class(post, instance = obj)
         if form.is_valid():
             return self.form_valid(form)
         else:
