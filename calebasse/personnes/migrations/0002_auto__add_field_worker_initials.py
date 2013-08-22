@@ -13,9 +13,6 @@ class Migration(SchemaMigration):
         db.add_column('personnes_worker', 'initials',
                       self.gf('django.db.models.fields.CharField')(default='', max_length=5),
                       keep_default=False)
-        for worker in Worker.objects.all():
-            worker.save()
-
 
     def backwards(self, orm):
         # Deleting field 'Worker.initials'
