@@ -27,8 +27,11 @@ worker_patterns = patterns('calebasse.personnes.views',
 
 holidays_patterns = patterns('calebasse.personnes.views',
     url(r'^$', 'holiday_listing'),
-    url(r'^groupe/$', 'group_holiday_update',
-        name='group-holiday-update'),
+    # url(r'^groupe/$', 'group_holiday_update',
+    #     name='group-holiday-update'),
+    url(r'^groupe/$', 'group_holidays', name = 'group-holidays'),
+    url(r'^groupe/(?P<pk>\d+)/editer/?$', 'edit_group_holiday', name = 'edit-group-holiday'),
+    url(r'^groupe/(?P<pk>\d+)/supprimer/?$', 'delete_group_holiday', name = 'delete-group-holiday'),
     )
 
 urlpatterns = patterns('calebasse.personnes.views',

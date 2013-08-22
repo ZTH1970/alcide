@@ -831,6 +831,7 @@ div#tabs-7 div.frame {
 }
 
 #info-membre div button.save,
+div.group_holidays button.save,
 div#tabs-7 div div.buttons,
 div#tabs-4 div div.buttons,
 div#tabs-3 div div.buttons,
@@ -854,7 +855,7 @@ div#tabs-4 div div.buttons {
 	margin: 0;
 }
 
-#info-membre div {
+#info-membre div, div.group_holidays {
   position: relative;
 }
 
@@ -1483,6 +1484,18 @@ li.comment {
 #holidays ul {
     margin: 0;
     padding: 0 .5em;
+}
+
+#holidays.group li.date, #holidays.group li.hour {
+    width: 9%;
+}
+
+#holidays.group .type, #holidays.group .all {
+    width: 8%;
+}
+
+#holidays.group .comment {
+    width: 30%;
 }
 
 #services li {

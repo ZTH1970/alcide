@@ -1,10 +1,15 @@
-function action(worker, on, action, selector, original_color, highlight_color, params, on_success) {
-    var url = '';
+function action(url, worker, on, action, selector, original_color, highlight_color, params, on_success) {
     if(on) {
-        url = '/cmpp/personnes/gestion/' + worker + '/holidays/' + on + '/' + action + '/';
+        if(worker)
+            url += worker + '/holidays/' + on + '/' + action + '/';
+        else
+            url += on + '/' + action;
         $(selector).attr('style', 'background: ' + highlight_color);
     } else {
-        url = '/cmpp/personnes/gestion/' + worker + '/holidays/' + action;
+        if(worker)
+            url += worker + '/holidays/' + action;
+        else
+            url += action;
     }
     $("#holiday-dlg").load(url,
                            function() {
@@ -54,10 +59,10 @@ function add_holiday(worker) {
         }
 
     };
-    action(worker, null, 'ajouter', null, null, null, params, on_success);
+    action('/cmpp/personnes/gestion/', worker, null, 'ajouter', null, null, null, params, on_success);
 };
 
-function delete_holiday(worker, holiday) {
+function delete_holiday(worker, holiday, url = '/cmpp/personnes/gestion/') {
     var selector = '#' + holiday + ' ul';
     var initial_color = $(selector).attr('style');
     var params = {'title': 'Supprimer une absence',
@@ -71,10 +76,11 @@ function delete_holiday(worker, holiday) {
             $("#holiday-dlg").dialog("close");
         }
     };
-    action(worker, holiday, 'supprimer', selector, initial_color, '#f8b0b0', params, on_success);
+    action(url, worker, holiday, 'supprimer', selector, initial_color,
+           '#f8b0b0', params, on_success);
 };
 
-function edit_holiday(worker, holiday) {
+function edit_holiday(worker, holiday, url = '/cmpp/personnes/gestion/') {
     var selector = '#' + holiday + ' ul';
     var initial_color = $(selector).attr('style');
     params = {'title': 'Éditer une absence',
@@ -97,5 +103,15 @@ function edit_holiday(worker, holiday) {
         }
 
     }
-    action(worker, holiday, 'editer', selector, initial_color,  '#af7', params, on_success);
+    action(url, worker, holiday, 'editer', selector, initial_color,  '#af7', params, on_success);
 };
+
+function edit_group_holiday(holiday) {
+    var url = '/cmpp/personnes/conges/groupe/';
+    edit_holiday(null, holiday, url);
+}
+
+function delete_group_holiday(holiday) {
+    var url = '/cmpp/personnes/conges/groupe/';
+    delete_holiday(null, holiday, url);
+}
