@@ -1,0 +1,8 @@
+import os
+
+PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
+
+# Tell Django to use the JUXD Test Suite Runner
+TEST_RUNNER = 'juxd.JUXDTestSuiteRunner'
+# Where to write the output
+JUXD_FILENAME = os.path.join(PROJECT_PATH, 'junit.xml')
