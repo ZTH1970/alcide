@@ -62,7 +62,8 @@ function add_holiday(worker) {
     action('/cmpp/personnes/gestion/', worker, null, 'ajouter', null, null, null, params, on_success);
 };
 
-function delete_holiday(worker, holiday, url = '/cmpp/personnes/gestion/') {
+function delete_holiday(worker, holiday, url) {
+    var url = url || '/cmpp/personnes/gestion/';
     var selector = '#' + holiday + ' ul';
     var initial_color = $(selector).attr('style');
     var params = {'title': 'Supprimer une absence',
@@ -80,7 +81,8 @@ function delete_holiday(worker, holiday, url = '/cmpp/personnes/gestion/') {
            '#f8b0b0', params, on_success);
 };
 
-function edit_holiday(worker, holiday, url = '/cmpp/personnes/gestion/') {
+function edit_holiday(worker, holiday, url) {
+    var url = url || '/cmpp/personnes/gestion/';
     var selector = '#' + holiday + ' ul';
     var initial_color = $(selector).attr('style');
     params = {'title': 'Éditer une absence',
@@ -109,9 +111,9 @@ function edit_holiday(worker, holiday, url = '/cmpp/personnes/gestion/') {
 function edit_group_holiday(holiday) {
     var url = '/cmpp/personnes/conges/groupe/';
     edit_holiday(null, holiday, url);
-}
+};
 
 function delete_group_holiday(holiday) {
     var url = '/cmpp/personnes/conges/groupe/';
     delete_holiday(null, holiday, url);
-}
+};
