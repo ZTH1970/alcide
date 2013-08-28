@@ -229,7 +229,7 @@ worker_delete = cbv.DeleteView.as_view(model=models.Worker,
         success_url='../../')
 
 
-class HolidayView(cbv.TemplateView):
+class HolidayView(cbv.TemplateView, cbv.ServiceViewMixin):
     months = 3
     template_name='personnes/holidays.html'
 
@@ -267,9 +267,9 @@ class HolidayView(cbv.TemplateView):
         def holiday_url(holiday):
             if holiday.worker:
                 return reverse('worker_update', kwargs=dict(
-                    service=self.service.slug, pk=holiday.worker.pk))
+                    service = ctx['service'], pk=holiday.worker.pk))
             else:
-                slug = holiday.service.slug if holiday.service else self.service.slug
+                slug = ctx['service']
                 return reverse('group-holidays', kwargs=dict(
                     service=slug))
 
@@ -325,26 +325,97 @@ class GroupHolidayUpdateView(cbv.FormView):
 
 group_holiday_update = GroupHolidayUpdateView.as_view()
 
-# ===================================================================
+class HolidayManagement(object):
+    """
+    A class providing some methods for handling the absences management
+    """
+
+    def render_to_json(self, id, context, err = 0, **kwargs):
+        data = {'err': err, 'id': id, 'content': context}
+        response = json.dumps(data)
+        kwargs['content_type'] = 'application/json'
+        return HttpResponse(response, **kwargs)
+
+    def update_post_data(self, request):
+        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
+        post = request.POST.copy()
+        post.update({'worker': worker.id})
+        return worker, post
+
+    def form_valid(self, form):
+        form.save()
+        if self.request.is_ajax:
+            instance = form.instance
+            status = ''
+            if instance.is_current() and instance.services.count():
+                status = u'congés annuels, en cours'
+            elif instance.is_current():
+                status = u'en cours'
+            elif instance.services.count():
+                status = u'congés annuels'
+
+            context = (('period', '%s' % instance),
+                       ('status', status),
+                       ('type', '%s' % instance.holiday_type),
+                       ('comment', instance.comment)
+                       )
+            return self.render_to_json(instance.id, context)
+        return super(HolidayManagement, self).form_valid(form)
+
+    def group_form_valid(self, form):
+        """
+        Method handling the saving of group absences form
+        """
+        form.save()
+        form.save_m2m()
+        if self.request.is_ajax:
+            instance = form.instance
+            context = (('start_date', '%s' % instance.start_date),
+                       ('end_date', '%s' % instance.end_date),
+                       ('start_time',
+                        instance.start_time and '%s' % instance.start_time or '---'),
+                       ('end_time',
+                        instance.end_time and '%s' % instance.end_time  or '---'),
+                       ('type', '%s' % instance.holiday_type),
+                       ('all',
+                        instance.for_all_services() and '<span class="icon-ok"></span>' or ''),
+                       ('comment',
+                        instance.comment)
+                       )
+            return self.render_to_json(instance.id, context)
+        return super(EditGroupHolidayView, self).form_valid(form)
 
 class GroupHolidaysList(cbv.ListView):
     model = models.Holiday
     template_name = 'personnes/group_holidays_list.html'
     queryset = model.objects.future()
 
+    def get_queryset(self, *args, **kwargs):
+        qs = super(GroupHolidaysList, self).get_queryset(*args, **kwargs)
+        qs = qs.for_service(self.service)
+        return qs
+
 group_holidays = GroupHolidaysList.as_view()
 
-class CreateGroupHolidayView(cbv.CreateView):
+class CreateGroupHolidayView(HolidayManagement, cbv.CreateView):
     form_class = forms.GroupHolidayForm
     model = models.Holiday
+    template_name_suffix = '_group_form'
+
+    def get_form_kwargs(self):
+        return {'initial': {'services': Service.objects.all()}}
 
     def post(self, request, *args, **kwargs):
-        # créer l'objet
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            return self.group_form_valid(form)
+
+        return self.form_invalid(form)
+
 
 create_group_holiday = CreateGroupHolidayView.as_view()
 
-class EditGroupHolidayView(cbv.FormView):
+class EditGroupHolidayView(HolidayManagement, cbv.FormView):
     template_name = 'personnes/group_holiday_update_form.html'
     form_class = forms.GroupHolidayForm
     model = models.Holiday
@@ -352,11 +423,15 @@ class EditGroupHolidayView(cbv.FormView):
     def get_form_kwargs(self):
         kwargs = super(EditGroupHolidayView, self).get_form_kwargs()
         kwargs['instance'] = self.model.objects.get(pk = self.kwargs['pk'])
-        print kwargs['instance'].service
         return kwargs
 
     def post(self, request, *args, **kwargs):
-        return super(EditGroupHolidayView, self).post(request, *args, **kwargs)
+        obj = self.model.objects.get(pk = self.kwargs['pk'])
+        form = self.form_class(request.POST, instance = obj)
+        if form.is_valid():
+            return self.group_form_valid(form)
+
+        return self.form_invalid(form)
 
 edit_group_holiday = EditGroupHolidayView.as_view()
 
@@ -376,40 +451,6 @@ class DeleteGroupHolidayView(cbv.DeleteView):
         return response
 
 delete_group_holiday = DeleteGroupHolidayView.as_view()
-
-class HolidayManagement(object):
-
-    def render_to_json(self, id, context, err = 0, **kwargs):
-        data = {'err': err, 'id': id, 'content': context}
-        response = json.dumps(data)
-        kwargs['content_type'] = 'application/json'
-        return HttpResponse(response, **kwargs)
-
-    def update_post_data(self, request):
-        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
-        post = request.POST.copy()
-        post.update({'worker': worker.id})
-        return worker, post
-
-    def form_valid(self, form):
-        form.save()
-        if self.request.is_ajax:
-            instance = form.instance
-            status = ''
-            if instance.is_current() and instance.service:
-                status = u'congés annuels, en cours'
-            elif instance.is_current():
-                status = u'en cours'
-            elif instance.service:
-                status = u'congés annuels'
-
-            context = (('period', '%s' % instance),
-                       ('status', status),
-                       ('type', '%s' % instance.holiday_type),
-                       ('comment', instance.comment)
-                       )
-            return self.render_to_json(instance.id, context)
-        return super(HolidayManagement, self).form_valid(form)
 
 class HolidayCreateView(HolidayManagement, cbv.CreateView):
     model = models.Holiday
