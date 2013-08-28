@@ -338,9 +338,9 @@ class HolidayQuerySet(query.QuerySet):
     def for_worker(self, worker):
         filter_query = models.Q(worker=worker) \
               | models.Q(worker__isnull=True,
-                           service=None) \
+                           services = None) \
               | models.Q(worker__isnull=True,
-                           service__in=worker.services.all())
+                           services__in = worker.services.all())
         return self.filter(filter_query)
 
     def for_worker_id(self, worker_id):
@@ -351,23 +351,23 @@ class HolidayQuerySet(query.QuerySet):
             return None
         filter_query = models.Q(worker=worker) \
               | models.Q(worker__isnull=True,
-                           service=None) \
+                           services = None) \
               | models.Q(worker__isnull=True,
-                           service__in=worker.services.all())
+                           services__in = worker.services.all())
         return self.filter(filter_query)
 
     def for_type(self, holiday_type):
-        return self.filter(holiday_type=holiday_type)
+        return self.filter(holiday_type = holiday_type)
 
     def for_service(self, service):
-        return self.filter(worker__isnull=True) \
-                   .filter(models.Q(service=service)
-                          |models.Q(service__isnull=True))
+        return self.filter(worker__isnull = True) \
+                   .filter(models.Q(services = service)
+                          |models.Q(services__isnull = True))
 
     def for_service_workers(self, service):
-        return self.filter(models.Q(worker__services=service)
-                |models.Q(service=service)
-                |models.Q(worker__isnull=True, service__isnull=True))
+        return self.filter(models.Q(worker__services = [service])
+                |models.Q(services__in = [service])
+                |models.Q(worker__isnull=True, services__isnull = True))
 
     def future(self):
         return self.filter(end_date__gte=date.today())
@@ -405,9 +405,8 @@ class Holiday(BaseModelMixin, models.Model):
             verbose_name=u'Type de congé')
     worker = models.ForeignKey(Worker, blank=True, null=True,
             verbose_name=u"Personnel")
-    service = models.ForeignKey(Service, blank=True, null=True,
-            verbose_name=u"Service")
-    services = models.ManyToManyField(Service, null = True, blank = True, related_name = 'new_services')
+    services = models.ManyToManyField(Service, null = True,
+                                      blank = True, verbose_name = u'Services')
     start_date = models.DateField(verbose_name=u"Date de début",
         help_text=u'format: jj/mm/aaaa')
     end_date = models.DateField(verbose_name=u"Date de fin",
@@ -425,6 +424,9 @@ class Holiday(BaseModelMixin, models.Model):
 
     def is_current(self):
         return self.start_date <= date.today() <= self.end_date
+
+    def for_all_services(self):
+        return self.services.count() == Service.objects.count()
 
     def __unicode__(self):
         ret = ''

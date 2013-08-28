@@ -1,0 +1,71 @@
+{% extends "personnes/simple-form.html" %}
+
+{% block extrascripts %}
+{{ block.super }}
+    <script>
+        $(function() {
+
+            $('button[data-action=delete]').click(function() {
+                delete_group_holiday($(this).data('id'));
+            });
+
+            $('button[data-action=edit]').click(function() {
+                edit_group_holiday($(this).data('id'));
+            });
+
+            $('button[data-action=new]').click(function() {
+                add_group_holiday();
+            });
+
+        });
+    </script>
+{% endblock %}
+
+
+{% block appbar %}
+<h2>&nbsp;</h2>
+  <a href="..">Retour à la gestion des absences</a>
+{% endblock %}
+
+
+{% block content %}
+    <div class="group_holidays frame">
+      <h3>Absences de groupe</h3>
+      <button class="save icon-plus" data-action='new'></button>
+      <ul id="holidays" class="group">
+        <li>
+          <ul class="caption">
+            <li class="start_date">Date de début</li>
+            <li class="end_date">Date de fin</li>
+            <li class="start_time">Heure de début</li>
+            <li class="end_time">Heure de fin</li>
+            <li class="type">Type</li>
+            <li class="all">Tous les services</li>
+            <li class="comment">Commentaire</li>
+            <li class="actions">Actions</li>
+          </ul>
+        </li>
+        {% for object in object_list %}
+        <li id="{{ object.id }}">
+          <ul style="background: {% cycle '#fff' '#eee' %}">
+            <li class="start_date">{{ object.start_date }}</li>
+            <li class="end_date">{{ object.end_date }}</li>
+            <li class="start_time">{% if object.start_time %}{{ object.start_time }}{% else %}---{% endif %}</li>
+            <li class="end_time">{% if object.end_time %}{{ object.end_time }}{% else %} --- {% endif %}</li>
+            <li class="type">{{ object.holiday_type }}</li>
+            <li class="all">{% if object.for_all_services %}<span class="icon-ok"></span>{% endif %}</li>
+            <li class="comment">{{ object.comment }}</li>
+            <li class="actions">
+              <button class="icon-edit" data-action='edit' data-id='{{ object.id }}'></button>
+              <button class="icon-remove" data-action='delete' data-id='{{ object.id }}'></button>
+            </li>
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+<p><a href="..">{% block back-link %}Retour à la gestion des absences{% endblock %}</a></p>
+{% endblock %}
+{% block dialogs %}
+<div id="holiday-dlg"></div>
+{% endblock %}

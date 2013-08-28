@@ -1486,7 +1486,8 @@ li.comment {
     padding: 0 .5em;
 }
 
-#holidays.group li.date, #holidays.group li.hour {
+#holidays.group li.start_date, #holidays.group li.end_date,
+#holidays.group li.start_time, #holidays.group li.end_time {
     width: 9%;
 }
 

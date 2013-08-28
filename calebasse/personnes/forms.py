@@ -232,19 +232,14 @@ class GroupHolidayForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.service = kwargs.pop('service', None)
         super(GroupHolidayForm, self).__init__(*args, **kwargs)
-        self.fields['service'].choices = ((service.id, service.name) for service in Service.objects.all())
         if self.instance and self.instance.id:
-            self.initial['for_all_services'] = self.instance.service is None
+            self.initial['for_all_services'] = self.instance.services.count() == Service.objects.count()
         self.fields['holiday_type'].queryset = \
                 HolidayType.objects.filter(for_group=True)
 
 
     def save(self, commit=True):
         instance = super(GroupHolidayForm, self).save(commit=False)
-        if self.cleaned_data.get('for_all_services', False):
-            instance.service = None
-        else:
-            instance.service = self.service
         if commit:
             instance.save()
         return instance
@@ -253,7 +248,7 @@ class GroupHolidayForm(forms.ModelForm):
         model = Holiday
         widgets = {
             'comment': forms.Textarea(attrs = {'rows': 3, 'cols': 18}),
-            'service': forms.CheckboxSelectMultiple(attrs = {'class': ''})
+            'services': forms.CheckboxSelectMultiple()
         }
 
 GroupHolidayFormSet = modelformset_factory(Holiday,
