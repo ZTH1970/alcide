@@ -44,6 +44,9 @@
           {% if appointment.patient.confidential %}
           <span title="Dossier confidentiel" class="icon-lock"></span>
           {% endif %}
+          {% if appointment.convocation_sent %}
+          <button title="Courrier envoyé" class="icon-envelope">
+          {% endif %}
          {% if service in appointment.services_names or not appointment.services_names %}
           {% if appointment.patient_record_id %}
             {% if not appointment.is_billed %}
