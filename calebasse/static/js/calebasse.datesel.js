@@ -1,18 +1,11 @@
 (function($) {
   $(function () {
+    var value = $('#date-selector').attr('value');
+    var week = value.substring(value.indexOf('(') + 1, value.length - 1);
+    var format = "DD d MM yy (" + week + ")";
     $('#date-selector').datepicker({
-        dateFormat: "DD d MM yy",
+        dateFormat: format,
         showWeek: true,
-        beforeShowDay: function(date) {
-            var selected_date = location.pathname.split('/')[3];
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            var possible_current = [year + '-' + month + '-' + day,
-                                    year + (month < 10? '-0': '-') + month +
-                                    (day < 10? '-0': '-') + day];
-            return [true, $.inArray(selected_date, possible_current) >= 0 ? 'active-cell': 'unactive-cell']
-        },
         onClose: function(dateText, inst) {
             console.log('close');
         }
@@ -26,7 +19,8 @@
         var week = Math.ceil(dayOfYear/7);
         var day = date.getDate();
         var current_date = $(this).attr('value');
-        $(this).attr('value', current_date + ' (' + week + ')');
+        current_date = current_date.replace(/\([0-9]{2}\)/, '(' + week + ')');
+        $(this).attr('value', current_date);
         var url_tpl = $(this).data('url');
         var new_date = year + '-' + month + '-' + day;
         var url = url_tpl.replace(/[0-9]{4}-[0-9]{2}-[0-9]{2}/, new_date);
