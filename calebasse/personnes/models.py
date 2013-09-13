@@ -341,7 +341,7 @@ class HolidayQuerySet(query.QuerySet):
                            services = None) \
               | models.Q(worker__isnull=True,
                            services__in = worker.services.all())
-        return self.filter(filter_query)
+        return self.filter(filter_query).distinct()
 
     def for_worker_id(self, worker_id):
         worker = None
@@ -405,8 +405,7 @@ class Holiday(BaseModelMixin, models.Model):
             verbose_name=u'Type de congé')
     worker = models.ForeignKey(Worker, blank=True, null=True,
             verbose_name=u"Personnel")
-    services = models.ManyToManyField(Service, null = True,
-                                      blank = True, verbose_name = u'Services')
+    services = models.ManyToManyField(Service, blank = True, verbose_name = u'Services')
     start_date = models.DateField(verbose_name=u"Date de début",
         help_text=u'format: jj/mm/aaaa')
     end_date = models.DateField(verbose_name=u"Date de fin",
