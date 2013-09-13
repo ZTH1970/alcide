@@ -5,15 +5,18 @@ from interval import IntervalSet
 
 from dateutil.relativedelta import relativedelta
 
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils.dateformat import format as date_format
+from django.views.decorators.csrf import csrf_exempt
 
 from calebasse import cbv, models as cb_models
 from calebasse.ressources.models import Service
+
+import json
 
 from calebasse.decorators import super_user_only
 
@@ -226,7 +229,7 @@ worker_delete = cbv.DeleteView.as_view(model=models.Worker,
         success_url='../../')
 
 
-class HolidayView(cbv.TemplateView):
+class HolidayView(cbv.TemplateView, cbv.ServiceViewMixin):
     months = 3
     template_name='personnes/holidays.html'
 
@@ -263,11 +266,11 @@ class HolidayView(cbv.TemplateView):
 
         def holiday_url(holiday):
             if holiday.worker:
-                return reverse('worker-holidays-update', kwargs=dict(
-                    service=self.service.slug, pk=holiday.worker.pk))
+                return reverse('worker_update', kwargs=dict(
+                    service = ctx['service'], pk=holiday.worker.pk))
             else:
-                slug = holiday.service.slug if holiday.service else self.service.slug
-                return reverse('group-holiday-update', kwargs=dict(
+                slug = ctx['service']
+                return reverse('group-holidays', kwargs=dict(
                     service=slug))
 
         currents = []
@@ -322,6 +325,186 @@ class GroupHolidayUpdateView(cbv.FormView):
 
 group_holiday_update = GroupHolidayUpdateView.as_view()
 
+class HolidayManagement(object):
+    """
+    A class providing some methods for handling the absences management
+    """
+
+    def render_to_json(self, id, context, err = 0, **kwargs):
+        data = {'err': err, 'id': id, 'content': context}
+        response = json.dumps(data)
+        kwargs['content_type'] = 'application/json'
+        return HttpResponse(response, **kwargs)
+
+    def update_post_data(self, request):
+        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
+        post = request.POST.copy()
+        post.update({'worker': worker.id})
+        return worker, post
+
+    def form_valid(self, form):
+        form.save()
+        if self.request.is_ajax:
+            instance = form.instance
+            status = ''
+            if instance.is_current() and instance.services.count():
+                status = u'congés annuels, en cours'
+            elif instance.is_current():
+                status = u'en cours'
+            elif instance.services.count():
+                status = u'congés annuels'
+
+            context = (('period', '%s' % instance),
+                       ('status', status),
+                       ('type', '%s' % instance.holiday_type),
+                       ('comment', instance.comment)
+                       )
+            return self.render_to_json(instance.id, context)
+        return super(HolidayManagement, self).form_valid(form)
+
+    def group_form_valid(self, form):
+        """
+        Method handling the saving of group absences form
+        """
+        form.save()
+        form.save_m2m()
+        if self.request.is_ajax:
+            instance = form.instance
+            context = (('start_date', '%s' % instance.start_date),
+                       ('end_date', '%s' % instance.end_date),
+                       ('start_time',
+                        instance.start_time and '%s' % instance.start_time or '---'),
+                       ('end_time',
+                        instance.end_time and '%s' % instance.end_time  or '---'),
+                       ('type', '%s' % instance.holiday_type),
+                       ('all',
+                        instance.for_all_services() and '<span class="icon-ok"></span>' or ''),
+                       ('comment',
+                        instance.comment)
+                       )
+            return self.render_to_json(instance.id, context)
+        return super(EditGroupHolidayView, self).form_valid(form)
+
+class GroupHolidaysList(cbv.ListView):
+    model = models.Holiday
+    template_name = 'personnes/group_holidays_list.html'
+    queryset = model.objects.future()
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(GroupHolidaysList, self).get_queryset(*args, **kwargs)
+        qs = qs.for_service(self.service)
+        return qs
+
+group_holidays = GroupHolidaysList.as_view()
+
+class CreateGroupHolidayView(HolidayManagement, cbv.CreateView):
+    form_class = forms.GroupHolidayForm
+    model = models.Holiday
+    template_name_suffix = '_group_form'
+
+    def get_form_kwargs(self):
+        return {'initial': {'services': Service.objects.all()}}
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            return self.group_form_valid(form)
+
+        return self.form_invalid(form)
+
+
+create_group_holiday = CreateGroupHolidayView.as_view()
+
+class EditGroupHolidayView(HolidayManagement, cbv.FormView):
+    template_name = 'personnes/group_holiday_update_form.html'
+    form_class = forms.GroupHolidayForm
+    model = models.Holiday
+
+    def get_form_kwargs(self):
+        kwargs = super(EditGroupHolidayView, self).get_form_kwargs()
+        kwargs['instance'] = self.model.objects.get(pk = self.kwargs['pk'])
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        obj = self.model.objects.get(pk = self.kwargs['pk'])
+        form = self.form_class(request.POST, instance = obj)
+        if form.is_valid():
+            return self.group_form_valid(form)
+
+        return self.form_invalid(form)
+
+edit_group_holiday = EditGroupHolidayView.as_view()
+
+class DeleteGroupHolidayView(cbv.DeleteView):
+    model = models.Holiday
+    template_name = 'personnes/group_holiday_update_form.html'
+    success_url = '.'
+
+    def delete(self, request, *args, **kwargs):
+        response = HttpResponse('', content_type = 'application/json')
+        context = {'err': 0, 'message': ''}
+        try:
+            super(DeleteGroupHolidayView, self).delete(request, *args, **kwargs)
+        except Exception, e:
+            context['message'] = '%s' % e
+        response.content = json.dumps(context)
+        return response
+
+delete_group_holiday = DeleteGroupHolidayView.as_view()
+
+class HolidayCreateView(HolidayManagement, cbv.CreateView):
+    model = models.Holiday
+    form_class = forms.HolidayForm
+
+    def post(self, request, *args, **kwargs):
+        worker, post = self.update_post_data(request)
+        form = self.form_class(post)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return super(HolidayCreateView, self).post(request, *args, **kwargs)
+
+create_holiday = HolidayCreateView.as_view()
+
+class EditHolidayView(HolidayManagement, cbv.FormView):
+    template_name = 'personnes/holiday_update_form.html'
+    form_class = forms.HolidayForm
+    model = models.Holiday
+
+    def get_form_kwargs(self):
+        kwargs = super(EditHolidayView, self).get_form_kwargs()
+        kwargs['instance'] = self.model.objects.get(pk = self.kwargs['pk'])
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        worker, post = self.update_post_data(request)
+        obj = self.model.objects.for_worker(worker).get(pk = kwargs['pk'])
+        form = self.form_class(post, instance = obj)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+edit_holiday = EditHolidayView.as_view()
+
+class DeleteHolidayView(cbv.DeleteView):
+    model = models.Holiday
+    template_name = 'personnes/holiday_update_form.html'
+
+    def post(self, request, *args, **kwargs):
+        response = HttpResponse('', content_type = 'application/json')
+        context = {'err': 0, 'message': ''}
+        try:
+            #worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
+            super(DeleteHolidayView, self).post(request, *args, **kwargs)
+            #self.model.objects.for_worker(worker).get(pk = self.kwargs['pk']).delete()
+        except Exception, e:
+            context['message'] = '%s' % e.message
+        response.content = json.dumps(context)
+        return response
+
+delete_holiday = DeleteHolidayView.as_view()
 
 #user_delete = UserCreateView.as_view()
 

@@ -2,6 +2,10 @@
 {% load url from future %}
 
 {% block title %}{{ block.super }} - Gestion des personnes {% endblock %}
+{% block extrascripts %}
+{{ block.super }}
+    <script src="{{ STATIC_URL }}js/calebasse.absences.js"></script>
+{% endblock %}
 
 {% block header %}
   {{ block.super }}

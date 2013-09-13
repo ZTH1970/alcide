@@ -179,6 +179,30 @@ class BaseHolidayForm(forms.ModelForm):
                 'comment': forms.Textarea(attrs={'rows': 3}),
         }
 
+class HolidayForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(HolidayForm, self).__init__(*args, **kwargs)
+        self.fields['holiday_type'].queryset = \
+            HolidayType.objects.filter(for_group=False)
+
+    class Meta:
+        model = Holiday
+        widgets = {
+            'comment': forms.Textarea(attrs = {'rows': 3, 'cols': 18}),
+            'start_date': forms.DateInput(format = '%d/%m/%Y',
+                                          attrs = {'size': 10}),
+            'end_date': forms.DateInput(format = '%d/%m/%Y',
+                                        attrs = {'size': 10}),
+            }
+
+    def clean(self):
+        cleaned_data = super(HolidayForm, self).clean()
+        if cleaned_data.get('start_date') and cleaned_data.get('end_date'):
+            if cleaned_data['start_date'] > cleaned_data['end_date']:
+                raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
+        return cleaned_data
+
 HolidayFormSet = inlineformset_factory(
         Worker, Holiday,
         form=BaseHolidayForm,
@@ -209,25 +233,22 @@ class GroupHolidayForm(forms.ModelForm):
         self.service = kwargs.pop('service', None)
         super(GroupHolidayForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.id:
-            self.initial['for_all_services'] = self.instance.service is None
+            self.initial['for_all_services'] = self.instance.services.count() == Service.objects.count()
         self.fields['holiday_type'].queryset = \
                 HolidayType.objects.filter(for_group=True)
 
 
     def save(self, commit=True):
         instance = super(GroupHolidayForm, self).save(commit=False)
-        if self.cleaned_data.get('for_all_services', False):
-            instance.service = None
-        else:
-            instance.service = self.service
         if commit:
             instance.save()
         return instance
 
     class Meta:
-        form = Holiday
+        model = Holiday
         widgets = {
-                'comment': forms.Textarea(attrs={'rows': 3}),
+            'comment': forms.Textarea(attrs = {'rows': 3, 'cols': 18}),
+            'services': forms.CheckboxSelectMultiple()
         }
 
 GroupHolidayFormSet = modelformset_factory(Holiday,

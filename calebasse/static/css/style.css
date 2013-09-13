@@ -831,6 +831,7 @@ div#tabs-7 div.frame {
 }
 
 #info-membre div button.save,
+div.group_holidays button.save,
 div#tabs-7 div div.buttons,
 div#tabs-4 div div.buttons,
 div#tabs-3 div div.buttons,
@@ -854,7 +855,7 @@ div#tabs-4 div div.buttons {
 	margin: 0;
 }
 
-#info-membre div {
+#info-membre div, div.group_holidays {
   position: relative;
 }
 
@@ -1398,6 +1399,7 @@ div.pagination {
 .icon-lock:before                 { content: "\f023"; }
 .icon-remove-sign:before          { content: "\f057"; }
 .icon-remove:before               { content: "\f00d"; }
+.icon-plus:before                { content: "\f067"; }
 .icon-minus:before                { content: "\f068"; }
 .icon-envelope:before             { content: "\f003"; }
 .icon-comment:before              { content: "\f075"; }
@@ -1405,7 +1407,9 @@ div.pagination {
 .icon-user-space:before           { content: "\f007 "; }
 .icon-circle-arrow-left:before    { content: "\f0a8"; }
 .icon-circle-arrow-right:before   { content: "\f0a9"; }
+.icon-remove:before   { content: "\f00d"; }
 .icon-warning-sign:before       { content: "\f071" }
+.icon-ok:before {content: "\f00c"}
 
 /* periodic event search form */
 
@@ -1433,4 +1437,66 @@ div.event h3 span.right {
 }
 #periodic-events-search-form label {
   display: block;
+}
+
+#holidays {
+    margin: .1em;
+    padding: .1em;
+}
+
+#holidays li {
+    list-style-type: none;
+}
+
+#holidays li li {
+    display: inline-block;
+    list-style-type: none;
+    margin: .2em 0;
+    padding: 0 .1em;
+}
+
+li.period {
+    width: 20%;
+}
+
+li.status, li.type, li.actions  {
+    width: 10%;
+}
+
+li.groupe {
+    width: 5%;
+    text-align: center;
+}
+
+li.comment {
+    width: 40%;
+}
+
+.caption {
+    color: #fff;
+    background: #bbb;
+    font-weight: bold;
+}
+
+#holidays ul {
+    margin: 0;
+    padding: 0 .5em;
+}
+
+#holidays.group li.start_date, #holidays.group li.end_date,
+#holidays.group li.start_time, #holidays.group li.end_time {
+    width: 9%;
+}
+
+#holidays.group .type, #holidays.group .all {
+    width: 8%;
+}
+
+#holidays.group .comment {
+    width: 30%;
+}
+
+#services li {
+    display: inline-block;
+    list-style-type: none;
 }

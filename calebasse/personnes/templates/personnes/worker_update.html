@@ -13,6 +13,19 @@
                         click: function() { $(this).dialog("close"); } }]}
                 );
             });
+
+            $('button[data-action=delete]').click(function() {
+                delete_holiday({{ object.id }}, $(this).data('id'));
+            });
+
+            $('button[data-action=edit]').click(function() {
+                edit_holiday({{ object.id }}, $(this).data('id'));
+            });
+
+            $('button[data-action=new]').click(function() {
+                add_holiday({{ object.id }});
+            });
+
         });
 </script>
 {% endblock %}
@@ -99,43 +112,64 @@ $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
       </tbody>
     </table>
   </div>
-  <form action="holidays/" method="get">
     <div class="frame">
       <h3>Absences</h3>
-      <button class="save icon-edit"></button>
-      <ul>
+      <!-- <button class="save icon-edit"></button> -->
+      <button class="save icon-plus" data-action='new'></button>
+      {% if holidays %}
+      <ul id="holidays">
+        <li>
+          <ul class="caption">
+            <li class="period">Période</li>
+            <li class="status">Statut</li>
+            <li class="type">Type</li>
+            <li class="comment">Commentaire</li>
+            <li class="groupe">Groupée</li>
+            <li class="actions">Actions</li>
+          </ul>
+        </li>
         {% for holiday in holidays %}
-        <li>{{ holiday|capfirst }}
+        <li id='{{ holiday.id }}'>
+          <ul style="background: {% cycle '#fff' '#eee' %}">
+            <li class="period">{{ holiday }}</li>
+            <li class="status">
             {% if holiday.is_current and holiday.service %}
-            (congés annuels, en cours)
+            congés annuels, en cours
             {% elif holiday.is_current %}
-            (en cours)
+            en cours
             {% elif holiday.service %}
-            (congés annuels)
-            {% endif %}
-            ({{ holiday.holiday_type }})
+            congés annuels
+            {% endif %}</li>
+            <li class="type">
+            {{ holiday.holiday_type }}
+            </li>
+            <li class="comment">
             {% if holiday.comment %}
-            « {{ holiday.comment }} »
+            {{ holiday.comment }}
             {% endif %}
+            </li>
+            <li class="groupe">
+              {% if holiday.holiday_type.for_group %}
+              <span class="icon-ok"></span>
+              </li>
+              <li class="actions"></li>
+              {% else %}
+              </li>
+              <li class="actions">
+              <button class="icon-edit" data-action='edit' data-id='{{ holiday.id }}'></button>
+              <button class="icon-remove" data-action='delete' data-id='{{ holiday.id }}'></button>
+              {% endif %}
+            </li>
+          </ul>
         </li>
         {% endfor %}
       </ul>
+      {% endif %}
     </div>
-  </form>
 </div>
 {% endblock %}
 
 {% block dialogs %}
-<div id="lundi-dlg" style="display: none;">
-  <table>
-    <tr>
-      <th>Heure début</th> <th>Heure fin</th> <th>Date début</th> <th>Date fin</th> <th>Périodicité</th> <th>Services</th>
-    </tr>
-    <tr>
-      <td><input value="13h30" size="8"/></td> <td><input value="17h30" size="8"/></td> <td><input value="20/04/2012" size="12"/></td> <td><input value="-" size="12"/></td> <td><select><option>Toutes les semaines</option></select></td> <td><select><option>CAMSP</option><option>CMPP</option><option>...</option><option>+</option></select></td> <td><button>-</button></td>
-    </tr>
-    <tr class="expired"> <td>13h30</td> <td>15h30</td> <td>2/01/2012</td> <td>14/04/2012</td> <td>2× par mois</td> <td>CAMSP</td> <td><button>déver.</button> </tr>
-  </table>
-  <button>+</button>
+<div id="holiday-dlg" style="display: none;">
 </div>
 {% endblock %}
