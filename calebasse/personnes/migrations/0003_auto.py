@@ -21,7 +21,7 @@ class Migration(SchemaMigration):
             if obj.service:
                 obj.services.add(obj.service)
             else:
-                for service in orm.Service.objects.all():
+                for service in orm['ressources.Service'].objects.all():
                     obj.services.add(service)
             obj.save()
 
