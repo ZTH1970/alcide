@@ -164,7 +164,6 @@ INSTALLED_APPS = (
     'calebasse.statistics',
     'calebasse.middleware.request',
     'south',
-    'django_jenkins',
 )
 
 INTERNAL_IPS=('127.0.0.1',)
