@@ -458,6 +458,8 @@ class HolidayCreateView(HolidayManagement, cbv.CreateView):
 
     def post(self, request, *args, **kwargs):
         worker, post = self.update_post_data(request)
+        service = Service.objects.get(slug = kwargs['service'])
+        post.update({'services': service.id})
         form = self.form_class(post)
         if form.is_valid():
             return self.form_valid(form)
@@ -478,13 +480,12 @@ class EditHolidayView(HolidayManagement, cbv.FormView):
 
     def post(self, request, *args, **kwargs):
         worker, post = self.update_post_data(request)
-        obj = self.model.objects.for_worker(worker).get(pk = kwargs['pk'])
+        obj = self.model.objects.get(pk = kwargs['pk'])
         form = self.form_class(post, instance = obj)
         if form.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-
 
 edit_holiday = EditHolidayView.as_view()
 
@@ -496,15 +497,11 @@ class DeleteHolidayView(cbv.DeleteView):
         response = HttpResponse('', content_type = 'application/json')
         context = {'err': 0, 'message': ''}
         try:
-            #worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
             super(DeleteHolidayView, self).post(request, *args, **kwargs)
-            #self.model.objects.for_worker(worker).get(pk = self.kwargs['pk']).delete()
         except Exception, e:
             context['message'] = '%s' % e.message
         response.content = json.dumps(context)
         return response
 
 delete_holiday = DeleteHolidayView.as_view()
-
-#user_delete = UserCreateView.as_view()
 
