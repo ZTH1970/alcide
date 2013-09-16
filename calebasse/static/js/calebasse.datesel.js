@@ -1,8 +1,13 @@
 (function($) {
   $(function () {
-    var value = $('#date-selector').attr('value');
-    var week = value.substring(value.indexOf('(') + 1, value.length - 1);
-    var format = "DD d MM yy (" + week + ")";
+    try {
+        // in case of the #date-selector element doesn't exist
+        var value = $('#date-selector').attr('value');
+        var week = value.substring(value.indexOf('(') + 1, value.length - 1);
+        var format = "DD d MM yy (" + week + ")";
+    } catch(err) {
+        var format = "DD d MM yy";
+    };
     $('#date-selector').datepicker({
         dateFormat: format,
         showWeek: true,
