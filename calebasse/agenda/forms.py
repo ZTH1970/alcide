@@ -212,7 +212,7 @@ class UpdateEventForm(NewEventForm):
         )
 
 class PeriodicEventsSearchForm(forms.Form):
-    start_date = forms.DateField(localize=True)
+    start_date = forms.DateField(localize=True, required = False)
     end_date = forms.DateField(required=False, localize=True)
 
     event_type = forms.MultipleChoiceField(
