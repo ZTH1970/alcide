@@ -43,11 +43,11 @@ class TransportPrescriptionLog(models.Model):
     def get_choices(self):
         if not self.choices:
             return dict()
-        return loads(str(self.choices))
+        return loads(str(self.choices), protocol = 1)
 
     def set_choices(self, choices=None):
         if choices and isinstance(choices, dict):
-            self.choices = dumps(choices)
+            self.choices = dumps(choices, protocol = 1)
 
 
 class HealthCare(models.Model):
