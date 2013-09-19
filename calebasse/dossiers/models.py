@@ -827,6 +827,19 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     aggregate(Max('date_selected'))['date_selected__max']
         return d and d.date()
 
+    @property
+    def care_duration(self):
+        # Duration between the first act present and the closing date.
+        # If no closing date, end_date is today
+        first_act_date = None
+        try:
+            first_act_date = self.act_set.filter(valide=True).order_by('date')[0].date
+        except:
+            return 0
+        exit_date = self.exit_date
+        if not exit_date:
+            exit_date = datetime.today().date()
+        return (exit_date - first_act_date).days
 
 reversion.register(PatientRecord, follow=['people_ptr'])
 
