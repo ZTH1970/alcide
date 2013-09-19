@@ -467,21 +467,8 @@ function event_dialog(url, title, width, btn_text) {
           });
 
           $('a.tab').click(function() {
-              $.cookie('active-worker-agenda', $(this).data('id'), { path: COOKIE_PATH });
+              $.cookie('active-worker-agenda', $(this).data('id'),  { path: COOKIE_PATH });
           });
-
-          if ($.cookie('agenda-worker-tabs')) {
-              $.each($.cookie('agenda-worker-tabs'), function (i, worker_selector) {
-                  toggle_worker('#' + worker_selector);
-              });
-              if ($.cookie('active-worker-agenda'))
-              {
-                  var target = $('#link-tab-worker-' + $.cookie('active-worker-agenda'));
-                  if (target.is(':visible')) {
-                      target.click();
-                  }
-              }
-          }
       }
 
       if ($('.ressource-item').length) {
