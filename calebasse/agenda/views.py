@@ -69,8 +69,9 @@ class AgendaHomepageView(TemplateView):
         return context
 
 
-class AgendaServiceActivityView(TemplateView):
+class AgendaServiceActivityView(TemplateView, cbv.ServiceViewMixin):
     template_name = 'agenda/service-activity.html'
+    cookies_to_clear = ['agenda-worker-tabs']
 
     def get_context_data(self, **kwargs):
         context = super(AgendaServiceActivityView, self).get_context_data(**kwargs)
@@ -290,6 +291,7 @@ class DeleteEventView(cbv.DeleteView):
 
 class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
+    cookies_to_clear = ['agenda-worker-tabs']
 
     def acts_of_the_day(self):
         acts = list(Act.objects \
@@ -419,6 +421,7 @@ class UnlockAllView(CreateView):
 
 class AgendasTherapeutesView(AgendaHomepageView):
     template_name = 'agenda/agendas-therapeutes.html'
+    cookies_to_clear = ['agenda-worker-tabs']
 
     def get_context_data(self, **kwargs):
         context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
@@ -504,6 +507,7 @@ class JoursNonVerrouillesView(TemplateView):
 class RessourcesView(TemplateView):
 
     template_name = 'agenda/ressources.html'
+    cookies_to_clear = []
 
     def get_context_data(self, **kwargs):
         context = super(RessourcesView, self).get_context_data(**kwargs)
@@ -622,6 +626,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
 class PeriodicEventsView(cbv.ListView):
     model = EventWithAct
     template_name = 'agenda/periodic-events.html'
+    cookies_to_clear = ['agenda-worker-tabs']
 
     def dispatch(self, request, *args, **kwargs):
         if 'worker_id' in kwargs:
