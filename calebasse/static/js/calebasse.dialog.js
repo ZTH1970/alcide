@@ -103,8 +103,8 @@ function add_dialog(on, url, title, width, btn_text) {
                   });
                   var old_background_image, old_background_repeat, $button;
                   var in_submit = false;
-                  $('#rdv').unbind('submit');
-                  $("#rdv").submit(function(event) {
+                  $(on).unbind('submit');
+                  $(on).submit(function(event) {
                       /* stop form from submitting normally */
                       event.preventDefault();
 
@@ -116,8 +116,8 @@ function add_dialog(on, url, title, width, btn_text) {
                             $button.css('background-repeat', old_background_repeat);
                             $button.removeAttr('disabled');
                             if ($('.errorlist', parse).length != 0) {
-                                $('#rdv').html(data);
-                                $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+                                $(on).html(data);
+                                $(on +' .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
                                 console.log('error');
                             } else {
                                 $('body').html(data);
@@ -137,7 +137,7 @@ function add_dialog(on, url, title, width, btn_text) {
                       $button.attr('disabled', 'disabled');
                       $button.css('background-image', 'url(/static/images/throbber.gif), ' + old_background_image);
                       $button.css('background-repeat', 'no-repeat, ' + old_background_repeat);
-                      $("#rdv form").submit();
+                      $(on + " form").submit();
                   };
                   $(this).dialog({title: title,
                       modal: true,
