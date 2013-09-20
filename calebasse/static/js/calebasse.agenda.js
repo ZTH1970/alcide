@@ -86,6 +86,7 @@ function enable_events(base) {
         return false;
       });
       $(base).find('.newrdv').click(function() {
+          $('#close-all-agendas').click();
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),
@@ -98,6 +99,7 @@ function enable_events(base) {
           return false;
       });
       $(base).find('.newevent').click(function() {
+          $('#close-all-agendas').click();
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),

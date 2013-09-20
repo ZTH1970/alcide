@@ -130,7 +130,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     template_name = 'agenda/new-appointment.html'
     success_url = '..'
     success_msg = u'Rendez-vous enregistré avec succès.'
-    cookies_to_clear = []
+    cookies_to_clear = ['agenda-worker-tabs']
 
     def get_initial(self):
         initial = super(NewAppointmentView, self).get_initial()
@@ -203,7 +203,7 @@ class NewEventView(CreateView):
     form_class = NewEventForm
     template_name = 'agenda/new-event.html'
     success_url = '..'
-    cookies_to_clear = []
+    cookies_to_clear = ['agenda-worker-tabs']
 
     def get_initial(self):
         initial = super(NewEventView, self).get_initial()
