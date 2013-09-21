@@ -71,7 +71,7 @@ class AgendaHomepageView(TemplateView):
 
 class AgendaServiceActivityView(TemplateView, cbv.ServiceViewMixin):
     template_name = 'agenda/service-activity.html'
-    cookies_to_clear = ['agenda-worker-tabs']
+    cookies_to_clear = [('agenda-worker-tabs', )]
 
     def get_context_data(self, **kwargs):
         context = super(AgendaServiceActivityView, self).get_context_data(**kwargs)
@@ -130,7 +130,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     template_name = 'agenda/new-appointment.html'
     success_url = '..'
     success_msg = u'Rendez-vous enregistré avec succès.'
-    cookies_to_clear = ['agenda-worker-tabs']
+    cookies_to_clear = [('agenda-worker-tabs', )]
 
     def get_initial(self):
         initial = super(NewAppointmentView, self).get_initial()
@@ -203,7 +203,7 @@ class NewEventView(CreateView):
     form_class = NewEventForm
     template_name = 'agenda/new-event.html'
     success_url = '..'
-    cookies_to_clear = ['agenda-worker-tabs']
+    cookies_to_clear = [('agenda-worker-tabs', )]
 
     def get_initial(self):
         initial = super(NewEventView, self).get_initial()
@@ -291,7 +291,7 @@ class DeleteEventView(cbv.DeleteView):
 
 class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
-    cookies_to_clear = ['agenda-worker-tabs']
+    cookies_to_clear = [('agenda-worker-tabs', )]
 
     def acts_of_the_day(self):
         acts = list(Act.objects \
@@ -421,7 +421,7 @@ class UnlockAllView(CreateView):
 
 class AgendasTherapeutesView(AgendaHomepageView):
     template_name = 'agenda/agendas-therapeutes.html'
-    cookies_to_clear = ['agenda-worker-tabs']
+    cookies_to_clear = [('agenda-worker-tabs', )]
 
     def get_context_data(self, **kwargs):
         context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
@@ -626,7 +626,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
 class PeriodicEventsView(cbv.ListView):
     model = EventWithAct
     template_name = 'agenda/periodic-events.html'
-    cookies_to_clear = ['agenda-worker-tabs']
+    cookies_to_clear = [('agenda-worker-tabs', )]
 
     def dispatch(self, request, *args, **kwargs):
         if 'worker_id' in kwargs:

@@ -30,13 +30,19 @@ class ServiceViewMixin(object):
     service = None
     date = None
     popup = False
-    cookies_to_clear = [ 'agenda-worker-tabs', 'active-resource-agenda' ]
+    cookies_to_clear = [('agenda-worker-tabs', ), ('active-resource-agenda', )]
 
     def clear_cookies(self, response, path):
         for cookie in self.cookies_to_clear:
-            response.delete_cookie(cookie,
-                                   path = '/'.join(path.split('/')[:3])
-                                   )
+            cookie_name = cookie[0]
+            try:
+                # delete the cookie for provided path
+                response.delete_cookie(cookie[0], path = cookie[1])
+            except IndexError:
+                # if not use the current page path
+                response.delete_cookie(cookie[0],
+                                       path = '/'.join(path.split('/')[:3])
+                                       )
 
     def dispatch(self, request, **kwargs):
         self.popup = request.GET.get('popup')
