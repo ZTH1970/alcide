@@ -30,7 +30,9 @@ class Homepage(TemplateView):
     def dispatch(self, request, **kwargs):
         if 'service' in kwargs:
             self.cookies_to_clear = [('agenda-worker-tabs',
-                                      '/%s/agenda' % kwargs['service'])
+                                      '/%s/agenda' % kwargs['service']),
+                                     ('agenda-ressource-tabs',
+                                      '/%s/agenda' % kwargs['service']),
                                      ]
         return super(Homepage, self).dispatch(request, **kwargs)
 
