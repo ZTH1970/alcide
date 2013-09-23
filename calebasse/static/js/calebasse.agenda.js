@@ -86,31 +86,31 @@ function enable_events(base) {
         return false;
       });
       $(base).find('.newrdv').click(function() {
-          $('#close-all-agendas').click();
-          $('.ressource-item.active').each(function (i, v) {
-              toggle_ressource(v);
-          });
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),
                             time: $(this).data('hour') }, true);
           var new_appointment_url = $(this).data('url') + "?" + qs;
           event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
+          $('#close-all-agendas').click();
+          $('.ressource-item.active').each(function (i, v) {
+              toggle_ressource(v);
+          });
       });
       $(base).find('.edit-appointment').click(function() {
           event_dialog("/" + service + "/agenda/" + current_date + "/update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
           return false;
       });
       $(base).find('.newevent').click(function() {
-          $('#close-all-agendas').click();
-          $('.ressource-item.active').each(function (i, v) {
-              toggle_ressource(v);
-          });
           var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),
                             time: $(this).data('hour') }, true);
           event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
+          $('#close-all-agendas').click();
+          $('.ressource-item.active').each(function (i, v) {
+              toggle_ressource(v);
+          });
       });
       $(base).find('.edit-event').click(function() {
           event_dialog("update-event/" + $(this).data('event-id') , 'Modifier un événement', '850px', 'Modifier');
