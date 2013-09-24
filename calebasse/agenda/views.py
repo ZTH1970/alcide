@@ -130,7 +130,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     template_name = 'agenda/new-appointment.html'
     success_url = '..'
     success_msg = u'Rendez-vous enregistré avec succès.'
-    cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
+    cookies_to_clear = []
 
     def get_initial(self):
         initial = super(NewAppointmentView, self).get_initial()
@@ -148,6 +148,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, self.success_msg)
+        self.cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
         return super(NewAppointmentView, self).form_valid(form)
 
 
@@ -203,7 +204,7 @@ class NewEventView(CreateView):
     form_class = NewEventForm
     template_name = 'agenda/new-event.html'
     success_url = '..'
-    cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
+    cookies_to_clear = []
 
     def get_initial(self):
         initial = super(NewEventView, self).get_initial()
@@ -224,6 +225,7 @@ class NewEventView(CreateView):
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, u'Evénement enregistré avec succès.')
+        self.cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
         return super(NewEventView, self).form_valid(form)
 
 
