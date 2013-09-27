@@ -377,7 +377,7 @@ function event_dialog(url, title, width, btn_text) {
               });
               if ($.cookie('active-worker-agenda'))
               {
-                  var target = $('#link-tab-worker' + $.cookie('active-worker-agenda'));
+                  var target = $('#link-tab-worker-' + $.cookie('active-worker-agenda'));
                   if (target.is(':visible')) {
                       target.click();
                   }
