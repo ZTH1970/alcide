@@ -398,5 +398,9 @@ def list_acts_for_billing_CMPP_per_patient(patient, end_day, service, acts=None)
                     cared = True
             if not cared:
                 acts_losts.append(act)
+    if len(acts_pause.keys()) == 1:
+        acts_pause = acts_pause.values()[0]
+    else:
+        acts_pause = []
     return (acts_not_locked, days_not_locked, acts_not_valide,
         acts_not_billable, acts_pause, acts_per_hc, acts_losts)
