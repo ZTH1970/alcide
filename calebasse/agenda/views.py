@@ -148,7 +148,6 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, self.success_msg)
-        self.cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
         return super(NewAppointmentView, self).form_valid(form)
 
 
@@ -225,7 +224,6 @@ class NewEventView(CreateView):
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, u'Evénement enregistré avec succès.')
-        self.cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
         return super(NewEventView, self).form_valid(form)
 
 
