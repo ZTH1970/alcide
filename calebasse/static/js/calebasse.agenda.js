@@ -256,17 +256,19 @@ function toggle_ressource(ressource_selector, ressource) {
     var tab = $('#link-tab-' + ressource + '-' + ressource_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
     $(tab).detach().appendTo(tab_list);
+    var url = $("#date-selector").data('url');
 
     if ($('#tabs-' + ressource + '-' + ressource_id + ' .' + ressource + '-tab-content-placeholder').length) {
         /* load ressource appointments tab */
-        $('#tabs-' + ressource + '-' + ressource_id).load('ajax-' + ressource + '-tab/' + ressource_id,
+        $('#tabs-' + ressource + '-' + ressource_id).load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
             function () {
                $(this).children('div').accordion({active: false, autoHeight: false});
                enable_events(this);
             }
         );
         /* load ressource disponibility column */
-        $.get('ajax-' + ressource + '-disponibility-column/' + ressource_id,
+
+        $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
                 var dispo_table_rows = $('td#dispos table tr');
                 $(data).find('td').each(function(a, b) {
