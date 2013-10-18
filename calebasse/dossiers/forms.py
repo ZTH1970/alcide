@@ -85,6 +85,10 @@ class PatientStateForm(ModelForm):
 class NewPatientRecordForm(ModelForm):
     date_selected = forms.DateField(label=u"Date de contact", initial=date.today(), localize=True)
 
+    def __init__(self, *args, **kwargs):
+        super(NewPatientRecordForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+
     class Meta:
         model = PatientRecord
         fields = ('last_name', 'first_name')

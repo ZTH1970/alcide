@@ -46,6 +46,7 @@ def render_to_pdf_file(templates, ctx, prefix='tmp', delete=False):
                 pass
         raise
 
+
 def price_details(service, invoicing,
                   header_service_template = 'facturation/bordereau-%s.html',
                   header_template = 'facturation/prices-details.html',
