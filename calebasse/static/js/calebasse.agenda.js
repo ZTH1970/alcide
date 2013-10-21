@@ -286,7 +286,6 @@ function toggle_ressource(ressource_selector, ressource) {
                 var dispo_table_rows = $('td#dispos table tr');
                 all_td = $(data).find('td');
                 $(data).find('td').each(function(a, b) {
-                    console.log(b);
                     $(dispo_table_rows[a]).append(b);
                 });
             }
