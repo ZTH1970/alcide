@@ -11,7 +11,7 @@ from views import (redirect_today, AgendaHomepageView, NewAppointmentView,
         UnlockAllView, AgendasTherapeutesView, JoursNonVerrouillesView,
         RessourcesView, AjaxWorkerTabView, AjaxWorkerDisponibilityColumnView,
         DeleteOccurrenceView, DeleteEventView, UpdatePeriodicEventView, UpdatePeriodicAppointmentView,
-        PeriodicEventsView)
+        PeriodicEventsView, AjaxRessourceDisponibilityColumnView)
 
 agenda_patterns = patterns('',
             url(r'^$',
@@ -74,6 +74,9 @@ agenda_patterns = patterns('',
             url(r'^ajax-worker-disponibility-column/(?P<worker_id>\d+)$',
                 AjaxWorkerDisponibilityColumnView.as_view(),
                 name='ajax-worker-disponibility-column'),
+            url(r'^ajax-ressource-disponibility-column/(?P<ressource_id>\d+)$',
+                AjaxRessourceDisponibilityColumnView.as_view(),
+                name='ajax-ressource-disponibility-column'),
             url(r'^rendez-vous-periodiques/$',
                 PeriodicEventsView.as_view(),
                 name='periodic-events'),

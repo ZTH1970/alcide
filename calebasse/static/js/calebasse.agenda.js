@@ -210,11 +210,12 @@ function reorder_disponibility_columns() {
     $('a.tab').each(function(a, b) {
         table_indexes.push($(b).data('id'));
     });
+
     rows = $('td#dispos table tr');
     for (var i=0; i<rows.length; i++) {
         tr = $(rows[i]);
         t = $.map(table_indexes,
-                  function(v, i) { return $('.worker-' + v, tr)[0]; }).filter(
+                  function(v, i) { return $('.ressource-' + v, tr)[0]; }).filter(
                   function(a) { if (a) return true; return false; });
         $('.agenda', tr).detach();
         $(tr).append(t);
@@ -223,8 +224,8 @@ function reorder_disponibility_columns() {
 
 function toggle_ressource(ressource_selector, ressource) {
 
-   var ressource_id = $(ressource_selector).data(ressource + '-id');
-    if (!ressource_id) {
+    var ressource_id = $(ressource_selector).data(ressource + '-id');
+     if (!ressource_id) {
         return;
     }
 
@@ -258,29 +259,44 @@ function toggle_ressource(ressource_selector, ressource) {
     $(tab).detach().appendTo(tab_list);
     var url = $("#date-selector").data('url');
 
-    if ($('#tabs-' + ressource + '-' + ressource_id + ' .' + ressource + '-tab-content-placeholder').length) {
-        /* load ressource appointments tab */
-        $('#tabs-' + ressource + '-' + ressource_id).load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
-            function () {
-               $(this).children('div').accordion({active: false, autoHeight: false});
-               enable_events(this);
-            }
-        );
-        /* load ressource disponibility column */
+    var tab_selector = '';
 
+    if (ressource == 'worker') {
+        tab_selector = '#tabs-' + ressource + '-' + ressource_id + ' .' + ressource + '-tab-content-placeholder';
+    } else {
+        tab_selector = '#selector-ressource-' + ressource_id + '.active';
+        url = url.split('/')
+        url.splice(4, 1);
+        url = url.join('/');
+    }
+
+    if ($(tab_selector).length) {
+        if(ressource == 'worker') {
+            /* load ressource appointments tab */
+            $('#tabs-' + ressource + '-' + ressource_id).load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
+                function () {
+                    $(this).children('div').accordion({active: false, autoHeight: false});
+                    enable_events(this);
+                }
+             );
+        };
+        /* load ressource disponibility column */
         $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
                 var dispo_table_rows = $('td#dispos table tr');
+                all_td = $(data).find('td');
                 $(data).find('td').each(function(a, b) {
-                        $(dispo_table_rows[a]).append(b);
-                    }
-                );
-                reorder_disponibility_columns();
+                    console.log(b);
+                    $(dispo_table_rows[a]).append(b);
+                });
             }
         );
     } else {
-        reorder_disponibility_columns();
+        // remove hidden ressource availability
+        $('td#dispos table tr td.ressource-' + ressource_id + '.agenda').remove();
     }
+
+    reorder_disponibility_columns();
     return target.find('a.tab');
 }
 
