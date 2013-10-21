@@ -128,7 +128,6 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     model = EventWithAct
     form_class = NewAppointmentForm
     template_name = 'agenda/new-appointment.html'
-    success_url = '..'
     success_msg = u'Rendez-vous enregistré avec succès.'
     cookies_to_clear = []
 
@@ -145,6 +144,9 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         kwargs = super(NewAppointmentView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', '..')
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, self.success_msg)
@@ -202,7 +204,6 @@ class NewEventView(CreateView):
     model = Event
     form_class = NewEventForm
     template_name = 'agenda/new-event.html'
-    success_url = '..'
     cookies_to_clear = []
 
     def get_initial(self):
@@ -221,6 +222,9 @@ class NewEventView(CreateView):
         kwargs = super(NewEventView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', '..')
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, u'Evénement enregistré avec succès.')
