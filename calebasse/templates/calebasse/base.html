@@ -4,13 +4,13 @@
   <head>
     <meta charset="utf-8"/>
     <title>{% block title %}{{ service_name }}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/style.css"/>
-    <link rel="stylesheet" type="text/css" media="print" href="{{ STATIC_URL }}css/print.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/style.css?{% now  'YmdH'%}"/>
+    <link rel="stylesheet" type="text/css" media="print" href="{{ STATIC_URL }}css/print.css?{% now  'YmdH'%}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/smoothness/jquery-ui-1.8.21.custom.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/ajax_select.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calebasse.checkboxwidget.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calebasse.divmenu.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calebasse.datesel.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/ajax_select.css?{% now  'YmdH'%}"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calebasse.checkboxwidget.css?{% now  'YmdH'%}" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calebasse.divmenu.css?{% now  'YmdH'%}" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/calebasse.datesel.css?{% now  'YmdH'%}" />
     <script src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script>$.cookie.json = true;</script>
@@ -18,14 +18,14 @@
     <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.sortElements.js"></script>
     <script src="{{ STATIC_URL }}development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
-    <script src="{{ STATIC_URL }}js/ajax_select.js"></script>
+    <script src="{{ STATIC_URL }}js/ajax_select.js?{% now  'YmdH'%}"></script>
     <script src="{{ STATIC_URL }}js/jquery.mousewheel.js"></script>
-    <script src="{{ STATIC_URL }}js/calebasse.mousewheel.js"></script>
-    <script src="{{ STATIC_URL }}js/calebasse.dialog.js"></script>
-    <script src="{{ STATIC_URL }}js/calebasse.tables.js"></script>
-    <script src="{{ STATIC_URL }}js/calebasse.text_input_wrapper.js"></script>
-    <script src="{{ STATIC_URL }}/js/calebasse.checkboxwidget.js"></script>
-    <script src="{{ STATIC_URL }}/js/calebasse.divmenu.js"></script>
+    <script src="{{ STATIC_URL }}js/calebasse.mousewheel.js?{% now  'YmdH'%}"></script>
+    <script src="{{ STATIC_URL }}js/calebasse.dialog.js?{% now  'YmdH'%}"></script>
+    <script src="{{ STATIC_URL }}js/calebasse.tables.js?{% now  'YmdH'%}"></script>
+    <script src="{{ STATIC_URL }}js/calebasse.text_input_wrapper.js?{% now  'YmdH'%}"></script>
+    <script src="{{ STATIC_URL }}/js/calebasse.checkboxwidget.js?{% now  'YmdH'%}"></script>
+    <script src="{{ STATIC_URL }}/js/calebasse.divmenu.js?{% now  'YmdH'%}"></script>
     {% block extrascripts %}
     {% endblock %}
   </head>
