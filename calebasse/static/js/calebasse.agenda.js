@@ -275,7 +275,7 @@ function toggle_ressource(ressource_selector, ressource) {
             /* load ressource appointments tab */
             $('#tabs-' + ressource + '-' + ressource_id).load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
                 function () {
-                    $(this).children('div').accordion({active: false, autoHeight: false});
+                    $(this).children('div').accordion({active: false, autoHeight: false, collapsible: true});
                     enable_events(this);
                 }
              );
