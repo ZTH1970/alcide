@@ -54,6 +54,7 @@ setup(name='calebasse',
             'interval == 1.0.0',
             'python-entrouvert >= 1.3'
             'django-debug-toolbar',
+            'django-localflavor',
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',

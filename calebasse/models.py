@@ -3,7 +3,7 @@
 from django.db import models
 from django.db.models import fields
 from django import forms
-from django.contrib.localflavor.fr.forms import FRPhoneNumberField, FRZipCodeField
+from localflavor.fr.forms import FRPhoneNumberField, FRZipCodeField
 from django.utils.text import capfirst
 
 
