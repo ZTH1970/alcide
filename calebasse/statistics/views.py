@@ -48,6 +48,26 @@ class StatisticsFormView(FormView):
     template_name = 'statistics/form.html'
     success_url = '..'
 
+    def get(self, request, *args, **kwargs):
+        name = kwargs.get('name')
+        form = forms.StatForm()
+        if name == 'annual_activity':
+            form = forms.AnnualStatForm()
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def post(self, request, *args, **kwargs):
+        name = kwargs.get('name')
+        form = forms.StatForm()
+        if name == 'annual_activity':
+            form = forms.AnnualStatForm(request.POST)
+        else:
+            form = forms.StatForm(request.POST)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+        return self.render_to_response(self.get_context_data(form=form))
+
     def form_valid(self, form):
         if 'display_or_export' in form.data:
             name = self.kwargs.get('name')
