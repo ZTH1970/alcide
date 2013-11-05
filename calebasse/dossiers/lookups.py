@@ -3,6 +3,7 @@
 from ajax_select import LookupChannel
 from calebasse.dossiers.models import PatientRecord, PatientAddress
 from django.core.exceptions import PermissionDenied
+from itertools import chain
 
 class PatientRecordLookup(LookupChannel):
     model = PatientRecord
@@ -24,9 +25,15 @@ class PatientRecordLookup(LookupChannel):
         #    self.homonym = True
         qs.prefetch_related('last_state__status')
         qs.query.order_by = [not_closed_filter_field, ]
+
+        # filtering all closed records to put them at the end
+        separation_criteria = {'last_state__status__name': 'Clos'}
+        closed = qs.filter(**separation_criteria)
+        qs = qs.exclude(**separation_criteria)
+
         qs = qs.order_by('-%s' % not_closed_filter_field)
 
-        return qs
+        return chain(qs, closed)
 
     def format_match(self,obj):
         return self.format_item_display(texte)
