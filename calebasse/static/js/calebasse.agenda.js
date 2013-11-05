@@ -86,7 +86,10 @@ function enable_events(base) {
         return false;
       });
       $(base).find('.newrdv').click(function() {
-          var participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
+          var participants = new Array();
+          if ($.cookie('agenda-worker-tabs')) {
+              participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
+          }
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),
                             time: $(this).data('hour') }, true);
