@@ -4,7 +4,7 @@ import tempfile
 import csv
 
 from collections import OrderedDict
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from django.db import models
@@ -13,6 +13,7 @@ from django.db.models import Count
 from calebasse.dossiers.models import PatientRecord
 from calebasse.personnes.models import Worker
 from calebasse.actes.models import Act
+from calebasse.agenda.models import Event
 
 
 STATISTICS = {
@@ -35,7 +36,7 @@ STATISTICS = {
     },
 }
 
-ANNUAL_ACTIVITY_ROWS = ['total', 'pointe', 'non_pointe', 'absent', 'percent_abs', 'reporte', 'acts_present', 'abs_non_exc', 'abs_exc', 'abs_inter', 'annul_nous', 'annul_famille', 'abs_ess_pps', 'enf_hosp', 'non_facturables', 'facturables', 'perdus', 'doubles', 'really_facturables', 'factures', 'diag', 'trait', 'restants_a_fac', 'refac', 'nf', 'percent_nf', 'patients', 'intervenants', 'days', 'fact_per_day']
+ANNUAL_ACTIVITY_ROWS = ['total', 'pointe', 'non_pointe', 'absent', 'percent_abs', 'reporte', 'acts_present', 'abs_non_exc', 'abs_exc', 'abs_inter', 'annul_nous', 'annul_famille', 'abs_ess_pps', 'enf_hosp', 'non_facturables', 'facturables', 'perdus', 'doubles', 'really_facturables', 'factures', 'diag', 'trait', 'restants_a_fac', 'refac', 'nf', 'percent_nf', 'patients', 'intervenants', 'days', 'fact_per_day', 'moving_time', 'moving_time_per_intervene', 'moving_time_per_act']
 
 ANNUAL_ACTIVITY_COLUMN_LABELS = ['Janv', 'Fév', 'Mar', 'T1', 'Avr', 'Mai', 'Jui', 'T2', 'Jui', 'Aoû', 'Sep', 'T3', 'Oct', 'Nov', 'Déc', 'T4', 'Total']
 
@@ -70,23 +71,36 @@ class AnnualActivityProcessingColumn():
     intervenants = 0
     days = 0
     fact_per_day = 0
+    moving_time = timedelta()
+    moving_time_per_intervene = timedelta()
+    moving_time_per_act = timedelta()
 
 def annual_activity_month_analysis(statistic, start_day, analyses, key, i, trim_cnt, participant=None):
     rd = relativedelta(months=1)
     sd = start_day + i * rd
     ed = sd + rd
     acts = None
+    moving_events = None
     if participant:
         acts = Act.objects.filter(date__gte=sd.date(),
             date__lt=ed.date(), patient__service=statistic.in_service,
             doctors__in=[participant])
+        moving_events = Event.objects.filter(event_type__label='Temps de trajet',
+            start_datetime__gte=sd, end_datetime__lt=ed,
+            services__in=[statistic.in_service],
+            participants__in=[participant])
     else:
         acts = Act.objects.filter(date__gte=sd.date(),
             date__lt=ed.date(), patient__service=statistic.in_service)
+        moving_events = Event.objects.filter(event_type__label='Temps de trajet',
+            start_datetime__gte=sd, end_datetime__lt=ed,
+            services__in=[statistic.in_service])
     analyses[key].append(AnnualActivityProcessingColumn())
     analyses[key][i+trim_cnt].patients = acts.aggregate(Count('patient', distinct=True))['patient__count']
     analyses[key][i+trim_cnt].intervenants = acts.aggregate(Count('doctors', distinct=True))['doctors__count']
     analyses[key][i+trim_cnt].days = acts.aggregate(Count('date', distinct=True))['date__count']
+    for me in moving_events:
+        analyses[key][i+trim_cnt].moving_time += me.timedelta()
     for a in acts:
         if a.is_new():
             analyses[key][i+trim_cnt].non_pointe += 1
@@ -152,6 +166,12 @@ def annual_activity_month_analysis(statistic, start_day, analyses, key, i, trim_
         if analyses[key][i+trim_cnt].days:
             analyses[key][i+trim_cnt].fact_per_day = "%.2f" % (analyses[key][i+trim_cnt].really_facturables / float(analyses[key][i+trim_cnt].days))
 
+    if analyses[key][i+trim_cnt].moving_time and analyses[key][i+trim_cnt].intervenants:
+        analyses[key][i+trim_cnt].moving_time_per_intervene = analyses[key][i+trim_cnt].moving_time / analyses[key][i+trim_cnt].intervenants
+    if analyses[key][i+trim_cnt].moving_time and analyses[key][i+trim_cnt].acts_present:
+        analyses[key][i+trim_cnt].moving_time_per_act = analyses[key][i+trim_cnt].moving_time / analyses[key][i+trim_cnt].acts_present
+
+
 def annual_activity_trimester_analysis(statistic, start_day, analyses, key, i, trim_cnt, participant=None):
     analyses[key].append(AnnualActivityProcessingColumn())
     rd = relativedelta(months=1)
@@ -192,6 +212,12 @@ def annual_activity_trimester_analysis(statistic, start_day, analyses, key, i, t
         elif row == 'fact_per_day':
             if analyses[key][i+trim_cnt].days:
                 analyses[key][i+trim_cnt].fact_per_day = "%.2f" % (analyses[key][i+trim_cnt].really_facturables / float(analyses[key][i+trim_cnt].days))
+        elif row == 'moving_time_per_intervene':
+            if analyses[key][i+trim_cnt].moving_time and analyses[key][i+trim_cnt].intervenants:
+                analyses[key][i+trim_cnt].moving_time_per_intervene = analyses[key][i+trim_cnt].moving_time / analyses[key][i+trim_cnt].intervenants
+        elif row == 'moving_time_per_act':
+            if analyses[key][i+trim_cnt].moving_time and analyses[key][i+trim_cnt].acts_present:
+                analyses[key][i+trim_cnt].moving_time_per_act = analyses[key][i+trim_cnt].moving_time / analyses[key][i+trim_cnt].acts_present
         else:
             setattr(analyses[key][i+trim_cnt], row, getattr(analyses[key][i+trim_cnt-1], row) + getattr(analyses[key][i-2+trim_cnt], row) + getattr(analyses[key][i-3+trim_cnt], row))
 
@@ -237,11 +263,27 @@ def annual_activity_synthesis_analysis(statistic, start_day, end_day, analyses, 
         elif row == 'fact_per_day':
             if analyses[key][16].days:
                 analyses[key][16].fact_per_day = "%.2f" % (analyses[key][16].really_facturables / float(analyses[key][16].days))
+        elif row == 'moving_time_per_intervene':
+            if analyses[key][16].moving_time and analyses[key][16].intervenants:
+                analyses[key][16].moving_time_per_intervene = analyses[key][16].moving_time / analyses[key][16].intervenants
+        elif row == 'moving_time_per_act':
+            if analyses[key][16].moving_time and analyses[key][16].acts_present:
+                analyses[key][16].moving_time_per_act = analyses[key][16].moving_time / analyses[key][16].acts_present
         else:
             val = 0
+            if row == 'moving_time':
+                val = timedelta()
             for i in (3, 7, 11, 15):
                 val += getattr(analyses[key][i], row)
             setattr(analyses[key][16], row, val)
+
+def strfdelta(tdelta, fmt):
+    if not tdelta:
+        return '0'
+    d = {"days": tdelta.days}
+    d["hours"], rem = divmod(tdelta.seconds, 3600)
+    d["minutes"], d["seconds"] = divmod(rem, 60)
+    return fmt.format(**d)
 
 def annual_activity_build_tables(statistic, analyses, key, label, data_tables):
     table_1 = []
@@ -310,6 +352,24 @@ def annual_activity_build_tables(statistic, analyses, key, label, data_tables):
         for column in analyses[key]:
             row.append(column.fact_per_day)
         rows.append(row)
+    row = ['Temps de déplacement']
+    for column in analyses[key]:
+        row.append(strfdelta(column.moving_time, "{hours}h {minutes}m"))
+        if column.moving_time.days:
+            row.append(strfdelta(column.moving_time, "{days}j {hours}h {minutes}m"))
+    rows.append(row)
+    row = ['Temps de déplacement par intervenant']
+    for column in analyses[key]:
+        row.append(strfdelta(column.moving_time_per_intervene, "{hours}h {minutes}m"))
+        if column.moving_time_per_intervene.days:
+            row.append(strfdelta(column.moving_time_per_intervene, "{days}j {hours}h {minutes}m"))
+    rows.append(row)
+    row = ['Temps de déplacement par acte']
+    for column in analyses[key]:
+        row.append(strfdelta(column.moving_time_per_act, "{hours}h {minutes}m"))
+        if column.moving_time_per_act.days:
+            row.append(strfdelta(column.moving_time_per_act, "{days}j {hours}h {minutes}m"))
+    rows.append(row)
     table_1.append(rows)
     data_tables.append(table_1)
 
