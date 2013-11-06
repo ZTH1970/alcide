@@ -20,7 +20,7 @@ class StatisticsHomepageView(TemplateView):
         statistics = dict()
         for name, statistic in STATISTICS.iteritems():
             statistics.setdefault(statistic['category'], []).append((name,
-                statistic['display_name']))
+                statistic))
         context['statistics'] = statistics
         return context
 
