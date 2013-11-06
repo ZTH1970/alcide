@@ -830,7 +830,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     @property
     def care_duration(self):
         # Duration between the first act present and the closing date.
-        # If no closing date, end_date is today
+        # If no closing date, end_date is the date of tha last act
         first_act_date = None
         try:
             first_act_date = self.act_set.filter(valide=True).order_by('date')[0].date
@@ -838,7 +838,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             return 0
         exit_date = self.exit_date
         if not exit_date:
-            exit_date = datetime.today().date()
+            exit_date = self.act_set.filter(valide=True).order_by('-date')[0].date
         return (exit_date - first_act_date).days
 
 reversion.register(PatientRecord, follow=['people_ptr'])
