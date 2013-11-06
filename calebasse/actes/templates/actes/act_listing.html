@@ -4,6 +4,7 @@
 {% block extrascripts %}
 {{ block.super }}
 <script src="{{ STATIC_URL }}js/calebasse.datesel.js"></script>
+<script src="{{ STATIC_URL }}js/calebasse.agenda.js"></script>
 <script>
     $(function() {
         $('table#actes tr').click(function() {
@@ -36,8 +37,8 @@
         });
     $('.date').datepicker();
     $('.new-act').click(function() {
-        generic_ajaxform_dialog($(this).data('url'), 'Nouvel acte',
-        '#acte-dlg', '850px', 'Ajouter', '.');
+        add_dialog('#acte-dlg', $(this).data('url'), 'Nouvel acte',
+        '850px', 'Ajouter');
     });
     $('#search-form input[type="checkbox"]').on('change', function () {
       $('#search-form').submit();

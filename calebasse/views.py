@@ -26,6 +26,16 @@ def redirect_to_homepage(request):
 
 class Homepage(TemplateView):
     template_name='calebasse/homepage.html'
+    cookies_to_clear = [('agenda-worker-tabs', )]
+
+    def dispatch(self, request, **kwargs):
+        if 'service' in kwargs:
+            self.cookies_to_clear = [('agenda-worker-tabs',
+                                      '/%s/agenda' % kwargs['service']),
+                                     ('agenda-ressource-tabs',
+                                      '/%s/agenda' % kwargs['service']),
+                                     ]
+        return super(Homepage, self).dispatch(request, **kwargs)
 
     def get_context_data(self, **kwargs):
         services = Service.objects.values_list('name', 'slug')

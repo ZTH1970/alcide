@@ -71,9 +71,9 @@ class InvoiceTemplate(object):
             },
             'TABLEAU1': {
                 'type': 'array',
-                'size': 6,
+                'size': 5,
                 'y': 323,
-                'lineheight': 11,
+                'lineheight': 10,
                 'cols': [
                     38,
                     65,
@@ -86,9 +86,9 @@ class InvoiceTemplate(object):
                     414.5] },
             'TABLEAU2': {
                 'type': 'array',
-                'size': 6,
+                'size': 5,
                 'y': 323,
-                'lineheight': 11,
+                'lineheight': 10,
                 'x': 395.5,
                 'cols': [
                     38,

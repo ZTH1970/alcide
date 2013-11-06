@@ -657,7 +657,7 @@ class Invoicing(models.Model):
                             management_code = policy_holder.management_code
                             invoice_kwargs['policy_holder_management_code'] = management_code.code
                             invoice_kwargs['policy_holder_management_code_name'] = management_code.name
-                        list_dates = '$'.join([act.date.strftime('%d/%m/%Y') for act in acts])
+                        list_dates = '$'.join([act.date.strftime('%d/%m/%Y') for act in acts_to_commit])
                         invoice = Invoice(
                                 invoicing=self,
                                 ppa=0, amount=0,

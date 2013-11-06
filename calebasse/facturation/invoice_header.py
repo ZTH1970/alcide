@@ -150,7 +150,7 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
     if invoice.list_dates:
         dates = invoice.list_dates.split('$')
     if dates:
-        if len(dates) > 26:
+        if len(dates) > 30:
             raise RuntimeError('Too much acts in invoice %s' % invoice.id)
         kind = 'X'
         offset = 0
@@ -159,12 +159,12 @@ def invoice_files(service, invoicing, batch, invoice, counter=None):
             kind = invoice.first_tag[0]
             offset = int(invoice.first_tag[1:])
             prestation = u'SNS' if kind == 'T' else u'SD'
-        for date in dates[:13]:
+        for date in dates[:15]:
             tableau1.append([u'19', u'320', prestation, date, date,
                 invoice.decimal_ppa, 1, invoice.decimal_ppa, kind + str(offset)])
             total1 += invoice.decimal_ppa
             offset += 1
-        for date in dates[13:26]:
+        for date in dates[15:30]:
             tableau2.append([u'19', u'320', prestation, date, date,
                 invoice.decimal_ppa, 1, invoice.decimal_ppa, kind + str(offset)])
             total2 += invoice.decimal_ppa

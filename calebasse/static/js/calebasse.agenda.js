@@ -86,7 +86,7 @@ function enable_events(base) {
         return false;
       });
       $(base).find('.newrdv').click(function() {
-          var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
+          var participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),
                             time: $(this).data('hour') }, true);
@@ -98,7 +98,7 @@ function enable_events(base) {
           return false;
       });
       $(base).find('.newevent').click(function() {
-          var participants = $('.person-item.active').map(function (i, v) { return $(v).data('worker-id'); });
+          var participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
           var qs = $.param({participants: $.makeArray(participants),
                             room: $.cookie('active-ressource-agenda'),
                             time: $(this).data('hour') }, true);
@@ -210,238 +210,97 @@ function reorder_disponibility_columns() {
     $('a.tab').each(function(a, b) {
         table_indexes.push($(b).data('id'));
     });
+
     rows = $('td#dispos table tr');
     for (var i=0; i<rows.length; i++) {
         tr = $(rows[i]);
         t = $.map(table_indexes,
-                  function(v, i) { return $('.worker-' + v, tr)[0]; }).filter(
+                  function(v, i) { return $('.ressource-' + v, tr)[0]; }).filter(
                   function(a) { if (a) return true; return false; });
         $('.agenda', tr).detach();
         $(tr).append(t);
     };
 }
 
-function toggle_worker(worker_selector) {
-    var worker_id = $(worker_selector).data('worker-id');
-    if (!worker_id) {
-        return;
-    }
+function toggle_ressource(ressource_selector, ressource) {
 
-    $(worker_selector).toggleClass('active');
-    if (!($.cookie('agenda-worker-tabs'))) {
-        $.cookie('agenda-worker-tabs', new Array(), {path: COOKIE_PATH});
-    }
-    if ($(worker_selector).hasClass('active')) {
-        var tabs = $.cookie('agenda-worker-tabs');
-        if ($.inArray($(worker_selector).attr('id'), tabs) == -1)
-        {
-            tabs.push($(worker_selector).attr('id'));
-            $.cookie('agenda-worker-tabs', tabs, { path: COOKIE_PATH });
-        }
-    }
-    else {
-        var agendatabs = $.cookie('agenda-worker-tabs');
-        var ok = false;
-        $.each(agendatabs, function (i, value) {
-            if (value == $(worker_selector).attr('id')) {
-                agendatabs.splice(i, 1);
-                ok = true;
-            }
-        });
-        $.cookie('agenda-worker-tabs', agendatabs, {path: COOKIE_PATH});
-    }
-    var target = $($(worker_selector).data('target'));
-    target.toggle();
-    /* Show the close all button */
-    $('#close-all-agendas').toggle($('li.agenda:visible').length != 0);
-
-    var tab = $('#link-tab-worker-' + worker_id).parent().get(0);
-    var tab_list = $(tab).parent().get(0);
-    $(tab).detach().appendTo(tab_list);
-
-    if ($('#tabs-worker-' + worker_id + ' .worker-tab-content-placeholder').length) {
-        /* load worker appointments tab */
-        $('#tabs-worker-' + worker_id).load('ajax-worker-tab/' + worker_id,
-            function () {
-               $(this).children('div').accordion({active: false, autoHeight: false, collapsible: true});
-               enable_events(this);
-            }
-        );
-        /* load worker disponibility column */
-        $.get('ajax-worker-disponibility-column/' + worker_id,
-            function(data) {
-                var dispo_table_rows = $('td#dispos table tr');
-                all_td = $(data).find('td');
-                for (var i=0; i<all_td.length; i++) {
-                    $(dispo_table_rows[i]).append(all_td[i]);
-                }
-            }
-        );
-    }
-    return target.find('a.tab');
-}
-
-function toggle_ressource(ressource_selector) {
-    var ressource_id = $(ressource_selector).data('ressource-id');
-    if (!ressource_id) {
+    var ressource_id = $(ressource_selector).data(ressource + '-id');
+     if (!ressource_id) {
         return;
     }
 
     $(ressource_selector).toggleClass('active');
-    if (!($.cookie('agenda-ressource-tabs'))) {
-        $.cookie('agenda-ressource-tabs', new Array(), { path: COOKIE_PATH });
+    if (!($.cookie('agenda-' + ressource + '-tabs'))) {
+        $.cookie('agenda-' + ressource + '-tabs', new Array(), { path: COOKIE_PATH });
     }
     if ($(ressource_selector).hasClass('active')) {
-        var tabs = $.cookie('agenda-ressource-tabs');
+        var tabs = $.cookie('agenda-' + ressource + '-tabs');
         if ($.inArray($(ressource_selector).attr('id'), tabs) == -1)
         {
             tabs.push($(ressource_selector).attr('id'));
-            $.cookie('agenda-ressource-tabs', tabs, { path: COOKIE_PATH });
+            $.cookie('agenda-' + ressource + '-tabs', tabs, { path: COOKIE_PATH });
         }
     }
     else {
-        var agendatabs = $.cookie('agenda-ressource-tabs');
+        var agendatabs = $.cookie('agenda-' + ressource + '-tabs');
         $.each(agendatabs, function (i, value) {
             if (value == $(ressource_selector).attr('id')) {
                 agendatabs.splice(i, 1);
             }
         });
-        $.cookie('agenda-ressource-tabs', agendatabs, { path: COOKIE_PATH });
+        $.cookie('agenda-' + ressource + '-tabs', agendatabs, { path: COOKIE_PATH });
     }
     var target = $($(ressource_selector).data('target'));
     target.toggle();
+    $('#close-all-' + ressource + '-agendas').toggle($('li.agenda:visible').length != 0);
 
-    var tab = $('#link-tab-ressource-' + ressource_id).parent().get(0);
+    var tab = $('#link-tab-' + ressource + '-' + ressource_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
     $(tab).detach().appendTo(tab_list);
+    var url = $("#date-selector").data('url');
 
-    if ($('#tabs-ressource-' + ressource_id + ' .ressource-tab-content-placeholder').length) {
-        /* load ressource appointments tab */
-        $('#tabs-ressource-' + ressource_id).load('ajax-ressource-tab/' + ressource_id,
-            function () {
-               $(this).children('div').accordion({active: false, autoHeight: false});
-               enable_events(this);
-            }
-        );
+    var tab_selector = '';
+
+    if (ressource == 'worker') {
+        tab_selector = '#tabs-' + ressource + '-' + ressource_id + ' .' + ressource + '-tab-content-placeholder';
+    } else {
+        tab_selector = '#selector-ressource-' + ressource_id + '.active';
+        url = url.split('/')
+        url.splice(4, 1);
+        url = url.join('/');
+    }
+
+    if ($(tab_selector).length) {
+        if(ressource == 'worker') {
+            /* load ressource appointments tab */
+            $('#tabs-' + ressource + '-' + ressource_id).load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
+                function () {
+                    $(this).children('div').accordion({active: false, autoHeight: false, collapsible: true});
+                    enable_events(this);
+                }
+             );
+        };
         /* load ressource disponibility column */
-        $.get('ajax-ressource-disponibility-column/' + ressource_id,
+        $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
                 var dispo_table_rows = $('td#dispos table tr');
+                all_td = $(data).find('td');
                 $(data).find('td').each(function(a, b) {
-                        $(dispo_table_rows[a]).append(b);
-                    }
-                );
-                reorder_disponibility_columns();
+                    $(dispo_table_rows[a]).append(b);
+                });
             }
         );
     } else {
-        reorder_disponibility_columns();
+        // remove hidden ressource availability
+        $('td#dispos table tr td.ressource-' + ressource_id + '.agenda').remove();
     }
+
+    reorder_disponibility_columns();
     return target.find('a.tab');
 }
 
-
-var in_event = false;
 function event_dialog(url, title, width, btn_text) {
-          if (in_event) {
-            return;
-          }
-          in_event = true;
-          $('#rdv').load(url,
-              function () {
-                  /* function onsuccess(response, status, xhr, form) {
-                      var parse = $(response);
-                      if ($('.errorlist', parse).length != 0) {
-                          $('#rdv').html(response);
-                          $('#rdv form').ajaxForm({
-                              success: onsuccess,
-                          });
-                          $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-                          console.log('error');
-                      } else {
-                          console.log(xhr);
-                          window.location.href = xhr.redirect;
-                         window.location.reload(true);
-                      }
-                  } */
-                  $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-                  $('#id_description').attr('rows', '3');
-                  $('#id_description').attr('cols', '30');
-                  var deck = $('#id_participants_on_deck');
-                  $(deck).bind('added', function() {
-                      var added = $(deck).find('div:last');
-                      var t = added.attr('id').indexOf('_group:');
-                      if ( t == -1) return;
-                      var query = added.attr('id').substr(t+1);
-
-                      /* remove group element and fake id */
-                      added.remove();
-                      var val = $('#id_participants').val();
-                      $('#id_participants').val(val.substr(0, val.substr(0, val.length-1).lastIndexOf('|')+1));
-
-                      /* add all workers */
-                      var receive_result = $('#id_participants_text').autocomplete('option', 'select');
-                      $.getJSON($('#id_participants_text').autocomplete('option', 'source') + '?term=' + query,
-                          function(data) {
-                              $.each(data, function(key, val) {
-                                  if (key==0) return; /* ignore first element as it's the group itself */
-                                  var ui = Object();
-                                  ui.item = val;
-                                  receive_result(null, ui);
-                              });
-                      });
-                  });
-                  /* $('form', this).ajaxForm({
-                      success: onsuccess
-                  }); */
-                  var old_background_image, old_background_repeat, $button;
-                  var in_submit = false;
-                  $('#rdv').unbind('submit');
-                  $("#rdv").submit(function(event) {
-                      /* stop form from submitting normally */
-                      event.preventDefault();
-
-                      var $form = $('form', this);
-                      $.post($form.attr('action'), $form.serialize(),
-                          function (data) {
-                            var parse = $(data);
-                            $button.css('background-image', old_background_image);
-                            $button.css('background-repeat', old_background_repeat);
-                            $button.removeAttr('disabled');
-                            if ($('.errorlist', parse).length != 0) {
-                                $('#rdv').html(data);
-                                $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-                                console.log('error');
-                            } else {
-                                $('body').html(data);
-                            }
-                            in_submit = false;
-                          },
-                          "html");
-                  });
-                  var submit = function (ev) {
-                      if (in_submit) {
-                        return;
-                      }
-                      in_submit = true;
-                      $button = $(ev.target).parent();
-                      old_background_image = $button.css('background-image');
-                      old_background_repeat = $button.css('background-repeat');
-                      $button.attr('disabled', 'disabled');
-                      $button.css('background-image', 'url(/static/images/throbber.gif), ' + old_background_image);
-                      $button.css('background-repeat', 'no-repeat, ' + old_background_repeat);
-                      $("#rdv form").submit();
-                  };
-                  $(this).dialog({title: title,
-                      modal: true,
-                      width: width,
-                      buttons: [
-                      { text: btn_text,
-                          click: submit }
-                      ],
-                      close: function() { in_event = false; },
-                  });
-              });
+    add_dialog('#rdv', url, title, width, btn_text);
 }
 
 (function($) {
@@ -450,9 +309,9 @@ function event_dialog(url, title, width, btn_text) {
 
       $('#tabs').ajaxStop(function() { reorder_disponibility_columns(); });
 
-      if ($('.person-item').length) {
-          $('.person-item').on('click', function() {
-              var target = toggle_worker(this);
+      if ($('.worker-item').length) {
+          $('.worker-item').on('click', function() {
+              var target = toggle_ressource(this, 'worker');
               if ($(target).is(':visible')) {
                   $(target).click();
               }
@@ -467,12 +326,12 @@ function event_dialog(url, title, width, btn_text) {
           });
 
           $('a.tab').click(function() {
-              $.cookie('active-worker-agenda', $(this).data('id'), { path: COOKIE_PATH });
+              $.cookie('active-worker-agenda', $(this).data('id'),  { path: COOKIE_PATH });
           });
 
           if ($.cookie('agenda-worker-tabs')) {
               $.each($.cookie('agenda-worker-tabs'), function (i, worker_selector) {
-                  toggle_worker('#' + worker_selector);
+                  toggle_ressource('#' + worker_selector, 'worker');
               });
               if ($.cookie('active-worker-agenda'))
               {
@@ -486,7 +345,7 @@ function event_dialog(url, title, width, btn_text) {
 
       if ($('.ressource-item').length) {
           $('.ressource-item').on('click', function() {
-              var target = toggle_ressource(this);
+              var target = toggle_ressource(this, 'ressource');
               if ($(target).is(':visible')) {
                   $(target).click();
               }
@@ -505,7 +364,7 @@ function event_dialog(url, title, width, btn_text) {
 
           if ($.cookie('agenda-ressource-tabs')) {
               $.each($.cookie('agenda-ressource-tabs'), function (i, ressource_selector) {
-                  toggle_ressource('#' + ressource_selector);
+                  toggle_ressource('#' + ressource_selector, 'ressource');
               });
               if ($.cookie('active-ressource-agenda'))
               {
@@ -548,8 +407,8 @@ function event_dialog(url, title, width, btn_text) {
           } else {
               $('#users li').show();
               if (! everybody) {
-                  $('.person-item:not(.in_service)').hide();
-                  $('.person-item:not(.intervenant)').hide();
+                  $('.worker-item:not(.in_service)').hide();
+                  $('.worker-item:not(.intervenant)').hide();
               }
           }
           /* hide worker type titles that do not have a single visible person */
@@ -577,10 +436,16 @@ function event_dialog(url, title, width, btn_text) {
       ($(this).data('previous') == $(this).val()));
     })
     $('#filtre input').keyup();
-    $('#close-all-agendas').click(function () {
-      $('.person-item.active').each(function (i, v) {
-        toggle_worker(v);
-      });
-    });
+
+    $.each({'persons': {'button': 'worker', 'element': 'worker'},
+            'rooms': {'button': 'ressource', 'element': 'ressource'}
+           },
+         function(key, value) {
+             $('#close-all-' + value.button + '-agendas').click(function() {
+                 $('.' + value.element + '-item.active').each(function (i, v) {
+                     toggle_ressource(v, value.element);
+                 });
+             });
+         });
   });
 })(window.jQuery)

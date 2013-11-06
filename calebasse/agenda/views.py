@@ -69,8 +69,9 @@ class AgendaHomepageView(TemplateView):
         return context
 
 
-class AgendaServiceActivityView(TemplateView):
+class AgendaServiceActivityView(TemplateView, cbv.ServiceViewMixin):
     template_name = 'agenda/service-activity.html'
+    cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
 
     def get_context_data(self, **kwargs):
         context = super(AgendaServiceActivityView, self).get_context_data(**kwargs)
@@ -127,7 +128,6 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
     model = EventWithAct
     form_class = NewAppointmentForm
     template_name = 'agenda/new-appointment.html'
-    success_url = '..'
     success_msg = u'Rendez-vous enregistré avec succès.'
     cookies_to_clear = []
 
@@ -144,6 +144,9 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         kwargs = super(NewAppointmentView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', '..')
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, self.success_msg)
@@ -201,7 +204,6 @@ class NewEventView(CreateView):
     model = Event
     form_class = NewEventForm
     template_name = 'agenda/new-event.html'
-    success_url = '..'
     cookies_to_clear = []
 
     def get_initial(self):
@@ -220,6 +222,9 @@ class NewEventView(CreateView):
         kwargs = super(NewEventView, self).get_form_kwargs()
         kwargs['service'] = self.service
         return kwargs
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', '..')
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.INFO, u'Evénement enregistré avec succès.')
@@ -290,6 +295,7 @@ class DeleteEventView(cbv.DeleteView):
 
 class AgendaServiceActValidationView(TemplateView):
     template_name = 'agenda/act-validation.html'
+    cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
 
     def acts_of_the_day(self):
         acts = list(Act.objects \
@@ -419,6 +425,7 @@ class UnlockAllView(CreateView):
 
 class AgendasTherapeutesView(AgendaHomepageView):
     template_name = 'agenda/agendas-therapeutes.html'
+    cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
 
     def get_context_data(self, **kwargs):
         context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
@@ -504,6 +511,7 @@ class JoursNonVerrouillesView(TemplateView):
 class RessourcesView(TemplateView):
 
     template_name = 'agenda/ressources.html'
+    cookies_to_clear = []
 
     def get_context_data(self, **kwargs):
         context = super(RessourcesView, self).get_context_data(**kwargs)
@@ -519,6 +527,7 @@ class RessourcesView(TemplateView):
         data = {'type': Room._meta.verbose_name_plural, 'ressources': Room.objects.all() }
         context['ressources_types'].append(data)
         ressources.extend(data['ressources'])
+        context['disponibility_start_times'] = range(8, 20)
 
         events_ressources = {}
         for ressource in ressources:
@@ -579,7 +588,7 @@ class AjaxWorkerTabView(TemplateView):
 
 class AjaxWorkerDisponibilityColumnView(TemplateView):
 
-    template_name = 'agenda/ajax-worker-disponibility-column.html'
+    template_name = 'agenda/ajax-ressource-disponibility-column.html'
     cookies_to_clear = []
 
     def get_context_data(self, worker_id, **kwargs):
@@ -613,15 +622,49 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         holidays_workers = {worker.id: holidays_worker}
 
         context['initials'] = worker.initials
-        context['worker_id'] = worker.id
+        context['ressource_id'] = worker.id
         context['disponibility'] = Event.objects.daily_disponibilities(self.date,
                 events_workers, [worker], time_tables_workers, holidays_workers)
+        return context
+
+class AjaxRessourceDisponibilityColumnView(AjaxWorkerDisponibilityColumnView):
+
+    def get_context_data(self, ressource_id, **kwargs):
+        context = {}
+        ressource = Room.objects.get(pk = ressource_id)
+        context = {'initials': ressource.name[:3], 'ressource_id': ressource.id}
+        disponibility = dict()
+        start_datetime = datetime.datetime(self.date.year,
+                                           self.date.month,
+                                           self.date.day, 8, 0)
+        end_datetime = datetime.datetime(self.date.year, self.date.month,
+                                         self.date.day, 8, 15)
+        events = Event.objects.filter(room__id=ressource_id).today_occurrences(self.date)
+
+        while (start_datetime.hour <= 19):
+            if start_datetime.hour not in disponibility:
+                disponibility[start_datetime.hour] = [[], [], [], []]
+                quarter = 0
+            dispo = 'free'
+
+            if events:
+                event = events[0]
+
+                if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
+                    dispo = 'busy'
+
+            disponibility[start_datetime.hour][quarter].append({'id': ressource_id, 'dispo': dispo})
+            quarter += 1
+            start_datetime += datetime.timedelta(minutes=15)
+            end_datetime += datetime.timedelta(minutes=15)
+        context['disponibility'] = disponibility
         return context
 
 
 class PeriodicEventsView(cbv.ListView):
     model = EventWithAct
     template_name = 'agenda/periodic-events.html'
+    cookies_to_clear = [('agenda-worker-tabs', ), ('agenda-ressource-tabs', )]
 
     def dispatch(self, request, *args, **kwargs):
         if 'worker_id' in kwargs:
