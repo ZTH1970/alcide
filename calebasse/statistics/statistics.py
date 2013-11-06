@@ -25,7 +25,7 @@ STATISTICS = {
     },
     'active_patients' :
         {
-        'display_name': 'Enfants en file active',
+        'display_name': 'Enfants en file active (au moins un acte sur la période)',
         'category': 'Suivi',
         'services': ['CMPP',]
     },
@@ -488,15 +488,16 @@ def annual_activity(statistic):
     return data_tables
 
 def patients_per_worker_for_period(statistic):
-    if not (statistic.in_start_date and statistic.in_end_date
-            and statistic.in_service):
+    if not statistic.in_service:
         return None
     data_tables = []
     data = []
     data.append(['Intervenants', 'Nombre', 'Patients'])
     values = []
-    # Get all acts in the period with a patient in the service
-    # Make a dic with intervene for keys
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
     acts = None
     if statistic.in_patients:
         acts = Act.objects.filter(date__gte=statistic.in_start_date,
@@ -524,17 +525,20 @@ def patients_per_worker_for_period(statistic):
     return data_tables
 
 def active_patients(statistic):
-    if not statistic.in_start_date and not statistic.in_service:
+    if not statistic.in_service:
         return None
     data_tables = []
     data1 = []
-    data1.append(['Au moins un acte après cette date', 'Jours',
+    data1.append(['Période', 'Jours',
         'Nombre de dossiers'])
     data2 = []
     data2.append(['Nom', 'Prénom', 'N° Dossier'])
-    today = datetime.today().date()
-    patients = Act.objects.filter(date__gte=statistic.in_start_date.date(),
-        date__lte=today, patient__service=statistic.in_service,
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    patients = Act.objects.filter(date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date, patient__service=statistic.in_service,
         patient__last_state__status__type__in=('TRAITEMENT',
             'DIAGNOSTIC')).order_by('patient').distinct('patient').\
             values_list('patient__last_name', 'patient__first_name',
@@ -550,8 +554,8 @@ def active_patients(statistic):
         p_list.append((ln, fn, str(pid or '')))
     data2.append(sorted(p_list,
         key=lambda k: k[0]+k[1]))
-    data1.append([(statistic.in_start_date.date(),
-        (today-statistic.in_start_date.date()).days, len(data2[1])-1)])
+    data1.append([("%s - %s" % (statistic.in_start_date.date(), statistic.in_end_date.date()),
+        (statistic.in_end_date-statistic.in_start_date).days+1, len(data2[1])-1)])
     data_tables.append(data1)
     data_tables.append(data2)
     return data_tables

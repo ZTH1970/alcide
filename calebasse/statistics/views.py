@@ -52,14 +52,18 @@ class StatisticsFormView(FormView):
         name = kwargs.get('name')
         form = forms.StatForm()
         if name == 'annual_activity':
-            form = forms.AnnualStatForm()
+            form = forms.AnnualActivityForm()
+        elif name == 'active_patients':
+            form = forms.ActivePatientsForm()
         return self.render_to_response(self.get_context_data(form=form))
 
     def post(self, request, *args, **kwargs):
         name = kwargs.get('name')
         form = forms.StatForm()
         if name == 'annual_activity':
-            form = forms.AnnualStatForm(request.POST)
+            form = forms.AnnualActivityForm(request.POST)
+        elif name == 'active_patients':
+            form = forms.ActivePatientsForm(request.POST)
         else:
             form = forms.StatForm(request.POST)
         if form.is_valid():
