@@ -19,20 +19,41 @@ from calebasse.agenda.models import Event
 STATISTICS = {
     'patients_per_worker_for_period' :
         {
-        'display_name': 'Enfants suivis par intervenant sur une '
-            'période',
-        'category': 'Suivi'
+        'display_name': 'Enfants suivis par intervenant sur une période',
+        'category': 'Suivi',
+        'comment': """Liste et décompte des patients par intervenant pour les
+            patients ayant eu au moins un acte proposé avec cet intervenant
+            sur la plage de date spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui. Si aucun patient ou
+            intervenant n'est spécifié, tous les patients et les intervenants
+            sont pris en compte. A l'inverse, si des patients ou des
+            intervenants sont indiqués, seuls ceux-ci sont pris en compte.
+            """
     },
     'active_patients' :
         {
         'display_name': 'Enfants en file active (au moins un acte sur la période)',
         'category': 'Suivi',
-        'services': ['CMPP',]
+        'services': ['CMPP',],
+        'comment': """Listes des patients du CMPP dont le dossier est en
+            diagnostic ou en traitement et ayant eu au moins un acte proposé
+            sur la plage de date spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui.
+            """
     },
     'annual_activity' :
         {
         'display_name': "Activité annuelle",
-        'category': 'Synthèse'
+        'category': 'Synthèse',
+        'comment': """Tableaux de synthèse annuelle. La date saisie
+            indique l'année à traiter. Si aucune date n'est spécifiée ce sera
+            l'année en cours. Si aucun intervenant n'est spécifié, les
+            tableaux de synthèse globaux sont retournés. Si des intervenants
+            sont indiqués, les tableaux de synthèse pour chaque intervenant
+            sont retournés.
+            """
     },
 }
 
