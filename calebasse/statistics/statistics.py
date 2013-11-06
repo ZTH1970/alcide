@@ -23,7 +23,7 @@ STATISTICS = {
         'category': 'Suivi',
         'comment': """Liste et décompte des patients par intervenant pour les
             patients ayant eu au moins un acte proposé avec cet intervenant
-            sur la plage de date spécifiée. La date de début de la plage par
+            sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui. Si aucun patient ou
             intervenant n'est spécifié, tous les patients et les intervenants
@@ -33,14 +33,27 @@ STATISTICS = {
     },
     'active_patients' :
         {
-        'display_name': 'Enfants en file active (au moins un acte sur la période)',
+        'display_name': 'Enfants en file active (au moins un acte sur la '
+            'période)',
         'category': 'Suivi',
         'services': ['CMPP',],
         'comment': """Listes des patients du CMPP dont le dossier est en
             diagnostic ou en traitement et ayant eu au moins un acte proposé
-            sur la plage de date spécifiée. La date de début de la plage par
+            sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
+            """
+    },
+    'closed_files' :
+        {
+        'display_name': 'Dossier clos sur une période et durée de la prise '
+            'en charge',
+        'category': 'Suivi',
+        'comment': """Liste des dossiers clos avec leur durée de la prise en
+            charge sur la plage de dates spécifiée. Le nombre de dossier et la
+            durée moyenne de la prise en charge est également donnée. La date
+            de début de la plage par défaut est le 1er janvier de l'année en
+            cours. La date de fin de la plage par défaut est aujourd'hui.
             """
     },
     'annual_activity' :
@@ -577,6 +590,48 @@ def active_patients(statistic):
         key=lambda k: k[0]+k[1]))
     data1.append([("%s - %s" % (statistic.in_start_date.date(), statistic.in_end_date.date()),
         (statistic.in_end_date-statistic.in_start_date).days+1, len(data2[1])-1)])
+    data_tables.append(data1)
+    data_tables.append(data2)
+    return data_tables
+
+def closed_files(statistic):
+    if not statistic.in_service:
+        return None
+    data_tables = []
+    data1 = []
+    data1.append(['Période', 'Jours',
+        'Nombre de dossiers', 'PEC moyenne'])
+    data2 = []
+    data2.append(['Nom', 'Prénom', 'N° Dossier', 'Date de clôture', 'Durée de la PEC'])
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    closed_records = PatientRecord.objects.filter(last_state__status__type='CLOS',
+        last_state__date_selected__gte=statistic.in_start_date,
+        last_state__date_selected__lte=statistic.in_end_date,
+        service=statistic.in_service)#.order_by('last_state__date_selected')
+    total_pec = 0
+    p_list = []
+    for record in closed_records:
+        ln = record.last_name or ''
+        if len(ln) > 1:
+            ln = ln[0].upper() + ln[1:].lower()
+        fn = record.first_name or ''
+        if len(fn) > 1:
+            fn = fn[0].upper() + fn[1:].lower()
+        p_list.append((ln, fn, str(record.paper_id or ''),
+            record.last_state.date_selected.date(),
+            record.care_duration))
+        total_pec += record.care_duration
+#    data2.append(p_list)
+    data2.append(sorted(p_list,
+        key=lambda k: k[0]+k[1]))
+    avg_pec = 0
+    if closed_records.count() and total_pec:
+        avg_pec = total_pec/closed_records.count()
+    data1.append([("%s - %s" % (statistic.in_start_date.date(), statistic.in_end_date.date()),
+        (statistic.in_end_date-statistic.in_start_date).days+1, closed_records.count(), avg_pec)])
     data_tables.append(data1)
     data_tables.append(data2)
     return data_tables

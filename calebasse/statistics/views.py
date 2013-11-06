@@ -53,7 +53,7 @@ class StatisticsFormView(FormView):
         form = forms.StatForm()
         if name == 'annual_activity':
             form = forms.AnnualActivityForm()
-        elif name == 'active_patients':
+        elif name in ('active_patients', 'closed_files'):
             form = forms.ActivePatientsForm()
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -62,7 +62,7 @@ class StatisticsFormView(FormView):
         form = forms.StatForm()
         if name == 'annual_activity':
             form = forms.AnnualActivityForm(request.POST)
-        elif name == 'active_patients':
+        elif name in ('active_patients', 'closed_files'):
             form = forms.ActivePatientsForm(request.POST)
         else:
             form = forms.StatForm(request.POST)
