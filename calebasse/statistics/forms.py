@@ -22,5 +22,4 @@ class ActivePatientsForm(Form):
 class AnnualActivityForm(Form):
     display_or_export = forms.BooleanField(label=u'Exporter dans un fichier', required=False, localize=True)
     start_date = forms.DateField(label=u"Date de l'année souhaitée", required=False, localize=True)
-    participants = make_ajax_field(Statistic, 'participants', 'worker-or-group', True,
-        help_text="Ne choisir aucun participant pour le tableau de synthèse générale.")
+    participants = make_ajax_field(Statistic, 'participants', 'worker-or-group', True)
