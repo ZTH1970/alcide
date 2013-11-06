@@ -44,44 +44,29 @@ class StatisticsDetailView(TemplateView):
 
 
 class StatisticsFormView(FormView):
-    form_class = forms.StatForm
     template_name = 'statistics/form.html'
-    success_url = '..'
 
-    def get(self, request, *args, **kwargs):
-        name = kwargs.get('name')
-        form = forms.StatForm()
-        if name == 'annual_activity':
-            form = forms.AnnualActivityForm()
-        elif name in ('active_patients', 'closed_files'):
-            form = forms.ActivePatientsForm()
-        return self.render_to_response(self.get_context_data(form=form))
+    def dispatch(self, request, **kwargs):
+        self.name = kwargs.get('name')
+        return super(StatisticsFormView, self).dispatch(request, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        name = kwargs.get('name')
-        form = forms.StatForm()
-        if name == 'annual_activity':
-            form = forms.AnnualActivityForm(request.POST)
-        elif name in ('active_patients', 'closed_files'):
-            form = forms.ActivePatientsForm(request.POST)
+    def get_form_class(self):
+        if self.name == 'annual_activity':
+            return forms.AnnualActivityForm
+        elif self.name in ('active_patients', 'closed_files'):
+            return forms.ActivePatientsForm
         else:
-            form = forms.StatForm(request.POST)
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-        return self.render_to_response(self.get_context_data(form=form))
+            return forms.StatForm
 
     def form_valid(self, form):
         if 'display_or_export' in form.data:
-            name = self.kwargs.get('name')
             inputs = dict()
             inputs['service'] = self.service
             inputs['start_date'] = form.data.get('start_date')
             inputs['end_date'] = form.data.get('end_date')
             inputs['participants'] = form.data.get('participants')
             inputs['patients'] = form.data.get('patients')
-            statistic = Statistic(name, inputs)
+            statistic = Statistic(self.name, inputs)
             path = statistic.get_file()
             content = File(file(path))
             response = HttpResponse(content, 'text/csv')
