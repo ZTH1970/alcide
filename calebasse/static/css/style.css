@@ -1503,3 +1503,7 @@ li.comment {
     display: inline-block;
     list-style-type: none;
 }
+
+div.statistic {
+    background-color:#F7F2E0;
+}

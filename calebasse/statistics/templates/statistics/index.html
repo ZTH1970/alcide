@@ -16,10 +16,10 @@
      {% for category, stats in statistics.iteritems %}
          <h3>{{ category }}</h3>
          {% for n, statistic in stats %}
-         <p>
+         <div class="statistic">
          {% if statistic.comment %}<p>{{ statistic.comment }}</p>{% endif %}
-         <button id="{{ n }}" class="stats">{{ statistic.display_name }}</button><br/>
-         </p>
+         <button id="{{ n }}" class="stats">{{ statistic.display_name }}</button>
+         </div>
          {% endfor %}
      {% endfor %}
     </ul>
