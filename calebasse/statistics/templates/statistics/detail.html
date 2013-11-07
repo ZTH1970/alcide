@@ -12,7 +12,9 @@
 {% endblock %}
 
 {% block content %}
-    {% if data_tables %}
+    {% if data_tables_set %}
+    {% for data_tables in data_tables_set %}
+    <div class="statistic">
     {% for data in data_tables %}
     <table class="basic">
       <thead>
@@ -42,6 +44,8 @@
         {% endfor %}
       </tbody>
     </table><br/>
+    {% endfor %}
+    </div><br/><br/>
     {% endfor %}
     {% endif %}
 {% endblock %}
