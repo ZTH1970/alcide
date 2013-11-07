@@ -39,7 +39,7 @@ class StatisticsDetailView(TemplateView):
         inputs['patients'] = self.request.GET.get('patients')
         statistic = Statistic(name, inputs)
         context['dn'] = statistic.display_name
-        context['data_tables'] = statistic.get_data()
+        context['data_tables_set'] = statistic.get_data()
         return context
 
 
@@ -53,6 +53,8 @@ class StatisticsFormView(FormView):
     def get_form_class(self):
         if self.name == 'annual_activity':
             return forms.AnnualActivityForm
+        if self.name == 'patients_details':
+            return forms.PatientsDetailsForm
         elif self.name in ('active_patients', 'closed_files'):
             return forms.ActivePatientsForm
         else:
