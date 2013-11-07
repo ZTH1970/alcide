@@ -29,9 +29,9 @@
         <tr>
             {% for value in values %}
                 {% if not value|is_list %}
-                <td>{{ value }}</td>
+                <td class="width-limited">{{ value }}</td>
                 {% else %}
-                <td>
+                <td class="width-limited">
                     <ul>
                         {% for val in value %}
                         <li>{{ val }}</li>
