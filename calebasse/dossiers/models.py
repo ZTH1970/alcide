@@ -522,6 +522,25 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     def get_states_history(self):
         return self.filestate_set.order_by('date_selected')
 
+    def get_states_history_with_duration(self):
+        '''
+        Return the state history with for each state its duration.
+        If the last state is in the past, the duration is counted until today.
+        If the last state is in the future, the duration is not set.
+        '''
+        history = self.get_states_history()
+        history_with_duration = list()
+        today = datetime.today()
+        i = 0
+        for state in history:
+            history_with_duration.append([state, None])
+            if i != 0:
+                history_with_duration[i-1][1] = state.date_selected - history_with_duration[i-1][0].date_selected
+            if i == len(history)-1 and state.date_selected <= today:
+                history_with_duration[i][1] = today - history_with_duration[i][0].date_selected
+            i += 1
+        return history_with_duration
+
     def can_be_deleted(self):
         for act in self.act_set.all():
             if act.is_state('VALIDE'):
@@ -840,6 +859,31 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         if not exit_date:
             exit_date = self.act_set.filter(valide=True).order_by('-date')[0].date
         return (exit_date - first_act_date).days
+
+    @property
+    def care_duration_since_last_contact_or_first_act(self):
+        # Duration between the first act present and the closing date.
+        # If no closing date, end_date is the date of tha last act
+        contacts = FileState.objects.filter(patient=self, status__type='ACCUEIL').order_by('date_selected')
+        last_contact = None
+        first_acts_after_contact = None
+        if len(contacts) == 1:
+            last_contact = contacts[0]
+        elif len(contacts) > 1:
+            last_contact = contacts[len(contacts)-1]
+        if last_contact:
+            # inscription act
+            first_acts_after_last_contact = Act.objects.filter(patient=self, date__gte=last_contact.date_selected).order_by('date')
+            if first_acts_after_last_contact:
+                first_act_after_last_contact = first_acts_after_last_contact[0]
+        if not contacts:
+            return self.care_duration
+        if not first_act_after_last_contact:
+            return 0
+        exit_date = self.exit_date
+        if not exit_date or exit_date < first_act_after_last_contact.date:
+            exit_date = self.act_set.filter(valide=True).order_by('-date')[0].date
+        return (exit_date - first_act_after_last_contact.date).days
 
 reversion.register(PatientRecord, follow=['people_ptr'])
 
