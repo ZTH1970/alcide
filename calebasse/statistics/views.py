@@ -56,7 +56,7 @@ class StatisticsFormView(FormView):
         if self.name == 'patients_details':
             return forms.PatientsDetailsForm
         elif self.name in ('active_patients', 'closed_files',
-                'patients_synthesis'):
+                'patients_synthesis', 'acts_synthesis'):
             return forms.ActivePatientsForm
         else:
             return forms.StatForm

@@ -43,8 +43,6 @@ STATISTICS = {
             sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
-
-            Il faut ici indiquer tous ceux qui ont des actes puis differencier les dans le bon etat et les autres
             """
     },
     'closed_files' :
@@ -90,6 +88,17 @@ STATISTICS = {
             'la plage de date',
         'category': 'Patients',
         'comment': """Patients ayant eu au moins un acte validé
+            sur la plage de dates spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui.
+            """
+    },
+    'acts_synthesis' :
+        {
+        'display_name': 'Synthèse sur les actes sur '
+            'la plage de date',
+        'category': 'Actes',
+        'comment': """Synthèse sur les actes
             sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
@@ -996,6 +1005,76 @@ def patients_synthesis(statistic):
     data_tables.append(data)
 
     return [data_tables]
+
+def acts_synthesis(statistic):
+    if not statistic.in_service:
+        return None
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    data_tables = []
+    data = []
+    data.append(['Période', 'Jours',
+        "Nombre d'actes proposés sur la période",
+        "Nombre d'actes validés sur la période"])
+    acts = Act.objects.filter(date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service)
+    acts_valide = acts.filter(valide=True)
+    data.append([("%s - %s"
+        % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
+        formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
+        (statistic.in_end_date-statistic.in_start_date).days+1,
+        acts.count(), acts_valide.count())])
+    data_tables.append(data)
+
+    acts_types = dict()
+    for act in acts:
+        acts_types.setdefault(act.act_type, []).append(act)
+    data = []
+    data.append(["Types des actes", "Nombre d'actes"])
+    values = []
+    for act_type, acts in acts_types.iteritems():
+        values.append((act_type, len(acts)))
+    data.append(values)
+    data_tables.append(data)
+
+    for act_type, acts in acts_types.iteritems():
+        analysis = {'Non pointés': 0,
+            'Reportés': 0, 'Absents': 0, 'Présents': 0}
+        for a in acts:
+            if a.is_new():
+                analysis['Non pointés'] += 1
+            elif a.is_absent():
+                state = a.get_state()
+                if state.state_name == 'REPORTE':
+                    analysis['Reportés'] += 1
+                else:
+                    analysis['Absents'] += 1
+            else:
+                analysis['Présents'] += 1
+        data = []
+        data.append(["Type d'acte", act_type])
+        values = []
+        for status, number in analysis.iteritems():
+            values.append((status, number))
+        data.append(values)
+        data_tables.append(data)
+
+    acts_count_participants = dict()
+    for act in acts_valide:
+        acts_count_participants.setdefault(act.doctors.count(), []).append(act)
+    data = []
+    data.append(["Nombre d'intervenants des actes réalisés", "Nombre d'actes", "Nombre de dossiers concernés"])
+    values = []
+    for number, acts_counted in acts_count_participants.iteritems():
+        values.append((number, len(acts_counted), len(set([a.patient.id for a in acts_counted]))))
+    data.append(values)
+    data_tables.append(data)
+
+    return [data_tables]
+
 
 class Statistic(models.Model):
     patients = models.ManyToManyField('dossiers.PatientRecord',
