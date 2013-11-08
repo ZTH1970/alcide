@@ -21,7 +21,7 @@ STATISTICS = {
     'patients_per_worker_for_period' :
         {
         'display_name': 'Enfants suivis par intervenant sur une période',
-        'category': 'Suivi',
+        'category': 'Patients',
         'comment': """Liste et décompte des patients par intervenant pour les
             patients ayant eu au moins un acte proposé avec cet intervenant
             sur la plage de dates spécifiée. La date de début de la plage par
@@ -36,20 +36,22 @@ STATISTICS = {
         {
         'display_name': 'Enfants en file active (au moins un acte sur la '
             'période)',
-        'category': 'Suivi',
+        'category': 'Patient',
         'services': ['CMPP',],
         'comment': """Listes des patients du CMPP dont le dossier est en
-            diagnostic ou en traitement et ayant eu au moins un acte proposé
+            diagnostic ou en traitement et ayant eu au moins un acte validé
             sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
+
+            Il faut ici indiquer tous ceux qui ont des actes puis differencier les dans le bon etat et les autres
             """
     },
     'closed_files' :
         {
         'display_name': 'Dossier clos sur une période et durée de la prise '
             'en charge',
-        'category': 'Suivi',
+        'category': 'Patients',
         'comment': """Liste des dossiers clos avec leur durée de la prise en
             charge sur la plage de dates spécifiée. Le nombre de dossier et la
             durée moyenne de la prise en charge est également donnée. La date
@@ -81,6 +83,17 @@ STATISTICS = {
             durant cette période, il ne sera pas pris en compte. La date de
             début de la plage par défaut est le 1er janvier de l'année en
             cours. La date de fin de la plage par défaut est aujourd'hui. """
+    },
+    'patients_synthesis' :
+        {
+        'display_name': 'Synthèse sur les patients avec un acte valide sur '
+            'la plage de date',
+        'category': 'Patients',
+        'comment': """Patients ayant eu au moins un acte validé
+            sur la plage de dates spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui.
+            """
     },
 }
 
@@ -585,8 +598,10 @@ def active_patients(statistic):
         statistic.in_end_date = datetime.today()
     if not statistic.in_start_date:
         statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
-    patients = Act.objects.filter(date__gte=statistic.in_start_date,
-        date__lte=statistic.in_end_date, patient__service=statistic.in_service,
+    patients = Act.objects.filter(valide=True,
+        date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service,
         patient__last_state__status__type__in=('TRAITEMENT',
             'DIAGNOSTIC')).order_by('patient').distinct('patient').\
             values_list('patient__last_name', 'patient__first_name',
@@ -616,19 +631,23 @@ def closed_files(statistic):
     data_tables = []
     data1 = []
     data1.append(['Période', 'Jours',
-        'Nombre de dossiers', 'PEC moyenne'])
+        'Nombre de dossiers clos durant la période', 'PEC moyenne', "Dossiers qui ne sont plus clos"])
     data2 = []
-    data2.append(['Nom', 'Prénom', 'N° Dossier', 'Date de clôture', 'Durée de la PEC'])
+    data2.append(['Nom', 'Prénom', 'N° Dossier', 'Date de clôture', 'Durée de la PEC', "N'est plus clos"])
     if not statistic.in_end_date:
         statistic.in_end_date = datetime.today()
     if not statistic.in_start_date:
         statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
-    closed_records = PatientRecord.objects.filter(last_state__status__type='CLOS',
-        last_state__date_selected__gte=statistic.in_start_date,
-        last_state__date_selected__lte=statistic.in_end_date,
-        service=statistic.in_service)#.order_by('last_state__date_selected')
+    closed_records = FileState.objects.filter(status__type='CLOS',
+        date_selected__gte=statistic.in_start_date,
+        date_selected__lte=statistic.in_end_date). \
+        order_by('patient').distinct('patient').\
+        values_list('patient')
+    closed_records = PatientRecord.objects.filter(service=statistic.in_service, id__in=[patient[0]
+        for patient in closed_records])
     total_pec = 0
     p_list = []
+    not_closed_now = 0
     for record in closed_records:
         ln = record.last_name or ''
         if len(ln) > 1:
@@ -636,11 +655,20 @@ def closed_files(statistic):
         fn = record.first_name or ''
         if len(fn) > 1:
             fn = fn[0].upper() + fn[1:].lower()
+        current_state = ''
+        close_date = record.last_state.date_selected.date()
+        if record.get_current_state().status.type != 'CLOS':
+            not_closed_now += 1
+            current_state = record.get_current_state().status.name + \
+                ' le ' + formats.date_format(record.get_current_state(). \
+                date_selected, "SHORT_DATE_FORMAT")
+            close_date = FileState.objects.filter(status__type='CLOS',
+                patient=record).order_by('-date_selected')[0].date_selected.date()
         p_list.append((ln, fn, str(record.paper_id or ''),
-            record.last_state.date_selected.date(),
-            record.care_duration_since_last_contact_or_first_act))
+            close_date,
+            record.care_duration_since_last_contact_or_first_act,
+            current_state))
         total_pec += record.care_duration_since_last_contact_or_first_act
-#    data2.append(p_list)
     data2.append(sorted(p_list,
         key=lambda k: k[0]+k[1]))
     avg_pec = 0
@@ -649,7 +677,8 @@ def closed_files(statistic):
     data1.append([("%s - %s"
         % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
         formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
-        (statistic.in_end_date-statistic.in_start_date).days+1, closed_records.count(), avg_pec)])
+        (statistic.in_end_date-statistic.in_start_date).days+1,
+        closed_records.count(), avg_pec, not_closed_now)])
     data_tables.append(data1)
     data_tables.append(data2)
     return [data_tables]
@@ -791,6 +820,182 @@ def patients_details(statistic):
         data_tables_set.append(data_tables)
 
     return data_tables_set
+
+def patients_synthesis(statistic):
+    if not statistic.in_service:
+        return None
+    data_tables = []
+    data = []
+    data.append(['Période', 'Jours',
+        'Nombre de dossiers avec un acte validé sur la période',
+        "Nombre d'actes validés sur la période"])
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    acts = Act.objects.filter(valide=True,
+        date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service)
+    patients = acts.order_by('patient').distinct('patient').\
+        values_list('patient')
+    patients = PatientRecord.objects.filter(id__in=[patient[0]
+        for patient in patients])
+    nb_patients = patients.count()
+    data.append([("%s - %s"
+        % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
+        formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
+        (statistic.in_end_date-statistic.in_start_date).days+1,
+        nb_patients, acts.count())])
+    data_tables.append(data)
+    data = []
+    data.append(['Féminin', 'Masculin'])
+    data.append([(patients.filter(gender='2').count(),
+        patients.filter(gender='1').count())])
+    data_tables.append(data)
+    data = []
+    data.append(['Durée totale de la PEC',
+        'Durée moyenne de la PEC par patient'])
+    pec_total = sum([p.care_duration_since_last_contact_or_first_act for p in patients])
+    data.append([(pec_total, pec_total/nb_patients)])
+    data_tables.append(data)
+    data = []
+    data.append(["Etat du dossier à ce jour", 'Nombre de patients'])
+    states = dict()
+    for patient in patients:
+        states.setdefault(patient.get_current_state().status, []).append(patient)
+    values = []
+    closed_patients_tmp = None
+    for state, ps in states.iteritems():
+        values.append((state.name, len(ps)))
+        if state.id == 5:
+            closed_patients_tmp = ps
+    data.append(values)
+    data_tables.append(data)
+
+    # Pour les patients inscrits pendant la périodes
+    inscriptions = 0
+    recontact_cnt = 0
+    waiting_duration = timedelta()
+
+    for patient in patients:
+        recontact = False
+        contacts = FileState.objects.filter(patient=patient, status__type='ACCUEIL').order_by('date_selected')
+        last_contact = None
+        first_acts_after_contact = None
+        if len(contacts) == 1:
+            last_contact = contacts[0]
+        elif len(contacts) > 1:
+            recontact = True
+            last_contact = contacts[len(contacts)-1]
+        if last_contact:
+            # inscription act
+            first_acts_after_contact = Act.objects.filter(patient=patient, date__gte=last_contact.date_selected).order_by('date')
+            if first_acts_after_contact:
+                first_act_after_contact = first_acts_after_contact[0]
+                if first_act_after_contact.date <= statistic.in_end_date.date() and first_act_after_contact.date >= statistic.in_start_date.date():
+                    # inscription during the selected date range.
+                    waiting_duration += first_act_after_contact.date - last_contact.date_selected.date()
+                    inscriptions += 1
+                    if recontact:
+                        recontact_cnt += 1
+    if inscriptions:
+        data = []
+        data.append(['Inscriptions (premier acte suivant le dernier contact dans la période)', 'Dont réinscription', "Durée moyenne de l'attente"])
+        data.append([(inscriptions, recontact_cnt, (waiting_duration/inscriptions).days)])
+        data_tables.append(data)
+
+    closed_records = FileState.objects.filter(status__type='CLOS',
+        date_selected__gte=statistic.in_start_date,
+        date_selected__lte=statistic.in_end_date, patient__in=patients). \
+        order_by('patient').distinct('patient').\
+        values_list('patient')
+    closed_records = PatientRecord.objects.filter(service=statistic.in_service, id__in=[patient[0]
+        for patient in closed_records])
+    total_pec = 0
+    not_closed_now = 0
+    for record in closed_records:
+        if record.get_current_state().status.type != 'CLOS':
+            not_closed_now += 1
+        total_pec += record.care_duration_since_last_contact_or_first_act
+    avg_pec = 0
+    if closed_records.count() and total_pec:
+        avg_pec = total_pec/closed_records.count()
+    if closed_records.count():
+        data = []
+        data.append(['Clos dans la période', 'Durée moyenne de la PEC', "Qui ne sont plus clos à ce jour"])
+        data.append([(closed_records.count(), avg_pec, not_closed_now)])
+        data_tables.append(data)
+
+    mdph_requests = 0
+    mdph_requests_before = 0
+    for patient in patients:
+        if patient.mdph_requests.exists():
+            mdph_requests += 1
+            # We only look to the last one
+            if patient.mdph_requests.order_by('-start_date')[0].start_date < statistic.in_start_date.date():
+                mdph_requests_before +=1
+    data = []
+    data.append(['Dossier avec une demande MDPH', "Dont la dernière demande a été faite avant la période"])
+    data.append([(mdph_requests, mdph_requests_before)])
+    data_tables.append(data)
+
+    birth_years = dict()
+    patients_without_birthyear = []
+    for patient in patients:
+        try:
+            birth_years.setdefault(patient.birthdate.year, []).append(patient)
+        except:
+            patients_without_birthyear.append(patient)
+    data = []
+    data.append(['Année de naissance', "Nombre de dossiers"])
+    values = []
+    for birth_year, patients in birth_years.iteritems():
+        values.append((birth_year, len(patients)))
+    if patients_without_birthyear:
+        values.append(('%d patient(s) sans date de naissance' % len(patients_without_birthyear), patients_without_birthyear))
+    data.append(values)
+    data_tables.append(data)
+
+    jobs = dict()
+    for patient in patients:
+        if patient.job_mother:
+            jobs.setdefault(patient.job_mother, []).append(patient)
+        if patient.job_father:
+            jobs.setdefault(patient.job_father, []).append(patient)
+    data = []
+    data.append(["Profession d'un parent", "Nombre de dossiers"])
+    values = []
+    for job, patients in jobs.iteritems():
+        values.append((job, len(patients)))
+    data.append(values)
+    data_tables.append(data)
+
+    provenances = dict()
+    for patient in patients:
+        if patient.provenance:
+            provenances.setdefault(patient.provenance, []).append(patient)
+    data = []
+    data.append(["Provenances", "Nombre de dossiers"])
+    values = []
+    for provenance, patients in provenances.iteritems():
+        values.append((provenance, len(patients)))
+    data.append(values)
+    data_tables.append(data)
+
+    outtos = dict()
+    for patient in patients:
+        if patient.outto:
+            outtos.setdefault(patient.outto, []).append(patient)
+    data = []
+    data.append(["Orientations", "Nombre de dossiers"])
+    values = []
+    for outto, patients in outtos.iteritems():
+        values.append((outto, len(patients)))
+    data.append(values)
+    data_tables.append(data)
+
+    return [data_tables]
 
 class Statistic(models.Model):
     patients = models.ManyToManyField('dossiers.PatientRecord',
