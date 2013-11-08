@@ -866,14 +866,14 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         # If no closing date, end_date is the date of tha last act
         contacts = FileState.objects.filter(patient=self, status__type='ACCUEIL').order_by('date_selected')
         last_contact = None
-        first_acts_after_contact = None
+        first_act_after_last_contact = None
         if len(contacts) == 1:
             last_contact = contacts[0]
         elif len(contacts) > 1:
             last_contact = contacts[len(contacts)-1]
         if last_contact:
             # inscription act
-            first_acts_after_last_contact = Act.objects.filter(patient=self, date__gte=last_contact.date_selected).order_by('date')
+            first_acts_after_last_contact = Act.objects.filter(patient=self, date__gte=last_contact.date_selected, valide=True).order_by('date')
             if first_acts_after_last_contact:
                 first_act_after_last_contact = first_acts_after_last_contact[0]
         if not contacts:
