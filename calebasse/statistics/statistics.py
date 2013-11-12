@@ -34,13 +34,22 @@ STATISTICS = {
     },
     'active_patients' :
         {
-        'display_name': 'Enfants en file active (au moins un acte sur la '
-            'période)',
-        'category': 'Patient',
-        'services': ['CMPP',],
-        'comment': """Listes des patients du CMPP dont le dossier est en
-            diagnostic ou en traitement et ayant eu au moins un acte validé
-            sur la plage de dates spécifiée. La date de début de la plage par
+        'display_name': 'Enfants en file active',
+        'category': 'Patients',
+        'comment': """Listes des patients ayant eu au moins un acte proposé
+            durant la période indiquée. Les patients sont scindés en quatre
+            tableaux.
+            Les patients dont au moins un acte a été
+            validé ET dont le dossier est dans un état "actif".
+            Les patients dont au moins un acte a été
+            validé ET dont le dossier N'est PAS dans un état "actif".
+            Les patients sans aucun acte validé ET dont le dossier est dans
+            un état "actif".
+            Les patients sans aucun acte validé ET dont le dossier N'est PAS
+            dans un état "actif".
+            Rappel des états actifs des dossiers : CMPP : diagnostic
+            ou traitement, CAMSP : suivi, SESSAD: Traitement.
+            La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
             """
@@ -595,44 +604,84 @@ def patients_per_worker_for_period(statistic):
     return [data_tables]
 
 def active_patients(statistic):
+    def process(patients_list, title):
+        data_tables = []
+        data = []
+        data.append([title, len(patients_list), '', ''])
+        data_tables.append(data)
+        data = []
+        data.append(['Nom', 'Prénom', 'N° Dossier'])
+        patients_values = patients_list.\
+                values_list('last_name', 'first_name', 'paper_id')
+        p_list = []
+        for ln, fn, pid in patients_values:
+            ln = ln or ''
+            if len(ln) > 1:
+                ln = ln[0].upper() + ln[1:].lower()
+            fn = fn or ''
+            if len(fn) > 1:
+                fn = fn[0].upper() + fn[1:].lower()
+            p_list.append((ln, fn, str(pid or '')))
+        data.append(sorted(p_list,
+            key=lambda k: k[0]+k[1]))
+        data_tables.append(data)
+        return data_tables
     if not statistic.in_service:
         return None
-    data_tables = []
-    data1 = []
-    data1.append(['Période', 'Jours',
-        'Nombre de dossiers'])
-    data2 = []
-    data2.append(['Nom', 'Prénom', 'N° Dossier'])
     if not statistic.in_end_date:
         statistic.in_end_date = datetime.today()
     if not statistic.in_start_date:
         statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
-    patients = Act.objects.filter(valide=True,
-        date__gte=statistic.in_start_date,
-        date__lte=statistic.in_end_date,
-        patient__service=statistic.in_service,
-        patient__last_state__status__type__in=('TRAITEMENT',
-            'DIAGNOSTIC')).order_by('patient').distinct('patient').\
-            values_list('patient__last_name', 'patient__first_name',
-            'patient__paper_id')
-    p_list = []
-    for ln, fn, pid in patients:
-        ln = ln or ''
-        if len(ln) > 1:
-            ln = ln[0].upper() + ln[1:].lower()
-        fn = fn or ''
-        if len(fn) > 1:
-            fn = fn[0].upper() + fn[1:].lower()
-        p_list.append((ln, fn, str(pid or '')))
-    data2.append(sorted(p_list,
-        key=lambda k: k[0]+k[1]))
-    data1.append([("%s - %s"
+    active_states = None
+    if statistic.in_service.name == 'CMPP':
+        active_states = ('TRAITEMENT', 'DIAGNOSTIC')
+    elif statistic.in_service.name == 'CAMSP':
+        active_states = ('SUIVI', )
+    else:
+        active_states = ('TRAITEMENT', )
+
+    data_tables_set = []
+    data_tables = []
+    data = []
+    data.append(['Période', 'Jours'])
+    data.append([("%s - %s"
         % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
         formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
-        (statistic.in_end_date-statistic.in_start_date).days+1, len(data2[1])-1)])
-    data_tables.append(data1)
-    data_tables.append(data2)
-    return [data_tables]
+        (statistic.in_end_date-statistic.in_start_date).days+1)])
+    data_tables.append(data)
+    data_tables_set.append(data_tables)
+
+    acts_base = Act.objects.filter(
+        date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service)
+    acts_valide = acts_base.filter(valide=True)
+    acts_valide_patients_ids = acts_valide.order_by('patient').\
+        distinct('patient').values_list('patient')
+    acts_valide_patients = PatientRecord.objects.filter(
+        id__in=[patient[0] for patient in acts_valide_patients_ids])
+    all_patients_ids = acts_base.order_by('patient').distinct('patient').\
+        values_list('patient')
+    acts_not_valide_patients = PatientRecord.objects.filter(
+        id__in=[patient[0] for patient in all_patients_ids
+            if not patient in acts_valide_patients_ids])
+
+
+    patients_1 = acts_valide_patients.filter(
+        last_state__status__type__in=active_states)
+    patients_2 = acts_valide_patients.exclude(
+        last_state__status__type__in=active_states)
+    patients_3 = acts_not_valide_patients.filter(
+        last_state__status__type__in=active_states)
+    patients_4 = acts_not_valide_patients.exclude(
+        last_state__status__type__in=active_states)
+
+    data_tables_set.append(process(patients_1, 'Patients avec un acte validé et dans un état actif'))
+    data_tables_set.append(process(patients_2, 'Patients avec un acte validé et dans un état non actif'))
+    data_tables_set.append(process(patients_3, 'Patients sans acte validé et dans un état actif'))
+    data_tables_set.append(process(patients_4, 'Patients sans acte validé et dans un état non actif'))
+
+    return data_tables_set
 
 def closed_files(statistic):
     if not statistic.in_service:
