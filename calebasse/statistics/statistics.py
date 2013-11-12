@@ -1173,9 +1173,9 @@ def acts_synthesis_cmpp(statistic):
         elif vals == [True, True]:
             values3.append(pfields)
     cols = ['Nom', 'Prénom', 'Numéro de dossier']
-    data_tables_set.append([[['Seulement facturé en diagnostic'], [[len(values1)]]], [cols, values1]])
-    data_tables_set.append([[['Seulement facturé en traitement'], [[len(values2)]]], [cols, values2]])
-    data_tables_set.append([[['Facturé en diagnostic et en traitement'], [[len(values3)]]], [cols, values3]])
+    data_tables_set.append([[['Seulement facturé en diagnostic'], [[len(values1)]]], [cols, sorted(values1, key=lambda t: t[0])]])
+    data_tables_set.append([[['Seulement facturé en traitement'], [[len(values2)]]], [cols, sorted(values2, key=lambda t: t[0])]])
+    data_tables_set.append([[['Facturé en diagnostic et en traitement'], [[len(values3)]]], [cols, sorted(values3, key=lambda t: t[0])]])
     return data_tables_set
 
 def mises(statistic):
