@@ -104,10 +104,20 @@ STATISTICS = {
     },
     'acts_synthesis' :
         {
-        'display_name': 'Synthèse sur les actes sur '
-            'la plage de date',
+        'display_name': 'Synthèse sur les actes',
         'category': 'Actes',
         'comment': """Synthèse sur les actes
+            sur la plage de dates spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui.
+            """
+    },
+    'acts_synthesis_cmpp' :
+        {
+        'display_name': 'Synthèse sur la facturation des actes au CMPP',
+        'category': 'Actes',
+        'services': ['CMPP', ],
+        'comment': """Synthèse sur la facturation des actes au CMPP
             sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
@@ -1123,6 +1133,40 @@ def acts_synthesis(statistic):
     data_tables.append(data)
 
     return [data_tables]
+
+def acts_synthesis_cmpp(statistic):
+    data_tables_set = []
+    if not statistic.in_service:
+        return None
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    acts = Act.objects.filter(date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service)
+    acts_billed = acts.filter(is_billed=True)
+    patients_billed = dict()
+    for act in acts_billed:
+        patients_billed.setdefault(act.patient, [False, False])
+        if act.get_hc_tag() and act.get_hc_tag()[0] == 'D':
+            patients_billed[act.patient][0] = True
+        elif act.get_hc_tag() and act.get_hc_tag()[0] == 'T':
+            patients_billed[act.patient][1] = True
+    values1, values2, values3 = [], [], []
+    for patient, vals in patients_billed.iteritems():
+        pfields = [patient.last_name, patient.first_name, patient.paper_id]
+        if vals == [True, False]:
+            values1.append(pfields)
+        elif vals == [False, True]:
+            values2.append(pfields)
+        elif vals == [True, True]:
+            values3.append(pfields)
+    cols = ['Nom', 'Prénom', 'Numéro de dossier']
+    data_tables_set.append([[['Seulement facturé en diagnostic'], [[len(values1)]]], [cols, values1]])
+    data_tables_set.append([[['Seulement facturé en traitement'], [[len(values2)]]], [cols, values2]])
+    data_tables_set.append([[['Facturé en diagnostic et en traitement'], [[len(values3)]]], [cols, values3]])
+    return data_tables_set
 
 
 class Statistic(models.Model):
