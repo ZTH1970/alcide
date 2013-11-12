@@ -123,6 +123,16 @@ STATISTICS = {
             la plage par défaut est aujourd'hui.
             """
     },
+    'mises' :
+        {
+        'display_name': 'Synthèse sur les pathologies MISES',
+        'category': 'Patients',
+        'comment': """Synthèse sur les pathologies
+            sur la plage de dates spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui.
+            """
+    },
 }
 
 ANNUAL_ACTIVITY_ROWS = ['total', 'pointe', 'non_pointe', 'absent', 'percent_abs', 'reporte', 'acts_present', 'abs_non_exc', 'abs_exc', 'abs_inter', 'annul_nous', 'annul_famille', 'abs_ess_pps', 'enf_hosp', 'non_facturables', 'facturables', 'perdus', 'doubles', 'really_facturables', 'factures', 'diag', 'trait', 'restants_a_fac', 'refac', 'nf', 'percent_nf', 'patients', 'intervenants', 'days', 'fact_per_day', 'moving_time', 'moving_time_per_intervene', 'moving_time_per_act']
@@ -1167,6 +1177,36 @@ def acts_synthesis_cmpp(statistic):
     data_tables_set.append([[['Seulement facturé en traitement'], [[len(values2)]]], [cols, values2]])
     data_tables_set.append([[['Facturé en diagnostic et en traitement'], [[len(values3)]]], [cols, values3]])
     return data_tables_set
+
+def mises(statistic):
+    if not statistic.in_service:
+        return None
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    acts = Act.objects.filter(valide='True',
+        date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service)
+    patients = acts.order_by('patient').distinct('patient').\
+        values_list('patient')
+    patients = PatientRecord.objects.filter(id__in=[patient[0]
+        for patient in patients])
+    pathologies = dict()
+    for patient in patients:
+        for pathology in patient.mises_1.all():
+            pathologies.setdefault(pathology, 0)
+            pathologies[pathology] += 1
+        for pathology in patient.mises_2.all():
+            pathologies.setdefault(pathology, 0)
+            pathologies[pathology] += 1
+        for pathology in patient.mises_3.all():
+            pathologies.setdefault(pathology, 0)
+            pathologies[pathology] += 1
+    data = [['Pathologies MISES', 'Nombre de patients concernés']]
+    data.append(OrderedDict(sorted(pathologies.items(), key=lambda t: t[0].ordering_code)).items())
+    return [[data]]
 
 
 class Statistic(models.Model):
