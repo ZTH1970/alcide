@@ -1079,14 +1079,30 @@ def patients_synthesis(statistic):
     data_tables.append(data)
 
     provenances = dict()
+    unknown = 0
     for patient in patients:
         if patient.provenance:
             provenances.setdefault(patient.provenance, []).append(patient)
+        else:
+            unknown += 1
     data = []
     data.append(["Provenances", "Nombre de dossiers"])
     values = []
     for provenance, pts in provenances.iteritems():
         values.append((provenance, len(pts)))
+    values.append(('Non renseignée', unknown))
+    data.append(values)
+    data_tables.append(data)
+
+    outmotives = dict()
+    for patient in patients:
+        if patient.outmotive:
+            outmotives.setdefault(patient.outmotive, []).append(patient)
+    data = []
+    data.append(["Motifs de sortie", "Nombre de dossiers"])
+    values = []
+    for outmotive, pts in outmotives.iteritems():
+        values.append((outmotive, len(pts)))
     data.append(values)
     data_tables.append(data)
 
