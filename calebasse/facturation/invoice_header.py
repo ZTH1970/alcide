@@ -281,7 +281,6 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
     service = invoicing.service
     now = datetime.datetime.now()
     output_file = None
-
     all_files = [price_details(service, invoicing)]
     try:
         if service.name == 'CMPP':
