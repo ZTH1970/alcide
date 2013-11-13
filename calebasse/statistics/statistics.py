@@ -709,7 +709,7 @@ def closed_files(statistic):
     data_tables = []
     data1 = []
     data1.append(['Période', 'Jours',
-        'Nombre de dossiers clos durant la période', 'PEC moyenne', "Dossiers qui ne sont plus clos"])
+        'Nombre de dossiers clos durant la période', 'PEC totale', 'PEC moyenne', "Dossiers qui ne sont plus clos"])
     data2 = []
     data2.append(['Nom', 'Prénom', 'N° Dossier', 'Date de clôture', 'Durée de la PEC', "N'est plus clos"])
     if not statistic.in_end_date:
@@ -756,7 +756,7 @@ def closed_files(statistic):
         % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
         formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
         (statistic.in_end_date-statistic.in_start_date).days+1,
-        closed_records.count(), avg_pec, not_closed_now)])
+        closed_records.count(), total_pec, avg_pec, not_closed_now)])
     data_tables.append(data1)
     data_tables.append(data2)
     return [data_tables]
@@ -1001,8 +1001,8 @@ def patients_synthesis(statistic):
         avg_pec = total_pec/closed_records.count()
     if closed_records.count():
         data = []
-        data.append(['Clos dans la période', 'Durée moyenne de la PEC', "Qui ne sont plus clos à ce jour"])
-        data.append([(closed_records.count(), avg_pec, not_closed_now)])
+        data.append(['Clos dans la période', 'Durée totale de la PEC', 'Durée moyenne de la PEC', "Qui ne sont plus clos à ce jour"])
+        data.append([(closed_records.count(), total_pec, avg_pec, not_closed_now)])
         data_tables.append(data)
 
     mdph_requests = 0
