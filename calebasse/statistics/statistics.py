@@ -1028,10 +1028,39 @@ def patients_synthesis(statistic):
     data = []
     data.append(['Année de naissance', "Nombre de dossiers"])
     values = []
-    for birth_year, patients in birth_years.iteritems():
-        values.append((birth_year, len(patients)))
+    for birth_year, pts in birth_years.iteritems():
+        values.append((birth_year, len(pts)))
     if patients_without_birthyear:
         values.append(('%d patient(s) sans date de naissance' % len(patients_without_birthyear), patients_without_birthyear))
+    data.append(values)
+    data_tables.append(data)
+
+    lower_bounds = [0, 3, 5, 7, 11, 16, 20, 25, 30, 35, 40, 45, 50, 55, 60, 75, 85, 96]
+    anap_code = 198
+    data = []
+    data.append(["Code ANAP", "Tranche d'âge (au %s)" \
+        % formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"),
+        "Nombre de dossiers"])
+    values = []
+    for i in range(len(lower_bounds)):
+        lower_bound = lower_bounds[i]
+        if i == len(lower_bounds) - 1:
+            values.append([anap_code, "De %d ans et plus" % lower_bound, 0])
+        else:
+            values.append([anap_code, "De %d à %d ans" % (lower_bound, lower_bounds[i + 1] - 1), 0])
+        anap_code += 1
+    for patient in patients:
+        try:
+            age = statistic.in_end_date.date() - patient.birthdate
+            age = age.days / 365
+            i = 0
+            while age >= lower_bounds[i+1]:
+                i += 1
+                if i == len(lower_bounds) - 1:
+                    break
+            values[i][2] += 1
+        except:
+            pass
     data.append(values)
     data_tables.append(data)
 
@@ -1044,8 +1073,8 @@ def patients_synthesis(statistic):
     data = []
     data.append(["Profession d'un parent", "Nombre de dossiers"])
     values = []
-    for job, patients in jobs.iteritems():
-        values.append((job, len(patients)))
+    for job, pts in jobs.iteritems():
+        values.append((job, len(pts)))
     data.append(values)
     data_tables.append(data)
 
@@ -1056,8 +1085,8 @@ def patients_synthesis(statistic):
     data = []
     data.append(["Provenances", "Nombre de dossiers"])
     values = []
-    for provenance, patients in provenances.iteritems():
-        values.append((provenance, len(patients)))
+    for provenance, pts in provenances.iteritems():
+        values.append((provenance, len(pts)))
     data.append(values)
     data_tables.append(data)
 
@@ -1068,8 +1097,8 @@ def patients_synthesis(statistic):
     data = []
     data.append(["Orientations", "Nombre de dossiers"])
     values = []
-    for outto, patients in outtos.iteritems():
-        values.append((outto, len(patients)))
+    for outto, pts in outtos.iteritems():
+        values.append((outto, len(pts)))
     data.append(values)
     data_tables.append(data)
 
