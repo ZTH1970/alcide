@@ -769,6 +769,7 @@ class GenerateRtfFormView(cbv.FormView):
             event = EventWithAct.objects.get(id=self.request.GET.get('event-id'))
             event = event.today_occurrence(date)
             appointment.init_from_event(event, self.service)
+            ctx['event'] = event
             ctx['appointment'] = appointment
         return ctx
 
@@ -776,6 +777,7 @@ class GenerateRtfFormView(cbv.FormView):
         ctx = self.get_context_data(**kwargs)
         patient = ctx['object']
         appointment = ctx['appointment']
+        event = ctx['event']
         template_filename = form.cleaned_data.get('template_filename')
         dest_filename = datetime.now().strftime('%Y-%m-%d--%H:%M:%S') + '--' + template_filename
         from_path = os.path.join(settings.RTF_TEMPLATES_DIRECTORY, template_filename)
@@ -854,6 +856,8 @@ class GenerateRtfFormView(cbv.FormView):
             persistent)
 
         client_dir = patient.get_client_side_directory(self.service.name)
+        event.convocation_sent = True
+        event.save()
         if not client_dir:
             content = File(file(filename))
             response = HttpResponse(content,'text/rtf')

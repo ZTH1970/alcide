@@ -75,9 +75,6 @@
                  {% for service_name in appointment.other_services_names %}
                  <span class="box {{ service_name }}" title="{{ service_name }}"></span>
                  {% endfor %}
-                 {% if appointment.convocation_sent %}
-                 <span title="Une convocation a été envoyée" class="icon-envelope"></span>
-                 {% endif %}
                  {% if appointment.description %}
                  <span title="Un commentaire existe" class="icon-comment"></span>
                  {% endif %}
