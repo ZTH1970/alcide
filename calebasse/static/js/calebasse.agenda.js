@@ -385,10 +385,8 @@ function event_dialog(url, title, width, btn_text) {
       $('a.close-tab').click(function() {
           console.log('close');
           var target = '#' + $(this).data('target');
-          console.log('target: ' + target);
           $(target).click();
           if ($.cookie('active-ressource-agenda') == $(target).data('ressource-id')) {
-              console.log('cookie cleaned');
               $.cookie('active-ressource-agenda','', { path: COOKIE_PATH });
           }
 
