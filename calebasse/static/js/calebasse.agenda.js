@@ -385,8 +385,10 @@ function event_dialog(url, title, width, btn_text) {
       $('a.close-tab').click(function() {
           console.log('close');
           var target = '#' + $(this).data('target');
+          console.log('target: ' + target);
           $(target).click();
           if ($.cookie('active-ressource-agenda') == $(target).data('ressource-id')) {
+              console.log('cookie cleaned');
               $.cookie('active-ressource-agenda','', { path: COOKIE_PATH });
           }
 
@@ -448,6 +450,7 @@ function event_dialog(url, title, width, btn_text) {
            },
          function(key, value) {
              $('#close-all-' + value.button + '-agendas').click(function() {
+                 $.cookie('active-' + value.element + '-agenda', '', {path: COOKIE_PATH});
                  $('.' + value.element + '-item.active').each(function (i, v) {
                      toggle_ressource(v, value.element);
                  });
