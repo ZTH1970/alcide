@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.db.models import Count
 from django.utils import formats
+from django.conf import settings
 
 from calebasse.dossiers.models import PatientRecord, FileState
 from calebasse.personnes.models import Worker
@@ -1311,10 +1312,57 @@ class Statistic(models.Model):
         return self.data
 
     def render_to_csv(self):
+        _delimiter = ';'
+        _quotechar = '|'
+        _doublequote = True
+        _skipinitialspace = False
+        _lineterminator = '\r\n'
+        _quoting = csv.QUOTE_MINIMAL
+        if getattr(settings, 'CSVPROFILE', None):
+            csv_profile = settings.CSVPROFILE
+            _delimiter = csv_profile.get('delimiter', ';')
+            _quotechar = csv_profile.get('quotechar', '|')
+            _doublequote = csv_profile.get('doublequote', True)
+            _skipinitialspace = csv_profile.get('skipinitialspace', False)
+            _lineterminator = csv_profile.get('lineterminator', '\r\n')
+            _quoting = csv_profile.get('quoting', csv.QUOTE_MINIMAL)
+        class CSVProfile(csv.Dialect):
+            delimiter = _delimiter
+            quotechar = _quotechar
+            doublequote = _doublequote
+            skipinitialspace = _skipinitialspace
+            lineterminator = _lineterminator
+            quoting = _quoting
+        csv.register_dialect('csv_profile', CSVProfile())
+        encoding = getattr(settings, 'CSV_ENCODING', 'utf-8')
+#        Python 3: , encoding=encoding
+#        with tempfile.NamedTemporaryFile(delete=False) as temp_out_csv:
+#            try:
+#                writer = csv.writer(temp_out_csv, dialect='csv_profile')
+#                for data_set in self.data:
+#                    for data in data_set:
+#                        writer.writerow(data[0])
+#                        if len(data) > 1:
+#                            for d in data[1]:
+#                                writer.writerow(d)
+#                        writer.writerow([])
+#                    writer.writerow([])
+#                return temp_out_csv.name
+#            except Exception, e:
+#                print e
+#                try:
+#                    os.unlink(temp_out_pdf.name)
+#                except:
+#                    pass
+
+        import codecs
+        filename = None
         with tempfile.NamedTemporaryFile(delete=False) as temp_out_csv:
+            filename = temp_out_csv.name
+            temp_out_csv.close()
+        with codecs.open(filename, 'w+b', encoding=encoding) as encoded_f:
             try:
-                writer = csv.writer(temp_out_csv, delimiter=';', quotechar='|',
-                    quoting=csv.QUOTE_MINIMAL)
+                writer = csv.writer(encoded_f, dialect='csv_profile')
                 for data_set in self.data:
                     for data in data_set:
                         writer.writerow(data[0])
@@ -1323,9 +1371,8 @@ class Statistic(models.Model):
                                 writer.writerow(d)
                         writer.writerow([])
                     writer.writerow([])
-                return temp_out_csv.name
-            except Exception, e:
-                print e
+                return filename
+            except:
                 try:
                     os.unlink(temp_out_pdf.name)
                 except:
