@@ -281,6 +281,16 @@ RTF_REPOSITORY_DIRECTORY = None
 # Invoicing file saving directory
 INVOICING_DIRECTORY = None
 
+#CSV_ENCODING = 'cp1252' #For windows : windows-1252/Winlatin1
+#CSVPROFILE = {\
+#    'delimiter' : ';',
+#    'quotechar' : '"',
+#    'doublequote' : True
+#    'skipinitialspace' : False
+#    'lineterminator' : '\r\n'
+#    'quoting' : csv.QUOTE_MINIMAL
+#}
+
 # IRIS/B2 transmission
 # B2_TRANSMISSION = {
 #    'output_directory': '/var/lib/calebasse/B2/',
