@@ -114,10 +114,11 @@ STATISTICS = {
     },
     'acts_synthesis_cmpp' :
         {
-        'display_name': 'Synthèse sur la facturation des actes au CMPP',
-        'category': 'Actes',
+        'display_name': 'Synthèse sur les dossiers facturés au CMPP',
+        'category': 'Patients',
         'services': ['CMPP', ],
-        'comment': """Synthèse sur la facturation des actes au CMPP
+        'comment': """Synthèse sur les dossiers facturés au CMPP selon que ce
+            soit en diagnostic, en traitement ou les deux,
             sur la plage de dates spécifiée. La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
