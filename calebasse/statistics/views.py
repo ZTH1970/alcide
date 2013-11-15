@@ -19,8 +19,10 @@ class StatisticsHomepageView(TemplateView):
         context = super(StatisticsHomepageView, self).get_context_data(**kwargs)
         statistics = dict()
         for name, statistic in STATISTICS.iteritems():
-            statistics.setdefault(statistic['category'], []).append((name,
-                statistic))
+            if not statistic.get('services') or \
+                    self.service.name in statistic.get('services'):
+                statistics.setdefault(statistic['category'], []).append((name,
+                    statistic))
         context['statistics'] = statistics
         return context
 
