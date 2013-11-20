@@ -385,7 +385,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             related_name='mdph_responses_of')
 
     # Physiology and health data
-    size = models.IntegerField(verbose_name=u"Taille (cm)",
+    size = models.DecimalField(verbose_name=u"Taille (cm)", max_digits=5, decimal_places=1,
             null=True, blank=True, default=None)
     weight = models.IntegerField(verbose_name=u"Poids (g)",
             null=True, blank=True, default=None)
