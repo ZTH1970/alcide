@@ -312,6 +312,7 @@ class PatientContact(People):
     parente = models.ForeignKey('ressources.PatientRelatedLink',
             verbose_name=u"Lien avec le patient (Parenté)",
             null=True, blank=True, default=None)
+    ame = models.BooleanField(verbose_name=u"AME", default=False)
 
     addresses = models.ManyToManyField('PatientAddress', verbose_name=u"Adresses")
     contact_comment = models.TextField(verbose_name=u"Commentaire",
