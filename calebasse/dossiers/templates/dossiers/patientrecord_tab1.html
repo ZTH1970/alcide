@@ -91,6 +91,7 @@
     {% if object.pause %}<li><span id="highlight">Le dossier est en pause facturation.</span></li>{% endif %}
     {% if missing_policy %}<li><span id="highlight">Informations d'assuré social manquantes.</span></li>{% endif %}
     {% if missing_birthdate %}<li><span id="highlight">Date de naissance manquante.</span></li>{% endif %}
+    {% if object.policyholder.ame %}<li><span id="highlight">Le contact assuré est AME.</span></li>{% endif %}
     </div>
     {% endif %}
 
