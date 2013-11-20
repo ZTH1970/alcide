@@ -378,6 +378,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             null=True, blank=True, default=None)
     pause = models.BooleanField(verbose_name=u"Pause facturation",
             default=False)
+    pause_comment = models.TextField(verbose_name=u"Commentaire sur la pause facturation",
+            null=True, blank=True, default=None)
     confidential = models.BooleanField(verbose_name=u"Confidentiel",
             default=False)
     socialisation_durations = models.ManyToManyField('ressources.SocialisationDuration',
