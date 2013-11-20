@@ -315,7 +315,10 @@
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
-                {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
+                {% if patient.pause %}
+                    <p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>
+                    {% if patient.pause_comment %}<p>Commentaire : {{ patient.pause_comment }}</p>{% endif %}
+                {% endif %}
                 {% if "losts" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
                 {% if "losts_missing_policy" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des informations de sécurité sociale manquantes.</span></p>{% endif %}
                 {% if "losts_missing_birthdate" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Date de naissance manquante pour le patient.</span></p>{% endif %}
@@ -436,7 +439,10 @@
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
-                {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
+                {% if patient.pause %}
+                    <p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>
+                    {% if patient.pause_comment %}<p>Commentaire : {{ patient.pause_comment }}</p>{% endif %}
+                {% endif %}
                 {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
                 {% if patient in patients_missing_policy %}<p id="pause-fac"><span class="hi-fact">Le dossier présente une information de sécurité sociale manquante.</span></p>{% endif %}
                 <ul>
@@ -510,7 +516,10 @@
                 {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
-                {% if patient.pause %}<p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>{% endif %}
+                {% if patient.pause %}
+                    <p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>
+                    {% if patient.pause_comment %}<p>Commentaire : {{ patient.pause_comment }}</p>{% endif %}
+                {% endif %}
                 {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
                 {% if patient in patients_missing_policy %}<p id="pause-fac"><span class="hi-fact">Le dossier présente une information de sécurité sociale manquante.</span></p>{% endif %}
                 {% if patient in patients_missing_notif %}<p id="pause-fac"><span class="hi-fact">Le dossier n'a pas de notification couvrant tous les actes.</span></p>{% endif %}
