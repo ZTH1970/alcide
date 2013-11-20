@@ -111,6 +111,8 @@ class CmppHealthCareTreatment(HealthCare):
         blank=True, null=True)
     prolongation = models.IntegerField(default=0,
             verbose_name=u'Prolongation')
+    prolongation_date = models.DateField(verbose_name=u"Date de prolongation",
+        blank=True, null=True)
 
     def get_act_number(self):
         if self.is_extended():

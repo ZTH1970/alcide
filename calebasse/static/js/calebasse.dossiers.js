@@ -5,6 +5,7 @@ function add_datepickers(that) {
   $('input#id_insist_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
   $('input#id_end_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
   $('input#id_date_selected', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+  $('input#id_prolongation_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
 function state_dialog(url, state_title, state_type) {

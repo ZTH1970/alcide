@@ -267,7 +267,8 @@ class CmppHealthCareTreatmentForm(ModelForm):
         model = CmppHealthCareTreatment
         fields = ('start_date', 'request_date',
                 'agree_date', 'insist_date', 'end_date', 'act_number',
-                'prolongation', 'comment', 'patient', 'author')
+                'prolongation', 'prolongation_date', 'comment', 'patient',
+                'author')
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 40, 'rows': 4}),
                 'patient': forms.HiddenInput(),
