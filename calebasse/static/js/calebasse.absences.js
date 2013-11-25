@@ -23,8 +23,9 @@ function action(url, worker, on, action, selector, original_color, highlight_col
                                                               click: function(){
                                                                   $.ajax({url: url,
                                                                           type: 'post',
-                                                                          data: $('#holiday-dlg form').serialize()
-                                                                         }).done(on_success)
+                                                                          data: $('#holiday-dlg form').serialize(),
+                                                                         }
+                                                                        ).done(on_success)
                                                               }}]});
                            })
 };
@@ -38,27 +39,11 @@ function add_holiday(worker, url) {
         try {
             $.parseJSON(response);
             if(!response.err) {
-                var result = response.content;
-                var id = response.id;
-                var li = $("<li id='" + id + "'></li>");
-                var ul = $('<ul></ul>');
-                $.each(result, function(i, e) {
-                    var item = $('<li class="' + e[0] + '">' + e[1] + '</li>');
-                    ul.append(item);
-                });
-                var button_edit = $('<button class="icon-edit" data-action="edit" data-id="' + id + '"></button>');
-                var button_delete = $('<button class="icon-remove" data-action="delete" data-id="' + id + '"></button>');
-                var actions = $('<li class="actions"></li>');
-                actions.append(button_edit, button_delete);
-                ul.append(actions);
-                li.append(ul);
-                $("#holidays").append(li);
-                $("#holiday-dlg").dialog("close");
+                window.location = response.location;
             }
         } catch(e) {
             $('#holiday-dlg form').html(response);
         }
-
     };
     action(url, worker, null, 'ajouter', null, null, null, params, on_success);
 };
@@ -72,10 +57,13 @@ function delete_holiday(worker, holiday, url) {
                   'width': '450px'}
 
     on_success = function(response) {
-        if(!response.err) {
-            $('#' +  holiday).remove();
-            $(selector).attr('style', initial_color);
-            $("#holiday-dlg").dialog("close");
+      try {
+            $.parseJSON(response);
+            if(!response.err) {
+                window.location = response.location;
+            }
+        } catch(e) {
+            return false;
         }
     };
     action(url, worker, holiday, 'supprimer', selector, initial_color,
@@ -90,21 +78,15 @@ function edit_holiday(worker, holiday, url) {
               'button_close': 'Fermer', 'button_confirm': 'Mettre à jour',
               'width': '550px'}
 
-    on_success = function(response) {
+    on_success = function(response, status, xhr) {
         try {
             $.parseJSON(response);
             if(!response.err) {
-                $.each(response.content, function(i, e) {
-                    $('#holidays #' + holiday + ' li.' + e[0]).html(e[1]);
-                });
-                $(selector).attr('style', initial_color);
-                $("#holiday-dlg").dialog("close");
+                window.location = response.location;
             }
         } catch(e) {
-            console.log(e);
             $('#holiday-dlg form').html(response);
         }
-
     }
     action(url, worker, holiday, 'editer', selector, initial_color,  '#af7', params, on_success);
 };
@@ -116,7 +98,6 @@ function add_group_holiday() {
 
 function edit_group_holiday(holiday) {
     var url = '/cmpp/personnes/conges/groupe/';
-    console.log(holiday);
     edit_holiday(null, holiday, url);
 };
 
