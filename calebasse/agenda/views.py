@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import logging
 from itertools import chain
 
 from django.contrib import messages
@@ -25,6 +26,8 @@ from calebasse import cbv
 from forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
         DisablePatientAppointmentForm, UpdateAppointmentForm,
         UpdateEventForm, PeriodicEventsSearchForm)
+
+logger = logging.getLogger(__name__)
 
 def redirect_today(request, service):
     '''If not date is given we redirect on the agenda for today'''
@@ -51,6 +54,7 @@ class AgendaHomepageView(TemplateView):
         return HttpResponseRedirect('#acte-frame-'+acte_id)
 
     def get_context_data(self, **kwargs):
+        logger.info('AgendaHomepageView.get_context_data called')
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
         context['workers_types'] = []

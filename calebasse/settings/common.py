@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'calebasse.statistics',
     'calebasse.middleware.request',
     'south',
+    'raven.contrib.django.raven_compat'
 )
 
 INTERNAL_IPS=('127.0.0.1',)
@@ -178,7 +179,7 @@ DEBUG_TOOLBAR_CONFIG = {
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -188,6 +189,9 @@ LOGGING = {
         'verbose': {
             'format': '[%(asctime)s] %(levelname)-8s %(name)s.%(message)s',
             'datefmt': '%Y-%m-%d %a %H:%M:%S'
+        },
+        'syslog': {
+            'format': 'calebasse (pid=%(process)d) %(levelname)s %(name)s: %(message)s',
         },
     },
     'handlers': {
@@ -201,29 +205,41 @@ LOGGING = {
             'class':'logging.StreamHandler',
             'formatter': 'verbose',
         },
-        'local_file': {
-            'level':'DEBUG',
-            'class':'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(PROJECT_PATH, 'calebasse.log'),
-        },
-        'syslog':{
-            'level':'INFO',
-            'class':'logging.handlers.SysLogHandler',
+        'syslog': {
+            'level': 'DEBUG',
+            'class': 'entrouvert.logging.handlers.SysLogHandler',
+            'formatter': 'syslog',
             'facility': SysLogHandler.LOG_LOCAL0,
             'address': '/dev/log',
+            'max_length': 999,
+        },
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
         },
     },
     'loggers': {
-        '': {
-            'handlers': ['mail_admins','syslog'],
-            'level': 'INFO',
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
         },
-    },
-    'root': {
-            'handlers': ['console', 'local_file'],
+        'raven': {
             'level': 'DEBUG',
-    }
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        '': {
+            'handlers': ['sentry', 'syslog'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': True,
+        }
+    },
 }
 
 # AJAX Select
@@ -241,6 +257,12 @@ AJAX_LOOKUP_CHANNELS = {
 
 # Default URL after login
 LOGIN_REDIRECT_URL = '/'
+
+# Sentry / raven configuration
+# You need to overload this option in the local_settings.py
+RAVEN_CONFIG = {
+        'dsn': None,
+}
 
 # Base directory for generated patient files
 PATIENT_FILES_BASE_DIRECTORY = None

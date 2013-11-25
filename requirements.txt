@@ -13,3 +13,4 @@ python-ldap
 xhtml2pdf
 git+git://repos.entrouvert.org/python-entrouvert.git
 django-localflavor
+raven >= 3.5.2, < 3.6
