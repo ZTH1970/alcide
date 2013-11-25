@@ -337,60 +337,6 @@ class GroupHolidaysList(cbv.ListView):
 
 group_holidays = GroupHolidaysList.as_view()
 
-class CreateGroupHolidayView(cbv.CreateView):
-    form_class = forms.GroupHolidayForm
-    model = models.Holiday
-    template_name_suffix = '_group_form'
-
-    def get_form_kwargs(self):
-        return {'initial': {'services': Service.objects.all()}}
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            return self.group_form_valid(form)
-
-        return self.form_invalid(form)
-
-
-create_group_holiday = CreateGroupHolidayView.as_view()
-
-class EditGroupHolidayView(cbv.FormView):
-    template_name = 'personnes/group_holiday_update_form.html'
-    form_class = forms.GroupHolidayForm
-    model = models.Holiday
-
-    def get_form_kwargs(self):
-        kwargs = super(EditGroupHolidayView, self).get_form_kwargs()
-        kwargs['instance'] = self.model.objects.get(pk = self.kwargs['pk'])
-        return kwargs
-
-    def post(self, request, *args, **kwargs):
-        obj = self.model.objects.get(pk = self.kwargs['pk'])
-        form = self.form_class(request.POST, instance = obj)
-        if form.is_valid():
-            return self.group_form_valid(form)
-
-        return self.form_invalid(form)
-
-edit_group_holiday = EditGroupHolidayView.as_view()
-
-class DeleteGroupHolidayView(cbv.DeleteView):
-    template_name = 'personnes/group_holiday_update_form.html'
-    success_url = '.'
-
-    def delete(self, request, *args, **kwargs):
-        response = HttpResponse('', content_type = 'application/json')
-        context = {'err': 0, 'message': ''}
-        try:
-            super(DeleteGroupHolidayView, self).delete(request, *args, **kwargs)
-        except Exception, e:
-            context['message'] = '%s' % e
-        response.content = json.dumps(context)
-        return response
-
-delete_group_holiday = DeleteGroupHolidayView.as_view()
-
 class HolidayManagement(object):
     """
     A class providing some methods for handling the absences management
@@ -409,14 +355,59 @@ class HolidayManagement(object):
         return reverse('worker_update', kwargs={'pk': self.kwargs['worker_pk'],
                                                 'service': slug})
 
+class GroupHolidayManagement(HolidayManagement):
+    form_class = forms.GroupHolidayForm
+
+    def get_success_url(self):
+        slug = self.service.slug
+        return reverse('group-holidays', kwargs={'service': slug})
+
+class CreateGroupHolidayView(GroupHolidayManagement, cbv.CreateView):
+
+    template_name_suffix = '_group_form'
+
+    def get_initial(self):
+        return {'services': Service.objects.all()}
+
+    def form_valid(self, form):
+        try:
+            form.save()
+            messages.success(self.request, u'Absence ajoutée avec succès')
+        except:
+            messages.error(self.request, u'Une erreur est survenue lors de l\'ajout de l\'absence')
+        return self.render_to_json(self.get_success_url())
+
+create_group_holiday = CreateGroupHolidayView.as_view()
+
+class EditGroupHolidayView(GroupHolidayManagement, cbv.FormView):
+    template_name = 'personnes/group_holiday_update_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(EditGroupHolidayView, self).get_form_kwargs()
+        kwargs['instance'] = self.model.objects.get(pk = self.kwargs['pk'])
+        return kwargs
+
+    def form_valid(self, form):
+        try:
+            form.save()
+            messages.success(self.request, u'Données mises à jour avec succès')
+        except:
+            messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
+        return self.render_to_json(self.get_success_url())
+
+edit_group_holiday = EditGroupHolidayView.as_view()
+
 class HolidayCreateView(HolidayManagement, cbv.CreateView):
 
     def form_valid(self, form):
-        holiday = form.save()
-        worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
-        for service in worker.services.all():
-            holiday.services.add(service)
-        messages.success(self.request, u'Absence ajoutée avec succès')
+        try:
+            holiday = form.save()
+            worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
+            for service in worker.services.all():
+                holiday.services.add(service)
+            messages.success(self.request, u'Absence ajoutée avec succès')
+        except:
+            messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
         return self.render_to_json(self.get_success_url())
 
 create_holiday = HolidayCreateView.as_view()
@@ -449,10 +440,20 @@ class DeleteHolidayView(HolidayManagement, cbv.DeleteView):
         try:
             super(DeleteHolidayView, self).delete(request, *args, **kwargs)
             messages.success(request, u'Absence supprimée avec succès')
+            print "success"
         except:
+            print "error"
             messages.error(request, u'Une erreur est survenue lors de la suppression de l\'absence')
 
         return self.render_to_json(self.get_success_url())
 
 delete_holiday = DeleteHolidayView.as_view()
+
+class DeleteGroupHolidayView(GroupHolidayManagement, DeleteHolidayView):
+    template_name = 'personnes/group_holiday_update_form.html'
+
+    def delete(self, request, *args, **kwargs):
+        return super(DeleteGroupHolidayView, self).delete(request, *args, **kwargs)
+
+delete_group_holiday = DeleteGroupHolidayView.as_view()
 

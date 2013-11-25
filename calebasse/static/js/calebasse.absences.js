@@ -58,13 +58,13 @@ function delete_holiday(worker, holiday, url) {
 
     on_success = function(response) {
       try {
-            $.parseJSON(response);
-            if(!response.err) {
-                window.location = response.location;
-            }
-        } catch(e) {
-            return false;
-        }
+          $.parseJSON(response);
+          if(!response.err) {
+              window.location = response.location;
+          }
+      } catch(e) {
+          return false;
+      }
     };
     action(url, worker, holiday, 'supprimer', selector, initial_color,
            '#f8b0b0', params, on_success);
