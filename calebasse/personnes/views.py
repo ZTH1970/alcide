@@ -2,6 +2,7 @@
 from collections import defaultdict
 from datetime import date
 from interval import IntervalSet
+import logging
 
 from dateutil.relativedelta import relativedelta
 
@@ -22,6 +23,8 @@ from calebasse.decorators import super_user_only
 
 import forms
 import models
+
+logger = logging.getLogger(__name__)
 
 
 FILTER_CRITERIA = (
@@ -373,7 +376,8 @@ class CreateGroupHolidayView(GroupHolidayManagement, cbv.CreateView):
         try:
             form.save()
             messages.success(self.request, u'Absence ajoutée avec succès')
-        except:
+        except Exception, e:
+            logger.debug('Error on creating a group holiday: %s' % e)
             messages.error(self.request, u'Une erreur est survenue lors de l\'ajout de l\'absence')
         return self.render_to_json(self.get_success_url())
 
@@ -391,7 +395,8 @@ class EditGroupHolidayView(GroupHolidayManagement, cbv.FormView):
         try:
             form.save()
             messages.success(self.request, u'Données mises à jour avec succès')
-        except:
+        except Exception, e:
+            logger.debug('Error on updating a group holiday: %s' % e)
             messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
         return self.render_to_json(self.get_success_url())
 
@@ -406,7 +411,8 @@ class HolidayCreateView(HolidayManagement, cbv.CreateView):
             for service in worker.services.all():
                 holiday.services.add(service)
             messages.success(self.request, u'Absence ajoutée avec succès')
-        except:
+        except Exception, e:
+            logger.debug('Error on creating a holiday: %s' % e)
             messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
         return self.render_to_json(self.get_success_url())
 
@@ -427,7 +433,8 @@ class EditHolidayView(HolidayManagement, cbv.FormView):
             for service in worker.services.all():
                 holiday.services.add(service)
             messages.success(self.request, u'Données mises à jour avec succès')
-        except:
+        except Exception, e:
+            logger.debug('Error on updating a holiday: %s' % e)
             messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
         return self.render_to_json(self.get_success_url())
 
@@ -440,9 +447,8 @@ class DeleteHolidayView(HolidayManagement, cbv.DeleteView):
         try:
             super(DeleteHolidayView, self).delete(request, *args, **kwargs)
             messages.success(request, u'Absence supprimée avec succès')
-            print "success"
-        except:
-            print "error"
+        except Exception, e:
+            logger.debug('Error on deleting a holiday: %s' % e)
             messages.error(request, u'Une erreur est survenue lors de la suppression de l\'absence')
 
         return self.render_to_json(self.get_success_url())
@@ -453,7 +459,12 @@ class DeleteGroupHolidayView(GroupHolidayManagement, DeleteHolidayView):
     template_name = 'personnes/group_holiday_update_form.html'
 
     def delete(self, request, *args, **kwargs):
-        return super(DeleteGroupHolidayView, self).delete(request, *args, **kwargs)
+        try:
+            super(DeleteGroupHolidayView, self).delete(request, *args, **kwargs)
+            messages.success(request, u'Absence supprimée avec succès')
+        except Exception, e:
+            logger.debug('Error on deleting a group holiday: %s' % e)
+            messages.error(request, u'Une erreur est survenue lors de la suppression de l\'absence')
+        return self.render_to_json(self.get_success_url())
 
 delete_group_holiday = DeleteGroupHolidayView.as_view()
-
