@@ -168,7 +168,7 @@ class NewEventForm(BaseForm):
         try:
             return int(duration)
         except:
-            return None
+            raise forms.ValidationError('Veuillez saisir un entier')
 
     def save(self, commit=True):
         event = super(NewEventForm, self).save(commit=False)
