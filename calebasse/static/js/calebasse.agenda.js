@@ -268,7 +268,7 @@ function toggle_ressource(ressource_selector, ressource) {
     var tab_selector = '';
 
     if (ressource == 'worker') {
-        tab_selector = '#tabs-' + ressource + '-' + ressource_id + ' .' + ressource + '-tab-content-placeholder';
+        tab_selector = '#selector-' + ressource + '-' + ressource_id + '.active';
     } else {
         tab_selector = '#selector-ressource-' + ressource_id + '.active';
         url = url.split('/')
