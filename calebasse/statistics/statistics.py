@@ -33,9 +33,19 @@ STATISTICS = {
             intervenants sont indiqués, seuls ceux-ci sont pris en compte.
             """
     },
-    'active_patients' :
+    'active_patients_by_state_only' :
         {
-        'display_name': 'Enfants en file active',
+        'display_name': "Dossiers actifs selon l'état du dossier à une date donnée",
+        'category': 'Patients',
+        'comment': """Listes des patients dont le dossier était actif à une date donnée.
+            Rappel des états actifs des dossiers : CMPP : diagnostic
+            ou traitement, CAMSP : suivi, SESSAD: Traitement.
+            La date par défaut est aujourd'hui.
+            """
+    },
+    'active_patients_with_act' :
+        {
+        'display_name': 'Dossiers actifs et inactifs avec un acte validé ou non sur une période',
         'category': 'Patients',
         'comment': """Listes des patients ayant eu au moins un acte proposé
             durant la période indiquée. Les patients sont scindés en quatre
@@ -625,7 +635,40 @@ def patients_per_worker_for_period(statistic):
     data_tables.append(data)
     return [data_tables]
 
-def active_patients(statistic):
+def active_patients_by_state_only(statistic):
+    if not statistic.in_service:
+        return None
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime.today()
+    active_states = None
+    if statistic.in_service.name == 'CMPP':
+        active_states = ('TRAITEMENT', 'DIAGNOSTIC')
+    elif statistic.in_service.name == 'CAMSP':
+        active_states = ('SUIVI', )
+    else:
+        active_states = ('TRAITEMENT', )
+    patients = [(p.last_name, p.first_name, p.paper_id) \
+        for p in PatientRecord.objects.filter(service=statistic.in_service) \
+            if p.get_state_at_day(
+                statistic.in_start_date).status.type in active_states]
+    data_tables_set=[[[['En date du :', formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"), len(patients)]]]]
+    data = []
+    data.append(['Nom', 'Prénom', 'N° Dossier'])
+    p_list = []
+    for ln, fn, pid in patients:
+        ln = ln or ''
+        if len(ln) > 1:
+            ln = ln[0].upper() + ln[1:].lower()
+        fn = fn or ''
+        if len(fn) > 1:
+            fn = fn[0].upper() + fn[1:].lower()
+        p_list.append((ln, fn, str(pid or '')))
+    data.append(sorted(p_list,
+        key=lambda k: k[0]+k[1]))
+    data_tables_set[0].append(data)
+    return data_tables_set
+
+def active_patients_with_act(statistic):
     def process(patients_list, title):
         data_tables = []
         data = []
