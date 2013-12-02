@@ -55,14 +55,16 @@ class StatisticsFormView(FormView):
     def get_form_class(self):
         if self.name == 'annual_activity':
             return forms.AnnualActivityForm
-        if self.name == 'patients_details':
-            return forms.PatientsDetailsForm
-        elif self.name in ('active_patients', 'closed_files',
+        elif self.name == 'patients_details':
+            return forms.PatientsTwoDatesForm
+        elif self.name == 'active_patients_by_state_only':
+            return forms.OneDateForm
+        elif self.name in ('active_patients_with_act', 'closed_files',
                 'patients_synthesis', 'acts_synthesis',
                 'acts_synthesis_cmpp', 'mises'):
-            return forms.ActivePatientsForm
+            return forms.TwoDatesForm
         else:
-            return forms.StatForm
+            return forms.ParticipantsPatientsTwoDatesForm
 
     def form_valid(self, form):
         if 'display_or_export' in form.data:
