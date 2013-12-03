@@ -362,7 +362,7 @@ function event_dialog(url, title, width, btn_text) {
               }
           });
 
-          $('div.agenda > div').accordion({active: false, autoHeight: false});
+          $('div.agenda > div').accordion({active: false, autoHeight: false, collapsible: true});
 
           $('a.tab').click(function() {
               $.cookie('active-ressource-agenda', $(this).data('id'), { path: COOKIE_PATH });
