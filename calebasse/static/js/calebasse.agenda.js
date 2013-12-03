@@ -19,18 +19,36 @@ function enable_events(base) {
           var textarea = $(this).prev();
           var span = textarea.prev()
           var btn = $(this)
-          var data = {description: textarea.val() };
-          var data = JSON.stringify(data);
-          $.ajax({
+          if ($(this).data('act-id'))
+          {
+            var data = {comment: textarea.val() };
+            var data = JSON.stringify(data);
+            $.ajax({
+              url: '/api/v1/act/' + $(this).data("act-id") + '/?format=json&date=' + $(this).data('date'),
+              type: 'PATCH',
+              contentType: 'application/json',
+              data: data,
+              success: function(data) {
+                btn.attr('disabled', 'disabled');
+                span.html('Commentaire modifié avec succès');
+              }
+            });
+          }
+          else
+          {
+            var data = {description: textarea.val() };
+            var data = JSON.stringify(data);
+            $.ajax({
               url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
               contentType: 'application/json',
               data: data,
               success: function(data) {
-                  btn.attr('disabled', 'disabled');
-                  span.html('Commentaire modifié avec succès');
+                btn.attr('disabled', 'disabled');
+                span.html('Commentaire modifié avec succès');
               }
-          });
+            });
+          }
       });
       /* TODO: put this in a generic function */
       $('.input_is_billable').click(function() {
