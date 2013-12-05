@@ -34,3 +34,8 @@ TYPE_OF_CONTRACT_CHOICES = (
         #('XX', 'ACS - Aide pour une complémentaire santé'),
 )
 
+DEFICIENCY_CHOICES = (
+    (0, 'Non'),
+    (1, 'A titre principal'),
+    (2, 'A titre associé'),
+)

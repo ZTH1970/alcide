@@ -16,7 +16,8 @@ from django.core.validators import MinValueValidator
 
 import reversion
 
-from calebasse.choices import LARGE_REGIME_CHOICES, TYPE_OF_CONTRACT_CHOICES
+from calebasse.choices import (LARGE_REGIME_CHOICES, TYPE_OF_CONTRACT_CHOICES,
+        DEFICIENCY_CHOICES)
 from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
@@ -413,6 +414,54 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     mises_3 = models.ManyToManyField('ressources.CodeCFTMEA', related_name="mises3",
             verbose_name=u"Axe II : facteurs environnementaux",
             null=True, blank=True, default=None)
+    deficiency_intellectual = models.IntegerField(max_length=1,
+            verbose_name=u"Déficiences intellectuelles",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_autism_and_other_ted = models.IntegerField(max_length=1,
+            verbose_name=u"Autisme et autres TED",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_mental_disorder = models.IntegerField(max_length=1,
+            verbose_name=u"Troubles psychiques",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_learning_disorder = models.IntegerField(max_length=1,
+            verbose_name=u"Troubles du langage et des apprentissages",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_auditory = models.IntegerField(max_length=1,
+            verbose_name=u"Déficiences auditives",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_visual = models.IntegerField(max_length=1,
+            verbose_name=u"Déficiences visuelles",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_motor = models.IntegerField(max_length=1,
+            verbose_name=u"Déficiences motrices",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_metabolic_disorder = models.IntegerField(max_length=1,
+            verbose_name=u"Déficiences métaboliques",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_brain_damage = models.IntegerField(max_length=1,
+            verbose_name=u"Cérébro-lésions",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_polyhandicap = models.BooleanField(verbose_name=u'Polyhandicap',
+            default=False)
+    deficiency_behavioral_disorder = models.IntegerField(max_length=1,
+            verbose_name=u"Troubles du comportement et de la communication",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
+    deficiency_in_diagnostic = models.BooleanField(verbose_name=u'En diagnostic',
+            default=False)
+    deficiency_other_disorder = models.IntegerField(max_length=1,
+            verbose_name=u"Autres types de déficience",
+            choices=DEFICIENCY_CHOICES,
+            default=0)
 
     # Inscription motive
     analysemotive = models.ForeignKey('ressources.AnalyseMotive',
