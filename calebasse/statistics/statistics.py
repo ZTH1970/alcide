@@ -1203,6 +1203,18 @@ def patients_synthesis(statistic):
     data.append(values)
     data_tables.append(data)
 
+    provenance_places = dict()
+    for patient in patients:
+        if patient.provenanceplace:
+            provenance_places.setdefault(patient.provenanceplace, []).append(patient)
+    data = []
+    data.append(["Lieux de provenance", "Nombre de dossiers"])
+    values = []
+    for provenance_place, pts in provenance_places.iteritems():
+        values.append((provenance_place, len(pts)))
+    data.append(values)
+    data_tables.append(data)
+
     return [data_tables]
 
 def acts_synthesis(statistic):
