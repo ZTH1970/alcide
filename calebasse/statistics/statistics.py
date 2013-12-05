@@ -155,6 +155,14 @@ STATISTICS = {
             la plage par défaut est aujourd'hui.
             """
     },
+    'patients_protection' :
+        {
+        'display_name': 'Synthèse sur les mesures de protection des patients '
+            'à une date donnée',
+        'category': 'Patients',
+        'comment': """La date par défaut est aujourd'hui.
+            """
+    },
 }
 
 ANNUAL_ACTIVITY_ROWS = ['total', 'pointe', 'non_pointe', 'absent', 'percent_abs', 'reporte', 'acts_present', 'abs_non_exc', 'abs_exc', 'abs_inter', 'annul_nous', 'annul_famille', 'abs_ess_pps', 'enf_hosp', 'non_facturables', 'facturables', 'perdus', 'doubles', 'really_facturables', 'factures', 'diag', 'trait', 'restants_a_fac', 'refac', 'nf', 'percent_nf', 'patients', 'intervenants', 'days', 'fact_per_day', 'moving_time', 'moving_time_per_intervene', 'moving_time_per_act']
@@ -675,6 +683,28 @@ def active_patients_by_state_only(statistic):
         p_list.append((ln, fn, str(pid or '')))
     data.append(sorted(p_list,
         key=lambda k: k[0]+k[1]))
+    data_tables_set[0].append(data)
+    return data_tables_set
+
+def patients_protection(statistic):
+    if not statistic.in_service:
+        return None
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime.today()
+    patients = PatientRecord.objects.filter(protectionstate__isnull=False).distinct()
+    print patients
+    protection_states = [p.get_protection_state_at_date(
+            statistic.in_start_date) for p in patients
+            if p.get_protection_state_at_date(statistic.in_start_date)]
+    analyse = {}
+    for state in protection_states:
+        print state.patient
+        analyse.setdefault(state.status.name, 0)
+        analyse[state.status.name] += 1
+    data_tables_set=[[[['En date du :', formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"), len(protection_states)]]]]
+    data = []
+    data.append(['Mesure de protection', 'Nombre de dossiers'])
+    data.append(analyse.items())
     data_tables_set[0].append(data)
     return data_tables_set
 

@@ -57,7 +57,8 @@ class StatisticsFormView(FormView):
             return forms.AnnualActivityForm
         elif self.name == 'patients_details':
             return forms.PatientsTwoDatesForm
-        elif self.name == 'active_patients_by_state_only':
+        elif self.name in ('active_patients_by_state_only',
+                'patients_protection'):
             return forms.OneDateForm
         elif self.name in ('active_patients_with_act', 'closed_files',
                 'patients_synthesis', 'acts_synthesis',
