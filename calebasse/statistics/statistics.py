@@ -145,6 +145,16 @@ STATISTICS = {
             la plage par défaut est aujourd'hui.
             """
     },
+    'deficiencies' :
+        {
+        'display_name': 'Synthèse sur les déficiences',
+        'category': 'Patients',
+        'comment': """Synthèse sur les déficiences
+            sur la plage de dates spécifiée. La date de début de la plage par
+            défaut est le 1er janvier de l'année en cours. La date de fin de
+            la plage par défaut est aujourd'hui.
+            """
+    },
 }
 
 ANNUAL_ACTIVITY_ROWS = ['total', 'pointe', 'non_pointe', 'absent', 'percent_abs', 'reporte', 'acts_present', 'abs_non_exc', 'abs_exc', 'abs_inter', 'annul_nous', 'annul_famille', 'abs_ess_pps', 'enf_hosp', 'non_facturables', 'facturables', 'perdus', 'doubles', 'really_facturables', 'factures', 'diag', 'trait', 'restants_a_fac', 'refac', 'nf', 'percent_nf', 'patients', 'intervenants', 'days', 'fact_per_day', 'moving_time', 'moving_time_per_intervene', 'moving_time_per_act']
@@ -1298,6 +1308,39 @@ def mises(statistic):
     data.append(OrderedDict(sorted(pathologies.items(), key=lambda t: t[0].ordering_code)).items())
     return [[data]]
 
+def deficiencies(statistic):
+    if not statistic.in_service:
+        return None
+    if not statistic.in_end_date:
+        statistic.in_end_date = datetime.today()
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    acts = Act.objects.filter(valide='True',
+        date__gte=statistic.in_start_date,
+        date__lte=statistic.in_end_date,
+        patient__service=statistic.in_service)
+    patients = acts.order_by('patient').distinct('patient').\
+        values_list('patient')
+    patients = PatientRecord.objects.filter(id__in=[patient[0]
+        for patient in patients])
+    deficiencies_three = ('deficiency_intellectual',
+            'deficiency_autism_and_other_ted',
+            'deficiency_mental_disorder', 'deficiency_learning_disorder',
+            'deficiency_auditory', 'deficiency_visual', 'deficiency_motor',
+            'deficiency_metabolic_disorder', 'deficiency_brain_damage',
+            'deficiency_behavioral_disorder', 'deficiency_other_disorder')
+    data = [['Déficiences', 'Nombre de patients concernés'], []]
+    for deficiency in deficiencies_three:
+        name = PatientRecord._meta.get_field_by_name(deficiency)[0].verbose_name
+        filter_dict = {deficiency: 1}
+        data[1].append((name + ' à titre principal', patients.filter(**filter_dict).count()))
+        filter_dict = {deficiency: 2}
+        data[1].append((name + ' à titre associé', patients.filter(**filter_dict).count()))
+    name = PatientRecord._meta.get_field_by_name('deficiency_polyhandicap')[0].verbose_name
+    data[1].append((name, patients.filter(deficiency_polyhandicap=True).count()))
+    name = PatientRecord._meta.get_field_by_name('deficiency_in_diagnostic')[0].verbose_name
+    data[1].append((name, patients.filter(deficiency_in_diagnostic=True).count()))
+    return [[data]]
 
 class Statistic(models.Model):
     patients = models.ManyToManyField('dossiers.PatientRecord',

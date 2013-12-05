@@ -61,7 +61,7 @@ class StatisticsFormView(FormView):
             return forms.OneDateForm
         elif self.name in ('active_patients_with_act', 'closed_files',
                 'patients_synthesis', 'acts_synthesis',
-                'acts_synthesis_cmpp', 'mises'):
+                'acts_synthesis_cmpp', 'mises', 'deficiencies'):
             return forms.TwoDatesForm
         else:
             return forms.ParticipantsPatientsTwoDatesForm
