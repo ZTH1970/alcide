@@ -125,7 +125,13 @@ class PhysiologyForm(ModelForm):
         model = PatientRecord
         fields = ('size', 'weight', 'pregnancy_term',
             'cranium_perimeter', 'chest_perimeter', 'apgar_score_one',
-            'apgar_score_two', 'mises_1', 'mises_2', 'mises_3')
+            'apgar_score_two', 'mises_1', 'mises_2', 'mises_3',
+            'deficiency_intellectual', 'deficiency_autism_and_other_ted',
+            'deficiency_mental_disorder', 'deficiency_learning_disorder',
+            'deficiency_auditory', 'deficiency_visual', 'deficiency_motor',
+            'deficiency_metabolic_disorder', 'deficiency_brain_damage',
+            'deficiency_polyhandicap', 'deficiency_behavioral_disorder',
+            'deficiency_in_diagnostic', 'deficiency_other_disorder')
         widgets = {
             'mises_1': FilteredSelectMultipleMise,
             'mises_2': FilteredSelectMultipleMise,
