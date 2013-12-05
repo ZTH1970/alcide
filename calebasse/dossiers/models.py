@@ -177,6 +177,32 @@ reversion.register(CmppHealthCareDiagnostic, follow=['healthcare_ptr'])
 reversion.register(CmppHealthCareTreatment, follow=['healthcare_ptr'])
 reversion.register(SessadHealthCareNotification, follow=['healthcare_ptr'])
 
+class ProtectionStatus(NamedAbstractModel):
+
+    class Meta:
+        app_label = 'dossiers'
+        verbose_name = u"Statut d'une mesure de protection"
+        verbose_name_plural = u"Statuts d'une mesure de protection"
+
+class ProtectionState(models.Model):
+
+    class Meta:
+        app_label = 'dossiers'
+        verbose_name = u'Mesure de protection du dossier patient'
+        verbose_name_plural = u'Mesure de protections du dossier patient'
+        ordering = ['-start_date']
+
+    patient = models.ForeignKey('dossiers.PatientRecord',
+        verbose_name=u'Dossier patient')
+    status = models.ForeignKey('dossiers.ProtectionStatus', verbose_name=u'Statut de protection')
+    created = models.DateTimeField(u'Création', auto_now_add=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField(blank=True, null=True)
+    comment = models.TextField(max_length=3000, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.status.name + ' ' + str(self.start_date)
+
 class Status(NamedAbstractModel):
 
     class Meta:
@@ -700,6 +726,13 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             self.get_state().delete()
         except:
             pass
+
+    def get_protection_state_at_date(self, date):
+        try:
+            return self.protectionstate_set.exclude(end_date__lt=date). \
+                exclude(start_date__gt=date).latest('start_date')
+        except:
+            return None
 
     # START Specific to sessad healthcare
     def get_last_notification(self):
