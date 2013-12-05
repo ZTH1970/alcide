@@ -298,15 +298,6 @@ class InscriptionMotive(NamedAbstractModel):
         verbose_name = u'Motif d\'inscription'
         verbose_name_plural = u'Motifs d\'inscription'
 
-class Provenance(NamedAbstractModel):
-    old_id = models.CharField(max_length=256,
-            verbose_name=u'Ancien ID', blank=True, null=True)
-    old_service = models.CharField(max_length=256,
-            verbose_name=u'Ancien Service', blank=True, null=True)
-    class Meta:
-        verbose_name = u'Provenance'
-        verbose_name_plural = u'Provenances'
-
 
 class Nationality(NamedAbstractModel):
     class Meta:
@@ -336,30 +327,52 @@ class Room(NamedAbstractModel):
         verbose_name = u'Salle'
         verbose_name_plural = u'Salles'
 
+
 class AnalyseMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u"Motif analysé"
         verbose_name_plural = u"Motifs analysés"
+
 
 class FamilyMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u"Motif familiale"
         verbose_name_plural = u"Motifs familiaux"
 
+
+class AdviceGiver(NamedAbstractModel):
+    class Meta:
+        verbose_name = u"Demandeur"
+        verbose_name_plural = u"Demandeurs"
+
+
+class Provenance(NamedAbstractModel):
+    old_id = models.CharField(max_length=256,
+            verbose_name=u'Ancien ID', blank=True, null=True)
+    old_service = models.CharField(max_length=256,
+            verbose_name=u'Ancien Service', blank=True, null=True)
+    class Meta:
+        verbose_name = u'Conseilleur'
+        verbose_name_plural = u'Conseilleurs'
+
+
+class ProvenancePlace(NamedAbstractModel):
+    class Meta:
+        verbose_name = u'Lieu de provenance'
+        verbose_name_plural = u'Lieux de provenance'
+
+
 class OutMotive(NamedAbstractModel):
     class Meta:
         verbose_name = u"Motif de sortie"
         verbose_name_plural = u"Motifs de sortie"
+
 
 class OutTo(NamedAbstractModel):
     class Meta:
         verbose_name = u"Orientation de sortie"
         verbose_name_plural = u"Orientations de sortie"
 
-class AdviceGiver(NamedAbstractModel):
-    class Meta:
-        verbose_name = u"Conseilleur"
-        verbose_name_plural = u"Conseilleurs"
 
 class Service(NamedAbstractModel):
     admin_only = True
@@ -375,6 +388,7 @@ class Service(NamedAbstractModel):
     class Meta:
         verbose_name = u'Service'
         verbose_name_plural = u'Services'
+
 
 class ActTypeQuerySet(query.QuerySet):
     def for_service(self, service):
