@@ -15,6 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files import File
 from django.forms import Form
 from django.utils import formats
+from django.shortcuts import get_object_or_404
 
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
@@ -26,7 +27,7 @@ from calebasse.agenda.appointments import Appointment
 from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
         CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare,
-        TransportPrescriptionLog)
+        TransportPrescriptionLog, ProtectionState)
 from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
@@ -940,6 +941,39 @@ class PatientRecordsQuotationsView(cbv.ListView):
         return ctx
 
 patientrecord_quotations = PatientRecordsQuotationsView.as_view()
+
+class NewProtectionStateView(cbv.CreateView):
+    model = ProtectionState
+    template_name = 'dossiers/generic_form.html'
+    success_url = '../view#tab=1'
+    form_class = forms.ProtectionStateForm
+
+    def form_valid(self, form):
+        self.patient = get_object_or_404(PatientRecord, id=self.kwargs.get('patientrecord_id',None))
+        form.instance.patient = self.patient
+        return super(NewProtectionStateView, self).form_valid(form)
+
+new_protection = NewProtectionStateView.as_view()
+
+class UpdateProtectionStateView(cbv.UpdateView):
+    model = ProtectionState
+    template_name = 'dossiers/generic_form.html'
+    success_url = '../../view#tab=1'
+    form_class = forms.ProtectionStateForm
+
+    def form_valid(self, form):
+        self.patient = get_object_or_404(PatientRecord, id=self.kwargs.get('patientrecord_id',None))
+        form.instance.patient = self.patient
+        return super(UpdateProtectionStateView, self).form_valid(form)
+
+update_protection = UpdateProtectionStateView.as_view()
+
+class DeleteProtectionStateView(cbv.DeleteView):
+    model = ProtectionState
+    template_name = 'dossiers/protection_confirm_delete.html'
+    success_url = '../../view#tab=1'
+
+delete_protection = DeleteProtectionStateView.as_view()
 
 class PatientRecordsWaitingQueueView(cbv.ListView):
     model = PatientRecord

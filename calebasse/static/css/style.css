@@ -841,6 +841,7 @@ div#tabs-2 div button.save {
         right: 0;
 }
 
+#tabs-2 div.frame div.subframe,
 #tabs-7 div.frame div.subframe {
 	position: relative;
         margin: 12px;

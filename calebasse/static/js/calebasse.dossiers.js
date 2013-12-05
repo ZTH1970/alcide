@@ -219,6 +219,18 @@ function state_dialog(url, state_title, state_type) {
         generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
             '#ajax-dlg', '500px', 'Supprimer');
     });
+    $('#new-protection-btn').click(function() {
+        generic_ajaxform_dialog('protection/new', 'Ajouter une mesure de protection',
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
+    });
+    $('.update-protection-btn').click(function() {
+        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/update', 'Modifier une mesure de protection',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.del-protection').click(function() {
+        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/del', 'Supprimer une mesure de protection',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
     $('#new-mdph-request-btn').click(function() {
         generic_ajaxform_dialog('mdph_request/new', 'Ajouter une demande MDPH',
             '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);

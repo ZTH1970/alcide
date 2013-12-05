@@ -12,7 +12,7 @@ import django.contrib.admin.widgets
 from calebasse.dossiers.models import (PatientRecord,
     PatientAddress, PatientContact, DEFAULT_ACT_NUMBER_TREATMENT,
     CmppHealthCareTreatment, CmppHealthCareDiagnostic,
-    SessadHealthCareNotification, FileState, Status)
+    SessadHealthCareNotification, FileState, Status, ProtectionState)
 from calebasse.ressources.models import (HealthCenter, LargeRegime,
     CodeCFTMEA, SocialisationDuration, MDPHRequest, MDPHResponse)
 
@@ -335,6 +335,14 @@ class SocialisationDurationForm(ModelForm):
             'end_date', 'level', 'contact', 'comment')
         widgets = {
                 'contact': forms.Textarea(attrs={'cols': 39, 'rows': 2}),
+                'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
+                }
+
+class ProtectionStateForm(ModelForm):
+    class Meta:
+        model = ProtectionState
+        fields = ('status', 'start_date', 'end_date', 'comment')
+        widgets = {
                 'comment': forms.Textarea(attrs={'cols': 39, 'rows': 4}),
                 }
 

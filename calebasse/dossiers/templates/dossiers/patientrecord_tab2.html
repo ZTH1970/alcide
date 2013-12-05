@@ -196,6 +196,25 @@
     </tbody>
     </table>
     </div>
-      </p>
       <input type="hidden"  name="tab"  value="1">
   </form>
+
+<div class="frame">
+    <h3>Mesures de protection</h3>
+    <p><button id="new-protection-btn">Nouvelle mesure de protection</button></p>
+    {% for protection in object.protectionstate_set.all %}
+        <div class="subframe">
+        Depuis le {{ protection.start_date }} : {{ protection.status.name }}
+        <div class="buttons">
+            <button type="button" data-id="{{ protection.id }}" class="del-protection icon-minus" title="Supprimer"></button>
+            <button type="button" data-id="{{ protection.id }}" class="update-protection-btn icon-edit" title="Modifier"></button>
+        </div>
+        <div>
+            <ul>
+                {% if protection.end_date %}<li><label>Date de fin</label> : {{ protection.end_date }}</li>{% endif %}
+                {% if protection.comment %}<li><label>Commentaire</label> : {{ protection.comment }}</li>{% endif %}
+            </ul>
+        </div>
+        </div>
+    {% endfor %}
+</div>
