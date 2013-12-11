@@ -104,7 +104,7 @@ class UpdateAppointmentForm(NewAppointmentForm):
         )
 
 
-class UpdatePeriodicAppointmentForm(UpdateAppointmentForm):
+class UpdatePeriodicAppointmentForm(NewAppointmentForm):
 
     def clean(self):
         cleaned_data = super(UpdatePeriodicAppointmentForm, self).clean()
