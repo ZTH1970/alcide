@@ -50,7 +50,8 @@ class Appointment(object):
         self.event_id = event.id
         self.length = delta.seconds / 60
         self.title = event.title
-        if hasattr(event, 'parent') and event.parent.recurrence_periodicity:
+        if (hasattr(event, 'parent') and event.parent.recurrence_periodicity) or \
+                event.exception_to:
             self.is_recurrent = True
         services = event.services.all()
         self.date = event.start_datetime.date()
