@@ -408,6 +408,8 @@ class HolidayCreateView(HolidayManagement, cbv.CreateView):
         try:
             holiday = form.save()
             worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
+            holiday.worker = worker
+            holiday.save()
             for service in worker.services.all():
                 holiday.services.add(service)
             messages.success(self.request, u'Absence ajoutée avec succès')
