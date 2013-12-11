@@ -139,7 +139,7 @@ user_update = super_user_only(AccessUpdateView.as_view())
 user_delete = super_user_only(UserDeleteView.as_view())
 
 
-class WorkerUpdateView(cbv.MultiUpdateView):
+class WorkerUpdateView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
     model = models.Worker
     forms_classes = {
             'id': forms.WorkerIdForm,

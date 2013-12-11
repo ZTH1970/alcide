@@ -33,7 +33,8 @@ def homepage(request, service):
     service_name = get_object_or_404(Service, slug=service)
     return render(request, 'ressources/index.html',
             dict(models=sorted(ressources_models),
-                 service_name=service_name))
+                service=service,
+                service_name=service_name))
 
 
 def list_view(request, service, model_name):
