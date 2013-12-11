@@ -80,7 +80,8 @@ class Appointment(object):
             self.patient_record_id = event.patient.id
             self.patient_record_paper_id = event.patient.paper_id
             self.act_type = event.act_type.name
-            self.description = event.act.comment
+            if self.act_id:
+                self.description = event.act.comment
             self.is_billed = event.act.is_billed
             state = event.get_state()
             state_name = state.state_name if state else 'NON_VALIDE'
@@ -102,6 +103,8 @@ class Appointment(object):
             self.event_type = event.event_type
         for worker in self.workers:
             self.workers_code.append("%s-%s" % (worker.id, worker.last_name.upper()))
+        if not self.description:
+            self.description = ''
 
     def init_free_time(self, length, begin_time):
         self.type = "free"

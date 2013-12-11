@@ -90,7 +90,21 @@ class NewAppointmentForm(BaseForm):
             appointment.services = [self.service]
         return appointment
 
-class UpdatePeriodicAppointmentForm(NewAppointmentForm):
+class UpdateAppointmentForm(NewAppointmentForm):
+    class Meta(NewAppointmentForm.Meta):
+        fields = (
+                'start_datetime',
+                'date',
+                'time',
+                'duration',
+                'patient',
+                'participants',
+                'room',
+                'act_type',
+        )
+
+
+class UpdatePeriodicAppointmentForm(UpdateAppointmentForm):
 
     def clean(self):
         cleaned_data = super(UpdatePeriodicAppointmentForm, self).clean()
@@ -102,7 +116,7 @@ class UpdatePeriodicAppointmentForm(NewAppointmentForm):
                             u"La date doit être supérieur au dernier acte facturé de la récurrence"])
         return cleaned_data
 
-class DisablePatientAppointmentForm(NewAppointmentForm):
+class DisablePatientAppointmentForm(UpdateAppointmentForm):
 
     def __init__(self, instance, service=None, **kwargs):
         super(DisablePatientAppointmentForm, self).__init__(instance,
@@ -117,19 +131,6 @@ class DisablePatientAppointmentForm(NewAppointmentForm):
             return instance.patient
         else:
             return self.cleaned_data.get('patient', None)
-
-class UpdateAppointmentForm(NewAppointmentForm):
-    class Meta(NewAppointmentForm.Meta):
-        fields = (
-                'start_datetime',
-                'date',
-                'time',
-                'duration',
-                'patient',
-                'participants',
-                'room',
-                'act_type',
-        )
 
 
 class NewEventForm(BaseForm):

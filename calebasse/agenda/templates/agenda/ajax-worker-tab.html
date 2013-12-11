@@ -129,7 +129,7 @@
     <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
             <span></span>
             {% if service in appointment.services_names or not appointment.services_names %}
-            <textarea>{% if appointment.description %}{{ appointment.description }}{% endif %}</textarea>
+            <textarea>{{ appointment.description }}</textarea>
             <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}" {% if appointment.act_id %}data-act-id="{{ appointment.act_id }}{% endif %}">✔</button>
             {% else %}
             <p>{{ appointment.description }}</p>
@@ -137,7 +137,7 @@
         </div>
     {% else %}
         {% if appointment.description %}
-        <p>{% if appointment.description %}{{ appointment.description }}{% endif %}</p>
+        <p>{{ appointment.description }}</p>
         {% endif %}
     {% endif %}
   </div>
