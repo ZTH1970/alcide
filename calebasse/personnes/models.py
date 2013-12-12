@@ -405,7 +405,8 @@ class Holiday(BaseModelMixin, models.Model):
             verbose_name=u'Type de congé')
     worker = models.ForeignKey(Worker, blank=True, null=True,
             verbose_name=u"Personnel")
-    services = models.ManyToManyField(Service, blank = True, verbose_name = u'Services')
+    services = models.ManyToManyField(Service, blank = False, null = False,
+                                      verbose_name = u'Services')
     start_date = models.DateField(verbose_name=u"Date de début",
         help_text=u'format: jj/mm/aaaa')
     end_date = models.DateField(verbose_name=u"Date de fin",
