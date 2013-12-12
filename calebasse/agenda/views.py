@@ -727,6 +727,7 @@ class PeriodicEventsView(cbv.ListView):
                     qs = qs.exclude(event_type_id=1)
             if form.cleaned_data.get('no_end_date'):
                 qs = qs.filter(recurrence_end_date__isnull=True)
+        qs = qs.filter(canceled=False)
         qs = qs.filter(services=self.service)
         qs = qs.filter(recurrence_periodicity__isnull=False)
         qs = qs.filter(start_datetime__lt=end_date)
