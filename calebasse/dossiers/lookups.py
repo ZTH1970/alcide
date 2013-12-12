@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from ajax_select import LookupChannel
+from calebasse.lookups import CalebasseLookup
 from calebasse.dossiers.models import PatientRecord, PatientAddress
 from django.core.exceptions import PermissionDenied
 from itertools import chain
 
-class PatientRecordLookup(LookupChannel):
+class PatientRecordLookup(CalebasseLookup):
     model = PatientRecord
     search_field = 'last_name'
     homonym = False
@@ -58,11 +58,7 @@ class PatientRecordLookup(LookupChannel):
             text += u')'
         return unicode(text)
 
-    def check_auth(self, request):
-        if not request.user.is_authenticated():
-            raise PermissionDenied
-
-class PatientAddressLookup(LookupChannel):
+class PatientAddressLookup(CalebasseLookup):
     model = PatientAddress
     search_field = 'display_name'
 
@@ -72,6 +68,3 @@ class PatientAddressLookup(LookupChannel):
             qs = qs.filter(patientcontact__id=request.session['patientrecord_id'])
         return qs
 
-    def check_auth(self, request):
-        if not request.user.is_authenticated():
-            raise PermissionDenied

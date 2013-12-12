@@ -1,6 +1,6 @@
 import itertools
 
-from ajax_select import LookupChannel
+from calebasse.lookups import CalebasseLookup
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service
 
@@ -16,7 +16,7 @@ class FakeGroup:
         return u'Groupe: %s' % self.label
 
 
-class WorkerOrGroupLookup(LookupChannel):
+class WorkerOrGroupLookup(CalebasseLookup):
     model = Worker
     search_field = 'last_name'
 

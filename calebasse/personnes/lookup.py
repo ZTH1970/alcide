@@ -1,8 +1,9 @@
 
-from ajax_select import LookupChannel
+from calebasse.lookups import CalebasseLookup
+
 from models import Worker
 
-class WorkerLookup(LookupChannel):
+class WorkerLookup(CalebasseLookup):
     model = Worker
     search_field = 'display_name'
 
