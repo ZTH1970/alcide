@@ -259,7 +259,8 @@ class HolidayView(cbv.TemplateView, cbv.ServiceViewMixin):
                         start_date__lte=filter_end_date) \
                 .select_related('worker', 'service')
         holiday_by_worker = defaultdict(lambda: [])
-        all_holidays = holidays.filter(worker__isnull=True)
+        service = Service.objects.get(slug = ctx['service'])
+        all_holidays = holidays.filter(worker__isnull=True, services=service)
 
         for worker in workers:
             holiday_by_worker[worker] = list(all_holidays)
