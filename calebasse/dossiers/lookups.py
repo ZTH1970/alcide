@@ -2,7 +2,6 @@
 
 from calebasse.lookups import CalebasseLookup
 from calebasse.dossiers.models import PatientRecord, PatientAddress
-from django.core.exceptions import PermissionDenied
 from itertools import chain
 
 class PatientRecordLookup(CalebasseLookup):

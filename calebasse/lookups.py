@@ -1,5 +1,6 @@
 
 from ajax_select import LookupChannel
+from django.core.exceptions import PermissionDenied
 
 class CalebasseLookup(LookupChannel):
 
