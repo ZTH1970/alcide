@@ -114,7 +114,6 @@ class Appointment(object):
 
     def init_busy_time(self, title, length, begin_time, description=None):
         self.title = title
-        self.type = "busy-here"
         self.length = length
         self.__set_time(begin_time)
         self.description = description
@@ -169,6 +168,10 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
                     delta_minutes,
                     time(interval.lower_bound.hour, interval.lower_bound.minute),
                     description=holiday.comment)
+        services = holiday.services.all()
+        if service not in services:
+            appointment.type = 'busy-elsewhere'
+            appointment.other_services_names = [s.slug for s in services]
         appointments.append(appointment)
     for time_table in time_tables:
         interval_set = IntervalSet.between(time_table.to_interval(date).lower_bound.time(),
