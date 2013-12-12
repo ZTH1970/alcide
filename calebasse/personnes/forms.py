@@ -227,22 +227,12 @@ class GroupHolidayBaseFormSet(BaseModelFormSet):
         super(GroupHolidayBaseFormSet, self).__init__(*args, **kwargs)
 
 class GroupHolidayForm(forms.ModelForm):
-    for_all_services = forms.BooleanField(required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
         self.service = kwargs.pop('service', None)
         super(GroupHolidayForm, self).__init__(*args, **kwargs)
-        if self.instance and self.instance.id:
-            self.initial['for_all_services'] = self.instance.services.count() == Service.objects.count()
         self.fields['holiday_type'].queryset = \
                 HolidayType.objects.filter(for_group=True)
-
-
-    def save(self, commit=True):
-        instance = super(GroupHolidayForm, self).save(commit=False)
-        if commit:
-            instance.save()
-        return instance
 
     class Meta:
         model = Holiday
