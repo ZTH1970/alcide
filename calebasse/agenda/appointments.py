@@ -163,6 +163,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         delta = interval.upper_bound - interval.lower_bound
         delta_minutes = delta.seconds / 60
         appointment = Appointment()
+        appointment.type = 'busy-here'
         label = u"Congé (%s)" % holiday.holiday_type.name
         appointment.init_holiday_time(label,
                     delta_minutes,
@@ -171,7 +172,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         services = holiday.services.all()
         if service not in services:
             appointment.type = 'busy-elsewhere'
-            appointment.other_services_names = [s.slug for s in services]
+        appointment.other_services_names = [s.slug for s in services]
         appointments.append(appointment)
     for time_table in time_tables:
         interval_set = IntervalSet.between(time_table.to_interval(date).lower_bound.time(),
