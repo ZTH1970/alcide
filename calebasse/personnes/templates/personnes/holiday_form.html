@@ -1,5 +1,6 @@
 <form>
   {% csrf_token %}
+  <div class='print-only'>{{ form.services }}</div>
   <table>
     <tr><td colspan=2>{{ form.non_field_errors }}</td></tr>
     <tr>

@@ -348,6 +348,10 @@ class HolidayManagement(object):
     model = models.Holiday
     form_class = forms.HolidayForm
 
+    def get_initial(self):
+        worker = models.Worker.objects.get(pk=self.kwargs['worker_pk'])
+        return {'services': worker.services.all()}
+
     def render_to_json(self, location, err = 0, **kwargs):
         data = {'err': err, 'location': location}
         response = json.dumps(data)
@@ -407,12 +411,7 @@ class HolidayCreateView(HolidayManagement, cbv.CreateView):
 
     def form_valid(self, form):
         try:
-            holiday = form.save()
-            worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
-            holiday.worker = worker
-            holiday.save()
-            for service in worker.services.all():
-                holiday.services.add(service)
+            form.save()
             messages.success(self.request, u'Absence ajoutée avec succès')
         except Exception, e:
             logger.debug('Error on creating a holiday: %s' % e)
@@ -431,10 +430,7 @@ class EditHolidayView(HolidayManagement, cbv.FormView):
 
     def form_valid(self, form):
         try:
-            holiday = form.save()
-            worker = models.Worker.objects.get(pk = self.kwargs['worker_pk'])
-            for service in worker.services.all():
-                holiday.services.add(service)
+            form.save()
             messages.success(self.request, u'Données mises à jour avec succès')
         except Exception, e:
             logger.debug('Error on updating a holiday: %s' % e)
