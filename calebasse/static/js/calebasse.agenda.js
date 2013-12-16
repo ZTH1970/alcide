@@ -129,7 +129,7 @@ function enable_events(base) {
           event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
       });
       $(base).find('.edit-event').click(function() {
-          event_dialog("update-event/" + $(this).data('event-id') , 'Modifier un événement', '850px', 'Modifier');
+          event_dialog("/" + service + "/agenda/" + current_date + "/update-event/" + $(this).data('event-id') , 'Modifier un événement', '850px', 'Modifier');
           return false;
       });
       $(base).find('#print-button').click(function() { window.print(); });
