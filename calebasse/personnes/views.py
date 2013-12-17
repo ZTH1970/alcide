@@ -366,6 +366,9 @@ class HolidayManagement(object):
 class GroupHolidayManagement(HolidayManagement):
     form_class = forms.GroupHolidayForm
 
+    def get_initial(self):
+        return {'services': Service.objects.all()}
+
     def get_success_url(self):
         slug = self.service.slug
         return reverse('group-holidays', kwargs={'service': slug})
