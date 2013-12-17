@@ -172,7 +172,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         services = holiday.services.all()
         if service not in services:
             appointment.type = 'busy-elsewhere'
-        appointment.other_services_names = [s.slug for s in services]
+        appointment.other_services_names = [s.slug for s in services if s != service]
         appointments.append(appointment)
     for time_table in time_tables:
         interval_set = IntervalSet.between(time_table.to_interval(date).lower_bound.time(),
