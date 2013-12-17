@@ -66,18 +66,6 @@
 
 
 {% block content %}
-
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-<script type="text/javascript">
-$('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
-</script>
-{% endif %}
-
 <div id="sidebar">
   <form method="get" id="search-form">
     <div>
