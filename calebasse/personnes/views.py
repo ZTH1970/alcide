@@ -377,9 +377,6 @@ class CreateGroupHolidayView(GroupHolidayManagement, cbv.CreateView):
 
     template_name_suffix = '_group_form'
 
-    def get_initial(self):
-        return {'services': Service.objects.all()}
-
     def form_valid(self, form):
         try:
             form.save()
@@ -393,6 +390,9 @@ create_group_holiday = CreateGroupHolidayView.as_view()
 
 class EditGroupHolidayView(GroupHolidayManagement, cbv.FormView):
     template_name = 'personnes/group_holiday_update_form.html'
+
+    def get_initial(self):
+        return
 
     def get_form_kwargs(self):
         kwargs = super(EditGroupHolidayView, self).get_form_kwargs()
