@@ -75,7 +75,7 @@ class Event(models.Model):
             (4, 'Une semaine sur quatre'),
             (5, 'Une semaine sur cinq')
     )
-    OFFSET = range(0,4)
+    OFFSET = range(0, 4)
     PERIODICITIES = (
             (1, u'Toutes les semaines'),
             (2, u'Une semaine sur deux'),

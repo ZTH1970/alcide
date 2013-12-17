@@ -7,7 +7,6 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from cPickle import loads, dumps
 
-from django import forms
 from django.conf import settings
 from django.db import models
 from django.db.models import Min, Max, Q
@@ -16,13 +15,11 @@ from django.core.validators import MinValueValidator
 
 import reversion
 
-from calebasse.choices import (LARGE_REGIME_CHOICES, TYPE_OF_CONTRACT_CHOICES,
-        DEFICIENCY_CHOICES)
+from calebasse.choices import TYPE_OF_CONTRACT_CHOICES, DEFICIENCY_CHOICES
 from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
 from calebasse.ressources.models import (ServiceLinkedAbstractModel,
-        NamedAbstractModel, Service)
-from calebasse.actes.validation import are_all_acts_of_the_day_locked
+        NamedAbstractModel)
 from calebasse.actes.models import Act
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
@@ -655,9 +652,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             except IndexError:
                 pass
             else:
-                 if os.path.exists(fullpath) and not os.path.exists(next_fullpath):
-                     os.rename(fullpath, next_fullpath)
-                 continue
+                if os.path.exists(fullpath) and not os.path.exists(next_fullpath):
+                    os.rename(fullpath, next_fullpath)
+                continue
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
             for subdir in settings.PATIENT_SUBDIRECTORIES:
@@ -864,7 +861,9 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         today = date.today()
         current_hc_trait = None
         try:
-            current_hc_trait = CmppHealthCareTreatment.objects.filter(patient=self,start_date__lte=today, end_date__gte=today).latest('start_date')
+            current_hc_trait = CmppHealthCareTreatment.objects.filter(
+                patient=self, start_date__lte=today, end_date__gte=today
+            ).latest('start_date')
         except:
             pass
         if not current_hc_trait:

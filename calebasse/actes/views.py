@@ -4,10 +4,9 @@ import datetime
 
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Q
-from django.views.generic.edit import ModelFormMixin
 from django.shortcuts import redirect
 
-from calebasse.cbv import ListView, UpdateView, FormView, DeleteView
+from calebasse.cbv import ListView, UpdateView, DeleteView
 from calebasse.agenda.views import NewAppointmentView
 
 import copy
@@ -20,8 +19,8 @@ def redirect_today(request, service):
             service=service)
 
 class ActListingView(ListView):
-    model=models.Act
-    template_name='actes/act_listing.html'
+    model = models.Act
+    template_name = 'actes/act_listing.html'
 
     def get_queryset(self):
         qs = super(ActListingView, self).get_queryset()

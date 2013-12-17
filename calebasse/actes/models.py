@@ -4,14 +4,9 @@ from datetime import date, time
 from django.db import models
 from django.contrib.auth.models import User
 
-import reversion
-
-from calebasse.agenda.models import Event, EventType
-from calebasse.agenda.managers import EventManager
+from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 from ..middleware.request import get_request
-
-from validation_states import VALIDATION_STATES, NON_VALIDE
 
 
 class ActValidationState(models.Model):

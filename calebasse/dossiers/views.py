@@ -5,11 +5,10 @@ import os
 from datetime import datetime, date
 
 from django.conf import settings
-from django.core.urlresolvers import reverse_lazy
 from django.db import models
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import View
-from django.views.generic.edit import DeleteView, FormMixin
+from django.views.generic.edit import DeleteView
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files import File
@@ -28,7 +27,7 @@ from calebasse.dossiers.models import (PatientRecord, PatientContact,
         PatientAddress, Status, FileState, create_patient, CmppHealthCareTreatment,
         CmppHealthCareDiagnostic, SessadHealthCareNotification, HealthCare,
         TransportPrescriptionLog, ProtectionState)
-from calebasse.dossiers.states import STATES_MAPPING, STATE_CHOICES_TYPE, STATES_BTN_MAPPER
+from calebasse.dossiers.states import STATES_MAPPING, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
 from calebasse.facturation.list_acts import list_acts_for_billing_CMPP_per_patient

@@ -15,7 +15,7 @@ class BaseModelMixin(object):
 class PhoneNumberField(models.CharField):
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 20
-        super(PhoneNumberField, self).__init__(*args,**kwargs)
+        super(PhoneNumberField, self).__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
         default = { 'form_class': FRPhoneNumberField }

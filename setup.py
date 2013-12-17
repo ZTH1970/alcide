@@ -5,7 +5,6 @@ import os
 def get_version():
     import glob
     import re
-    import os
 
     version = None
     for d in glob.glob('*'):
