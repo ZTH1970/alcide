@@ -17,22 +17,22 @@ function action(url, worker, on, action, selector, original_color, highlight_col
             url += action;
     }
     $("#holiday-dlg").load(url,
-                           function() {
-                               $(this).dialog({title: params.title,
-                                               width: params.width,
-                                               buttons: [{text: params.button_close,
-                                                          click: function() {
-                                                              $(this).dialog('close');
-                                                              $(selector).attr('style', original_color);
-                                                          }},{text: params.button_confirm,
-                                                              click: function(){
-                                                                  $.ajax({url: url,
-                                                                          type: 'post',
-                                                                          data: $('#holiday-dlg form').serialize(),
-                                                                         }
-                                                                        ).done(on_success)
-                                                              }}]});
-                           })
+        function() {
+          $(this).dialog({title: params.title,
+            width: params.width,
+          buttons: [{text: params.button_close,
+            click: function() {
+              $(this).dialog('close');
+              $(selector).attr('style', original_color);
+            }},{text: params.button_confirm,
+              click: function(){
+                $.ajax({url: url,
+                  type: 'post',
+                data: $('#holiday-dlg form').serialize(),
+                }
+                ).done(on_success)
+              }}]});
+        })
 };
 
 function add_holiday(worker, url) {

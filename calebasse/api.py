@@ -3,7 +3,7 @@ import datetime
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 from calebasse.actes.models import Act
-from calebasse.agenda.models import Event
+from calebasse.agenda.models import Event, EventWithAct
 from calebasse.dossiers.models import PatientRecord, PatientAddress
 
 
@@ -26,6 +26,12 @@ class EventResource(ModelResource):
             obj = obj.today_occurrence(date)
         return obj
 
+class EventWithActRessource(ModelResource):
+    class Meta:
+        queryset = EventWithAct.objects.all()
+        resource_name = 'eventwithact'
+        authorization = Authorization()
+
 class PatientRecordRessource(ModelResource):
     class Meta:
         queryset = PatientRecord.objects.all()
@@ -46,6 +52,7 @@ class ActRessource(ModelResource):
 
 patientaddress_ressource = PatientAddressRessource()
 event_resource = EventResource()
+eventwithact_resource = EventWithActRessource()
 patientrecord_resource = PatientRecordRessource()
 act_ressource = ActRessource()
 

@@ -23,7 +23,7 @@ from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
 
-from forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
+from calebasse.agenda.forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
         DisablePatientAppointmentForm, UpdateAppointmentForm,
         UpdateEventForm, PeriodicEventsSearchForm)
 
@@ -50,7 +50,7 @@ class AgendaHomepageView(TemplateView):
                 act.save()
                 act.set_state(state_name, request.user)
         except Act.DoesNotExist:
-            pass
+            logger.warning('agenda homepage acte_id %d not found' % acte_id)
         return HttpResponseRedirect('#acte-frame-'+acte_id)
 
     def get_context_data(self, **kwargs):

@@ -115,8 +115,18 @@ function enable_events(base) {
           event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
       });
       $(base).find('.edit-appointment').click(function() {
-          event_dialog("/" + service + "/agenda/" + current_date + "/update-rdv/" + $(this).data('event-id') , 'Modifier rendez-vous', '850px', 'Modifier');
-          return false;
+        id = $(this).data("event-id");
+        $.getJSON("/api/v1/eventwithact/" + id + "/?format=json")
+          .done(function () {
+            event_dialog("/" + service + "/agenda/" + current_date + "/update-rdv/" + id,
+              'Modifier rendez-vous', '850px', 'Modifier');
+          })
+         .fail(function() {
+            window.location.reload(true);
+            $('.messages').html("Le rendez-vous n'existe plus");
+            return false;
+         });
+        return false;
       });
       $(base).find('.newevent').click(function() {
           var participants = new Array();

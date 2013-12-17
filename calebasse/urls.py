@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from urls_utils import decorated_includes
 
 from calebasse.api import (act_ressource, event_resource,
-        patientrecord_resource, patientaddress_ressource)
+        eventwithact_resource, patientrecord_resource,
+        patientaddress_ressource)
 from tastypie.api import Api
 
 admin.autodiscover()
@@ -13,6 +14,7 @@ admin.autodiscover()
 v1_api = Api(api_name="v1")
 v1_api.register(act_ressource)
 v1_api.register(event_resource)
+v1_api.register(eventwithact_resource)
 v1_api.register(patientaddress_ressource)
 v1_api.register(patientrecord_resource)
 
