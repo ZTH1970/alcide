@@ -1364,6 +1364,7 @@ ul.messages, ul.ajax_messages {
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
+        font-weight: normal;
 }
 
 ul.messages li, ul.ajax_messages li {
@@ -1373,7 +1374,7 @@ ul.messages li, ul.ajax_messages li {
 	-moz-border-radius:7px;
 	-webkit-border-radius:7px;
 	border-radius:7px;
-	border: none;
+	border: none
 }
 
 input.hasDatepicker {
