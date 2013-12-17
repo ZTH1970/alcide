@@ -414,7 +414,10 @@ class HolidayCreateView(HolidayManagement, cbv.CreateView):
 
     def form_valid(self, form):
         try:
-            form.save()
+            holiday = form.save()
+            worker = models.Worker.objects.get(pk=self.kwargs['worker_pk'])
+            holiday.worker = worker
+            holiday.save()
             messages.success(self.request, u'Absence ajoutée avec succès')
         except Exception, e:
             logger.debug('Error on creating a holiday: %s' % e)
