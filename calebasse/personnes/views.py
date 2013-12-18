@@ -332,11 +332,10 @@ group_holiday_update = GroupHolidayUpdateView.as_view()
 class GroupHolidaysList(cbv.ListView):
     model = models.Holiday
     template_name = 'personnes/group_holidays_list.html'
-    queryset = model.objects.future()
+    queryset = model.objects.future().filter(worker__isnull=True)
 
     def get_queryset(self, *args, **kwargs):
         qs = super(GroupHolidaysList, self).get_queryset(*args, **kwargs)
-        qs = qs.filter(worker__isnull=True)
         return qs
 
 group_holidays = GroupHolidaysList.as_view()
