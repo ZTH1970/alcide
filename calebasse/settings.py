@@ -5,7 +5,7 @@
 import os
 from logging.handlers import SysLogHandler
 
-from ..settings import PROJECT_PATH
+PROJECT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'calebasse')
 
 DEBUG = True
 TEMPLATE_DEBUG = True
@@ -49,7 +49,7 @@ USE_I18N = True
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
 USE_L10N = True
-FORMAT_MODULE_PATH = 'calebasse.settings.formats'
+FORMAT_MODULE_PATH = 'calebasse.formats'
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = False
@@ -260,9 +260,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # Sentry / raven configuration
 # You need to overload this option in the local_settings.py
-RAVEN_CONFIG = {
-        'dsn': None,
-}
+RAVEN_CONFIG = {}
 
 # Base directory for generated patient files
 PATIENT_FILES_BASE_DIRECTORY = None
@@ -335,3 +333,18 @@ INVOICING_DIRECTORY = None
 #    # delay between two mails, in seconds, or None
 #    'smtp_delay': None,
 # }
+
+try:
+    from local_settings import *
+except ImportError:
+    print """ 
+    -------------------------------------------------------------------------
+    You need to create a local_settings.py file which needs to contain at least
+    database connection information.
+    
+    Copy local_settings_example.py to local_settings.py and edit it.
+    -------------------------------------------------------------------------
+    """
+    import sys 
+    sys.exit(1)
+
