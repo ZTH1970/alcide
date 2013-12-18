@@ -122,11 +122,11 @@ user_listing = super_user_only(AccessView.as_view())
 
 
 class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
-    model=User
-    success_url='../'
-    form_class=forms.UserForm
-    template_name='calebasse/simple-form.html'
-    template_name_suffix='_new.html'
+    model = User
+    success_url = '../'
+    form_class = forms.UserForm
+    template_name = 'calebasse/simple-form.html'
+    template_name_suffix = '_new.html'
 
 class UserDeleteView(cbv.DeleteView):
     model = User
