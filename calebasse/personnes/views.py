@@ -336,6 +336,7 @@ class GroupHolidaysList(cbv.ListView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(GroupHolidaysList, self).get_queryset(*args, **kwargs)
+        qs = qs.filter(worker__isnull=True)
         return qs
 
 group_holidays = GroupHolidaysList.as_view()
