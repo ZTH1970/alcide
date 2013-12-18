@@ -164,7 +164,6 @@ INSTALLED_APPS = (
     'calebasse.statistics',
     'calebasse.middleware.request',
     'south',
-    'raven.contrib.django.raven_compat'
 )
 
 INTERNAL_IPS=('127.0.0.1',)
@@ -213,10 +212,6 @@ LOGGING = {
             'address': '/dev/log',
             'max_length': 999,
         },
-        'sentry': {
-            'level': 'ERROR',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-        },
     },
     'loggers': {
         'django.db.backends': {
@@ -224,18 +219,8 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
         '': {
-            'handlers': ['sentry', 'syslog'],
+            'handlers': ['syslog'],
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': True,
         }
@@ -260,7 +245,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # Sentry / raven configuration
 # You need to overload this option in the local_settings.py
-RAVEN_CONFIG = {}
+RAVEN_CONFIG = None
 
 # Base directory for generated patient files
 PATIENT_FILES_BASE_DIRECTORY = None
@@ -347,4 +332,22 @@ except ImportError:
     """
     import sys 
     sys.exit(1)
+
+if RAVEN_CONFIG:
+    INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
+    LOGGING['handlers']['sentry'] = {
+            'level': 'ERROR',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            }
+    LOGGING['loggers']['raven'] = {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+            }
+    LOGGING['loggers']['sentry.errors'] = {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+            }
+    LOGGING['loggers']['']['handlers'].append('sentry')
 

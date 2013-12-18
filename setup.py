@@ -52,7 +52,6 @@ setup(name='calebasse',
             'django-tastypie == 0.9.14',
             'interval == 1.0.0',
             'python-entrouvert >= 1.3'
-            'django-debug-toolbar',
             'django-localflavor',
         ],
         dependency_links = [
