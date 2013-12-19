@@ -164,7 +164,11 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         delta_minutes = delta.seconds / 60
         appointment = Appointment()
         appointment.type = 'busy-here'
-        label = u"Congé (%s)" % holiday.holiday_type.name
+        label = None
+        if not holiday.worker:
+            label = u"Absence de groupe : %s" % holiday.holiday_type.name
+        else:
+            label = u"Absence indiv. : %s" % holiday.holiday_type.name
         appointment.init_holiday_time(label,
                     delta_minutes,
                     time(interval.lower_bound.hour, interval.lower_bound.minute),
