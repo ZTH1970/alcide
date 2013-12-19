@@ -351,6 +351,12 @@ class HolidayManagement(object):
         worker = models.Worker.objects.get(pk=self.kwargs['worker_pk'])
         return {'services': worker.services.all()}
 
+    def form_valid(self, form):
+        holiday = form.save()
+        worker = models.Worker.objects.get(pk=self.kwargs['worker_pk'])
+        holiday.worker = worker
+        holiday.save()
+
     def render_to_json(self, location, err = 0, **kwargs):
         data = {'err': err, 'location': location}
         response = json.dumps(data)
@@ -407,20 +413,18 @@ class EditGroupHolidayView(GroupHolidayManagement, cbv.FormView):
             messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
         return self.render_to_json(self.get_success_url())
 
+
 edit_group_holiday = EditGroupHolidayView.as_view()
 
 class HolidayCreateView(HolidayManagement, cbv.CreateView):
 
     def form_valid(self, form):
         try:
-            holiday = form.save()
-            worker = models.Worker.objects.get(pk=self.kwargs['worker_pk'])
-            holiday.worker = worker
-            holiday.save()
+            super(HolidayCreateView, self).form_valid(form)
             messages.success(self.request, u'Absence ajoutée avec succès')
         except Exception, e:
             logger.debug('Error on creating a holiday: %s' % e)
-            messages.error(self.request, u'Une erreur est survenue lors de la mise à jour de l\'absence')
+            messages.error(self.request, u'Une erreur est survenue lors de l\'ajout de l\'absence')
         return self.render_to_json(self.get_success_url())
 
 create_holiday = HolidayCreateView.as_view()
@@ -435,7 +439,7 @@ class EditHolidayView(HolidayManagement, cbv.FormView):
 
     def form_valid(self, form):
         try:
-            form.save()
+            super(EditHolidayView, self).form_valid(form)
             messages.success(self.request, u'Données mises à jour avec succès')
         except Exception, e:
             logger.debug('Error on updating a holiday: %s' % e)
