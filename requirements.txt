@@ -14,3 +14,4 @@ django-localflavor
 raven >= 3.5.2, < 3.6
 M2Crypto
 pycairo
+PyGTK
