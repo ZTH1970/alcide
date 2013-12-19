@@ -1,4 +1,4 @@
-django >= 1.4, < 1.6
+Django >= 1.4, < 1.6
 south > 0.7
 django-reversion == 1.6.6
 python-dateutil >= 2.2, < 2.3
@@ -12,3 +12,5 @@ xhtml2pdf
 git+git://repos.entrouvert.org/python-entrouvert.git
 django-localflavor
 raven >= 3.5.2, < 3.6
+M2Crypto
+pycairo

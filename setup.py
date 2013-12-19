@@ -42,7 +42,7 @@ setup(name='calebasse',
         author_email="info@entrouvert.com",
         packages=find_packages(os.path.dirname(__file__) or '.'),
         install_requires=[
-            'django >= 1.5, < 1.6',
+            'Django >= 1.5, < 1.6',
             'south >= 0.7',
             'django-reversion == 1.6.6',
             'python-dateutil >= 2.2, < 2.3',
@@ -53,6 +53,9 @@ setup(name='calebasse',
             'interval == 1.0.0',
             'python-entrouvert >= 1.3'
             'django-localflavor',
+            'xhtml2pdf',
+            'M2Crypto',
+            'pycairo'
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',
