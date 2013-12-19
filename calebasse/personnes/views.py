@@ -466,13 +466,4 @@ delete_holiday = DeleteHolidayView.as_view()
 class DeleteGroupHolidayView(GroupHolidayManagement, DeleteHolidayView):
     template_name = 'personnes/group_holiday_update_form.html'
 
-    def delete(self, request, *args, **kwargs):
-        try:
-            super(DeleteGroupHolidayView, self).delete(request, *args, **kwargs)
-            messages.success(request, u'Absence supprimée avec succès')
-        except Exception, e:
-            logger.debug('Error on deleting a group holiday: %s' % e)
-            messages.error(request, u'Une erreur est survenue lors de la suppression de l\'absence')
-        return self.render_to_json(self.get_success_url())
-
 delete_group_holiday = DeleteGroupHolidayView.as_view()
