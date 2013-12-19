@@ -33,7 +33,6 @@ function action(url, worker, on, action, selector, original_color, highlight_col
                 ).done(on_success)
               }}]});
             $('form .datepicker input').trigger('focus');
-            console.log('dialog loaded');
         })
 };
 
