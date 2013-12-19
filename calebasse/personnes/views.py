@@ -101,7 +101,7 @@ class WorkerView(cbv.ListView):
             for worker in qs:
                 worker.holiday = True
         else:
-            qs2 = models.Holiday.objects.today()
+            qs2 = models.Holiday.objects.today().filter(worker__isnull=False)
             worker_dict = dict(((w.id, w) for w in qs))
             for worker in qs:
                 worker.holiday = False
