@@ -531,7 +531,11 @@
                 {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
                 {% if participant in missing_participants %}</span>{% endif %}
               {% endfor %}</td>
+          {% if event.act.id %}
+          <td class="width-limited">{{ event.act.comment }}</td>
+          {% else %}
           <td class="width-limited">{{ event.description }}</td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>
