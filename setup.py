@@ -53,7 +53,7 @@ setup(name='calebasse',
             'interval == 1.0.0',
             'python-entrouvert >= 1.3'
             'django-localflavor',
-            'PyGTK'
+            'PyGTK',
             'xhtml2pdf',
             'M2Crypto',
             'pycairo',
