@@ -25,6 +25,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
           var parse = $(response);
           if ($('.errorlist', parse).length != 0) {
             $(id).html(response);
+            on_load_callback($(id));
             $(id + ' form').ajaxForm({
               success: onsuccess,
             });
