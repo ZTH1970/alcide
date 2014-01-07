@@ -1425,6 +1425,7 @@ class Statistic(models.Model):
         try:
             self.in_start_date = datetime.strptime(inputs.get('start_date'),
                 "%d/%m/%Y")
+            self.in_year = self.in_start_date.year
         except:
             pass
         self.in_end_date = None
