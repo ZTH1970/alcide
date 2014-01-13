@@ -104,6 +104,13 @@ class FacturationDetailView(UpdateView):
             context['len_patient_with_lost_acts_missing_birthdate'] = len_patient_with_lost_acts_missing_birthdate
             context['some_stats'] = context['invoicing'].get_stats_per_price_per_year()
             context['batches'] = context['invoicing'].get_batches()
+            previous_seq_id = context['invoicing'].seq_id - 1
+            try:
+                previous = Invoicing.objects.get(service= self.service, seq_id=previous_seq_id)
+                if previous.status == Invoicing.STATUS.validated:
+                    context['previous_validated'] = True
+            except:
+                pass
         elif self.service.name == 'CAMSP':
             (len_patient_pause, len_patient_hors_pause,
                 len_acts_pause, len_acts_hors_pause, patients_stats,

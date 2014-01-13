@@ -26,7 +26,7 @@
     <a href="..">Retourner à la liste</a>
     {% if service_name == "CMPP" %}
         {% if invoicing.status == "open" %}<button id="close-invoicing">Clore cette facturation</button>{% endif %}
-        {% if invoicing.status == "closed" %}<button id="validate"">Valider cette facturation</button>{% endif %}
+        {% if invoicing.status == "closed" and previous_validated %}<button id="validate"">Valider cette facturation</button>{% endif %}
         {% if invoicing.status == "validated" %}
             <button onclick="window.location.href=window.location.href+'transmission/'">Télétransmission</button>
             <button onclick="window.location.href=window.location.href+'export/'">Export comptabilité</button>
