@@ -964,8 +964,9 @@ class Invoice(models.Model):
     @property
     def start_date(self):
         res = date.max
-        for act in self.acts.all():
-            res = min(res, act.date)
+        for d in self.list_dates.split('$'):
+            date_o = datetime.strptime(d, '%d/%m/%Y').date()
+            res = min(res, date_o)
         return res
 
     @property
@@ -975,13 +976,21 @@ class Invoice(models.Model):
     @property
     def end_date(self):
         res = date.min
-        for act in self.acts.all():
-            res = max(res, act.date)
+        for d in self.list_dates.split('$'):
+            date_o = datetime.strptime(d, '%d/%m/%Y').date()
+            res = max(res, date_o)
         return res
 
     @property
     def decimal_amount(self):
         return Decimal(self.amount) / Decimal(100)
+
+    @property
+    def decimal_amount_corrected(self):
+        amount = 0
+        for d, ppa in self.list_dates:
+            amount += ppa
+        return Decimal(amount) / Decimal(100)
 
     @property
     def decimal_ppa(self):
