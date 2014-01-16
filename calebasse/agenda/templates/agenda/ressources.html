@@ -79,6 +79,7 @@
                  <span title="Un commentaire existe" class="icon-comment"></span>
                  {% endif %}
                  {% if appointment.event_id %}
+                 {% if appointment.is_recurrent %} R {% endif %}
                   {% if appointment.patient_record_id %}
                     <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
                   {% else %}
@@ -162,6 +163,6 @@
 {% endblock %}
 
 {% block dialogs %}
-  <div id="rdv" style="display: none;">
- </div>
+  <div id="rdv" style="display: none;"></div>
+  <div id="ajax-dlg" style="display: none;"></div>
 {% endblock %}

@@ -1,5 +1,6 @@
 var path = location.pathname.split('/');
 var service = path[1];
+var app_name = path[2];
 var current_date = path[3];
 COOKIE_PATH = '/' + service + '/agenda';
 
@@ -178,7 +179,7 @@ function enable_events(base) {
 
         var id = $(this).data('id');
         var delete_url = $(this).data('delete-url');
-        generic_ajaxform_dialog('update-periodic-event/' + id,
+        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-event/' + id,
           'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
           function (dialog) {
             $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
@@ -209,7 +210,7 @@ function enable_events(base) {
         $('.ui-icon-closethick').click();
         var id = $(this).data('id');
         var delete_url = $(this).data('delete-url');
-        generic_ajaxform_dialog('update-periodic-rdv/' + id,
+        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-rdv/' + id,
           'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
           function (dialog) {
             $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
