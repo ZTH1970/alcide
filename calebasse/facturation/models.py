@@ -11,7 +11,8 @@ from django.db.models import Max, Q
 from model_utils import Choices
 
 from calebasse.dossiers.models import PatientRecord
-from calebasse.ressources.models import ServiceLinkedManager, PricePerAct
+from calebasse.ressources.models import (ServiceLinkedManager, PricePerAct,
+    HealthCenter)
 
 import list_acts
 import progor
@@ -875,13 +876,17 @@ class InvoiceManager(models.Manager):
     def new_batch_number(self, health_center, invoicing):
         '''Compute the next batch number for the given health center'''
         global PREVIOUS_MAX_BATCH_NUMBERS
+        hcs = HealthCenter.objects.filter(hc_invoice=health_center)
         agg = self \
                 .filter(invoicing__service=invoicing.service) \
                 .filter(invoicing__seq_id__lt=invoicing.seq_id) \
                 .filter(
                     Q(patient_healthcenter=health_center,
                         policy_holder_healthcenter__isnull=True)|
-                    Q(policy_holder_healthcenter=health_center)) \
+                    Q(policy_holder_healthcenter=health_center) |
+                    Q(patient_healthcenter__in=hcs,
+                        policy_holder_healthcenter__isnull=True)|
+                    Q(policy_holder_healthcenter__in=hcs)) \
                         .aggregate(Max('batch'))
         max_bn = agg['batch__max']
         if max_bn is None:
