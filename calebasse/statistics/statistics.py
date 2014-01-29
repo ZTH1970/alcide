@@ -610,10 +610,10 @@ def annual_activity(statistic):
     data_tables = list()
     analyses = dict()
     if not statistic.in_participants:
-        run_annual_activity(statistic, start_day, analyses, 'global', 'Tous', data_tables, participant=None)
+        run_annual_activity(statistic, start_day, analyses, 'global', str(statistic.in_year) + ' - Tous', data_tables, participant=None)
     else:
         for participant in statistic.in_participants:
-            run_annual_activity(statistic, start_day, analyses, participant.id, str(participant), data_tables, participant=participant)
+            run_annual_activity(statistic, start_day, analyses, participant.id, str(statistic.in_year) + ' - ' + str(participant), data_tables, participant=participant)
     return [data_tables]
 
 def patients_per_worker_for_period(statistic):
