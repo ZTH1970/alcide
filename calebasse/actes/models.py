@@ -164,6 +164,9 @@ class Act(models.Model):
             return True
         return False
 
+    def is_present(self):
+        return (not self.is_new() and not self.is_absent())
+
     def get_state(self):
         try:
             return self.last_validation_state
