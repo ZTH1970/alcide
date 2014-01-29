@@ -1022,17 +1022,26 @@ def patients_synthesis(statistic):
     pec_total = sum([p.care_duration_since_last_contact_or_first_act for p in patients])
     data.append([(pec_total, pec_total/nb_patients)])
     data_tables.append(data)
+
     data = []
-    data.append(["Etat du dossier à ce jour", 'Nombre de patients'])
+    data.append(["Etat du dossier à ce jour (%s)" % formats.date_format(datetime.today(), "SHORT_DATE_FORMAT"), 'Nombre de patients'])
     states = dict()
     for patient in patients:
         states.setdefault(patient.get_current_state().status, []).append(patient)
     values = []
-    closed_patients_tmp = None
     for state, ps in states.iteritems():
         values.append((state.name, len(ps)))
-        if state.id == 5:
-            closed_patients_tmp = ps
+    data.append(values)
+    data_tables.append(data)
+
+    data = []
+    data.append(["Etat du dossier en date de fin (%s)" % formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"), 'Nombre de patients'])
+    states = dict()
+    for patient in patients:
+        states.setdefault(patient.get_state_at_day(statistic.in_end_date).status, []).append(patient)
+    values = []
+    for state, ps in states.iteritems():
+        values.append((state.name, len(ps)))
     data.append(values)
     data_tables.append(data)
 
@@ -1153,10 +1162,32 @@ def patients_synthesis(statistic):
     for patient in patients:
         if patient.job_mother:
             jobs.setdefault(patient.job_mother, []).append(patient)
+        else:
+            for contact in patient.contacts.all():
+                if contact.parente and contact.parente.name == 'Mère':
+                    if contact.job:
+                        jobs.setdefault(contact.job, []).append(patient)
+                    break
+    data = []
+    data.append(["Profession de la mère", "Nombre de dossiers"])
+    values = []
+    for job, pts in jobs.iteritems():
+        values.append((job, len(pts)))
+    data.append(values)
+    data_tables.append(data)
+
+    jobs = dict()
+    for patient in patients:
         if patient.job_father:
             jobs.setdefault(patient.job_father, []).append(patient)
+        else:
+            for contact in patient.contacts.all():
+                if contact.parente and contact.parente.name == 'Père':
+                    if contact.job:
+                        jobs.setdefault(contact.job, []).append(patient)
+                    break
     data = []
-    data.append(["Profession d'un parent", "Nombre de dossiers"])
+    data.append(["Profession du père", "Nombre de dossiers"])
     values = []
     for job, pts in jobs.iteritems():
         values.append((job, len(pts)))
