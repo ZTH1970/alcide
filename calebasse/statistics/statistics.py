@@ -1049,6 +1049,7 @@ def patients_synthesis(statistic):
     inscriptions = 0
     recontact_cnt = 0
     waiting_duration = timedelta()
+#    patients_inscription = list()
 
     for patient in patients:
         recontact = False
@@ -1069,6 +1070,7 @@ def patients_synthesis(statistic):
                     # inscription during the selected date range.
                     waiting_duration += first_act_after_contact.date - last_contact.date_selected.date()
                     inscriptions += 1
+#                    patients_inscription.append(patient)
                     if recontact:
                         recontact_cnt += 1
     if inscriptions:
@@ -1076,6 +1078,13 @@ def patients_synthesis(statistic):
         data.append(['Inscriptions (premier acte suivant le dernier contact dans la période)', 'Dont réinscription', "Durée moyenne de l'attente"])
         data.append([(inscriptions, recontact_cnt, (waiting_duration/inscriptions).days)])
         data_tables.append(data)
+#        data = []
+#        data.append(['Nom', 'Prénom', "Numéro papier"])
+#        values = []
+#        for p in patients_inscription:
+#            values.append((p.last_name, p.first_name, p.paper_id))
+#        data.append(values)
+#        data_tables.append(data)
 
     closed_records = FileState.objects.filter(status__type='CLOS',
         date_selected__gte=statistic.in_start_date,
@@ -1259,23 +1268,28 @@ def acts_synthesis(statistic):
     data = []
     data.append(['Période', 'Jours',
         "Nombre d'actes proposés sur la période",
-        "Nombre d'actes validés sur la période"])
+        "Dossiers concernés",
+        "Nombre d'actes réalisés sur la période",
+        "Dossiers concernés"])
     acts = Act.objects.filter(date__gte=statistic.in_start_date,
         date__lte=statistic.in_end_date,
         patient__service=statistic.in_service)
-    acts_valide = acts.filter(valide=True)
+    len_patients = len(set([a.patient.id for a in acts]))
+    acts_present = [a for a in acts if a.is_present()]
+    len_patients_present = len(set([a.patient.id for a in acts_present]))
+    len_acts_present = len(acts_present)
     data.append([("%s - %s"
         % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
         formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
         (statistic.in_end_date-statistic.in_start_date).days+1,
-        acts.count(), acts_valide.count())])
+        acts.count(), len_patients, len_acts_present, len_patients_present)])
     data_tables.append(data)
 
     acts_types = dict()
     for act in acts:
         acts_types.setdefault(act.act_type, []).append(act)
     data = []
-    data.append(["Types des actes", "Nombre d'actes"])
+    data.append(["Types des actes", "Nombre d'actes proposés"])
     values = []
     for act_type, acts in acts_types.iteritems():
         values.append((act_type, len(acts)))
@@ -1305,7 +1319,7 @@ def acts_synthesis(statistic):
         data_tables.append(data)
 
     acts_count_participants = dict()
-    for act in acts_valide:
+    for act in acts_present:
         acts_count_participants.setdefault(act.doctors.count(), []).append(act)
     data = []
     data.append(["Nombre d'intervenants des actes réalisés", "Nombre d'actes", "Nombre de dossiers concernés"])
