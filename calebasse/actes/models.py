@@ -155,10 +155,7 @@ class Act(models.Model):
         return None
 
     def is_new(self):
-        states = self.actvalidationstate_set.all()
-        states_len = len(states)
-        return states_len == 0 or \
-            (states_len == 1 and states[0].state_name == 'NON_VALIDE')
+        return (not self.get_state() or self.is_state('NON_VALIDE'))
 
     def is_absent(self):
         state = self.get_state()
