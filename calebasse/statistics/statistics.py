@@ -1482,7 +1482,10 @@ class Statistic(models.Model):
 
     def get_data(self):
         func = globals()[self.name]
-        self.data = func(self)
+        data = func(self)
+        self.data = [[[["Date du jour", "Service", "Nom statistique"],
+            [[formats.date_format(datetime.today(), "SHORT_DATE_FORMAT"),
+            self.in_service, STATISTICS[self.name]['display_name']]]]]] + data
         return self.data
 
     def render_to_csv(self):
