@@ -19,6 +19,7 @@ class FakeGroup:
 class WorkerOrGroupLookup(CalebasseLookup):
     model = Worker
     search_field = 'last_name'
+    enabled = True
 
     def get_query(self, q, request):
         service = None
@@ -36,7 +37,9 @@ class WorkerOrGroupLookup(CalebasseLookup):
             return itertools.chain([group], self.model.objects.for_service(service.id).order_by('last_name'))
 
         kwargs = { "%s__istartswith" % self.search_field : q }
-        return self.model.objects.filter(enabled=True).filter(**kwargs).order_by('last_name')
+        if self.enabled:
+            return self.model.objects.filter(enabled=True).filter(**kwargs).order_by('last_name')
+        return self.model.objects.filter(**kwargs).order_by('last_name')
 
     def get_result(self, obj):
         return self.format_item_display(obj)
@@ -51,3 +54,5 @@ class WorkerOrGroupLookup(CalebasseLookup):
             text = obj.last_name.upper() + ' ' + obj.first_name
         return unicode(text)
 
+class AllWorkerOrGroupLookup(WorkerOrGroupLookup):
+    enabled = False

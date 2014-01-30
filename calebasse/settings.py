@@ -238,6 +238,7 @@ AJAX_LOOKUP_CHANNELS = {
     'school' : {'model':'ressources.School', 'search_field':'name'},
     'addresses' : ('calebasse.dossiers.lookups', 'PatientAddressLookup'),
     'worker-or-group' : ('calebasse.ressources.lookups', 'WorkerOrGroupLookup'),
+    'all-worker-or-group' : ('calebasse.ressources.lookups', 'AllWorkerOrGroupLookup'),
 }
 
 # Default URL after login
@@ -322,15 +323,15 @@ INVOICING_DIRECTORY = None
 try:
     from local_settings import *
 except ImportError:
-    print """ 
+    print """
     -------------------------------------------------------------------------
     You need to create a local_settings.py file which needs to contain at least
     database connection information.
-    
+
     Copy local_settings_example.py to local_settings.py and edit it.
     -------------------------------------------------------------------------
     """
-    import sys 
+    import sys
     sys.exit(1)
 
 if RAVEN_CONFIG:
@@ -350,4 +351,3 @@ if RAVEN_CONFIG:
             'propagate': False,
             }
     LOGGING['loggers']['']['handlers'].append('sentry')
-

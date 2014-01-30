@@ -19,10 +19,10 @@ class TwoDatesForm(BaseForm):
 
 class AnnualActivityForm(BaseForm):
     start_date = forms.DateField(label=u"Date de l'année souhaitée", required=False, localize=True)
-    participants = make_ajax_field(Statistic, 'participants', 'worker-or-group', True)
+    participants = make_ajax_field(Statistic, 'participants', 'all-worker-or-group', True)
 
 class PatientsTwoDatesForm(TwoDatesForm):
     patients = make_ajax_field(Statistic, 'patients', 'patientrecord', True)
 
 class ParticipantsPatientsTwoDatesForm(PatientsTwoDatesForm):
-    participants = make_ajax_field(Statistic, 'participants', 'worker-or-group', True)
+    participants = make_ajax_field(Statistic, 'participants', 'all-worker-or-group', True)
