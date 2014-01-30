@@ -83,11 +83,12 @@ class PatientStateForm(ModelForm):
         return self.cleaned_data['date_selected']
 
 class NewPatientRecordForm(ModelForm):
-    date_selected = forms.DateField(label=u"Date de contact", initial=date.today(), localize=True)
+    date_selected = forms.DateField(label=u"Date de contact", localize=True)
 
     def __init__(self, *args, **kwargs):
         super(NewPatientRecordForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].required = True
+        self.fields['date_selected'].initial = date.today()
 
     class Meta:
         model = PatientRecord
