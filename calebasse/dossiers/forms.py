@@ -214,6 +214,7 @@ class PatientContactForm(ModelForm):
             self.fields['health_org'].initial = self.instance.health_center.large_regime.code + self.instance.health_center.health_fund + self.instance.health_center.code
         if self.patient:
             self.fields['addresses'].queryset = self.patient.addresses
+            self.fields['addresses'].required = False
 
     def clean(self):
         cleaned_data = super(PatientContactForm, self).clean()
@@ -259,6 +260,14 @@ class PatientContactForm(ModelForm):
                 cleaned_data['other_health_center'] = other_health_center
         return cleaned_data
 
+    def save(self, commit=True):
+        contact = super(PatientContactForm, self).save(commit=False)
+        contact.clean()
+        if commit:
+            contact.save()
+            if self.patient and not self.instance.addresses.all():
+                self.patient.contacts.add(contact)
+        return contact
 
 class PatientAddressForm(ModelForm):
 

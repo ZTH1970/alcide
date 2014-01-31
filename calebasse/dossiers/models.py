@@ -278,7 +278,7 @@ class PatientAddress(models.Model):
             null=True, blank=True)
 
     def __unicode__(self):
-        return self.display_name
+        return self.display_name or u"Non renseigné"
 
     def save(self, **kwargs):
         self.display_name = ''
