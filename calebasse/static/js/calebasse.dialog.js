@@ -29,9 +29,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
             $(id + ' form').ajaxForm({
               success: onsuccess,
             });
-            console.log('error');
           } else {
-            console.log('success');
             if (redirectToUrl) {
               if (redirectToUrl.indexOf('#') == 0) {
                 window.location.hash = redirectToUrl.substr(1);
@@ -119,7 +117,6 @@ function add_dialog(on, url, title, width, btn_text) {
                             if ($('.errorlist', parse).length != 0) {
                                 $(on).html(data);
                                 $(on +' .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-                                console.log('error');
                             } else {
                                 $('body').html(data);
                             }

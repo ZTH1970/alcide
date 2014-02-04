@@ -64,7 +64,6 @@ function enable_events(base) {
               contentType: 'application/json',
               data: '{"switch_billable": ' + value + '}',
               success: function(data) {
-                  console.log('success');
               }
           });
       });
@@ -80,7 +79,6 @@ function enable_events(base) {
               contentType: 'application/json',
               data: '{"is_lost": ' + value + '}',
               success: function(data) {
-                  console.log('success');
               }
           });
       });
@@ -412,7 +410,6 @@ function event_dialog(url, title, width, btn_text) {
       }
 
       $('a.close-tab').click(function() {
-          console.log('close');
           var target = '#' + $(this).data('target');
           $(target).click();
           if ($.cookie('active-ressource-agenda') == $(target).data('ressource-id')) {

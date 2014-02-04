@@ -21,9 +21,7 @@ function state_dialog(url, state_title, state_type) {
                             success: onsuccess,
                             data: { patient_id: patient_id,  state_type: state_type, service_id: service_id }
                         });
-                        console.log('error');
                     } else {
-                        console.log('success');
                         window.location.reload(true);
                     }
                 }

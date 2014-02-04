@@ -8,9 +8,7 @@ function close_dialog(url) {
                         $('#change-record form').ajaxForm({
                             success: onsuccess,
                         });
-                        console.log('error');
                     } else {
-                        console.log('success');
                         window.location.reload(true);
                     }
                 }
@@ -38,9 +36,7 @@ function rebill_dialog(url, invoice_id) {
                             success: onsuccess,
                             data: { invoice_id: invoice_id}
                         });
-                        console.log('error');
                     } else {
-                        console.log('success');
                         window.location.reload(true);
                     }
                 }
