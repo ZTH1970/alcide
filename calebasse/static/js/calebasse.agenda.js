@@ -316,11 +316,13 @@ function toggle_ressource(ressource_selector, ressource) {
         /* load ressource disponibility column */
         $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
-                var dispo_table_rows = $('td#dispos table tr');
-                all_td = $(data).find('td');
-                $(data).find('td').each(function(a, b) {
-                    $(dispo_table_rows[a]).append(b);
-                });
+                if ($(tab_selector).hasClass('active')) {
+                    var dispo_table_rows = $('td#dispos table tr');
+                    all_td = $(data).find('td');
+                    $(data).find('td').each(function(a, b) {
+                        $(dispo_table_rows[a]).append(b);
+                    });
+                }
             }
         );
     } else {
