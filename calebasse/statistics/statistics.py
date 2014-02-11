@@ -692,13 +692,11 @@ def patients_protection(statistic):
     if not statistic.in_start_date:
         statistic.in_start_date = datetime.today()
     patients = PatientRecord.objects.filter(protectionstate__isnull=False).distinct()
-    print patients
     protection_states = [p.get_protection_state_at_date(
             statistic.in_start_date) for p in patients
             if p.get_protection_state_at_date(statistic.in_start_date)]
     analyse = {}
     for state in protection_states:
-        print state.patient
         analyse.setdefault(state.status.name, 0)
         analyse[state.status.name] += 1
     data_tables_set=[[[['En date du :', formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"), len(protection_states)]]]]
@@ -1004,7 +1002,64 @@ def patients_synthesis(statistic):
         values_list('patient')
     patients = PatientRecord.objects.filter(id__in=[patient[0]
         for patient in patients])
+
+    TS = ('TRAITEMENT', 'DIAGNOSTIC', 'SUIVI')
+    inscriptions = []
+    for patient in patients:
+        # Select patient if she has been in treament between the selected dates
+        traitement_states_tmp = FileState.objects.filter(patient=patient, status__type__in=TS, date_selected__lte=statistic.in_end_date).order_by('date_selected')
+        traitement_states = []
+        for ts in traitement_states_tmp:
+            if not ts.get_next_state() or ts.get_next_state().date_selected >= statistic.in_start_date:
+                traitement_states.append(ts)
+
+        # Patient has been in treatment
+        # We look for all the treament periods during the selected dates
+        # A treament period ends if during the period the file has left treament state
+        openings = []
+        opening = []
+        start = False
+        for ts in traitement_states:
+            if start:
+                openings.append(opening)
+                opening = []
+                start = False
+            if ts.get_next_state() and not ts.get_next_state().status.type in TS and ts.get_next_state().get_next_state() and ts.get_next_state().get_next_state().status.type in TS:
+                start = True
+            opening.append(ts)
+        openings.append(opening)
+
+        # The first treatment state is the first one of each period matching the dates selected.
+        # But there could be other treatment state before, like diag before treatment.
+        # so We have to look for the very first treament state to look at the first act after
+        first_tss = []
+        for opening in openings:
+            if len(opening) >= 1:
+                first_ts = opening[0]
+                while first_ts.previous_state and first_ts.previous_state.status.type in TS:
+                    first_ts = first_ts.previous_state
+                contact = None
+                if first_ts.previous_state and first_ts.previous_state.status.type=='ACCUEIL':
+                    contact = first_ts.previous_state.date_selected.date()
+                first_tss.append((contact, first_ts))
+
+        # We look to the first act after the datebeginning
+        for contact, first_ts in first_tss:
+            acts_tmp = Act.objects.filter(valide=True,
+                date__gte=first_ts.date_selected,
+                patient=patient).order_by('date')
+            if acts_tmp and acts_tmp[0].date >= statistic.in_start_date.date() and acts_tmp[0].date <= statistic.in_end_date.date():
+                waiting_duration = 0
+                if contact:
+                    waiting_duration = (acts_tmp[0].date - contact).days
+                inscriptions.append((patient, contact, first_ts.date_selected.date(), acts_tmp[0].date, waiting_duration))
+
+    if statistic.inscriptions:
+        patients = PatientRecord.objects.filter(id__in=[p.id for p, _, _, _, _ in inscriptions])
+        acts = acts.filter(patient__in=patients)
+
     nb_patients = patients.count()
+
     data.append([("%s - %s"
         % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
         formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT")),
@@ -1045,46 +1100,19 @@ def patients_synthesis(statistic):
     data.append(values)
     data_tables.append(data)
 
-    # Pour les patients inscrits pendant la périodes
-    inscriptions = 0
-    recontact_cnt = 0
-    waiting_duration = timedelta()
-#    patients_inscription = list()
+    data = []
+    data.append(["Inscriptions (premier acte suivant le début d'une phase de traitement dans la période)", "Durée moyenne de l'attente"])
+    data.append([(len(inscriptions), sum([wd for _, _, _, _, wd in inscriptions])/len(inscriptions) if len(inscriptions) else 0)])
+    data_tables.append(data)
 
-    for patient in patients:
-        recontact = False
-        contacts = FileState.objects.filter(patient=patient, status__type='ACCUEIL').order_by('date_selected')
-        last_contact = None
-        first_acts_after_contact = None
-        if len(contacts) == 1:
-            last_contact = contacts[0]
-        elif len(contacts) > 1:
-            recontact = True
-            last_contact = contacts[len(contacts)-1]
-        if last_contact:
-            # inscription act
-            first_acts_after_contact = Act.objects.filter(patient=patient, date__gte=last_contact.date_selected).order_by('date')
-            if first_acts_after_contact:
-                first_act_after_contact = first_acts_after_contact[0]
-                if first_act_after_contact.date <= statistic.in_end_date.date() and first_act_after_contact.date >= statistic.in_start_date.date():
-                    # inscription during the selected date range.
-                    waiting_duration += first_act_after_contact.date - last_contact.date_selected.date()
-                    inscriptions += 1
-#                    patients_inscription.append(patient)
-                    if recontact:
-                        recontact_cnt += 1
     if inscriptions:
         data = []
-        data.append(['Inscriptions (premier acte suivant le dernier contact dans la période)', 'Dont réinscription', "Durée moyenne de l'attente"])
-        data.append([(inscriptions, recontact_cnt, (waiting_duration/inscriptions).days)])
+        data.append(['Nom', 'Prénom', "Numéro papier", "Date premier acte", "Date passage en traitement", "Date de contact", "Attente"])
+        values = []
+        for patient, contact, first_ts, first_act, waiting_duration in sorted(inscriptions, key=lambda p: (p[0].last_name, p[0].first_name)):
+            values.append((patient.last_name, patient.first_name, patient.paper_id, first_act, first_ts, contact, waiting_duration))
+        data.append(values)
         data_tables.append(data)
-#        data = []
-#        data.append(['Nom', 'Prénom', "Numéro papier"])
-#        values = []
-#        for p in patients_inscription:
-#            values.append((p.last_name, p.first_name, p.paper_id))
-#        data.append(values)
-#        data_tables.append(data)
 
     closed_records = FileState.objects.filter(status__type='CLOS',
         date_selected__gte=statistic.in_start_date,
@@ -1440,6 +1468,7 @@ class Statistic(models.Model):
     in_participants = None
     in_patients = None
     in_year = None
+    inscriptions = False
 
     def __init__(self, name=None, inputs=dict()):
         self.name = name
@@ -1479,6 +1508,7 @@ class Statistic(models.Model):
                 "%d/%m/%Y")
         except:
             pass
+        self.inscriptions = inputs.get('inscriptions')
 
     def get_data(self):
         func = globals()[self.name]

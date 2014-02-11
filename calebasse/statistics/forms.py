@@ -26,3 +26,6 @@ class PatientsTwoDatesForm(TwoDatesForm):
 
 class ParticipantsPatientsTwoDatesForm(PatientsTwoDatesForm):
     participants = make_ajax_field(Statistic, 'participants', 'all-worker-or-group', True)
+
+class PatientsSynthesisForm(TwoDatesForm):
+    inscriptions = forms.BooleanField(label=u'Seulement les inscriptions', required=False, localize=True)
