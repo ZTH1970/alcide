@@ -1317,10 +1317,10 @@ def acts_synthesis(statistic):
     for act in acts:
         acts_types.setdefault(act.act_type, []).append(act)
     data = []
-    data.append(["Types des actes", "Nombre d'actes proposés"])
+    data.append(["Types des actes", "Nombre d'actes proposés", "Nombre de dossiers"])
     values = []
     for act_type, acts in acts_types.iteritems():
-        values.append((act_type, len(acts)))
+        values.append((act_type, len(acts), len(set([a.patient.id for a in acts]))))
     data.append(values)
     data_tables.append(data)
 
