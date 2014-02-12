@@ -1367,6 +1367,14 @@ ul.messages, ul.ajax_messages {
         font-weight: normal;
 }
 
+.messages:before, .ajax_messages:before {
+    float: left;
+    margin: .3em .4em;
+    font-family: FontAwesome;
+    font-size: 2em;
+    content: "\f129";
+}
+
 ul.messages li, ul.ajax_messages li {
 	padding: 1ex;
 	margin: 1ex;
