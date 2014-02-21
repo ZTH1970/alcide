@@ -842,6 +842,19 @@ def closed_files(statistic):
         closed_records.count(), total_pec, avg_pec, not_closed_now)])
     data_tables.append(data1)
     data_tables.append(data2)
+
+    days_states = {}
+    for record in closed_records:
+        for state, duration in record.get_states_history_with_duration():
+            days_states.setdefault(state.status, 0)
+            days_states[state.status] += duration.days
+    data = []
+    data.append(["Etat des dossiers", "Nombre de jours total", "Nombre de jours moyen par dossier"])
+    values = []
+    for status, duration in days_states.iteritems():
+        values.append((status.name, duration, duration/closed_records.count()))
+    data.append(values)
+    data_tables.append(data)
     return [data_tables]
 
 def patients_details(statistic):
