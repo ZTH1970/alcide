@@ -1158,29 +1158,37 @@ def patients_synthesis(statistic):
         except:
             patients_without_birthyear.append(patient)
     data = []
-    data.append(['Année de naissance', "Nombre de dossiers"])
+    data.append(['Année de naissance', "Nombre de dossiers", "%"])
     values = []
     for birth_year, pts in birth_years.iteritems():
-        values.append((birth_year, len(pts)))
-    if patients_without_birthyear:
-        values.append(('%d patient(s) sans date de naissance' % len(patients_without_birthyear), patients_without_birthyear))
+        values.append((birth_year, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
+    values.append(('Non renseignée',  len(patients_without_birthyear), "%.2f" % (len(patients_without_birthyear) / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
+
+    if patients_without_birthyear:
+        data = []
+        data.append(["Patients sans date de naissance"])
+        values = [[patients_without_birthyear]]
+        data.append(values)
+        data_tables.append(data)
+
 
     lower_bounds = [0, 3, 5, 7, 11, 16, 20, 25, 30, 35, 40, 45, 50, 55, 60, 75, 85, 96]
     anap_code = 198
     data = []
     data.append(["Code ANAP", "Tranche d'âge (au %s)" \
         % formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"),
-        "Nombre de dossiers"])
+        "Nombre de dossiers", "%"])
     values = []
     for i in range(len(lower_bounds)):
         lower_bound = lower_bounds[i]
         if i == len(lower_bounds) - 1:
-            values.append([anap_code, "De %d ans et plus" % lower_bound, 0])
+            values.append([anap_code, "De %d ans et plus" % lower_bound, 0, None])
         else:
-            values.append([anap_code, "De %d à %d ans" % (lower_bound, lower_bounds[i + 1] - 1), 0])
+            values.append([anap_code, "De %d à %d ans" % (lower_bound, lower_bounds[i + 1] - 1), 0, None])
         anap_code += 1
+    unknown = 0
     for patient in patients:
         try:
             age = statistic.in_end_date.date() - patient.birthdate
@@ -1192,43 +1200,60 @@ def patients_synthesis(statistic):
                     break
             values[i][2] += 1
         except:
-            pass
+            unknown += 1
+    for value in values:
+        value[3] = "%.2f" % (value[2] / float(len(patients)) * 100)
+    values.append(['', "Non renseignée", unknown, "%.2f" % (unknown / float(len(patients)) * 100)])
     data.append(values)
     data_tables.append(data)
 
     jobs = dict()
+    no_job = 0
     for patient in patients:
+        job = False
         if patient.job_mother:
             jobs.setdefault(patient.job_mother, []).append(patient)
+            job = True
         else:
             for contact in patient.contacts.all():
                 if contact.parente and contact.parente.name == 'Mère':
                     if contact.job:
                         jobs.setdefault(contact.job, []).append(patient)
+                        job = True
                     break
+        if not job:
+            no_job += 1
     data = []
-    data.append(["Profession de la mère", "Nombre de dossiers"])
+    data.append(["Profession de la mère", "Nombre de dossiers", "%"])
     values = []
     for job, pts in jobs.iteritems():
-        values.append((job, len(pts)))
+        values.append((job, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
+    values.append(("Non renseignée", no_job, "%.2f" % (no_job / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
 
     jobs = dict()
+    no_job = 0
     for patient in patients:
+        job = False
         if patient.job_father:
             jobs.setdefault(patient.job_father, []).append(patient)
+            job = True
         else:
             for contact in patient.contacts.all():
                 if contact.parente and contact.parente.name == 'Père':
                     if contact.job:
                         jobs.setdefault(contact.job, []).append(patient)
+                        job = True
                     break
+        if not job:
+            no_job += 1
     data = []
-    data.append(["Profession du père", "Nombre de dossiers"])
+    data.append(["Profession du père", "Nombre de dossiers", "%"])
     values = []
     for job, pts in jobs.iteritems():
-        values.append((job, len(pts)))
+        values.append((job, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
+    values.append(("Non renseignée", no_job, "%.2f" % (no_job / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
 
@@ -1240,47 +1265,59 @@ def patients_synthesis(statistic):
         else:
             unknown += 1
     data = []
-    data.append(["Provenances", "Nombre de dossiers"])
+    data.append(["Provenances", "Nombre de dossiers", "%"])
     values = []
     for provenance, pts in provenances.iteritems():
-        values.append((provenance, len(pts)))
-    values.append(('Non renseignée', unknown))
+        values.append((provenance, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
+    values.append(('Non renseignée', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
 
     outmotives = dict()
+    unknown = 0
     for patient in patients:
         if patient.outmotive:
             outmotives.setdefault(patient.outmotive, []).append(patient)
+        else:
+            unknown += 1
     data = []
-    data.append(["Motifs de sortie", "Nombre de dossiers"])
+    data.append(["Motifs de sortie", "Nombre de dossiers", "%"])
     values = []
     for outmotive, pts in outmotives.iteritems():
         values.append((outmotive, len(pts)))
+    values.append(('Non renseigné', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
 
     outtos = dict()
+    unknown = 0
     for patient in patients:
         if patient.outto:
             outtos.setdefault(patient.outto, []).append(patient)
+        else:
+            unknown += 1
     data = []
-    data.append(["Orientations", "Nombre de dossiers"])
+    data.append(["Orientations", "Nombre de dossiers", "%"])
     values = []
     for outto, pts in outtos.iteritems():
         values.append((outto, len(pts)))
+    values.append(('Non renseigné', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
 
     provenance_places = dict()
+    unknown = 0
     for patient in patients:
         if patient.provenanceplace:
             provenance_places.setdefault(patient.provenanceplace, []).append(patient)
+        else:
+            unknown += 1
     data = []
-    data.append(["Lieux de provenance", "Nombre de dossiers"])
+    data.append(["Lieux de provenance", "Nombre de dossiers", "%"])
     values = []
     for provenance_place, pts in provenance_places.iteritems():
         values.append((provenance_place, len(pts)))
+    values.append(('Non renseigné', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
 
