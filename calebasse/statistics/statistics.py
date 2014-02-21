@@ -1292,6 +1292,7 @@ def acts_synthesis(statistic):
         statistic.in_end_date = datetime.today()
     if not statistic.in_start_date:
         statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+    data_tables_set = []
     data_tables = []
     data = []
     data.append(['Période', 'Jours',
@@ -1312,19 +1313,36 @@ def acts_synthesis(statistic):
         (statistic.in_end_date-statistic.in_start_date).days+1,
         acts.count(), len_patients, len_acts_present, len_patients_present)])
     data_tables.append(data)
+    data_tables_set.append(data_tables)
 
+    data_tables=[]
     acts_types = dict()
     for act in acts:
         acts_types.setdefault(act.act_type, []).append(act)
     data = []
-    data.append(["Types des actes", "Nombre d'actes proposés", "Nombre de dossiers"])
+    data.append(["Types des actes", "Nombre d'actes proposés", "Nombre de dossiers", "Nombre d'actes réalisés", "Nombre de dossiers"])
     values = []
     for act_type, acts in acts_types.iteritems():
-        values.append((act_type, len(acts), len(set([a.patient.id for a in acts]))))
+        values.append((act_type, len(acts), len(set([a.patient.id for a in acts])), len([a for a in acts if a.is_present()]), len(set([a.patient.id for a in acts if a.is_present()]))))
     data.append(values)
     data_tables.append(data)
+    data_tables_set.append(data_tables)
+
+    data_tables=[]
+    acts_count_participants = dict()
+    for act in acts_present:
+        acts_count_participants.setdefault(act.doctors.count(), []).append(act)
+    data = []
+    data.append(["Nombre d'intervenants des actes réalisés", "Nombre d'actes", "Nombre de dossiers concernés"])
+    values = []
+    for number, acts_counted in acts_count_participants.iteritems():
+        values.append((number, len(acts_counted), len(set([a.patient.id for a in acts_counted]))))
+    data.append(values)
+    data_tables.append(data)
+    data_tables_set.append(data_tables)
 
     for act_type, acts in acts_types.iteritems():
+        data_tables=[]
         analysis = {'Non pointés': 0,
             'Reportés': 0, 'Absents': 0, 'Présents': 0}
         for a in acts:
@@ -1345,19 +1363,19 @@ def acts_synthesis(statistic):
             values.append((status, number))
         data.append(values)
         data_tables.append(data)
+        acts_type_patients = {}
+        for act in acts:
+            acts_type_patients.setdefault(act.patient, []).append(act)
+        data = []
+        data.append(["Patient", "Actes proposés", "Actes réalisés"])
+        values = []
+        for patient, acts_type in acts_type_patients.iteritems():
+            values.append((patient, len(acts_type), len([a for a in acts_type if a.is_present()])))
+        data.append(values)
+        data_tables.append(data)
+        data_tables_set.append(data_tables)
 
-    acts_count_participants = dict()
-    for act in acts_present:
-        acts_count_participants.setdefault(act.doctors.count(), []).append(act)
-    data = []
-    data.append(["Nombre d'intervenants des actes réalisés", "Nombre d'actes", "Nombre de dossiers concernés"])
-    values = []
-    for number, acts_counted in acts_count_participants.iteritems():
-        values.append((number, len(acts_counted), len(set([a.patient.id for a in acts_counted]))))
-    data.append(values)
-    data_tables.append(data)
-
-    return [data_tables]
+    return data_tables_set
 
 def acts_synthesis_cmpp(statistic):
     data_tables_set = []
