@@ -252,6 +252,7 @@ class School(NamedAbstractModel):
             verbose_name=u'Ancien ID', blank=True, null=True)
     old_service = models.CharField(max_length=256,
             verbose_name=u'Ancien Service', blank=True, null=True)
+    private = models.BooleanField(verbose_name=u"Privé", default=False)
 
 
 class SchoolTeacherRole(NamedAbstractModel):
