@@ -879,6 +879,7 @@ def patients_details(statistic):
     for patient, acts in o_analyse.iteritems():
         data_tables = list()
         data_tables.append([["%s %s" % (str(patient), str(patient.paper_id))]])
+        data_tables.append([["Durée de la prise en charge (depuis le premier acte)"], [[patient.care_duration_since_last_contact_or_first_act]]])
         data = []
         data.append(["Statut de l'acte", 'Nombre'])
         values = []
