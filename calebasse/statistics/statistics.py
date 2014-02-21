@@ -896,11 +896,12 @@ def patients_details(statistic):
         values.append(('Absents', absent))
         data.append(values)
         data_tables.append(data)
+
         data = []
-        data.append(["Types d'acte", "Nombre d'actes proposés"])
+        data.append(["Types d'acte", "Nombre d'actes proposés", "Nombre d'actes réalisés"])
         values = []
         for act_type, acts in act_types.iteritems():
-            values.append((act_type, len(acts)))
+            values.append((act_type, len(acts), len([a for a in acts if a.is_present()])))
         data.append(values)
         data_tables.append(data)
 
