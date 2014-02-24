@@ -1018,11 +1018,18 @@ def patients_synthesis(statistic):
     patients = PatientRecord.objects.filter(id__in=[patient[0]
         for patient in patients])
 
-    TS = ('TRAITEMENT', 'DIAGNOSTIC', 'SUIVI')
+    active_states = None
+    if statistic.in_service.name == 'CMPP':
+        active_states = ('TRAITEMENT', 'DIAGNOSTIC', )
+    elif statistic.in_service.name == 'CAMSP':
+        active_states = ('SUIVI', 'BILAN', 'CLOS', )
+    else:
+        active_states = ('TRAITEMENT', )
+
     inscriptions = []
     for patient in patients:
         # Select patient if she has been in treament between the selected dates
-        traitement_states_tmp = FileState.objects.filter(patient=patient, status__type__in=TS, date_selected__lte=statistic.in_end_date).order_by('date_selected')
+        traitement_states_tmp = FileState.objects.filter(patient=patient, status__type__in=active_states, date_selected__lte=statistic.in_end_date).order_by('date_selected')
         traitement_states = []
         for ts in traitement_states_tmp:
             if not ts.get_next_state() or ts.get_next_state().date_selected >= statistic.in_start_date:
@@ -1039,7 +1046,7 @@ def patients_synthesis(statistic):
                 openings.append(opening)
                 opening = []
                 start = False
-            if ts.get_next_state() and not ts.get_next_state().status.type in TS and ts.get_next_state().get_next_state() and ts.get_next_state().get_next_state().status.type in TS:
+            if ts.get_next_state() and not ts.get_next_state().status.type in active_states and ts.get_next_state().get_next_state() and ts.get_next_state().get_next_state().status.type in active_states:
                 start = True
             opening.append(ts)
         openings.append(opening)
@@ -1051,7 +1058,7 @@ def patients_synthesis(statistic):
         for opening in openings:
             if len(opening) >= 1:
                 first_ts = opening[0]
-                while first_ts.previous_state and first_ts.previous_state.status.type in TS:
+                while first_ts.previous_state and first_ts.previous_state.status.type in active_states:
                     first_ts = first_ts.previous_state
                 contact = None
                 if first_ts.previous_state and first_ts.previous_state.status.type=='ACCUEIL':
@@ -1344,6 +1351,7 @@ def acts_synthesis(statistic):
         statistic.in_end_date = datetime.today()
     if not statistic.in_start_date:
         statistic.in_start_date = datetime(statistic.in_end_date.year, 1, 1)
+
     data_tables_set = []
     data_tables = []
     data = []
@@ -1393,7 +1401,7 @@ def acts_synthesis(statistic):
     data_tables.append(data)
     data_tables_set.append(data_tables)
 
-    for act_type, acts in acts_types.iteritems():
+    for act_type, acts in sorted(acts_types.items(), key=lambda t: t[0].name):
         data_tables=[]
         analysis = {'Non pointés': 0,
             'Reportés': 0, 'Absents': 0, 'Présents': 0}
