@@ -1305,7 +1305,7 @@ def patients_synthesis(statistic):
     data.append(["Motifs de sortie", "Nombre de dossiers", "%"])
     values = []
     for outmotive, pts in outmotives.iteritems():
-        values.append((outmotive, len(pts)))
+        values.append((outmotive, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
     values.append(('Non renseigné', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
@@ -1321,7 +1321,7 @@ def patients_synthesis(statistic):
     data.append(["Orientations", "Nombre de dossiers", "%"])
     values = []
     for outto, pts in outtos.iteritems():
-        values.append((outto, len(pts)))
+        values.append((outto, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
     values.append(('Non renseigné', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
@@ -1337,7 +1337,7 @@ def patients_synthesis(statistic):
     data.append(["Lieux de provenance", "Nombre de dossiers", "%"])
     values = []
     for provenance_place, pts in provenance_places.iteritems():
-        values.append((provenance_place, len(pts)))
+        values.append((provenance_place, len(pts), "%.2f" % (len(pts) / float(len(patients)) * 100)))
     values.append(('Non renseigné', unknown, "%.2f" % (unknown / float(len(patients)) * 100)))
     data.append(values)
     data_tables.append(data)
