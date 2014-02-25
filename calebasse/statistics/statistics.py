@@ -1022,7 +1022,7 @@ def patients_synthesis(statistic):
     if statistic.in_service.name == 'CMPP':
         active_states = ('TRAITEMENT', 'DIAGNOSTIC', )
     elif statistic.in_service.name == 'CAMSP':
-        active_states = ('SUIVI', 'BILAN', 'CLOS', )
+        active_states = ('SUIVI', 'BILAN', 'SURVEILLANCE', 'CLOS', )
     else:
         active_states = ('TRAITEMENT', )
 
