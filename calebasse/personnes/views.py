@@ -77,6 +77,7 @@ class WorkerView(cbv.ListView):
         qs = super(WorkerView, self).get_queryset()
         qs = qs.select_related()
         qs = qs.prefetch_related('services')
+        qs = qs.filter(is_active=True)
         form = self.get_form()
         if form.is_valid():
             cleaned_data = form.cleaned_data
@@ -128,15 +129,21 @@ class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
     template_name = 'calebasse/simple-form.html'
     template_name_suffix = '_new.html'
 
-class UserDeleteView(cbv.DeleteView):
+class UserDisactivateView(cbv.DeleteView):
     model = User
     success_url = "../../"
     template_name = 'calebasse/generic_confirm_delete.html'
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 
 user_new = super_user_only(UserCreateView.as_view())
 user_update = super_user_only(AccessUpdateView.as_view())
-user_delete = super_user_only(UserDeleteView.as_view())
+user_delete = super_user_only(UserDisactivateView.as_view())
 
 
 class WorkerUpdateView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
