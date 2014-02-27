@@ -24,7 +24,7 @@ from calebasse.actes.validation import (automated_validation, unlock_all_acts_of
 from calebasse import cbv
 
 from calebasse.agenda.forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
-        DisablePatientAppointmentForm, UpdateAppointmentForm,
+        DisablePatientAppointmentForm, UpdateAppointmentForm, UpdatePeriodicEventForm, 
         UpdateEventForm, PeriodicEventsSearchForm)
 
 logger = logging.getLogger(__name__)
@@ -267,7 +267,7 @@ class UpdateEventView(TodayOccurrenceMixin, BaseEventView):
 
 
 class UpdatePeriodicEventView(BaseEventView):
-    form_class = NewEventForm
+    form_class = UpdatePeriodicEventForm
     template_name = 'agenda/new-event.html'
 
 
