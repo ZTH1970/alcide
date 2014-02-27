@@ -100,3 +100,4 @@ class StatisticsFormView(FormView):
         qs = urllib.urlencode(self.request.POST)
         target = '../../detail/%s?%s' % (self.kwargs.get('name'), qs)
         return target
+

@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.forms import Form
-
-from ajax_select import make_ajax_field
-
-from statistics import Statistic
-
+from ajax_select.fields import AutoCompleteSelectMultipleField
 
 class BaseForm(Form):
     display_or_export = forms.BooleanField(label=u'Exporter dans un fichier', required=False, localize=True)
@@ -19,13 +15,14 @@ class TwoDatesForm(BaseForm):
 
 class AnnualActivityForm(BaseForm):
     start_date = forms.DateField(label=u"Date de l'année souhaitée", required=False, localize=True)
-    participants = make_ajax_field(Statistic, 'participants', 'all-worker-or-group', True)
+    participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=True)
 
 class PatientsTwoDatesForm(TwoDatesForm):
-    patients = make_ajax_field(Statistic, 'patients', 'patientrecord', True)
+    patients = AutoCompleteSelectMultipleField('patientrecord', required=True)
 
 class ParticipantsPatientsTwoDatesForm(PatientsTwoDatesForm):
-    participants = make_ajax_field(Statistic, 'participants', 'all-worker-or-group', True)
+    participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=True)
 
 class PatientsSynthesisForm(TwoDatesForm):
     inscriptions = forms.BooleanField(label=u'Seulement les inscriptions', required=False, localize=True)
+

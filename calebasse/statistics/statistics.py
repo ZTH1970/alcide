@@ -1535,11 +1535,7 @@ def deficiencies(statistic):
     data[1].append((name, patients.filter(deficiency_in_diagnostic=True).count()))
     return [[data]]
 
-class Statistic(models.Model):
-    patients = models.ManyToManyField('dossiers.PatientRecord',
-            null=True, blank=True, default=None)
-    participants = models.ManyToManyField('personnes.People',
-            null=True, blank=True, default=None)
+class Statistic(object):
     in_start_date = None
     in_end_date = None
     in_service = None
@@ -1620,25 +1616,6 @@ class Statistic(models.Model):
             quoting = _quoting
         csv.register_dialect('csv_profile', CSVProfile())
         encoding = getattr(settings, 'CSV_ENCODING', 'utf-8')
-#        Python 3: , encoding=encoding
-#        with tempfile.NamedTemporaryFile(delete=False) as temp_out_csv:
-#            try:
-#                writer = csv.writer(temp_out_csv, dialect='csv_profile')
-#                for data_set in self.data:
-#                    for data in data_set:
-#                        writer.writerow(data[0])
-#                        if len(data) > 1:
-#                            for d in data[1]:
-#                                writer.writerow(d)
-#                        writer.writerow([])
-#                    writer.writerow([])
-#                return temp_out_csv.name
-#            except Exception, e:
-#                print e
-#                try:
-#                    os.unlink(temp_out_pdf.name)
-#                except:
-#                    pass
 
         import codecs
         filename = None
@@ -1666,3 +1643,4 @@ class Statistic(models.Model):
     def get_file(self):
         self.get_data()
         return self.render_to_csv()
+
