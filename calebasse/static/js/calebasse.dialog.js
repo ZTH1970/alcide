@@ -29,9 +29,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
             $(id + ' form').ajaxForm({
               success: onsuccess,
             });
-            console.log('error');
           } else {
-            console.log('success');
             if (redirectToUrl) {
               if (redirectToUrl.indexOf('#') == 0) {
                 window.location.hash = redirectToUrl.substr(1);
@@ -57,99 +55,104 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
           modal: true,
           width: width,
           buttons: [ { text: "Annuler",
-              id: "close-btn",
-            click: function() { $(this).dialog("close"); } },
+            id: "close-btn",
+          click: function() { $(this).dialog("close"); } },
           { text: btn_submit_name,
-              id: "submit-btn",
-            click: function() {
-              disable_button($('#submit-btn'));
-              $(id + " form").submit(); 
-            } }]});
+            id: "submit-btn",
+          click: function() {
+            disable_button($('#submit-btn'));
+            $(id + " form").submit(); 
+          } }]});
         if (on_load_callback) {
-            on_load_callback($(this));
+          on_load_callback($(this));
         }
       });
 }
 
 function add_dialog(on, url, title, width, btn_text) {
- // function used to add patient schedules, events and acts
-          $(on).load(url,
-              function () {
-                  $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-                  $('#id_description').attr('rows', '3');
-                  $('#id_description').attr('cols', '30');
-                  var deck = $('#id_participants_on_deck');
-                  $(deck).bind('added', function() {
-                      var added = $(deck).find('div:last');
-                      var t = added.attr('id').indexOf('_group:');
-                      if ( t == -1) return;
-                      var query = added.attr('id').substr(t+1);
+  // function used to add patient schedules, events and acts
 
-                      /* remove group element and fake id */
-                      added.remove();
-                      var val = $('#id_participants').val();
-                      $('#id_participants').val(val.substr(0, val.substr(0, val.length-1).lastIndexOf('|')+1));
+  function init_dialog() {
+    $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+    $('#id_description').attr('rows', '3');
+    $('#id_description').attr('cols', '30');
+    var deck = $('#id_participants_on_deck');
+    $(deck).bind('added', function() {
+      var added = $(deck).find('div:last');
+      var t = added.attr('id').indexOf('_group:');
+      if ( t == -1) return;
 
-                      /* add all workers */
-                      var receive_result = $('#id_participants_text').autocomplete('option', 'select');
-                      $.getJSON($('#id_participants_text').autocomplete('option', 'source') + '?term=' + query,
-                          function(data) {
-                              $.each(data, function(key, val) {
-                                  if (key==0) return; /* ignore first element as it's the group itself */
-                                  var ui = Object();
-                                  ui.item = val;
-                                  receive_result(null, ui);
-                              });
-                      });
-                  });
-                  var old_background_image, old_background_repeat, $button;
-                  var in_submit = false;
-                  $(on).unbind('submit');
-                  $(on).submit(function(event) {
-                      /* stop form from submitting normally */
-                      event.preventDefault();
+      /* remove group element and fake id */
+      added.remove();
+      var val = $('#id_participants').val();
+      $('#id_participants').val(val.substr(0, val.substr(0, val.length-1).lastIndexOf('|')+1));
 
-                      var $form = $('form', this);
-                      $.post($form.attr('action'), $form.serialize(),
-                          function (data) {
-                            var parse = $(data);
-                            $button.css('background-image', old_background_image);
-                            $button.css('background-repeat', old_background_repeat);
-                            $button.removeAttr('disabled');
-                            if ($('.errorlist', parse).length != 0) {
-                                $(on).html(data);
-                                $(on +' .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-                                console.log('error');
-                            } else {
-                                $('body').html(data);
-                            }
-                            in_submit = false;
-                          },
-                          "html");
-                  });
-                  var submit = function (ev) {
-                      if (in_submit) {
-                        return;
-                      }
-                      in_submit = true;
-                      $button = $(ev.target).parent();
-                      old_background_image = $button.css('background-image');
-                      old_background_repeat = $button.css('background-repeat');
-                      $button.attr('disabled', 'disabled');
-                      $button.css('background-image', 'url(/static/images/throbber.gif), ' + old_background_image);
-                      $button.css('background-repeat', 'no-repeat, ' + old_background_repeat);
-                      $(on + " form").submit();
-                  };
-                  $(this).dialog({title: title,
-                      modal: true,
-                      width: width,
-                      buttons: [
-                      { text: btn_text,
-                          click: submit }
-                      ],
-                      close: function() {},
-                  });
-              });
+      /* add all workers */
+      var query = added.attr('id').substr(t+1);
+      var receive_result = $('#id_participants_text').autocomplete('option', 'select');
+      $.getJSON($('#id_participants_text').autocomplete('option', 'source') + '?term=' + query,
+        function(data) {
+          $.each(data, function(key, val) {
+            if (key==0) return; /* ignore first element as it's the group itself */
+            var ui = Object();
+            ui.item = val;
+            receive_result(null, ui);
+          });
+        });
+
+    });
+  }
+
+  $(on).load(url,
+      function () {
+        init_dialog();
+        var old_background_image, old_background_repeat, $button;
+        var in_submit = false;
+        $(on).unbind('submit');
+        $(on).submit(function(event) {
+          /* stop form from submitting normally */
+          event.preventDefault();
+
+          var $form = $('form', this);
+          $.post($form.attr('action'), $form.serialize(),
+            function (data) {
+              var parse = $(data);
+              $button.css('background-image', old_background_image);
+              $button.css('background-repeat', old_background_repeat);
+              $button.removeAttr('disabled');
+              if ($('.errorlist', parse).length != 0) {
+                $(on).html(data);
+                init_dialog();
+              } else {
+                $('body').html(data);
+              }
+              in_submit = false;
+            },
+            "html");
+        });
+        var submit = function (ev) {
+          if (in_submit) {
+            return;
+          }
+          in_submit = true;
+          $button = $(ev.target).parent();
+          old_background_image = $button.css('background-image');
+          old_background_repeat = $button.css('background-repeat');
+          $button.attr('disabled', 'disabled');
+          $button.css('background-image', 'url(/static/images/throbber.gif), ' + old_background_image);
+          $button.css('background-repeat', 'no-repeat, ' + old_background_repeat);
+          $(on + " form").submit();
+        };
+        $(this).dialog({title: title,
+          modal: true,
+          width: width,
+          buttons: [
+        { text: btn_text,
+          click: submit }
+        ],
+          close: function() {},
+        });
+      });
 }
 
 function select_add_dialog(opts, $form, form_action)
@@ -179,47 +182,47 @@ function select_add_dialog(opts, $form, form_action)
     var id = $(this).attr('id');
     this.on('click', function () {
       var $dialog = $('<div id="dialog-' + (opts.name || id) +
-                     '" title="' + opts.title + '"><form class="inline-form" method="post"></form></div>');
-      var default_button = opts.default_button == undefined ? 'Envoyer' : opts.default_button;
-      var form_action = opts.url.split(' ')[0];
-      var $form = $('form', $dialog);
-      $dialog.appendTo('#dialogs');
-      if (opts.next_url) {
-          $form.attr('action', form_action + '?next_url=' + opts.next_url);
-      } else {
-          $form.attr('action', form_action);
-      }
+        '" title="' + opts.title + '"><form class="inline-form" method="post"></form></div>');
+    var default_button = opts.default_button == undefined ? 'Envoyer' : opts.default_button;
+    var form_action = opts.url.split(' ')[0];
+    var $form = $('form', $dialog);
+    $dialog.appendTo('#dialogs');
+    if (opts.next_url) {
+      $form.attr('action', form_action + '?next_url=' + opts.next_url);
+    } else {
+      $form.attr('action', form_action);
+    }
 
-      if (opts.add_select) {
-          select_add_dialog(opts, $form, form_action);
-      }
+    if (opts.add_select) {
+      select_add_dialog(opts, $form, form_action);
+    }
 
-      var buttons = [
-        {
-          text: 'Annuler',
-          click: function () {
-              $(this).dialog('close');
-          }
-        },
-        {
-          text: default_button,
-          click: function () {
-            $form.submit();
-          }
-        },
-      ];
-      $dialog.css('max-height', $(window).height() - 200);
-      $form.load(opts.url, function () {
-        $dialog.dialog({
-          modal: opts.modal == undefined ? true : opts.modal,
-          width: 900,
-          maxHeight: $(window).height() - 100,
-          buttons: buttons,
-          close: function () {
-            $(this).remove();
-          }
-        });
+    var buttons = [
+    {
+      text: 'Annuler',
+      click: function () {
+        $(this).dialog('close');
+      }
+    },
+    {
+      text: default_button,
+      click: function () {
+        $form.submit();
+      }
+    },
+    ];
+    $dialog.css('max-height', $(window).height() - 200);
+    $form.load(opts.url, function () {
+      $dialog.dialog({
+        modal: opts.modal == undefined ? true : opts.modal,
+        width: 900,
+        maxHeight: $(window).height() - 100,
+        buttons: buttons,
+        close: function () {
+          $(this).remove();
+        }
       });
+    });
     })
   };
   $(function () {
@@ -249,8 +252,8 @@ function select_add_dialog(opts, $form, form_action)
         $('button.enable-on-change, form input[type="submit"]', form).enable();
       })
       $('form.form-with-confirmation', base).on('submit', function () {
-          var mesg = $(this).data('confirmation-msg') || "Êtes-vous sûr ?";
-          return window.confirm(mesg);
+        var mesg = $(this).data('confirmation-msg') || "Êtes-vous sûr ?";
+        return window.confirm(mesg);
       });
       $('form .datepicker', base).each(function (i, span) {
         var $span = $(span);

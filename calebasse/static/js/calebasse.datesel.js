@@ -12,7 +12,6 @@
         dateFormat: format,
         showWeek: true,
         onClose: function(dateText, inst) {
-            console.log('close');
         }
     });
     $('#date-selector').on('change', function () {

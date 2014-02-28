@@ -91,6 +91,7 @@ class NewAppointmentForm(BaseForm):
         return appointment
 
 class UpdateAppointmentForm(NewAppointmentForm):
+
     class Meta(NewAppointmentForm.Meta):
         fields = (
                 'start_datetime',
@@ -105,6 +106,8 @@ class UpdateAppointmentForm(NewAppointmentForm):
 
 
 class UpdatePeriodicAppointmentForm(NewAppointmentForm):
+    recurrence_periodicity = forms.ChoiceField(label=u"Périodicité",
+            choices=Event.PERIODICITIES, required=True)
 
     def clean(self):
         cleaned_data = super(UpdatePeriodicAppointmentForm, self).clean()
@@ -197,6 +200,9 @@ class NewEventForm(BaseForm):
                             u"Ce champ est obligatoire pour les événements de type « Autre »."])
         return cleaned_data
 
+class UpdatePeriodicEventForm(NewEventForm):
+    recurrence_periodicity = forms.ChoiceField(label=u"Périodicité",
+            choices=Event.PERIODICITIES, required=True)
 
 class UpdateEventForm(NewEventForm):
     class Meta(NewEventForm.Meta):

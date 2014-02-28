@@ -64,7 +64,6 @@ function enable_events(base) {
               contentType: 'application/json',
               data: '{"switch_billable": ' + value + '}',
               success: function(data) {
-                  console.log('success');
               }
           });
       });
@@ -80,7 +79,6 @@ function enable_events(base) {
               contentType: 'application/json',
               data: '{"is_lost": ' + value + '}',
               success: function(data) {
-                  console.log('success');
               }
           });
       });
@@ -318,11 +316,13 @@ function toggle_ressource(ressource_selector, ressource) {
         /* load ressource disponibility column */
         $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
-                var dispo_table_rows = $('td#dispos table tr');
-                all_td = $(data).find('td');
-                $(data).find('td').each(function(a, b) {
-                    $(dispo_table_rows[a]).append(b);
-                });
+                if ($(tab_selector).hasClass('active')) {
+                    var dispo_table_rows = $('td#dispos table tr');
+                    all_td = $(data).find('td');
+                    $(data).find('td').each(function(a, b) {
+                        $(dispo_table_rows[a]).append(b);
+                    });
+                }
             }
         );
     } else {
@@ -412,7 +412,6 @@ function event_dialog(url, title, width, btn_text) {
       }
 
       $('a.close-tab').click(function() {
-          console.log('close');
           var target = '#' + $(this).data('target');
           $(target).click();
           if ($.cookie('active-ressource-agenda') == $(target).data('ressource-id')) {

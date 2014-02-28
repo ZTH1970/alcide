@@ -333,7 +333,7 @@ class ProcessMultiFormView(base.View):
         """
         forms = self.get_forms()
         prefix = self.get_current_prefix()
-        if forms[prefix].is_valid():
+        if prefix and forms[prefix].is_valid():
             return self.form_valid(forms)
         else:
             return self.form_invalid(forms)

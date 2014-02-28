@@ -39,6 +39,9 @@ class StatisticsDetailView(TemplateView):
         inputs['end_date'] = self.request.GET.get('end_date')
         inputs['participants'] = self.request.GET.get('participants')
         inputs['patients'] = self.request.GET.get('patients')
+        inputs['inscriptions'] = False
+        if self.request.GET.get('inscriptions'):
+            inputs['inscriptions'] = True
         statistic = Statistic(name, inputs)
         context['dn'] = statistic.display_name
         context['data_tables_set'] = statistic.get_data()
@@ -55,6 +58,8 @@ class StatisticsFormView(FormView):
     def get_form_class(self):
         if self.name == 'annual_activity':
             return forms.AnnualActivityForm
+        elif self.name == 'patients_synthesis':
+            return forms.PatientsSynthesisForm
         elif self.name == 'patients_details':
             return forms.PatientsTwoDatesForm
         elif self.name in ('active_patients_by_state_only',
@@ -75,6 +80,9 @@ class StatisticsFormView(FormView):
             inputs['end_date'] = form.data.get('end_date')
             inputs['participants'] = form.data.get('participants')
             inputs['patients'] = form.data.get('patients')
+            inputs['inscriptions'] = False
+            if 'inscriptions' in form.data:
+                inputs['inscriptions'] = True
             statistic = Statistic(self.name, inputs)
             path = statistic.get_file()
             content = File(file(path))
@@ -92,3 +100,4 @@ class StatisticsFormView(FormView):
         qs = urllib.urlencode(self.request.POST)
         target = '../../detail/%s?%s' % (self.kwargs.get('name'), qs)
         return target
+
