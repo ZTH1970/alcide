@@ -481,6 +481,8 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             ctx['last_prescription'] = TransportPrescriptionLog.objects.filter(patient=ctx['object']).latest('created')
         except:
             pass
+
+        ctx['addresses'] = ctx['object'].addresses.order_by('-place_of_life', 'id')
         return ctx
 
     def form_valid(self, form):

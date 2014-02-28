@@ -1,0 +1,316 @@
+<form method="post" id="policyholder-form" class="patientrecordform">{% csrf_token %}
+
+        <div class="contact patient">
+            <h4>{{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> (Patient)</h4>
+            <div class="right">Assuré
+                <input type="radio"
+                {% if object.policyholder.id == object.id %} checked="checked" {% endif %}
+                id="id_policyholder-policyholder_{{ object.id }}"
+                value="{{ object.id }}"
+                class="policyholder-radio"
+                name="policyholder-policyholder">
+                <button type="button" data-id="{{ object.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
+            </div>
+            <div>
+                <ul>
+                    {% if object.parente %}
+                        <li><label>Lien avec le patient :</label>
+                        {{ object.parente }}</li>
+                    {% endif %}
+                    {% if object.mobile %}
+                        <li>
+                        <span class="icon-user-space">{{ object.mobile }} (perso)</span>
+                        </li>
+                    {% endif %}
+                    {% if object.phone %}
+                        <li>
+                        <span class="icon-user-space">{{ object.phone }} (pro)</span>
+                        </li>
+                    {% endif %}
+                    {% if object.email %}
+                        <li>
+                        <label>Courriel :</label>
+                        {{ object.email }}
+                        </li>
+                    {% endif %}
+                    {% if object.job %}
+                        <li>
+                        <label>Profession :</label>
+                        {{ object.job }}
+                        </li>
+                    {% endif %}
+                    {% if object.contact_comment %}
+                        <li>
+                        <label>Commentaire :</label>
+                        {{ object.contact_comment }}
+                        </li>
+                    {% endif %}
+                    <li><label>Données d'assuré social</label>
+<!--                            <button class="blind">détails</button>-->
+                    <ul>
+                    {% if object.social_security_id %}
+                        <li><label>Numéro d'assuré social :</label>
+                        {{ object.social_security_id }} {{ object.get_control_key }}</li>
+                    {% endif %}
+                    {% if object.birthdate %}
+                        <li><label>Date de naissance :</label>
+                        {{ object.birthdate|date:"SHORT_DATE_FORMAT" }}</li>
+                    {% endif %}
+                    {% if object.birthplace %}
+                        <li><label>Lieu de naissance :</label>
+                        {{ object.birthplace }}</li>
+                    {% endif %}
+                    {% if object.begin_rights %}
+                        <li><label>Début de droits :</label>
+                        {{ object.begin_rights }}</li>
+                    {% endif %}
+                    {% if object.end_rights %}
+                        <li><label>Fin de droits :</label>
+                        {{ object.end_rights }}</li>
+                    {% endif %}
+                    {% if object.health_center %}
+                        <li><label>Caisse :</label>
+                        {{ object.health_center }} ({{ object.health_center.address }} {{ object.health_center.address_complement }} {{ object.health_center.zip_code }} {{ object.health_center.city }})</li>
+                    {% endif %}
+                    {% if object.other_health_center %}
+                        <li><label>Centre spécifique :</label>
+                        {{ object.other_health_center }}</li>
+                    {% endif %}
+                    {% if object.management_code %}
+                        <li><label>Code de gestion :</label>
+                        {{ object.management_code }}</li>
+                    {% endif %}
+                    <li><label>Tiers-payant :</label>
+                        {% if object.thirdparty_payer %}
+                            Oui
+                        {% else %}
+                            Non
+                        {% endif %}
+                    </li>
+                    {% if object.twinning_rank %}
+                        <li><label>Rang (gémellité) :</label>
+                        {{ object.twinning_rank }}</li>
+                    {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<button type="button" id="new-address-btn">Nouvelle adresse</button>
+<button type="button" id="new-contact-btn">Nouveau contact</button>
+
+{% for contact in object.contacts.all %}
+    {% if not contact.addresses.all %}
+    <div class="contact">
+        <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
+            {{ contact.first_name }} <span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
+        <div class="right">Assuré
+            <input type="radio"
+            {% if object.policyholder.id == contact.id %} checked="checked" {% endif %}
+            id="id_policyholder-policyholder_{{ contact.id }}"
+            value="{{ contact.id }}"
+            class="policyholder-radio"
+            name="policyholder-policyholder">
+            <button type="button" data-id="{{ contact.id }}" data-address-id="{{ address.id }}" class="del-contact icon-minus" title="Supprimer"></button>
+            <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
+        </div>
+        <div>
+            <ul>
+                {% if contact.parente %}
+                    <li><label>Lien avec le patient :</label>
+                    {{ contact.parente }}</li>
+                {% endif %}
+                {% if contact.mobile %}
+                    <li>
+                    <span class="icon-user-space">{{ contact.mobile }} (perso)</span>
+                    </li>
+                {% endif %}
+                {% if contact.phone %}
+                    <li>
+                    <span class="icon-user-space">{{ contact.phone }} (pro)</span>
+                    </li>
+                {% endif %}
+                {% if contact.email %}
+                    <li>
+                    <label>Courriel :</label>
+                    {{ contact.email }}
+                    </li>
+                {% endif %}
+                {% if contact.job %}
+                    <li>
+                    <label>Profession :</label>
+                    {{ contact.job }}
+                    </li>
+                {% endif %}
+                {% if contact.contact_comment %}
+                    <li>
+                    <label>Commentaire :</label>
+                    {{ contact.contact_comment }}
+                    </li>
+                {% endif %}
+                <li><label>Données d'assuré social</label>
+<!--                            <button class="blind">détails</button>-->
+                        <ul>
+                        {% if contact.social_security_id %}
+                            <li><label>Numéro d'assuré social :</label>
+                            {{ contact.social_security_id }} {{ contact.get_control_key }}</li>
+                        {% endif %}
+                        {% if contact.birthdate %}
+                            <li><label>Date de naissance :</label>
+                            {{ contact.birthdate|date:"SHORT_DATE_FORMAT" }}</li>
+                        {% endif %}
+                        {% if contact.birthplace %}
+                            <li><label>Lieu de naissance :</label>
+                            {{ contact.birthplace }}</li>
+                        {% endif %}
+                        {% if contact.begin_rights %}
+                            <li><label>Début de droits :</label>
+                            {{ contact.begin_rights }}</li>
+                        {% endif %}
+                        {% if contact.end_rights %}
+                            <li><label>Fin de droits :</label>
+                            {{ contact.end_rights }}</li>
+                        {% endif %}
+                        {% if contact.health_center %}
+                            <li><label>Centre de santé :</label>
+                            {{ contact.health_center }} ({{ contact.health_center.address }} {{ contact.health_center.address_complement }} {{ contact.health_center.zip_code }} {{ contact.health_center.city }})</li>
+                        {% endif %}
+                        {% if contact.management_code %}
+                            <li><label>Code de gestion :</label>
+                            {{ contact.management_code }}</li>
+                        {% endif %}
+                        <li><label>Tiers-payant :</label>
+                            {% if contact.thirdparty_payer %}
+                                Oui
+                            {% else %}
+                                Non
+                            {% endif %}
+                        </li>
+                        {% if contact.twinning_rank %}
+                            <li><label>Rang (gémellité) :</label>
+                            {{ contact.twinning_rank }}</li>
+                        {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% for address in addresses %}
+    <div class="frame">
+        <h3>{{ address }}</h3>
+        <div class="buttons">
+            <button type="button" data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
+            <button type="button" data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
+        </div>
+        <div class="right">
+            <ul class="ajax_messages" style="display: none;"></ul>
+            <input type="checkbox" data-id="{{ address.id }}" class="place_of_life" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
+        </div>
+        {% if address.phone %}<p><span class="icon-home-space">{{ address.phone }}</span></p>{% endif %}
+        {% if address.comment %}<p><label>Commentaire :</label>{{ address.comment }}</p>{% endif %}
+        {% if not address.phone and not address.comment %}<p>&nbsp;<!-- intentionaly empty --></p>{% endif %}
+        {% for contact in address.patientcontact_set.all  %}
+        {% if contact.id != object.id %}
+        <div class="contact">
+            <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
+                {{ contact.first_name }} <span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
+            <div class="right">Assuré
+                <input type="radio"
+                {% if object.policyholder.id == contact.id %} checked="checked" {% endif %}
+                id="id_policyholder-policyholder_{{ contact.id }}"
+                value="{{ contact.id }}"
+                class="policyholder-radio"
+                name="policyholder-policyholder">
+                <button type="button" data-id="{{ contact.id }}" data-address-id="{{ address.id }}" class="del-contact icon-minus" title="Supprimer"></button>
+                <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
+            </div>
+            <div>
+                <ul>
+                    {% if contact.parente %}
+                        <li><label>Lien avec le patient :</label>
+                        {{ contact.parente }}</li>
+                    {% endif %}
+                    {% if contact.mobile %}
+                        <li>
+                        <span class="icon-user-space">{{ contact.mobile }} (perso)</span>
+                        </li>
+                    {% endif %}
+                    {% if contact.phone %}
+                        <li>
+                        <span class="icon-user-space">{{ contact.phone }} (pro)</span>
+                        </li>
+                    {% endif %}
+                    {% if contact.email %}
+                        <li>
+                        <label>Courriel :</label>
+                        {{ contact.email }}
+                        </li>
+                    {% endif %}
+                    {% if contact.job %}
+                        <li>
+                        <label>Profession :</label>
+                        {{ contact.job }}
+                        </li>
+                    {% endif %}
+                    {% if contact.contact_comment %}
+                        <li>
+                        <label>Commentaire :</label>
+                        {{ contact.contact_comment }}
+                        </li>
+                    {% endif %}
+                    <li><label>Données d'assuré social</label>
+                            <!-- <button class="blind">détails</button> -->
+                            <ul>
+                            {% if contact.social_security_id %}
+                                <li><label>Numéro d'assuré social :</label>
+                                {{ contact.social_security_id }} {{ contact.get_control_key }}</li>
+                            {% endif %}
+                            {% if contact.birthdate %}
+                                <li><label>Date de naissance :</label>
+                                {{ contact.birthdate|date:"SHORT_DATE_FORMAT" }}</li>
+                            {% endif %}
+                            {% if contact.birthplace %}
+                                <li><label>Lieu de naissance :</label>
+                                {{ contact.birthplace }}</li>
+                            {% endif %}
+                            {% if contact.begin_rights %}
+                                <li><label>Début de droits :</label>
+                                {{ contact.begin_rights }}</li>
+                            {% endif %}
+                            {% if contact.end_rights %}
+                                <li><label>Fin de droits :</label>
+                                {{ contact.end_rights }}</li>
+                            {% endif %}
+                            {% if contact.health_center %}
+                                <li><label>Centre de santé :</label>
+                                {{ contact.health_center }} ({{ contact.health_center.address }} {{ contact.health_center.address_complement }} {{ contact.health_center.zip_code }} {{ contact.health_center.city }})</li>
+                            {% endif %}
+                            {% if contact.management_code %}
+                                <li><label>Code de gestion :</label>
+                                {{ contact.management_code }}</li>
+                            {% endif %}
+                            <li><label>Tiers-payant :</label>
+                                {% if contact.thirdparty_payer %}
+                                    Oui
+                                {% else %}
+                                    Non
+                                {% endif %}
+                            </li>
+                            {% if contact.twinning_rank %}
+                                <li><label>Rang (gémellité) :</label>
+                                {{ contact.twinning_rank }}</li>
+                            {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </form>
+
