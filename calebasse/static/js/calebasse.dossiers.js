@@ -8,6 +8,11 @@ function add_datepickers(that) {
   $('input#id_prolongation_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
+function load_add_address_dialog() {
+    generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
+        '#address-dlg', '600px', 'Ajouter');
+}
+
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
             function () {
@@ -47,6 +52,7 @@ function state_dialog(url, state_title, state_type) {
 (function($) {
   $(function() {
     var $tabs = $('#tabs').tabs();
+
 
     $('.atabs').click(function() {
         location.hash = 'tab=' + $(this).data('id');
@@ -343,4 +349,16 @@ function state_dialog(url, state_title, state_type) {
         $tabs.tabs('select',  parseInt(tabid));
       }
     });
+
 })(window.jQuery)
+
+$( document ).ready(function(){
+    var hashes = location.hash.split('&');
+    for (i in hashes) {
+      console.log(hashes[i]);
+      if (hashes[i] == "newcontact") {
+        $('#new-contact-btn').first().click();
+      }
+    }
+    location.hash = hashes[0];
+});

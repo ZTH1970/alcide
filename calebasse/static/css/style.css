@@ -804,6 +804,11 @@ div.frame p {
         margin: 0;
 }
 
+#contact-add-address {
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
 div#tabs-3 div.right {
         text-align: right;
         border: 0;
@@ -1413,7 +1418,7 @@ div.pagination {
 .icon-lock:before                 { content: "\f023"; }
 .icon-remove-sign:before          { content: "\f057"; }
 .icon-remove:before               { content: "\f00d"; }
-.icon-plus:before                { content: "\f067"; }
+.icon-plus:before                 { content: "\f067"; }
 .icon-minus:before                { content: "\f068"; }
 .icon-envelope:before             { content: "\f003"; }
 .icon-comment:before              { content: "\f075"; }

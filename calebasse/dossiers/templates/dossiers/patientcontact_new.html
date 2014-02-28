@@ -135,6 +135,12 @@
       <tr {% if object.id == request.session.patientrecord_id %}style="display: none;"{%endif%}>
         <td>
           {{ form.addresses.label_tag }} :
+          <p id="contact-add-address">
+          <a href="#tab=2&newcontact" id="contact-add-address" role="button" title="Ajouter une adresse" onClick="javascript: load_add_address_dialog();">
+            <span class="icon-plus" title="Ajouter une adresse"></Span>
+            Ajouter une adresse
+          </a>
+          </p>
           {{ form.addresses }}
           {{ form.addresses.errors }}
         </td>
@@ -147,3 +153,4 @@
   {{ form.contact_comment.errors }}
   </p>
  </form>
+ <div id="address-dlg"></div>
