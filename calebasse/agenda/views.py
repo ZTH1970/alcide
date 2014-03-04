@@ -270,6 +270,14 @@ class UpdatePeriodicEventView(BaseEventView):
     form_class = UpdatePeriodicEventForm
     template_name = 'agenda/new-event.html'
 
+def delete_eventwithact(event):
+    assert event.event_type == 1
+    if event.act.id \
+            and not event.act.is_billed:
+        event.act.delete()
+    if not event.act.id or \
+            not event.act.is_billed:
+        event.delete()
 
 class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
     model = Event
@@ -278,23 +286,34 @@ class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.event_type == 1 and self.object.act.id \
-                and not self.object.act.is_billed:
-            self.object.act.delete()
-        self.object.delete()
+        if self.object.event_type == 1:
+            delete_eventwithact(self.object)
+        else:
+            self.object.delete()
 
         return HttpResponse(status=204)
 
 class DeleteEventView(cbv.DeleteView):
-    """
-    TODO: Remove this class
-    """
     model = Event
     success_url = '..'
     cookies_to_clear = []
 
     def delete(self, request, *args, **kwargs):
-        super(DeleteEventView, self).delete(request, *args, **kwargs)
+        self.object = self.get_object()
+        # If exceptions remove them only if act is not billed
+        for exception in self.object.exceptions.all():
+            exception.recurrence_periodicity = None
+            exception.exception_to = None
+            exception.save()
+            if exception.event_type == 1:
+                delete_eventwithact(exception)
+            else:
+                exception.delete()
+
+        if self.object.event_type == 1:
+            delete_eventwithact(self.object)
+        else:
+            self.object.delete()
         return HttpResponse(status=204)
 
 class AgendaServiceActValidationView(TemplateView):
