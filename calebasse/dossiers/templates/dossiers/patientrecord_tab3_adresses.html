@@ -2,6 +2,9 @@
 
         <div class="contact patient">
             <h4>{{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> (Patient)</h4>
+            {% if nb_place_of_lifes > 1 %}
+            <p>{{ nb_place_of_lifes }} lieux de vie</p>
+            {% endif %}
             <div class="right">Assuré
                 <input type="radio"
                 {% if object.policyholder.id == object.id %} checked="checked" {% endif %}
@@ -101,12 +104,6 @@
 <button type="button" id="new-contact-btn">Nouveau contact</button>
 
 
-<div>
-  {% if nb_place_of_lifes > 1 %}
-  <label>Nombre de lieux de vie :</label>
-  {{ nb_place_of_lifes }}
-  {% endif %}
-</div>
 
 {% for contact in object.contacts.all %}
     {% if not contact.addresses.all %}
