@@ -100,6 +100,14 @@
 <button type="button" id="new-address-btn">Nouvelle adresse</button>
 <button type="button" id="new-contact-btn">Nouveau contact</button>
 
+
+<div>
+  {% if nb_place_of_lifes > 1 %}
+  <label>Nombre de lieux de vie :</label>
+  {{ nb_place_of_lifes }}
+  {% endif %}
+</div>
+
 {% for contact in object.contacts.all %}
     {% if not contact.addresses.all %}
     <div class="contact">

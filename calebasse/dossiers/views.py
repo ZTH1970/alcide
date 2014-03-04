@@ -483,6 +483,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             pass
 
         ctx['addresses'] = ctx['object'].addresses.order_by('-place_of_life', 'id')
+        ctx['nb_place_of_lifes'] = ctx['object'].addresses.filter(place_of_life=True).count()
         return ctx
 
     def form_valid(self, form):
