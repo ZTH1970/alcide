@@ -20,6 +20,10 @@
                         <li><label>Lien avec le patient :</label>
                         {{ object.parente }}</li>
                     {% endif %}
+                    {% if object.parental_authority %}
+                        <li><label>Garde parental :</label>
+                        {{ object.parental_authority }}</li>
+                    {% endif %}
                     {% if object.mobile %}
                         <li>
                         <span class="icon-user-space">{{ object.mobile }} (perso)</span>
