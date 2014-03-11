@@ -55,7 +55,6 @@ class AccessView(cbv.ListView):
     def get_context_data(self, **kwargs):
         ctx = super(AccessView, self).get_context_data(**kwargs)
         ctx['active_list'] = ctx['object_list'].filter(is_active=True)
-        ctx['inactive_list'] = ctx['object_list'].filter(is_active=False)
         return ctx
 
 
@@ -77,7 +76,7 @@ class WorkerView(cbv.ListView):
         qs = super(WorkerView, self).get_queryset()
         qs = qs.select_related()
         qs = qs.prefetch_related('services')
-        qs = qs.filter(is_active=True)
+        qs = qs.filter()
         form = self.get_form()
         if form.is_valid():
             cleaned_data = form.cleaned_data
