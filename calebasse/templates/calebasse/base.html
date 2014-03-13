@@ -28,6 +28,8 @@
     <script src="{{ STATIC_URL }}/js/calebasse.divmenu.js"></script>
     {% block extrascripts %}
     {% endblock %}
+    {% block extrastyles %}
+    {% endblock %}
   </head>
   <body class="{% firstof service params.service %} {% block body-class %}{% endblock %}{% if popup %} popup{% endif %}">
   {% block wrapper %}
