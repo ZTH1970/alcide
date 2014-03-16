@@ -290,30 +290,26 @@ function toggle_ressource(ressource_selector, ressource) {
     var tab = $('#link-tab-' + ressource + '-' + ressource_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
     $(tab).detach().appendTo(tab_list);
+
     var url = $("#date-selector").data('url');
 
     var tab_selector = '';
-
     if (ressource == 'worker') {
         tab_selector = '#selector-' + ressource + '-' + ressource_id + '.active';
     } else {
         tab_selector = '#selector-ressource-' + ressource_id + '.active';
-        url = url.split('/')
-        url.splice(4, 1);
-        url = url.join('/');
     }
 
     if ($(tab_selector).length) {
-        if(ressource == 'worker') {
-            /* load ressource appointments tab */
-            $('#tabs-' + ressource + '-' + ressource_id).load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
-                function () {
-                    $(this).children('div').accordion({active: false, autoHeight: false, collapsible: true});
-                    enable_events(this);
-                }
-             );
-        };
-        /* load ressource disponibility column */
+        /* load appointments tab */
+        // $('#tabs-ressource').load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
+        //                           function () {
+        //                               $(this).children('div').accordion({active: false,
+        //                                                                  autoHeight: false,
+        //                                                                  collapsible: true});
+        //                               enable_events(this);}
+        //                          );
+        /* load disponibility column */
         $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
                 if ($(tab_selector).hasClass('active')) {
@@ -340,13 +336,19 @@ function event_dialog(url, title, width, btn_text) {
 
 (function($) {
   $(function() {
-      $('#tabs').tabs();
+      $('#tabs').tabs({
+          load: function(event, ui) {
+              $('#tabs > div > div').accordion({active: false, autoHeight: false, collapsible: true});
+          },
+          selected: -1,
+      });
 
       $('#tabs').ajaxStop(function() { reorder_disponibility_columns(); });
 
       if ($('.worker-item').length) {
           $('.worker-item').on('click', function() {
               var target = toggle_ressource(this, 'worker');
+
               if ($(target).is(':visible')) {
                   $(target).click();
               }
@@ -390,8 +392,6 @@ function event_dialog(url, title, width, btn_text) {
                   $('#filtre input').focus();
               }
           });
-
-          $('div.agenda > div').accordion({active: false, autoHeight: false, collapsible: true});
 
           $('a.tab').click(function() {
               $.cookie('active-ressource-agenda', $(this).data('id'), { path: COOKIE_PATH });

@@ -1,6 +1,9 @@
 {% extends "agenda/base.html" %}
 {% load url from future %}
 {% load apptags %}
+{% block extrastyles %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/agenda.css" />
+{% endblock extrastyles %}
 
 {% block appbar %}
     <h2>Agenda</h2>
@@ -20,7 +23,6 @@
      <a href="agendas-therapeutes">Tous les agendas des intervenants</a>
     </div>
 
-
     <div id="users">
     <div id="filtre">
      <input type="text" class="focus"/>
@@ -34,19 +36,27 @@
      <dd><ul>
        {% for worker in workers_type.workers %}
        {% if worker|is_worker_in_service:service_name and worker|is_intervenant %}
-       <li id="selector-worker-{{worker.id}}" class="worker-item in_service intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="worker-item in_service intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %}<span class="icon-toggle"></span></li>
        {% elif worker|is_worker_in_service:service_name %}
-       <li id="selector-worker-{{worker.id}}" class="worker-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="worker-item in_service" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="icon-toggle"></span></li>
        {% elif worker|is_intervenant %}
-       <li id="selector-worker-{{worker.id}}" class="worker-item intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="worker-item intervenant" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="icon-toggle"></span></li>
        {% else %}
-       <li id="selector-worker-{{worker.id}}" class="worker-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="toggle" title="cliquer pour déselectionner">(-)</span></li>
+       <li id="selector-worker-{{worker.id}}" class="worker-item" data-worker-id="{{worker.id}}" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="icon-toggle"></span></li>
        {% endif %}
        {% endfor %}
      </ul></dd>
      {% endfor %}
+     {% for ressources_type in ressources_types %}
+     <dt>{{ ressources_type.type }}</dt>
+     <dd><ul>
+       {% for ressource in ressources_type.ressources %}
+       <li id="selector-ressource-{{ressource.id}}" class="ressource-item" data-ressource-id="{{ressource.id}}" data-target=".ressource-{{ressource.id}}.agenda">{{ ressource.name }} <span class="icon-toggle"></span></li>
+       {% endfor %}
+     </ul></dd>
+     {% endfor %}
    </dl>
-   <a href="{% url 'ressources' service date %}">Agenda des salles</a>
+
  </div>
 {% endblock %}
 
@@ -71,30 +81,34 @@
      </td>
 
      <td id="agendas">
-       <div id="tabs">
-       <ul>
-        {% for worker in workers %}
-        <li style="display: none" class="worker-{{ worker.id }} agenda">
-        <a id="link-tab-worker-{{ worker.id }}" href="#tabs-worker-{{ worker.id }}" class="tab" data-id="{{ worker.id }}">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span></a>
-        <a href="#" style="padding: 3px;cursor: auto;" class="close-tab" data-target="selector-worker-{{ worker.id }}"><span class="ui-icon ui-icon-circle-close"></span></a>
-        </li>
-        {% endfor %}
-       </ul>
-       {% for worker in workers %}
-       <div id="tabs-worker-{{ worker.id }}" class="tabs agenda worker-{{ worker.id }}" style="display: none;">
-         <div class="worker-tab-content-placeholder">
-           <!-- placeholder -->
-         </div>
-       </div>
-       {% endfor %}
+       <div id="tabs" class="agenda">
+         <ul>
+           {% for worker in workers %}
+           <li style="display: none" class="worker-{{ worker.id }} agenda">
+             <a id="link-tab-worker-{{ worker.id }}" href="{% url "ajax-worker-tab" service date worker.id %}" class="tab" data-id="{{ worker.id }}">
+               {{ worker.first_name }}
+               <span class="lastname">{{ worker.last_name }}</span>
+             </a>
+             <a href="#" style="padding: 3px;cursor: auto;" class="close-tab" data-target="selector-worker-{{ worker.id }}"><span class="ui-icon ui-icon-circle-close"></span></a>
+           </li>
+           {% endfor %}
 
+           {% for ressource in ressources_types.0.ressources %}
+           <li style="display: none" class="ressource-{{ ressource.id }} agenda">
+             <a id="link-tab-ressource-{{ ressource.id }}" href="{% url "ajax-ressource-tab" service date ressource.id %}" class="tab" data-id="{{ ressource.id }}">
+               {{ ressource }}
+             </a>
+             <a href="#" style="padding: 3px;cursor: auto;" class="close-tab" data-target="selector-ressource-{{ ressource.id }}"><span class="ui-icon ui-icon-circle-close"></span></a>
+           </li>
+           {% endfor %}
+         </ul>
        </div>
 
-       </div>
-     </td>
-    </tr>
-    </tbody>
-   </table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
 
 {% endblock %}
 

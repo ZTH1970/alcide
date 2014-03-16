@@ -70,8 +70,13 @@ class AgendaHomepageView(TemplateView):
         context['workers'] = workers
         context['disponibility_start_times'] = range(8, 20)
 
-        return context
+        # ressources
+        context['ressources_types'] = []
+        data = {'type': Room._meta.verbose_name_plural,
+                'ressources': Room.objects.all()}
+        context['ressources_types'].append(data)
 
+        return context
 
 class AgendaServiceActivityView(TemplateView, cbv.ServiceViewMixin):
     template_name = 'agenda/service-activity.html'
@@ -531,37 +536,6 @@ class JoursNonVerrouillesView(TemplateView):
         context['days_not_locked'] = sorted(days)
         return context
 
-class RessourcesView(TemplateView):
-
-    template_name = 'agenda/ressources.html'
-    cookies_to_clear = []
-
-    def get_context_data(self, **kwargs):
-        context = super(RessourcesView, self).get_context_data(**kwargs)
-
-        plain_events = Event.objects.for_today(self.date) \
-                .order_by('start_datetime').select_subclasses()
-        events = [ e.today_occurrence(self.date) for e in plain_events ]
-
-        context['ressources_types'] = []
-        context['ressources_agenda'] = []
-        context['disponibility'] = {}
-        ressources = []
-        data = {'type': Room._meta.verbose_name_plural, 'ressources': Room.objects.all() }
-        context['ressources_types'].append(data)
-        ressources.extend(data['ressources'])
-        context['disponibility_start_times'] = range(8, 20)
-
-        events_ressources = {}
-        for ressource in ressources:
-            events_ressource = [e for e in events if ressource == e.room]
-            events_ressources[ressource.id] = events_ressource
-            context['ressources_agenda'].append({'ressource': ressource,
-                    'appointments': get_daily_usage(context['date'], ressource,
-                        self.service, events_ressource)})
-
-        return context
-
 class AjaxWorkerTabView(TemplateView):
 
     template_name = 'agenda/ajax-worker-tab.html'
@@ -607,6 +581,24 @@ class AjaxWorkerTabView(TemplateView):
 
         if settings.RTF_TEMPLATES_DIRECTORY:
             context['mail'] = True
+        return context
+
+class AjaxRessourceTabView(TemplateView):
+    template_name = 'agenda/ajax-ressource-tab.html'
+    cookies_to_clear = []
+
+    def get_context_data(self, ressource_id, **kwargs):
+        context = super(AjaxRessourceTabView, self).get_context_data(**kwargs)
+        ressource = Room.objects.get(pk=ressource_id)
+        plain_events = Event.objects.for_today(self.date) \
+                                    .order_by('start_datetime').select_subclasses()
+        events = [ e.today_occurrence(self.date) for e in plain_events ]
+        events_ressource = [e for e in events if ressource == e.room]
+        context['ressource_agenda'] = {'appointments': get_daily_usage(context['date'],
+                                                                       ressource,
+                                                                       self.service,
+                                                                       events_ressource)
+        }
         return context
 
 class AjaxWorkerDisponibilityColumnView(TemplateView):

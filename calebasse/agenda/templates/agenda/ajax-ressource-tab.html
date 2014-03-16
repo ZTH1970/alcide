@@ -1,0 +1,94 @@
+{% load url from future %}
+{% load apptags %}
+<a class="print" href="#">Imprimer</a>
+<div>
+  {% for appointment in ressource_agenda.appointments %}
+  <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
+      {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
+    <span class="hour">{{ appointment.begin_hour }}</span>
+    {% if appointment.event_type %} — {{ appointment.event_type }}  {% endif %}
+    {% if appointment.title %} — {{ appointment.title }}  {% endif %}
+    {% if appointment.length %} — {{ appointment.length }}m {% endif %}
+    {% if appointment.ressources_initial %} —{{ appointment.ressources_initial }} {% endif %}
+    {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
+    {% if appointment.room %} — {{ appointment.room }} {% endif %}
+    <span class="right">
+      {% for service_name in appointment.other_services_names %}
+      <span class="box {{ service_name }}" title="{{ service_name }}"></span>
+      {% endfor %}
+      {% if appointment.description %}
+      <span title="Un commentaire existe" class="icon-comment"></span>
+      {% endif %}
+      {% if appointment.event_id %}
+      {% if appointment.is_recurrent %} R {% endif %}
+      {% if appointment.patient_record_id %}
+      <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
+      {% else %}
+      <button title="Éditer un événement" class="edit-event icon-edit" data-event-id="{{ appointment.event_id }}">
+        {% endif %}
+        <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-url="{% url 'delete-occurrence' date=date service=service pk=appointment.event_id %}" data-rdv="{{ appointment.title }}"></button>
+        {% endif %}
+    </span>
+  </h3>
+
+  <div>
+    {% if appointment.type == 'free' %}
+    <button class='newrdv' data-url="{% url 'nouveau-rdv' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouveau rendez-vous patient</button>
+    <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouvel événement</button>
+    {% endif %}
+    {% if appointment.event_id %}
+    {% if appointment.workers %}
+    <p class="workers">
+      Intervenants :
+      {% for worker in appointment.workers %}
+      {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+      {% endfor %}
+    </p>
+    {% endif %}
+    <div class="tabs-ressource-{{ ressource_agenda.ressource.id }} textedit">
+      <span></span>
+      <textarea>{{ appointment.description }}</textarea>
+      <button disabled="disabled" data-event-id="{{ appointment.event_id }}">✔</button>
+    </div>
+    {% endif %}
+    {% if appointment.patient_record_id %}
+    <p class="phones">
+      {% for address in appointment.patient.addresses.all %}
+      {% if address.place_of_life and address.phone %}
+      <span title="{{ address.number }} {{ address.street }} {{ address.zip_code }} {{ address.city }}" class="icon-home-space">{{ address.phone }}</span>
+      {% for contact in address.patientcontact_set.all  %}
+      <span title="{{ contact.first_name }} {{ contact.last_name|upper }}" class="icon-user-space">{{ contact.mobile }}</span>
+      {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </p>
+    <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view" target="_blank">Dossier patient</a> -
+    <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view#tab=5" target="_blank">Prochains rendez-vous</a> -
+    <a href="#" class="generate-mail-btn" data-dossier-id="{{ appointment.patient_record_id }}" data-date="{{date|date:"Y-m-d"}}" data-event-id="{{ appointment.event_id }}" data-next-url="{{ request.get_full_path }}">Courrier</a>
+    {% endif %}
+    {% if appointment.validation %}
+    <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong>, le {{ appointment.validation.1.created }} par {{ appointment.validation.1.author }}
+        {% if appointment.validation.1.auto %}(par validation automatique){% endif %}. {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
+        {% else %}
+        Non pointé.
+        {% endif %}
+      </span>
+      {% if not appointment.validation.0.validation_locked and appointment.validation.3 %}
+      <form method="post" class="inline-form">
+        {% csrf_token %}
+        <input type="hidden" value="{{appointment.validation.0.id}}" name="acte-id">
+        <select data-previous="{{ last_status.state_name }}" name="act_state">
+          {% for state_name, display_state_name in appointment.validation.3.items %}
+          <option value="{{ state_name }}" {% if state_name == appointment.validation.1.state_name %}selected{% endif %}>{{ display_state_name }}</option>
+          {% endfor %}
+        </select>
+        <button>Modifier</button>
+      </form>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+</div>
+
