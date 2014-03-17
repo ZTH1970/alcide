@@ -1068,6 +1068,8 @@ def patients_synthesis(statistic):
         acts = acts.filter(patient__in=patients)
 
     nb_patients = patients.count()
+    if not nb_patients:
+        return []
 
     data.append([("%s - %s"
         % (formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
