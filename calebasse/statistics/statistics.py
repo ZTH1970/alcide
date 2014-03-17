@@ -45,21 +45,13 @@ STATISTICS = {
     },
     'active_patients_with_act' :
         {
-        'display_name': 'Dossiers actifs et inactifs avec un acte validé ou non sur une période',
+        'display_name': 'Listes des dossiers avec un acte validé, ou un acte '
+            'proposé seulement, sur une période et triés par état du dossier '
+            'en fin de période',
         'category': 'Patients',
-        'comment': """Listes des patients ayant eu au moins un acte proposé
-            durant la période indiquée. Les patients sont scindés en quatre
-            tableaux.
-            Les patients dont au moins un acte a été
-            validé ET dont le dossier est dans un état "actif".
-            Les patients dont au moins un acte a été
-            validé ET dont le dossier N'est PAS dans un état "actif".
-            Les patients sans aucun acte validé ET dont le dossier est dans
-            un état "actif".
-            Les patients sans aucun acte validé ET dont le dossier N'est PAS
-            dans un état "actif".
-            Rappel des états actifs des dossiers : CMPP : diagnostic
-            ou traitement, CAMSP : suivi, SESSAD: Traitement.
+        'comment': """Listes des dossiers avec un acte validé ou un acte
+            proposé seulement sur une période et triés par état du dossier en
+            fin de période.
             La date de début de la plage par
             défaut est le 1er janvier de l'année en cours. La date de fin de
             la plage par défaut est aujourd'hui.
@@ -714,10 +706,9 @@ def active_patients_with_act(statistic):
         data_tables.append(data)
         data = []
         data.append(['Nom', 'Prénom', 'N° Dossier'])
-        patients_values = patients_list.\
-                values_list('last_name', 'first_name', 'paper_id')
         p_list = []
-        for ln, fn, pid in patients_values:
+        for p in patients_list:
+            ln, fn, pid = p.last_name, p.first_name, p.paper_id
             ln = ln or ''
             if len(ln) > 1:
                 ln = ln[0].upper() + ln[1:].lower()
@@ -769,20 +760,16 @@ def active_patients_with_act(statistic):
         id__in=[patient[0] for patient in all_patients_ids
             if not patient in acts_valide_patients_ids])
 
-
-    patients_1 = acts_valide_patients.filter(
-        last_state__status__type__in=active_states)
-    patients_2 = acts_valide_patients.exclude(
-        last_state__status__type__in=active_states)
-    patients_3 = acts_not_valide_patients.filter(
-        last_state__status__type__in=active_states)
-    patients_4 = acts_not_valide_patients.exclude(
-        last_state__status__type__in=active_states)
-
-    data_tables_set.append(process(patients_1, 'Patients avec un acte validé et dans un état actif'))
-    data_tables_set.append(process(patients_2, 'Patients avec un acte validé et dans un état non actif'))
-    data_tables_set.append(process(patients_3, 'Patients sans acte validé et dans un état actif'))
-    data_tables_set.append(process(patients_4, 'Patients sans acte validé et dans un état non actif'))
+    p_val = dict()
+    for p in acts_valide_patients:
+        p_val.setdefault(p.get_state_at_day(statistic.in_end_date).status, []).append(p)
+    for k, v in p_val.items():
+        data_tables_set.append(process(v, "Patients avec un acte validé et dans l'état '%s' en date du %s" % (k, formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"))))
+    p_val = dict()
+    for p in acts_not_valide_patients:
+        p_val.setdefault(p.get_state_at_day(statistic.in_end_date).status, []).append(p)
+    for k, v in p_val.items():
+        data_tables_set.append(process(v, "Patients avec sans acte validé et dans l'état '%s' en date du %s" % (k, formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"))))
 
     return data_tables_set
 
@@ -1643,4 +1630,3 @@ class Statistic(object):
     def get_file(self):
         self.get_data()
         return self.render_to_csv()
-
