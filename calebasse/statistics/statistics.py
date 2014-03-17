@@ -760,12 +760,14 @@ def active_patients_with_act(statistic):
         id__in=[patient[0] for patient in all_patients_ids
             if not patient in acts_valide_patients_ids])
 
+    data_tables_set.append(process(acts_valide_patients, "Patients avec un acte validé sur la période"))
     p_val = dict()
     for p in acts_valide_patients:
         p_val.setdefault(p.get_state_at_day(statistic.in_end_date).status, []).append(p)
     for k, v in p_val.items():
         data_tables_set.append(process(v, "Patients avec un acte validé et dans l'état '%s' en date du %s" % (k, formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"))))
     p_val = dict()
+    data_tables_set.append(process(acts_not_valide_patients, "Patients avec un acte proposé seulement sur la période"))
     for p in acts_not_valide_patients:
         p_val.setdefault(p.get_state_at_day(statistic.in_end_date).status, []).append(p)
     for k, v in p_val.items():
