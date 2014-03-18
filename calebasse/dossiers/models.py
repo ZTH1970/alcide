@@ -266,6 +266,8 @@ class PatientAddress(models.Model):
     place_of_life = models.BooleanField(verbose_name=u"Lieu de vie")
     number = models.CharField(max_length=12,
             verbose_name=u"Numéro", blank=True, null=True)
+    recipient = models.CharField(max_length=100,
+            verbose_name=u"Destinataire", blank=True, null=True)
     street = models.CharField(max_length=100,
             verbose_name=u"Rue", blank=True, null=True)
     address_complement = models.CharField(max_length=100,
@@ -282,6 +284,8 @@ class PatientAddress(models.Model):
 
     def save(self, **kwargs):
         self.display_name = ''
+        if self.recipient:
+            self.display_name += self.recipient + ' '
         if self.number:
             self.display_name += self.number + ' '
         if self.street:

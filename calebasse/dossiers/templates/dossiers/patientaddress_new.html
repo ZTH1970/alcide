@@ -9,6 +9,15 @@
         <p>
         </p>
         <td>
+          {{ form.recipient.label_tag }} :<br>
+          {{ form.recipient }}
+          {{ form.recipient.errors }}
+        </td>
+      </tr>
+      <tr>
+        <p>
+        </p>
+        <td>
           {{ form.number.label_tag }} :<br>
           {{ form.number }}
           {{ form.number.errors }}
