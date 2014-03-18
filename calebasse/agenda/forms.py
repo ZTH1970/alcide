@@ -83,7 +83,6 @@ class NewAppointmentForm(BaseForm):
         appointment.end_datetime = appointment.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
         appointment.creator = get_request().user
-        appointment.title = appointment.patient.display_name
         appointment.clean()
         if commit:
             appointment.save()

@@ -94,6 +94,7 @@ class Appointment(object):
             if not service in services:
                 validation_states = None
             self.validation = (event.act, state, display_name, validation_states)
+            self.title = event.patient.display_name
         else:
             if event.event_type.label == 'Autre' and event.title:
                 self.title = event.title
