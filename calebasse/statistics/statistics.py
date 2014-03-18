@@ -152,7 +152,16 @@ STATISTICS = {
         'display_name': 'Synthèse sur les mesures de protection des patients '
             'à une date donnée',
         'category': 'Patients',
-        'comment': """La date par défaut est aujourd'hui.
+        'comment': """Synthèse sur les mesures de protection des patients.
+            La date par défaut est aujourd'hui.
+            """
+    },
+    'patients_contact' :
+        {
+        'display_name': 'Liste des patients en contact à une date donnée',
+        'category': 'Patients',
+        'comment': """Liste des patients en contact à une date donnée.
+            La date par défaut est aujourd'hui.
             """
     },
 }
@@ -659,8 +668,8 @@ def active_patients_by_state_only(statistic):
         active_states = ('TRAITEMENT', )
     patients = [(p.last_name, p.first_name, p.paper_id) \
         for p in PatientRecord.objects.filter(service=statistic.in_service) \
-            if p.get_state_at_day(
-                statistic.in_start_date).status.type in active_states]
+            if p.get_state_at_day(statistic.in_start_date) and \
+                p.get_state_at_day(statistic.in_start_date).status.type in active_states]
     data_tables_set=[[[['En date du :', formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"), len(patients)]]]]
     data = []
     data.append(['Nom', 'Prénom', 'N° Dossier'])
@@ -696,6 +705,60 @@ def patients_protection(statistic):
     data.append(['Mesure de protection', 'Nombre de dossiers'])
     data.append(analyse.items())
     data_tables_set[0].append(data)
+    return data_tables_set
+
+def patients_contact(statistic):
+    if not statistic.in_service:
+        return None
+    if not statistic.in_start_date:
+        statistic.in_start_date = datetime.today()
+    patients = [p for p in PatientRecord.objects.filter(service=statistic.in_service) \
+            if p.was_in_state_at_day(statistic.in_start_date, 'ACCUEIL') ]
+
+    all_patients = []
+    patients_acts = []
+    patients_no_acts = []
+
+    for p in patients:
+        values = [p.last_name, p.first_name, p.paper_id or "",
+            formats.date_format(p.get_state_at_day(
+            statistic.in_start_date).date_selected,
+            "SHORT_DATE_FORMAT")]
+        all_patients.append(values)
+        acts = Act.objects.filter(patient=p, valide=True,
+                date__lte=statistic.in_start_date).order_by("-date")
+        if acts:
+            v = list(values)
+            v.append(acts[0].date)
+            v.append(acts[0].act_type)
+            patients_acts.append(v)
+        else:
+            patients_no_acts.append(values)
+
+    data_tables_set = []
+
+    data_tables_set.append([[['Dossiers en contact en date du %s' % \
+            formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"),
+            len(all_patients)]]])
+    data = []
+    data.append(['Nom', 'Prénom', 'N° dossier', 'Contact'])
+    data.append(sorted(all_patients, key=lambda k: k[0]+k[1]))
+    data_tables_set[0].append(data)
+
+    data_tables_set.append([[["Dossiers n'ayant jamais eu d'actes validé avant cette date",
+            len(patients_no_acts)]]])
+    data = []
+    data.append(['Nom', 'Prénom', 'N° dossier', 'Contact'])
+    data.append(sorted(patients_no_acts, key=lambda k: k[0]+k[1]))
+    data_tables_set[1].append(data)
+
+    data_tables_set.append([[["Dossiers ayant déjà eu au moins un acte validé avant cette date",
+            len(patients_acts)]]])
+    data = []
+    data.append(['Nom', 'Prénom', 'N° dossier', 'Contact', 'Dernier acte', "Type de l'acte"])
+    data.append(sorted(patients_acts, key=lambda k: k[0]+k[1]))
+    data_tables_set[2].append(data)
+
     return data_tables_set
 
 def active_patients_with_act(statistic):
@@ -763,13 +826,19 @@ def active_patients_with_act(statistic):
     data_tables_set.append(process(acts_valide_patients, "Patients avec un acte validé sur la période"))
     p_val = dict()
     for p in acts_valide_patients:
-        p_val.setdefault(p.get_state_at_day(statistic.in_end_date).status, []).append(p)
+        s = "Indéfini"
+        if p.get_state_at_day(statistic.in_end_date):
+            s = p.get_state_at_day(statistic.in_end_date).status
+        p_val.setdefault(s, []).append(p)
     for k, v in p_val.items():
         data_tables_set.append(process(v, "Patients avec un acte validé et dans l'état '%s' en date du %s" % (k, formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"))))
     p_val = dict()
     data_tables_set.append(process(acts_not_valide_patients, "Patients avec un acte proposé seulement sur la période"))
     for p in acts_not_valide_patients:
-        p_val.setdefault(p.get_state_at_day(statistic.in_end_date).status, []).append(p)
+        s = "Indéfini"
+        if p.get_state_at_day(statistic.in_end_date):
+            s = p.get_state_at_day(statistic.in_end_date).status
+        p_val.setdefault(s, []).append(p)
     for k, v in p_val.items():
         data_tables_set.append(process(v, "Patients avec sans acte validé et dans l'état '%s' en date du %s" % (k, formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"))))
 
@@ -1106,10 +1175,13 @@ def patients_synthesis(statistic):
     data.append(["Etat du dossier en date de fin (%s)" % formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"), 'Nombre de patients'])
     states = dict()
     for patient in patients:
-        states.setdefault(patient.get_state_at_day(statistic.in_end_date).status, []).append(patient)
+        s = "Indéfini"
+        if patient.get_state_at_day(statistic.in_end_date):
+            s = patient.get_state_at_day(statistic.in_end_date).status.name
+        states.setdefault(s, []).append(patient)
     values = []
     for state, ps in states.iteritems():
-        values.append((state.name, len(ps)))
+        values.append((state, len(ps)))
     data.append(values)
     data_tables.append(data)
 
