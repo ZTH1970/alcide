@@ -72,31 +72,6 @@
   <p>Il n'y a aucun compte actif</p>
   {% endif %}
 
-  {% if inactive_list %}
-  <h4>Comptes désactivés</h4>
-
-  <table class="main">
-    <thead>
-    <tr>
-      <th>Identifiant</th>
-      <th>Courriel</th>
-      <th>Fiche Personnel</th>
-    </tr>
-    </thead>
-    <tbody>
-   {% for object in object_list %}
-    {% if not object.is_active %}
-    <tr data-pk="{{object.pk}}">
-      <td>{{object.username}}</td>
-      <td>{{object.email}}</td>
-      <td>{% firstof object.userworker.worker "-" %}</td>
-      <td><button class="icon-edit"></button> <button class="icon-minus"></button> <button>Histo</button></td>
-    </tr>
-    {% endif %}
-   {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
 </div>
 {% endblock %}
 

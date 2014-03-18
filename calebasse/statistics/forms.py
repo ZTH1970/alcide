@@ -15,13 +15,13 @@ class TwoDatesForm(BaseForm):
 
 class AnnualActivityForm(BaseForm):
     start_date = forms.DateField(label=u"Date de l'année souhaitée", required=False, localize=True)
-    participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=True)
+    participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=False)
 
 class PatientsTwoDatesForm(TwoDatesForm):
-    patients = AutoCompleteSelectMultipleField('patientrecord', required=True)
+    patients = AutoCompleteSelectMultipleField('patientrecord', required=False)
 
 class ParticipantsPatientsTwoDatesForm(PatientsTwoDatesForm):
-    participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=True)
+    participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=False)
 
 class PatientsSynthesisForm(TwoDatesForm):
     inscriptions = forms.BooleanField(label=u'Seulement les inscriptions', required=False, localize=True)
