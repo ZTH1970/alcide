@@ -11,7 +11,14 @@
     <li><label>Prénom :</label> {{ object.first_name }}</li>
     <li><label>Genre :</label> {{ object.get_gender_display|default_if_none:"Non renseigné" }}</li>
     <li><label>Date de naissance :</label> {% if object.birthdate %}{{ object.birthdate|date:"d/m/Y" }}{% else %}Non renseignée{% endif %}</li>
-    <li><label>Lieux de vie :</label>
+    <li>
+      {% if nb_place_of_lifes == 1 %}
+      <label>Lieux de vie :</label>
+      {% elif nb_place_of_lifes > 1 %}
+      <label class="place_of_lifes_warning">{{ nb_place_of_lifes }} lieux de vie :</label>
+      {% else %}
+      <label class="place_of_lifes_warning">Pas de lieu de vie</label>
+      {% endif %}
         {% if object.addresses.all %}
         <ul>
           {% for address in object.addresses.all %}

@@ -1527,3 +1527,8 @@ div.statistic {
 .addresses li {
     list-style-type: none;
 }
+
+div#tabs label.place_of_lifes_warning {
+    color: orange;
+    font-weight: bold;
+}
