@@ -101,6 +101,13 @@
                     </ul>
                 </li>
             </ul>
+            <hr>
+            <span>
+                <form method="post" id="contact-form">{% csrf_token %}
+                <label>Commentaire </label> <button class="save enable-on-change" id="btn-maj">✔</button><br/>
+                {{ forms.contact.contact_comment }}
+            </span>
+          </form>
         </div>
     </div>
 

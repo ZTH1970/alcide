@@ -248,6 +248,7 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
     model = PatientRecord
     forms_classes = {
             'general': forms.GeneralForm,
+            'contact': forms.PatientContactForm,
             'id': forms.CivilStatusForm,
             'physiology': forms.PhysiologyForm,
             'inscription': forms.InscriptionForm,

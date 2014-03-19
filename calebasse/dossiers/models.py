@@ -368,7 +368,7 @@ class PatientContact(People):
                 nir = int(nir) - minus
                 return (97 - (nir % 97))
             except Exception, e:
-                print str(e)
+                logger.warning("%s" % str(e))
                 return None
         return None
 
