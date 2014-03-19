@@ -974,6 +974,28 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             exit_date = self.act_set.filter(valide=True).order_by('-date')[0].date
         return (exit_date - first_act_after_last_contact.date).days
 
+    def care_duration_before_close_state(self, end_date=None):
+        if not end_date:
+            end_date = datetime.now()
+        last_close = None
+        try:
+            last_close = FileState.objects.filter(status__type='CLOS',
+                    patient=self, date_selected__lt=end_date).order_by('-date_selected')[0]
+        except:
+            pass
+        first_act = None
+        if last_close:
+            try:
+                first_act = Act.objects.filter(patient=self, valide=True, date__lte=end_date, date__gt=last_close.date_selected).order_by('date')[0]
+            except:
+                return 0
+        else:
+            try:
+                first_act = Act.objects.filter(patient=self, valide=True, date__lte=end_date).order_by('date')[0]
+            except:
+                return 0
+        return (end_date.date() - first_act.date).days + 1
+
 reversion.register(PatientRecord, follow=['people_ptr'])
 
 
