@@ -987,9 +987,27 @@ def patients_details(statistic):
         len(o_analyse))])
     data_tables_set.append([data])
     for patient, acts in o_analyse.iteritems():
+        closed_during_range_date = None
+        try:
+            closed_during_range_date = FileState.objects.filter(patient=patient, status__type='CLOS',
+                date_selected__gte=statistic.in_start_date,
+                date_selected__lte=statistic.in_end_date).latest('date_selected')
+        except:
+            pass
+        closure_date = ''
+        if closed_during_range_date:
+            closure_date = closed_during_range_date.date_selected.date
+        reopen = ''
+        if closed_during_range_date and not patient.exit_date:
+            reopen = 'Oui'
+        if closed_during_range_date and not reopen:
+            end_date = closed_during_range_date.date_selected
+        else:
+            end_date = statistic.in_end_date
+        pec = patient.care_duration_before_close_state(end_date=end_date)
         data_tables = list()
         data_tables.append([["%s %s" % (str(patient), str(patient.paper_id))]])
-        data_tables.append([["Durée de la prise en charge (depuis le premier acte)"], [[patient.care_duration_since_last_contact_or_first_act]]])
+        data_tables.append([["Durée de la prise en charge"], [[pec]]])
         data = []
         data.append(["Statut de l'acte", 'Nombre'])
         values = []
@@ -1050,24 +1068,10 @@ def patients_details(statistic):
                     data.append(values)
                     data_tables.append(data)
 
-        closed_during_range_date = None
-        try:
-            closed_during_range_date = FileState.objects.filter(patient=patient, status__type='CLOS',
-                date_selected__gte=statistic.in_start_date,
-                date_selected__lte=statistic.in_end_date).latest('date_selected')
-        except:
-            pass
-        care_duration = patient.care_duration_since_last_contact_or_first_act
-        closure_date = ''
-        if closed_during_range_date:
-            closure_date = closed_during_range_date.date_selected.date
-        reopen = ''
-        if closed_during_range_date and not patient.exit_date:
-            reopen = 'Oui'
         data = []
-        data.append(["Durée de la prise en charge", "Clos pendant la période", "Actes suivants la clôture"])
+        data.append(["Durée de la prise en charge", "Clos pendant la période", "Réouvert"])
         values = []
-        values.append((patient.care_duration_since_last_contact_or_first_act, closure_date, reopen))
+        values.append((pec, closure_date, reopen))
         data.append(values)
         data_tables.append(data)
 
@@ -1123,6 +1127,7 @@ def patients_synthesis(statistic):
     else:
         active_states = ('TRAITEMENT', )
 
+    pec_total = 0
     inscriptions = []
     for patient in patients:
         # Select patient if she has been in treament between the selected dates
@@ -1173,6 +1178,20 @@ def patients_synthesis(statistic):
                     waiting_duration = (acts_tmp[0].date - contact).days
                 inscriptions.append((patient, contact, first_ts.date_selected.date(), acts_tmp[0].date, waiting_duration))
 
+        closed_during_range_date = None
+        try:
+            closed_during_range_date = FileState.objects.filter(patient=patient, status__type='CLOS',
+                date_selected__gte=statistic.in_start_date,
+                date_selected__lte=statistic.in_end_date).latest('date_selected')
+        except:
+            pass
+        if closed_during_range_date and not patient.exit_date:
+            end_date = closed_during_range_date.date_selected
+        else:
+            end_date = statistic.in_end_date
+        pec_total += patient.care_duration_before_close_state(end_date=end_date)
+
+
     if statistic.inscriptions:
         patients = PatientRecord.objects.filter(id__in=[p.id for p, _, _, _, _ in inscriptions])
         acts = acts.filter(patient__in=patients)
@@ -1195,7 +1214,6 @@ def patients_synthesis(statistic):
     data = []
     data.append(['Durée totale de la PEC',
         'Durée moyenne de la PEC par patient'])
-    pec_total = sum([p.care_duration_since_last_contact_or_first_act for p in patients])
     data.append([(pec_total, pec_total/nb_patients)])
     data_tables.append(data)
 
@@ -1250,7 +1268,19 @@ def patients_synthesis(statistic):
     for record in closed_records:
         if record.get_current_state().status.type != 'CLOS':
             not_closed_now += 1
-        total_pec += record.care_duration_since_last_contact_or_first_act
+        closed_during_range_date = None
+        try:
+            closed_during_range_date = FileState.objects.filter(patient=record, status__type='CLOS',
+                date_selected__gte=statistic.in_start_date,
+                date_selected__lte=statistic.in_end_date).latest('date_selected')
+        except:
+            pass
+        if closed_during_range_date and not record.exit_date:
+            end_date = closed_during_range_date.date_selected
+        else:
+            end_date = statistic.in_end_date
+        total_pec += record.care_duration_before_close_state(end_date=end_date)
+
     avg_pec = 0
     if closed_records.count() and total_pec:
         avg_pec = total_pec/closed_records.count()
