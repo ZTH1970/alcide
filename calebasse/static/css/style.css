@@ -1523,3 +1523,7 @@ li.comment {
 div.statistic {
     background-color:#F7F2E0;
 }
+
+.addresses li {
+    list-style-type: none;
+}
