@@ -63,7 +63,7 @@ class StatisticsFormView(FormView):
         elif self.name == 'patients_details':
             return forms.PatientsTwoDatesForm
         elif self.name in ('active_patients_by_state_only',
-                'patients_protection'):
+                'patients_protection', 'patients_contact'):
             return forms.OneDateForm
         elif self.name in ('active_patients_with_act', 'closed_files',
                 'patients_synthesis', 'acts_synthesis',
@@ -100,4 +100,3 @@ class StatisticsFormView(FormView):
         qs = urllib.urlencode(self.request.POST)
         target = '../../detail/%s?%s' % (self.kwargs.get('name'), qs)
         return target
-

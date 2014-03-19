@@ -595,7 +595,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
                     datetime(date.year, date.month, date.day):
                 return state
             state = state.previous_state
-        return self.get_state()
+        return None
 
     def was_in_state_at_day(self, date, status_type):
         state_at_day = self.get_state_at_day(date)
@@ -956,7 +956,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     @property
     def care_duration_since_last_contact_or_first_act(self):
         # Duration between the first act present and the closing date.
-        # If no closing date, end_date is the date of tha last act
+        # If no closing date, end_date is the date of the last act
         contacts = FileState.objects.filter(patient=self, status__type='ACCUEIL').order_by('date_selected')
         last_contact = None
         first_act_after_last_contact = None
