@@ -852,7 +852,7 @@ def closed_files(statistic):
     data1.append(['Période', 'Jours',
         'Nombre de dossiers clos durant la période', 'PEC totale', 'PEC moyenne', "Dossiers qui ne sont plus clos"])
     data2 = []
-    data2.append(['Nom', 'Prénom', 'N° Dossier', 'Date de clôture', 'Durée de la PEC', "N'est plus clos"])
+    data2.append(['Nom', 'Prénom', 'N° Dossier', 'Date de clôture', 'Durée de la PEC', "N'est plus clos", "Dernier acte validé avant clôture", "Type de cet acte", "Etat précédent la clôture"])
     if not statistic.in_end_date:
         statistic.in_end_date = datetime.today()
     if not statistic.in_start_date:
@@ -867,6 +867,7 @@ def closed_files(statistic):
     total_pec = 0
     p_list = []
     not_closed_now = 0
+    closure_states = []
     for record in closed_records:
         ln = record.last_name or ''
         if len(ln) > 1:
@@ -875,19 +876,36 @@ def closed_files(statistic):
         if len(fn) > 1:
             fn = fn[0].upper() + fn[1:].lower()
         current_state = ''
-        close_date = record.last_state.date_selected.date()
+        closure_state = record.last_state
         if record.get_current_state().status.type != 'CLOS':
             not_closed_now += 1
             current_state = record.get_current_state().status.name + \
                 ' le ' + formats.date_format(record.get_current_state(). \
                 date_selected, "SHORT_DATE_FORMAT")
-            close_date = FileState.objects.filter(status__type='CLOS',
-                patient=record).order_by('-date_selected')[0].date_selected.date()
+            closure_state = FileState.objects.filter(status__type='CLOS',
+                patient=record).order_by('-date_selected')[0]
+        closure_states.append(closure_state)
+        close_date = closure_state.date_selected.date()
+        last_act_date = ""
+        last_act_type = ""
+        try:
+            last_act = Act.objects.filter(valide=True, patient=record, date__lte=close_date).order_by("-date")[0]
+            last_act_date = formats.date_format(last_act.date, "SHORT_DATE_FORMAT")
+            last_act_type = last_act.act_type
+        except:
+            pass
+        status = "Indéfini"
+        try:
+            status = closure_state.previous_state.status
+        except:
+            pass
+        close_date = formats.date_format(close_date, "SHORT_DATE_FORMAT")
         p_list.append((ln, fn, str(record.paper_id or ''),
             close_date,
-            record.care_duration_since_last_contact_or_first_act,
-            current_state))
-        total_pec += record.care_duration_since_last_contact_or_first_act
+            record.care_duration_before_close_state(closure_state.date_selected),
+            current_state, last_act_date, last_act_type,
+            status))
+        total_pec += record.care_duration_before_close_state(closure_state.date_selected)
     data2.append(sorted(p_list,
         key=lambda k: k[0]+k[1]))
     avg_pec = 0
@@ -913,6 +931,27 @@ def closed_files(statistic):
         values.append((status.name, duration, duration/closed_records.count()))
     data.append(values)
     data_tables.append(data)
+
+    states_before_closure = {}
+    for closure_state in closure_states:
+        status = "Indéfini"
+        try:
+            status = closure_state.previous_state.status.name
+        except:
+            pass
+        states_before_closure.setdefault(status, []).append(closure_state)
+    data = []
+    data.append(["Etat du dossier avant clôture", "Nombre de dossiers", "Nombre de jours total de la PEC", "Nombre de jours moyen de la PEC"])
+    values = []
+    for k, v in states_before_closure.items():
+        if v:
+            total_pec = 0
+            for closure_state in v:
+                total_pec += closure_state.patient.care_duration_before_close_state(closure_state.date_selected)
+            values.append((k, len(v), total_pec, total_pec/len(v)))
+    data.append(values)
+    data_tables.append(data)
+
     return [data_tables]
 
 def patients_details(statistic):
