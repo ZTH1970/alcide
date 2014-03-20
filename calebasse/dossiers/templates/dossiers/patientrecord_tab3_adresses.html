@@ -15,7 +15,7 @@
                 <button type="button" data-id="{{ object.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
             </div>
             <div>
-              {% include "dossiers/patientrecord_tab3_contact.html" %}
+              {% include "dossiers/patientrecord_tab3_contact.html" with contact=object %}
             <hr>
             <span>
                 <form method="post" id="contact-form">{% csrf_token %}
