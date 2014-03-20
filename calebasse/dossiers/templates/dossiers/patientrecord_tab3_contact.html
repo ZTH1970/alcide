@@ -1,0 +1,82 @@
+<ul>
+  {% if contact.parente %}
+  <li><label>Lien avec le patient :</label>
+  {{ contact.parente }}</li>
+  {% endif %}
+  {% if contact.mobile %}
+  <li>
+  <span class="icon-user-space">{{ contact.mobile }} (perso)</span>
+  </li>
+  {% endif %}
+  {% if contact.phone %}
+  <li>
+  <span class="icon-user-space">{{ contact.phone }} (pro)</span>
+  </li>
+  {% endif %}
+  {% if contact.email %}
+  <li>
+  <label>Courriel :</label>
+  {{ contact.email }}
+  </li>
+  {% endif %}
+  {% if contact.job %}
+  <li>
+  <label>Profession :</label>
+  {{ contact.job }}
+  </li>
+  {% endif %}
+  {% if contact.contact_comment %}
+  <li>
+  <label>Commentaire :</label>
+  {{ contact.contact_comment }}
+  </li>
+  {% endif %}
+  <span class="social-security-contact">
+    <label class="social-security-label">Infos d'assuré [+]</label>
+    <ul>
+      {% if object.social_security_id %}
+      <li><label>Numéro d'assuré social :</label>
+      {{ object.social_security_id }} {{ object.get_control_key }}</li>
+      {% endif %}
+      {% if object.birthdate %}
+      <li><label>Date de naissance :</label>
+      {{ object.birthdate|date:"SHORT_DATE_FORMAT" }}</li>
+      {% endif %}
+      {% if object.birthplace %}
+      <li><label>Lieu de naissance :</label>
+      {{ object.birthplace }}</li>
+      {% endif %}
+      {% if object.begin_rights %}
+      <li><label>Début de droits :</label>
+      {{ object.begin_rights }}</li>
+      {% endif %}
+      {% if object.end_rights %}
+      <li><label>Fin de droits :</label>
+      {{ object.end_rights }}</li>
+      {% endif %}
+      {% if object.health_center %}
+      <li><label>Caisse :</label>
+      {{ object.health_center }} ({{ object.health_center.address }} {{ object.health_center.address_complement }} {{ object.health_center.zip_code }} {{ object.health_center.city }})</li>
+      {% endif %}
+      {% if object.other_health_center %}
+      <li><label>Centre spécifique :</label>
+      {{ object.other_health_center }}</li>
+      {% endif %}
+      {% if object.management_code %}
+      <li><label>Code de gestion :</label>
+      {{ object.management_code }}</li>
+      {% endif %}
+      <li><label>Tiers-payant :</label>
+      {% if object.thirdparty_payer %}
+      Oui
+      {% else %}
+      Non
+      {% endif %}
+      </li>
+      {% if object.twinning_rank %}
+      <li><label>Rang (gémellité) :</label>
+      {{ object.twinning_rank }}</li>
+      {% endif %}
+    </ul>
+  </span>
+</ul>
