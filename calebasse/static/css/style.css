@@ -1532,3 +1532,16 @@ div#tabs label.place_of_lifes_warning {
     color: orange;
     font-weight: bold;
 }
+
+#social-security-label {
+    cursor: pointer;
+}
+
+label#social-security-label:hover {
+    font-weight: bold;
+}
+
+#social-security-contact ul {
+    display: none;
+}
+

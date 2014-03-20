@@ -332,6 +332,18 @@ function state_dialog(url, state_title, state_type) {
     $('button.blind').click(function() {
       $(this).next().toggle('blind');
     });
+    $('#social-security-label').click(function() {
+      var label = $(this).html();
+      var data = $(this).next();
+      if (($(data).is(':hidden'))) {
+        $(this).html(label.replace('+', '-'));
+        $(this).css("font-weight", "bold");
+      } else {
+        $(this).html(label.replace('-', '+'));
+        $(this).css("font-weight", "");
+      }
+      $(data).toggle();
+    });
     $('#prescription-transport-btn').click(function() {
         $('#ajax-dlg').load('prescription-transport',
           function () {
