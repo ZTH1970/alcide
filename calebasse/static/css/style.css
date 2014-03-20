@@ -1533,15 +1533,15 @@ div#tabs label.place_of_lifes_warning {
     font-weight: bold;
 }
 
-#social-security-label {
+.social-security-label {
     cursor: pointer;
 }
 
-label#social-security-label:hover {
+label.social-security-label:hover {
     font-weight: bold;
 }
 
-#social-security-contact ul {
+.social-security-contact ul {
     display: none;
 }
 

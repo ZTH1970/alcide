@@ -47,8 +47,8 @@
                         </li>
                     {% endif %}
             </ul>
-            <div id="social-security-contact">
-            <label id="social-security-label">Données d'assuré social [+]</label>
+            <div class="social-security-contact">
+            <label class="social-security-label">Infos d'assuré [+]</label>
             <ul>
               {% if object.social_security_id %}
               <li><label>Numéro d'assuré social :</label>
@@ -159,8 +159,8 @@
                     {{ contact.contact_comment }}
                     </li>
                 {% endif %}
-                <li><label>Données d'assuré social</label>
-<!--                            <button class="blind">détails</button>-->
+                <div class="social-security-contact">
+                <label class="social-security-label">Infos d'assuré [+]</label>
                         <ul>
                         {% if contact.social_security_id %}
                             <li><label>Numéro d'assuré social :</label>
@@ -202,7 +202,7 @@
                             {{ contact.twinning_rank }}</li>
                         {% endif %}
                         </ul>
-                    </li>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -271,8 +271,8 @@
                         {{ contact.contact_comment }}
                         </li>
                     {% endif %}
-                    <li><label>Données d'assuré social</label>
-                            <!-- <button class="blind">détails</button> -->
+                    <span class="social-security-contact">
+                      <label class="social-security-label">Infos d'assuré [+]</label>
                             <ul>
                             {% if contact.social_security_id %}
                                 <li><label>Numéro d'assuré social :</label>
@@ -314,9 +314,9 @@
                                 {{ contact.twinning_rank }}</li>
                             {% endif %}
                             </ul>
-                        </li>
+                        </div>
                     </ul>
-                </div>
+                </span>
             </div>
             {% endif %}
             {% endfor %}

@@ -332,7 +332,7 @@ function state_dialog(url, state_title, state_type) {
     $('button.blind').click(function() {
       $(this).next().toggle('blind');
     });
-    $('#social-security-label').click(function() {
+    $('.social-security-label').click(function() {
       var label = $(this).html();
       var data = $(this).next();
       if (($(data).is(':hidden'))) {
