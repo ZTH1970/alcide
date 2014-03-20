@@ -19,6 +19,7 @@
       {% else %}
       <label class="place_of_lifes_warning">Pas de lieu de vie</label>
       {% endif %}
+      {% if object.contact_comment %}<pre>{{ object.contact_comment }}</pre>{% endif %}
         {% if object.addresses.all %}
         <ul>
           {% for address in object.addresses.all %}
