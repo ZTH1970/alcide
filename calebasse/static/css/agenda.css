@@ -1,0 +1,97 @@
+#users {
+    font: normal .8em Arial;
+}
+
+#users dt {
+    background: #eee;
+    border: 1px solid #ddd;
+    padding: .1em;
+    border-radius: .2em;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-border-radius: .2em;
+    -webkit-border-radius: .2em;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+#users li:hover .icon-toggle {
+    display: block;
+}
+
+#users .icon-toggle {
+    float: right;
+    display: none;
+}
+
+#users .icon-toggle:before {
+    content: "\f067";
+}
+
+#users .active .icon-toggle:before {
+    content: "\f00d";
+}
+
+div.agenda ul {
+    padding: 0;
+    list-style: none;
+}
+
+div.agenda span.act_type {
+    display : inline-block;
+    font-size: 80%;
+    min-width: 23%;
+}
+
+div.agenda h3.info {
+    color: #8c8c73;
+    font-style: italic;
+}
+
+div.agenda span.room {
+    display : inline-block;
+}
+
+div.agenda span.length {
+    display : inline-block;
+    min-width: 7%;
+}
+
+div.agenda span.hour {
+    padding-left: 20px;
+    display : inline-block;
+    min-width: 6%;
+}
+
+div.agenda span.title {
+    display : inline-block;
+    min-width: 25%;
+}
+
+div.agenda span.participants {
+    display: inline-block;
+    min-width: 15%;
+}
+
+#content div.agenda h3 {
+    margin: 5px 0 0 0;
+    padding: 3px 5px;
+    font-size: 100%;
+    background: white;
+}
+
+.search {
+    border: 1px solid #bbb;
+    border-radius:.2em;
+    background: #fff;
+}
+
+.search:before {
+    content: '\f002';
+    font: normal 1.3em FontAwesome;
+    margin: auto .4em;
+}
+
+.search input {
+    border: 0 !important;
+    width: 77%;
+}

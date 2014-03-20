@@ -384,10 +384,6 @@ body.no-left-column div.content {
   margin-left: 0px;
 }
 
-div#users input {
-	width: 10em;
-}
-
 div#users input#show-everybody {
 	width: auto;
 }
@@ -500,54 +496,6 @@ span.absent{
 td#agendas {
 	vertical-align: top;
 	width: 100%;
-}
-
-div.agenda ul {
-	padding: 0;
-	list-style: none;
-}
-
-#content div.agenda h3 {
-	padding: 3px 5px;
-	margin: 5px 0;
-	font-size: 100%;
-	background: white;
-}
-
-div.agenda span.hour {
-	padding-left: 20px;
-    display : inline-block;
-    min-width: 80px;
-}
-
-div.agenda span.length {
-    display : inline-block;
-    min-width: 90px;
-}
-
-div.agenda span.title {
-    display : inline-block;
-    min-width: 320px;
-}
-
-div.agenda span.participants {
-    display : inline-block;
-    min-width: 150px;
-}
-
-div.agenda span.act_type {
-    display : inline-block;
-	font-size: 80%;
-    min-width: 230px;
-}
-
-div.agenda span.room {
-    display : inline-block;
-}
-
-div.agenda h3.info {
-	color: #8c8c73;
-	font-style: italic;
 }
 
 #content div.agenda h3.free {
