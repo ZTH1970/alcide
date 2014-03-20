@@ -301,14 +301,6 @@ function toggle_ressource(ressource_selector, ressource) {
     }
 
     if ($(tab_selector).length) {
-        /* load appointments tab */
-        // $('#tabs-ressource').load(url + 'ajax-' + ressource + '-tab/' + ressource_id,
-        //                           function () {
-        //                               $(this).children('div').accordion({active: false,
-        //                                                                  autoHeight: false,
-        //                                                                  collapsible: true});
-        //                               enable_events(this);}
-        //                          );
         /* load disponibility column */
         $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
@@ -331,16 +323,20 @@ function toggle_ressource(ressource_selector, ressource) {
 }
 
 function event_dialog(url, title, width, btn_text) {
-    add_dialog('#rdv', url, title, width, btn_text);
+    add_dialog('#ajax-dlg', url, title, width, btn_text);
 }
 
 (function($) {
   $(function() {
       $('#tabs').tabs({
           load: function(event, ui) {
-              $('#tabs > div > div').accordion({active: false, autoHeight: false, collapsible: true});
+              $('#tabs > div > div').accordion({active: false,
+                                                autoHeight: false,
+                                                collapsible: true});
+              enable_events($('body'));
           },
           selected: -1,
+          collapsible: true,
       });
 
       $('#tabs').ajaxStop(function() { reorder_disponibility_columns(); });
@@ -457,7 +453,6 @@ function event_dialog(url, title, width, btn_text) {
           $(this).prev().val('').focus();
           return false;
       });
-      enable_events($('body'));
       $('#show-everybody').change(function() {
       if (! $(this).is(':checked')) {
         $('#filtre input').val('');
