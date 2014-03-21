@@ -15,9 +15,9 @@
       {% if nb_place_of_lifes == 1 %}
       <label>Lieux de vie :</label>
       {% elif nb_place_of_lifes > 1 %}
-      <label class="place_of_lifes_warning">{{ nb_place_of_lifes }} lieux de vie :</label>
+      <label class="warning">{{ nb_place_of_lifes }} lieux de vie :</label>
       {% else %}
-      <label class="place_of_lifes_warning">Pas de lieu de vie</label>
+      <label class="warning">Pas de lieu de vie</label>
       {% endif %}
       {% if object.contact_comment %}<pre>{{ object.contact_comment }}</pre>{% endif %}
         {% if object.addresses.all %}

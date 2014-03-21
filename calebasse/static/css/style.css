@@ -1476,7 +1476,7 @@ div.statistic {
     list-style-type: none;
 }
 
-div#tabs label.place_of_lifes_warning {
+.warning, div#tabs label.warning {
     color: orange;
     font-weight: bold;
 }
