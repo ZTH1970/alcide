@@ -237,24 +237,6 @@ function enable_events(base) {
       });
 }
 
-function reorder_disponibility_columns() {
-    /* make sure column are ordered like tabs */
-    var table_indexes = new Array();
-    $('a.tab').each(function(a, b) {
-        table_indexes.push($(b).data('id'));
-    });
-
-    rows = $('td#dispos table tr');
-    for (var i=0; i<rows.length; i++) {
-        tr = $(rows[i]);
-        t = $.map(table_indexes,
-                  function(v, i) { return $('.ressource-' + v, tr)[0]; }).filter(
-                  function(a) { if (a) return true; return false; });
-        $('.agenda', tr).detach();
-        $(tr).append(t);
-    };
-}
-
 function toggle_ressource(ressource_selector, ressource) {
 
     var ressource_id = $(ressource_selector).data(ressource + '-id');
@@ -285,7 +267,7 @@ function toggle_ressource(ressource_selector, ressource) {
     }
     var target = $($(ressource_selector).data('target'));
     target.toggle();
-    $('#close-all-' + ressource + '-agendas').toggle($('li.agenda:visible').length != 0);
+    $('#close-all-agendas').toggle($('li.agenda:visible').length != 0);
 
     var tab = $('#link-tab-' + ressource + '-' + ressource_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
@@ -305,20 +287,15 @@ function toggle_ressource(ressource_selector, ressource) {
         $.get(url + 'ajax-' + ressource + '-disponibility-column/' + ressource_id,
             function(data) {
                 if ($(tab_selector).hasClass('active')) {
-                    var dispo_table_rows = $('td#dispos table tr');
-                    all_td = $(data).find('td');
-                    $(data).find('td').each(function(a, b) {
-                        $(dispo_table_rows[a]).append(b);
-                    });
+                    var availability_block = $('ul#availability');
+                    availability_block.append($(data));
                 }
             }
         );
     } else {
         // remove hidden ressource availability
-        $('td#dispos table tr td.ressource-' + ressource_id + '.agenda').remove();
+        $('ul#availability li.ressource-'+ressource_id).remove();
     }
-
-    reorder_disponibility_columns();
     return target.find('a.tab');
 }
 
@@ -338,8 +315,6 @@ function event_dialog(url, title, width, btn_text) {
           selected: -1,
           collapsible: true,
       });
-
-      $('#tabs').ajaxStop(function() { reorder_disponibility_columns(); });
 
       if ($('.worker-item').length) {
           $('.worker-item').on('click', function() {
@@ -470,7 +445,8 @@ function event_dialog(url, title, width, btn_text) {
             'rooms': {'button': 'ressource', 'element': 'ressource'}
            },
          function(key, value) {
-             $('#close-all-' + value.button + '-agendas').click(function() {
+             $('#close-all-agendas').click(function() {
+                 console.log(value);
                  $.cookie('active-' + value.element + '-agenda', '', {path: COOKIE_PATH});
                  $('.' + value.element + '-item.active').each(function (i, v) {
                      toggle_ressource(v, value.element);

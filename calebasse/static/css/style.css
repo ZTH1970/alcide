@@ -452,40 +452,14 @@ a#datesel-today-link {
   top: -6px;
 }
 
-td#dispos {
-	padding-top: 55px;
-  vertical-align: top;
-  position: relative;
-}
-
-td#dispos tr.initials {
-	font-size: 80%;
-	font-family: monospace;
-}
-
 td#dispos td {
 	height: 4px;
 	width: 15px;
 	vertical-align: top;
 }
 
-button#close-all-agendas {
-  position: absolute;
-  top: 0px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-td.away {
-	background: #ccc;
-}
-
-td.free {
-	background: green;
-}
-
-td.busy {
-	background: red;
+td#dispos h5 {
+    margin: 5px auto;
 }
 
 span.absent{

@@ -1,10 +1,18 @@
-<tr><td class="ressource-{{ ressource_id }} agenda" data-id="{{ ressource_id }}">{{ initials }}</td></tr>
-{% for start_time, quarters in disponibility.items %}
-  <tr>
+<li class='ressource-{{ ressource_id }}'>
+<ul>
+  <li class="initials" data-id="{{ ressource_id }}">
+    {{ initials }}
+  </li>
+  {% for start_time, quarters in disponibility.items %}
+  <li class="hour-mark">
+    <ul>
       {% for quarter in quarters %}
-        {% for value in quarter %}
-        <td class="ressource-{{ value.id }} agenda {{ value.dispo }}" data-id="{{ value.id }}"></td>
-        {% endfor %}
+      {% for value in quarter %}
+      <li class="ressource-{{ value.id }} agenda {{ value.dispo }}" data-id="{{ value.id }}"></li>
       {% endfor %}
-  </tr>
-{% endfor %}
+      {% endfor %}
+    </ul>
+  </li>
+  {% endfor %}
+</ul>
+</li>
