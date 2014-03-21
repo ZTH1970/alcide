@@ -322,6 +322,7 @@ function state_dialog(url, state_title, state_type) {
                 (prev).show();
                 (prev).html('<li>Modification appliquée avec succés</li>');
                 $('.ajax_messages').delay(1500).fadeOut('slow');
+                location.reload();
               }
           });
       });

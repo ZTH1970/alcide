@@ -708,6 +708,10 @@ div.frame {
   border-radius: 4px;
 }
 
+div.orange {
+    background: rgba(255, 165, 0, 0.4);
+}
+
 div.frame h3 {
   margin: 0;
   margin-bottom: 1ex;

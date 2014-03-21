@@ -53,7 +53,7 @@
         {% endif %}
     {% endfor %}
     {% for address in addresses %}
-    <div class="frame">
+    <div class="frame {% if address.place_of_life %}orange{% endif %}">
         <h3>{{ address }}</h3>
         <div class="buttons">
             <button type="button" data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
