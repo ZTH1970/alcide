@@ -272,6 +272,9 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['object'].automated_switch_state(self.request.user)
         ctx['initial_state'] = ctx['object'].get_initial_state()
         current_state = ctx['object'].get_current_state()
+        if not current_state:
+            current_state = ctx['object'].get_state()
+            ctx['future_state'] = True
         if STATES_MAPPING.has_key(current_state.status.type):
             state = STATES_MAPPING[current_state.status.type]
         else:
@@ -881,7 +884,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def _get_search_result(self, paginate_patient_records):
         patient_records = []
         for patient_record in paginate_patient_records:
-            current_state = patient_record.get_current_state()
+            current_state = patient_record.get_current_state() or patient_record.get_state()
             state = current_state.status.name
             state_class = current_state.status.type.lower()
             patient_records.append(

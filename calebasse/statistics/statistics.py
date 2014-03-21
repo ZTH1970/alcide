@@ -1221,10 +1221,14 @@ def patients_synthesis(statistic):
     data.append(["Etat du dossier à ce jour (%s)" % formats.date_format(datetime.today(), "SHORT_DATE_FORMAT"), 'Nombre de patients'])
     states = dict()
     for patient in patients:
-        states.setdefault(patient.get_current_state().status, []).append(patient)
+        current_state = patient.get_current_state()
+        state = "Indéfini"
+        if current_state:
+            state = current_state.status.name
+        states.setdefault(state, []).append(patient)
     values = []
     for state, ps in states.iteritems():
-        values.append((state.name, len(ps)))
+        values.append((state, len(ps)))
     data.append(values)
     data_tables.append(data)
 
