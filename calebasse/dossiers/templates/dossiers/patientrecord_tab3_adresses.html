@@ -18,18 +18,14 @@
               {% include "dossiers/patientrecord_tab3_contact.html" with contact=object %}
             <hr>
             <span>
-                <form method="post" id="contact-form">{% csrf_token %}
-                <label>Commentaire </label> <button class="save enable-on-change" id="btn-maj">✔</button><br/>
-                {{ forms.contact.contact_comment }}
+                <label>Commentaire </label> <button class="save enable-on-change btn-maj">✔</button><br/>
+                {{ forms.policyholder.contact_comment }}
             </span>
-          </form>
         </div>
     </div>
 
 <button type="button" id="new-address-btn">Nouvelle adresse</button>
 <button type="button" id="new-contact-btn">Nouveau contact</button>
-
-
 
 {% for contact in object.contacts.all %}
     {% if not contact.addresses.all %}

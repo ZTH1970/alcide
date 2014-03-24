@@ -185,8 +185,11 @@ class PaperIDForm(ModelForm):
 class PolicyHolderForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('policyholder', )
-        widgets = { 'policyholder': forms.RadioSelect() }
+        fields = ('policyholder', 'contact_comment')
+        widgets = { 
+                'policyholder': forms.RadioSelect(),
+                'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
+                }
 
 class FollowUpForm(ModelForm):
     coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)
@@ -200,7 +203,6 @@ class PatientContactForm(ModelForm):
     class Meta:
         model = PatientContact
         widgets = {
-                'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 'key': forms.TextInput(attrs={'size': 4}),
                 'twinning_rank': forms.TextInput(attrs={'size': 4}),
                 'health_org': forms.TextInput(attrs={'size': 9}),

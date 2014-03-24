@@ -40,7 +40,7 @@
         </ul>
         {% else %}Aucun{% endif %}
     </li>
-      <li><label>Commentaire </label> <button class="save enable-on-change" id="btn-maj">✔</button><br/>
+      <li><label>Commentaire </label> <button class="save enable-on-change btn-maj">✔</button><br/>
       {{ forms.general.comment }}
       </li>
     </ul>
@@ -87,7 +87,7 @@
       {{ forms.general.confidential.label_tag }} : {{ forms.general.confidential }}
       <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
       {{ forms.general.pause.label_tag }} : {{ forms.general.pause }}
-      <br/><label>Commentaire de la pause facturation</label> <button class="save enable-on-change" id="btn-maj">✔</button><br/>
+      <br/><label>Commentaire de la pause facturation</label> <button class="save enable-on-change btn-maj">✔</button><br/>
       {{ forms.general.pause_comment }}
 
     </div>
