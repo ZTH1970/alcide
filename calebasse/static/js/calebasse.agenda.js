@@ -266,8 +266,12 @@ function toggle_ressource(ressource_selector, ressource) {
         $.cookie('agenda-' + ressource + '-tabs', agendatabs, { path: COOKIE_PATH });
     }
     var target = $($(ressource_selector).data('target'));
-    target.toggle();
-    $('#close-all-agendas').toggle($('li.agenda:visible').length != 0);
+    target.toggle()
+    $('#close-all-agendas').toggle($('#users li.active').length != 0);
+
+    if (! $('#users li.active').length) {
+        $('#agendas #tabs div').hide();
+    }
 
     var tab = $('#link-tab-' + ressource + '-' + ressource_id).parent().get(0);
     var tab_list = $(tab).parent().get(0);
@@ -311,13 +315,6 @@ function event_dialog(url, title, width, btn_text) {
                                                 autoHeight: false,
                                                 collapsible: true});
               enable_events($('body'));
-          },
-          activate: function (event, ui) {
-              /* trick to hide schedule div when tab closed */
-              $('span.ui-icon-circle-close', ui.newTab).unbind('click');
-              $('span.ui-icon-circle-close', ui.newTab).click(function() {
-                  ui.newPanel.hide();
-              });
           },
           selected: -1,
           collapsible: true,
