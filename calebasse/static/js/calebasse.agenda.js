@@ -312,6 +312,13 @@ function event_dialog(url, title, width, btn_text) {
                                                 collapsible: true});
               enable_events($('body'));
           },
+          activate: function (event, ui) {
+              /* trick to hide schedule div when tab closed */
+              $('span.ui-icon-circle-close', ui.newTab).unbind('click');
+              $('span.ui-icon-circle-close', ui.newTab).click(function() {
+                  ui.newPanel.hide();
+              });
+          },
           selected: -1,
           collapsible: true,
       });
