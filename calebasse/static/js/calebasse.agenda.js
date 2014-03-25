@@ -12,6 +12,36 @@ function delete_prompt(text) {
     return false;
   }
 }
+
+function enable_new_appointment(base) {
+    var base = base || 'body';
+    $(base).find('.newrdv').click(function() {
+        var participants = new Array();
+        if ($.cookie('agenda-worker-tabs')) {
+            participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
+        }
+        var qs = $.param({participants: $.makeArray(participants),
+                          room: $.cookie('active-ressource-agenda'),
+                          time: $(this).data('hour') }, true);
+        var new_appointment_url = $(this).data('url') + "?" + qs;
+        event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
+    });
+}
+
+function enable_new_event(base) {
+    var base = base || 'body';
+    $(base).find('.newevent').click(function() {
+        var participants = new Array();
+        if ($.cookie('agenda-worker-tabs')) {
+            var participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
+        }
+        var qs = $.param({participants: $.makeArray(participants),
+                          room: $.cookie('active-ressource-agenda'),
+                          time: $(this).data('hour') }, true);
+        event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
+    });
+}
+
 function enable_events(base) {
       $(base).find('.textedit').on('keydown', function() {
           $('button', this).removeAttr("disabled");
@@ -83,6 +113,9 @@ function enable_events(base) {
           });
       });
 
+    enable_new_appointment(base);
+    enable_new_event(base);
+
       $(base).find('.appointment').on('click', function() {
           $('.textedit span', this).html('');
       });
@@ -102,17 +135,7 @@ function enable_events(base) {
            }
         return false;
       });
-      $(base).find('.newrdv').click(function() {
-          var participants = new Array();
-          if ($.cookie('agenda-worker-tabs')) {
-              participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
-          }
-          var qs = $.param({participants: $.makeArray(participants),
-                            room: $.cookie('active-ressource-agenda'),
-                            time: $(this).data('hour') }, true);
-          var new_appointment_url = $(this).data('url') + "?" + qs;
-          event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
-      });
+
       $(base).find('.edit-appointment').click(function() {
         id = $(this).data("event-id");
         $.getJSON("/api/v1/eventwithact/" + id + "/?format=json")
@@ -126,16 +149,6 @@ function enable_events(base) {
             return false;
          });
         return false;
-      });
-      $(base).find('.newevent').click(function() {
-          var participants = new Array();
-          if ($.cookie('agenda-worker-tabs')) {
-              var participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
-          }
-          var qs = $.param({participants: $.makeArray(participants),
-                            room: $.cookie('active-ressource-agenda'),
-                            time: $(this).data('hour') }, true);
-          event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
       });
       $(base).find('.edit-event').click(function() {
           event_dialog("/" + service + "/agenda/" + current_date + "/update-event/" + $(this).data('event-id') , 'Modifier un événement', '850px', 'Modifier');
@@ -314,11 +327,14 @@ function event_dialog(url, title, width, btn_text) {
               $('#tabs > div > div').accordion({active: false,
                                                 autoHeight: false,
                                                 collapsible: true});
-              enable_events($('body'));
+              enable_events('#tabs');
           },
           selected: -1,
           collapsible: true,
       });
+
+      enable_new_event();
+      enable_new_appointment();
 
       if ($('.worker-item').length) {
           $('.worker-item').on('click', function() {
