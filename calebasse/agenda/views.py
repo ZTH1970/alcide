@@ -637,6 +637,7 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         holidays_workers = {worker.id: holidays_worker}
 
         context['initials'] = worker.initials
+        context['type'] = 'worker'
         context['ressource_id'] = worker.id
         context['disponibility'] = Event.objects.daily_disponibilities(self.date,
                 events_workers, [worker], time_tables_workers, holidays_workers)
@@ -647,7 +648,7 @@ class AjaxRessourceDisponibilityColumnView(AjaxWorkerDisponibilityColumnView):
     def get_context_data(self, ressource_id, **kwargs):
         context = {}
         ressource = Room.objects.get(pk = ressource_id)
-        context = {'initials': ressource.name[:3], 'ressource_id': ressource.id}
+        context = {'initials': ressource.name[:3], 'ressource_id': ressource.id, 'type': 'ressource'}
         disponibility = dict()
         start_datetime = datetime.datetime(self.date.year,
                                            self.date.month,
