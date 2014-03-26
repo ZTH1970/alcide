@@ -1,1 +1,9 @@
+Installation with virtualenv on Debian
+--------------------------------------
 
+	apt-get install libldap2-dev libsasl2-dev swig
+	virtualenv venv
+	. ./venv/bin/activate
+	pip install -U setuptools
+	pip install -U pip
+	pip install -r requirements
