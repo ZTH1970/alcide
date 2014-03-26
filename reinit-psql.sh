@@ -1,16 +1,30 @@
 #!/bin/bash
 
-DUMP='calebasse-dump-'$(date +%Y%m%d%H%M)'.sql.bz2'
+DUMP='last_dump.sql.bz2'
+HELP="./`basename $0` [new|dl]"
+
+if [ $# -gt 1 ]; then
+    echo $HELP
+    exit 1
+fi
+
+if [ $# ]; then
+    if [ "$1" != "new" -a "$1" != "dl" ]; then
+        echo $HELP
+        exit 1
+    fi
+fi
 
 sudo -u postgres dropdb calebasse
 sudo -u postgres createdb calebasse -O $USER
 
-if [ $1 == 'dl' ]; then
-    ssh calebasse.aps42.entrouvert.com ssh prod "sudo -u postgres pg_dump -O calebasse | bzip2 > $DUMP"
+if [ $# ]; then
+    if [ $1 = "new" ]; then
+        ssh calebasse.aps42.entrouvert.com ssh prod "/etc/cron.daily/calebasse_dumpdb"
+    fi
+    ssh calebasse.aps42.entrouvert.com scp prod:/tmp/$DUMP .
     scp calebasse.aps42.entrouvert.com:$DUMP .
-    ssh calebasse.aps42.entrouvert.com "rm $DUMP"
+    ssh calebasse.aps42.entrouvert.com "rm /tmp/$DUMP"
 fi
-
-mv $DUMP last_dump.sql.bz2
 
 bzip2 -dc ./last_dump.sql.bz2 | psql calebasse
