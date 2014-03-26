@@ -7,9 +7,10 @@
   <li class="hour-mark">
     <ul>
       {% for quarter in quarters %}
-      {% for value in quarter %}
-      <li class="ressource-{{ value.id }} agenda {{ value.dispo }}" data-id="{{ value.id }}"></li>
+      {% for min, value in quarter %}
+      <li class="ressource-{{ value.id }} agenda {{ value.dispo }}" data-id="{{ value.id }}" title="{{ start_time|stringformat:"02d" }}:{{ min|stringformat:"02d" }}"></li>
       {% endfor %}
+
       {% endfor %}
     </ul>
   </li>

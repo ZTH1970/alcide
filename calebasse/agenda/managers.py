@@ -78,17 +78,19 @@ class EventQuerySet(InheritanceQuerySet):
                     result[start_datetime.hour] = [[], [], [], []]
                     quarter = 0
                 interval = IntervalSet.between(start_datetime, end_datetime, False)
+                mins = quarter * 15
                 if interval.intersection(events_set[participant.id]):
-                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'busy'})
+                    result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'busy'}))
                 elif interval.intersection(holidays_set[participant.id]):
-                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'busy'})
+                    result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'busy'}))
                 elif not interval.intersection(timetables_set[participant.id]):
-                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'away'})
+                    result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'away'}))
                 else:
-                    result[start_datetime.hour][quarter].append({'id': participant.id, 'dispo': 'free'})
+                    result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'free'}))
             quarter += 1
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
+        print result
         return result
 
 
