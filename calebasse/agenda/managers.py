@@ -90,7 +90,6 @@ class EventQuerySet(InheritanceQuerySet):
             quarter += 1
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
-        print result
         return result
 
 
