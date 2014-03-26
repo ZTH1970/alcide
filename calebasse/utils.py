@@ -13,18 +13,21 @@ def weeks_since_epoch(date):
 
 def weekday_ranks(date):
     '''Returns n so that if date occurs on a certain weekday, this is the
-    n-th weekday of the month counting from 0. Also return 4 if this the
-    last suck weekday of the month. '''
+       n-th weekday of the month counting from the first. Also return -n-1 if
+       this is the n-th weekday of the month counting from the last.
+    '''
     n = 0
     month = date.month
     i = date - timedelta(days=7)
     while i.month == month:
         n += 1
         i = i - timedelta(days=7)
-    if (date+timedelta(days=7)).month != month and n != 4:
-        return n, 4
-    else:
-        return n,
+    m = -1
+    i = date + timedelta(days=7)
+    while i.month == month:
+        m -= 1
+        i = i + timedelta(days=7)
+    return n, m
 
 def is_super_user(user):
     if not user or not user.is_authenticated():

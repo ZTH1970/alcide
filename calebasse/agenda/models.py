@@ -95,7 +95,13 @@ class Event(models.Model):
             (1, u'La deuxième semaine du mois'),
             (2, u'La troisième semaine du mois'),
             (3, u'La quatrième semaine du mois'),
-            (4, u'La dernière semaine du mois')
+            (4, u'La cinquième semaine du mois'),
+            (-1, u'La dernière semaine du mois'),
+#            (-2, u'L\'avant dernière semaine du mois'),
+#            (-3, u'L\'antépénultième semaine du mois'),
+#            (-4, u'L\'anté-antépénultième semaine du mois'),
+#            (-5, u'L\'anté-anté-antépénultième semaine du mois')
+
     )
     PARITIES = (
             (0, u'Les semaines paires'),
@@ -121,7 +127,7 @@ class Event(models.Model):
             blank=True,
             null=True,
             db_index=True)
-    recurrence_week_rank = models.PositiveIntegerField(
+    recurrence_week_rank = models.IntegerField(
             verbose_name=u"Rang de la semaine dans le mois",
             choices=WEEK_RANKS,
             blank=True, null=True, db_index=True)
