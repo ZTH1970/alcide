@@ -305,6 +305,7 @@ function toggle_ressource(ressource) {
 
     if ($(tab_selector).length) {
         /* load disponibility column */
+        $.ajaxSetup({async:false});
         $.get(url + 'disponibility/' + ressource_id,
             function(data) {
                 if ($(tab_selector).hasClass('active')) {
@@ -313,6 +314,7 @@ function toggle_ressource(ressource) {
                 }
             }
         );
+       $.ajaxSetup({async:true});
     } else {
         // remove hidden ressource availability
         $('ul#availability li.' + ressource_id).remove();
