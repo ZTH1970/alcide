@@ -328,6 +328,10 @@ function event_dialog(url, title, width, btn_text) {
   $(function() {
       $('#tabs').tabs({
           load: function(event, ui) {
+              var tab = $(ui.tab).attr('id').split('-');
+              if(tab[0] == 'ressource')
+                  $.cookie('last-ressource', tab[1], { path: COOKIE_PATH });
+
               $('#tabs > div > div').accordion({active: false,
                                                 autoHeight: false,
                                                 collapsible: true});
