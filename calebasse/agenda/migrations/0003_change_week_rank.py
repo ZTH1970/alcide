@@ -6,10 +6,10 @@ class Migration(SchemaMigration):
     no_dry_run = True
 
     def forwards(self, orm):
-        orm.Event.filter(recurrence_week_rank=4).update(recurrence_week_rank=-1)
+        orm.Event.objects.filter(recurrence_week_rank=4).update(recurrence_week_rank=-1)
 
     def backwards(self, orm):
-        orm.Event.filter(recurrence_week_rank=-1).update(recurrence_week_rank=4)
+        orm.Event.objects.filter(recurrence_week_rank=-1).update(recurrence_week_rank=4)
 
     models = {
         u'agenda.event': {
