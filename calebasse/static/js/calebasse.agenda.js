@@ -13,32 +13,42 @@ function delete_prompt(text) {
   }
 }
 
+function get_participants() {
+    var participants = new Array();
+    var active_agenda = $.cookie('active-agenda').split('-');
+    var room = '';
+    if (active_agenda[0] == 'ressource') {
+        room = active_agenda[1];
+    } else {
+        room = $.cookie('last-ressource');
+    }
+
+    if ($.cookie('agenda-tabs')) {
+        participants = $.cookie('agenda-tabs').filter(function(v) {
+            var data = v.split('-');
+            if(data[0]=='worker')
+                return true;
+        });
+        participants = participants.map(function(v) {
+            var data = v.split('-'); return data[1]
+        });
+    }
+    return $.param({participants: $.makeArray(participants),
+                    room: room,
+                    time: $(this).data('hour') }, true);
+}
+
 function enable_new_appointment(base) {
     var base = base || 'body';
     $(base).find('.newrdv').click(function() {
-        var participants = new Array();
-        if ($.cookie('agenda-worker-tabs')) {
-            participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
-        }
-        var qs = $.param({participants: $.makeArray(participants),
-                          room: $.cookie('active-ressource-agenda'),
-                          time: $(this).data('hour') }, true);
-        var new_appointment_url = $(this).data('url') + "?" + qs;
-        event_dialog(new_appointment_url, 'Nouveau rendez-vous', '850px', 'Ajouter');
+        event_dialog($(this).data('url') + "?" + get_participants(), 'Nouveau rendez-vous', '850px', 'Ajouter');
     });
 }
 
 function enable_new_event(base) {
     var base = base || 'body';
     $(base).find('.newevent').click(function() {
-        var participants = new Array();
-        if ($.cookie('agenda-worker-tabs')) {
-            var participants = $.cookie('agenda-worker-tabs').map(function(i, v) { var data = i.split('-'); return data[2]});
-        }
-        var qs = $.param({participants: $.makeArray(participants),
-                          room: $.cookie('active-ressource-agenda'),
-                          time: $(this).data('hour') }, true);
-        event_dialog($(this).data('url') + "?" + qs, 'Nouvel événement', '850px', 'Ajouter');
+        event_dialog($(this).data('url') + "?" + get_participants(), 'Nouvel événement', '850px', 'Ajouter');
     });
 }
 
