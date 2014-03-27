@@ -432,12 +432,6 @@ div#appbar button {
 	top: -55px;
 }
 
-div#extra-top-links {
-	position: absolute;
-	right: 20px;
-}
-
-
 div#datesel {
 	text-align: center;
 	margin: 0 auto;
@@ -450,16 +444,6 @@ a#datesel-today-link {
   display: block;
   position: relative;
   top: -6px;
-}
-
-td#dispos td {
-	height: 4px;
-	width: 15px;
-	vertical-align: top;
-}
-
-td#dispos h5 {
-    margin: 5px auto;
 }
 
 span.absent{
