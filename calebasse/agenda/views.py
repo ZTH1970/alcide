@@ -601,13 +601,43 @@ class AjaxRessourceTabView(TemplateView):
         }
         return context
 
-class AjaxWorkerDisponibilityColumnView(TemplateView):
+class AjaxDisponibilityColumnView(TemplateView):
 
-    template_name = 'agenda/ajax-ressource-disponibility-column.html'
+    template_name = 'agenda/ajax-disponibility-column.html'
     cookies_to_clear = []
 
-    def get_context_data(self, worker_id, **kwargs):
-        context = super(AjaxWorkerDisponibilityColumnView, self).get_context_data(**kwargs)
+    def get_ressource_context_data(self, ressource_id, context):
+        ressource = Room.objects.get(pk = ressource_id)
+        context['initials'] = ressource.name[:3]
+        disponibility = dict()
+        start_datetime = datetime.datetime(self.date.year,
+                                           self.date.month,
+                                           self.date.day, 8, 0)
+        end_datetime = datetime.datetime(self.date.year, self.date.month,
+                                         self.date.day, 8, 15)
+        events = Event.objects.filter(room__id=ressource_id).today_occurrences(self.date)
+
+        while (start_datetime.hour <= 19):
+            if start_datetime.hour not in disponibility:
+                disponibility[start_datetime.hour] = [[], [], [], []]
+                quarter = 0
+            dispo = 'free'
+            mins = quarter * 15
+
+            if events:
+                event = events[0]
+
+                if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
+                    dispo = 'busy'
+            disponibility[start_datetime.hour][quarter].append((mins, {'id': ressource_id, 'dispo': dispo}))
+            quarter += 1
+            start_datetime += datetime.timedelta(minutes=15)
+            end_datetime += datetime.timedelta(minutes=15)
+        context['disponibility'] = disponibility
+        return context
+
+
+    def get_worker_context_data(self, worker_id, context):
         worker = Worker.objects.get(pk=worker_id)
 
         time_tables_worker = TimeTable.objects.select_related('worker'). \
@@ -637,46 +667,17 @@ class AjaxWorkerDisponibilityColumnView(TemplateView):
         holidays_workers = {worker.id: holidays_worker}
 
         context['initials'] = worker.initials
-        context['type'] = 'worker'
-        context['ressource_id'] = worker.id
         context['disponibility'] = Event.objects.daily_disponibilities(self.date,
                 events_workers, [worker], time_tables_workers, holidays_workers)
         return context
 
-class AjaxRessourceDisponibilityColumnView(AjaxWorkerDisponibilityColumnView):
-
-    def get_context_data(self, ressource_id, **kwargs):
-        context = {}
-        ressource = Room.objects.get(pk = ressource_id)
-        context = {'initials': ressource.name[:3], 'ressource_id': ressource.id, 'type': 'ressource'}
-        disponibility = dict()
-        start_datetime = datetime.datetime(self.date.year,
-                                           self.date.month,
-                                           self.date.day, 8, 0)
-        end_datetime = datetime.datetime(self.date.year, self.date.month,
-                                         self.date.day, 8, 15)
-        events = Event.objects.filter(room__id=ressource_id).today_occurrences(self.date)
-
-        while (start_datetime.hour <= 19):
-            if start_datetime.hour not in disponibility:
-                disponibility[start_datetime.hour] = [[], [], [], []]
-                quarter = 0
-            dispo = 'free'
-            mins = quarter * 15
-
-            if events:
-                event = events[0]
-
-                if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
-                    dispo = 'busy'
-
-            disponibility[start_datetime.hour][quarter].append((mins, {'id': ressource_id, 'dispo': dispo}))
-            quarter += 1
-            start_datetime += datetime.timedelta(minutes=15)
-            end_datetime += datetime.timedelta(minutes=15)
-        context['disponibility'] = disponibility
+    def get_context_data(self, ressource_type, ressource_id, **kwargs):
+        context = super(AjaxDisponibilityColumnView, self).get_context_data(**kwargs)
+        if ressource_type in ('worker', 'ressource',):
+            context['ressource_type'] = ressource_type
+            context['ressource_id'] = ressource_id
+            getattr(self, 'get_%s_context_data' % ressource_type)(ressource_id, context)
         return context
-
 
 class PeriodicEventsView(cbv.ListView):
     model = EventWithAct
