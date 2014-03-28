@@ -23,54 +23,27 @@
 {% block content %}
 <div id="tabs">
   <ul>
-    <li><a data-id="0" class="atabs" href="#tabs-1">Général</a></li>
-    <li><a data-id="1" class="atabs" href="#tabs-2">Fiche administrative</a></li>
-    <li><a data-id="2" class="atabs" href="#tabs-3">Adresses / contacts</a></li>
-    {% if object.service.name == "CMPP" %}
-    <li><a data-id="3"  class="atabs" href="#tabs-4">Prise en charge</a></li>
-    {% elif object.service.name == "SESSAD TED" or object.service.name == "SESSAD DYS" %}
-    <li><a data-id="3" class="atabs" href="#tabs-4">Notifications</a></li>
+    <li id="tab1">
+    <a data-id="0" href="tab1" class="atabs">Général</a>
+    </li>
+    <li id="tab2">
+      <a data-id="1" href="tab2" class="atabs">Fiche administrative</a>
+    </li>
+    <li id="tab3">
+      <a data-id="2" href="tab3" class="atabs">Adresses / contacts</a>
+    </li>
+    {% if object.service.slug == "cmpp" %}
+    <li><a data-id="3" href="tab4" class="atabs">Prise en charge</a></li>
+    {% elif object.service.slug == "sessad-ted" or object.service.name == "sessad-dys" %}
+    <li><a data-id="3" href="tab4" class="atabs">Notifications</a></li>
     {% else %}
-    <li style="display: none;"><a data-id="3" class="atabs" href="#tabs-4">Notifications</a></li>
+    <li style="display: none;"><a data-id="3" href="tab4" class="atabs">Notifications</a></li>
     {% endif %}
-    <li><a data-id="4" class="atabs" href="#tabs-5">Actes passés</a>
-    <li><a data-id="5" class="atabs" href="#tabs-6">Prochains rendez-vous</a>
-    <li><a data-id="6" class="atabs" href="#tabs-7">Socialisation</a>
-    <li><a data-id="7" class="atabs" href="#tabs-8">Données à caractère médical</a>
+    <li><a data-id="4" class="atabs" href="tab5">Actes passés</a>
+    <li><a data-id="5" class="atabs" href="tab6">Prochains rendez-vous</a>
+    <li><a data-id="6" class="atabs" href="tab7">Socialisation</a>
+    <li><a data-id="7" class="atabs" href="tab8">Données à caractère médical</a>
   </ul>
-  <div id="tabs-1"> <!-- Général -->
-      {% include "dossiers/patientrecord_tab1_general.html" %}
-  </div>
-
-  <div id="tabs-2"> <!-- Fiche administrative -->
-      {% include "dossiers/patientrecord_tab2_fiche_adm.html" %}
-  </div>
-
-    <div id="tabs-3"> <!-- Adresses / Contacts -->
-      {% include "dossiers/patientrecord_tab3_adresses.html" %}
-    </div>
-
-    <div id="tabs-4"> <!-- Prise en charge et notifications -->
-      {% include "dossiers/patientrecord_tab4_notifs.html" %}
-    </div>
-
-    <div id="tabs-5"> <!-- Actes passés -->
-      {% include "dossiers/patientrecord_tab5_actes_passes.html" %}
-    </div>
-
-    <div id="tabs-6"> <!-- Prochains rendez-vous -->
-      {% include "dossiers/patientrecord_tab6_next_rdv.html" %}
-    </div>
-
-
-    <div id="tabs-7"><!-- Période de socialisation -->
-      {% include "dossiers/patientrecord_tab7_socialisation.html" %}
-    </div>
-
-    <div id="tabs-8"><!-- Données à caractère médicale -->
-      {% include "dossiers/patientrecord_tab8_medical.html" %}
-    </div>
-  </div>
 </div>
 {% endblock %}
 

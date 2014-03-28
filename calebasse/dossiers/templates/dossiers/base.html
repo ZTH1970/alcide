@@ -1,6 +1,11 @@
 {% extends "calebasse/base.html" %}
 {% load url from future %}
 
+{% block extrastyles %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/dossiers.css" />
+{% endblock extrastyles %}
+
+
 {% block extrascripts %}
 <script src="{{ STATIC_URL }}js/jquery.parse-url.js"></script>
 <script src="{{ STATIC_URL }}js/calebasse.dossiers.js"></script>

@@ -1,220 +1,221 @@
-<form method="post" id="id-form" class="patientrecordform">
-  {% csrf_token %}
-  <div class="frame inline">
-    <h3>État civil</h3>
+<div id="tabs-2">
+  <form method="post" action="tab2" id="id-form" class="patientrecordform">{% csrf_token %}
+    <div class="frame inline">
+      <h3>État civil</h3>
       <button class="save">✔</button>
-    <table class="basic">
-    <tbody>
-    <tr><td class="width-limited">{{ forms.id.last_name.label_tag }}</td><td><span class="lastname">{{ forms.id.last_name }}</span></td><td>{{ forms.id.last_name.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.id.first_name.label_tag }}</td><td>{{ forms.id.first_name }}</td><td>{{ forms.id.first_name.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.id.birthplace.label_tag }}</td><td>{{ forms.id.birthplace }}</td><td>{{ forms.id.birthplace.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.id.birthdate.label_tag }}</td><td>{{ forms.id.birthdate }}</td><td>{{ forms.id.birthdate.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.id.gender.label_tag }}</td><td>{{ forms.id.gender }}</td><td>{{ forms.id.gender.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.id.nationality.label_tag }}</td><td>{{ forms.id.nationality }}</td><td>{{ forms.id.nationality.errors }}</td></tr>
-    </tbody>
-    </table>
-    <input type="hidden"  name="tab"  value="1">
-  </div>
-</form>
-
-<form method="post" id="inscription-form" class="patientrecordform">
-  {% csrf_token %}
-  <div class="frame inline">
-    <h3>Inscription</h3>
-      <button class="save">✔</button>
-    <table class="basic">
-    <tbody>
-    {% for field in forms.inscription %}
-    <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/{{ field.name }}/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_inscription-{{ field.name }}"
-      title="Ajouter un {{ field.label.lower }}"
-      type="button">+</button></td><td>{{ field.errors }}</td></tr>
-    {% endfor %}
-    </tbody>
-    </table>
-    <input type="hidden"  name="tab"  value="1">
-  </div>
-</form>
-
-<form method="post" id="out-form" class="patientrecordform">
-  {% csrf_token %}
-  <div class="frame inline">
-    <h3>Sortie</h3>
-      <button class="save">✔</button>
-    <table class="basic">
-    <tbody>
-    {% for field in forms.out %}
-    <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/{{ field.name }}/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_out-{{ field.name }}"
-      title="Ajouter un {{ field.label.lower }}"
-      type="button">+</button></td><td>{{ field.errors }}</td></tr>
-    {% endfor %}
-    </tbody>
-    </table>
-    <input type="hidden"  name="tab"  value="1">
-  </div>
-</form>
-
-<form method="post" id="family-form" class="patientrecordform">
-  {% csrf_token %}
-  <div class="frame inline">
-    <h3>Famille</h3>
-      <button class="save">✔</button>
-    <table class="basic">
-    <tbody>
-    <tr><td class="width-limited">{{ forms.family.sibship_place.label_tag  }}</td><td>{{ forms.family.sibship_place }}</td><td>{{ forms.family.sibship_place.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.nb_children_family.label_tag  }}</td><td>{{ forms.family.nb_children_family }}</td><td>{{ forms.family.nb_children_family.errors }}</td></tr>
-    <tr><td class="width-limited"><label>Rang (gémellité) :  </label></td><td>{{ object.twinning_rank|default_if_none:"Aucun" }}</td><td></td></tr>
-    <tr><td class="width-limited">{{ forms.family.parental_authority.label_tag  }}</td><td>{{ forms.family.parental_authority }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/parentalauthoritytype/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-parental_authority"
-      title="Ajouter un type d'autorité parentale">+</button></td><td>{{ forms.family.parental_authority.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.family_situation.label_tag  }}</td><td>{{ forms.family.family_situation }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/familysituationtype/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-family_situation"
-      title="Ajouter un type de situation familiale">+</button></td><td>{{ forms.family.family_situation.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.child_custody.label_tag  }}</td><td>{{ forms.family.child_custody }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/parentalcustodytype/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-child_custody"
-      title="Ajouter un type de garde parentale">+</button></td><td>{{ forms.family.child_custody.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.job_mother.label_tag  }}</td><td>{{ forms.family.job_mother }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/job/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-job_mother"
-      title="Ajouter un type de profession">+</button></td><td>{{ forms.family.job_mother.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.job_father.label_tag  }}</td><td>{{ forms.family.job_father }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/job/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-job_father"
-      title="Ajouter un type de profession">+</button></td><td>{{ forms.family.job_father.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.rm_mother.label_tag  }}</td><td>{{ forms.family.rm_mother }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/maritalstatustype/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-rm_mother"
-      title="Ajouter un type de régime">+</button></td><td>{{ forms.family.rm_mother.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.rm_father.label_tag  }}</td><td>{{ forms.family.rm_father }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/maritalstatustype/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_family-rm_father"
-      title="Ajouter un type de régime">+</button></td><td>{{ forms.family.rm_father.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.family.family_comment.label_tag  }}</td><td>{{ forms.family.family_comment }}</td><td>{{ forms.family.family_comment.errors }}</td></tr>
-    </tbody>
-    </table>
-    <input type="hidden"  name="tab"  value="1">
-  </div>
-</form>
-
-<form method="post" id="transport-form" class="patientrecordform">
-  {% csrf_token %}
-  <div class="frame inline">
-    <h3>Transport</h3>
-      <button class="save">✔</button>
-    <table class="basic">
-    <tbody>
-    {% for field in forms.transport %}
-    <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../ressources/{{ field.name }}/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_transport-{{ field.name }}"
-      title="Ajouter {% if field.label.lower == "type de transport" %}un{% else %}une{% endif %} {{ field.label.lower }}">+</button></td><td>{{ field.errors }}</td></tr>
-    {% endfor %}
-    </tbody>
-    </table>
-    <br/>
-    <table>
-      <tr>
-        <td><!--<button id="attestation-transport-btn">Attestation de transport</button>--></td><td><button id="prescription-transport-btn">Prescription de transport</button></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>{% if last_prescription %} Dernière prescription le {{ last_prescription.created }}{% endif %}</td>
-      </tr>
-    </table>
+      <table class="basic">
+        <tbody>
+        <tr><td class="width-limited">{{ forms.id.last_name.label_tag }}</td><td><span class="lastname">{{ forms.id.last_name }}</span></td><td>{{ forms.id.last_name.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.id.first_name.label_tag }}</td><td>{{ forms.id.first_name }}</td><td>{{ forms.id.first_name.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.id.birthplace.label_tag }}</td><td>{{ forms.id.birthplace }}</td><td>{{ forms.id.birthplace.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.id.birthdate.label_tag }}</td><td>{{ forms.id.birthdate }}</td><td>{{ forms.id.birthdate.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.id.gender.label_tag }}</td><td>{{ forms.id.gender }}</td><td>{{ forms.id.gender.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.id.nationality.label_tag }}</td><td>{{ forms.id.nationality }}</td><td>{{ forms.id.nationality.errors }}</td></tr>
+        </tbody>
+      </table>
+      <input type="hidden"  name="tab"  value="1">
     </div>
   </form>
 
-  <form method="post" id="followup-form" class="patientrecordform">{% csrf_token %}
+  <form method="post" action="tab2" id="inscription-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
+      <h3>Inscription</h3>
+      <button class="save">✔</button>
+      <table class="basic">
+        <tbody>
+        {% for field in forms.inscription %}
+        <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/{{ field.name }}/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_inscription-{{ field.name }}"
+              title="Ajouter un {{ field.label.lower }}"
+              type="button">+</button></td><td>{{ field.errors }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <input type="hidden"  name="tab"  value="1">
+    </div>
+  </form>
+
+  <form method="post" action="tab2" id="out-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
+      <h3>Sortie</h3>
+      <button class="save">✔</button>
+      <table class="basic">
+        <tbody>
+        {% for field in forms.out %}
+        <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/{{ field.name }}/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_out-{{ field.name }}"
+              title="Ajouter un {{ field.label.lower }}"
+              type="button">+</button></td><td>{{ field.errors }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <input type="hidden"  name="tab"  value="1">
+    </div>
+  </form>
+
+  <form method="post" action="tab2" id="family-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
+      <h3>Famille</h3>
+      <button class="save">✔</button>
+      <table class="basic">
+        <tbody>
+        <tr><td class="width-limited">{{ forms.family.sibship_place.label_tag  }}</td><td>{{ forms.family.sibship_place }}</td><td>{{ forms.family.sibship_place.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.nb_children_family.label_tag  }}</td><td>{{ forms.family.nb_children_family }}</td><td>{{ forms.family.nb_children_family.errors }}</td></tr>
+        <tr><td class="width-limited"><label>Rang (gémellité) :  </label></td><td>{{ object.twinning_rank|default_if_none:"Aucun" }}</td><td></td></tr>
+        <tr><td class="width-limited">{{ forms.family.parental_authority.label_tag  }}</td><td>{{ forms.family.parental_authority }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/parentalauthoritytype/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-parental_authority"
+              title="Ajouter un type d'autorité parentale">+</button></td><td>{{ forms.family.parental_authority.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.family_situation.label_tag  }}</td><td>{{ forms.family.family_situation }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/familysituationtype/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-family_situation"
+              title="Ajouter un type de situation familiale">+</button></td><td>{{ forms.family.family_situation.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.child_custody.label_tag  }}</td><td>{{ forms.family.child_custody }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/parentalcustodytype/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-child_custody"
+              title="Ajouter un type de garde parentale">+</button></td><td>{{ forms.family.child_custody.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.job_mother.label_tag  }}</td><td>{{ forms.family.job_mother }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/job/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-job_mother"
+              title="Ajouter un type de profession">+</button></td><td>{{ forms.family.job_mother.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.job_father.label_tag  }}</td><td>{{ forms.family.job_father }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/job/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-job_father"
+              title="Ajouter un type de profession">+</button></td><td>{{ forms.family.job_father.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.rm_mother.label_tag  }}</td><td>{{ forms.family.rm_mother }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/maritalstatustype/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-rm_mother"
+              title="Ajouter un type de régime">+</button></td><td>{{ forms.family.rm_mother.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.rm_father.label_tag  }}</td><td>{{ forms.family.rm_father }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/maritalstatustype/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_family-rm_father"
+              title="Ajouter un type de régime">+</button></td><td>{{ forms.family.rm_father.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.family.family_comment.label_tag  }}</td><td>{{ forms.family.family_comment }}</td><td>{{ forms.family.family_comment.errors }}</td></tr>
+        </tbody>
+      </table>
+      <input type="hidden"  name="tab"  value="1">
+    </div>
+  </form>
+
+  <form method="post" action="tab2" id="transport-form" class="patientrecordform">
+    {% csrf_token %}
+    <div class="frame inline">
+      <h3>Transport</h3>
+      <button class="save">✔</button>
+      <table class="basic">
+        <tbody>
+        {% for field in forms.transport %}
+        <tr><td class="width-limited">{{ field.label_tag }}</td><td>{{ field }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../ressources/{{ field.name }}/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_transport-{{ field.name }}"
+              title="Ajouter {% if field.label.lower == "type de transport" %}un{% else %}une{% endif %} {{ field.label.lower }}">+</button></td><td>{{ field.errors }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <br/>
+      <table>
+        <tr>
+          <td><!--<button id="attestation-transport-btn">Attestation de transport</button>--></td><td><button id="prescription-transport-btn">Prescription de transport</button></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>{% if last_prescription %} Dernière prescription le {{ last_prescription.created }}{% endif %}</td>
+        </tr>
+      </table>
+    </div>
+  </form>
+
+  <form method="post" action="tab2" id="followup-form" class="patientrecordform">{% csrf_token %}
     <div class="frame inline">
       <h3>Suivi du patient</h3>
       <button class="save">✔</button>
-    <table class="basic">
-    <tbody>
-    <tr><td class="width-limited">{{ forms.followup.coordinators.label_tag  }}</td><td>{{ forms.followup.coordinators }}</td><td>{{ forms.followup.coordinators.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.followup.externaldoctor.label_tag  }}</td><td>{{ forms.followup.externaldoctor }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../personnes/externaltherapist/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_followup-externaldoctor"
-      title="Ajouter un médecin extérieur">+</button></td><td>{{ forms.followup.externaldoctor.errors }}</td></tr>
-    <tr><td class="width-limited">{{ forms.followup.externalintervener.label_tag  }}</td><td>{{ forms.followup.externalintervener }}
-    <button type="button"
-      class="dialog-button"
-      data-url="../../personnes/externalworker/new/ #form-content"
-      data-default-button="Ajouter"
-      data-next-url="{{ request.get_full_path }}#tab=1"
-      data-add-select="#id_followup-externalintervener"
-      title="Ajouter un intervenant extérieur">+</button></td><td>{{ forms.followup.externalintervener.errors }}</td></tr>
-    </tbody>
-    </table>
+      <table class="basic">
+        <tbody>
+        <tr><td class="width-limited">{{ forms.followup.coordinators.label_tag  }}</td><td>{{ forms.followup.coordinators }}</td><td>{{ forms.followup.coordinators.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.followup.externaldoctor.label_tag  }}</td><td>{{ forms.followup.externaldoctor }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../personnes/externaltherapist/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_followup-externaldoctor"
+              title="Ajouter un médecin extérieur">+</button></td><td>{{ forms.followup.externaldoctor.errors }}</td></tr>
+        <tr><td class="width-limited">{{ forms.followup.externalintervener.label_tag  }}</td><td>{{ forms.followup.externalintervener }}
+            <button type="button"
+              class="dialog-button"
+              data-url="../../personnes/externalworker/new/ #form-content"
+              data-default-button="Ajouter"
+              data-next-url="{{ request.get_full_path }}#tab=1"
+              data-add-select="#id_followup-externalintervener"
+              title="Ajouter un intervenant extérieur">+</button></td><td>{{ forms.followup.externalintervener.errors }}</td></tr>
+        </tbody>
+      </table>
     </div>
-      <input type="hidden"  name="tab"  value="1">
+    <input type="hidden"  name="tab"  value="1">
   </form>
 
-<div class="frame">
+  <div class="frame">
     <h3>Mesures de protection</h3>
     <p><button id="new-protection-btn">Nouvelle mesure de protection</button></p>
     {% for protection in object.protectionstate_set.all %}
-        <div class="subframe">
-        Depuis le {{ protection.start_date }} : {{ protection.status.name }}
-        <div class="buttons">
-            <button type="button" data-id="{{ protection.id }}" class="del-protection icon-minus" title="Supprimer"></button>
-            <button type="button" data-id="{{ protection.id }}" class="update-protection-btn icon-edit" title="Modifier"></button>
-        </div>
-        <div>
-            <ul>
-                {% if protection.end_date %}<li><label>Date de fin</label> : {{ protection.end_date }}</li>{% endif %}
-                {% if protection.comment %}<li><label>Commentaire</label> : {{ protection.comment }}</li>{% endif %}
-            </ul>
-        </div>
-        </div>
+    <div class="subframe">
+      Depuis le {{ protection.start_date }} : {{ protection.status.name }}
+      <div class="buttons">
+        <button type="button" data-id="{{ protection.id }}" class="del-protection icon-minus" title="Supprimer"></button>
+        <button type="button" data-id="{{ protection.id }}" class="update-protection-btn icon-edit" title="Modifier"></button>
+      </div>
+      <div>
+        <ul>
+          {% if protection.end_date %}<li><label>Date de fin</label> : {{ protection.end_date }}</li>{% endif %}
+          {% if protection.comment %}<li><label>Commentaire</label> : {{ protection.comment }}</li>{% endif %}
+        </ul>
+      </div>
+    </div>
     {% endfor %}
+  </div>
 </div>

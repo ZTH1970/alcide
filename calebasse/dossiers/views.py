@@ -19,6 +19,7 @@ from django.shortcuts import get_object_or_404
 from calebasse import cbv
 from calebasse.doc_templates import make_doc_from_template
 from calebasse.dossiers import forms
+from calebasse.dossiers.views_utils import get_next_rdv, get_last_rdv, get_status
 from calebasse.dossiers.transport import render_transport
 from calebasse.agenda.models import Event, EventWithAct
 from calebasse.actes.models import Act
@@ -34,39 +35,6 @@ from calebasse.facturation.list_acts import list_acts_for_billing_CMPP_per_patie
 
 from calebasse.decorators import validator_only
 
-def get_next_rdv(patient_record):
-    Q = models.Q
-    today = date.today()
-    qs = EventWithAct.objects.filter(patient=patient_record) \
-            .filter(exception_to__isnull=True, canceled=False) \
-            .filter(Q(start_datetime__gte=today) \
-            |  Q(exceptions__isnull=False) \
-            | ( Q(recurrence_periodicity__isnull=False) \
-            & (Q(recurrence_end_date__gte=today) \
-            | Q(recurrence_end_date__isnull=True) \
-            ))) \
-            .distinct() \
-            .select_related() \
-            .prefetch_related('participants', 'exceptions__eventwithact')
-    occurrences = []
-    for event in qs:
-        occurrences.extend(filter(lambda e: e.start_datetime.date() >= today, event.all_occurences(limit=180)))
-    occurrences = sorted(occurrences, key=lambda e: e.start_datetime)
-    if occurrences:
-        return occurrences[0]
-    else:
-        return None
-
-def get_last_rdv(patient_record):
-    last_rdv = {}
-    event = Event.objects.last_appointment(patient_record)
-    if event:
-        last_rdv['start_datetime'] = event.start_datetime
-        last_rdv['participants'] = event.participants.all()
-        last_rdv['act_type'] = event.eventwithact.act_type
-        last_rdv['act_state'] = event.act.get_state()
-        last_rdv['is_absent'] = event.is_absent()
-    return last_rdv
 
 class NewPatientRecordView(cbv.FormView, cbv.ServiceViewMixin):
     form_class = forms.NewPatientRecordForm
@@ -157,7 +125,9 @@ class UpdatePatientAddressView(cbv.UpdateView):
     success_url = '../../view#tab=2'
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.INFO, u'Modification enregistrée avec succès.')
+        messages.add_message(self.request,
+                messages.INFO,
+                u'Modification enregistrée avec succès.')
         return super(UpdatePatientAddressView, self).form_valid(form)
 
 update_patient_address = UpdatePatientAddressView.as_view()
@@ -243,36 +213,18 @@ class StateFormView(cbv.FormView):
 
 state_form = StateFormView.as_view()
 
-
-class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+class PatientRecordView(cbv.UpdateView):
     model = PatientRecord
-    forms_classes = {
-            'general': forms.GeneralForm,
-            'contact': forms.PatientContactForm,
-            'id': forms.CivilStatusForm,
-            'physiology': forms.PhysiologyForm,
-            'inscription': forms.InscriptionForm,
-            'out': forms.OutForm,
-            'family': forms.FamilyForm,
-            'transport': forms.TransportFrom,
-            'followup': forms.FollowUpForm,
-            'policyholder': forms.PolicyHolderForm
-            }
     template_name = 'dossiers/patientrecord_update.html'
-    success_url = './view'
-
-    def get_success_url(self):
-        if self.request.POST.has_key('tab'):
-            return self.success_url + '#tab=' + self.request.POST['tab']
-        else:
-            return self.success_url
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordView, self).get_context_data(**kwargs)
         ctx['object'].create_diag_healthcare(self.request.user)
         ctx['object'].automated_switch_state(self.request.user)
-        ctx['initial_state'] = ctx['object'].get_initial_state()
         current_state = ctx['object'].get_current_state()
+        if not current_state:
+            current_state = ctx['object'].get_state()
+            ctx['future_state'] = True
         if STATES_MAPPING.has_key(current_state.status.type):
             state = STATES_MAPPING[current_state.status.type]
         else:
@@ -282,6 +234,160 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['states'] = FileState.objects.filter(patient=self.object) \
                 .filter(status__services=self.service) \
                 .order_by('-date_selected')
+        return ctx
+
+patient_record = PatientRecordView.as_view()
+
+class PatientRecordGeneralView(cbv.UpdateView):
+    model = PatientRecord
+    form_class = forms.GeneralForm
+    template_name = 'dossiers/patientrecord_tab1_general.html'
+    success_url = './view'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordGeneralView, self).get_context_data(**kwargs)
+        ctx['nb_place_of_lifes'] = ctx['object'].addresses.filter(place_of_life=True).count()
+        ctx['initial_state'] = ctx['object'].get_initial_state()
+        ctx['last_rdv'] = get_last_rdv(ctx['object'])
+        ctx['next_rdv'] = get_next_rdv(ctx['object'])
+        current_state = ctx['object'].get_current_state()
+        if STATES_MAPPING.has_key(current_state.status.type):
+            state = STATES_MAPPING[current_state.status.type]
+        else:
+            state = current_state.status.name
+        ctx['current_state'] = current_state
+        ctx['status'], ctx['hc_status'] = get_status(ctx, self.request.user)
+        ctx['missing_policy'] = False
+        if not self.object.policyholder or \
+                not self.object.policyholder.health_center or \
+                not self.object.policyholder.social_security_id:
+            ctx['missing_policy'] = True
+        ctx['missing_birthdate'] = False
+        if not self.object.birthdate:
+            ctx['missing_birthdate'] = True
+        return ctx
+
+tab1_general = PatientRecordGeneralView.as_view()
+
+class PatientRecordAdmView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+    model = PatientRecord
+    forms_classes = {
+            'id': forms.CivilStatusForm,
+            'inscription': forms.InscriptionForm,
+            'out': forms.OutForm,
+            'family': forms.FamilyForm,
+            'transport': forms.TransportFrom,
+            'followup': forms.FollowUpForm,
+            }
+    template_name = 'dossiers/patientrecord_tab2_fiche_adm.html'
+    success_url = './view#tab=1'
+
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordAdmView, self).get_context_data(**kwargs)
+        try:
+            ctx['last_prescription'] = TransportPrescriptionLog.objects.filter(patient=ctx['object']).latest('created')
+        except:
+            pass
+        return ctx
+
+tab2_fiche_adm = PatientRecordAdmView.as_view()
+
+class PatientRecordAddrView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+    model = PatientRecord
+    forms_classes = {
+            'contact': forms.PatientContactForm,
+            'policyholder': forms.PolicyHolderForm
+            }
+    template_name = 'dossiers/patientrecord_tab3_adresses.html'
+    success_url = './view#tab=2'
+
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordAddrView, self).get_context_data(**kwargs)
+        ctx['nb_place_of_lifes'] = ctx['object'].addresses.filter(place_of_life=True).count()
+        ctx['addresses'] = ctx['object'].addresses.order_by('-place_of_life', 'id')
+        return ctx
+
+tab3_addresses = PatientRecordAddrView.as_view()
+
+class PatientRecordNotifsView(cbv.DetailView):
+    model = PatientRecord
+    template_name = 'dossiers/patientrecord_tab4_notifs.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordNotifsView, self).get_context_data(**kwargs)
+        ctx['status'], ctx['hc_status'] = get_status(ctx, self.request.user)
+        if ctx['object'].service.slug == "cmpp":
+            (acts_not_locked, days_not_locked, acts_not_valide,
+            acts_not_billable, acts_pause, acts_per_hc, acts_losts) = \
+                list_acts_for_billing_CMPP_per_patient(self.object,
+                    datetime.today(), self.service)
+            ctx['acts_losts'] = acts_losts
+            ctx['acts_pause'] = acts_pause
+            hcs_used = acts_per_hc.keys()
+            hcs = None
+            if not hcs_used:
+                hcs = [(hc, None) for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date')]
+            else:
+                hcs = []
+                for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date'):
+                    acts = None
+                    if hasattr(hc, 'cmpphealthcarediagnostic') and hc.cmpphealthcarediagnostic in hcs_used:
+                        acts = acts_per_hc[hc.cmpphealthcarediagnostic]
+                    elif hasattr(hc, 'cmpphealthcaretreatment') and hc.cmpphealthcaretreatment in hcs_used:
+                        acts = acts_per_hc[hc.cmpphealthcaretreatment]
+                    hcs.append((hc, acts))
+            ctx['hcs'] = []
+            for hc, acts in hcs:
+                ctx['hcs'].append((hc, acts, hc.act_set.order_by('date', 'time')))
+        elif ctx['object'].service.slug == "sessad-ted" or ctx['object'].service.slug == "sessad-dys":
+            ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
+        return ctx
+
+tab4_notifs = PatientRecordNotifsView.as_view()
+
+class PatientRecordOldActs(cbv.DetailView):
+    model = PatientRecord
+    template_name = 'dossiers/patientrecord_tab5_actes_passes.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordOldActs, self).get_context_data(**kwargs)
+        ctx['last_rdvs'] = []
+        for act in Act.objects.last_acts(ctx['object']).prefetch_related('doctors'):
+            state = act.get_state()
+            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
+                state = None
+            missing_workers = []
+            try:
+                missing_workers = [participant.worker for participant in act.event.get_missing_participants()]
+            except:
+                pass
+            ctx['last_rdvs'].append((act, state, missing_workers))
+        history = []
+        i = 0
+        for state in ctx['object'].filestate_set.order_by('-date_selected'):
+            acts = []
+            try:
+                while ctx['last_rdvs'][i][0].date >= state.date_selected.date():
+                    acts.append(ctx['last_rdvs'][i])
+                    i += 1
+            except:
+                pass
+            history.append((state, acts))
+        if i < len(ctx['last_rdvs']) - 1:
+            history.append((None, ctx['last_rdvs'][i:]))
+        ctx['history'] = history
+        return ctx
+
+tab5_old_acts = PatientRecordOldActs.as_view()
+
+class PatientRecordNextAppointmentsView(cbv.DetailView):
+    model = PatientRecord
+    template_name = 'dossiers/patientrecord_tab6_next_rdv.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PatientRecordNextAppointmentsView, self).get_context_data(**kwargs)
         ctx['next_rdvs'] = []
         Q = models.Q
         today = date.today()
@@ -309,190 +415,23 @@ class PatientRecordView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
             ctx['next_rdvs'].append((event, state, event.get_missing_participants()))
-        if ctx['next_rdvs']:
-            ctx['next_rdv'] = ctx['next_rdvs'][0][0]
-        ctx['last_rdvs'] = []
-        for act in Act.objects.last_acts(ctx['object']).prefetch_related('doctors'):
-            state = act.get_state()
-            if state and not state.previous_state and state.state_name == 'NON_VALIDE':
-                state = None
-            missing_workers = []
-            try:
-                missing_workers = [participant.worker for participant in act.event.get_missing_participants()]
-            except:
-                pass
-            ctx['last_rdvs'].append((act, state, missing_workers))
-        history = []
-        i = 0
-        for state in ctx['object'].filestate_set.order_by('-date_selected'):
-            acts = []
-            try:
-                while ctx['last_rdvs'][i][0].date >= state.date_selected.date():
-                    acts.append(ctx['last_rdvs'][i])
-                    i += 1
-            except:
-                pass
-            history.append((state, acts))
-        if i < len(ctx['last_rdvs']) -1:
-            history.append((None, ctx['last_rdvs'][i:]))
-        ctx['history'] = history
-        ctx['last_rdv'] = get_last_rdv(ctx['object'])
-
-        ctx['missing_policy'] = False
-        if not self.object.policyholder or \
-                not self.object.policyholder.health_center or \
-                not self.object.policyholder.social_security_id:
-            ctx['missing_policy'] = True
-        ctx['missing_birthdate'] = False
-        if not self.object.birthdate:
-            ctx['missing_birthdate'] = True
-
-        ctx['status'] = []
-        close_btn = STATES_BTN_MAPPER['CLOS']
-        if 'next_rdv' in ctx:
-            close_btn = STATES_BTN_MAPPER['CLOS_RDV']
-        if ctx['object'].service.name == "CMPP":
-            ctx['can_rediag'] = self.object.create_diag_healthcare(self.request.user)
-            status = self.object.get_healthcare_status()
-            highlight = False
-            if status[0] == -1:
-                status = 'Indéterminé.'
-                highlight = True
-            elif status[0] == 0:
-                status = "Prise en charge de diagnostic en cours."
-            elif status[0] == 1:
-                status = 'Patient jamais pris en charge.'
-            elif status[0] == 2:
-                status = "Prise en charge de diagnostic complète, faire une demande de prise en charge de traitement."
-                highlight = True
-            elif status[0] == 3:
-                if ctx['can_rediag']:
-                    status = "Prise en charge de traitement expirée. Patient élligible en rediagnostic."
-                    highlight = True
-                else:
-                    status = "Prise en charge de traitement expirée. La demande d'un renouvellement est possible."
-                    highlight = True
-            elif status[0] == 4:
-                status = "Il existe une prise en charge de traitement mais qui ne prendra effet que le %s." % str(status[1])
-            elif status[0] == 5:
-                status = "Prise en charge de traitement en cours."
-            elif status[0] == 6:
-                status = "Prise en charge de traitement complète mais qui peut être prolongée."
-                highlight = True
-            elif status[0] == 7:
-                status = "Prise en charge de traitement complète et déjà prolongée, se terminant le %s." % \
-                    formats.date_format(status[2], "SHORT_DATE_FORMAT")
-            else:
-                status = 'Statut inconnu.'
-            ctx['hc_status'] = (status, highlight)
-            if ctx['object'].last_state.status.type == "ACCUEIL":
-                # Inscription automatique au premier acte facturable valide
-                ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
-                        STATES_BTN_MAPPER['DIAGNOSTIC'],
-                        STATES_BTN_MAPPER['TRAITEMENT']]
-            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
-                # Passage automatique en diagnostic ou traitement
-                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['DIAGNOSTIC'],
-                        STATES_BTN_MAPPER['TRAITEMENT']]
-            elif ctx['object'].last_state.status.type == "DIAGNOSTIC":
-                # Passage automatique en traitement
-                ctx['status'] = [STATES_BTN_MAPPER['TRAITEMENT'],
-                        close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            elif ctx['object'].last_state.status.type == "TRAITEMENT":
-                # Passage automatique en diagnostic si on ajoute une prise en charge diagnostic,
-                # ce qui est faisable dans l'onglet prise en charge par un bouton visible sous conditions
-                ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
-                        close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            elif ctx['object'].last_state.status.type == "CLOS":
-                # Passage automatique en diagnostic ou traitement
-                ctx['status'] = [STATES_BTN_MAPPER['DIAGNOSTIC'],
-                        STATES_BTN_MAPPER['TRAITEMENT'],
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            (acts_not_locked, days_not_locked, acts_not_valide,
-            acts_not_billable, acts_pause, acts_per_hc, acts_losts) = \
-                list_acts_for_billing_CMPP_per_patient(self.object,
-                    datetime.today(), self.service)
-            ctx['acts_losts'] = acts_losts
-            ctx['acts_pause'] = acts_pause
-            hcs_used = acts_per_hc.keys()
-            hcs = None
-            if not hcs_used:
-                hcs = [(hc, None) for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date')]
-            else:
-                hcs = []
-                for hc in HealthCare.objects.filter(patient=self.object).order_by('-start_date'):
-                    acts = None
-                    if hasattr(hc, 'cmpphealthcarediagnostic') and hc.cmpphealthcarediagnostic in hcs_used:
-                        acts = acts_per_hc[hc.cmpphealthcarediagnostic]
-                    elif hasattr(hc, 'cmpphealthcaretreatment') and hc.cmpphealthcaretreatment in hcs_used:
-                        acts = acts_per_hc[hc.cmpphealthcaretreatment]
-                    hcs.append((hc, acts))
-            ctx['hcs'] = []
-            for hc, acts in hcs:
-                ctx['hcs'].append((hc, acts, hc.act_set.order_by('date', 'time')))
-        elif ctx['object'].service.name == "CAMSP":
-            if ctx['object'].last_state.status.type == "ACCUEIL":
-                ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN']]
-            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
-                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN'],
-                        STATES_BTN_MAPPER['SURVEILLANCE'],
-                        STATES_BTN_MAPPER['SUIVI'],
-                        close_btn]
-            elif ctx['object'].last_state.status.type == "BILAN":
-                ctx['status'] = [STATES_BTN_MAPPER['SURVEILLANCE'],
-                        STATES_BTN_MAPPER['SUIVI'],
-                        close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            elif ctx['object'].last_state.status.type == "SURVEILLANCE":
-                ctx['status'] = [STATES_BTN_MAPPER['SUIVI'],
-                        close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN']]
-            elif ctx['object'].last_state.status.type == "SUIVI":
-                ctx['status'] = [close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN'],
-                        STATES_BTN_MAPPER['SURVEILLANCE']]
-            elif ctx['object'].last_state.status.type == "CLOS":
-                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN'],
-                        STATES_BTN_MAPPER['SURVEILLANCE'],
-                        STATES_BTN_MAPPER['SUIVI']]
-        elif ctx['object'].service.name == "SESSAD TED" or ctx['object'].service.name == "SESSAD DYS":
-            if ctx['object'].last_state.status.type == "ACCUEIL":
-                ctx['status'] = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
-                        STATES_BTN_MAPPER['TRAITEMENT']]
-            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
-                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['TRAITEMENT'],
-                        close_btn]
-            elif ctx['object'].last_state.status.type == "TRAITEMENT":
-                ctx['status'] = [close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            elif ctx['object'].last_state.status.type == "CLOS":
-                ctx['status'] = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['TRAITEMENT']]
-            ctx['hcs'] = HealthCare.objects.filter(patient=self.object).order_by('-start_date')
-        try:
-            ctx['last_prescription'] = TransportPrescriptionLog.objects.filter(patient=ctx['object']).latest('created')
-        except:
-            pass
-
-        ctx['addresses'] = ctx['object'].addresses.order_by('-place_of_life', 'id')
-        ctx['nb_place_of_lifes'] = ctx['object'].addresses.filter(place_of_life=True).count()
         return ctx
 
-    def form_valid(self, form):
-        messages.add_message(self.request, messages.INFO, u'Modification enregistrée avec succès.')
-        return super(PatientRecordView, self).form_valid(form)
+tab6_next_rdv = PatientRecordNextAppointmentsView.as_view()
 
+class PatientRecordSocialisationView(cbv.DetailView):
+    model = PatientRecord
+    template_name = 'dossiers/patientrecord_tab7_socialisation.html'
 
-patient_record = PatientRecordView.as_view()
+tab7_socialisation = PatientRecordSocialisationView.as_view()
+
+class PatientRecordMedicalView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+    model = PatientRecord
+    forms_classes = {'physiology': forms.PhysiologyForm}
+    template_name = 'dossiers/patientrecord_tab8_medical.html'
+    success_url = './view#tab=7'
+
+tab8_medical = PatientRecordMedicalView.as_view()
 
 class PatientRecordsHomepageView(cbv.ListView):
     model = PatientRecord

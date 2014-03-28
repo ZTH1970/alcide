@@ -1,24 +1,26 @@
-<table class="basic">
-  <thead>
-    <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> </tr>
-  </thead>
-  <tbody>
-  {% for event, state, missing_participants in next_rdvs %}
-  <tr>
-    <td>{% firstof event.start_datetime|date:"l d/m/y H:i"|title %}{% if missing_participants %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
-    <td>{% if state %}{% if state.state_name != 'VALIDE' %}<strong>{% endif %}{{ state }}{% if state.state_name != 'VALIDE' %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
-    <td>{{ event.act_type }}</td>
-    <td class="width-limited">{% for participant in event.participants.all %}
-      {% if participant in missing_participants %}<span class="absent" title="Absent">{% endif %}
-        {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
-        {% if participant in missing_participants %}</span>{% endif %}
-      {% endfor %}</td>
-    {% if event.act.id %}
-    <td class="width-limited">{{ event.act.comment }}</td>
-    {% else %}
-    <td class="width-limited">{{ event.description }}</td>
-    {% endif %}
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div id="tabs-6">
+  <table class="basic">
+    <thead>
+      <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> </tr>
+    </thead>
+    <tbody>
+    {% for event, state, missing_participants in next_rdvs %}
+    <tr>
+      <td>{% firstof event.start_datetime|date:"l d/m/y H:i"|title %}{% if missing_participants %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
+      <td>{% if state %}{% if state.state_name != 'VALIDE' %}<strong>{% endif %}{{ state }}{% if state.state_name != 'VALIDE' %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
+      <td>{{ event.act_type }}</td>
+      <td class="width-limited">{% for participant in event.participants.all %}
+        {% if participant in missing_participants %}<span class="absent" title="Absent">{% endif %}
+          {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+          {% if participant in missing_participants %}</span>{% endif %}
+        {% endfor %}</td>
+      {% if event.act.id %}
+      <td class="width-limited">{{ event.act.comment }}</td>
+      {% else %}
+      <td class="width-limited">{{ event.description }}</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

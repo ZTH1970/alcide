@@ -1,27 +1,29 @@
-{% for state, last_rdvs in history %}
-<div class="frame">
-  <h3>{{ state.status.name }} depuis le {{ state.date_selected|date:"SHORT_DATE_FORMAT" }}</h3>
-  {% if last_rdvs %}
-  <table class="basic">
-    <thead>
-      <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
-    </thead>
-    <tbody>
-    {% for act, state, missing_workers in last_rdvs %}
-    <tr>
-      <td>{{ act.date|date:"SHORT_DATE_FORMAT" }} {{ act.time|date:"H:i" }}{% if missing_workers %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
-      <td>{% if state %}{% if act.is_absent %}<strong>{% endif %}{% if state.state_name == 'ACT_DOUBLE' or state.state_name == 'ACT_LOST' %}Présent ({{ state }}){% else %}{{ state }}{% endif %}{% if act.is_absent %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
-      <td>{{ act.act_type }}</td>
-      <td class="width-limited">{% for doctor in act.doctors.all %}
-        {% if doctor in missing_workers %}<span class="absent" title="Absent">{% endif %}
-          {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
-          {% if doctor in missing_workers %}</span>{% endif %}
-        {% endfor %}</td>
-      <td class="width-limited">{% if act.comment %}{{ act.comment }}{% endif %}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
+<div id="tabs-5">
+  {% for state, last_rdvs in history %}
+  <div class="frame">
+    <h3>{{ state.status.name }} depuis le {{ state.date_selected|date:"SHORT_DATE_FORMAT" }}</h3>
+    {% if last_rdvs %}
+    <table class="basic">
+      <thead>
+        <tr> <th>Date</th> <th>Pointage</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
+      </thead>
+      <tbody>
+      {% for act, state, missing_workers in last_rdvs %}
+      <tr>
+        <td>{{ act.date|date:"SHORT_DATE_FORMAT" }} {{ act.time|date:"H:i" }}{% if missing_workers %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
+        <td>{% if state %}{% if act.is_absent %}<strong>{% endif %}{% if state.state_name == 'ACT_DOUBLE' or state.state_name == 'ACT_LOST' %}Présent ({{ state }}){% else %}{{ state }}{% endif %}{% if act.is_absent %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
+        <td>{{ act.act_type }}</td>
+        <td class="width-limited">{% for doctor in act.doctors.all %}
+          {% if doctor in missing_workers %}<span class="absent" title="Absent">{% endif %}
+            {{ doctor.first_name }} <span class="lastname">{{ doctor.last_name }}</span>
+            {% if doctor in missing_workers %}</span>{% endif %}
+          {% endfor %}</td>
+        <td class="width-limited">{% if act.comment %}{{ act.comment }}{% endif %}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+  {% endfor %}
 </div>
-{% endfor %}

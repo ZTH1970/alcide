@@ -706,94 +706,6 @@ div.frame p {
   margin: 0 1ex;
 }
 
-#tabs-2 select {
-        width: auto;
-        height: auto;
-}
-
-#tabs-2 table {
-  width: 100%;
-  text-align: center;
-}
-
-#tabs-3 div {
-  margin-top: 1em;
-  position: relative;
-}
-
-#tabs-3 div.contact {
-        margin: 12px;
-        background: #eee;
-        padding: 1em;
-        border-radius: 10px;
-}
-
-#tabs-3 div.contact.patient {
-	background: #ddd;
-	border-width: 2px;
-}
-
-#tabs-3 div.contact h4 {
-        margin: 0;
-}
-
-#contact-add-address {
-    margin-top: 5px;
-    margin-left: 10px;
-}
-
-div#tabs-3 div.right {
-        text-align: right;
-        border: 0;
-        position: absolute;
-        top: 20px;
-        right: 0;
-        width: 350px;
-        padding-right: 30px;
-}
-
-div#tabs-3 div.right button {
-        margin-left: 20px;
-}
-
-div#tabs-3 div.contact div.right {
-        padding-right: 18px; /* 30px - 12px */
-        top: -4px;
-}
-
-div#tabs-2 div,
-div#tabs-3 div,
-div#tabs-4 div.frame,
-div#tabs-7 div.frame {
-        position: relative;
-}
-
-#info-membre div button.save,
-div.group_holidays button.save,
-div#tabs-7 div div.buttons,
-div#tabs-4 div div.buttons,
-div#tabs-3 div div.buttons,
-div#tabs-2 div button.save {
-        position: absolute;
-        top: 0;
-        right: 0;
-}
-
-#tabs-2 div.frame div.subframe,
-#tabs-7 div.frame div.subframe {
-	position: relative;
-        margin: 12px;
-        background: #eee;
-        padding: 1em;
-        border-radius: 10px;
-}
-
-div#tabs-3 div div.buttons,
-div#tabs-4 div div.buttons {
-	border: 0;
-	margin: 0;
-}
-
 #info-membre div, div.group_holidays {
   position: relative;
 }
@@ -1281,9 +1193,6 @@ a [class^="icon-"], a [class*=" icon-"] {
   overflow-y: scroll;
 }
 
-#tabs-8 form p {
-	clear: both;
-}
 
 ul.messages, ul.ajax_messages {
 	position: absolute;
