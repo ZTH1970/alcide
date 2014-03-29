@@ -126,10 +126,101 @@ function load_tab2_adm(tab) {
         generic_ajaxform_dialog('protection/' + $(this).data('id') + '/del', 'Supprimer une mesure de protection',
             '#ajax-dlg', '500px', 'Supprimer');
     });
+    $('input#id_id-birthdate', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
 function load_tab3_addresses(tab) {
+    $('.policyholder-radio').click(function() {
+        $("#policyholder-form").submit();
+    });
+    $('#new-contact-btn').click(function() {
+        generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
+            '#ajax-dlg', '900px', 'Ajouter', null, nir_check);
+    });
+    $('.update-contact-btn').click(function() {
+        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
+            '#ajax-dlg', '800px', 'Modifier', null, nir_check);
+    });
+    $('.del-contact').click(function() {
+        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del?address=' + $(this).data('address-id'),
+                'Supprimer un contact', '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('#new-address-btn').click(function() {
+        generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
+            '#ajax-dlg', '600px', 'Ajouter');
+    });
+    $('.update-address-btn').click(function() {
+        generic_ajaxform_dialog('address/' + $(this).data('id') + '/update', 'Modifier une adresse',
+            '#ajax-dlg', '600px', 'Modifier');
+    });
+    $('.del-address').click(function() {
+        generic_ajaxform_dialog('address/' + $(this).data('id') + '/del', 'Supprimer une addresse',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+
+
+    function nir_check(that) {
+      $(that).find('#social-security-id input').keyup(function() {
+        if ($(this).val().length < 13) {
+             $('p#nir-key span').removeAttr('id')
+             $('p#nir-key span').text('-');
+         } else {
+             $('p#nir-key span').attr('id', 'highlight')
+             var nir = $(this).val();
+             var minus = 0;
+             if (nir.charAt(6) == 'A'){
+               nir = nir.replace('A', '0');
+               minus = 1000000;
+             }
+             if (nir.charAt(6) == 'B'){
+               nir = nir.replace('B', '0');
+               minus = 2000000;
+             }
+             nir = parseInt(nir, 10);
+             nir = nir - minus;
+             var key = 97 - (nir % 97);
+             if (isNaN(key)) {
+                 $('p#nir-key span').text('NIR invalide');
+             } else {
+                 $('p#nir-key span').text(key);
+             }
+         }
+      });
+    }
+      $('.place_of_life').click(function() {
+          if ((this.checked) == true) {
+              var value = "true";
+          } else {
+              var value = "false";
+          }
+          var prev = $(this).prev();
+          $.ajax({
+              url: '/api/v1/patientaddress/' + $(this).data("id") + '/?format=json',
+              type: 'PATCH',
+              contentType: 'application/json',
+              data: '{"place_of_life": ' + value + '}',
+              success: function(data) {
+                (prev).show();
+                (prev).html('<li>Modification appliquée avec succés</li>');
+                $('.ajax_messages').delay(1500).fadeOut('slow');
+                location.reload();
+              }
+          });
+      });
+    $('.social-security-label').click(function() {
+      var label = $(this).html();
+      var data = $(this).next();
+      if (($(data).is(':hidden'))) {
+        $(this).html(label.replace('+', '-'));
+        $(this).css("font-weight", "bold");
+      } else {
+        $(this).html(label.replace('-', '+'));
+        $(this).css("font-weight", "");
+      }
+      $(data).toggle();
+    });
 }
+
 function load_tab4_notifs(tab) {
 }
 function load_tab5_last_acts(tab) {
@@ -183,9 +274,6 @@ function load_tab8_medical(tab) {
         $("#search").click();
     });
 
-    $('.policyholder-radio').click(function() {
-        $("#policyholder-form").submit();
-    });
     $('.pr-line').click(function() {
         window.open($(this).data('link'), $(this).data('link'));
     });
@@ -223,61 +311,7 @@ function load_tab8_medical(tab) {
             '#ajax-dlg', '500px', 'Oui', '..');
     });
 
-    $('#new-address-btn').click(function() {
-        generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
-            '#ajax-dlg', '600px', 'Ajouter');
-    });
-    $('.update-address-btn').click(function() {
-        generic_ajaxform_dialog('address/' + $(this).data('id') + '/update', 'Modifier une adresse',
-            '#ajax-dlg', '600px', 'Modifier');
-    });
-    $('.del-address').click(function() {
-        generic_ajaxform_dialog('address/' + $(this).data('id') + '/del', 'Supprimer une addresse',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
 
-
-    function nir_check(that) {
-      $(that).find('#social-security-id input').keyup(function() {
-        if ($(this).val().length < 13) {
-             $('p#nir-key span').removeAttr('id')
-             $('p#nir-key span').text('-');
-         } else {
-             $('p#nir-key span').attr('id', 'highlight')
-             var nir = $(this).val();
-             var minus = 0;
-             if (nir.charAt(6) == 'A'){
-               nir = nir.replace('A', '0');
-               minus = 1000000;
-             }
-             if (nir.charAt(6) == 'B'){
-               nir = nir.replace('B', '0');
-               minus = 2000000;
-             }
-             nir = parseInt(nir, 10);
-             nir = nir - minus;
-             var key = 97 - (nir % 97);
-             if (isNaN(key)) {
-                 $('p#nir-key span').text('NIR invalide');
-             } else {
-                 $('p#nir-key span').text(key);
-             }
-         }
-      });
-    }
-
-    $('#new-contact-btn').click(function() {
-        generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
-            '#ajax-dlg', '900px', 'Ajouter', null, nir_check);
-    });
-    $('.update-contact-btn').click(function() {
-        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
-            '#ajax-dlg', '800px', 'Modifier', null, nir_check);
-    });
-    $('.del-contact').click(function() {
-        generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del?address=' + $(this).data('address-id'),
-                'Supprimer un contact', '#ajax-dlg', '500px', 'Supprimer');
-    });
     $('#new-socialisation-duration-btn').click(function() {
         generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
             '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
@@ -361,44 +395,11 @@ function load_tab8_medical(tab) {
     });
 
 
-      $('.place_of_life').click(function() {
-          if ((this.checked) == true) {
-              var value = "true";
-          } else {
-              var value = "false";
-          }
-          var prev = $(this).prev();
-          $.ajax({
-              url: '/api/v1/patientaddress/' + $(this).data("id") + '/?format=json',
-              type: 'PATCH',
-              contentType: 'application/json',
-              data: '{"place_of_life": ' + value + '}',
-              success: function(data) {
-                (prev).show();
-                (prev).html('<li>Modification appliquée avec succés</li>');
-                $('.ajax_messages').delay(1500).fadeOut('slow');
-                location.reload();
-              }
-          });
-      });
 
-    $('input#id_id-birthdate', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 
     $('button.blind').next().hide();
     $('button.blind').click(function() {
       $(this).next().toggle('blind');
-    });
-    $('.social-security-label').click(function() {
-      var label = $(this).html();
-      var data = $(this).next();
-      if (($(data).is(':hidden'))) {
-        $(this).html(label.replace('+', '-'));
-        $(this).css("font-weight", "bold");
-      } else {
-        $(this).html(label.replace('-', '+'));
-        $(this).css("font-weight", "");
-      }
-      $(data).toggle();
     });
     var tabid = $.url($(location).attr('href')).fparam('tab');
       if (tabid) {
