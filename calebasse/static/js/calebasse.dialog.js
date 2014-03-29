@@ -177,7 +177,8 @@ function select_add_dialog(opts, $form, form_action)
   $form.ajaxForm({success: on_success});
 }
 
-(function ($) {
+function init_magic_dialog() {
+
   $.fn.dialogButton = function (opts) {
     var id = $(this).attr('id');
     this.on('click', function () {
@@ -316,4 +317,8 @@ function select_add_dialog(opts, $form, form_action)
     };
     window.calebasse_dialogs();
   });
+}
+
+(function ($) {
+    init_magic_dialog();
 })(window.jQuery)

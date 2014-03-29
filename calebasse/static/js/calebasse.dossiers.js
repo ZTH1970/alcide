@@ -8,7 +8,7 @@ function add_datepickers(that) {
   $('input#id_prolongation_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
-function load_add_address_dialog() {
+function load_add_addressialog() {
     generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
         '#address-dlg', '600px', 'Ajouter');
 }
@@ -49,42 +49,11 @@ function state_dialog(url, state_title, state_type) {
             });
 }
 
-(function($) {
-  $(function() {
-    var $tabs = $('#tabs').tabs();
-
-
-    $('.atabs').click(function() {
-        location.hash = 'tab=' + $(this).data('id');
+function load_tab1_general(tab) {
+    $('#update-paper-id-btn').click(function() {
+        generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
+            '#ajax-dlg', '500px', 'Modifier');
     });
-
-    $('#btn_all_state').click(function() {
-      $('.checkbox_state').attr('checked', true);
-    });
-    $('#btn_none_state').click(function() {
-      $('.checkbox_state').attr('checked', false);
-    });
-    $('.checkbox_state').click(function() {
-        $("#search").click();
-    });
-    $('#id_general-pause').click(function() {
-        $('#general-form').submit();
-    });
-    $('#id_general-confidential').click(function() {
-        $('#general-form').submit();
-    });
-    $('.policyholder-radio').click(function() {
-        $("#policyholder-form").submit();
-    });
-    $('.pr-line').click(function() {
-        window.open($(this).data('link'), $(this).data('link'));
-    });
-    $('button#reset').click(function() {
-        window.location.href = window.location.pathname;
-        return false;
-    });
-    $('#print-button').click(function() { window.print(); });
-
     $('#close-patientrecord').click(function() {
         state_dialog('update-state', 'Clore', 'CLOS');
     });
@@ -123,6 +92,108 @@ function state_dialog(url, state_title, state_type) {
       $('#patientrecord-history').click();
       location.hash = '';
     }
+    $('#id_pause').click(function() {
+        $('#general-form').submit();
+    });
+    $('#id_confidential').click(function() {
+        $('#general-form').submit();
+    });
+}
+
+function load_tab2_adm(tab) {
+    init_magic_dialog();
+    $('#prescription-transport-btn').click(function() {
+        $('#ajax-dlg').load('prescription-transport',
+          function () {
+             $(this).dialog({title: 'Prescription de transport', width: '800px',
+                      buttons: [ { text: "Fermer",
+                          click: function() { $(this).dialog("close"); } },
+                      { text: "Prescrire",
+                          click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
+             $('.addresses input[type=radio]').first().click();
+         });
+         return false;
+    });
+    $('#new-protection-btn').click(function() {
+        generic_ajaxform_dialog('protection/new', 'Ajouter une mesure de protection',
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
+    });
+    $('.update-protection-btn').click(function() {
+        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/update', 'Modifier une mesure de protection',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.del-protection').click(function() {
+        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/del', 'Supprimer une mesure de protection',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+}
+
+function load_tab3_addresses(tab) {
+}
+function load_tab4_notifs(tab) {
+}
+function load_tab5_last_acts(tab) {
+}
+function load_tab6_next_rdv(tab) {
+}
+function load_tab7_socialisation(tab) {
+}
+function load_tab8_medical(tab) {
+}
+
+
+(function($) {
+  $(function() {
+    var $tabs = $('#tabs').tabs({
+        load: function(event, ui) {
+            var tabid = $(ui.tab).attr('id');
+            console.log(tabid);
+            if (tabid == "ui-id-1")
+                load_tab1_general($(ui.tab));
+            else if (tabid == "ui-id-2")
+                load_tab2_adm($(ui.tab));
+            else if (tabid == "ui-id-3")
+                load_tab3_addresses($(ui.tab));
+            else if (tabid == "ui-id-4") {
+            }
+            else if (tabid == "ui-id-5") {
+            }
+            else if (tabid == "ui-id-6") {
+            }
+            else if (tabid == "ui-id-7") {
+            }
+            else if (tabid == "ui-id-8") {
+            }
+
+        },
+        });
+
+
+    $('.atabs').click(function() {
+        location.hash = 'tab=' + $(this).data('id');
+    });
+
+    $('#btn_all_state').click(function() {
+      $('.checkbox_state').attr('checked', true);
+    });
+    $('#btn_none_state').click(function() {
+      $('.checkbox_state').attr('checked', false);
+    });
+    $('.checkbox_state').click(function() {
+        $("#search").click();
+    });
+
+    $('.policyholder-radio').click(function() {
+        $("#policyholder-form").submit();
+    });
+    $('.pr-line').click(function() {
+        window.open($(this).data('link'), $(this).data('link'));
+    });
+    $('button#reset').click(function() {
+        window.location.href = window.location.pathname;
+        return false;
+    });
+    $('#print-button').click(function() { window.print(); });
 
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',
@@ -165,10 +236,6 @@ function state_dialog(url, state_title, state_type) {
             '#ajax-dlg', '500px', 'Supprimer');
     });
 
-    $('#update-paper-id-btn').click(function() {
-        generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
-            '#ajax-dlg', '500px', 'Modifier');
-    });
 
     function nir_check(that) {
       $(that).find('#social-security-id input').keyup(function() {
@@ -221,18 +288,6 @@ function state_dialog(url, state_title, state_type) {
     });
     $('.del-duration').click(function() {
         generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('#new-protection-btn').click(function() {
-        generic_ajaxform_dialog('protection/new', 'Ajouter une mesure de protection',
-            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
-    });
-    $('.update-protection-btn').click(function() {
-        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/update', 'Modifier une mesure de protection',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.del-protection').click(function() {
-        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/del', 'Supprimer une mesure de protection',
             '#ajax-dlg', '500px', 'Supprimer');
     });
     $('#new-mdph-request-btn').click(function() {
@@ -345,18 +400,6 @@ function state_dialog(url, state_title, state_type) {
       }
       $(data).toggle();
     });
-    $('#prescription-transport-btn').click(function() {
-        $('#ajax-dlg').load('prescription-transport',
-          function () {
-             $(this).dialog({title: 'Prescription de transport', width: '800px',
-                      buttons: [ { text: "Fermer",
-                          click: function() { $(this).dialog("close"); } },
-                      { text: "Prescrire",
-                          click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
-             $('.addresses input[type=radio]').first().click();
-         });
-         return false;
-    });
     var tabid = $.url($(location).attr('href')).fparam('tab');
       if (tabid) {
         $tabs.tabs('select',  parseInt(tabid));
@@ -368,7 +411,6 @@ function state_dialog(url, state_title, state_type) {
 $( document ).ready(function(){
     var hashes = location.hash.split('&');
     for (i in hashes) {
-      console.log(hashes[i]);
       if (hashes[i] == "newcontact") {
         $('#new-contact-btn').first().click();
       }
