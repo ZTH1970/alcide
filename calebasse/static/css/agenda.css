@@ -183,6 +183,7 @@ li.away {
 #extra-top-links a:link, #extra-top-links a:visited{
     color: #555;
     text-decoration: none;
+    font: bold .8em Arial;
 }
 
 #extra-top-links a:hover {
