@@ -49,7 +49,7 @@ function state_dialog(url, state_title, state_type) {
             });
 }
 
-function load_tab1_general(tab) {
+function load_tab1_general() {
     $('#update-paper-id-btn').click(function() {
         generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
             '#ajax-dlg', '500px', 'Modifier');
@@ -100,7 +100,7 @@ function load_tab1_general(tab) {
     });
 }
 
-function load_tab2_adm(tab) {
+function load_tab2_adm() {
     init_magic_dialog();
     $('#prescription-transport-btn').click(function() {
         $('#ajax-dlg').load('prescription-transport',
@@ -129,7 +129,35 @@ function load_tab2_adm(tab) {
     $('input#id_id-birthdate', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
-function load_tab3_addresses(tab) {
+function load_tab3_addresses() {
+    function nir_check(that) {
+      $(that).find('#social-security-id input').keyup(function() {
+        if ($(this).val().length < 13) {
+             $('p#nir-key span').removeAttr('id')
+             $('p#nir-key span').text('-');
+         } else {
+             $('p#nir-key span').attr('id', 'highlight')
+             var nir = $(this).val();
+             var minus = 0;
+             if (nir.charAt(6) == 'A'){
+               nir = nir.replace('A', '0');
+               minus = 1000000;
+             }
+             if (nir.charAt(6) == 'B'){
+               nir = nir.replace('B', '0');
+               minus = 2000000;
+             }
+             nir = parseInt(nir, 10);
+             nir = nir - minus;
+             var key = 97 - (nir % 97);
+             if (isNaN(key)) {
+                 $('p#nir-key span').text('NIR invalide');
+             } else {
+                 $('p#nir-key span').text(key);
+             }
+         }
+      });
+    }
     $('.policyholder-radio').click(function() {
         $("#policyholder-form").submit();
     });
@@ -159,34 +187,6 @@ function load_tab3_addresses(tab) {
     });
 
 
-    function nir_check(that) {
-      $(that).find('#social-security-id input').keyup(function() {
-        if ($(this).val().length < 13) {
-             $('p#nir-key span').removeAttr('id')
-             $('p#nir-key span').text('-');
-         } else {
-             $('p#nir-key span').attr('id', 'highlight')
-             var nir = $(this).val();
-             var minus = 0;
-             if (nir.charAt(6) == 'A'){
-               nir = nir.replace('A', '0');
-               minus = 1000000;
-             }
-             if (nir.charAt(6) == 'B'){
-               nir = nir.replace('B', '0');
-               minus = 2000000;
-             }
-             nir = parseInt(nir, 10);
-             nir = nir - minus;
-             var key = 97 - (nir % 97);
-             if (isNaN(key)) {
-                 $('p#nir-key span').text('NIR invalide');
-             } else {
-                 $('p#nir-key span').text(key);
-             }
-         }
-      });
-    }
       $('.place_of_life').click(function() {
           if ((this.checked) == true) {
               var value = "true";
@@ -221,15 +221,91 @@ function load_tab3_addresses(tab) {
     });
 }
 
-function load_tab4_notifs(tab) {
+function load_tab4_notifs() {
+    $('#new-hctrait-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
+            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
+    });
+    $('#new-hcdiag-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_diagnostic/new', 'Ajouter une prise en charge de diagnostic',
+            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
+    });
+    $('#new-notification-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_notification/new', 'Ajouter une notification',
+            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
+    });
+    $('.update-hctrait-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/update', 'Modifier une prise en charge de traitement',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.update-hcdiag-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/update', 'Modifier une prise en charge de diagnostic',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.update-notification-btn').click(function() {
+        generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/update', 'Modifier une notification',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.del-hctrait').click(function() {
+        generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de traitement',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('.del-hcdiag').click(function() {
+        generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de diagnostic',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('.del-notification').click(function() {
+        generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/del', 'Supprimer une notification',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+
 }
-function load_tab5_last_acts(tab) {
+
+function load_tab5_last_acts() {
 }
-function load_tab6_next_rdv(tab) {
+
+function load_tab6_next_rdv() {
 }
-function load_tab7_socialisation(tab) {
+
+function load_tab7_socialisation() {
+    $('#new-socialisation-duration-btn').click(function() {
+        generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
+    });
+    $('.update-duration-btn').click(function() {
+        generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/update', 'Modifier une période de socialisation',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.del-duration').click(function() {
+        generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('#new-mdph-request-btn').click(function() {
+        generic_ajaxform_dialog('mdph_request/new', 'Ajouter une demande MDPH',
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
+    });
+    $('.update-mdph-request-btn').click(function() {
+        generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/update', 'Modifier une demande MDPH',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.del-mdph-request').click(function() {
+        generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/del', 'Supprimer une demande MDPH',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
+    $('#new-mdph-response-btn').click(function() {
+        generic_ajaxform_dialog('mdph_response/new', 'Ajouter une réponse MDPH',
+            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
+    });
+    $('.update-mdph-response-btn').click(function() {
+        generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/update', 'Modifier une réponse MDPH',
+            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
+    });
+    $('.del-mdph-response').click(function() {
+        generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/del', 'Supprimer une réponse MDPH',
+            '#ajax-dlg', '500px', 'Supprimer');
+    });
 }
-function load_tab8_medical(tab) {
+function load_tab8_medical() {
 }
 
 
@@ -240,21 +316,17 @@ function load_tab8_medical(tab) {
             var tabid = $(ui.tab).attr('id');
             console.log(tabid);
             if (tabid == "ui-id-1")
-                load_tab1_general($(ui.tab));
+                load_tab1_general();
             else if (tabid == "ui-id-2")
-                load_tab2_adm($(ui.tab));
+                load_tab2_adm();
             else if (tabid == "ui-id-3")
-                load_tab3_addresses($(ui.tab));
-            else if (tabid == "ui-id-4") {
-            }
-            else if (tabid == "ui-id-5") {
-            }
-            else if (tabid == "ui-id-6") {
-            }
-            else if (tabid == "ui-id-7") {
-            }
-            else if (tabid == "ui-id-8") {
-            }
+                load_tab3_addresses();
+            else if (tabid == "ui-id-4")
+                load_tab4_notifs();
+            else if (tabid == "ui-id-7")
+                load_tab7_socialisation();
+            else if (tabid == "ui-id-8")
+                load_tab8_medical();
 
         },
         });
@@ -311,79 +383,6 @@ function load_tab8_medical(tab) {
             '#ajax-dlg', '500px', 'Oui', '..');
     });
 
-
-    $('#new-socialisation-duration-btn').click(function() {
-        generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
-            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
-    });
-    $('.update-duration-btn').click(function() {
-        generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/update', 'Modifier une période de socialisation',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.del-duration').click(function() {
-        generic_ajaxform_dialog('socialisation/' + $(this).data('id') + '/del', 'Supprimer une période de socialisation',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('#new-mdph-request-btn').click(function() {
-        generic_ajaxform_dialog('mdph_request/new', 'Ajouter une demande MDPH',
-            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
-    });
-    $('.update-mdph-request-btn').click(function() {
-        generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/update', 'Modifier une demande MDPH',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.del-mdph-request').click(function() {
-        generic_ajaxform_dialog('mdph_request/' + $(this).data('id') + '/del', 'Supprimer une demande MDPH',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('#new-mdph-response-btn').click(function() {
-        generic_ajaxform_dialog('mdph_response/new', 'Ajouter une réponse MDPH',
-            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
-    });
-    $('.update-mdph-response-btn').click(function() {
-        generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/update', 'Modifier une réponse MDPH',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.del-mdph-response').click(function() {
-        generic_ajaxform_dialog('mdph_response/' + $(this).data('id') + '/del', 'Supprimer une réponse MDPH',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('#new-hctrait-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_treatment/new', 'Ajouter une prise en charge de traitement',
-            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
-    });
-    $('#new-hcdiag-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_diagnostic/new', 'Ajouter une prise en charge de diagnostic',
-            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
-    });
-    $('#new-notification-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_notification/new', 'Ajouter une notification',
-            '#ajax-dlg', '600px', 'Ajouter', null, add_datepickers);
-    });
-    $('.update-hctrait-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/update', 'Modifier une prise en charge de traitement',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.update-hcdiag-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/update', 'Modifier une prise en charge de diagnostic',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.update-notification-btn').click(function() {
-        generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/update', 'Modifier une notification',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.del-hctrait').click(function() {
-        generic_ajaxform_dialog('healthcare_treatment/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de traitement',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('.del-hcdiag').click(function() {
-        generic_ajaxform_dialog('healthcare_diagnostic/' + $(this).data('id') + '/del', 'Supprimer une prise en charge de diagnostic',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('.del-notification').click(function() {
-        generic_ajaxform_dialog('healthcare_notification/' + $(this).data('id') + '/del', 'Supprimer une notification',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
 
     $('.update-patient-state-btn').click(function() {
         generic_ajaxform_dialog('state/' + $(this).data('id') + '/update', 'Modifier un état',
