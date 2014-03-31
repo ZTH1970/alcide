@@ -197,6 +197,7 @@ function load_tab3_addresses() {
           $.ajax({
               url: '/api/v1/patientaddress/' + $(this).data("id") + '/?format=json',
               type: 'PATCH',
+              async: false,
               contentType: 'application/json',
               data: '{"place_of_life": ' + value + '}',
               success: function(data) {
