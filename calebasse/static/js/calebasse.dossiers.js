@@ -339,8 +339,9 @@ function load_tab8_medical() {
       load_tab7_socialisation();
         else if (tabid == "ui-id-8")
       load_tab8_medical();
-
       },
+        selected: -1,
+        collapsible: true,
     });
 
 
@@ -415,6 +416,9 @@ function load_tab8_medical() {
     var tabid = $.url($(location).attr('href')).fparam('tab');
       if (tabid) {
         $tabs.tabs('select',  parseInt(tabid));
+      }
+      else {
+        $tabs.tabs('select',  0);
       }
     });
 
