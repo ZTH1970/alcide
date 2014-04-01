@@ -314,6 +314,7 @@ function load_tab7_socialisation() {
             '#ajax-dlg', '500px', 'Supprimer');
     });
 }
+
 function load_tab8_medical() {
   SelectFilter.init("id_mises_1", "Catégorie", 0, "/static/admin/");
   SelectFilter.init("id_mises_2", "Catégorie", 0, "/static/admin/");
@@ -324,24 +325,23 @@ function load_tab8_medical() {
 (function($) {
   $(function() {
     var $tabs = $('#tabs').tabs({
-        load: function(event, ui) {
-            var tabid = $(ui.tab).attr('id');
-            console.log(tabid);
-            if (tabid == "ui-id-1")
-                load_tab1_general();
-            else if (tabid == "ui-id-2")
-                load_tab2_adm();
-            else if (tabid == "ui-id-3")
-                load_tab3_addresses();
-            else if (tabid == "ui-id-4")
-                load_tab4_notifs();
-            else if (tabid == "ui-id-7")
-                load_tab7_socialisation();
-            else if (tabid == "ui-id-8")
-                load_tab8_medical();
+      load: function(event, ui) {
+        var tabid = $(ui.tab).attr('id');
+        if (tabid == "ui-id-1")
+      load_tab1_general();
+        else if (tabid == "ui-id-2")
+      load_tab2_adm();
+        else if (tabid == "ui-id-3")
+      load_tab3_addresses();
+        else if (tabid == "ui-id-4")
+      load_tab4_notifs();
+        else if (tabid == "ui-id-7")
+      load_tab7_socialisation();
+        else if (tabid == "ui-id-8")
+      load_tab8_medical();
 
-        },
-        });
+      },
+    });
 
 
     $('.atabs').click(function() {
