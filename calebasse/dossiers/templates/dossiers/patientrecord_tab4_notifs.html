@@ -3,11 +3,11 @@
   <div class="notifs">
     <h4>Information sur la prise en charge</h4>
     <ul>
-      <li><span{% if hc_status.1 %} id="highlight"{% endif %}>{{ hc_status.0 }}</span></li>
-      {% if object.pause %}<li><span id="highlight">Le dossier est en pause facturation.</span></li>{% endif %}
-      {% if missing_policy %}<li><span id="highlight">Informations d'assuré sociale manquantes.</span></li>{% endif %}
-      {% if missing_birthdate %}<li><span id="highlight">Date de naissance manquante.</span></li>{% endif %}
-      {% if object.policyholder.ame %}<li><span id="highlight">Le contact assuré est AME.</span></li>{% endif %}
+      <li><span{% if hc_status.1 %} class="highlight"{% endif %}>{{ hc_status.0 }}</span></li>
+      {% if object.pause %}<li><span class="highlight">Le dossier est en pause facturation.</span></li>{% endif %}
+      {% if missing_policy %}<li><span class="highlight">Informations d'assuré sociale manquantes.</span></li>{% endif %}
+      {% if missing_birthdate %}<li><span class="highlight">Date de naissance manquante.</span></li>{% endif %}
+      {% if object.policyholder.ame %}<li><span class="highlight">Le contact assuré est AME.</span></li>{% endif %}
     </div>
     <p>
     <button id="new-hcdiag-btn">Nouvelle PC diagnostic</button>

@@ -1178,8 +1178,9 @@ a [class^="icon-"], a [class*=" icon-"] {
   text-decoration: inherit;
 }
 
-#highlight {
+.highlight, div#tabs label.highlight {
 	color: #FF7800;
+    font-weight: bold;
 }
 
 #last_name_matches {
@@ -1368,11 +1369,6 @@ div.statistic {
 
 .addresses li {
     list-style-type: none;
-}
-
-.warning, div#tabs label.warning {
-    color: orange;
-    font-weight: bold;
 }
 
 .social-security-label {

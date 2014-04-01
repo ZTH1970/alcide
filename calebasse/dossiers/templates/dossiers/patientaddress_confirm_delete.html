@@ -5,7 +5,7 @@
 {% endif %}
 <form action="{{ request.get_full_path }}" method="post">{% csrf_token %}
   {% if object.place_of_life %}
-  <p class="warning">ATTENTION cette adresse est un lieu de vie</p>
+  <p class="highlight">ATTENTION cette adresse est un lieu de vie</p>
   {% endif %}
   <p>Êtes-vous sûr de vouloir supprimer l'adresse : {{ object.display_name }} ?</p>
 </form>
