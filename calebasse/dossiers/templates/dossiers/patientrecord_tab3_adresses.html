@@ -3,8 +3,12 @@
 
     <div class="contact patient">
       <h4>{{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> (Patient)</h4>
-      {% if nb_place_of_lifes > 1 %}
-      <p>{{ nb_place_of_lifes }} lieux de vie</p>
+      {% if nb_place_of_lifes == 1 %}
+      <p>Un lieu de vie unique est indiqué</p>
+      {% elif nb_place_of_lifes > 1 %}
+      <p class="highlight">Il y a {{ nb_place_of_lifes }} lieux de vie d'indiqué</p>
+      {% else %}
+      <p class="highlight">Aucun lieu de vie d'indiqué</p>
       {% endif %}
       <div class="right">Assuré
         <input type="radio"
