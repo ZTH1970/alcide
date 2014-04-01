@@ -2,7 +2,7 @@
   <form method="post" action="tab8" id="physiology-form" class="patientrecordform">
     {% csrf_token %}
     <button class="save enable-on-change">Enregistrer</button>
-    {% for field in forms.physiology %}
+    {% for field in form %}
     <p>
     {{ field.errors }}
     </p>

@@ -425,9 +425,9 @@ class PatientRecordSocialisationView(cbv.DetailView):
 
 tab7_socialisation = PatientRecordSocialisationView.as_view()
 
-class PatientRecordMedicalView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+class PatientRecordMedicalView(cbv.UpdateView):
     model = PatientRecord
-    forms_classes = {'physiology': forms.PhysiologyForm}
+    form_class = forms.PhysiologyForm
     template_name = 'dossiers/patientrecord_tab8_medical.html'
     success_url = './view#tab=7'
 

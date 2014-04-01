@@ -315,6 +315,9 @@ function load_tab7_socialisation() {
     });
 }
 function load_tab8_medical() {
+  SelectFilter.init("id_mises_1", "Catégorie", 0, "/static/admin/");
+  SelectFilter.init("id_mises_2", "Catégorie", 0, "/static/admin/");
+  SelectFilter.init("id_mises_3", "Catégorie", 0, "/static/admin/");
 }
 
 

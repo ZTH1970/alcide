@@ -113,7 +113,6 @@ class FilteredSelectMultipleMise(django.contrib.admin.widgets.FilteredSelectMult
     def __init__(self, **kwargs):
         super(FilteredSelectMultipleMise, self).__init__(u'Catégorie', False)
 
-
 class PhysiologyForm(ModelForm):
     cranium_perimeter = forms.DecimalField(label=u"Périmètre cranien",
                     max_digits=5, decimal_places=2, localize=True,
