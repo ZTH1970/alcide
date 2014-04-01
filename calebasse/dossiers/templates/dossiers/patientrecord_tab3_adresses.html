@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <button type="button" id="new-address-btn">Nouvelle adresse</button>
-    <button type="button" id="new-contact-btn">Nouveau contact</button>
+    <button type="button" id="new-address-btn" class="icon-home-space">Nouvelle adresse</button>
+    <button type="button" id="new-contact-btn" class="icon-user-space">Nouveau contact</button>
 
     {% for contact in object.contacts.all %}
     {% if not contact.addresses.all %}

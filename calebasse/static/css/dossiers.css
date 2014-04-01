@@ -89,3 +89,8 @@ div#tabs-4 div div.buttons {
 #tabs-8 form p {
 	clear: both;
 }
+
+#new-address-btn, #new-contact-btn {
+    font-size: 1.1em;
+}
+
