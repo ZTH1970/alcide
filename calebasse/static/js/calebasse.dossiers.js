@@ -8,10 +8,11 @@ function add_datepickers(that) {
   $('input#id_prolongation_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
-function load_add_addressialog() {
-    generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
-        '#address-dlg', '600px', 'Ajouter');
+function load_add_address_dialog() {
+      generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
+                  '#address-dlg', '600px', 'Ajouter');
 }
+
 
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
@@ -220,6 +221,13 @@ function load_tab3_addresses() {
       }
       $(data).toggle();
     });
+    var hashes = location.hash.split('&');
+    for (i in hashes) {
+      if (hashes[i] == "newcontact") {
+        $('#new-contact-btn').first().click();
+      }
+    }
+    location.hash = hashes[0];
 }
 
 function load_tab4_notifs() {
@@ -409,12 +417,3 @@ function load_tab8_medical() {
 
 })(window.jQuery)
 
-$( document ).ready(function(){
-    var hashes = location.hash.split('&');
-    for (i in hashes) {
-      if (hashes[i] == "newcontact") {
-        $('#new-contact-btn').first().click();
-      }
-    }
-    location.hash = hashes[0];
-});
