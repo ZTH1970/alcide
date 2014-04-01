@@ -168,7 +168,7 @@ class FamilyForm(ModelForm):
                 'family_situation', 'child_custody', 'job_mother', 'job_father',
                 'rm_mother', 'rm_father', 'family_comment')
         widgets = {
-                'family_comment': forms.Textarea(attrs={'cols': 100, 'rows': 1}),
+                'family_comment': forms.Textarea(attrs={'cols': 70, 'rows': 2}),
                 }
 
 class TransportFrom(ModelForm):
