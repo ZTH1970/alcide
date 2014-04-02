@@ -190,3 +190,8 @@ li.away {
     color: #000;
     text-decoration: underline;
 }
+
+div.new {
+    margin: .4em 0;
+    float: right;
+}
