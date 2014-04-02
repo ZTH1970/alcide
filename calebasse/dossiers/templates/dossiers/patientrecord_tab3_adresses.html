@@ -54,7 +54,7 @@
     {% endfor %}
     {% for address in addresses %}
     <div class="frame {% if address.place_of_life %}orange{% endif %}">
-      <h3>{{ address }}</h3>
+      <h3 class="icon-home-space">{{ address }}</h3>
       <div class="buttons">
         <button type="button" data-id="{{ address.id }}" class="del-address icon-minus" title="Supprimer"></button>
         <button type="button" data-id="{{ address.id }}" class="update-address-btn icon-edit" title="Modifier"></button>
@@ -69,7 +69,7 @@
       {% for contact in address.patientcontact_set.all  %}
       {% if contact.id != object.id %}
       <div class="contact">
-        <h4>{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
+        <h4 class="icon-user-space">{% if contact.gender == 1 %}M.{% elif contact.gender == 2 %}Mme{% endif %}
           {{ contact.first_name }} <span class="lastname">{{ contact.last_name }}</span> {% if contact.id == object.id %} (PATIENT){% endif %}</h4>
         <div class="right">Assuré
           <input type="radio"
