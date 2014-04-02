@@ -127,7 +127,7 @@ function load_tab2_adm() {
         generic_ajaxform_dialog('protection/' + $(this).data('id') + '/del', 'Supprimer une mesure de protection',
             '#ajax-dlg', '500px', 'Supprimer');
     });
-    $('input#id_id-birthdate', this).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+    $('input#id_id-birthdate').datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
 function load_tab3_addresses() {
