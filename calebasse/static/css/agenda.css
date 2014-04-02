@@ -153,6 +153,14 @@ li.hour-mark {
     margin-bottom: 1em;
 }
 
+li.noon-start {
+    margin-top: 1.5em;
+}
+
+li.noon-end {
+    margin-bottom: 1.5em;
+}
+
 li.free {
     background: green;
 }
