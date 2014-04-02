@@ -1270,8 +1270,12 @@ div.pagination {
 .icon-remove:before               { content: "\f00d"; }
 .icon-warning-sign:before         { content: "\f071"; }
 .icon-ok:before                   { content: "\f00c"; }
-.icon-mobile:before               { content: "\f10b"; margin-right: 4px; }
-.icon-phone:before                { content: "\f095"; margin-right: 4px; }
+.icon-mobile:before               {
+    content: "\f10b";
+    margin-right: 5px;
+    font-size: 1.3em;
+}
+.icon-phone:before                { content: "\f095"; margin-right: 3px; }
 
 /* periodic event search form */
 
