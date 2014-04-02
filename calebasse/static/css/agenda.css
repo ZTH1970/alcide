@@ -196,7 +196,7 @@ div.new {
     float: right;
 }
 
-div.lastname {
+p.lastname {
     text-transform: uppercase;
     display: inline;
 }
