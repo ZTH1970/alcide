@@ -26,11 +26,11 @@ def redirect_to_homepage(request):
 
 class Homepage(TemplateView):
     template_name='calebasse/homepage.html'
-    cookies_to_clear = [('agenda-worker-tabs', )]
+    cookies_to_clear = [('agenda-tabs', )]
 
     def dispatch(self, request, **kwargs):
         if 'service' in kwargs:
-            self.cookies_to_clear = [('agenda-worker-tabs',
+            self.cookies_to_clear = [('agenda-tabs',
                                       '/%s/agenda' % kwargs['service']),
                                      ('agenda-ressource-tabs',
                                       '/%s/agenda' % kwargs['service']),

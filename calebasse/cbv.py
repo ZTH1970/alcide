@@ -30,7 +30,7 @@ class ServiceViewMixin(object):
     service = None
     date = None
     popup = False
-    cookies_to_clear = [('agenda-worker-tabs', ), ('active-resource-agenda', )]
+    cookies_to_clear = [('agenda-tabs', ), ('active-agenda', ), ('last-ressource', )]
 
     def clear_cookies(self, response, path):
         for cookie in self.cookies_to_clear:
