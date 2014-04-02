@@ -1,14 +1,25 @@
 <div id="tabs-3">
   <form method="post" action="tab3" id="policyholder-form" class="patientrecordform">{% csrf_token %}
+    <p>
+    {% if nb_place_of_lifes == 1 %}
+    <span>Un lieu de vie unique est indiqué</span>
+    {% elif nb_place_of_lifes > 1 %}
+    <span class="highlight">Il y a {{ nb_place_of_lifes }} lieux de vie d'indiqués</span>
+    {% else %}
+    <span class="highlight">Aucun lieu de vie d'indiqué</span>
+    {% endif %}
+    </p>
+    <p>
+    <label>Commentaire <button class="save enable-on-change btn-maj">✔</button></label>
+    {{ forms.policyholder.contact_comment }}
+    </p>
+    <p>
+    <button type="button" id="new-address-btn" class="icon-home-space">Nouvelle adresse</button>
+    <button type="button" id="new-contact-btn" class="icon-user-space">Nouveau contact</button>
+    </p>
 
     <div class="contact patient">
-      {% if nb_place_of_lifes == 1 %}
-      <p>Un lieu de vie unique est indiqué</p>
-      {% elif nb_place_of_lifes > 1 %}
-      <p class="highlight">Il y a {{ nb_place_of_lifes }} lieux de vie d'indiqués</p>
-      {% else %}
-      <p class="highlight">Aucun lieu de vie d'indiqué</p>
-      {% endif %}
+      <h4 class="icon-user-space">Patient</h4>
       <div class="right">Assuré
         <input type="radio"
         {% if object.policyholder.id == object.id %} checked="checked" {% endif %}
@@ -20,16 +31,8 @@
       </div>
       <div>
         {% include "dossiers/patientrecord_tab3_contact.html" with contact=object %}
-        <hr>
-        <span>
-          <label>Commentaire </label> <button class="save enable-on-change btn-maj">✔</button><br/>
-          {{ forms.policyholder.contact_comment }}
-        </span>
       </div>
     </div>
-
-    <button type="button" id="new-address-btn" class="icon-home-space">Nouvelle adresse</button>
-    <button type="button" id="new-contact-btn" class="icon-user-space">Nouveau contact</button>
 
     {% for contact in object.contacts.all %}
     {% if not contact.addresses.all %}
