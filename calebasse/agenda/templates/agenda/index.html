@@ -90,7 +90,7 @@
            <li style="display: none" class="worker-{{ worker.id }} agenda">
              <a id="worker-{{ worker.id }}" href="{% url "ajax-worker-tab" service date worker.id %}" class="tab">
                {{ worker.first_name }}
-               <span class="lastname">{{ worker.last_name }}</span>
+               <div class="lastname">{{ worker.last_name }}</div>
              </a>
              <a href="#" style="padding: 3px;cursor: auto;" class="close-tab" data-target="worker-{{ worker.id }}"><span class="ui-icon ui-icon-circle-close"></span></a>
            </li>
@@ -105,10 +105,6 @@
            </li>
            {% endfor %}
          </ul>
-       </div>
-       <div class="new">
-         <button class="newrdv" data-hour="" data-url="{% url 'nouveau-rdv' service=service date=date %}">Nouveau rendez-vous patient</button>
-         <button class="newevent" data-hour="" data-url="{% url 'new-event' service=service date=date %}">Nouvel événement</button>
        </div>
 </td>
 </tr>

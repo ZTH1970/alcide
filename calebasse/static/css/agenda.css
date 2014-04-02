@@ -181,7 +181,7 @@ li.away {
 }
 
 #extra-top-links a:link, #extra-top-links a:visited{
-    color: #555;
+    color: #000;
     text-decoration: none;
     font: bold .8em Arial;
 }
@@ -194,4 +194,9 @@ li.away {
 div.new {
     margin: .4em 0;
     float: right;
+}
+
+div.lastname {
+    text-transform: uppercase;
+    display: inline;
 }
