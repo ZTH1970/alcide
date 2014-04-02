@@ -19,21 +19,24 @@
   {{ contact.email }}
   </li>
   {% endif %}
+  {% if contact.contact_comment and contact.id != object.id %}
+  <li>
+  <label>Commentaire :</label>
+  {{ contact.contact_comment }}
+  </li>
+  {% endif %}
   {% if contact.job %}
   <li>
   <label>Profession :</label>
   {{ contact.job }}
   </li>
   {% endif %}
-  {% if contact.contact_comment %}
-  <li>
-  <label>Commentaire :</label>
-  {{ contact.contact_comment }}
-  </li>
-  {% endif %}
   <span class="social-security-contact">
     <label class="social-security-label">Infos d'assuré [+]</label>
     <ul>
+      {% if contact.id == object.id %}
+      {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span>
+      {% endif %}
       {% if contact.social_security_id %}
       <li><label>Numéro d'assuré social :</label>
       {{ contact.social_security_id }} {{ contact.get_control_key }}</li>
