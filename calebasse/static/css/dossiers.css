@@ -102,3 +102,9 @@ div#tabs-4 div div.buttons {
 #id_policyholder-contact_comment {
     margin: 0;
 }
+
+.ui-tabs .ui-tabs-nav li a {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+

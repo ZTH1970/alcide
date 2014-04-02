@@ -206,6 +206,7 @@ class PatientContactForm(ModelForm):
                 'twinning_rank': forms.TextInput(attrs={'size': 4}),
                 'health_org': forms.TextInput(attrs={'size': 9}),
                 'addresses': forms.CheckboxSelectMultiple(),
+                'contact_comment': forms.Textarea(attrs={'rows': 2}),
                 }
 
     def __init__(self, *args, **kwargs):

@@ -164,7 +164,7 @@ function load_tab3_addresses() {
     });
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
-            '#ajax-dlg', '900px', 'Ajouter', null, nir_check);
+            '#ajax-dlg', '900px', 'Ajouter', null, nir_check, 850);
     });
     $('.update-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
