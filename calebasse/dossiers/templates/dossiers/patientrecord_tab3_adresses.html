@@ -63,7 +63,7 @@
         <ul class="ajax_messages" style="display: none;"></ul>
         <input type="checkbox" data-id="{{ address.id }}" class="place_of_life" {% if address.place_of_life %}checked{% endif %}>Lieu de vie</input>
       </div>
-      {% if address.phone %}<p><span class="icon-home-space">{{ address.phone }}</span></p>{% endif %}
+      {% if address.phone %}<p><span class="icon-phone">{{ address.phone }}</span></p>{% endif %}
       {% if address.comment %}<p><label>Commentaire :</label>{{ address.comment }}</p>{% endif %}
       {% if not address.phone and not address.comment %}<p>&nbsp;<!-- intentionaly empty --></p>{% endif %}
       {% for contact in address.patientcontact_set.all  %}
