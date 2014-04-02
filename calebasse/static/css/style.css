@@ -351,13 +351,11 @@ div#sidebar div.search-reset button#reset {
 }
 
 select {
-	background: white url(../images/button-next-down.png) no-repeat 98% 50%;
+    background: white;
 	color: black;
 	padding: 5px;
-	margin-left: 10px;
 	border: 1px solid #cccccc;
-	color:#666666;
-	color: black;
+	color: #666666;
 /*	width: 69.2%; */
 }
 
@@ -643,12 +641,12 @@ table#ressource-list .col-label a {
 
 div#tabs div.left {
         float: left;
-        width: 35%;
+        width: 47%;
 }
 
 div#tabs div.right {
         float: right;
-        width: 45%;
+        width: 50%;
 }
 
 div#tabs div.right ul li,

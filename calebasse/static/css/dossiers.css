@@ -94,3 +94,8 @@ div#tabs-4 div div.buttons {
     font-size: 1.1em;
 }
 
+#tabs textarea {
+    margin-top: 5px;
+    width: 85%;
+}
+
