@@ -824,7 +824,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def _get_search_result(self, paginate_patient_records):
         patient_records = []
         for patient_record in paginate_patient_records:
-            current_state = patient_record.get_current_state()
+            current_state = patient_record.get_current_state() or patient_record.get_state()
             state = current_state.status.name
             state_class = current_state.status.type.lower()
             patient_records.append(
