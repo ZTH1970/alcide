@@ -4,7 +4,7 @@
     {{ initials }}
   </li>
   {% for start_time, quarters in disponibility.items %}
-  <li class="hour-mark {% if start_time == 13 %}noon-start{% elif start_time == 14%}noon-end{% endif %}">
+  <li class="hour-mark {% if start_time == 12 %}noon-start{% elif start_time == 14%}noon-end{% endif %}">
     <ul>
       {% for quarter in quarters %}
       {% for min, value in quarter %}
