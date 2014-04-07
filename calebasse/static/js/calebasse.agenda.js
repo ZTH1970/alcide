@@ -283,6 +283,11 @@ function toggle_ressource(ressource) {
     }
     else {
         var agendatabs = $.cookie('agenda-tabs');
+        if ($('#users li.item.ressource.active:last').attr('id'))
+            $.cookie('last-ressource', $('#users li.item.ressource.active:last').attr('id').split('-')[1], { path: COOKIE_PATH });
+        else
+            $.cookie('last-ressource', '', {path: COOKIE_PATH});
+
         $.each(agendatabs, function (i, value) {
             if (value == ressource_id) {
                 agendatabs.splice(i, 1);
@@ -290,7 +295,7 @@ function toggle_ressource(ressource) {
         });
         $.cookie('agenda-tabs', agendatabs, { path: COOKIE_PATH });
     }
-    $(ressource_target).toggle()
+    $(ressource_target).toggle();
     $('#close-all-agendas').toggle($('#users li.active').length != 0);
     if (! $('#users li.active').length) {
         $('#agendas #tabs div').hide();
