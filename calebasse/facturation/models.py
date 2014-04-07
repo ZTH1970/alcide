@@ -171,7 +171,7 @@ class Invoicing(models.Model):
 
     seq_id = models.IntegerField(blank=True, null=True)
 
-    service = models.ForeignKey('ressources.Service', on_delete='PROTECT')
+    service = models.ForeignKey('ressources.Service', on_delete=models.PROTECT)
 
     start_date = models.DateField(
             verbose_name=u'Ouverture de la facturation')
@@ -949,7 +949,7 @@ class Invoice(models.Model):
 
     created = models.DateTimeField(u'Création', auto_now_add=True)
     invoicing = models.ForeignKey('facturation.Invoicing',
-        on_delete='PROTECT')
+        on_delete=models.PROTECT)
     acts = models.ManyToManyField('actes.Act')
     list_dates = models.CharField(max_length=512, blank=True, null=True)
     first_tag = models.CharField(max_length=128, blank=True, null=True)
