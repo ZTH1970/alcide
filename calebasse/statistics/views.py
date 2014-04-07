@@ -39,9 +39,8 @@ class StatisticsDetailView(TemplateView):
         inputs['end_date'] = self.request.GET.get('end_date')
         inputs['participants'] = self.request.GET.get('participants')
         inputs['patients'] = self.request.GET.get('patients')
-        inputs['inscriptions'] = False
-        if self.request.GET.get('inscriptions'):
-            inputs['inscriptions'] = True
+        inputs['inscriptions'] = self.request.GET.get('inscriptions')
+        inputs['no_synthesis'] = self.request.GET.get('no_synthesis')
         statistic = Statistic(name, inputs)
         context['dn'] = statistic.display_name
         context['data_tables_set'] = statistic.get_data()
@@ -65,6 +64,8 @@ class StatisticsFormView(FormView):
         elif self.name in ('active_patients_by_state_only',
                 'patients_protection', 'patients_contact'):
             return forms.OneDateForm
+        elif self.name == 'patients_per_worker_for_period':
+            return forms.PatientsPerWorkerForPeriodForm
         elif self.name in ('active_patients_with_act', 'closed_files',
                 'patients_synthesis', 'acts_synthesis',
                 'acts_synthesis_cmpp', 'mises', 'deficiencies'):
@@ -80,9 +81,8 @@ class StatisticsFormView(FormView):
             inputs['end_date'] = form.data.get('end_date')
             inputs['participants'] = form.data.get('participants')
             inputs['patients'] = form.data.get('patients')
-            inputs['inscriptions'] = False
-            if 'inscriptions' in form.data:
-                inputs['inscriptions'] = True
+            inputs['inscriptions'] = form.data.get('inscriptions')
+            inputs['no_synthesis'] = 'no_synthesis' in form.data
             statistic = Statistic(self.name, inputs)
             path = statistic.get_file()
             content = File(file(path))

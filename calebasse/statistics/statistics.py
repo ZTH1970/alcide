@@ -11,6 +11,7 @@ from django.db import models
 from django.db.models import Count
 from django.utils import formats
 from django.conf import settings
+from django.db.models import Q
 
 from calebasse.dossiers.models import PatientRecord, FileState
 from calebasse.personnes.models import Worker
@@ -638,6 +639,11 @@ def patients_per_worker_for_period(statistic):
         acts = Act.objects.filter(date__gte=statistic.in_start_date,
             date__lte=statistic.in_end_date,
             patient__service=statistic.in_service)
+    if statistic.no_synthesis:
+        synthesis_q = Q(act_type__name__icontains="SYNTHÈSE") | \
+                Q(act_type__name__icontains="SYNTHESE") | \
+                Q(act_type__name__icontains="SYNTHÉSE")
+        acts = acts.exclude(synthesis_q)
     analyse = dict()
     for act in acts:
         for intervene in act.doctors.all():
@@ -646,8 +652,8 @@ def patients_per_worker_for_period(statistic):
                     analyse.setdefault(intervene, []).append(str(act.patient))
             else:
                 analyse.setdefault(intervene, []).append(str(act.patient))
-    o_analyse = OrderedDict(sorted(analyse.items(), key=lambda t: t[0]))
-    for intervene, patients in o_analyse.iteritems():
+    for intervene, patients in sorted(analyse.items(),
+            key=lambda t: (t[0].last_name, t[0].first_name)):
         lst = list(set(patients))
         values.append([str(intervene), len(lst), lst])
     data.append(values)
@@ -1719,6 +1725,7 @@ class Statistic(object):
         except:
             pass
         self.inscriptions = inputs.get('inscriptions')
+        self.no_synthesis = inputs.get('no_synthesis')
 
     def get_data(self):
         func = globals()[self.name]

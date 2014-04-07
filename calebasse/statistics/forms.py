@@ -23,6 +23,8 @@ class PatientsTwoDatesForm(TwoDatesForm):
 class ParticipantsPatientsTwoDatesForm(PatientsTwoDatesForm):
     participants = AutoCompleteSelectMultipleField('all-worker-or-group', required=False)
 
+class PatientsPerWorkerForPeriodForm(ParticipantsPatientsTwoDatesForm):
+    no_synthesis = forms.BooleanField(label=u'Exclure les synthèses', required=False, localize=True)
+
 class PatientsSynthesisForm(TwoDatesForm):
     inscriptions = forms.BooleanField(label=u'Seulement les inscriptions', required=False, localize=True)
-
