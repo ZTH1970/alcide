@@ -76,51 +76,53 @@ def get_status(ctx, user):
             status = [STATES_BTN_MAPPER['DIAGNOSTIC'],
                     STATES_BTN_MAPPER['TRAITEMENT'],
                     STATES_BTN_MAPPER['ACCUEIL']]
-        elif ctx['object'].service.slug == "camsp":
-            if ctx['object'].last_state.status.type == "ACCUEIL":
-                status = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN']]
-            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
-                status = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN'],
-                        STATES_BTN_MAPPER['SURVEILLANCE'],
-                        STATES_BTN_MAPPER['SUIVI'],
-                        close_btn]
-            elif ctx['object'].last_state.status.type == "BILAN":
-                status = [STATES_BTN_MAPPER['SURVEILLANCE'],
-                        STATES_BTN_MAPPER['SUIVI'],
-                        close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            elif ctx['object'].last_state.status.type == "SURVEILLANCE":
-                status = [STATES_BTN_MAPPER['SUIVI'],
-                        close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN']]
-            elif ctx['object'].last_state.status.type == "SUIVI":
-                status = [close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN'],
-                        STATES_BTN_MAPPER['SURVEILLANCE']]
-            elif ctx['object'].last_state.status.type == "CLOS":
-                status = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['BILAN'],
-                        STATES_BTN_MAPPER['SURVEILLANCE'],
-                        STATES_BTN_MAPPER['SUIVI']]
-        elif ctx['object'].service.slug == "sessad-ted" or ctx['object'].service.slug == "sessad-dys":
-            if ctx['object'].last_state.status.type == "ACCUEIL":
-                status = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
-                        STATES_BTN_MAPPER['TRAITEMENT']]
-            elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
-                status = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['TRAITEMENT'],
-                        close_btn]
-            elif ctx['object'].last_state.status.type == "TRAITEMENT":
-                status = [close_btn,
-                        STATES_BTN_MAPPER['ACCUEIL']]
-            elif ctx['object'].last_state.status.type == "CLOS":
-                status = [STATES_BTN_MAPPER['ACCUEIL'],
-                        STATES_BTN_MAPPER['TRAITEMENT']]
-        return (status, hc_status)
+    elif ctx['object'].service.slug == "camsp":
+        hc_status = None
+        if ctx['object'].last_state.status.type == "ACCUEIL":
+            status = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
+                    STATES_BTN_MAPPER['BILAN']]
+        elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
+            status = [STATES_BTN_MAPPER['ACCUEIL'],
+                    STATES_BTN_MAPPER['BILAN'],
+                    STATES_BTN_MAPPER['SURVEILLANCE'],
+                    STATES_BTN_MAPPER['SUIVI'],
+                    close_btn]
+        elif ctx['object'].last_state.status.type == "BILAN":
+            status = [STATES_BTN_MAPPER['SURVEILLANCE'],
+                    STATES_BTN_MAPPER['SUIVI'],
+                    close_btn,
+                    STATES_BTN_MAPPER['ACCUEIL']]
+        elif ctx['object'].last_state.status.type == "SURVEILLANCE":
+            status = [STATES_BTN_MAPPER['SUIVI'],
+                    close_btn,
+                    STATES_BTN_MAPPER['ACCUEIL'],
+                    STATES_BTN_MAPPER['BILAN']]
+        elif ctx['object'].last_state.status.type == "SUIVI":
+            status = [close_btn,
+                    STATES_BTN_MAPPER['ACCUEIL'],
+                    STATES_BTN_MAPPER['BILAN'],
+                    STATES_BTN_MAPPER['SURVEILLANCE']]
+        elif ctx['object'].last_state.status.type == "CLOS":
+            status = [STATES_BTN_MAPPER['ACCUEIL'],
+                    STATES_BTN_MAPPER['BILAN'],
+                    STATES_BTN_MAPPER['SURVEILLANCE'],
+                    STATES_BTN_MAPPER['SUIVI']]
+    elif ctx['object'].service.slug == "sessad-ted" or ctx['object'].service.slug == "sessad-dys":
+        hc_status = None
+        if ctx['object'].last_state.status.type == "ACCUEIL":
+            status = [STATES_BTN_MAPPER['FIN_ACCUEIL'],
+                    STATES_BTN_MAPPER['TRAITEMENT']]
+        elif ctx['object'].last_state.status.type == "FIN_ACCUEIL":
+            status = [STATES_BTN_MAPPER['ACCUEIL'],
+                    STATES_BTN_MAPPER['TRAITEMENT'],
+                    close_btn]
+        elif ctx['object'].last_state.status.type == "TRAITEMENT":
+            status = [close_btn,
+                    STATES_BTN_MAPPER['ACCUEIL']]
+        elif ctx['object'].last_state.status.type == "CLOS":
+            status = [STATES_BTN_MAPPER['ACCUEIL'],
+                    STATES_BTN_MAPPER['TRAITEMENT']]
+    return (status, hc_status)
 
 def get_last_rdv(patient_record):
     last_rdv = {}
