@@ -325,8 +325,8 @@ class Room(NamedAbstractModel):
     etablissement = models.ForeignKey('Office')
 
     class Meta:
-        verbose_name = u'Salle'
-        verbose_name_plural = u'Salles'
+        verbose_name = u'Ressource'
+        verbose_name_plural = u'Ressources'
 
 
 class AnalyseMotive(NamedAbstractModel):
