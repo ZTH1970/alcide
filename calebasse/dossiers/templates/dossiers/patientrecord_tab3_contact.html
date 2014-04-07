@@ -1,4 +1,10 @@
 <ul>
+  {% if contact.id == object.id %}
+  {% if object.child_custody %}
+  <li><label>Garde parentale :</label>
+  {{ object.child_custody }}</li>
+  {% endif %}
+  {% endif %}
   {% if contact.parente %}
   <li><label>Lien avec le patient :</label>
   {{ contact.parente }}</li>
