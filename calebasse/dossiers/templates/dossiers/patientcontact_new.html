@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 
-<form action="{{ request.get_full_path }}" enctype="multipart/form-data" method="post">
+<form id="contactform" action="{{ request.get_full_path }}" enctype="multipart/form-data" method="post">
   {% csrf_token %}
     {{ form.errors }}
   <table>

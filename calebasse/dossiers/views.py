@@ -72,6 +72,14 @@ class NewPatientContactView(RecordPatientRecordIdMixing, cbv.CreateView):
     template_name = 'dossiers/patientcontact_new.html'
     success_url = '../view#tab=2'
 
+    def get_initial(self):
+        initial = super(NewPatientContactView, self).get_initial()
+        fields = self.form_class.base_fields.keys()
+        for arg in self.request.GET.keys():
+            if arg in fields:
+                initial[arg] = self.request.GET.get(arg)
+        return initial
+
 new_patient_contact = NewPatientContactView.as_view()
 
 class UpdatePatientContactView(RecordPatientRecordIdMixing, cbv.UpdateView):

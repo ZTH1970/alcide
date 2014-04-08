@@ -9,10 +9,11 @@ function add_datepickers(that) {
 }
 
 function load_add_address_dialog() {
-      generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
-                  '#address-dlg', '600px', 'Ajouter');
+  var str = $("#contactform").serialize();
+  $.cookie('contactform', str, { path: window.location.pathname });
+  generic_ajaxform_dialog('address/new', 'Ajouter une adresse',
+      '#address-dlg', '600px', 'Ajouter');
 }
-
 
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
@@ -224,7 +225,10 @@ function load_tab3_addresses() {
     var hashes = location.hash.split('&');
     for (i in hashes) {
       if (hashes[i] == "newcontact") {
-        $('#new-contact-btn').first().click();
+        var form = $.cookie('contactform');
+        generic_ajaxform_dialog('contact/new?'+ form, 'Ajouter un contact',
+            '#ajax-dlg', '900px', 'Ajouter', null, nir_check, 850);
+        $.removeCookie('contactform', { path: window.location.pathname });
       }
     }
     location.hash = hashes[0];
@@ -405,9 +409,6 @@ function load_tab8_medical() {
         generic_ajaxform_dialog('state/' + $(this).data('id') + '/del', 'Supprimer un état',
             '#ajax-dlg', '500px', 'Supprimer', '#histo');
     });
-
-
-
 
     $('button.blind').next().hide();
     $('button.blind').click(function() {
