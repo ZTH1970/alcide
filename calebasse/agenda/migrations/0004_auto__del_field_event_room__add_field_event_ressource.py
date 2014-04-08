@@ -8,16 +8,12 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Event.room'
-        db.delete_column(u'agenda_event', 'room_id')
-
+        # Renaming field 'Event.room'
+        db.rename_column(u'agenda_event', 'room_id', 'ressource_id')
 
     def backwards(self, orm):
-        # Adding field 'Event.room'
-        db.add_column(u'agenda_event', 'room',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ressources.Ressource'], null=True, blank=True),
-                      keep_default=False)
 
+        db.rename_column(u'agenda_event', 'ressource_id', 'room_id')
 
     models = {
         u'agenda.event': {
@@ -42,7 +38,7 @@ class Migration(SchemaMigration):
             'recurrence_week_parity': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'recurrence_week_period': ('django.db.models.fields.PositiveIntegerField', [], {'default': 'None', 'null': 'True', 'db_index': 'True', 'blank': 'True'}),
             'recurrence_week_rank': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
-            'ressource': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ressources.Ressource']", 'null': 'True', 'blank': 'True'}),
+            'ressource_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ressources.Room']", 'null': 'True', 'blank': 'True'}),
             'services': ('django.db.models.fields.related.ManyToManyField', [], {'default': 'None', 'to': u"orm['ressources.Service']", 'null': 'True', 'symmetrical': 'False', 'blank': 'True'}),
             'start_datetime': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '60', 'blank': 'True'})
@@ -437,8 +433,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'})
         },
-        u'ressources.ressource': {
-            'Meta': {'object_name': 'Ressource'},
+        u'ressources.room': {
+            'Meta': {'object_name': 'Room'},
             'etablissement': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ressources.Office']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'})
