@@ -10,12 +10,12 @@ from calebasse.actes.validation_states import VALIDATION_STATES
 class Appointment(object):
 
     def __init__(self, title=None, begin_time=None, type=None,
-            length=None, description=None, room=None):
+            length=None, description=None, ressource=None):
         self.title = title
         self.type = type
         self.length = length
         self.description = description
-        self.room = room
+        self.ressource = ressource
         self.is_recurrent = False
         self.is_billed = False
         self.convocation_sent = None
@@ -66,8 +66,8 @@ class Appointment(object):
         else:
             self.type = "busy-elsewhere"
         self.event_id = event.id
-        if event.room:
-            self.room = event.room.name
+        if event.ressource:
+            self.ressource = event.ressource.name
         self.description = event.description
         self.workers_initial = ""
         self.workers_code = []

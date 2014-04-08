@@ -25,7 +25,7 @@
     {% endif %}
     </span>
     <span class="act_type">{% if appointment.act_type %}{{ appointment.act_type|trunc_act_type }}{% endif %}</span>
-    <span class="room">{% if appointment.room %}{{ appointment.room }}{% endif %}</span>
+    <span class="ressource">{% if appointment.ressource %}{{ appointment.ressource }}{% endif %}</span>
     <span class="right">
         {% if appointment.workers_absent %}
         <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>

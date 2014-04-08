@@ -70,7 +70,7 @@
              {% if appointment.length %} — {{ appointment.length }}m {% endif %}
              {% if appointment.ressources_initial %} —{{ appointment.ressources_initial }} {% endif %}
              {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
-             {% if appointment.room %} — {{ appointment.room }} {% endif %}
+             {% if appointment.ressource %} — {{ appointment.ressource }} {% endif %}
              <span class="right">
                  {% for service_name in appointment.other_services_names %}
                  <span class="box {{ service_name }}" title="{{ service_name }}"></span>

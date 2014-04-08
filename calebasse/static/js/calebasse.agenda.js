@@ -16,11 +16,11 @@ function delete_prompt(text) {
 function get_participants() {
     var participants = new Array();
     var active_agenda = $.cookie('active-agenda').split('-');
-    var room = '';
+    var ressource = '';
     if (active_agenda[0] == 'ressource') {
-        room = active_agenda[1];
+        ressource = active_agenda[1];
     } else {
-        room = $.cookie('last-ressource');
+        ressource = $.cookie('last-ressource');
     }
 
     if ($.cookie('agenda-tabs')) {
@@ -34,7 +34,7 @@ function get_participants() {
         });
     }
     return $.param({participants: $.makeArray(participants),
-                    room: room,
+                    ressource: ressource,
                     time: $(this).data('hour') }, true);
 }
 
@@ -446,7 +446,7 @@ function event_dialog(url, title, width, btn_text) {
     $('#filtre input').keyup();
 
     $.each({'persons': 'worker',
-            'rooms': 'ressource'},
+            'ressources': 'ressource'},
          function(key, value) {
              $('#close-all-agendas').click(function() {
                  $.cookie('active-agenda', '', {path: COOKIE_PATH});

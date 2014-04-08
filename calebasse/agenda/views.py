@@ -15,7 +15,7 @@ from calebasse.agenda.models import Event, EventType, EventWithAct
 from calebasse.personnes.models import TimeTable, Holiday
 from calebasse.agenda.appointments import get_daily_appointments, get_daily_usage
 from calebasse.personnes.models import Worker
-from calebasse.ressources.models import WorkerType, Room
+from calebasse.ressources.models import WorkerType, Ressource
 from calebasse.actes.validation import (get_acts_of_the_day,
         get_days_with_acts_not_locked)
 from calebasse.actes.validation_states import VALIDATION_STATES
@@ -72,8 +72,8 @@ class AgendaHomepageView(TemplateView):
 
         # ressources
         context['ressources_types'] = []
-        data = {'type': Room._meta.verbose_name_plural,
-                'ressources': Room.objects.all()}
+        data = {'type': Ressource._meta.verbose_name_plural,
+                'ressources': Ressource.objects.all()}
         context['ressources_types'].append(data)
 
         return context
@@ -146,7 +146,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         initial['date'] = self.date
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
-        initial['room'] = self.request.GET.get('room')
+        initial['ressource'] = self.request.GET.get('ressource')
         return initial
 
     def get_form_kwargs(self):
@@ -222,7 +222,7 @@ class NewEventView(CreateView):
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
         initial['event_type'] = 2
-        initial['room'] = self.request.GET.get('room')
+        initial['ressource'] = self.request.GET.get('ressource')
         if not initial.has_key('services'):
             initial['services'] = [self.service]
         return initial
@@ -589,11 +589,11 @@ class AjaxRessourceTabView(TemplateView):
 
     def get_context_data(self, ressource_id, **kwargs):
         context = super(AjaxRessourceTabView, self).get_context_data(**kwargs)
-        ressource = Room.objects.get(pk=ressource_id)
+        ressource = Ressource.objects.get(pk=ressource_id)
         plain_events = Event.objects.for_today(self.date) \
                                     .order_by('start_datetime').select_subclasses()
         events = [ e.today_occurrence(self.date) for e in plain_events ]
-        events_ressource = [e for e in events if ressource == e.room]
+        events_ressource = [e for e in events if ressource == e.ressource]
         context['ressource_agenda'] = {'appointments': get_daily_usage(context['date'],
                                                                        ressource,
                                                                        self.service,
@@ -607,7 +607,7 @@ class AjaxDisponibilityColumnView(TemplateView):
     cookies_to_clear = []
 
     def get_ressource_context_data(self, ressource_id, context):
-        ressource = Room.objects.get(pk = ressource_id)
+        ressource = Ressource.objects.get(pk = ressource_id)
         context['initials'] = ressource.name[:3]
         disponibility = dict()
         start_datetime = datetime.datetime(self.date.year,
@@ -615,7 +615,7 @@ class AjaxDisponibilityColumnView(TemplateView):
                                            self.date.day, 8, 0)
         end_datetime = datetime.datetime(self.date.year, self.date.month,
                                          self.date.day, 8, 15)
-        events = Event.objects.filter(room__id=ressource_id).today_occurrences(self.date)
+        events = Event.objects.filter(ressource__id=ressource_id).today_occurrences(self.date)
 
         while (start_datetime.hour <= 19):
             if start_datetime.hour not in disponibility:

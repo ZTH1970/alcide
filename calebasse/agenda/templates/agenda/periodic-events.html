@@ -90,7 +90,7 @@
         {% if event.patient.paper_id %} — {{ event.patient.paper_id }} {% endif %}
         {% if event.length %} — {{ event.length }} mn {% endif %}
         {% if event.workers_initial %} — {{ event.workers_initial }} {% endif %}
-        {% if event.room %} — {{ event.room }} {% endif %}
+        {% if event.ressource %} — {{ event.ressource }} {% endif %}
         <span class="right">
           {% for other_service in event.services.all %}
             {% if other_service.name != service_name %}

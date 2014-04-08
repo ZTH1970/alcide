@@ -312,7 +312,7 @@ class Job(NamedAbstractModel):
         verbose_name_plural = u'Professions'
 
 
-class RoomQuerySet(query.QuerySet):
+class RessourceQuerySet(query.QuerySet):
     def for_etablissement(self, etablissement):
         return self.filter(etablissement=etablissement)
 
@@ -320,8 +320,8 @@ class RoomQuerySet(query.QuerySet):
         return self.filter(etablissement__service=service)
 
 
-class Room(NamedAbstractModel):
-    objects = PassThroughManager.for_queryset_class(RoomQuerySet)()
+class Ressource(NamedAbstractModel):
+    objects = PassThroughManager.for_queryset_class(RessourceQuerySet)()
     etablissement = models.ForeignKey('Office')
 
     class Meta:

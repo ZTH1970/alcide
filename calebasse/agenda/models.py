@@ -49,8 +49,8 @@ class Event(models.Model):
             null=True, blank=True, default=None)
     participants = models.ManyToManyField('personnes.People',
             null=True, blank=True, default=None)
-    room = models.ForeignKey('ressources.Room', blank=True, null=True,
-            verbose_name=u'Salle')
+    ressource = models.ForeignKey('ressources.Ressource', blank=True, null=True,
+                                  verbose_name=u'Ressource')
 
     start_datetime = models.DateTimeField(_('Début'), db_index=True)
     end_datetime = models.DateTimeField(_('Fin'), blank=True, null=True)
@@ -456,7 +456,7 @@ class Event(models.Model):
 class EventWithActManager(managers.EventManager):
     def create_patient_appointment(self, creator, title, patient,
             doctors=[], act_type=None, service=None, start_datetime=None, end_datetime=None,
-            room=None, periodicity=1, until=False):
+            ressource=None, periodicity=1, until=False):
         appointment = self.create_event(creator=creator,
                 title=title,
                 event_type=EventType(id=1),
@@ -464,7 +464,7 @@ class EventWithActManager(managers.EventManager):
                 services=[service],
                 start_datetime=start_datetime,
                 end_datetime=end_datetime,
-                room=room,
+                ressource=ressource,
                 periodicity=periodicity,
                 until=until,
                 act_type=act_type,

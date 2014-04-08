@@ -99,7 +99,7 @@ class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),
     """
 
     def create_event(self, creator, title, event_type, participants=[], description='',
-            services=[], start_datetime=None, end_datetime=None, room=None, note=None, periodicity=1, until=False, **kwargs):
+            services=[], start_datetime=None, end_datetime=None, ressource=None, note=None, periodicity=1, until=False, **kwargs):
         """
         Convenience function to create an ``Event``, optionally create an
         ``EventType``.
@@ -128,7 +128,7 @@ class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),
         event = self.create(creator=creator,
                 title=title, start_datetime=start_datetime,
                 end_datetime=end_datetime, event_type=event_type,
-                room=room, recurrence_periodicity=periodicity,
+                ressource=ressource, recurrence_periodicity=periodicity,
                 recurrence_end_date=until, **kwargs)
         event.services = services
         event.participants = participants
