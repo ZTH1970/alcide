@@ -192,21 +192,15 @@ li#time {
     position: absolute;
     right: 0;
     top: 3em;
-    border: 1px solid #bbb;
-    background: linear-gradient(#bbb, #eee);
     padding: 3px 5px;
-    border-radius: .35em;
     color: #555;
 }
 
 #extra-top-links a:link, #extra-top-links a:visited{
-    color: #000;
     text-decoration: none;
-    font: bold .8em Arial;
 }
 
 #extra-top-links a:hover {
-    color: #000;
     text-decoration: underline;
 }
 
