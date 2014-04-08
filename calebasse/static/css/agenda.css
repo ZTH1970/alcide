@@ -146,10 +146,11 @@ div#close-all-agendas:after {
     height: 15px;
     margin-bottom: 2px;
     font-size:.7em;
+    text-align: center;
 }
 
 #availability li.agenda  {
-    min-width: .9em;
+    width: 1.2em;
     height: 7px;
     margin: 4px 0px;
 }
