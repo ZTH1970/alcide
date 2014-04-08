@@ -8,7 +8,7 @@ if [ $# -gt 1 ]; then
     exit 1
 fi
 
-if [ $# ]; then
+if [ $# -gt 0 ]; then
     if [ "$1" != "new" -a "$1" != "dl" ]; then
         echo $HELP
         exit 1
@@ -18,7 +18,7 @@ fi
 sudo -u postgres dropdb calebasse
 sudo -u postgres createdb calebasse -O $USER
 
-if [ $# ]; then
+if [ $# -gt 0 ]; then
     if [ $1 = "new" ]; then
         ssh calebasse.aps42.entrouvert.com ssh prod "/etc/cron.daily/calebasse_dumpdb"
     fi
