@@ -182,6 +182,7 @@ function enable_events(base) {
                if ($(this).data('contact-gender')){address += $(this).data('contact-gender') + ' ';}
                if ($(this).data('contact-first-name')){address += $(this).data('contact-first-name') + ' ';}
                if ($(this).data('contact-last-name')){address += $(this).data('contact-last-name') + '\n';}
+               if ($(this).data('address-recipient')){address += $(this).data('address-recipient') + '\n';}
                if ($(this).data('address-number')){address += $(this).data('address-number') + ' ';}
                if ($(this).data('address-street')){address += $(this).data('address-street') + '\n';}
                if ($(this).data('address-address-complement')){address += $(this).data('address-address-complement') + '\n';}

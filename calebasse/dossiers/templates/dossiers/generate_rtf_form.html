@@ -28,7 +28,11 @@ errors:
 <ul class="addresses">
   {% for address in object.addresses.all %}
   <li>
-  <input type="radio" name="contact" id="contact_{{ address.id }}"
+  <span>{{ address.display_name }} {% if address.phone %}(Tél : {{ address.phone }}){% endif %}</span>
+  <pre>{{ address.comment }}</pre>
+  <ul>
+    {% if address.recipient %}
+    <li><input type="radio" name="contact" id="contact_{{ address.id }}_{{ contact.id }}"
                {% if address.recipient %}data-address-recipient="{{ address.recipient }}"{% endif %}
                {% if address.street %}data-address-street="{{ address.street }}"{% endif %}
                {% if address.number %}data-address-number="{{ address.number }}"{% endif %}
@@ -36,9 +40,25 @@ errors:
                {% if address.zip_code %}data-address-zip-code="{{ address.zip_code }}"{% endif %}
                {% if address.city %}data-address-city="{{ address.city }}"{% endif %}
                {% if address.phone %}data-address-phone="{{ address.phone }}"{% endif %}
-               ><label for="contact_{{ address.id }}">{{ address.display_name }}{% if address.phone %}(Tél : {{ address.phone }}){% endif %}
-                 <p>{{ address.comment }}</p>
-               </label></input></li>
+               {% if contact.gender %}data-contact-gender={% if contact.gender == 1 %}"Monsieur"{% elif contact.gender == 2 %}"Madame"{% endif %}{% endif %}
+               {% if contact.first_name %}data-contact-first-name="{{ contact.first_name }}"{% endif %}
+               {% if contact.last_name %}data-contact-last-name="{{ contact.last_name }}"{% endif %}
+               ><label for="contact_{{ address.id }}_{{ contact.id }}">{{ address.recipient }} (DESTINATAIRE)</label></input></li>
+    {% endif %}
+    {% for contact in address.patientcontact_set.all  %}
+    <li><input type="radio" name="contact" id="contact_{{ address.id }}_{{ contact.id }}"
+               {% if address.street %}data-address-street="{{ address.street }}"{% endif %}
+               {% if address.number %}data-address-number="{{ address.number }}"{% endif %}
+               {% if address.address_complement %}data-address-address-complement="{{ address.address_complement }}"{% endif %}
+               {% if address.zip_code %}data-address-zip-code="{{ address.zip_code }}"{% endif %}
+               {% if address.city %}data-address-city="{{ address.city }}"{% endif %}
+               {% if address.phone %}data-address-phone="{{ address.phone }}"{% endif %}
+               {% if contact.gender %}data-contact-gender={% if contact.gender == 1 %}"Monsieur"{% elif contact.gender == 2 %}"Madame"{% endif %}{% endif %}
+               {% if contact.first_name %}data-contact-first-name="{{ contact.first_name }}"{% endif %}
+               {% if contact.last_name %}data-contact-last-name="{{ contact.last_name }}"{% endif %}
+       ><label for="contact_{{ address.id }}_{{ contact.id }}">{% if contact.gender == 1 %}M. {% elif contact.gender == 2 %}Mme {% endif %}{% if contact.first_name %}{{ contact.first_name }} {% endif %}<span class="lastname">{{ contact.last_name }}</span>{% if contact.mobile %} (Perso : {{ contact.mobile }}){% endif %}{% if contact.phone %} (Pro : {{ contact.phone }}){% endif %}{% if contact.id == object.id %} (PATIENT){% endif %}{% if object.policyholder.id == contact.id %} (ASSURE){% endif %}</label></input></li>
+    {% endfor %}
+  </ul>
   </li>
   {% endfor %}
 </ul>
