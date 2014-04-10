@@ -298,7 +298,6 @@ class PatientAddress(models.Model):
             self.display_name += self.city + ' '
         super(PatientAddress, self).save(**kwargs)
 
-
 class PatientContact(People):
     class Meta:
         verbose_name = u'Contact patient'

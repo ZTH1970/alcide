@@ -1,4 +1,6 @@
 function add_datepickers(that) {
+  $('input#id_birthdate', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button',
+    changeMonth: true, changeYear: true, yearRange: 'c-80:c+2' });
   $('input#id_start_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
   $('input#id_request_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
   $('input#id_agree_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
@@ -133,6 +135,7 @@ function load_tab2_adm() {
 
 function load_tab3_addresses() {
     function nir_check(that) {
+      add_datepickers($(that));
       $(that).find('#social-security-id input').keyup(function() {
         if ($(this).val().length < 13) {
              $('p#nir-key span').removeAttr('id')
