@@ -72,7 +72,7 @@
            <ul>
              <li class="initials">&nbsp;</li>
              {% for start_time in disponibility_start_times %}
-             <li class="hour-mark {% if start_time == 12 %}noon-start{% elif start_time == 14%}noon-end{% endif %}">
+             <li class="hour-mark {% if start_time == 12 %}noon-start{% elif start_time == 15%}noon-end{% endif %}">
                {{ start_time|stringformat:"02d" }}
              </li>
              {% endfor %}
