@@ -77,11 +77,14 @@ class NewPatientContactView(RecordPatientRecordIdMixing, cbv.CreateView):
         fields = self.form_class.base_fields.keys()
         for arg in self.request.GET.keys():
             if arg in fields:
-                value = self.request.GET.getlist(arg)
-                if len(value) == 1:
-                    value = value[0]
+                if arg == 'addresses':
+                    value = self.request.GET.getlist(arg)
+                else:
+                    value = self.request.GET.get(arg)
                 initial[arg] = value
         if initial:
+            if not initial.has_key('addresses'):
+                initial['addresses'] = []
             patient = PatientRecord.objects.get(id=self.patientrecord_id)
             addresses = patient.addresses.order_by('-id')
             if addresses:
