@@ -108,3 +108,7 @@ div#tabs-4 div div.buttons {
     padding-right: 0.6em;
 }
 
+.ui-tabs .ui-tabs-nav {
+    margin-top: .4em;
+}
+
