@@ -211,3 +211,7 @@ p.lastname {
     text-transform: uppercase;
     display: inline;
 }
+
+ul.addresses {
+    padding-left: 0;
+}
