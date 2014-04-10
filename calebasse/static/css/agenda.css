@@ -155,15 +155,15 @@ div#close-all-agendas:after {
 
 li.hour-mark {
     height: 30px;
-    margin-bottom: 1.35em;
+    margin-bottom: 1.5em;
 }
 
 li.noon-start {
-    margin-top: 1.8em;
+    margin-top: 2.5em;
 }
 
 li.noon-end {
-    margin-bottom: 1.8em;
+    margin-bottom: 2.5em;
 }
 
 li.free {
