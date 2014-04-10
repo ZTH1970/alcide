@@ -33,8 +33,8 @@
 
   <div>
     {% if appointment.type == 'free' %}
-    <button class='newrdv' data-url="{% url 'nouveau-rdv' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouveau rendez-vous patient</button>
-    <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}">Nouvel événement</button>
+    <button class='newrdv' data-url="{% url 'nouveau-rdv' service=service date=date %}" data-hour="{{ appointment.begin_hour }}" data-duration="{{ appointment.length }}">Nouveau rendez-vous patient</button>
+    <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}" data-duration="{{ appointment.length }}">Nouvel événement</button>
     {% endif %}
     {% if appointment.event_id %}
     {% if appointment.workers %}

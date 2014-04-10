@@ -147,6 +147,7 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         initial['participants'] = self.request.GET.getlist('participants')
         initial['time'] = self.request.GET.get('time')
         initial['ressource'] = self.request.GET.get('ressource')
+        initial['duration'] = self.request.GET.get('duration')
         return initial
 
     def get_form_kwargs(self):
@@ -223,6 +224,7 @@ class NewEventView(CreateView):
         initial['time'] = self.request.GET.get('time')
         initial['event_type'] = 2
         initial['ressource'] = self.request.GET.get('ressource')
+        initial['duration'] = self.request.GET.get('duration')
         if not initial.has_key('services'):
             initial['services'] = [self.service]
         return initial

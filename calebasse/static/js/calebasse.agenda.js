@@ -13,7 +13,7 @@ function delete_prompt(text) {
   }
 }
 
-function get_participants() {
+function get_initial_fields(button, base) {
     var participants = new Array();
     var active_agenda = $.cookie('active-agenda').split('-');
     var ressource = '';
@@ -33,22 +33,24 @@ function get_participants() {
             var data = v.split('-'); return data[1]
         });
     }
+    console.log($(button).data('duration'));
     return $.param({participants: $.makeArray(participants),
                     ressource: ressource,
-                    time: $(this).data('hour') }, true);
+                    time: $(button).data('hour'),
+                    duration: $(button).data('duration')}, true);
 }
 
 function enable_new_appointment(base) {
     var base = base || 'body';
     $(base).find('.newrdv').click(function() {
-        event_dialog($(this).data('url') + "?" + get_participants(), 'Nouveau rendez-vous', '850px', 'Ajouter');
+        event_dialog($(this).data('url') + "?" + get_initial_fields(this, base), 'Nouveau rendez-vous', '850px', 'Ajouter');
     });
 }
 
 function enable_new_event(base) {
     var base = base || 'body';
     $(base).find('.newevent').click(function() {
-        event_dialog($(this).data('url') + "?" + get_participants(), 'Nouvel événement', '850px', 'Ajouter');
+        event_dialog($(this).data('url') + "?" + get_initial_fields(this, base), 'Nouvel événement', '850px', 'Ajouter');
     });
 }
 
