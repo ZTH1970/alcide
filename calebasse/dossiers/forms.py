@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import logging
 
 from datetime import date
 
@@ -18,6 +19,7 @@ from calebasse.ressources.models import (HealthCenter, LargeRegime,
 
 from ajax_select import make_ajax_field
 
+logger = logging.getLogger(__name__)
 
 class EditPatientRecordForm(ModelForm):
     class Meta:
@@ -380,6 +382,11 @@ class AvailableRtfTemplates:
     def __iter__(self):
         if not settings.RTF_TEMPLATES_DIRECTORY:
             return iter([])
+        if not os.path.exists(settings.RTF_TEMPLATES_DIRECTORY):
+            logger.warning("RTF_TEMPLATES_DIRECTOR %r doesn't exist" % \
+                    settings.RTF_TEMPLATES_DIRECTORY)
+            return iter([])
+
         templates = []
         for filename in os.listdir(settings.RTF_TEMPLATES_DIRECTORY):
             templates.append((filename, filename[:-4]))

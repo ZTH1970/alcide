@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+
+import datetime
+import logging
 import os
 import os.path
 import tempfile
-import datetime
 import textwrap
+
 from decimal import Decimal
 from collections import defaultdict
 
@@ -16,6 +19,7 @@ from ..pdftk import PdfTk
 from batches import build_batches
 from calebasse.utils import get_nir_control_key
 
+logger = logging.getLogger(__name__)
 
 class Counter(object):
     def __init__(self, initial_value=0):
@@ -301,7 +305,9 @@ def render_invoicing(invoicing, delete=False, headers=True, invoices=True):
             content = render_not_cmpp_content(invoicing)
             all_files.append(content)
         output_file = None
-        if settings.INVOICING_DIRECTORY and settings.INVOICING_DIRECTORY != '':
+        if settings.INVOICING_DIRECTORY and not os.path.exists(settings.INVOICING_DIRECTORY):
+            logger.warning("INVOICING_DIRECTORY %r doesn't exist" % settings.INVOICING_DIRECTORY)
+        elif settings.INVOICING_DIRECTORY:
             to_path = os.path.join(settings.INVOICING_DIRECTORY, service.name)
             if not os.path.exists(to_path):
                 os.makedirs(to_path)
