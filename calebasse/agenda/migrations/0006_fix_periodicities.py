@@ -3,6 +3,7 @@ from south.v2 import SchemaMigration
 
 
 class Migration(SchemaMigration):
+    no_dry_run = True
 
     def forwards(self, orm):
         orm.Event.objects.filter(recurrence_periodicity=10).update(recurrence_week_rank=-1)
