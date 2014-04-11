@@ -195,72 +195,6 @@ function enable_events(base) {
           });
         return false;
       });
-      $(base).on('click', '.update-periodic-event', function () {
-        $('.ui-icon-closethick').click();
-        // remove the form from previous hidden layer in order to prevent two
-        // elements with 'id_date' id on the page
-        $(this).parent().remove();
-
-        var id = $(this).data('id');
-        var delete_url = $(this).data('delete-url');
-        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-event/' + id,
-          'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-            var buttons = $(dialog).dialog('option', 'buttons');
-            buttons.push({
-              text: "Supprimer",
-              id: "delete-btn",
-              click: function () {
-                var r = delete_prompt("Etes-vous sûr de vouloir supprimer cet évènement récurrent ?");
-                if (r == true)
-                {
-                  $.ajax({
-                    url: delete_url,
-                    type: 'DELETE',
-                    success: function(data) {
-                        window.location.reload(true);
-                        return false;
-                    }
-                  });
-                }
-              }
-            });
-            $(dialog).dialog('option', 'buttons', buttons);
-          }
-        );
-      });
-      $(base).on('click', '.update-periodic-rdv', function () {
-        $('.ui-icon-closethick').click();
-        var id = $(this).data('id');
-        var delete_url = $(this).data('delete-url');
-        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-rdv/' + id,
-          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-            var buttons = $(dialog).dialog('option', 'buttons');
-            buttons.push({
-              text: "Supprimer",
-             id: "delete-btn",
-              click: function () {
-                var r = delete_prompt("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
-                if (r == true)
-                {
-                  $.ajax({
-                    url: delete_url,
-                    type: 'DELETE',
-                    success: function(data) {
-                        window.location.reload(true);
-                        return false;
-                    }
-                  });
-                }
-              }
-            });
-            $(dialog).dialog('option', 'buttons', buttons);
-          }
-        );
-      });
 }
 
 function toggle_ressource(ressource) {
@@ -331,7 +265,79 @@ function toggle_ressource(ressource) {
 }
 
 function event_dialog(url, title, width, btn_text) {
-    add_dialog('#ajax-dlg', url, title, width, btn_text);
+    
+    function add_periodic_events(base) {
+      $(base).on('click', '.update-periodic-event', function () {
+        $('.ui-icon-closethick').click();
+        // remove the form from previous hidden layer in order to prevent two
+        // elements with 'id_date' id on the page
+        $(this).parent().remove();
+
+        var id = $(this).data('id');
+        var delete_url = $(this).data('delete-url');
+        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-event/' + id,
+          'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
+          function (dialog) {
+            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+            var buttons = $(dialog).dialog('option', 'buttons');
+            buttons.push({
+              text: "Supprimer",
+              id: "delete-btn",
+              click: function () {
+                var r = delete_prompt("Etes-vous sûr de vouloir supprimer cet évènement récurrent ?");
+                if (r == true)
+                {
+                  $.ajax({
+                    url: delete_url,
+                    type: 'DELETE',
+                    success: function(data) {
+                        window.location.reload(true);
+                        return false;
+                    }
+                  });
+                }
+              }
+            });
+            $(dialog).dialog('option', 'buttons', buttons);
+          }
+        );
+      });
+      $(base).on('click', '.update-periodic-rdv', function () {
+        $('.ui-icon-closethick').click();
+        var id = $(this).data('id');
+        var delete_url = $(this).data('delete-url');
+        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-rdv/' + id,
+          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
+          function (dialog) {
+            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+            var buttons = $(dialog).dialog('option', 'buttons');
+            buttons.push({
+              text: "Supprimer",
+             id: "delete-btn",
+              click: function () {
+                var r = delete_prompt("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
+                if (r == true)
+                {
+                  $.ajax({
+                    url: delete_url,
+                    type: 'DELETE',
+                    success: function(data) {
+                        window.location.reload(true);
+                        return false;
+                    }
+                  });
+                }
+              }
+            });
+            $(dialog).dialog('option', 'buttons', buttons);
+          }
+        );
+      });
+    }
+
+    generic_ajaxform_dialog(url, title, '#ajax-dlg', width, btn_text, null,
+          add_periodic_events);
+
 }
 
 (function($) {
