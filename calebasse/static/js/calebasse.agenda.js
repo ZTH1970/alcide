@@ -166,7 +166,6 @@ function enable_events(base) {
           event_dialog("/" + service + "/agenda/" + current_date + "/update-event/" + $(this).data('event-id') , 'Modifier un événement', '850px', 'Modifier');
           return false;
       });
-      $(base).find('#print-button').click(function() { window.print(); });
 
       $('.generate-mail-btn', base).click(function() {
         var url = '../../dossiers/' + $(this).data('dossier-id') + '/generate?event-id=' + $(this).data('event-id') + '&date=' + $(this).data('date');
@@ -280,7 +279,8 @@ function event_dialog(url, title, width, btn_text) {
           function (dialog) {
             $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
             var buttons = $(dialog).dialog('option', 'buttons');
-            buttons.push({
+              console.log(buttons);
+            var delete_button = {
               text: "Supprimer",
               id: "delete-btn",
               click: function () {
@@ -297,7 +297,8 @@ function event_dialog(url, title, width, btn_text) {
                   });
                 }
               }
-            });
+            };
+            buttons.push(delete_button);
             $(dialog).dialog('option', 'buttons', buttons);
           }
         );
@@ -356,6 +357,8 @@ function event_dialog(url, title, width, btn_text) {
           selected: -1,
           collapsible: true,
       });
+
+      $('#print-button').click(function() { window.print(); });
 
       enable_new_event();
       enable_new_appointment();
