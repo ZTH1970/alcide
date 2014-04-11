@@ -86,6 +86,7 @@ class Event(models.Model):
             (7, u'La deuxième semaine du mois'),
             (8, u'La troisième semaine du mois'),
             (9, u'La quatrième semaine du mois'),
+            (13, u'La cinquième semaine du mois'),
             (10, u'La dernière semaine du mois'),
             (11, u'Les semaines paires'),
             (12, u'Les semaines impaires')
@@ -151,9 +152,10 @@ class Event(models.Model):
         (None, 1, None),
         (None, 2, None),
         (None, 3, None),
-        (None, 4, None),
+        (None, -1, None),
         (None, None, 0),
-        (None, None, 1)
+        (None, None, 1),
+        (None, 4, None),
     ]
 
     class Meta:
