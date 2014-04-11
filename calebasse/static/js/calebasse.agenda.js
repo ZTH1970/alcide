@@ -279,7 +279,6 @@ function event_dialog(url, title, width, btn_text) {
           function (dialog) {
             $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
             var buttons = $(dialog).dialog('option', 'buttons');
-              console.log(buttons);
             var delete_button = {
               text: "Supprimer",
               id: "delete-btn",
