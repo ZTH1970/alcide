@@ -17,7 +17,7 @@ function enable_button(button) {
   $button.removeAttr('disabled');
 }
 
-function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback, height) {
+function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback, height, extra_button) {
   if (! height)
     height = 'auto';
   $(id).load(url,
@@ -53,19 +53,23 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
         $('form', this).ajaxForm({
           success: onsuccess,
         });
+        var buttons = [{text: "Annuler",
+                        id: "close-btn",
+                        click: function() { $(this).dialog("close"); } },
+                       {text:btn_submit_name,
+                        id: "submit-btn",
+                        click: function() {
+                            disable_button($('#submit-btn'));
+                            $(id + " form").submit();
+                        }}];
+
+        if (extra_button)
+            buttons.push(extra_button);
         $(this).dialog({title: title,
           modal: true,
           width: width,
           height: height,
-          buttons: [ { text: "Annuler",
-            id: "close-btn",
-          click: function() { $(this).dialog("close"); } },
-          { text: btn_submit_name,
-            id: "submit-btn",
-          click: function() {
-            disable_button($('#submit-btn'));
-            $(id + " form").submit(); 
-          } }]});
+          buttons: buttons});
         if (on_load_callback) {
           on_load_callback($(this));
         }

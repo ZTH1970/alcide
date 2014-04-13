@@ -274,15 +274,10 @@ function event_dialog(url, title, width, btn_text) {
 
         var id = $(this).data('id');
         var delete_url = $(this).data('delete-url');
-        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-event/' + id,
-          'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-            var buttons = $(dialog).dialog('option', 'buttons');
-            var delete_button = {
-              text: "Supprimer",
-              id: "delete-btn",
-              click: function () {
+        var delete_button = {
+            text: "Supprimer",
+            id: "delete-btn",
+            click: function () {
                 var r = delete_prompt("Etes-vous sûr de vouloir supprimer cet évènement récurrent ?");
                 if (r == true)
                 {
@@ -297,24 +292,21 @@ function event_dialog(url, title, width, btn_text) {
                 }
               }
             };
-            buttons.push(delete_button);
-            $(dialog).dialog('option', 'buttons', buttons);
-          }
+        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-event/' + id,
+          'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
+          function (dialog) {
+            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+          }, null, delete_button
         );
       });
       $(base).on('click', '.update-periodic-rdv', function () {
         $('.ui-icon-closethick').click();
         var id = $(this).data('id');
         var delete_url = $(this).data('delete-url');
-        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-rdv/' + id,
-          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-            var buttons = $(dialog).dialog('option', 'buttons');
-            buttons.push({
-              text: "Supprimer",
-             id: "delete-btn",
-              click: function () {
+        var delete_button = {
+            text: "Supprimer",
+            id: "delete-btn",
+            click: function () {
                 var r = delete_prompt("Etes-vous sûr de vouloir supprimer ce rendez-vous récurrent ?");
                 if (r == true)
                 {
@@ -327,10 +319,13 @@ function event_dialog(url, title, width, btn_text) {
                     }
                   });
                 }
-              }
-            });
-            $(dialog).dialog('option', 'buttons', buttons);
-          }
+            }
+        };
+        generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-rdv/' + id,
+          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
+          function (dialog) {
+            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+          }, null, delete_button
         );
       });
     }

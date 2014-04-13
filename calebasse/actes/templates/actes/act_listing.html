@@ -11,23 +11,18 @@
             if ($(this).data('isbilled') == "False")
             {
                 var id = $(this).data('id');
-                generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
-                '#acte-dlg', '700px', 'Modifier', '.',
-                function (dialog) {
-                    var buttons = $(dialog).dialog('option', 'buttons');
-                    buttons.push({
-                        text: "Supprimer",
-                        id: "delete-btn",
-                        click: function () {
-                            $(dialog).dialog('close');
-                            generic_ajaxform_dialog(id + '/delete', "Supprimer l'acte",
-                            '#acte-dlg', '500px', 'Oui', window.location.href);
+                var delete_button = {
+                    text: "Supprimer",
+                    id: "delete-btn",
+                    click: function () {
+                        $(dialog).dialog('close');
+                        generic_ajaxform_dialog(id + '/delete', "Supprimer l'acte",
+                                                '#acte-dlg', '500px', 'Oui', window.location.href);
 
-                        }
-                    });
-                    $(dialog).dialog('option', 'buttons', buttons);
-                }
-                );
+                    }
+                };
+                generic_ajaxform_dialog($(this).data('id') + '/update', "Modifier l'acte",
+                '#acte-dlg', '700px', 'Modifier', '.', function (dialog) {});
                 } else if ($(this).data('oldbilled') == "True") {
                 generic_ajaxform_dialog($(this).data('id') + '/rebill', "Refacturer cet acte de l'ancienne facturation) ?",
                 '#acte-dlg', '700px', 'Refacturer', '.');
