@@ -217,6 +217,7 @@ def annual_activity_month_analysis(statistic, start_day, analyses, key, i, trim_
             date__lt=ed.date(), patient__service=statistic.in_service,
             doctors__in=[participant])
         moving_events = Event.objects.filter(event_type__label='Temps de trajet',
+            canceled = False,
             start_datetime__gte=sd, end_datetime__lt=ed,
             services__in=[statistic.in_service],
             participants__in=[participant])
@@ -224,6 +225,7 @@ def annual_activity_month_analysis(statistic, start_day, analyses, key, i, trim_
         acts = Act.objects.filter(date__gte=sd.date(),
             date__lt=ed.date(), patient__service=statistic.in_service)
         moving_events = Event.objects.filter(event_type__label='Temps de trajet',
+            canceled = False,
             start_datetime__gte=sd, end_datetime__lt=ed,
             services__in=[statistic.in_service])
     analyses[key].append(AnnualActivityProcessingColumn())
@@ -408,13 +410,17 @@ def annual_activity_synthesis_analysis(statistic, start_day, end_day, analyses, 
                 val += getattr(analyses[key][i], row)
             setattr(analyses[key][16], row, val)
 
-def strfdelta(tdelta, fmt):
-    if not tdelta:
-        return '0'
-    d = {"days": tdelta.days}
-    d["hours"], rem = divmod(tdelta.seconds, 3600)
-    d["minutes"], d["seconds"] = divmod(rem, 60)
-    return fmt.format(**d)
+def strfdelta(tdelta):
+    s = ''
+    if tdelta.days:
+        s += "%dj " % tdelta.days
+    hours, rem = divmod(tdelta.seconds, 3600)
+    if hours:
+        s += "%dh " % hours
+    minutes, seconds = divmod(rem, 60)
+    if minutes:
+        s += "%d" % minutes
+    return s or "0"
 
 def annual_activity_build_tables(statistic, analyses, key, label, data_tables):
     table_1 = []
@@ -485,21 +491,15 @@ def annual_activity_build_tables(statistic, analyses, key, label, data_tables):
         rows.append(row)
     row = ['Temps de déplacement']
     for column in analyses[key]:
-        row.append(strfdelta(column.moving_time, "{hours}h {minutes}m"))
-        if column.moving_time.days:
-            row.append(strfdelta(column.moving_time, "{days}j {hours}h {minutes}m"))
+        row.append(strfdelta(column.moving_time))
     rows.append(row)
     row = ['Temps de déplacement par intervenant']
     for column in analyses[key]:
-        row.append(strfdelta(column.moving_time_per_intervene, "{hours}h {minutes}m"))
-        if column.moving_time_per_intervene.days:
-            row.append(strfdelta(column.moving_time_per_intervene, "{days}j {hours}h {minutes}m"))
+        row.append(strfdelta(column.moving_time_per_intervene))
     rows.append(row)
     row = ['Temps de déplacement par acte']
     for column in analyses[key]:
-        row.append(strfdelta(column.moving_time_per_act, "{hours}h {minutes}m"))
-        if column.moving_time_per_act.days:
-            row.append(strfdelta(column.moving_time_per_act, "{days}j {hours}h {minutes}m"))
+        row.append(strfdelta(column.moving_time_per_act))
     rows.append(row)
     table_1.append(rows)
     data_tables.append(table_1)
