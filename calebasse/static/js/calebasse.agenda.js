@@ -15,12 +15,14 @@ function delete_prompt(text) {
 
 function get_initial_fields(button, base) {
     var participants = new Array();
-    var active_agenda = $.cookie('active-agenda').split('-');
-    var ressource = '';
-    if (active_agenda[0] == 'ressource') {
-        ressource = active_agenda[1];
-    } else {
-        ressource = $.cookie('last-ressource');
+    var ressource = null;
+    if ($.cookie('active-agenda')) {
+        var active_agenda = $.cookie('active-agenda').split('-');
+        if (active_agenda[0] == 'ressource') {
+            ressource = active_agenda[1];
+        } else {
+            ressource = $.cookie('last-ressource');
+        }
     }
 
     if ($.cookie('agenda-tabs')) {
@@ -33,7 +35,6 @@ function get_initial_fields(button, base) {
             var data = v.split('-'); return data[1]
         });
     }
-    console.log($(button).data('duration'));
     return $.param({participants: $.makeArray(participants),
                     ressource: ressource,
                     time: $(button).data('hour'),
