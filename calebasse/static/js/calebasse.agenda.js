@@ -353,7 +353,7 @@ function event_dialog(url, title, width, btn_text) {
           collapsible: true,
       });
 
-      $('#print-button').click(function() { window.print(); });
+      $('button#print-button').click(function() { window.print();});
 
       enable_new_event();
       enable_new_appointment();

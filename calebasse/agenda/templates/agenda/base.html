@@ -6,6 +6,9 @@
 <script src="{{ STATIC_URL }}js/calebasse.agenda.js"></script>
 <script src="{{ STATIC_URL }}js/calebasse.datesel.js"></script>
 {% endblock %}
+{% block extrastyles %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/agenda.css" />
+{% endblock extrastyles %}
 
 {% block title %}{{ block.super }} - Agenda {% endblock %}
 

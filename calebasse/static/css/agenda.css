@@ -215,3 +215,8 @@ p.lastname {
 ul.addresses {
     padding-left: 0;
 }
+
+button.screen-only {
+    margin: 1em 0;
+    float: right;
+}
