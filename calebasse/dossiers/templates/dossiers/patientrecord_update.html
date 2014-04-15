@@ -35,7 +35,7 @@
     </li>
     {% if object.service.slug == "cmpp" %}
     <li><a data-id="3" href="tab4" class="atabs">Prise en charge</a></li>
-    {% elif object.service.slug == "sessad-ted" or object.service.name == "sessad-dys" %}
+    {% elif object.service.slug == "sessad-ted" or object.service.slug == "sessad-dys" %}
     <li><a data-id="3" href="tab4" class="atabs">Notifications</a></li>
     {% else %}
     <li style="display: none;"><a data-id="3" href="tab4" class="atabs">Notifications</a></li>
