@@ -3,6 +3,10 @@
 
 {% block title %}{{ block.super }} - Gestion des personnes {% endblock %}
 {% block extrascripts %}
+{% block extrastyles %}
+{{ block.super }}
+   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/personnes.css" />
+{% endblock %}
 {{ block.super }}
     <script src="{{ STATIC_URL }}js/calebasse.absences.js"></script>
 {% endblock %}
