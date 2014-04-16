@@ -2,6 +2,7 @@
 {% load url from future %}
 
 {% block extrascripts %}
+{{ block.super }}
 <script src="{{ STATIC_URL }}js/json2.js"></script>
 <script src="{{ STATIC_URL }}js/calebasse.agenda.js"></script>
 <script src="{{ STATIC_URL }}js/calebasse.datesel.js"></script>

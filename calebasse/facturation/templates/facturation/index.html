@@ -1,5 +1,7 @@
 {% extends "facturation/base.html" %}
 {% load url from future %}
+{% block extrascripts %}
+{% endblock %}
 
 {% block appbar %}
     <h2>{% if service_name == "CMPP" %}Facturation{% else %}Décompte{% endif %}</h2>

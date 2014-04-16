@@ -1,9 +1,13 @@
 {% extends "dossiers/base.html" %}
 {% load url from future %}
 {% load dossiers %}
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}filter-widget/css/filter-widget.css"/>
+{% endblock %}
 
 {% block extrascripts %}
-<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}filter-widget/css/filter-widget.css"/>
+{{ block.super }}
 <script src="{{ STATIC_URL }}js/jquery.parse-url.js"></script>
 <script src="{{ STATIC_URL }}js/calebasse.dossiers.js"></script>
 <script src="{{ STATIC_URL }}filter-widget/js/i18n.js"></script>
