@@ -627,14 +627,15 @@ class AjaxDisponibilityColumnView(TemplateView):
             mins = quarter * 15
 
             if events:
-                event = events[0]
+                for event in events:
+                    if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
+                        dispo = 'busy'
 
-                if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
-                    dispo = 'busy'
-            disponibility[start_datetime.hour][quarter].append((mins, {'id': ressource_id, 'dispo': dispo}))
+                disponibility[start_datetime.hour][quarter].append((mins, {'id': ressource_id, 'dispo': dispo}))
             quarter += 1
             start_datetime += datetime.timedelta(minutes=15)
             end_datetime += datetime.timedelta(minutes=15)
+
         context['disponibility'] = disponibility
         return context
 
