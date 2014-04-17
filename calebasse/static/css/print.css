@@ -33,7 +33,6 @@ div#content div.worker-agenda h2 {
   margin-bottom: 1ex;
   color: black;
   background: none;
-  font-size: 1.4em;
 }
 
 .worker-agenda+.worker-agenda {
@@ -41,11 +40,11 @@ div#content div.worker-agenda h2 {
 }
 
 div.worker-agenda table{
-  font-size: 1.25em;
+  font-size: 70%;
 }
 
 table#activity{
-  font-size: 95%;
+  font-size: 80%;
 }
 
 div.worker-agenda h3 {
