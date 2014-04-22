@@ -390,7 +390,7 @@ class HolidayQuerySet(query.QuerySet):
             | models.Q(start_date=date, end_date=date, start_time__isnull=True, end_time__gt=start_time) \
             | models.Q(start_date=date, end_date=date, start_time__lt=end_time, end_time__isnull=True) \
             | models.Q(start_date=date, end_date=date, start_time__lte=start_time, end_time__gt=start_time) \
-            | models.Q(start_date=date, end_date=date, start_time__lt=end_time, end_time__gte=end_time)
+            | models.Q(start_date=date, end_date=date, start_time__lt=end_time, end_time__lte=end_time)
         return self.filter(filter_query)
 
 def time2french(time):
