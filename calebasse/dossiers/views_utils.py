@@ -14,7 +14,7 @@ def get_status(ctx, user):
     """
     status = []
     close_btn = STATES_BTN_MAPPER['CLOS']
-    if 'next_rdv' in ctx:
+    if ctx.get('next_rdv'):
         close_btn = STATES_BTN_MAPPER['CLOS_RDV']
     if ctx['object'].service.slug == "cmpp":
         ctx['can_rediag'] = ctx['object'].create_diag_healthcare(user)
