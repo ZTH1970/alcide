@@ -410,7 +410,7 @@ class PatientRecordNextAppointmentsView(cbv.DetailView):
         ctx['next_rdvs'] = []
         Q = models.Q
         today = date.today()
-        qs = EventWithAct.objects.filter(patient=ctx['object'], participants__worker__enabled=True) \
+        qs = EventWithAct.objects.filter(patient=ctx['object']) \
                 .filter(exception_to__isnull=True, canceled=False) \
                 .filter(Q(start_datetime__gte=today) \
                 |  Q(exceptions__isnull=False) \
