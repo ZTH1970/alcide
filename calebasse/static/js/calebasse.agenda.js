@@ -44,14 +44,14 @@ function get_initial_fields(button, base) {
 function enable_new_appointment(base) {
     var base = base || 'body';
     $(base).find('.newrdv').click(function() {
-        event_dialog($(this).data('url') + "?" + get_initial_fields(this, base), 'Nouveau rendez-vous', '850px', 'Ajouter');
+        add_dialog('#ajax-dlg', $(this).data('url') + "?" + get_initial_fields(this, base), 'Nouveau rendez-vous', '880px', 'Ajouter');
     });
 }
 
 function enable_new_event(base) {
     var base = base || 'body';
     $(base).find('.newevent').click(function() {
-        event_dialog($(this).data('url') + "?" + get_initial_fields(this, base), 'Nouvel événement', '850px', 'Ajouter');
+        add_dialog('#ajax-dlg', $(this).data('url') + "?" + get_initial_fields(this, base), 'Nouvel événement', '850px', 'Ajouter');
     });
 }
 
@@ -265,7 +265,6 @@ function toggle_ressource(ressource) {
 }
 
 function event_dialog(url, title, width, btn_text) {
-    
     function add_periodic_events(base) {
       $(base).on('click', '.update-periodic-event', function () {
         $('.ui-icon-closethick').click();
