@@ -275,6 +275,8 @@ class PatientRecordGeneralView(cbv.UpdateView):
         else:
             state = current_state.status.name
         ctx['current_state'] = current_state
+        print ctx
+        print get_status(ctx, self.request.user)
         ctx['status'], ctx['hc_status'] = get_status(ctx, self.request.user)
         ctx['missing_policy'] = False
         if not self.object.policyholder or \
@@ -410,7 +412,7 @@ class PatientRecordNextAppointmentsView(cbv.DetailView):
         ctx['next_rdvs'] = []
         Q = models.Q
         today = date.today()
-        qs = EventWithAct.objects.filter(patient=ctx['object']) \
+        qs = EventWithAct.objects.filter(patient=ctx['object'], participants__worker__enabled=True) \
                 .filter(exception_to__isnull=True, canceled=False) \
                 .filter(Q(start_datetime__gte=today) \
                 |  Q(exceptions__isnull=False) \
