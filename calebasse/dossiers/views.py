@@ -275,8 +275,6 @@ class PatientRecordGeneralView(cbv.UpdateView):
         else:
             state = current_state.status.name
         ctx['current_state'] = current_state
-        print ctx
-        print get_status(ctx, self.request.user)
         ctx['status'], ctx['hc_status'] = get_status(ctx, self.request.user)
         ctx['missing_policy'] = False
         if not self.object.policyholder or \
