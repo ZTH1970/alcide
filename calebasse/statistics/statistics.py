@@ -1213,7 +1213,7 @@ def patients_synthesis(statistic):
         nb_patients, acts.count())])
     data_tables.append(data)
     data = []
-    data.append(['Féminin', 'Masculin'])
+    data.append(['Filles', 'Garçons'])
     data.append([(patients.filter(gender='2').count(),
         patients.filter(gender='1').count())])
     data_tables.append(data)
@@ -1342,16 +1342,17 @@ def patients_synthesis(statistic):
     data = []
     data.append(["Code ANAP", "Tranche d'âge (au %s)" \
         % formats.date_format(statistic.in_end_date, "SHORT_DATE_FORMAT"),
-        "Nombre de dossiers", "%"])
+        "Nombre de dossiers", "%", "Filles", "%", "Garçons", "%"])
     values = []
     for i in range(len(lower_bounds)):
         lower_bound = lower_bounds[i]
         if i == len(lower_bounds) - 1:
-            values.append([anap_code, "De %d ans et plus" % lower_bound, 0, None])
+            values.append([anap_code, "De %d ans et plus" % lower_bound, 0, 0, 0, 0, 0, 0])
         else:
-            values.append([anap_code, "De %d à %d ans" % (lower_bound, lower_bounds[i + 1] - 1), 0, None])
+            values.append([anap_code, "De %d à %d ans" % (lower_bound, lower_bounds[i + 1] - 1), 0, 0, 0, 0, 0, 0])
         anap_code += 1
-    unknown = 0
+    patients_sorted = {}
+    unknowns = [0, 0]
     for patient in patients:
         try:
             age = statistic.in_end_date.date() - patient.birthdate
@@ -1361,12 +1362,29 @@ def patients_synthesis(statistic):
                 i += 1
                 if i == len(lower_bounds) - 1:
                     break
-            values[i][2] += 1
+            patients_sorted.setdefault(i, [0, 0])
+            if patient.gender == 1:
+                patients_sorted[i][0] += 1
+            else:
+                patients_sorted[i][1] += 1
         except:
-            unknown += 1
-    for value in values:
-        value[3] = "%.2f" % (value[2] / float(len(patients)) * 100)
-    values.append(['', "Non renseignée", unknown, "%.2f" % (unknown / float(len(patients)) * 100)])
+            if patient.gender == 1:
+                unknowns[0] += 1
+            else:
+                unknowns[1] += 1
+
+    for k, v in patients_sorted.items():
+        values[k][2] = v[0] + v[1]
+        values[k][3] = "%.2f" % (values[k][2] / float(len(patients)) * 100)
+        values[k][4] = v[1]
+        values[k][5] = "%.2f" % (v[1] / float(values[k][2]) * 100)
+        values[k][6] = v[0]
+        values[k][7] = "%.2f" % (v[0] / float(values[k][2]) * 100)
+    l_ukn = unknowns[0] + unknowns[1]
+    if l_ukn:
+        values.append(['', "Non renseigné", l_ukn, "%.2f" % (l_ukn / float(len(patients)) * 100),
+            unknowns[1], "%.2f" % (unknowns[1] / float(l_ukn) * 100),
+            unknowns[0], "%.2f" % (unknowns[0] / float(l_ukn) * 100)])
     data.append(values)
     data_tables.append(data)
 
