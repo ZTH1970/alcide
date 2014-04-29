@@ -472,6 +472,11 @@ span.absent{
 	font-style: italic;
 }
 
+span.inactive {
+	color: #8B008B;
+	font-style: italic;
+}
+
 td#agendas {
 	vertical-align: top;
 	width: 100%;

@@ -393,6 +393,9 @@ class Event(models.Model):
     def is_event_absence(self):
         return False
 
+    def get_inactive_participants(self):
+        return self.participants.filter(worker__enabled=False)
+
     def get_missing_participants(self):
         missing_participants = []
         for participant in self.participants.all():

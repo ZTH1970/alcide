@@ -433,7 +433,7 @@ class PatientRecordNextAppointmentsView(cbv.DetailView):
                 state = event.act.get_state()
             if state and not state.previous_state and state.state_name == 'NON_VALIDE':
                 state = None
-            ctx['next_rdvs'].append((event, state, event.get_missing_participants()))
+            ctx['next_rdvs'].append((event, state, event.get_missing_participants(), event.get_inactive_participants()))
         return ctx
 
 tab6_next_rdv = PatientRecordNextAppointmentsView.as_view()
