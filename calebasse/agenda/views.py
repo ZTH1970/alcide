@@ -7,7 +7,7 @@ from itertools import chain
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.conf import settings
 
 from calebasse.cbv import TemplateView, CreateView, UpdateView
@@ -166,7 +166,10 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
 class TodayOccurrenceMixin(object):
     def get_object(self, queryset=None):
         o = super(TodayOccurrenceMixin, self).get_object(queryset)
-        return o.today_occurrence(self.date)
+        obj = o.today_occurrence(self.date)
+        if obj:
+            return obj
+        raise Http404
 
 
 class BaseAppointmentView(UpdateView):
@@ -203,7 +206,6 @@ class UpdateAppointmentView(TodayOccurrenceMixin, BaseAppointmentView):
             return DisablePatientAppointmentForm
         else:
             return self.form_class
-
 
 class UpdatePeriodicAppointmentView(BaseAppointmentView):
     form_class = UpdatePeriodicAppointmentForm
