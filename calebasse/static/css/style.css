@@ -1192,7 +1192,7 @@ a [class^="icon-"], a [class*=" icon-"] {
 	right: 10px;
 }
 
-#id_participants_on_deck {
+#id_participants_on_deck, #id_patients_on_deck {
   max-height: 7em;
   overflow-y: scroll;
 }

@@ -10,7 +10,7 @@ from ..ressources.models import ActType
 from ..middleware.request import get_request
 
 from ajax_select import make_ajax_field
-from ajax_select.fields import AutoCompleteSelectField
+from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 from models import Event, EventWithAct, EventType
 
 class BaseForm(forms.ModelForm):
@@ -22,7 +22,7 @@ class BaseForm(forms.ModelForm):
 
 
 class NewAppointmentForm(BaseForm):
-    patient = make_ajax_field(EventWithAct, 'patient', 'patientrecord', False)
+    patients = AutoCompleteSelectMultipleField('patientrecord')
 
     class Meta:
         model = EventWithAct
@@ -31,7 +31,7 @@ class NewAppointmentForm(BaseForm):
                 'date',
                 'time',
                 'duration',
-                'patient',
+                'patients',
                 'participants',
                 'ressource',
                 'act_type',
@@ -54,7 +54,7 @@ class NewAppointmentForm(BaseForm):
             self.service = service
             self.fields['participants'].queryset = \
                     Worker.objects.for_service(service)
-            self.fields['patient'].queryset = \
+            self.fields['patients'].queryset = \
                     PatientRecord.objects.for_service(service)
             self.fields['act_type'].queryset = \
                     ActType.objects.for_service(service) \
@@ -67,6 +67,11 @@ class NewAppointmentForm(BaseForm):
         except ValueError:
             return 0
 
+    def clean_patients(self):
+        patients = self.cleaned_data['patients']
+        if patients:
+            return [patient for patient in PatientRecord.objects.filter(pk__in=patients)]
+
     def clean(self):
         cleaned_data = super(NewAppointmentForm, self).clean()
         if not cleaned_data.get('recurrence_periodicity'):
@@ -77,17 +82,19 @@ class NewAppointmentForm(BaseForm):
         return cleaned_data
 
     def save(self, commit=True):
-        appointment = super(NewAppointmentForm, self).save(commit=False)
-        appointment.start_datetime = datetime.combine(self.cleaned_data['date'],
-                    self.cleaned_data['time'])
-        appointment.end_datetime = appointment.start_datetime + timedelta(
+        for patient in self.cleaned_data.pop('patients'):
+            appointment = forms.save_instance(self, self._meta.model(), commit=False)
+            appointment.start_datetime = datetime.combine(self.cleaned_data['date'],
+                                                          self.cleaned_data['time'])
+            appointment.end_datetime = appointment.start_datetime + timedelta(
                 minutes=self.cleaned_data['duration'])
-        appointment.creator = get_request().user
-        appointment.clean()
-        if commit:
-            appointment.save()
-            appointment.services = [self.service]
-        return appointment
+            appointment.creator = get_request().user
+            appointment.clean()
+            if commit:
+                appointment.patient = patient
+                appointment.save()
+                self.save_m2m()
+                appointment.services = [self.service]
 
 class UpdateAppointmentForm(NewAppointmentForm):
 
