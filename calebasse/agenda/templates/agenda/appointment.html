@@ -47,11 +47,15 @@
            {{ form.participants.errors }}
            </div>
            </td>
-           <td {% if form.patients.field.required %}class="required"{% endif %}>
-           <h4>{{ form.patients.label_tag }}</h4>
-           <div id="patients">
-           {{ form.patients }}
-           {{ form.patients.errors }}
+           <td {% if form.patient.field.required %}class="required"{% endif %}>
+           <h4>{{ form.patient.label_tag }}</h4>
+           <div id="patient">
+           {% if object.exception_to and not object.exception_to.canceled %}
+           {{ object.patient }}
+           {% else %}
+           {{ form.patient }}
+           {{ form.patient.errors }}
+           {% endif %}
            </div>
            </td>
            <td {% if form.act_type.field.required %}class="required"{% endif %}>
