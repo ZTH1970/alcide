@@ -632,7 +632,9 @@ class AjaxDisponibilityColumnView(TemplateView):
                 for event in events:
                     if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
                         dispo = 'busy'
-
+                        crossed_events = filter(lambda e: e.start_datetime <= start_datetime and e.end_datetime >= end_datetime, events)
+                        if len(crossed_events) > 1:
+                            dispo = 'common'
                 disponibility[start_datetime.hour][quarter].append((mins, {'id': ressource_id, 'dispo': dispo}))
             quarter += 1
             start_datetime += datetime.timedelta(minutes=15)
@@ -645,11 +647,11 @@ class AjaxDisponibilityColumnView(TemplateView):
     def get_worker_context_data(self, worker_id, context):
         worker = Worker.objects.get(pk=worker_id)
 
-        time_tables_worker = TimeTable.objects.select_related('worker'). \
+        time_tables = TimeTable.objects.select_related('worker'). \
                 filter(services=self.service, worker=worker). \
                 for_today(self.date). \
                 order_by('start_date')
-        holidays_worker = Holiday.objects.for_worker(worker). \
+        holidays = Holiday.objects.for_worker(worker). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
         events = Event.objects.for_today(self.date) \
@@ -667,13 +669,13 @@ class AjaxDisponibilityColumnView(TemplateView):
 
         events = list(events) + list(eventswithact)
         events = [ e.today_occurrence(self.date) for e in events ]
-        time_tables_workers = {worker.id: time_tables_worker}
+        time_tables_workers = {worker.id: time_tables}
         events_workers = {worker.id: events}
-        holidays_workers = {worker.id: holidays_worker}
+        holidays_workers = {worker.id: holidays}
 
         context['initials'] = worker.initials
         context['disponibility'] = Event.objects.daily_disponibilities(self.date,
-                events_workers, [worker], time_tables_workers, holidays_workers)
+                events, worker, time_tables, holidays)
         return context
 
     def get_context_data(self, ressource_type, ressource_id, **kwargs):

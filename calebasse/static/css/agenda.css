@@ -178,6 +178,10 @@ li.away {
     background: #ccc;
 }
 
+li.common {
+    background: #d500a5;
+}
+
 li#time {
     margin-top: -0.15em;
 }
