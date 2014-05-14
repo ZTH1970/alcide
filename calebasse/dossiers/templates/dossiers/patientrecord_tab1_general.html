@@ -110,7 +110,7 @@
     {% endif %}
 
 
-    <form method="post" action="tab1" id="create-directory-form" action="create-directory">{% csrf_token %}
+    <form method="post" action="{% url "create_directory" service object.id %}" id="create-directory-form">{% csrf_token %}
       <button>Créer répertoire patient</button>
     </form>
 </div>
