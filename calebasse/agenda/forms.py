@@ -137,6 +137,7 @@ class UpdateAppointmentForm(NewAppointmentForm):
 
 
 class UpdatePeriodicAppointmentForm(NewAppointmentForm):
+    patient = make_ajax_field(EventWithAct, 'patient', 'patientrecord', False)
     recurrence_periodicity = forms.ChoiceField(label=u"Périodicité",
             choices=Event.PERIODICITIES, required=True)
 
