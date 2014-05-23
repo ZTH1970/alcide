@@ -5,6 +5,14 @@
     {% for duration in object.socialisation_durations.all %}
     <div class="subframe">
       Arrivée le <strong>{{ duration.start_date }}</strong> dans {% if duration.school %}l'établissement <strong>{{ duration.school }}</strong>{% else %}un établissement non renseigné{% endif %}{% if duration.level %} (en {{ duration.level }}){% endif %}
+      <ul>
+        {% if duration.school.address %}
+        <li><label>Adresse établissement : </label>{{ duration.school.address }}, {{ duration.school.zip_code }} {{ duration.school.city }}</span></li>
+        {% endif %}
+        {% if duration.school.phone %}
+        <li><span class="icon-phone">{{ duration.school.phone }}</span></li>
+        {% endif %}
+      </ul>
       <div class="buttons">
         <button type="button" data-id="{{ duration.id }}" class="del-duration icon-minus" title="Supprimer"></button>
         <button type="button" data-id="{{ duration.id }}" class="update-duration-btn icon-edit" title="Modifier"></button>
