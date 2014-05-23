@@ -39,11 +39,15 @@ def homepage(request, service):
 
 def list_view(request, service, model_name):
     model = get_ressource_model(model_name)
+    if model_name == 'acttype':
+        template = 'ressources/acttype_list.html'
+    else:
+        template = 'ressources/list.html'
     if model is None:
         raise Http404
     view = ListView.as_view(model=model,
             queryset=model.objects.select_related(),
-            template_name='ressources/list.html')
+                     template_name=template)
     return view(request, service=service)
 
 class RessourceCreateView(CreateView):

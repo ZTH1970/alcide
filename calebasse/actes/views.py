@@ -28,6 +28,7 @@ class ActListingView(ListView):
         qs = qs.filter(date=self.date)
         self.search_form = forms.ActSearchForm(data=self.request.GET or None)
         last_name = self.request.GET.get('last_name')
+        group = self.request.GET.get('group')
         patient_record_id = self.request.GET.get('patient_record_id')
         social_security_number = self.request.GET.get('social_security_number')
         doctor_name = self.request.GET.get('doctor_name')
@@ -40,6 +41,8 @@ class ActListingView(ListView):
             qs = qs.filter(doctors__last_name__icontains=doctor_name)
         if 'valide' in filters:
             qs = qs.exclude(last_validation_state__state_name__exact='VALIDE')
+        if 'group' in filters:
+            qs = qs.filter(act_type__group=True)
         if 'pointe' in filters:
             qs = qs.filter(last_validation_state__isnull=False). \
                     exclude(last_validation_state__state_name__exact='NON_VALIDE')

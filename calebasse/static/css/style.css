@@ -124,7 +124,7 @@ div#wrap-large {
 	padding-top: 5px;
 }
 
-#agendas span.box {
+#agendas span.box, #ressource-list span.box {
   display: inline-block;
   height: 20px;
   width: 20px;

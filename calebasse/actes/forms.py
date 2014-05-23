@@ -18,6 +18,7 @@ class ActSearchForm(forms.Form):
             ('lost', u'Perdus'),
             ('pause-invoicing', u'En pause facturation'),
             ('invoiced', u'Facturés'),
+            ('group', u'De groupe'),
 #            ('current-invoicing', u'Facturation en cours')
             )
 

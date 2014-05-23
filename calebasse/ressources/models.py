@@ -401,6 +401,7 @@ class ActType(NamedAbstractModel, ServiceLinkedAbstractModel):
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
     display_first = models.BooleanField(default=False, verbose_name=u"Acte principalement utilisé")
+    group = models.BooleanField(default=False, verbose_name=u'De groupe')
 
     class Meta(NamedAbstractModel.Meta):
         verbose_name = u'Type d\'actes'
