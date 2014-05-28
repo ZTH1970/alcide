@@ -224,3 +224,7 @@ button.screen-only {
     margin: 1em 0;
     float: right;
 }
+
+h3 .icon-comment {
+    display: none;
+}

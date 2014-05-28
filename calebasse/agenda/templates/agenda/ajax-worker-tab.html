@@ -3,7 +3,7 @@
 <p><a href="{% url 'periodic-events-for-worker' service=service date=date worker_id=worker_agenda.worker.id %}">Rendez-vous périodiques</a></p>
 <div {% if appointment.event_id %}data-event-id="{{ appointment.event_id }}"{% endif %}>
   {% for appointment in worker_agenda.appointments %}
-  <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
+  <h3 id="{{ appointment.event_id }}" class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
       {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
     <span class="hour">{{ appointment.begin_hour }}</span>
     <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} mn{% endif %}</span>
@@ -33,9 +33,7 @@
         {% for service_name in appointment.other_services_names %}
         <span class="box {{ service_name }}" title="{{ service_name }}"></span>
         {% endfor %}
-        {% if appointment.description %}
-        <span title="Un commentaire existe" class="icon-comment"></span>
-        {% endif %}
+        <span title="Un commentaire existe" class="icon-comment" {% if appointment.description %}style='display: inline'{% endif %}></span>
         {% if appointment.event_id %}
         {% if appointment.is_recurrent %} R {% endif %}
           {% if appointment.patient.confidential %}

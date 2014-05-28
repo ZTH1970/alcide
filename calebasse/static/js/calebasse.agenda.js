@@ -80,15 +80,19 @@ function enable_events(base) {
           }
           else
           {
-            var data = {description: textarea.val() };
-            var data = JSON.stringify(data);
+            var comment = {description: textarea.val()};
+            var data = JSON.stringify(comment);
             $.ajax({
               url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
               contentType: 'application/json',
               data: data,
-              success: function(data) {
+              success: function(response) {
                 btn.attr('disabled', 'disabled');
+                if (comment['description'])
+                    $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeIn();
+                else
+                    $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeOut();
                 span.html('Commentaire modifié avec succès');
               }
             });
