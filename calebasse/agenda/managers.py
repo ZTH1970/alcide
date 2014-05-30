@@ -78,9 +78,9 @@ class EventQuerySet(InheritanceQuerySet):
                 quarter = 0
             interval = IntervalSet.between(start_datetime, end_datetime, False)
             mins = quarter * 15
-            crossed_events = filter(lambda e: e.start_datetime <= start_datetime and e.end_datetime >= end_datetime, events)
+            crossed_events = self.overlap_occurences(start_datetime, events)
             if len(crossed_events) > 1:
-                result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'common'}))
+                result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'overlap'}))
             elif interval.intersection(events_intervals):
                 result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'busy'}))
             elif interval.intersection(holidays_intervals):
@@ -93,6 +93,28 @@ class EventQuerySet(InheritanceQuerySet):
             start_datetime += timedelta(minutes=15)
             end_datetime += timedelta(minutes=15)
         return result
+
+    def overlap_occurences(self, date_time=None, events=None):
+        """
+        returns the list of overlapping event occurences which do not begin and end
+        at the same time and have the same act type
+        """
+        date_time = date_time or datetime.now()
+        events = events or self.today_occurrences(date_time.date())
+        overlap = filter(lambda e: e.start_datetime <= date_time and e.end_datetime > date_time, events)
+        same_type_events = []
+        different_overlap = []
+        for event in overlap:
+            if different_overlap:
+                for e in different_overlap:
+                    if event.start_datetime == e.start_datetime and \
+                       event.end_datetime == e.end_datetime and \
+                       event.act_type == e.act_type:
+                        continue
+                    different_overlap.append(event)
+            else:
+                different_overlap.append(event)
+        return different_overlap
 
 
 class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),

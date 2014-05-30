@@ -630,11 +630,11 @@ class AjaxDisponibilityColumnView(TemplateView):
 
             if events:
                 for event in events:
-                    if event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
+                    overlap_events = Event.objects.overlap_occurences(start_datetime, events)
+                    if len(overlap_events) > 1:
+                        dispo = 'overlap'
+                    elif event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:
                         dispo = 'busy'
-                        crossed_events = filter(lambda e: e.start_datetime <= start_datetime and e.end_datetime >= end_datetime, events)
-                        if len(crossed_events) > 1:
-                            dispo = 'common'
                 disponibility[start_datetime.hour][quarter].append((mins, {'id': ressource_id, 'dispo': dispo}))
             quarter += 1
             start_datetime += datetime.timedelta(minutes=15)
