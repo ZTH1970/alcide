@@ -61,8 +61,8 @@ function enable_events(base) {
       });
       $(base).find('.textedit button').on('click', function() {
           var textarea = $(this).prev();
-          var span = textarea.prev()
-          var btn = $(this)
+          var span = textarea.prev();
+          var btn = $(this);
           if ($(this).data('act-id'))
           {
             var data = {comment: textarea.val() };

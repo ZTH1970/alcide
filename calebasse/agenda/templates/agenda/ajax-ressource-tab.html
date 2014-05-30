@@ -4,7 +4,7 @@
 <div>
   {% for appointment in ressource_agenda.appointments %}
   <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
-      {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
+      {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %} id="{{ appointment.event_id }}">
     <span class="hour">{{ appointment.begin_hour }}</span>
     {% if appointment.event_type %} — {{ appointment.event_type }}  {% endif %}
     {% if appointment.title %} — {{ appointment.title }}  {% endif %}
@@ -16,9 +16,7 @@
       {% for service_name in appointment.other_services_names %}
       <span class="box {{ service_name }}" title="{{ service_name }}"></span>
       {% endfor %}
-      {% if appointment.description %}
-      <span title="Un commentaire existe" class="icon-comment"></span>
-      {% endif %}
+      <span title="Un commentaire existe" class="icon-comment" {% if appointment.description %}style='display: inline'{% endif %}></span>
       {% if appointment.event_id %}
       {% if appointment.is_recurrent %} R {% endif %}
       {% if appointment.patient_record_id %}
@@ -48,7 +46,7 @@
     <div class="tabs-ressource-{{ ressource_agenda.ressource.id }} textedit">
       <span></span>
       <textarea>{{ appointment.description }}</textarea>
-      <button disabled="disabled" data-event-id="{{ appointment.event_id }}">✔</button>
+      <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
     </div>
     {% endif %}
     {% if appointment.patient_record_id %}
