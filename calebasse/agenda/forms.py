@@ -107,18 +107,6 @@ class UpdateAppointmentForm(NewAppointmentForm):
 
     patient = make_ajax_field(EventWithAct, 'patient', 'patientrecord', False)
 
-    class Meta(NewAppointmentForm.Meta):
-        fields = (
-                'start_datetime',
-                'date',
-                'time',
-                'duration',
-                'patient',
-                'participants',
-                'ressource',
-                'act_type',
-        )
-
     def clean_patient(self):
         return self.cleaned_data['patient']
 
@@ -185,7 +173,7 @@ class NewEventForm(BaseForm):
                 'services',
                 'description',
                 'recurrence_periodicity',
-                'recurrence_end_date'
+                'recurrence_end_date',
         )
         widgets = {
                 'start_datetime': forms.HiddenInput,
