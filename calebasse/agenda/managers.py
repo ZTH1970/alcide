@@ -100,18 +100,22 @@ class EventQuerySet(InheritanceQuerySet):
         at the same time and have the same act type
         """
         date_time = date_time or datetime.now()
-        events = events or self.today_occurrences(date_time.date())
+        if events is None:
+            events = self.today_occurrences(date_time.date())
         overlap = filter(lambda e: e.start_datetime <= date_time and e.end_datetime > date_time, events)
         same_type_events = []
         different_overlap = []
         for event in overlap:
             if different_overlap:
                 for e in different_overlap:
-                    if event.start_datetime == e.start_datetime and \
-                       event.end_datetime == e.end_datetime and \
-                       event.act_type == e.act_type:
+                    try:
+                        if event.start_datetime == e.start_datetime and \
+                           event.end_datetime == e.end_datetime and \
+                           event.act_type == e.act_type:
+                            continue
+                        different_overlap.append(event)
+                    except AttributeError:
                         continue
-                    different_overlap.append(event)
             else:
                 different_overlap.append(event)
         return different_overlap
