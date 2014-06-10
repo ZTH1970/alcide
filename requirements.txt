@@ -1,5 +1,6 @@
 --allow-external pyPdf
 --allow-unverified pyPdf
+pyPdf
 Django >= 1.4, < 1.6
 south > 0.7
 django-reversion == 1.6.6
