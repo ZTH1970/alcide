@@ -76,6 +76,21 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
       });
 }
 
+/**
+ * Transform form(s) into your id to ajax forms
+*/
+function calebasse_ajax_form(id) {
+  function onsuccess(response, status, xhr, form) {
+    $(id).html(response);
+    $('form').ajaxForm({
+      success: onsuccess,
+    });
+  }
+  $('form').ajaxForm({
+    success: onsuccess,
+  });
+}
+
 function add_dialog(on, url, title, width, btn_text) {
   // function used to add patient schedules, events and acts
 

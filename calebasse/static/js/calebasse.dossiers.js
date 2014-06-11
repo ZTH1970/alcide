@@ -131,6 +131,7 @@ function load_tab2_adm() {
             '#ajax-dlg', '500px', 'Supprimer');
     });
     $('input#id_id-birthdate').datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
+    calebasse_ajax_form('#tabs-2');
 }
 
 function load_tab3_addresses() {
@@ -323,6 +324,7 @@ function load_tab7_socialisation() {
 }
 
 function load_tab8_medical() {
+  calebasse_ajax_form('#tabs-8');
   SelectFilter.init("id_mises_1", "Catégorie", 0, "/static/admin/");
   SelectFilter.init("id_mises_2", "Catégorie", 0, "/static/admin/");
   SelectFilter.init("id_mises_3", "Catégorie", 0, "/static/admin/");
