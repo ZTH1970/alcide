@@ -168,8 +168,7 @@ class WorkerUpdateView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
         ctx['timetables'] = timetable
         ctx['holidays'] = models.Holiday.objects \
                             .for_worker(self.object) \
-                            .future() \
-                            .order_by('start_date')
+                            .order_by('-start_date')
         try:
             holiday = models.Holiday.objects \
                     .for_worker(self.object) \
