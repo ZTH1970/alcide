@@ -133,7 +133,7 @@ class AgendaServiceActivityView(TemplateView, cbv.ServiceViewMixin):
         return context
 
 
-class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateView):
+class NewAppointmentView(cbv.ServiceFormMixin, CreateView):
     model = EventWithAct
     form_class = NewAppointmentForm
     template_name = 'agenda/new-appointment.html'
@@ -150,17 +150,13 @@ class NewAppointmentView(cbv.ReturnToObjectMixin, cbv.ServiceFormMixin, CreateVi
         initial['duration'] = self.request.GET.get('duration')
         return initial
 
-    def get_form_kwargs(self):
-        kwargs = super(NewAppointmentView, self).get_form_kwargs()
-        kwargs['service'] = self.service
-        return kwargs
-
     def get_success_url(self):
         return self.request.META.get('HTTP_REFERER', '..')
 
     def form_valid(self, form):
+        obj = super(NewAppointmentView, self).form_valid(form)
         messages.add_message(self.request, messages.INFO, self.success_msg)
-        return super(NewAppointmentView, self).form_valid(form)
+        return obj
 
 
 class TodayOccurrenceMixin(object):

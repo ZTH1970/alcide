@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 
 from calebasse.cbv import ListView, UpdateView, DeleteView
 from calebasse.agenda.views import NewAppointmentView
+from calebasse.agenda.models import EventWithAct
+from calebasse.agenda.forms import UpdateAppointmentForm, NewAppointmentForm
 
 import copy
 import models
@@ -77,6 +79,8 @@ class ActListingView(ListView):
 class NewAct(NewAppointmentView):
     success_url = '.'
     success_msg = u'Acte enregistré avec succès.'
+    model = EventWithAct
+    form_class = UpdateAppointmentForm
 
     def form_valid(self, form):
         result = super(NewAct, self).form_valid(form)

@@ -120,6 +120,7 @@ class UpdateAppointmentForm(NewAppointmentForm):
         appointment.clean()
         if commit:
             appointment.save()
+            self.save_m2m()
             appointment.services = [self.service]
         return appointment
 
