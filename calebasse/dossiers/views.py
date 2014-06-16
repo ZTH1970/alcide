@@ -272,8 +272,10 @@ class PatientRecordGeneralView(cbv.UpdateView):
         current_state = ctx['object'].get_current_state()
         if current_state.status and STATES_MAPPING.has_key(current_state.status.type):
             state = STATES_MAPPING[current_state.status.type]
+        elif current_state.status:
+            state = current_state.status.name
         else:
-            state = current
+            state = "Aucun"
         ctx['current_state'] = current_state
         ctx['status'], ctx['hc_status'] = get_status(ctx, self.request.user)
         ctx['missing_policy'] = False
