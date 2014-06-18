@@ -63,10 +63,11 @@ function enable_events(base) {
           var textarea = $(this).prev();
           var span = textarea.prev();
           var btn = $(this);
+          var comment = {comment: textarea.val()};
+          var data = JSON.stringify(comment);
           if ($(this).data('act-id'))
           {
-            var data = {comment: textarea.val() };
-            var data = JSON.stringify(data);
+
             $.ajax({
               url: '/api/v1/act/' + $(this).data("act-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
@@ -74,14 +75,18 @@ function enable_events(base) {
               data: data,
               success: function(data) {
                 btn.attr('disabled', 'disabled');
+                if (comment['comment']) {
+                    $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeIn();
+                }
+                else {
+                    $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeOut();
+                }
                 span.html('Commentaire modifié avec succès');
               }
             });
           }
           else
           {
-            var comment = {description: textarea.val()};
-            var data = JSON.stringify(comment);
             $.ajax({
               url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
@@ -89,7 +94,7 @@ function enable_events(base) {
               data: data,
               success: function(response) {
                 btn.attr('disabled', 'disabled');
-                if (comment['description'])
+                if (comment['comment'])
                     $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeIn();
                 else
                     $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeOut();
