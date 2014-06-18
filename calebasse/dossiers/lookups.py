@@ -34,9 +34,6 @@ class PatientRecordLookup(CalebasseLookup):
 
         return chain(qs, closed)
 
-    def format_match(self,obj):
-        return self.format_item_display(texte)
-
     def get_result(self, obj):
         return self.format_item_display(obj)
 

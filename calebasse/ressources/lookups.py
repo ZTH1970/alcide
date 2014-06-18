@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 import itertools
 
 from calebasse.lookups import CalebasseLookup
 from calebasse.personnes.models import Worker
-from calebasse.ressources.models import Service
+from calebasse.ressources.models import Service, School
 
 class FakeGroup:
     pk = None
@@ -56,3 +57,28 @@ class WorkerOrGroupLookup(CalebasseLookup):
 
 class AllWorkerOrGroupLookup(WorkerOrGroupLookup):
     enabled = False
+
+class SchoolLookup(CalebasseLookup):
+    model = School
+    search_field = 'name'
+
+    def get_result(self, obj):
+        return self.format_item_display(obj)
+
+    def format_match(self, obj):
+        return self.format_item_display(obj)
+
+    def format_item_display(self, obj):
+        text = ''
+        if obj.school_type.name != 'Inconnu':
+            text = unicode(obj.school_type) + ' ' + obj.name
+        else:
+            text = obj.name
+        if obj.address:
+            text += " - "  + obj.address
+        if obj.private:
+            text += " (Privé)"
+        else:
+            text +=  " (Public)"
+        return text
+
