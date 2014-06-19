@@ -449,6 +449,12 @@ class Event(models.Model):
             parts.append(self.recurrence_end_date.strftime('%d/%m/%Y'))
         return u' '.join(parts)
 
+    def is_absent(self):
+        try:
+            return self.eventwithact.is_absent()
+        except self.DoesNotExist:
+            return False
+
     def __unicode__(self):
         return self.title
 

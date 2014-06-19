@@ -102,7 +102,8 @@ class EventQuerySet(InheritanceQuerySet):
         date_time = date_time or datetime.now()
         if events is None:
             events = self.today_occurrences(date_time.date())
-        overlap = filter(lambda e: e.start_datetime <= date_time and e.end_datetime > date_time, events)
+        overlap = filter(lambda e: e.start_datetime <= date_time and e.end_datetime > date_time \
+                         and not e.is_absent(), events)
         same_type_events = []
         different_overlap = []
         for event in overlap:
