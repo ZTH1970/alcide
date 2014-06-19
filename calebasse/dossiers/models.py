@@ -479,7 +479,7 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     deficiency_polyhandicap = models.BooleanField(verbose_name=u'Polyhandicap',
             default=False)
     deficiency_behavioral_disorder = models.IntegerField(max_length=1,
-            verbose_name=u"Troubles du comportement et de la communication",
+            verbose_name=u"Troubles de la conduite et du comportement",
             choices=DEFICIENCY_CHOICES,
             default=0)
     deficiency_in_diagnostic = models.BooleanField(verbose_name=u'En diagnostic',
