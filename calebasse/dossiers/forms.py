@@ -18,6 +18,7 @@ from calebasse.ressources.models import (HealthCenter, LargeRegime,
     CodeCFTMEA, SocialisationDuration, MDPHRequest, MDPHResponse)
 
 from ajax_select import make_ajax_field
+from django_select2.widgets import Select2MultipleWidget
 
 logger = logging.getLogger(__name__)
 
@@ -111,10 +112,6 @@ class CivilStatusForm(ModelForm):
         fields = ('first_name', 'last_name', 'birthdate', 'birthplace', 'gender', 'nationality')
 
 
-class FilteredSelectMultipleMise(django.contrib.admin.widgets.FilteredSelectMultiple):
-    def __init__(self, **kwargs):
-        super(FilteredSelectMultipleMise, self).__init__(u'Catégorie', False)
-
 class PhysiologyForm(ModelForm):
     cranium_perimeter = forms.DecimalField(label=u"Périmètre cranien",
                     max_digits=5, decimal_places=2, localize=True,
@@ -135,10 +132,11 @@ class PhysiologyForm(ModelForm):
             'deficiency_polyhandicap', 'deficiency_behavioral_disorder',
             'deficiency_in_diagnostic', 'deficiency_other_disorder')
         widgets = {
-            'mises_1': FilteredSelectMultipleMise,
-            'mises_2': FilteredSelectMultipleMise,
-            'mises_3': FilteredSelectMultipleMise,
-        }
+                'mises_1': Select2MultipleWidget(attrs={'style': 'width: 32em'}),
+                'mises_2': Select2MultipleWidget(attrs={'style': 'width: 32em'}),
+                'mises_3': Select2MultipleWidget(attrs={'style': 'width: 32em'}),
+                }
+
 
     def __init__(self, instance, **kwargs):
         super(PhysiologyForm, self).__init__(instance=instance, **kwargs)

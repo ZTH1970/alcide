@@ -151,6 +151,7 @@ INSTALLED_APPS = (
     'south',
     'django.contrib.admin',
     'ajax_select',
+    'django_select2',
     #'debug_toolbar',
     'widget_tweaks',
     # Uncomment the next line to enable admin documentation:

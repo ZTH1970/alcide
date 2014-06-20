@@ -77,14 +77,20 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
 }
 
 /**
- * Transform form(s) into your id to ajax forms
+ * Transform form(s) to ajax forms
+ * id: jQuery id where you want to replace form by ajaxForm
 */
 function calebasse_ajax_form(id) {
   function onsuccess(response, status, xhr, form) {
-    $(id).html(response);
-    $('form').ajaxForm({
-      success: onsuccess,
-    });
+    if ($('.errorlist', response).length != 0) {
+      $(id).html(response);
+      $('form').ajaxForm({
+        success: onsuccess,
+      });
+    }
+    else {
+      window.location.reload(true);
+    }
   }
   $('form').ajaxForm({
     success: onsuccess,

@@ -27,6 +27,7 @@ service_patterns = patterns('',
     url(r'^personnes/', include('calebasse.personnes.urls')),
     url(r'^ressources/', include('calebasse.ressources.urls')),
     url(r'^statistics/', include('calebasse.statistics.urls')),
+    url(r'^select2/', include('django_select2.urls')),
 )
 
 urlpatterns = patterns('',

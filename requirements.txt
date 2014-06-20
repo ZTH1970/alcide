@@ -18,4 +18,5 @@ django-localflavor
 raven >= 3.5.2, < 3.6
 M2Crypto
 --allow-external pycairo
+django_select2 < 4.3
 #PyGTK doesn't work with pip

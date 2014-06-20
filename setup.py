@@ -50,6 +50,7 @@ setup(name='calebasse',
             'django-ajax-selects < 1.3.0',
             'django-widget-tweaks < 1.2.0',
             'django-tastypie == 0.9.14',
+            'django-select2 < 4.3',
             'interval == 1.0.0',
             'python-entrouvert >= 1.3'
             'django-localflavor',

@@ -10,10 +10,6 @@
 {{ block.super }}
 <script src="{{ STATIC_URL }}js/jquery.parse-url.js"></script>
 <script src="{{ STATIC_URL }}js/calebasse.dossiers.js"></script>
-<script src="{{ STATIC_URL }}filter-widget/js/i18n.js"></script>
-<script src="{{ STATIC_URL }}filter-widget/js/core.js"></script>
-<script src="{{ STATIC_URL }}filter-widget/js/SelectBox.js"></script>
-<script src="{{ STATIC_URL }}filter-widget/js/SelectFilter2.js"></script>
 {% endblock %}
 
 {% block title %}{{ object.last_name }} {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% endblock %}
