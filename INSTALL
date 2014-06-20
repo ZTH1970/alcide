@@ -6,4 +6,4 @@ Installation with virtualenv on Debian
 	. ./venv/bin/activate
 	pip install -U setuptools
 	pip install -U pip
-	pip install -r requirements
+	pip install -r requirements.txt
