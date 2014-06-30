@@ -228,3 +228,7 @@ button.screen-only {
 h3 .icon-comment {
     display: none;
 }
+
+.worker-agenda {
+    margin-top: 2em;
+}
