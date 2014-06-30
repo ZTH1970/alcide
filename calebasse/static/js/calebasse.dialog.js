@@ -101,7 +101,8 @@ function add_dialog(on, url, title, width, btn_text) {
   // function used to add patient schedules, events and acts
 
   function init_dialog() {
-    $('#rdv .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+    $('.datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+    $('.datepicker input').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
     $('#id_description').attr('rows', '3');
     $('#id_description').attr('cols', '30');
     var deck = $('#id_participants_on_deck');
