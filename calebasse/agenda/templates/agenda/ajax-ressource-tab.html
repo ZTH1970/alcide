@@ -6,12 +6,25 @@
   <h3 class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
       {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %} id="{{ appointment.event_id }}">
     <span class="hour">{{ appointment.begin_hour }}</span>
-    {% if appointment.event_type %} — {{ appointment.event_type }}  {% endif %}
-    {% if appointment.title %} — {{ appointment.title }}  {% endif %}
-    {% if appointment.length %} — {{ appointment.length }}m {% endif %}
-    {% if appointment.ressources_initial %} —{{ appointment.ressources_initial }} {% endif %}
-    {% if appointment.act_type %} — {{ appointment.act_type }} {% endif %}
-    {% if appointment.ressource %} — {{ appointment.ressource }} {% endif %}
+    {% if appointment.title %}<span class="title">{{ appointment.title }}</span>{% endif %}
+    {% if appointment.length %}<span class="length">{{ appointment.length }} mn</span> {% endif %}
+    {% if appointment.act_type %}<span class="act_type">{{ appointment.act_type }}</span>{% endif %}
+    <span class="participants">
+    {% if appointment.len_workers > 4 %}
+    {% if appointment.workers_absent %}<span class="absent" title="Au moins un intervenant est absent">{% endif %}
+        {{ appointment.len_workers }} inter.
+        {% if appointment.workers_absent %}</span>{% endif %}
+    {% else %}
+    {% if appointment.workers %}
+    {% for worker in appointment.workers %}
+    {% if worker in appointment.workers_absent %}<span class="absent" title="Absent">{% endif %}
+        {{ worker.worker.initials }}{% if not forloop.last %} {% endif %}
+        {% if worker in appointment.workers_absent %}</span>{% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    </span>
+
     <span class="right">
       {% for service_name in appointment.other_services_names %}
       <span class="box {{ service_name }}" title="{{ service_name }}"></span>
