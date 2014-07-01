@@ -221,7 +221,8 @@ class Act(models.Model):
     # END Specific to sessad healthcare
 
     def save(self, *args, **kwargs):
-        super(Act, self).save(*args, **kwargs)
+        if self.parent_event and not self.parent_event.canceled:
+            super(Act, self).save(*args, **kwargs)
 
     def duration(self):
         '''Return a displayable duration for this field.'''
