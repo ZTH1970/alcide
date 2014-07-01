@@ -273,6 +273,11 @@ function toggle_ressource(ressource) {
     return $(ressource_target).find('a.tab');
 }
 
+function init_datepickers(dialog) {
+    $('.datepicker-date', dialog).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+    $('.datepicker input', dialog).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+}
+
 function event_dialog(url, title, width, btn_text) {
     function add_periodic_events(base) {
       $(base).on('click', '.update-periodic-event', function () {
@@ -302,11 +307,7 @@ function event_dialog(url, title, width, btn_text) {
               }
             };
         generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-event/' + id,
-          'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-          }, null, delete_button
-        );
+          'Modifier un évènement périodique', '#ajax-dlg', '900px', 'Modifier', null, init_datepickers, null, delete_button);
       });
       $(base).on('click', '.update-periodic-rdv', function () {
         $('.ui-icon-closethick').click();
@@ -331,11 +332,7 @@ function event_dialog(url, title, width, btn_text) {
             }
         };
         generic_ajaxform_dialog('/' + service + '/' + app_name + '/' + current_date + '/update-periodic-rdv/' + id,
-          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null,
-          function (dialog) {
-            $('#ajax-dlg .datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-          }, null, delete_button
-        );
+          'Modifier un rendez-vous périodique', '#ajax-dlg', '900px', 'Modifier', null, init_datepickers, null, delete_button);
       });
     }
 
