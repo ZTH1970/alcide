@@ -24,7 +24,7 @@ from calebasse.actes.validation import (automated_validation, unlock_all_acts_of
 from calebasse import cbv
 
 from calebasse.agenda.forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
-        DisablePatientAppointmentForm, UpdateAppointmentForm, UpdatePeriodicEventForm, 
+        DisablePatientAppointmentForm, UpdateAppointmentForm, UpdatePeriodicEventForm,
         UpdateEventForm, PeriodicEventsSearchForm)
 
 logger = logging.getLogger(__name__)
@@ -505,7 +505,8 @@ class AgendasTherapeutesView(AgendaHomepageView):
             if all(map(lambda x: x.holiday, daily_appointments)):
                 continue
             context['workers_agenda'].append({'worker': worker,
-                    'appointments': daily_appointments})
+                    'appointments': daily_appointments,
+                    'has_events': True if events_worker else False})
 
         for worker_agenda in context.get('workers_agenda', []):
             patient_appointments = [x for x in worker_agenda['appointments'] if x.patient_record_id]

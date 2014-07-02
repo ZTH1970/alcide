@@ -18,7 +18,7 @@
 <div class="worker-agenda">
     <h2>
         <strong>{{ service_name }}</strong> - Planning de {{ worker_agenda.worker.first_name }} <span class="lastname">{{ worker_agenda.worker.last_name }}</span>
-        <input type="checkbox" class="printable" checked>
+        <input type="checkbox" class="printable" {% if worker_agenda.has_events %}checked{% endif %}>
     </h2>
     <h3>{{ date|date:"DATE_FORMAT"|title }}</h3>
 
