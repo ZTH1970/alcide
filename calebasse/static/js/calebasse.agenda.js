@@ -280,6 +280,7 @@ function init_datepickers(dialog) {
 
 function event_dialog(url, title, width, btn_text) {
     function add_periodic_events(base) {
+      init_datepickers(base);
       $(base).on('click', '.update-periodic-event', function () {
         $('.ui-icon-closethick').click();
         // remove the form from previous hidden layer in order to prevent two
