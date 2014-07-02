@@ -1,7 +1,7 @@
 <div id="tabs-5">
   {% for state, last_rdvs in history %}
   <div class="frame">
-    <h3>{{ state.status.name }} depuis le {{ state.date_selected|date:"SHORT_DATE_FORMAT" }}</h3>
+    <h3>{% if state %}{{ state.status.name }} depuis le {{ state.date_selected|date:"SHORT_DATE_FORMAT" }}{% else %}Indéfini{% endif %}</h3>
     {% if last_rdvs %}
     <table class="basic">
       <thead>
