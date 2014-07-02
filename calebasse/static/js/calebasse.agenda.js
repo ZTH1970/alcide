@@ -63,7 +63,7 @@ function enable_events(base) {
           var textarea = $(this).prev();
           var span = textarea.prev();
           var btn = $(this);
-          var comment = {comment: textarea.val()};
+          var comment = {description: textarea.val()};
           var data = JSON.stringify(comment);
           if ($(this).data('act-id'))
           {
@@ -75,7 +75,7 @@ function enable_events(base) {
               data: data,
               success: function(data) {
                 btn.attr('disabled', 'disabled');
-                if (comment['comment']) {
+                if (comment['description']) {
                     $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeIn();
                 }
                 else {
@@ -94,7 +94,7 @@ function enable_events(base) {
               data: data,
               success: function(response) {
                 btn.attr('disabled', 'disabled');
-                if (comment['comment'])
+                if (comment['description'])
                     $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeIn();
                 else
                     $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeOut();
