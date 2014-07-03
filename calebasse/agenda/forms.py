@@ -65,7 +65,7 @@ class NewAppointmentForm(BaseForm):
         try:
             return int(duration)
         except ValueError:
-            return 0
+            raise forms.ValidationError('Veuillez saisir un entier')
 
     def clean_patient(self):
         patients = self.cleaned_data['patient']
