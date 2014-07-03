@@ -70,7 +70,9 @@
       {% if address.place_of_life and address.phone %}
       <span title="{{ address.number }} {{ address.street }} {{ address.zip_code }} {{ address.city }}" class="icon-home-space">{{ address.phone }}</span>
       {% for contact in address.patientcontact_set.all  %}
-      <span title="{{ contact.first_name }} {{ contact.last_name|upper }}" class="icon-user-space">{{ contact.mobile }}</span>
+        {% if contact.mobile %}
+          <span title="{{ contact.first_name }} {{ contact.last_name|upper }}" class="icon-user-space">{{ contact.mobile }}</span>
+        {% endif %}
       {% endfor %}
       {% endif %}
       {% endfor %}
