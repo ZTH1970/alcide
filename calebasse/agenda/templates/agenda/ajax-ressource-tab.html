@@ -58,11 +58,15 @@
       {% endfor %}
     </p>
     {% endif %}
-    <div class="tabs-ressource-{{ ressource_agenda.ressource.id }} textedit">
-      <span></span>
-      <textarea>{{ appointment.description }}</textarea>
-      <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
-    </div>
+      {% if service in appointment.services_names %}
+        <div class="tabs-ressource-{{ ressource_agenda.ressource.id }} textedit">
+          <span></span>
+          <textarea>{{ appointment.description }}</textarea>
+          <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
+        </div>
+      {% else %}
+        <p>{{ appointment.description }}</p>
+      {% endif %}
     {% endif %}
     {% if appointment.patient_record_id %}
     <p class="phones">
