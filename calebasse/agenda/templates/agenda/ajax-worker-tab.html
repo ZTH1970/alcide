@@ -6,7 +6,7 @@
   <h3 id="{{ appointment.event_id }}" class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
       {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
     <span class="hour">{{ appointment.begin_hour }}</span>
-    <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} mn{% endif %}</span>
+    <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} min{% endif %}</span>
     <span class="title">{% if appointment.title %}{{ appointment.title }}{% endif %}
     {% if appointment.patient.paper_id %} {{ appointment.patient.paper_id }} {% endif %}</span>
     <span class="participants">
