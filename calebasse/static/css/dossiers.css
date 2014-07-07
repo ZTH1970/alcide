@@ -115,3 +115,11 @@ div#tabs-4 div div.buttons {
 .select2-choices {
     font-size: 11pt;
 }
+
+#id_school_text {
+     min-width: 600px;
+}
+
+#ajax-dlg input, ul.ui-autocomplete, .results_on_deck {
+    font-size: 90%;
+}
