@@ -277,12 +277,18 @@ class UpdatePeriodicEventView(BaseEventView):
 
 def delete_eventwithact(event):
     assert event.event_type_id == 1
-    if event.act.id \
-            and not event.act.is_billed:
-        event.act.delete()
 
-    if not event.act.id or \
-            not event.act.is_billed:
+    # in case of "event" is an instance of "Event" model and not "EventWithAct"
+    # and so doesn't have 'act' attribute
+    try:
+        if event.act.id \
+           and not event.act.is_billed:
+            event.act.delete()
+
+        if not event.act.id or \
+           not event.act.is_billed:
+            event.delete()
+    except AttributeError:
         event.delete()
 
 class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
