@@ -10,6 +10,8 @@
 
 {% block agenda-content %}
 
+<div class="print-only page-header">{{ date|date:"DATE_FORMAT"|lower }}</div>
+
 <h2 class="print-only">Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
 
 <table class="main" id="activity">

@@ -77,3 +77,8 @@ div.summary {
 div#sidebar {
   display: none;
 }
+
+div.page-header {
+  position: fixed;
+  top: 0;
+}
