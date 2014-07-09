@@ -10,7 +10,7 @@
     <li><label>Nom :</label> <span class="lastname">{{ object.last_name }}</span></li>
     <li><label>Prénom :</label> {{ object.first_name }}</li>
     <li><label>Genre :</label> {{ object.get_gender_display|default_if_none:"Non renseigné" }}</li>
-    <li><label>Date de naissance :</label> {% if object.birthdate %}{{ object.birthdate|date:"d/m/Y" }}{% else %}Non renseignée{% endif %}</li>
+    <li><label>Date de naissance :</label> {% if object.birthdate %}{{ object.birthdate|date:"d/m/Y" }} ({{ object.age }}){% else %}Non renseignée{% endif %}</li>
     <li>
       {% if nb_place_of_lifes == 1 %}
       <label>Lieux de vie :</label>

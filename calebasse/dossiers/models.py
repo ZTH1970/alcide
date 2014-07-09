@@ -368,6 +368,19 @@ class PatientContact(People):
                 return None
         return None
 
+    def age(self):
+        if not self.birthdate:
+            return 'inconnu'
+        now = datetime.today().date()
+        age = relativedelta(now, self.birthdate)
+        if age.years < 2:
+            # for children < 2 years, return the number of months
+            months = age.years * 12 + age.months
+            if months:
+                return '%s mois' % months
+            return '%s jours' % age.days
+        return '%s ans' % age.years
+
 
 class PatientRecordManager(models.Manager):
     def for_service(self, service):
