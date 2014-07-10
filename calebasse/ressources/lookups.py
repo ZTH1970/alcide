@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import itertools
+import re
+
+from django.db.models import Q
 
 from calebasse.lookups import CalebasseLookup
 from calebasse.personnes.models import Worker
@@ -61,24 +64,24 @@ class AllWorkerOrGroupLookup(WorkerOrGroupLookup):
 class SchoolLookup(CalebasseLookup):
     model = School
     search_field = 'name'
+    query_words = []
+
+    def get_query(self, q, request):
+        words = q.split()
+        self.query_words = words
+        lookups = [Q(display_name__icontains=word) for word in words]
+        return School.objects.filter(*lookups)
 
     def get_result(self, obj):
         return self.format_item_display(obj)
 
     def format_match(self, obj):
-        return self.format_item_display(obj)
+        display = obj.display_name
+        for word in self.query_words:
+            pattern = re.compile(r"(%s)" % word, re.IGNORECASE)
+            display = re.sub(pattern, r"<strong>\1</strong>", display)
+        return display
 
     def format_item_display(self, obj):
-        text = ''
-        if obj.school_type.name != 'Inconnu':
-            text = unicode(obj.school_type) + ' ' + obj.name
-        else:
-            text = obj.name
-        if obj.address:
-            text += " - "  + obj.address
-        if obj.private:
-            text += " (Privé)"
-        else:
-            text +=  " (Public)"
-        return text
+        return obj.display_name
 

@@ -226,6 +226,22 @@ class School(NamedAbstractModel):
             return unicode(self.school_type) + ' ' + self.name
         return self.name
 
+    def save(self, **kwargs):
+        self.display_name = ""
+        if self.school_type.name != 'Inconnu':
+            self.display_name = unicode(self.school_type) + ' ' + self.name
+        else:
+            self.display_name = self.name
+        if self.address:
+            self.display_name += " - "  + self.address
+        if self.private:
+            self.display_name += " (Privé)"
+        else:
+            self.display_name +=  " (Public)"
+        super(School, self).save(**kwargs)
+
+    display_name = models.CharField(max_length=256,
+            blank=True, null=True, default='')
     school_type = models.ForeignKey('ressources.SchoolType',
         verbose_name=u"Type d'établissement")
     description = models.TextField(blank=True, null=True, default=None)
