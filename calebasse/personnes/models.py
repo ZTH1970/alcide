@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import date as date_filter
 from django import forms
 
-import reversion
 from model_utils.managers import InheritanceManager
 
 from calebasse.models import PhoneNumberField
@@ -113,10 +112,6 @@ class Worker(People):
         verbose_name = u'Personnel'
         verbose_name_plural = u'Personnels'
 
-
-reversion.register(Worker, follow=['people_ptr'])
-reversion.register(User)
-
 class ExternalWorker(People):
     description = models.TextField(blank=True, null=True, default=None)
     address = models.CharField(max_length=120,
@@ -143,8 +138,6 @@ class ExternalWorker(People):
     class Meta:
         verbose_name = u'Intervenant extérieur'
         verbose_name_plural = u'Intervenants extérieurs'
-
-reversion.register(ExternalWorker, follow=['people_ptr'])
 
 class ExternalTherapist(People):
     description = models.TextField(blank=True, null=True, default=None)
@@ -177,8 +170,6 @@ class ExternalTherapist(People):
         verbose_name = u'Médecin extérieur'
         verbose_name_plural = u'Médecins extérieurs'
 
-reversion.register(ExternalTherapist, follow=['people_ptr'])
-
 class UserWorker(BaseModelMixin, models.Model):
     user = models.OneToOneField('auth.User')
     worker = models.ForeignKey('Worker',
@@ -188,13 +179,9 @@ class UserWorker(BaseModelMixin, models.Model):
         return u'Lien entre la personne {0} et l\'utilisateur {1}'.format(
                 self.worker, self.user)
 
-reversion.register(UserWorker)
-
 class SchoolTeacher(People):
     schools = models.ManyToManyField('ressources.School')
     role = models.ForeignKey('ressources.SchoolTeacherRole')
-
-reversion.register(SchoolTeacher, follow=['user_ptr'])
 
 class TimeTableQuerySet(query.QuerySet):
     def current(self, today=None):

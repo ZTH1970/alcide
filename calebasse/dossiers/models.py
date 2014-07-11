@@ -13,8 +13,6 @@ from django.db.models import Min, Max, Q
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
-import reversion
-
 from calebasse.choices import TYPE_OF_CONTRACT_CHOICES, DEFICIENCY_CHOICES
 from calebasse.models import PhoneNumberField, ZipCodeField
 from calebasse.personnes.models import People
@@ -169,10 +167,6 @@ class SessadHealthCareNotification(HealthCare):
                 datetime(self.end_date.year, self.end_date.month,
                     self.end_date.day)
         super(SessadHealthCareNotification, self).save(**kwargs)
-
-reversion.register(CmppHealthCareDiagnostic, follow=['healthcare_ptr'])
-reversion.register(CmppHealthCareTreatment, follow=['healthcare_ptr'])
-reversion.register(SessadHealthCareNotification, follow=['healthcare_ptr'])
 
 class ProtectionStatus(NamedAbstractModel):
 
@@ -998,9 +992,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             except:
                 return 0
         return (end_date.date() - first_act.date).days + 1
-
-reversion.register(PatientRecord, follow=['people_ptr'])
-
 
 def create_patient(first_name, last_name, service, creator,
         date_selected=None):
