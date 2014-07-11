@@ -9,7 +9,7 @@ class Batch(object):
         self.invoices = invoices
         self.number_of_invoices = len(invoices)
         self.total = sum(invoice.decimal_amount for invoice in invoices)
-        self.number_of_acts = sum(len(invoice.acts.all()) for invoice in invoices)
+        self.number_of_acts = sum(len(invoice.list_dates.split('$')) for invoice in invoices)
         self.start_date = min(invoice.start_date for invoice in invoices)
         self.end_date = max(invoice.end_date for invoice in invoices)
 
@@ -28,4 +28,3 @@ def build_batches(invoicing):
         batches_by_health_center[hc].append(Batch(batch_number,
             prebatches[(health_center, batch_number)]))
     return batches_by_health_center
-
