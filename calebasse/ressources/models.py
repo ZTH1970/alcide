@@ -233,11 +233,11 @@ class School(NamedAbstractModel):
         else:
             self.display_name = self.name
         if self.address:
-            self.display_name += " - "  + self.address
+            self.display_name += u" - "  + self.address
         if self.private:
-            self.display_name += " (Privé)"
+            self.display_name += u" (Privé)"
         else:
-            self.display_name +=  " (Public)"
+            self.display_name += u" (Public)"
         super(School, self).save(**kwargs)
 
     display_name = models.CharField(max_length=256,
