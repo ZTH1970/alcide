@@ -43,7 +43,7 @@ setup(name='calebasse',
         packages=find_packages(os.path.dirname(__file__) or '.'),
         install_requires=[
             'Django >= 1.5, < 1.6',
-            'south >= 0.7',
+            'south >= 0.8.4',
             'django-reversion == 1.6.6',
             'python-dateutil >= 2.2, < 2.3',
             'django-model-utils >= 1.5.0',
