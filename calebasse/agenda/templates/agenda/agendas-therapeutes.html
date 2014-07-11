@@ -5,7 +5,7 @@
 {% block appbar %}
 <h2>Tous les agendas des intervenants du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
 <a href="..">Retourner à l'agenda</a>
-<button id='print-button'>Imprimer</button>
+<button id='print-button-therapeutes'>Imprimer</button>
 {% endblock %}
 
 
@@ -74,14 +74,19 @@
                 $('.pagebreak').not('.screen-only').last().css('page-break-before', 'avoid');
             }
             update_page_break();
-            $('.printable').on('change', function () {
-                if ($(this).is(':checked')) {
-                    $(this).parents('.worker-agenda').removeClass('screen-only');
-                    } else {
-                    $(this).parents('.worker-agenda').addClass('screen-only');
+
+            $('button#print-button-therapeutes').click(function() {
+              $.each($(".printable"), function(k, v) {
+                if ($(v).is(':checked')) {
+                    $(v).parents('.worker-agenda').removeClass('screen-only');
+                } else {
+                    $(v).parents('.worker-agenda').addClass('screen-only');
                 }
-                update_page_break();
-            });
+                });
+              update_page_break();
+              window.print();
+              });
+
             $('#uncheck-all').on('click', function () {
                 $('.printable').attr('checked', false);
                 $('.printable').trigger('change');
