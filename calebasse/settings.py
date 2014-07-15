@@ -113,6 +113,7 @@ MIDDLEWARE_CLASSES = (
     'reversion.middleware.RevisionMiddleware',
     # Entr'ouvert wsgi middleware to expose version
     'entrouvert.djommon.middleware.VersionMiddleware',
+    'django_journal.middleware.JournalMiddleware',
 )
 
 ROOT_URLCONF = 'calebasse.urls'
@@ -165,6 +166,7 @@ INSTALLED_APPS = (
     'calebasse.statistics',
     'calebasse.middleware.request',
     'south',
+    'django_journal',
 )
 
 INTERNAL_IPS=('127.0.0.1',)

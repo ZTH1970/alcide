@@ -21,6 +21,8 @@ from interval import Interval
 from model_utils import Choices
 from model_utils.managers import PassThroughManager
 
+from ..middleware.request import get_request
+
 class Role(NamedAbstractModel):
     users = models.ManyToManyField(User,
                 verbose_name=u'Utilisateurs', blank=True)
@@ -49,6 +51,7 @@ class People(BaseModelMixin, models.Model):
         else:
             self.display_name = self.last_name.upper()
         super(People, self).save(**kwargs)
+        get_request().record('people-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def __unicode__(self):
         return self.display_name
@@ -93,6 +96,7 @@ class Worker(People):
         if not self.initials:
             self.initials = self.get_initials()
         super(Worker, self).save(**kwargs)
+        get_request().record('worker-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def is_active(self):
         return self.enabled

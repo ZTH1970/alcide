@@ -239,7 +239,6 @@ class NewEventView(CreateView):
         messages.add_message(self.request, messages.INFO, u'Evénement enregistré avec succès.')
         return super(NewEventView, self).form_valid(form)
 
-
 class BaseEventView(UpdateView):
     model = Event
     form_class = UpdateEventForm

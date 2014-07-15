@@ -8,7 +8,6 @@ from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.ressources.models import ServiceLinkedAbstractModel
 from ..middleware.request import get_request
 
-
 class ActValidationState(models.Model):
 
     class Meta:
@@ -48,6 +47,7 @@ class ActManager(models.Manager):
                 act=act,state_name='NON_VALIDE',
                 author=author, previous_state=None)
         act.last_validation_state = last_validation_state
+        get_request().record('new-act','{obj_id} created by {user} from {ip}', obj_id=act.id)
         act.save()
         return act
 
@@ -201,6 +201,8 @@ class Act(models.Model):
             self.valide = True
         else:
             self.valide = False
+        get_request().record('act-update', '{obj_id} state changed to {state} by {user} from {ip}',
+                              obj_id=self.id, state=last_validation_state, user=author)
         self.save()
 
     def is_billable(self):
@@ -223,6 +225,7 @@ class Act(models.Model):
     def save(self, *args, **kwargs):
         if self.parent_event and not self.parent_event.canceled:
             super(Act, self).save(*args, **kwargs)
+            get_request().record('act-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def duration(self):
         '''Return a displayable duration for this field.'''
@@ -261,6 +264,11 @@ class Act(models.Model):
         except:
             pass
         return None
+
+    def delete(self):
+        obj_id = self.id
+        super(Act, self).delete()
+        get_request().record('act-delete', '{obj_id} deleted by {user} from {ip}', obj_id=obj_id)
 
     class Meta:
         verbose_name = u"Acte"

@@ -74,6 +74,7 @@ class ActListingView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(ActListingView, self).get_context_data(**kwargs)
         ctx['search_form'] = self.search_form
+        self.request.record('acts-view', 'act listing by {user} from {ip}')
         return ctx
 
 class NewAct(NewAppointmentView):
@@ -85,6 +86,9 @@ class NewAct(NewAppointmentView):
     def form_valid(self, form):
         result = super(NewAct, self).form_valid(form)
         self.object.act.save()
+        self.request.record('new-act',
+                            '{obj_id} created by {user} from {ip}',
+                            obj_id=self.object.id)
         return result
 
 act_listing = ActListingView.as_view()
@@ -100,6 +104,8 @@ class DeleteActView(DeleteView):
         if self.object.event:
             self.object.event.delete()
         if not self.object.is_billed:
+            self.request.record('act-delete', '{obj_id} deleted by {user} from {ip}',
+                                obj_id=self.object.id)
             self.object.delete()
 
         return HttpResponse(status=204)
@@ -119,6 +125,10 @@ class UpdateActView(UpdateView):
             self.object.event.participants =  doctors
             self.object.event.act_type =  self.object.act_type
             self.object.event.save()
+            self.request.record('act-update',
+                                '{obj_id} updated by {user} from {ip} with: {changes}',
+                                obj_id=self.object.id,
+                                changes={'participants': doctors, 'act_type': self.object.act_type})
         return result
 
 update_act = UpdateActView.as_view()
@@ -133,6 +143,7 @@ class RebillActView(UpdateView):
         act.is_billed = False
         act.healthcare = None
         act.save()
+        self.request.record('rebill-act', '{obj_id} rebilled by {user} from {ip}', obj_id=act.id)
         return super(RebillActView, self).post(request, *args, **kwarg)
 
 rebill_act = RebillActView.as_view()
