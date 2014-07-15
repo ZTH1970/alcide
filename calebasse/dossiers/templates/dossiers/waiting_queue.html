@@ -38,6 +38,7 @@
         <th rowspan="2">Prénom</th>
         <th rowspan="2">Position</th>
         <th rowspan="2">Date d'accueil</th>
+        <th rowspan="2">Prochain rendez-vous</th>
         <th rowspan="2">Commentaire</th>
       </tr>
       <tr>
@@ -55,6 +56,7 @@
           <td>{{ patient_record.object.first_name }}</td>
           <td>{{ patient_record.position }}</td>
           <td>{{ patient_record.object.last_state.date_selected|date:"SHORT_DATE_FORMAT" }}</td>
+          <td>{{ patient_record.object.get_next_rdv.start_datetime|date:"SHORT_DATE_FORMAT" }}</td>
           <td>{{ patient_record.object.last_state.comment|default_if_none:"" }}</td>
       </tr>
       {% endfor %}

@@ -735,6 +735,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         except:
             return None
 
+    def get_next_rdv(self):
+        from views_utils import get_next_rdv
+        return get_next_rdv(self)
+
     # START Specific to sessad healthcare
     def get_last_notification(self):
         return SessadHealthCareNotification.objects.filter(patient=self, ).\
