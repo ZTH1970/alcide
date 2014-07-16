@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 from django import forms
+from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
 
 from ..dossiers.models import PatientRecord
 from ..personnes.models import Worker
@@ -48,8 +50,13 @@ class NewAppointmentForm(BaseForm):
         super(NewAppointmentForm, self).__init__(instance=instance, **kwargs)
         self.fields['date'].css = 'datepicker'
         self.fields['participants'].required = True
+        self.fields['time'].required = False
+        self.fields['duration'].required = False
         if service:
             self.service = service
+            self.special_types = [str(act.id) for act in ActType.objects.filter(Q(name__iexact='courriel')
+                                                                                | Q(name__iexact='telephone')
+                                                                                | Q(name__iexact='téléphone'))]
             self.fields['participants'].queryset = \
                     Worker.objects.for_service(service)
             self.fields['patient'].queryset = \
@@ -58,12 +65,29 @@ class NewAppointmentForm(BaseForm):
                     ActType.objects.for_service(service) \
                     .order_by('name')
 
+    def clean_time(self):
+        act_type = self.data.get('act_type')
+        # act type is available as raw data from the post request
+        if act_type in self.special_types:
+            return time(8, 0)
+        if self.cleaned_data['time']:
+            return self.cleaned_data['time']
+        raise forms.ValidationError(_(u'This field is required.'))
+
     def clean_duration(self):
-        duration = self.cleaned_data['duration']
-        try:
-            return int(duration)
-        except ValueError:
-            raise forms.ValidationError('Veuillez saisir un entier')
+        act_type = self.data.get('act_type')
+        if act_type in self.special_types:
+            return 10
+        if self.cleaned_data['duration']:
+            duration = self.cleaned_data['duration']
+            try:
+                duration = int(duration)
+                if duration <= 0:
+                    raise ValueError
+                return duration
+            except ValueError:
+                raise forms.ValidationError(u'Le champ doit contenir uniquement des chiffres')
+        raise forms.ValidationError(_(u'This field is required.'))
 
     def clean_patient(self):
         patients = self.cleaned_data['patient']

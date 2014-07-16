@@ -6,6 +6,7 @@ from datetime import time as datetime_time
 from interval import Interval, IntervalSet
 
 from calebasse.actes.validation_states import VALIDATION_STATES
+from .models import EventWithAct
 
 class Appointment(object):
 
@@ -36,6 +37,7 @@ class Appointment(object):
         self.validation = None
         self.holiday = False
         self.services_names = []
+        self.event = False
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -47,6 +49,7 @@ class Appointment(object):
 
     def init_from_event(self, event, service, validation_states=None):
         delta = event.end_datetime - event.start_datetime
+        self.event = isinstance(event, EventWithAct)
         self.event_id = event.id
         self.length = delta.seconds / 60
         self.title = event.title
