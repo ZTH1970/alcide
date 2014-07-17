@@ -37,10 +37,11 @@ setup(name='calebasse',
             'django-tastypie == 0.9.14',
             'django-select2 < 4.3',
             'interval == 1.0.0',
-            'python-entrouvert >= 1.3'
+            'python-entrouvert >= 1.3',
             'django-localflavor',
             'xhtml2pdf',
             'M2Crypto',
+            'django_journal',
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',

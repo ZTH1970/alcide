@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'calebasse.personnes',
     'calebasse.ressources',
     'calebasse.statistics',
+    'calebasse.common',
     'calebasse.middleware.request',
     'south',
     'django_journal',

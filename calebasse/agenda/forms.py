@@ -122,9 +122,6 @@ class NewAppointmentForm(BaseForm):
             if commit:
                 appointment.patient = patient
                 appointment.save()
-                get_request().record('new-eventwithact',
-                                    '{obj_id} created by {user} from {ip}',
-                                     obj_id=appointment.id)
                 self.save_m2m()
                 appointment.services = [self.service]
 
@@ -145,9 +142,6 @@ class UpdateAppointmentForm(NewAppointmentForm):
         appointment.clean()
         if commit:
             appointment.save()
-            get_request().record('update-eventwithact',
-                                 '{obj_id} saved by {user} from {ip}',
-                                 obj_id=appointment.id)
             self.save_m2m()
             appointment.services = [self.service]
         return appointment
@@ -233,8 +227,6 @@ class NewEventForm(BaseForm):
         event.clean()
         if commit:
             event.save()
-            get_request().record('new-event', '{obj_id} created by {user} from {ip}',
-                                 obj_id=event.id)
             event.services = [self.service]
         return event
 

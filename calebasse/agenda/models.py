@@ -360,8 +360,6 @@ class Event(models.Model):
         assert self.start_datetime is not None
         self.sanitize() # init periodicity fields
         super(Event, self).save(*args, **kwargs)
-        get_request().record('event-save', '{obj_id} saved by {user} from {ip}',
-                             obj_id=self.id)
         self.acts_cleaning()
 
     def delete(self, *args, **kwargs):
@@ -538,10 +536,6 @@ class EventWithAct(Event):
     def update_act(self, act):
         '''Update an act to match details of the meeting'''
         self.init_act(act)
-        changes = {'delta': self.timedelta(), 'act_type': self.act_type,
-                   'patient': self.patient, 'date': self.start_datetime.date(),
-                   'time': self.start_datetime.time(), 'parent': self}
-        get_request().record('act-update', '{obj_id} updated by {user} from {ip} with: {changes}', changes=changes)
         act.save()
 
     def init_act(self, act):
@@ -558,7 +552,6 @@ class EventWithAct(Event):
         '''Force event_type to be patient meeting.'''
         self.event_type = EventType(id=1)
         super(EventWithAct, self).save(*args, **kwargs)
-        get_request().record('eventwithact-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def is_event_absence(self):
         return self.act.is_absent()

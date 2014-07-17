@@ -239,7 +239,6 @@ class FileState(models.Model):
                 datetime(self.date_selected.year,
                         self.date_selected.month, self.date_selected.day)
         super(FileState, self).save(**kwargs)
-        get_request().record('filestate-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def __unicode__(self):
         return self.status.name + ' ' + str(self.date_selected)
@@ -254,8 +253,6 @@ class FileState(models.Model):
             self.patient.save()
         obj_id = self.id
         super(FileState, self).delete(*args, **kwargs)
-        get_request().record('filestate-delete', '{obj_id} deleted by {user} from {ip}',
-                             obj_id=obj_id)
 
 class PatientAddress(models.Model):
 
@@ -297,7 +294,6 @@ class PatientAddress(models.Model):
         if self.city:
             self.display_name += self.city + ' '
         super(PatientAddress, self).save(**kwargs)
-        get_request().record('patientaddress-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
 class PatientContact(People):
     class Meta:
@@ -576,7 +572,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         if not getattr(self, 'service', None):
             raise Exception('The field service is mandatory.')
         super(PatientRecord, self).save(*args, **kwargs)
-        get_request().record('patientrecord-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def get_state(self):
         return self.last_state
@@ -636,7 +631,6 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
         if self.can_be_deleted():
             obj_id = self.id
             super(PatientRecord, self).delete(*args, **kwargs)
-            get_request().record('patientrecord-delete', '{obj_id} by {user} from {ip}', obj_id=obj_id)
 
     def get_ondisk_directory(self, service):
         if not settings.PATIENT_FILES_BASE_DIRECTORY:
@@ -1025,6 +1019,4 @@ def create_patient(first_name, last_name, service, creator,
     patient.save()
     patient.policyholder = patient.patientcontact
     patient.save()
-    get_request().record('new-patient', '{first_name} {last_name} ({id}) created by {user} from {ip}',
-                         first_name=patient.first_name, last_name=patient.last_name, id=patient.id)
     return patient

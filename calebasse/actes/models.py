@@ -47,7 +47,6 @@ class ActManager(models.Manager):
                 act=act,state_name='NON_VALIDE',
                 author=author, previous_state=None)
         act.last_validation_state = last_validation_state
-        get_request().record('new-act','{obj_id} created by {user} from {ip}', obj_id=act.id)
         act.save()
         return act
 
@@ -225,7 +224,6 @@ class Act(models.Model):
     def save(self, *args, **kwargs):
         if self.parent_event and not self.parent_event.canceled:
             super(Act, self).save(*args, **kwargs)
-            get_request().record('act-save', '{obj_id} saved by {user} from {ip}', obj_id=self.id)
 
     def duration(self):
         '''Return a displayable duration for this field.'''
@@ -268,7 +266,6 @@ class Act(models.Model):
     def delete(self):
         obj_id = self.id
         super(Act, self).delete()
-        get_request().record('act-delete', '{obj_id} deleted by {user} from {ip}', obj_id=obj_id)
 
     class Meta:
         verbose_name = u"Acte"
