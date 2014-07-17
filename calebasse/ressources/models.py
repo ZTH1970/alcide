@@ -269,6 +269,7 @@ class School(NamedAbstractModel):
     old_service = models.CharField(max_length=256,
             verbose_name=u'Ancien Service', blank=True, null=True)
     private = models.BooleanField(verbose_name=u"Privé", default=False)
+    services = models.ManyToManyField('ressources.Service', blank=True, null=True)
 
 
 class SchoolTeacherRole(NamedAbstractModel):

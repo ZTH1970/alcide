@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 
 from calebasse.cbv import (ListView, CreateView, UpdateView, DeleteView,
         ReturnToObjectMixin)
-from calebasse.ressources.models import Service
+from calebasse.ressources.models import Service, School
 
 
 _models = None
@@ -93,3 +93,26 @@ def delete_view(request, service, model_name, pk):
             template_name='ressources/delete.html',
             template_name_suffix='_delete')
     return view(request, pk=pk, service=service)
+
+class NewSchoolView(CreateView):
+    model = School
+    template_name =  'ressources/new.html'
+
+    def get_initial(self, **args):
+        initial = super(NewSchoolView, self).get_initial()
+        initial['services'] = Service.objects.all()
+        return initial
+
+new_school_view = NewSchoolView.as_view()
+
+class UpdateSchoolView(UpdateView):
+    model = School
+    template_name =  'ressources/new.html'
+
+    def get_initial(self, **args):
+        initial = super(UpdateSchoolView, self).get_initial()
+        initial['services'] = Service.objects.all()
+        return initial
+
+update_school_view = UpdateSchoolView.as_view()
+

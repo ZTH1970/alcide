@@ -4,6 +4,7 @@ import re
 
 from django.db.models import Q
 
+from calebasse.cbv import HOME_SERVICE_COOKIE
 from calebasse.lookups import CalebasseLookup
 from calebasse.personnes.models import Worker
 from calebasse.ressources.models import Service, School
@@ -67,10 +68,14 @@ class SchoolLookup(CalebasseLookup):
     query_words = []
 
     def get_query(self, q, request):
+        service = ''
+        if request.COOKIES.has_key(HOME_SERVICE_COOKIE):
+            service = request.COOKIES[HOME_SERVICE_COOKIE]
         words = q.split()
         self.query_words = words
         lookups = [Q(display_name__icontains=word) for word in words]
-        return School.objects.filter(*lookups)
+        return School.objects.filter(*lookups).\
+                filter(services__slug=service)
 
     def get_result(self, obj):
         return self.format_item_display(obj)
