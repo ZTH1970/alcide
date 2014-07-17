@@ -75,7 +75,8 @@ class SchoolLookup(CalebasseLookup):
         self.query_words = words
         lookups = [Q(display_name__icontains=word) for word in words]
         return School.objects.filter(*lookups).\
-                filter(services__slug=service)
+                filter(services__slug=service).\
+                filter(school_type__services__slug=service)
 
     def get_result(self, obj):
         return self.format_item_display(obj)
