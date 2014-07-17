@@ -34,6 +34,17 @@
             {% for appointment in worker_agenda.appointments %}
             <tr data-event-id="{{ appointment.event_id }}">
                 <td class="col-time">{{ appointment.begin_hour }}</td>
+                {% if not CURRENT_SERVICE_EVENTS_ONLY and not appointment.holiday and appointment.type != 'info' and appointment.other_services_names  %}
+                <td colspan=8 class="col-record-id">
+                  {% if appointment.event %}Evenement{% else %}Rendez-vous{% endif %}
+                  {% with services=appointment.other_services_names|length %}
+                  dans le{{ services|pluralize }} service{{ services|pluralize }}
+                  {% endwith %}
+                  {% for service in appointment.other_services_names %}
+                  {{ service|upper }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+                {% else %}
                 <td class="col-duration">{% if appointment.length %}{{ appointment.length }}min{% endif %}</td>
                 <td class="col-record-id">
                     {% if appointment.patient_record_id %}
@@ -58,6 +69,7 @@
                     {% endfor %}
                     {% endif %}
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

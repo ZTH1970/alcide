@@ -489,6 +489,9 @@ class AgendasTherapeutesView(AgendaHomepageView):
                         'patient__service',
                         'act_set__actvalidationstate_set',
                         'exceptions', 'participants')
+
+        context['CURRENT_SERVICE_EVENTS_ONLY'] = settings.CURRENT_SERVICE_EVENTS_ONLY
+
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]
         for e in events:

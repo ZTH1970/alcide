@@ -292,6 +292,9 @@ RTF_REPOSITORY_DIRECTORY = None
 # Invoicing file saving directory
 INVOICING_DIRECTORY = None
 
+# display events only for current service
+CURRENT_SERVICE_EVENTS_ONLY = True
+
 #CSV_ENCODING = 'cp1252' #For windows : windows-1252/Winlatin1
 #CSVPROFILE = {\
 #    'delimiter' : ';',
