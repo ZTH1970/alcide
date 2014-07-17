@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from calebasse.cbv import HOME_SERVICE_COOKIE
 from calebasse.lookups import CalebasseLookup
 from calebasse.dossiers.models import PatientRecord, PatientAddress
 from itertools import chain
@@ -15,9 +16,9 @@ class PatientRecordLookup(CalebasseLookup):
 
         qs = self.model.objects.filter(**kwargs).order_by(self.search_field)
 
-        if request.COOKIES.has_key('home-service'):
-            service = request.COOKIES['home-service'].upper().replace('-', ' ')
-            qs = qs.filter(service__name=service)
+        if request.COOKIES.has_key(HOME_SERVICE_COOKIE):
+            service = request.COOKIES[HOME_SERVICE_COOKIE]
+            qs = qs.filter(service__slug=service)
         #nb = qs.count()
         #nb_distinct = qs.distinct('display_name').count()
         #if nb != nb_distinct:
