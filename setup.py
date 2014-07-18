@@ -3,23 +3,8 @@ from setuptools import setup, find_packages
 import os
 
 def get_version():
-    import glob
-    import re
-
-    version = None
-    for d in glob.glob('*'):
-        if not os.path.isdir(d):
-            continue
-        module_file = os.path.join(d, '__init__.py')
-        if not os.path.exists(module_file):
-            continue
-        for v in re.findall("""__version__ *= *['"](.*)['"]""",
-                open(module_file).read()):
-            assert version is None
-            version = v
-        if version:
-            break
-    assert version is not None
+    from calebasse import __version__
+    version = __version__
     if os.path.exists('.git'):
         import subprocess
         p = subprocess.Popen(['git','describe','--dirty'],
@@ -54,10 +39,8 @@ setup(name='calebasse',
             'interval == 1.0.0',
             'python-entrouvert >= 1.3'
             'django-localflavor',
-            'PyGTK',
             'xhtml2pdf',
             'M2Crypto',
-            'pycairo',
         ],
         dependency_links = [
             'http://django-swingtime.googlecode.com/files/django-swingtime-0.2.1.tar.gz#egg=django-swingtime-0.2.1',
