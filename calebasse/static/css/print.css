@@ -43,7 +43,7 @@ div.worker-agenda table{
   font-size: 70%;
 }
 
-table#activity{
+table#activity, div#activity {
   font-size: 80%;
 }
 
@@ -81,4 +81,12 @@ div#sidebar {
 div.page-header {
   position: fixed;
   top: 0;
+}
+
+div#activity {
+    float: left;
+}
+
+div#activity .header {
+    display: block;
 }

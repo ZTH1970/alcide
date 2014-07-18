@@ -138,6 +138,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
     """
     """
     appointments = []
+    activity = {'absences': []}
 
     timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
     holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
@@ -158,6 +159,13 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
     validation_states.pop('VALIDE')
     validation_states.pop('ACT_LOST')
     validation_states = vs + sorted(validation_states.items(), key=lambda tup: tup[0])
+
+    events.sort(key=lambda event: event.start_datetime)
+
+    # get first and last events start times
+    if events:
+        activity['first_appointment'], activity['last_appointment'] = (e.start_datetime.time() for e in (events[0], events[-1]))
+
     for event in events:
         appointment = Appointment()
         appointment.init_from_event(event, service, validation_states)
@@ -173,10 +181,12 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
             label = u"Absence de groupe : %s" % holiday.holiday_type.name
         else:
             label = u"Absence indiv. : %s" % holiday.holiday_type.name
+
         appointment.init_holiday_time(label,
                     delta_minutes,
                     time(interval.lower_bound.hour, interval.lower_bound.minute),
                     description=holiday.comment)
+        activity['absences'].append(label)
         services = holiday.services.all()
         if service not in services:
             appointment.type = 'busy-elsewhere'
@@ -195,14 +205,16 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         end_time = interval_set.upper_bound()
         appointment = Appointment()
         appointment.init_start_stop(u"Arrivée", start_time)
+        activity['arrival'] = start_time
         appointment.weight = -1
         appointments.append(appointment)
         appointment = Appointment()
         appointment.init_start_stop(u"Départ", end_time)
+        activity['departure'] = end_time
         appointment.weight = 1
         appointments.append(appointment)
 
-    return sorted(appointments, key=lambda app: (app.begin_time, app.weight, app.event_id))
+    return activity, sorted(appointments, key=lambda app: (app.begin_time, app.weight, app.event_id))
 
 def get_daily_usage(date, ressource, service, occurrences):
     """

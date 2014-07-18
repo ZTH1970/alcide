@@ -5,14 +5,43 @@
 {% block appbar %}
 <h2>Tous les agendas des intervenants du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
 <a href="..">Retourner à l'agenda</a>
-<button id='print-button-therapeutes'>Imprimer</button>
 {% endblock %}
 
 
 {% block agenda-content %}
-<button id="uncheck-all" type="button">Tout décocher</button>
-<button id="check-all" type="button" style="display: none">Tout cocher</button>
-
+<div id="activity" class="screen-only">
+  <span class="actions screen-only"><button id='print-button-therapeutes-activity' class="icon-print screen-only">Imprimer</button></span>
+  <br class="clear" />
+  <span class="header"><strong>{{ service_name }}:</strong> {{ date|date:"DATE_FORMAT"|title }}</span>
+  <h3>Activité du personnel</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Nom</th><th>Arrivée</th><th>Premier rendez-vous</th>
+      <th>Dernier rendez-vous</th><th>Départ</th><th>Absences</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for worker_agenda in workers_agenda %}
+<tr>
+  <td>{{ worker_agenda.worker.first_name}} <span class="lastname">{{ worker_agenda.worker.last_name }}</span></td>
+  <td>{{ worker_agenda.activity.arrival }}</td><td>{{ worker_agenda.activity.first_appointment }}</td>
+  <td>{{ worker_agenda.activity.last_appointment }}</td><td>{{ worker_agenda.activity.departure }}</td>
+  <td>{% for absence in worker_agenda.activity.absences %}
+    {{ absence }}<br />
+    {% endfor %}
+  </td>
+</tr>
+{% endfor %}
+  </tbody>
+</table>
+</div>
+<br class="clear" />
+<span class="actions screen-only">
+  <button id="uncheck-all" type="button" class="icon-uncheck screen-only">Tout décocher</button>
+  <button id="check-all" type="button" style="display: none" class="icon-check screen-only">Tout cocher</button>
+  <button id='print-button-therapeutes' class="icon-print screen-only">Imprimer</button>
+</span>
 {% for worker_agenda in workers_agenda %}
 {% if worker_agenda.appointments %}
 <div class="worker-agenda">
@@ -88,12 +117,22 @@
             update_page_break();
 
             $('button#print-button-therapeutes').click(function() {
+              $('div#activity').addClass('screen-only');
               $.each($(".printable"), function(k, v) {
                 if ($(v).is(':checked')) {
                     $(v).parents('.worker-agenda').removeClass('screen-only');
                 } else {
                     $(v).parents('.worker-agenda').addClass('screen-only');
                 }
+                });
+              update_page_break();
+              window.print();
+              });
+
+            $('button#print-button-therapeutes-activity').click(function() {
+                $('div#activity').removeClass('screen-only');
+                $.each($('.content div:not(#activity)'), function(k, v) {
+                  $(v).addClass('screen-only');
                 });
               update_page_break();
               window.print();

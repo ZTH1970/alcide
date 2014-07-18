@@ -1,3 +1,7 @@
+br.clear {
+    clear: both;
+}
+
 td#dispos {
 	vertical-align: top;
 }
@@ -25,6 +29,21 @@ td#dispos h5 {
 
 #users li:hover .icon-toggle {
     display: block;
+}
+
+.icon-print:before {
+    content: "\f02f";
+    margin-right: 5px;
+}
+
+.icon-check:before {
+    content: "\f046";
+    margin-right: 5px;
+}
+
+.icon-uncheck:before {
+    content: "\f096";
+    margin-right: 5px;
 }
 
 #users .icon-toggle {
@@ -222,7 +241,7 @@ ul.addresses {
 
 button.screen-only {
     margin: 1em 0;
-    float: right;
+    /* float: right; */
 }
 
 h3 .icon-comment {
@@ -231,4 +250,35 @@ h3 .icon-comment {
 
 .worker-agenda {
     margin-top: 2em;
+}
+
+#activity {
+    float: right;
+    font-size: .8em;
+    margin-bottom: 2em;
+}
+
+#activity h3 {
+    background: #eee;
+    border: 1px solid #aaa;
+    padding: 2px 5px;
+    margin:0;
+    border-bottom: 0;
+}
+
+#activity table {
+    border-collapse: collapse;
+}
+
+#activity .header {
+    display: none;
+}
+
+#activity table td, #activity table th {
+    border: 1px solid #bbb;
+    padding: 2px 5px;
+}
+
+#activity #print-button-therapeutes-activity {
+    float: right;
 }

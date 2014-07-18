@@ -509,12 +509,14 @@ class AgendasTherapeutesView(AgendaHomepageView):
             events_workers[worker.id] = events_worker
             time_tables_workers[worker.id] = time_tables_worker
             holidays_workers[worker.id] = holidays_worker
-            daily_appointments = get_daily_appointments(context['date'], worker, self.service,
+            activity, daily_appointments = get_daily_appointments(context['date'], worker, self.service,
                         time_tables_worker, events_worker, holidays_worker)
             if all(map(lambda x: x.holiday, daily_appointments)):
                 continue
+
             context['workers_agenda'].append({'worker': worker,
                     'appointments': daily_appointments,
+                    'activity': activity,
                     'has_events': True if events_worker else False})
 
         for worker_agenda in context.get('workers_agenda', []):
@@ -584,10 +586,12 @@ class AjaxWorkerTabView(TemplateView):
                         'exceptions', 'participants')
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]
+        activity, appointments = get_daily_appointments(context['date'], worker,
+                                                        self.service, time_tables_worker,
+                                                        events, holidays_worker)
 
         context['worker_agenda'] = {'worker': worker,
-                    'appointments': get_daily_appointments(context['date'], worker, self.service,
-                        time_tables_worker, events, holidays_worker)}
+                                    'appointments': appointments}
 
         if settings.RTF_TEMPLATES_DIRECTORY:
             context['mail'] = True
