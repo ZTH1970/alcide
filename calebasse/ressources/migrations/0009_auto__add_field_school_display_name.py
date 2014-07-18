@@ -12,9 +12,10 @@ class Migration(SchemaMigration):
         db.add_column(u'ressources_school', 'display_name',
                       self.gf('django.db.models.fields.CharField')(default='', max_length=256, null=True, blank=True),
                       keep_default=False)
-        from calebasse.ressources.models import School
-        for school in School.objects.all():
-            school.save()
+        if not db.dry_run:
+            from calebasse.ressources.models import School
+            for school in School.objects.all():
+                school.save()
 
 
     def backwards(self, orm):
