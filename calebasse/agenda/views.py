@@ -558,10 +558,11 @@ class AjaxWorkerTabView(TemplateView):
         worker = Worker.objects.get(id=worker_id)
 
         time_tables_worker = TimeTable.objects.select_related('worker'). \
-                filter(services=self.service, worker=worker) \
+                filter(worker=worker) \
                 .for_today(self.date) \
                 .order_by('start_date') \
                 .select_related()
+
         holidays_worker = Holiday.objects.for_worker(worker) \
                 .for_period(self.date, self.date) \
                 .order_by('start_date') \
