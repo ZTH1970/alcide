@@ -40,7 +40,7 @@
             <li class="start_time">Heure de début</li>
             <li class="end_time">Heure de fin</li>
             <li class="type">Type</li>
-            <li class="all">Tous les services</li>
+            <li class="all">Services</li>
             <li class="comment">Commentaire</li>
             <li class="actions">Actions</li>
           </ul>
@@ -53,7 +53,13 @@
             <li class="start_time">{% if object.start_time %}{{ object.start_time }}{% else %}---{% endif %}</li>
             <li class="end_time">{% if object.end_time %}{{ object.end_time }}{% else %} --- {% endif %}</li>
             <li class="type">{{ object.holiday_type }}</li>
-            <li class="all">{% if object.for_all_services %}<span class="icon-ok"></span>{% endif %}</li>
+            <li class="all">
+              {% if object.for_all_services %}Tous{% else %}
+              {% for service in object.services.all %}
+              <p>{{ service }}</p>
+              {% endfor %}
+              {% endif %}
+            </li>
             <li class="comment">{{ object.comment }}</li>
             <li class="actions">
               <button class="icon-edit" data-action='edit' data-id='{{ object.id }}'></button>
