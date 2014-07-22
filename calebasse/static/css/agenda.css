@@ -287,3 +287,7 @@ h3 .icon-comment {
 #activity #print-button-therapeutes-activity {
     float: right;
 }
+
+div .changed {
+    box-shadow: 2px 2px .5em 5px #db9595;
+}
