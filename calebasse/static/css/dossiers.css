@@ -123,3 +123,7 @@ div#tabs-4 div div.buttons {
 #ajax-dlg input, ul.ui-autocomplete, .results_on_deck {
     font-size: 90%;
 }
+
+input[type=checkbox] + button {
+    display: none;
+}

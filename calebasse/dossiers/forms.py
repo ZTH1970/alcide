@@ -174,7 +174,8 @@ class FamilyForm(ModelForm):
 class TransportFrom(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('transporttype', 'transportcompany')
+        fields = ('transporttype', 'transportcompany',
+                  'simple_appointment_transport', 'periodic_appointment_transport')
 
 class PaperIDForm(ModelForm):
     class Meta:

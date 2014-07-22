@@ -551,6 +551,10 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
     transportcompany = models.ForeignKey('ressources.TransportCompany',
             verbose_name=u"Compagnie de transport",
             null=True, blank=True, default=None)
+    simple_appointment_transport = models.BooleanField(u'Afficher par défaut le transport sur les rendez-vous simples',
+                                                       default=False)
+    periodic_appointment_transport = models.BooleanField(u'Afficher par défaut le transport sur les rendez-vous réguliers',
+                                                         default=False)
 
     # FollowUp
     coordinators = models.ManyToManyField('personnes.Worker',

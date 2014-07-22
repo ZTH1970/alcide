@@ -46,6 +46,11 @@ td#dispos h5 {
     margin-right: 5px;
 }
 
+.icon-car:before {
+    content: "\f1b9";
+    margin-right: 5px;
+}
+
 #users .icon-toggle {
     float: right;
     display: none;
