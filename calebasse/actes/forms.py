@@ -10,7 +10,7 @@ class ActSearchForm(forms.Form):
     STATES = (
             ('pointe', u'Pointés'),
             ('non-pointe', u'Non pointés'),
-            ('valide', u'Validés'),
+            ('valide', u'Présents'),
             ('absent-or-canceled', u'Absents ou annulés'),
             ('is-billable', u'Facturables'),
             ('non-invoicable', u'Non facturables'),
@@ -36,8 +36,8 @@ class ActUpdate(forms.ModelForm):
     doctors = make_ajax_field(Act, 'doctors', 'intervenant', True)
     class Meta:
         model = Act
-        fields = ('act_type', 'doctors', 'is_lost', 'pause', 'switch_billable', 'comment',
-                'valide')
+        fields = ('act_type', 'doctors', 'is_lost', 'pause',
+            'switch_billable', 'comment', )
         widgets = {
                 'comment': forms.Textarea(attrs={'cols': 52, 'rows': 4}),
                 }
