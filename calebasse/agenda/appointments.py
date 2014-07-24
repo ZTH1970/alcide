@@ -84,8 +84,6 @@ class Appointment(object):
             self.patient_record_id = event.patient.id
             self.patient_record_paper_id = event.patient.paper_id
             self.act_type = event.act_type.name
-            if self.act_id:
-                self.description = event.act.comment
             self.is_billed = event.act.is_billed
             state = event.get_state()
             state_name = state.state_name if state else 'NON_VALIDE'
