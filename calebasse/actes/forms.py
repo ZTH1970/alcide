@@ -37,10 +37,7 @@ class ActUpdate(forms.ModelForm):
     class Meta:
         model = Act
         fields = ('act_type', 'doctors', 'is_lost', 'pause',
-            'switch_billable', 'comment', )
-        widgets = {
-                'comment': forms.Textarea(attrs={'cols': 52, 'rows': 4}),
-                }
+            'switch_billable', )
 
     def __init__(self, instance, service=None, **kwargs):
         super(ActUpdate, self).__init__(instance=instance, **kwargs)
