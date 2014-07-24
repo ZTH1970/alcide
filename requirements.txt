@@ -20,3 +20,4 @@ M2Crypto
 --allow-external pycairo
 django_select2 < 4.3
 #PyGTK doesn't work with pip
+django-journal
