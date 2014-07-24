@@ -136,7 +136,7 @@
             <span></span>
             {% if service in appointment.services_names or not appointment.services_names %}
             <textarea>{{ appointment.description }}</textarea>
-            <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}" {% if appointment.act_id %}data-act-id="{{ appointment.act_id }}{% endif %}">✔</button>
+            <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
             {% else %}
             <p>{{ appointment.description }}</p>
             {% endif %}

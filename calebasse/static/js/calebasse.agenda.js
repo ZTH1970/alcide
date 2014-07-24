@@ -65,28 +65,6 @@ function enable_events(base) {
           var btn = $(this);
           var comment = {description: textarea.val()};
           var data = JSON.stringify(comment);
-          if ($(this).data('act-id'))
-          {
-
-            $.ajax({
-              url: '/api/v1/act/' + $(this).data("act-id") + '/?format=json&date=' + $(this).data('date'),
-              type: 'PATCH',
-              contentType: 'application/json',
-              data: data,
-              success: function(data) {
-                btn.attr('disabled', 'disabled');
-                if (comment['description']) {
-                    $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeIn();
-                }
-                else {
-                    $('h3#' + btn.data("event-id") + ' span.icon-comment').fadeOut();
-                }
-                span.html('Commentaire modifié avec succès');
-              }
-            });
-          }
-          else
-          {
             $.ajax({
               url: '/api/v1/event/' + $(this).data("event-id") + '/?format=json&date=' + $(this).data('date'),
               type: 'PATCH',
@@ -101,7 +79,6 @@ function enable_events(base) {
                 span.html('Commentaire modifié avec succès');
               }
             });
-          }
       });
       /* TODO: put this in a generic function */
       $('.input_is_billable').click(function() {
