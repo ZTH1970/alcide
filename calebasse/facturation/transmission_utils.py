@@ -15,17 +15,12 @@ MODE_TEST = False
 MODE_COMPRESS = True
 MODE_ENCRYPT = True
 
-LDAP_HOST = 'ldap://annuaire.gip-cps.fr'
+LDAP_HOST = 'ldap://annuaire.sesam-vitale.fr'
 
-if MODE_TEST:
-    LDAP_BASEDN = 'o=gip-cps-test,c=fr'
-    CAPATH = '/var/lib/calebasse/test-gip-cps.capath/'
-else:
-    # production
-    LDAP_BASEDN = 'o=gip-cps,c=fr'
-    CAPATH = '/var/lib/calebasse/gip-cps.capath/'
+LDAP_BASEDN_O = 'o=sesam-vitale,c=fr'
+LDAP_BASEDN = 'ou=AC-FACTURATION,ou=AC-SESAM-VITALE-2034,' + LDAP_BASEDN_O
+CAPATH = '/var/lib/calebasse/sesam-vitale.capath/'
 
-LDAP_BASEDN_RSS = 'ou=339172288100045,l=Sarthe (72),' + LDAP_BASEDN
 LDAP_X509_ATTR = 'userCertificate;binary'
 LDAP_CA_ATTRS = {
         'cert': ('cACertificate;binary', 'CERTIFICATE'),
@@ -35,20 +30,22 @@ LDAP_CA_ATTRS = {
 
 RANDFILE = '/var/tmp/randpool.dat'
 
+MAILPATH = '/var/lib/calebasse/mail.out/'
+MESSAGE_ID_RIGHT = 'teletransmission.aps42.org'
+
 if MODE_TEST:
+    LDAP_BASEDN = 'ou=AC-FACTURATION-TEST,ou=AC-SESAM-VITALE-TEST-2034,' + LDAP_BASEDN_O
+    CAPATH = '/var/lib/calebasse/sesam-vitale-test.capath/'
     MAILPATH = '/var/lib/calebasse/test-mail.out/'
     MESSAGE_ID_RIGHT = 'teletransmission-test.aps42.org'
-else:
-    # production
-    MAILPATH = '/var/lib/calebasse/mail.out/'
-    MESSAGE_ID_RIGHT = 'teletransmission.aps42.org'
+
 SENDER = 'teletransmission@aps42.org'
 VVVVVV = '100500'  # ETS-DT-001-TransportsFlux_SpecsTechCommune_v1.1.pdf
 NUMERO_EMETTEUR = '00000420788606'
 EXERCICE = NUMERO_EMETTEUR
 
 #
-# get a certificate from gip-cps LDAP
+# get a certificate from LDAP
 #
 
 def get_certificate(large_regime, dest_organism):
@@ -62,7 +59,7 @@ def get_certificate(large_regime, dest_organism):
     """
     l = ldap.initialize(LDAP_HOST)
     cn = large_regime + dest_organism + '@' + dest_organism + '.' + large_regime + '.rss.fr'
-    results = l.search_s(LDAP_BASEDN_RSS, ldap.SCOPE_SUBTREE, '(cn=' + cn + ')')
+    results = l.search_s(LDAP_BASEDN, ldap.SCOPE_SUBTREE, '(cn=' + cn + ')')
     if len(results) > 1:
         raise LookupError("non unique result for cn=%s" % cn)
     if len(results) < 1:
@@ -180,11 +177,11 @@ def der2pem(der, type_='CERTIFICATE'):
 
 def build_capath(path=CAPATH):
     """
-    get all pkiCA from the gip-cps.fr ldap, store them in path
-    note: the gip-cps.fr ldap is limited to 10 objects in a response... by chance, there is less than 10 pkiCA ;)
+    get all pkiCA from the ldap, store them in path
+    note: the sesam-vitale ldap is limited to 10 objects in a response...  by chance, there is less than 10 pkiCA ;)
     """
     l = ldap.initialize(LDAP_HOST)
-    results = l.search_s(LDAP_BASEDN,ldap.SCOPE_SUBTREE,'(objectclass=pkiCA)')
+    results = l.search_s(LDAP_BASEDN, ldap.SCOPE_SUBTREE, '(objectclass=pkiCA)')
     for ca in results:
         dn = ca[0]
         for attr in LDAP_CA_ATTRS:
