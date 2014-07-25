@@ -843,12 +843,27 @@ class PatientRecordsQuotationsView(cbv.ListView):
             deficiencies = [getattr(patient_record, field) \
                             for field in self.deficience_fields]
             anap = reduce(lambda f1, f2: f1 or f2, deficiencies)
+            mises = reduce(lambda m1, m2: m1+m2, [list(getattr(patient_record, field).all()) for field in self.mises_fields])
+            next_rdv = get_next_rdv(patient_record)
+            last_rdv = get_last_rdv(patient_record)
+
+            if next_rdv:
+                next_rdv_datetime = next_rdv.start_datetime
+            else:
+                next_rdv_datetime = None
+            if last_rdv:
+                last_rdv_datetime = last_rdv['start_datetime']
+            else:
+                last_rdv_datetime = None
             patient_records.append(
                     {
                         'object': patient_record,
                         'state': state,
                         'state_class': state_class,
-                        'anap': anap
+                        'anap': anap,
+                        'mises': mises,
+                        'next_rdv_date': next_rdv_datetime,
+                        'last_rdv_date': last_rdv_datetime
                         }
                     )
         return patient_records
@@ -856,12 +871,16 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def get_queryset(self):
         form = forms.QuotationsForm(data=self.request.GET or None)
         qs = super(PatientRecordsQuotationsView, self).get_queryset()
-        self.deficience_fields = [field for field in self.model._meta.get_all_field_names() if field.startswith('deficiency_')]
+        all_field_names = self.model._meta.get_all_field_names()
+        self.deficience_fields = [field for field in all_field_names if field.startswith('deficiency_')]
+        self.mises_fields = [field for field in all_field_names if field.startswith('mises_')]
 
         without_quotations = self.request.GET.get('without_quotations')
         without_anap_quotations = self.request.GET.get('without_anap_quotations')
         if without_quotations:
-            qs = qs.filter(mises_1__isnull=True).filter(mises_2__isnull=True).filter(mises_3__isnull=True)
+            for field in self.mises_fields:
+                mise_field = {'%s__isnull' % field: True}
+                qs = qs.filter(**mise_field)
 
         if without_anap_quotations:
             for field in self.deficience_fields:

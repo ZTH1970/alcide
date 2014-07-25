@@ -52,10 +52,11 @@
         <th colspan="2">N° dossier
         </th><th rowspan="2">Nom</th>
         <th rowspan="2">Prénom</th>
+        <th rowspan="2">Date de naissance</th>
         <th rowspan="2">État du dossier</th>
-        <th rowspan="2">Mises 1</th>
-        <th rowspan="2">Mises 2</th>
-        <th rowspan="2">Mises 3</th>
+        <th rowspan="2">Date du prochain rendez-vou</th>
+        <th rowspan="2">Date du dernier rendez-vous</th>
+        <th rowspan="2">Mises</th>
         <th rowspan="2">ANAP</th>
       </tr>
       <tr>
@@ -71,10 +72,16 @@
         <td>{{ patient_record.object.id }}</td>
         <td><span class="lastname">{{ patient_record.object.last_name }}</span></td>
         <td>{{ patient_record.object.first_name }}</td>
+        <td>{{ patient_record.object.birthdate|date:"SHORT_DATE_FORMAT" }}</td>
         <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>
-        <td>{% for mise in patient_record.object.mises_1.all %}{{ mise }}<br/>{% endfor %}</td>
-        <td>{% for mise in patient_record.object.mises_2.all %}{{ mise }}<br/>{% endfor %}</td>
-        <td>{% for mise in patient_record.object.mises_3.all %}{{ mise }}<br/>{% endfor %}</td>
+        <td>{% if patient_record.next_rdv_date %}
+          {{ patient_record.next_rdv_date|date:"DATETIME_FORMAT" }}
+          {% endif %}
+        </td>
+        <td>{% if patient_record.last_rdv_date %}
+          {{ patient_record.last_rdv_date|date:"DATETIME_FORMAT" }}
+          {% endif %}</td>
+        <td>{% if patient_record.mises %}<span class="icon-ok"></span>{% endif %}</td>
         <td>{% if patient_record.anap %}<span class="icon-ok"></span>{% endif %}</td>
       </tr>
       {% endfor %}
