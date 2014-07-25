@@ -1,31 +1,31 @@
+{% load dossiers %}
 <div id="tabs-2">
-  <form method="post" action="tab2" id="id-form" class="patientrecordform">{% csrf_token %}
+  <form method="post" action="tab2" id="administrative-form" class="patientrecordform">{% csrf_token %}
+    <p><button class="save enable-on-change">Enregistrer</button></p>
     <div class="frame inline">
       <h3>État civil</h3>
-      <button class="save">✔</button>
       <table class="basic">
         <tbody>
-        <tr><td class="width-limited">{{ forms.id.last_name.label_tag }}</td><td><span class="lastname">{{ forms.id.last_name }}</span></td><td>{{ forms.id.last_name.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.id.first_name.label_tag }}</td><td>{{ forms.id.first_name }}</td><td>{{ forms.id.first_name.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.id.birthplace.label_tag }}</td><td>{{ forms.id.birthplace }}</td><td>{{ forms.id.birthplace.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.id.birthdate.label_tag }}</td><td>{{ forms.id.birthdate }}</td><td>{{ forms.id.birthdate.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.id.gender.label_tag }}</td><td>{{ forms.id.gender }}</td><td>{{ forms.id.gender.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.id.nationality.label_tag }}</td><td>{{ forms.id.nationality }}</td><td>{{ forms.id.nationality.errors }}</td></tr>
+        {% get_fieldset last_name,first_name,birthplace,birthdate,gender,nationality as id_fields from form %}
+        {% for field in id_fields %}
+        <tr>
+          <td class="width-limited">{{ field.label_tag }}</td>
+          <td>{{ field }}</td>
+          <td>{{ field.errors }}</td>
+        </tr>
+        {% endfor %}
         </tbody>
       </table>
       <input type="hidden"  name="tab"  value="1">
     </div>
-  </form>
 
-  <form method="post" action="tab2" id="inscription-form" class="patientrecordform">
-    {% csrf_token %}
     <div class="frame inline">
       <h3>Inscription</h3>
-      <button class="save">✔</button>
       <table class="basic">
         <tbody>
-        {% for field in forms.inscription %}
-        <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
+        {% get_fieldset analysemotive,familymotive,provenance,advicegiver,provenanceplace as inscription_fields from form %}
+        {% for field in inscription_fields %}
+        <tr><td class="width-limited">{{ field.label_tag }}</td><td>{{ field }}
             <button type="button"
               class="dialog-button"
               data-url="../../ressources/{{ field.name }}/new/ #form-content"
@@ -39,16 +39,13 @@
       </table>
       <input type="hidden"  name="tab"  value="1">
     </div>
-  </form>
 
-  <form method="post" action="tab2" id="out-form" class="patientrecordform">
-    {% csrf_token %}
     <div class="frame inline">
       <h3>Sortie</h3>
-      <button class="save">✔</button>
       <table class="basic">
         <tbody>
-        {% for field in forms.out %}
+        {% get_fieldset outmotive,outto as out_fields from form %}
+        {% for field in out_fields %}
         <tr><td class="width-limited">{{ field.label_tag  }}</td><td>{{ field }}
             <button type="button"
               class="dialog-button"
@@ -63,89 +60,39 @@
       </table>
       <input type="hidden"  name="tab"  value="1">
     </div>
-  </form>
 
-  <form method="post" action="tab2" id="family-form" class="patientrecordform">
-    {% csrf_token %}
     <div class="frame inline">
       <h3>Famille</h3>
-      <button class="save">✔</button>
       <table class="basic">
         <tbody>
-        <tr><td class="width-limited">{{ forms.family.sibship_place.label_tag  }}</td><td>{{ forms.family.sibship_place }}</td><td>{{ forms.family.sibship_place.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.nb_children_family.label_tag  }}</td><td>{{ forms.family.nb_children_family }}</td><td>{{ forms.family.nb_children_family.errors }}</td></tr>
+        <tr><td class="width-limited">{{ form.sibship_place.label_tag  }}</td><td>{{ form.sibship_place }}</td><td>{{ form.sibship_place.errors }}</td></tr>
+        <tr><td class="width-limited">{{ form.nb_children_family.label_tag  }}</td><td>{{ form.nb_children_family }}</td><td>{{ form.nb_children_family.errors }}</td></tr>
         <tr><td class="width-limited"><label>Rang (gémellité) :  </label></td><td>{{ object.twinning_rank|default_if_none:"Aucun" }}</td><td></td></tr>
-        <tr><td class="width-limited">{{ forms.family.parental_authority.label_tag  }}</td><td>{{ forms.family.parental_authority }}
+        {% get_fieldset parental_authority,family_situation,child_custody,job_mother,job_father,rm_mother,rm_father as familly_fields from form %}
+        {% for field in familly_fields %}
+        <tr>
+          <td class="width-limited">{{ field.label_tag }}</td><td>{{ field }}
             <button type="button"
               class="dialog-button"
               data-url="../../ressources/parentalauthoritytype/new/ #form-content"
               data-default-button="Ajouter"
               data-next-url="{{ request.get_full_path }}#tab=1"
               data-add-select="#id_family-parental_authority"
-              title="Ajouter un type d'autorité parentale">+</button></td><td>{{ forms.family.parental_authority.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.family_situation.label_tag  }}</td><td>{{ forms.family.family_situation }}
-            <button type="button"
-              class="dialog-button"
-              data-url="../../ressources/familysituationtype/new/ #form-content"
-              data-default-button="Ajouter"
-              data-next-url="{{ request.get_full_path }}#tab=1"
-              data-add-select="#id_family-family_situation"
-              title="Ajouter un type de situation familiale">+</button></td><td>{{ forms.family.family_situation.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.child_custody.label_tag  }}</td><td>{{ forms.family.child_custody }}
-            <button type="button"
-              class="dialog-button"
-              data-url="../../ressources/parentalcustodytype/new/ #form-content"
-              data-default-button="Ajouter"
-              data-next-url="{{ request.get_full_path }}#tab=1"
-              data-add-select="#id_family-child_custody"
-              title="Ajouter un type de garde parentale">+</button></td><td>{{ forms.family.child_custody.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.job_mother.label_tag  }}</td><td>{{ forms.family.job_mother }}
-            <button type="button"
-              class="dialog-button"
-              data-url="../../ressources/job/new/ #form-content"
-              data-default-button="Ajouter"
-              data-next-url="{{ request.get_full_path }}#tab=1"
-              data-add-select="#id_family-job_mother"
-              title="Ajouter un type de profession">+</button></td><td>{{ forms.family.job_mother.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.job_father.label_tag  }}</td><td>{{ forms.family.job_father }}
-            <button type="button"
-              class="dialog-button"
-              data-url="../../ressources/job/new/ #form-content"
-              data-default-button="Ajouter"
-              data-next-url="{{ request.get_full_path }}#tab=1"
-              data-add-select="#id_family-job_father"
-              title="Ajouter un type de profession">+</button></td><td>{{ forms.family.job_father.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.rm_mother.label_tag  }}</td><td>{{ forms.family.rm_mother }}
-            <button type="button"
-              class="dialog-button"
-              data-url="../../ressources/maritalstatustype/new/ #form-content"
-              data-default-button="Ajouter"
-              data-next-url="{{ request.get_full_path }}#tab=1"
-              data-add-select="#id_family-rm_mother"
-              title="Ajouter un type de régime">+</button></td><td>{{ forms.family.rm_mother.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.rm_father.label_tag  }}</td><td>{{ forms.family.rm_father }}
-            <button type="button"
-              class="dialog-button"
-              data-url="../../ressources/maritalstatustype/new/ #form-content"
-              data-default-button="Ajouter"
-              data-next-url="{{ request.get_full_path }}#tab=1"
-              data-add-select="#id_family-rm_father"
-              title="Ajouter un type de régime">+</button></td><td>{{ forms.family.rm_father.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.family.family_comment.label_tag  }}</td><td>{{ forms.family.family_comment }}</td><td>{{ forms.family.family_comment.errors }}</td></tr>
+              title="Ajouter {{ field.label.lower }}">+</button></td><td>{{ field.errors }}</td>
+        </tr>
+        {% endfor %}
+        <tr><td class="width-limited">{{ form.family_comment.label_tag  }}</td><td>{{ form.family_comment }}</td><td>{{ form.family_comment.errors }}</td></tr>
         </tbody>
       </table>
       <input type="hidden"  name="tab"  value="1">
     </div>
-  </form>
 
-  <form method="post" action="tab2" id="transport-form" class="patientrecordform">
-    {% csrf_token %}
     <div class="frame inline">
       <h3>Transport</h3>
-      <button class="save">✔</button>
       <table class="basic">
         <tbody>
-        {% for field in forms.transport %}
+        {% get_fieldset transporttype,transportcompany,simple_appointment_transport,periodic_appointment_transport as transport_fields from form %}
+        {% for field in transport_fields %}
         <tr><td class="width-limited">{{ field.label_tag }}</td><td>{{ field }}
             <button type="button"
               class="dialog-button"
@@ -168,35 +115,33 @@
         </tr>
       </table>
     </div>
-  </form>
 
-  <form method="post" action="tab2" id="followup-form" class="patientrecordform">{% csrf_token %}
     <div class="frame inline">
       <h3>Suivi du patient</h3>
-      <button class="save">✔</button>
       <table class="basic">
         <tbody>
-        <tr><td class="width-limited">{{ forms.followup.coordinators.label_tag  }}</td><td>{{ forms.followup.coordinators }}</td><td>{{ forms.followup.coordinators.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.followup.externaldoctor.label_tag  }}</td><td>{{ forms.followup.externaldoctor }}
+        <tr><td class="width-limited">{{ form.coordinators.label_tag  }}</td><td>{{ form.coordinators }}</td><td>{{ form.coordinators.errors }}</td></tr>
+        <tr><td class="width-limited">{{ form.externaldoctor.label_tag  }}</td><td>{{ form.externaldoctor }}
             <button type="button"
               class="dialog-button"
               data-url="../../personnes/externaltherapist/new/ #form-content"
               data-default-button="Ajouter"
               data-next-url="{{ request.get_full_path }}#tab=1"
               data-add-select="#id_followup-externaldoctor"
-              title="Ajouter un médecin extérieur">+</button></td><td>{{ forms.followup.externaldoctor.errors }}</td></tr>
-        <tr><td class="width-limited">{{ forms.followup.externalintervener.label_tag  }}</td><td>{{ forms.followup.externalintervener }}
+              title="Ajouter un médecin extérieur">+</button></td><td>{{ form.externaldoctor.errors }}</td></tr>
+        <tr><td class="width-limited">{{ form.externalintervener.label_tag  }}</td><td>{{ form.externalintervener }}
             <button type="button"
               class="dialog-button"
               data-url="../../personnes/externalworker/new/ #form-content"
               data-default-button="Ajouter"
               data-next-url="{{ request.get_full_path }}#tab=1"
               data-add-select="#id_followup-externalintervener"
-              title="Ajouter un intervenant extérieur">+</button></td><td>{{ forms.followup.externalintervener.errors }}</td></tr>
+              title="Ajouter un intervenant extérieur">+</button></td><td>{{ form.externalintervener.errors }}</td></tr>
         </tbody>
       </table>
     </div>
     <input type="hidden"  name="tab"  value="1">
+    <p><button class="save enable-on-change">Enregistrer</button></p>
   </form>
 
   <div class="frame">

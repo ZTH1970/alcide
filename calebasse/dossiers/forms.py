@@ -106,10 +106,30 @@ class GeneralForm(ModelForm):
                 'pause_comment': forms.Textarea(attrs={'cols': 50, 'rows': 3}),
                 }
 
-class CivilStatusForm(ModelForm):
+class AdministrativeForm(ModelForm):
+    coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)
     class Meta:
         model = PatientRecord
-        fields = ('first_name', 'last_name', 'birthdate', 'birthplace', 'gender', 'nationality')
+        # ID
+        fields = ('first_name', 'last_name', 'birthdate', 'birthplace',
+                'gender', 'nationality',)
+        # inscription
+        fields += ('analysemotive', 'familymotive', 'provenance',
+            'advicegiver', 'provenanceplace',)
+        # out
+        fields += ('outmotive', 'outto',)
+        # family
+        fields += ('sibship_place', 'nb_children_family', 'parental_authority',
+                'family_situation', 'child_custody', 'job_mother', 'job_father',
+                'rm_mother', 'rm_father', 'family_comment',)
+        # transport
+        fields += ('transporttype', 'transportcompany',
+                  'simple_appointment_transport', 'periodic_appointment_transport',)
+        # Follow up
+        fields += ('coordinators', 'externaldoctor', 'externalintervener',)
+        widgets = {
+                'family_comment': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
+                }
 
 
 class PhysiologyForm(ModelForm):
@@ -148,35 +168,6 @@ class PhysiologyForm(ModelForm):
                 CodeCFTMEA.objects.filter(axe=3)
 
 
-class InscriptionForm(ModelForm):
-    class Meta:
-        model = PatientRecord
-        fields = ('analysemotive', 'familymotive', 'provenance',
-            'advicegiver', 'provenanceplace')
-        widgets = {}
-
-class OutForm(ModelForm):
-    class Meta:
-        model = PatientRecord
-        fields = ('outmotive', 'outto')
-        widgets = {}
-
-class FamilyForm(ModelForm):
-    class Meta:
-        model = PatientRecord
-        fields = ('sibship_place', 'nb_children_family', 'parental_authority',
-                'family_situation', 'child_custody', 'job_mother', 'job_father',
-                'rm_mother', 'rm_father', 'family_comment')
-        widgets = {
-                'family_comment': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
-                }
-
-class TransportFrom(ModelForm):
-    class Meta:
-        model = PatientRecord
-        fields = ('transporttype', 'transportcompany',
-                  'simple_appointment_transport', 'periodic_appointment_transport')
-
 class PaperIDForm(ModelForm):
     class Meta:
         model = PatientRecord
@@ -190,12 +181,6 @@ class PolicyHolderForm(ModelForm):
                 'policyholder': forms.RadioSelect(),
                 'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 }
-
-class FollowUpForm(ModelForm):
-    coordinators = make_ajax_field(PatientRecord, 'coordinators', 'worker', True)
-    class Meta:
-        model = PatientRecord
-        fields = ('coordinators', 'externaldoctor', 'externalintervener')
 
 class PatientContactForm(ModelForm):
     health_org = forms.CharField(label=u"Numéro de l'organisme destinataire", required=False)

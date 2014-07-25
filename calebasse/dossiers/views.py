@@ -290,19 +290,11 @@ class PatientRecordGeneralView(cbv.UpdateView):
 
 tab1_general = PatientRecordGeneralView.as_view()
 
-class PatientRecordAdmView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+class PatientRecordAdmView(cbv.UpdateView):
     model = PatientRecord
-    forms_classes = {
-            'id': forms.CivilStatusForm,
-            'inscription': forms.InscriptionForm,
-            'out': forms.OutForm,
-            'family': forms.FamilyForm,
-            'transport': forms.TransportFrom,
-            'followup': forms.FollowUpForm,
-            }
+    form_class = forms.AdministrativeForm
     template_name = 'dossiers/patientrecord_tab2_fiche_adm.html'
     success_url = './view#tab=1'
-
 
     def get_context_data(self, **kwargs):
         ctx = super(PatientRecordAdmView, self).get_context_data(**kwargs)
