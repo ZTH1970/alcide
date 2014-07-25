@@ -840,11 +840,15 @@ class PatientRecordsQuotationsView(cbv.ListView):
             current_state = patient_record.get_current_state() or patient_record.get_state()
             state = current_state.status.name
             state_class = current_state.status.type.lower()
+            deficiencies = [getattr(patient_record, field) \
+                            for field in self.deficience_fields]
+            anap = reduce(lambda f1, f2: f1 or f2, deficiencies)
             patient_records.append(
                     {
                         'object': patient_record,
                         'state': state,
-                        'state_class': state_class
+                        'state_class': state_class,
+                        'anap': anap
                         }
                     )
         return patient_records
@@ -852,9 +856,18 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def get_queryset(self):
         form = forms.QuotationsForm(data=self.request.GET or None)
         qs = super(PatientRecordsQuotationsView, self).get_queryset()
+        self.deficience_fields = [field for field in self.model._meta.get_all_field_names() if field.startswith('deficiency_')]
+
         without_quotations = self.request.GET.get('without_quotations')
+        without_anap_quotations = self.request.GET.get('without_anap_quotations')
         if without_quotations:
-            qs = qs.filter(mises_1=None).filter(mises_2=None).filter(mises_3=None)
+            qs = qs.filter(mises_1__isnull=True).filter(mises_2__isnull=True).filter(mises_3__isnull=True)
+
+        if without_anap_quotations:
+            for field in self.deficience_fields:
+                anap_field = {field: 0}
+                qs = qs.filter(**anap_field)
+
         states = self.request.GET.getlist('states')
         qs = qs.filter(last_state__status__id__in=states)
 

@@ -2,40 +2,47 @@
 {% load url from future %}
 
 {% block appbar %}
-    <h2>Dossiers</h2>
-    <a href=".">Retourner aux dossiers</a>
-    <button id='print-button'>Imprimer</button>
+<h2>Dossiers</h2>
+<a href=".">Retourner aux dossiers</a>
+<button id='print-button'>Imprimer</button>
 {% endblock %}
 
 {% block content %}
 <div id="sidebar">
   <div>
     <form>
-    <h3>Rechercher dans les dossiers</h3>
-    <label>Sans quotations <input name="without_quotations" type="checkbox"
-    {% if request.GET.without_quotations == 'on' %}checked="checked"{% endif %}/></label>
-
-    <h3>Avec au moins un acte (optionnel)</h3>
-    Après (jj/mm/aaaa)
-    <label><input name="date_actes_start" type="text" value="{{ request.GET.date_actes_start }}"></label>
-    Avant (jj/mm/aaaa)
-    <label><input name="date_actes_end" type="text" value="{{ request.GET.date_actes_end }}"></label>
-    {% if request.GET %}
-    <div class="search-reset">
-    <button id="search">Rechercher</button>
-    <button id="reset" class="icon-remove-sign" title="Réinitialiser"></button>
-    </div>
-    {% else %}
-    <button id="search">Rechercher</button>
-    {% endif %}
-    <p id="search-results" style="display: none; "></p>
+      <h3>Rechercher dans les dossiers</h3>
+      <div>
+        <label>sans quotations
+          <input name="without_quotations" type="checkbox"
+                 {% if request.GET.without_quotations == 'on' %}checked="checked"{% endif %}/></label>
+      </div>
+      <div>
+        <label>sans quotations ANAP
+          <input name="without_anap_quotations" type="checkbox"
+                 {% if request.GET.without_anap_quotations == 'on' %}checked="checked"{% endif %}/></label>
+      </div>
+      <h3>Avec au moins un acte (optionnel)</h3>
+      Après (jj/mm/aaaa)
+      <label><input name="date_actes_start" type="text" value="{{ request.GET.date_actes_start }}"></label>
+      Avant (jj/mm/aaaa)
+      <label><input name="date_actes_end" type="text" value="{{ request.GET.date_actes_end }}"></label>
+      {% if request.GET %}
+      <div class="search-reset">
+        <button id="search">Rechercher</button>
+        <button id="reset" class="icon-remove-sign" title="Réinitialiser"></button>
+      </div>
+      {% else %}
+      <button id="search">Rechercher</button>
+      {% endif %}
+      <p id="search-results" style="display: none; "></p>
   </div>
   <div id="filtre">
     <h3>Filtres sur l'état</h3>
     {{ search_form.states }}
     <button id="btn_all_state">Tous</button>
     <button id="btn_none_state">Aucun</button>
-    </form>
+  </form>
   </div>
 </div>
 <div class="content">
@@ -49,6 +56,7 @@
         <th rowspan="2">Mises 1</th>
         <th rowspan="2">Mises 2</th>
         <th rowspan="2">Mises 3</th>
+        <th rowspan="2">ANAP</th>
       </tr>
       <tr>
         <th>papier</th>
@@ -59,37 +67,38 @@
 
       {% for patient_record in patient_records %}
       <tr style="display: table-row;" class="pr-line {{ patient_record.state_class }}" data-link="{{ patient_record.object.id }}/view">
-          <td>{{ patient_record.object.paper_id|default_if_none:"" }}</td>
-          <td>{{ patient_record.object.id }}</td>
-          <td><span class="lastname">{{ patient_record.object.last_name }}</span></td>
-          <td>{{ patient_record.object.first_name }}</td>
-          <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>
-          <td>{% for mise in patient_record.object.mises_1.all %}{{ mise }}<br/>{% endfor %}</td>
-          <td>{% for mise in patient_record.object.mises_2.all %}{{ mise }}<br/>{% endfor %}</td>
-          <td>{% for mise in patient_record.object.mises_3.all %}{{ mise }}<br/>{% endfor %}</td>
+        <td>{{ patient_record.object.paper_id|default_if_none:"" }}</td>
+        <td>{{ patient_record.object.id }}</td>
+        <td><span class="lastname">{{ patient_record.object.last_name }}</span></td>
+        <td>{{ patient_record.object.first_name }}</td>
+        <td class="{{ patient_record.state_class }}">{{ patient_record.state }}</td>
+        <td>{% for mise in patient_record.object.mises_1.all %}{{ mise }}<br/>{% endfor %}</td>
+        <td>{% for mise in patient_record.object.mises_2.all %}{{ mise }}<br/>{% endfor %}</td>
+        <td>{% for mise in patient_record.object.mises_3.all %}{{ mise }}<br/>{% endfor %}</td>
+        <td>{% if patient_record.anap %}<span class="icon-ok"></span>{% endif %}</td>
       </tr>
       {% endfor %}
 
     </tbody>
   </table>
 
-{% if request.GET %}
-<div class="pagination">
+  {% if request.GET %}
+  <div class="pagination">
     <span class="step-links">
-        {% if paginate_patient_records.has_previous %}
-            <a href="?{{ query }}&page={{ paginate_patient_records.previous_page_number }}">««</a>
-        {% endif %}
+      {% if paginate_patient_records.has_previous %}
+      <a href="?{{ query }}&page={{ paginate_patient_records.previous_page_number }}">««</a>
+      {% endif %}
 
-        <span class="current">
-            page {{ paginate_patient_records.number }} de {{ paginate_patient_records.paginator.num_pages }}
-        </span>
+      <span class="current">
+        page {{ paginate_patient_records.number }} de {{ paginate_patient_records.paginator.num_pages }}
+      </span>
 
-        {% if paginate_patient_records.has_next %}
-            <a href="?{{ query }}&page={{ paginate_patient_records.next_page_number }}">»»</a>
-        {% endif %}
+      {% if paginate_patient_records.has_next %}
+      <a href="?{{ query }}&page={{ paginate_patient_records.next_page_number }}">»»</a>
+      {% endif %}
     </span>
-</div>
-{% endif %}
+  </div>
+  {% endif %}
 
 
 
