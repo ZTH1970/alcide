@@ -365,6 +365,7 @@ class AgendaServiceActValidationView(TemplateView):
                 else:
                     state_name = request.POST.get('act_state')
                     act.set_state(state_name, request.user)
+                    messages.add_message(self.request, messages.INFO, u'Acte modifié avec succès')
             except Act.DoesNotExist:
                 pass
             return HttpResponseRedirect('#acte-frame-'+acte_id)

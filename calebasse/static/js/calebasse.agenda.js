@@ -344,16 +344,6 @@ function event_dialog(url, title, width, btn_text) {
 
 (function($) {
   $(function() {
-      $('#actes .frame select').on('change', function() {
-          var container = $(this).closest('.frame');
-          if ($(this).data('previous') != $(this).val()) {
-              container.addClass('changed');
-          } else {
-              container.removeClass('changed');
-          }
-
-      });
-
       $('#tabs').tabs({
           load: function(event, ui) {
               var tab = $(ui.tab).attr('id').split('-');
