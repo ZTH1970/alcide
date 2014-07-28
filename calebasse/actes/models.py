@@ -118,7 +118,6 @@ class Act(models.Model):
             choices=VALIDATION_CODE_CHOICES,
             default='absent',
             verbose_name=u'Présence')
-    comment = models.TextField(u'Commentaire', blank=True, null=True)
     old_id = models.CharField(max_length=256,
             verbose_name=u'Ancien ID', blank=True, null=True)
 
