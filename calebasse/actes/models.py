@@ -134,6 +134,12 @@ class Act(models.Model):
             return event.start_datetime
         return self.date
 
+    @property
+    def comment(self):
+        if self.parent_event:
+            return self.parent_event.description
+        return None
+
     def get_hc_tag(self):
         if self.healthcare:
             beg = None
