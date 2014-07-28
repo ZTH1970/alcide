@@ -523,7 +523,6 @@ class EventWithAct(Event):
         def save(*args, **kwargs):
             act.save = old_save
             old_save(*args, **kwargs)
-            act.comment = self.description
             act.doctors = (participant.worker for participant in self.participants.all())
             last_validation_state = ActValidationState.objects.create(
                     act=act, state_name='NON_VALIDE',
