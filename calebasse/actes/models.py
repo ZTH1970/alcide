@@ -76,6 +76,8 @@ class Act(models.Model):
             verbose_name=u'Vérouillage', db_index=True)
     is_billed = models.BooleanField(default=False,
             verbose_name=u'Facturé', db_index=True)
+    already_billed = models.BooleanField(default=False,
+            verbose_name=u'A déjà été facturé', db_index=True)
     is_lost = models.BooleanField(default=False,
             verbose_name=u'Acte perdu', db_index=True)
     last_validation_state = models.ForeignKey(ActValidationState,
