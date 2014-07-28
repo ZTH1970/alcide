@@ -142,6 +142,12 @@ class Act(models.Model):
             return self.parent_event.description
         return None
 
+    @property
+    def rebilling(self):
+        if self.already_billed and not self.is_billed and not self.is_lost:
+            return True
+        return False
+
     def get_hc_tag(self):
         if self.healthcare:
             beg = None
