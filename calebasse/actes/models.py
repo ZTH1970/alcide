@@ -229,6 +229,8 @@ class Act(models.Model):
     # END Specific to sessad healthcare
 
     def save(self, *args, **kwargs):
+        if self.is_billed:
+            self.already_billed = True
         super(Act, self).save(*args, **kwargs)
 
     def duration(self):
