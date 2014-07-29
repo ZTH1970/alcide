@@ -375,7 +375,21 @@ function load_tab8_medical() {
         window.location.href = window.location.pathname;
         return false;
     });
-    $('#print-button').click(function() { window.print(); });
+    $('#print-button').click(function() {
+        var button = $(this);
+        var title = button.html();
+        button.html('Préparation de l\'impression en cours');
+        button.attr({disabled: 'disabled'});
+        button.toggleClass('icon-wip');
+        $('.pagination').next().remove();
+        $.get(window.location + '&all', function(data) {
+            button.toggleClass('icon-wip');
+            button.removeAttr('disabled');
+            button.html(title);
+            $('.content').append(data);
+            window.print();
+        });
+    });
 
     $('#new-patientrecord').click(function() {
         generic_ajaxform_dialog('new', 'Nouveau dossier',

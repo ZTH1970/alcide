@@ -90,3 +90,14 @@ div#activity {
 div#activity .header {
     display: block;
 }
+
+/* quotations printing */
+
+table.main {
+    border-collapse: collapse;
+}
+
+table.main td, table.main th {
+    border: 1px solid #555;
+    padding: 0 .5em;
+}

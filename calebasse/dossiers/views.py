@@ -909,16 +909,22 @@ class PatientRecordsQuotationsView(cbv.ListView):
                 service=self.service)
         patient_records = []
         page = self.request.GET.get('page')
-        paginator = Paginator(ctx['object_list'].filter(), 50)
-        try:
-            paginate_patient_records = paginator.page(page)
-        except PageNotAnInteger:
-            paginate_patient_records = paginator.page(1)
-        except EmptyPage:
-            paginate_patient_records = paginator.page(paginator.num_pages)
+        all = 'all' in self.request.GET
+        if all:
+            patient_records = ctx['object_list']
+            ctx['all'] = all
+            self.template_name = 'dossiers/quotations_print.html'
+        else:
+            paginator = Paginator(ctx['object_list'].filter(), 50)
+            try:
+                patient_records = paginator.page(page)
+            except PageNotAnInteger:
+                patient_records = paginator.page(1)
+            except EmptyPage:
+                patient_records = paginator.page(paginator.num_pages)
+            ctx['paginate_patient_records'] = patient_records
 
-        ctx['patient_records'] = self._get_search_result(paginate_patient_records)
-        ctx['paginate_patient_records'] = paginate_patient_records
+        ctx['patient_records'] = self._get_search_result(patient_records)
 
         query = self.request.GET.copy()
         if 'page' in query:

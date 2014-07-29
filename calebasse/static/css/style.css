@@ -1288,6 +1288,14 @@ div.pagination {
 .icon-uncheck:before {content: "\f096";margin-right: 5px;}
 .icon-car:before {content: "\f1b9";margin-right: 5px;}
 .icon-phone:before { content: "\f095"; margin-right: 3px;}
+.icon-wip:before {
+    content: "\f110";
+    margin-right: 3px;
+    -webkit-animation: spin 2s infinite linear;
+    -moz-animation: spin 2s infinite linear;
+    -o-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+}
 
 /* periodic event search form */
 
