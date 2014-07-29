@@ -7,6 +7,7 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        orm.Act.objects.filter(is_billed=True).update(already_billed=True)
         orm.Act.objects.exclude(invoice=None).update(already_billed=True)
 
     def backwards(self, orm):
