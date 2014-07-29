@@ -43,6 +43,35 @@ function load_add_address_dialog() {
       '#address-dlg', '600px', 'Ajouter');
 }
 
+function warning_on_unsave_change() {
+    var form_changed = false;
+    $(window).on("beforeunload", function() {
+        if (form_changed) {
+            return "Vous n'avez pas enregistré vos changements.";
+        }
+    });
+    $("#tabs").on("tabsbeforeactivate", function(event, ui) {
+        if (form_changed) {
+            var answer = confirm('Vous avez des changements non sauvegardés. Voulez vous vraiment continuer ?');
+            if (! answer) {
+                event.preventDefault();
+            }
+            else {
+                form_changed = false;
+            }
+        }
+    });
+    $('.autosubmit').on("click", function() {
+        form_changed = false;
+    });
+    $('form').on("change", function() {
+        form_changed = true;
+    });
+    $('button').on("click", function() {
+        form_changed = false;
+    });
+}
+
 function state_dialog(url, state_title, state_type) {
     $('#change-record').load(url,
             function () {
@@ -80,6 +109,7 @@ function state_dialog(url, state_title, state_type) {
 }
 
 function load_tab1_general() {
+    warning_on_unsave_change();
     $('#update-paper-id-btn').click(function() {
         generic_ajaxform_dialog('update/paper_id', 'Modifier le numéro du dossier papier',
             '#ajax-dlg', '500px', 'Modifier');
@@ -122,15 +152,13 @@ function load_tab1_general() {
       $('#patientrecord-history').click();
       location.hash = '';
     }
-    $('#id_pause').click(function() {
-        $('#general-form').submit();
-    });
-    $('#id_confidential').click(function() {
+    $('.autosubmit').click(function() {
         $('#general-form').submit();
     });
 }
 
 function load_tab2_adm() {
+    warning_on_unsave_change();
     init_magic_dialog();
     $('#prescription-transport-btn').click(function() {
         $('#ajax-dlg').load('prescription-transport',
@@ -351,9 +379,7 @@ function load_tab7_socialisation() {
 
 function load_tab8_medical() {
   calebasse_ajax_form('#tabs-8');
-  SelectFilter.init("id_mises_1", "Catégorie", 0, "/static/admin/");
-  SelectFilter.init("id_mises_2", "Catégorie", 0, "/static/admin/");
-  SelectFilter.init("id_mises_3", "Catégorie", 0, "/static/admin/");
+  warning_on_unsave_change();
 }
 
 
@@ -380,8 +406,8 @@ function load_tab8_medical() {
     });
 
 
-    $('.atabs').click(function() {
-        location.hash = 'tab=' + $(this).data('id');
+    $('#tabs').on("tabsload", function(event, ui) {
+        location.hash = 'tab=' + $(ui.tab).data('id');
     });
 
     $('#btn_all_state').click(function() {
