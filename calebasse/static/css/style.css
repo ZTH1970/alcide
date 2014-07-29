@@ -1279,7 +1279,15 @@ div.pagination {
     margin-right: 5px;
     font-size: 1.3em;
 }
-.icon-phone:before                { content: "\f095"; margin-right: 3px; }
+.icon-print:before {content: "\f02f";margin-right: 5px;}
+.icon-check:before {content: "\f046";margin-right: 5px;}
+.icon-uncheck:before {content: "\f096";margin-right: 5px;}
+.icon-car:before {content: "\f1b9";margin-right: 5px;}
+.icon-print:before {content: "\f02f";margin-right: 5px;}
+.icon-check:before {content: "\f046";margin-right: 5px;}
+.icon-uncheck:before {content: "\f096";margin-right: 5px;}
+.icon-car:before {content: "\f1b9";margin-right: 5px;}
+.icon-phone:before { content: "\f095"; margin-right: 3px;}
 
 /* periodic event search form */
 
