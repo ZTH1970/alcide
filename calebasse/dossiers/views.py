@@ -841,9 +841,9 @@ class PatientRecordsQuotationsView(cbv.ListView):
             state = current_state.status.name
             state_class = current_state.status.type.lower()
             deficiencies = [getattr(patient_record, field) \
-                            for field in self.deficience_fields]
-            anap = reduce(lambda f1, f2: f1 or f2, deficiencies)
-            mises = reduce(lambda m1, m2: m1+m2, [list(getattr(patient_record, field).all()) for field in self.mises_fields])
+                            for field in self.model.DEFICIENCY_FIELDS]
+            anap = any(deficiencies)
+            mises = reduce(lambda m1, m2: m1+m2, [list(getattr(patient_record, field).all()) for field in self.model.MISES_FIELDS])
             next_rdv = get_next_rdv(patient_record)
             last_rdv = get_last_rdv(patient_record)
 
@@ -871,19 +871,15 @@ class PatientRecordsQuotationsView(cbv.ListView):
     def get_queryset(self):
         form = forms.QuotationsForm(data=self.request.GET or None)
         qs = super(PatientRecordsQuotationsView, self).get_queryset()
-        all_field_names = self.model._meta.get_all_field_names()
-        self.deficience_fields = [field for field in all_field_names if field.startswith('deficiency_')]
-        self.mises_fields = [field for field in all_field_names if field.startswith('mises_')]
-
         without_quotations = self.request.GET.get('without_quotations')
         without_anap_quotations = self.request.GET.get('without_anap_quotations')
         if without_quotations:
-            for field in self.mises_fields:
+            for field in self.model.MISES_FIELDS:
                 mise_field = {'%s__isnull' % field: True}
                 qs = qs.filter(**mise_field)
 
         if without_anap_quotations:
-            for field in self.deficience_fields:
+            for field in self.model.DEFICIENCY_FIELDS:
                 anap_field = {field: 0}
                 qs = qs.filter(**anap_field)
 
