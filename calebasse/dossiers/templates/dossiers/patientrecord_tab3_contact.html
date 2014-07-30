@@ -38,8 +38,9 @@
   </li>
   {% endif %}
   <span class="social-security-contact">
-    <label class="social-security-label">Infos d'assuré [+]</label>
-    <ul>
+    <span class="js-expandable">
+    <label class="js-click-to-expand">Infos d'assuré</label>
+    <ul class="js-to-expand">
       {% if contact.id == object.id %}
       {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span>
       {% endif %}
@@ -87,5 +88,6 @@
       {{ contact.twinning_rank }}</li>
       {% endif %}
     </ul>
+  </span>
   </span>
 </ul>

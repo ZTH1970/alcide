@@ -91,10 +91,14 @@
       <p id="confidential-msg" style="display: none; font-size: 10px;">Confidentialité mise à jour</p>
       {{ form.confidential.label_tag }} : <span class="autosubmit">{{ form.confidential }}</span>
       <p id="pause-msg" style="display: none; font-size: 10px;">Pause facturation mise à jour</p>
-      {{ form.pause.label_tag }} : {{ form.pause }}
-      <br/><label>Commentaire de la pause facturation</label> <button class="save enable-on-change btn-maj">✔</button><br/>
-      {{ form.pause_comment }}
-
+      {{ form.pause.label_tag }} : <span class="autosubmit">{{ form.pause }}</span>
+      <br/>
+      <span class="js-expandable">
+      <label class="js-click-to-expand">Commentaire de la pause facturation {% if object.pause_comment %}<span title="Un commentaire existe" class="icon-comment" style="display: inline"></span>{% endif %}</label>
+      <span class="js-to-expand">
+        <button class="save enable-on-change btn-maj">✔</button><br/>
+        {{ form.pause_comment }}
+      </span>
     </div>
   </form>
 

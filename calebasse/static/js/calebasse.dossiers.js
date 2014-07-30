@@ -268,18 +268,6 @@ function load_tab3_addresses() {
               }
           });
       });
-    $('.social-security-label').click(function() {
-      var label = $(this).html();
-      var data = $(this).next();
-      if (($(data).is(':hidden'))) {
-        $(this).html(label.replace('+', '-'));
-        $(this).css("font-weight", "bold");
-      } else {
-        $(this).html(label.replace('-', '+'));
-        $(this).css("font-weight", "");
-      }
-      $(data).toggle();
-    });
     var hashes = location.hash.split('&');
     for (i in hashes) {
       if (hashes[i] == "newcontact") {
@@ -339,7 +327,7 @@ function load_tab6_next_rdv() {
 }
 
 function load_tab7_socialisation() {
-    $('#new-socialisation-duration-btn').click(function() {
+    $('#new-socialisation-duration-btn').on("click", function() {
         generic_ajaxform_dialog('socialisation/new', 'Ajouter une période de socialisation',
             '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
     });
@@ -387,19 +375,22 @@ function load_tab8_medical() {
   $(function() {
     var $tabs = $('#tabs').tabs({
       load: function(event, ui) {
+        $(document).on('click', '.js-click-to-expand', function (event) {
+             $(event.target).parents('.js-expandable').toggleClass('js-expanded');
+        });
         var tabid = $(ui.tab).attr('id');
         if (tabid == "ui-id-1")
-      load_tab1_general();
+            load_tab1_general();
         else if (tabid == "ui-id-2")
-      load_tab2_adm();
+            load_tab2_adm();
         else if (tabid == "ui-id-3")
-      load_tab3_addresses();
+            load_tab3_addresses();
         else if (tabid == "ui-id-4")
-      load_tab4_notifs();
+            load_tab4_notifs();
         else if (tabid == "ui-id-7")
-      load_tab7_socialisation();
+            load_tab7_socialisation();
         else if (tabid == "ui-id-8")
-      load_tab8_medical();
+            load_tab8_medical();
       },
         selected: -1,
         collapsible: true,

@@ -152,3 +152,11 @@ input[type=checkbox] + button {
 .print-container form {
     display: inline;
 }
+
+.js-expandable .js-click-to-expand:after { content: " [+]"; }
+.js-expanded .js-click-to-expand:after { content: " [-]"; }
+.js-click-to-expand { cursor: pointer; }
+.js-click-to-expand:hover { font-weight: bold; }
+
+.js-expandable .js-to-expand { display: none; }
+.js-expandable.js-expanded .js-to-expand { display: block; }
