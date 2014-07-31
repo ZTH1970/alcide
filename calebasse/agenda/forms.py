@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ..dossiers.models import PatientRecord
 from ..personnes.models import Worker
+from ..actes.models import Act
 from ..ressources.models import ActType
 from ..middleware.request import get_request
 
@@ -153,13 +154,31 @@ class UpdatePeriodicAppointmentForm(UpdateAppointmentForm):
             choices=Event.PERIODICITIES, required=True)
 
     def clean(self):
+        '''
+            Check that reccurrency bound dates
+            won't exclude already_billed acts.
+        '''
         cleaned_data = super(UpdatePeriodicAppointmentForm, self).clean()
-        acts = self.instance.act_set.filter(is_billed=True).order_by('-date')
-        if acts and cleaned_data.get('recurrence_end_date'):
-            recurrence_end_date = cleaned_data['recurrence_end_date']
-            if recurrence_end_date < acts[0].date:
+        start_datetime = cleaned_data.get('start_datetime')
+        if start_datetime:
+            acts = Act.objects.filter(
+                Q(parent_event=self.instance,
+                    already_billed=True, date__lt=start_datetime) | \
+                Q(parent_event__exception_to=self.instance,
+                    already_billed=True, date__lt=start_datetime))
+            if acts:
+                self._errors['start_datetime'] = self.error_class([
+                    u"La date de début doit être antérieure au premier acte déja facturé de la récurrence"])
+        recurrence_end_date = cleaned_data.get('recurrence_end_date')
+        if recurrence_end_date:
+            acts = Act.objects.filter(
+                Q(parent_event=self.instance,
+                    already_billed=True, date__gt=recurrence_end_date) | \
+                Q(parent_event__exception_to=self.instance,
+                    already_billed=True, date__gt=recurrence_end_date))
+            if acts:
                 self._errors['recurrence_end_date'] = self.error_class([
-                            u"La date doit être supérieur au dernier acte facturé de la récurrence"])
+                    u"La date de fin doit être postérieure au dernier acte déja facturé de la récurrence"])
         return cleaned_data
 
 class DisablePatientAppointmentForm(UpdateAppointmentForm):
@@ -279,5 +298,5 @@ class PeriodicEventsSearchForm(forms.Form):
         cleaned_data = super(PeriodicEventsSearchForm, self).clean()
         if cleaned_data.get('start_date') and cleaned_data.get('end_date'):
             if cleaned_data['start_date'] > cleaned_data['end_date']:
-                raise forms.ValidationError(u'La date de début doit être supérieure à la date de fin')
+                raise forms.ValidationError(u'La date de début doit être antérieure à la date de fin')
         return cleaned_data
