@@ -3,23 +3,32 @@
 {{ form.non_field_errors }}
 {{ form.start_datetime }}
 {{ form.start_datetime.errors }}
+   {% if object.is_recurring and object.one_act_is_billed %}<p><em>Le rendez-vous périodique a un acte qui est facturé ce qui empêche de le modifier à l'exception de la description, de la ressource et des dates de début et de fin.</em></p>{% endif %}
+   {% if object.is_recurring and object.one_act_already_billed %}<p><em>Le rendez-vous périodique a un acte qui a déjà été facturé ce qui empêche de le supprimer.</em></p>{% endif %}
    <table id="new-appointment-table">
        <tr>
            <td {% if form.time.field.required %}class="required"{% endif %}>
             <p>
            {{ form.time.label_tag }}
+           {% if object.is_recurring and object.one_act_is_billed %}
+           {{ object.time }}
+           {{ form.time.as_hidden }}
+           {% else %}
            {{ form.time }}
+           {% endif %}
            {{ form.time.errors }}
            </p>
            </td>
            <td {% if form.duration.field.required %}class="required"{% endif %}>
            <p>
            {{ form.duration.label_tag }}
-           {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:5" }}
+           {% if object.is_recurring and object.one_act_is_billed %}
+           {{ object.duration }}
+           {{ form.duration.as_hidden }}
+           {% else %}
+           {{ form.duration }}
+           {% endif %}
            {{ form.duration.errors }}
-           <div>
-           {{ form.duration.help_text }}
-           </div>
            </p>
            </td>
            <td {% if form.date.field.required %}class="required"{% endif %}>
@@ -43,15 +52,21 @@
            <td {% if form.participants.field.required %}class="required"{% endif %}>
            <h4>{{ form.participants.label_tag }}</h4>
            <div id="intervenants">
+           {% if object.is_recurring and object.one_act_is_billed %}
+           <ul>{% for p in object.participants.all %}<li>{{ p }}</li>{% endfor %}</ul>
+           <input id="id_participants" name="participants" value="|{% for p in object.participants.all %}{{ p.id }}|{% endfor %}" type="hidden"/>
+           {% else %}
            {{ form.participants }}
+           {% endif %}
            {{ form.participants.errors }}
            </div>
            </td>
            <td {% if form.patient.field.required %}class="required"{% endif %}>
            <h4>{{ form.patient.label_tag }}</h4>
            <div id="patient">
-           {% if object.exception_to and not object.exception_to.canceled %}
+           {% if object.is_recurring or object.exception_to or object.act.already_billed %}
            {{ object.patient }}
+           {{ form.patient.as_hidden }}
            {% else %}
            {{ form.patient }}
            {{ form.patient.errors }}
@@ -60,7 +75,12 @@
            </td>
            <td {% if form.act_type.field.required %}class="required"{% endif %}>
            <h4>{{ form.act_type.label_tag }}</h4>
+           {% if object.is_recurring and object.one_act_is_billed %}
+           {{ object.act_type }}
+           {{ form.act_type.as_hidden }}
+           {% else %}
            {{ form.act_type }}
+           {% endif %}
            {{ form.act_type.errors }}
            </td>
        </tr>
@@ -79,13 +99,16 @@
   <hr/>
   {% if object.id != object.exception_to.id %}
   <p><em>Attention: cet objet est une exception à un rendez-vous périodique; si
-  vous modifiez ou supprimiez ce rendez-vous périodique, l'exception n'en serait pas
+  vous modifiez ou supprimez le rendez-vous périodique, l'exception n'en sera pas
   affectée.</em></p>
   {% endif %}
-  <div>Occurence du {{object.exception_date}} d'un rendez-vous périodique
-    {% if object.exception_to.canceled %}<em>supprimée</em> et initialement prévue{% endif %}
-    {{ object.exception_to.recurrence_description|lower }}</div>
+
+  <p>Occurence du {{object.exception_date}} d'un rendez-vous périodique
+    {% if object.exception_to.canceled %}<em>supprimé</em> et initialement prévu{% endif %}
+    {{ object.exception_to.recurrence_description|lower }}</p>
+
   {% if not object.exception_to.canceled %}
-  <button type="button" data-delete-url="{% url 'delete-event' service=service date=date pk=object.exception_to.pk %}" data-id="{{ object.exception_to.id }}" class="update-periodic-rdv">Éditer le rendez-vous périodique</button>
+  <p><button type="button" data-delete-url="{% url 'delete-event' service=service date=date pk=object.exception_to.pk %}" data-id="{{ object.exception_to.id }}" data-one_act_already_billed="{{ object.exception_to.one_act_already_billed }}"  class="update-periodic-rdv">Éditer le rendez-vous périodique</button></p>
   {% endif %}
+
 {% endif %}
