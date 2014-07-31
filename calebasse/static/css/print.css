@@ -7,8 +7,12 @@ html {
   color: black;
 }
 
+button {
+    display: none;
+}
+
 div#header, div#splash, div#footer, div#appbar, div#datesel,
-div#djDebugToolbarHandle, button#uncheck-all, button#check-all, input.printable  {
+div#djDebugToolbarHandle, input.printable {
   display: none;
 }
 
@@ -100,4 +104,55 @@ table.main {
 table.main td, table.main th {
     border: 1px solid #555;
     padding: 0 .5em;
+}
+
+
+ /* Patient record printing */
+
+textarea, input[type=text], select {
+    border: 0;
+}
+
+textarea[value=''] {
+    display: none;
+}
+
+input[value=''] {
+    display: none;
+}
+
+#tabs > ul {
+    display: none;
+}
+
+.social-security-contact ul {
+    display: block;
+}
+
+ /* tabs-7 */
+
+#tabs-7 .subframe {
+    padding: 0 .5em;
+}
+
+ /* tabs-8 */
+
+#tabs-8 label {
+    display: inline;
+}
+
+.select2-results {
+    display: none;
+}
+
+.select2-choices {
+    list-style-type:none;
+}
+
+.select2-container + select {
+    display: none;
+}
+
+#tabs-8 label:after {
+    content: ':';
 }

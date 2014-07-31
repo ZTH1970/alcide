@@ -1,3 +1,5 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
+{% block content %}
 <div id="tabs-4">
   {% if object.service.slug == "cmpp" %}
   <div class="notifs">
@@ -215,3 +217,4 @@
     {% endif %}
     {% endif %}
   </div>
+{% endblock %}

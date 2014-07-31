@@ -1,3 +1,17 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
+{% block print-button %}
+<div class="print-container screen-only">
+  <form class="datepicker filter">
+    <h5>Filtrer par date</h5>
+      du <input type="text" name="from" />
+      au <input type="text" name="to" />
+  </form>
+  {{ block.super }}
+</div>
+<br class="clear" />
+{% endblock %}
+
+{% block content %}
 <div id="tabs-5">
   {% for state, last_rdvs in history %}
   <div class="frame">
@@ -10,7 +24,8 @@
       <tbody>
       {% for act, state, missing_workers in last_rdvs %}
       <tr>
-        <td>{{ act.date|date:"SHORT_DATE_FORMAT" }} {{ act.time|date:"H:i" }}{% if missing_workers %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
+        <td><span class="date">{{ act.date|date:"SHORT_DATE_FORMAT" }}</span>
+          <span class="time">{{ act.time|date:"H:i" }}</span>{% if missing_workers %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
         <td>{% if state %}{% if act.is_absent %}<strong>{% endif %}{% if state.state_name == 'ACT_DOUBLE' or state.state_name == 'ACT_LOST' %}Présent ({{ state }}){% else %}{{ state }}{% endif %}{% if act.is_absent %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
         <td>{{ act.act_type }}</td>
         <td class="width-limited">{% for doctor in act.doctors.all %}
@@ -27,3 +42,5 @@
   </div>
   {% endfor %}
 </div>
+{% endblock %}
+{% block print-actions %}filter_date_bounds('#ui-tabs-5', '.frame td span.date');{% endblock %}

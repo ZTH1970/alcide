@@ -1,3 +1,16 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
+{% block print-button %}
+<div class="print-container screen-only">
+  <form class="datepicker filter">
+    <h5>Filtrer par date</h5>
+      du <input type="text" name="from" />
+      au <input type="text" name="to" />
+  </form>
+  {{ block.super }}
+</div>
+<br class="clear" />
+{% endblock %}
+{% block content %}
 <div id="tabs-6">
   <table class="basic">
     <thead>
@@ -6,7 +19,8 @@
     <tbody>
     {% for event, state, missing_participants, inactive_participants in next_rdvs %}
     <tr>
-      <td>{% firstof event.start_datetime|date:"l d/m/y H:i"|title %}{% if missing_participants or inactive_participants %} <span title="Au moins un intervenant est absent ou ne fait plus partie du service" class="icon-warning-sign absent"></span>{% endif %}</td>
+      <td><span class="date">{{ event.start_datetime|date:"SHORT_DATE_FORMAT" }}</span>
+          <span class="time">{% firstof event.start_datetime|date:"H:i"|title %}</span>{% if missing_participants or inactive_participants %} <span title="Au moins un intervenant est absent ou ne fait plus partie du service" class="icon-warning-sign absent"></span>{% endif %}</td>
       <td>{% if state %}{% if state.state_name != 'VALIDE' %}<strong>{% endif %}{{ state }}{% if state.state_name != 'VALIDE' %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
       <td>{{ event.act_type }}</td>
       <td class="width-limited">{% for participant in event.participants.all %}
@@ -32,3 +46,5 @@
     </tbody>
   </table>
 </div>
+{% endblock %}
+{% block print-actions %}filter_date_bounds('#ui-tabs-6', '.basic td span.date');{% endblock %}

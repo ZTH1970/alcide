@@ -127,3 +127,28 @@ div#tabs-4 div div.buttons {
 input[type=checkbox] + button {
     display: none;
 }
+
+.patientrecord_print ul {
+    margin: 0;
+    padding: 0;
+}
+
+.patientrecord_print li {
+    list-style-type: none;
+    display: inline;
+}
+
+.patientrecord_print label {
+    margin: 0 .5em;
+}
+
+.print-container {
+    float: right;
+}
+.print-container h5 {
+    margin: 0;
+}
+
+.print-container form {
+    display: inline;
+}

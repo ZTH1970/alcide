@@ -1,3 +1,6 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
+
+{% block content %}
 <div id="tabs-8">
   <form method="post" action="tab8" id="physiology-form" class="patientrecordform">
     {% csrf_token %}
@@ -16,3 +19,4 @@
     <button class="save enable-on-change">Enregistrer</button>
   </form>
 </div>
+{% endblock %}

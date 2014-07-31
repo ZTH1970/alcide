@@ -1407,3 +1407,10 @@ label.social-security-label:hover {
     display: none;
 }
 
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}

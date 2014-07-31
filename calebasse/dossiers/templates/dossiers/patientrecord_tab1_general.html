@@ -1,3 +1,5 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
+{% block content %}
 <form method="post" action="tab1"  id="general-form" class="patientrecordform">{% csrf_token %}
 <div class="left">
   <ul>
@@ -84,7 +86,7 @@
       {% for state in status %}
       <button type="button" id="{{ state.0 }}">{{ state.1 }}</button>
       {% endfor %}
-      <button type="button" id="patientrecord-history">Historique</button><br/>
+      <button type="button" id="patientrecord-history">Historique</button>
       <hr/>
       <p id="confidential-msg" style="display: none; font-size: 10px;">Confidentialité mise à jour</p>
       {{ form.confidential.label_tag }} : {{ form.confidential }}
@@ -113,4 +115,4 @@
       <button>Créer répertoire patient</button>
     </form>
 </div>
-<br style="clear:both"/>
+{% endblock %}

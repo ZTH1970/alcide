@@ -1,4 +1,6 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
 {% load dossiers %}
+{% block content %}
 <div id="tabs-3">
   <form method="post" action="tab3" id="policyholder-form" class="patientrecordform">{% csrf_token %}
     <p>
@@ -97,3 +99,4 @@
 {% endfor %}
   </form>
 </div>
+{% endblock %}

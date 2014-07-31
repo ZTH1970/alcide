@@ -10,6 +10,32 @@ function add_datepickers(that) {
   $('input#id_prolongation_date', that).datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
 }
 
+function print_cleanup() {
+    $.each($('textarea'), function() {
+        if(!$(this).val())
+            $(this).addClass('screen-only');
+        else
+            $(this).removeClass('screen-only');
+    });
+}
+
+function filter_date_bounds(tab, selector) {
+    console.log(tab);
+    var from = $(tab + ' form.filter input[name=from]').datepicker('getDate');
+    var to = $(tab + ' form.filter input[name=to]').datepicker('getDate');
+    if (to) {
+        to.setHours(23); to.setMinutes(59); to.setSeconds(59);
+    }
+    $.each($(tab + ' ' + selector), function(){
+        var current = $.datepicker.parseDate('d/m/yy', $(this).text());
+        if (current < from || (to && current >= to)) {
+            $(this).parent().parent().addClass('screen-only');
+        } else {
+            $(this).parent().parent().removeClass('screen-only');
+        }
+    });
+}
+
 function load_add_address_dialog() {
   var str = $("#contactform").serialize();
   $.cookie('contactform', str, { path: window.location.pathname });
@@ -389,6 +415,12 @@ function load_tab8_medical() {
             $('.content').append(data);
             window.print();
         });
+    });
+
+    $('#patientrecord-print-button').on('click', function(event) {
+        event.preventDefault();
+        generic_ajaxform_dialog($(this).attr('href'), 'Impression dossier patient',
+                                '#ajax-dlg', '450px', 'Imprimer', false, false);
     });
 
     $('#new-patientrecord').click(function() {

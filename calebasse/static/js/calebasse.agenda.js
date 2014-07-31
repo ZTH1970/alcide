@@ -4,15 +4,6 @@ var app_name = path[2];
 var current_date = path[3];
 COOKIE_PATH = '/' + service + '/agenda';
 
-function delete_prompt(text) {
-  var r = prompt(text + '\n Pour cela veuillez entrer DEL');
-  if (r.toLowerCase().replace(/^\s+|\s+$/g, '') == 'del') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function get_initial_fields(button, base) {
     var participants = new Array();
     var ressource = null;
@@ -248,11 +239,6 @@ function toggle_ressource(ressource) {
         $('ul#availability li.' + ressource_id).remove();
     }
     return $(ressource_target).find('a.tab');
-}
-
-function init_datepickers(dialog) {
-    $('.datepicker-date', dialog).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-    $('.datepicker input', dialog).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
 }
 
 function event_dialog(url, title, width, btn_text) {

@@ -398,3 +398,10 @@ class QuotationsForm(Form):
     date_actes_start = forms.DateField(label=u'Date', localize=True)
     date_actes_end = forms.DateField(label=u'Date', localize=True)
     without_quotations = forms.BooleanField()
+
+class PatientRecordPrintForm(Form):
+
+    prev_appointment_start_date = forms.DateField(label=u'De', required=False)
+    prev_appointment_end_date = forms.DateField(label=u'au', required=False)
+    next_appointment_start_date = forms.DateField(label=u'De', required=False)
+    next_appointment_end_date = forms.DateField(label=u'au', required=False)
