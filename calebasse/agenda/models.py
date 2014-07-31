@@ -207,6 +207,20 @@ class Event(models.Model):
         '''Distance between start and end of the event'''
         return self.end_datetime - self.start_datetime
 
+    @property
+    def time(self):
+        return self.start_datetime.time()
+
+    @property
+    def date(self):
+        return self.start_datetime.date()
+
+    @property
+    def duration(self):
+        if self.timedelta():
+            return self.timedelta().seconds / 60
+        return 0
+
     def match_date(self, date):
         if self.is_recurring():
             # consider exceptions
@@ -360,12 +374,62 @@ class Event(models.Model):
         assert self.start_datetime is not None
         self.sanitize() # init periodicity fields
         super(Event, self).save(*args, **kwargs)
+        self.events_cleaning()
         self.acts_cleaning()
 
     def delete(self, *args, **kwargs):
-        self.canceled = True
-        # save will clean acts
-        self.save(*args, **kwargs)
+        if not self.one_act_already_billed():
+            for exception in self.exceptions.all():
+                exception.delete()
+            self.canceled = True
+            if hasattr(self, 'eventwithact'):
+                # Needed
+                self.eventwithact.canceled = True
+            # save will clean acts
+            self.save(*args, **kwargs)
+
+    @property
+    def acts(self):
+        from ..actes.models import Act
+        return Act.objects.filter(
+                models.Q(parent_event=self) | \
+                models.Q(parent_event__exception_to=self))
+
+    def one_act_already_billed(self):
+        '''
+            Return True if at least one act of the present event or an act
+            of one of its exceptions is already billed.
+        '''
+        return self.acts.filter(already_billed=True).exists()
+
+    def one_act_is_billed(self):
+        '''
+            Return True if at least one act of the present event or an act
+            of one of its exceptions is billed.
+        '''
+        return self.acts.filter(is_billed=True).exists()
+
+    def events_cleaning(self):
+        """
+            Delete exceptions out of bounds if not with an associated act
+            already billed.
+        """
+        events = None
+        if self.recurrence_end_date:
+            events = Event.objects.filter(
+                models.Q(exception_to=self,
+                    exception_date__lt=self.start_datetime.date()) | \
+                models.Q(exception_to=self,
+                    exception_date__gt=self.recurrence_end_date))
+        else:
+            events = Event.objects.filter(exception_to=self,
+                    exception_date__lt=self.start_datetime.date())
+        for event in events:
+            if hasattr(event, 'eventwithact'):
+                if not event.eventwithact.act.already_billed:
+                    event.delete()
+            else:
+                event.delete()
 
     def acts_cleaning(self):
         # list of occurences may have changed
@@ -382,13 +446,12 @@ class Event(models.Model):
         if acts:
             eventwithact = self.eventwithact
             for act in acts:
-                if act.is_billed:
-                    pass
                 occurrence = eventwithact.today_occurrence(act.date)
                 if occurrence:
                     occurrence.update_act(act)
                 else:
-                    act.delete()
+                    if not act.already_billed:
+                        act.delete()
 
     def to_interval(self):
         return Interval(self.start_datetime, self.end_datetime)
@@ -538,14 +601,15 @@ class EventWithAct(Event):
         act.save()
 
     def init_act(self, act):
-        delta = self.timedelta()
-        duration = delta.seconds // 60
-        act._duration = duration
-        act.act_type = self.act_type
-        act.patient = self.patient
+        if not act.is_billed:
+            delta = self.timedelta()
+            duration = delta.seconds // 60
+            act._duration = duration
+            act.act_type = self.act_type
+            act.patient = self.patient
+            act.date = self.start_datetime.date()
+            act.time = self.start_datetime.time()
         act.parent_event = self
-        act.date = self.start_datetime.date()
-        act.time = self.start_datetime.time()
 
     def save(self, *args, **kwargs):
         '''Force event_type to be patient meeting.'''
