@@ -274,22 +274,6 @@ class UpdatePeriodicEventView(BaseEventView):
     form_class = UpdatePeriodicEventForm
     template_name = 'agenda/new-event.html'
 
-def delete_eventwithact(event):
-    assert event.event_type_id == 1
-
-    # in case of "event" is an instance of "Event" model and not "EventWithAct"
-    # and so doesn't have 'act' attribute
-    try:
-        if event.act.id \
-           and not event.act.is_billed:
-            event.act.delete()
-
-        if not event.act.id or \
-           not event.act.is_billed:
-            event.delete()
-    except AttributeError:
-        event.delete()
-
 class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
     model = Event
     success_url = '..'
@@ -297,11 +281,9 @@ class DeleteOccurrenceView(TodayOccurrenceMixin, cbv.DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.event_type_id == 1:
-            delete_eventwithact(self.object)
-        else:
-            self.object.delete()
-
+        # If the exception does not exist we need to create it before set it canceled
+        self.object.save()
+        self.object.delete()
         return HttpResponse(status=204)
 
 class DeleteEventView(cbv.DeleteView):
@@ -311,20 +293,7 @@ class DeleteEventView(cbv.DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # If exceptions remove them only if act is not billed
-        for exception in self.object.exceptions.all():
-            exception.recurrence_periodicity = None
-            exception.exception_to = None
-            exception.save()
-            if exception.event_type_id == 1:
-                delete_eventwithact(exception)
-            else:
-                exception.delete()
-
-        if self.object.event_type_id == 1:
-            delete_eventwithact(self.object)
-        else:
-            self.object.delete()
+        self.object.delete()
         return HttpResponse(status=204)
 
 class AgendaServiceActValidationView(TemplateView):
