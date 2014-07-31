@@ -4,8 +4,13 @@
            <td {% if form.recurrence_periodicity.field.required %}class="required"{% endif %}>
             <p>
            {{ form.recurrence_periodicity.label_tag }}
+           {% if object.one_act_already_billed %}
+           {{ object.recurrence_description }}
+           {{ form.recurrence_periodicity.as_hidden }}
+           {% else %}
            {{ form.recurrence_periodicity }}
            {{ form.recurrence_periodicity.errors }}
+           {% endif %}
            </p>
            </td>
            <td {% if form.recurrence_end_date.field.required %}class="required"{% endif %}>
