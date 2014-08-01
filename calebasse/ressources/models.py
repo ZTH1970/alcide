@@ -234,6 +234,10 @@ class School(NamedAbstractModel):
             self.display_name = self.name
         if self.address:
             self.display_name += u" - "  + self.address
+        if self.zip_code:
+            self.display_name += u" "  + self.zip_code
+        if self.city:
+            self.display_name += u" "  + self.city
         if self.private:
             self.display_name += u" (Privé)"
         else:
