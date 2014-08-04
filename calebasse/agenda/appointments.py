@@ -207,13 +207,13 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         appointment.other_services_names = services
         appointment.init_start_stop(u"Arrivée", start_time)
         activity['arrival'] = start_time
-        appointment.weight = 1
+        appointment.weight = -1
         appointments.append(appointment)
         appointment = Appointment()
         appointment.init_start_stop(u"Départ", end_time)
         appointment.other_services_names = services
         activity['departure'] = end_time
-        appointment.weight = -1
+        appointment.weight = 1
         appointments.append(appointment)
 
     return activity, sorted(appointments, key=lambda app: (app.begin_time, app.weight, app.event_id))
