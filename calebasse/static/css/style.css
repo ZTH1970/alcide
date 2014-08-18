@@ -1403,3 +1403,7 @@ div.statistic {
 .clear {
     clear: both;
 }
+
+.lightgray {
+    color: #bbb;
+}

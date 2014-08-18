@@ -109,7 +109,7 @@
       {% for act in object_list %}
       <tr data-id="{{ act.id }}" data-isbilled="{{ act.is_billed }}"
       {% if not act.is_billed %}class="non-factu"{% else %}{% if not act.invoice_set.all.0.number %}data-oldbilled="True"{% endif %}{% endif %}>
-        <td>{{ act.patient.paper_id }} ({{ act.patient.id }})
+        <td>{{ act.patient.paper_id|default_if_none:'' }} <span class="lightgray">({{ act.patient.id }})</span>
             {{ act.patient.first_name }}
             <span class="lastname">{{ act.patient.last_name }}</span>
         </td>

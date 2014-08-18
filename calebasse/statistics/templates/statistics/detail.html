@@ -28,9 +28,7 @@
         {% for values in data.1 %}
         <tr>
             {% for value in values %}
-                {% if not value|is_list %}
-                <td class="width-limited">{{ value }}</td>
-                {% else %}
+                {% if value|is_list %}
                 <td class="width-limited">
                     <ul>
                         {% for val in value %}
@@ -38,6 +36,10 @@
                         {% endfor %}
                     </ul>
                 </td>
+                {% elif value|is_dict %}
+                <td class="width-limited {{ value.style }}">{{ value.data }}</td>
+                {% else %}
+                <td class="width-limited">{{ value }}</td>
                 {% endif %}
             {% endfor %}
         </tr>

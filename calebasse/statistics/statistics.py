@@ -672,22 +672,22 @@ def active_patients_by_state_only(statistic):
         active_states = ('SUIVI', )
     else:
         active_states = ('TRAITEMENT', )
-    patients = [(p.last_name, p.first_name, p.paper_id) \
+    patients = [(p.last_name, p.first_name, p.paper_id, p.pk) \
         for p in PatientRecord.objects.filter(service=statistic.in_service) \
             if p.get_state_at_day(statistic.in_start_date) and \
                 p.get_state_at_day(statistic.in_start_date).status.type in active_states]
     data_tables_set=[[[['En date du :', formats.date_format(statistic.in_start_date, "SHORT_DATE_FORMAT"), len(patients)]]]]
     data = []
-    data.append(['Nom', 'Prénom', 'N° Dossier'])
+    data.append(['Nom', 'Prénom', 'N° Dossier', 'N° dossier informatique'])
     p_list = []
-    for ln, fn, pid in patients:
+    for ln, fn, paper_id, pid in patients:
         ln = ln or ''
         if len(ln) > 1:
             ln = ln[0].upper() + ln[1:].lower()
         fn = fn or ''
         if len(fn) > 1:
             fn = fn[0].upper() + fn[1:].lower()
-        p_list.append((ln, fn, str(pid or '')))
+        p_list.append((ln, fn, str(paper_id or ''), {'data': pid, 'style': 'lightgray'}))
     data.append(sorted(p_list,
         key=lambda k: k[0]+k[1]))
     data_tables_set[0].append(data)
@@ -1746,6 +1746,7 @@ class Statistic(object):
         self.no_synthesis = inputs.get('no_synthesis')
 
     def get_data(self):
+        print self.name
         func = globals()[self.name]
         data = func(self)
         self.data = [[[["Date du jour", "Service", "Nom statistique"],
