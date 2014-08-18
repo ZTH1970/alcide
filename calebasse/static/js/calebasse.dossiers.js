@@ -377,6 +377,7 @@ function load_tab8_medical() {
       load: function(event, ui) {
         $(document).on('click', '.js-click-to-expand', function (event) {
              $(event.target).parents('.js-expandable').toggleClass('js-expanded');
+             $(event.target).next().toggle();
         });
         var tabid = $(ui.tab).attr('id');
         if (tabid == "ui-id-1")

@@ -159,4 +159,3 @@ input[type=checkbox] + button {
 .js-click-to-expand:hover { font-weight: bold; }
 
 .js-expandable .js-to-expand { display: none; }
-.js-expandable.js-expanded .js-to-expand { display: block; }
