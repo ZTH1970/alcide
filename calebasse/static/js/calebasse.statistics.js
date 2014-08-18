@@ -1,7 +1,7 @@
 (function($) {
   $(function() {
     $('.stats').click(function() {
-        var url = 'form/' + this.id;
+        var url = 'form/' + this.id +  '/';
         $('#ajax-dlg').load(url,
           function () {
              $(this).dialog({title: 'Choix des parametres', width: '700px',
