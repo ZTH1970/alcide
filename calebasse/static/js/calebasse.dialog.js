@@ -85,7 +85,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
 function calebasse_ajax_form(id) {
   function onsuccess(response, status, xhr, form) {
     if ($('.errorlist', response).length != 0) {
-      $(id).html(response);
+      $(id).parent().html(response);
       $('form').ajaxForm({
         success: onsuccess,
       });
