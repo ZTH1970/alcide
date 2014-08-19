@@ -17,7 +17,7 @@ function enable_button(button) {
   $button.removeAttr('disabled');
 }
 
-function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback, height, extra_button) {
+function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback, height, extra_button, replace_content) {
   if (! height)
     height = 'auto';
   $(id).load(url,
@@ -33,6 +33,8 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
             $(id + ' form').ajaxForm({
               success: onsuccess,
             });
+          } else if(replace_content) {
+              $('body').html(parse);
           } else {
             if (redirectToUrl) {
               if (redirectToUrl.indexOf('#') == 0) {

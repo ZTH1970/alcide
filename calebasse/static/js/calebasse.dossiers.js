@@ -227,7 +227,7 @@ function load_tab3_addresses() {
     });
     $('.update-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/update', 'Modifier un contact',
-            '#ajax-dlg', '800px', 'Modifier', null, nir_check);
+            '#ajax-dlg', '800px', 'Modifier', null, nir_check, null, null, true);
     });
     $('.del-contact').click(function() {
         generic_ajaxform_dialog('contact/' + $(this).data('id') + '/del?address=' + $(this).data('address-id'),
@@ -239,7 +239,7 @@ function load_tab3_addresses() {
     });
     $('.update-address-btn').click(function() {
         generic_ajaxform_dialog('address/' + $(this).data('id') + '/update', 'Modifier une adresse',
-            '#ajax-dlg', '600px', 'Modifier');
+            '#ajax-dlg', '600px', 'Modifier', null, null, null, null, true);
     });
     $('.del-address').click(function() {
         generic_ajaxform_dialog('address/' + $(this).data('id') + '/del', 'Supprimer une addresse',

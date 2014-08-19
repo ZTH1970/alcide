@@ -99,6 +99,11 @@ class UpdatePatientContactView(RecordPatientRecordIdMixing, cbv.UpdateView):
     template_name = 'dossiers/patientcontact_new.html'
     success_url = '../../view#tab=2'
 
+    def form_valid(self, form):
+        valid = super(UpdatePatientContactView, self).form_valid(form)
+        messages.info(self.request, u'Modification enregistrée avec succès')
+        return valid
+
 update_patient_contact = UpdatePatientContactView.as_view()
 
 class DeletePatientContactView(cbv.DeleteView):
