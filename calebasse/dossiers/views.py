@@ -552,7 +552,7 @@ class PatientRecordPaperIDUpdateView(cbv.UpdateView):
     model = PatientRecord
     form_class = forms.PaperIDForm
     template_name = 'dossiers/generic_form.html'
-    success_url = '../..'
+    success_url = '../view#tab=0'
 
 update_paper_id = PatientRecordPaperIDUpdateView.as_view()
 
