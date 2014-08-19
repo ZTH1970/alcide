@@ -67,18 +67,16 @@ class NewAppointmentForm(BaseForm):
                     .order_by('name')
 
     def clean_time(self):
+        if self.cleaned_data['time']:
+            return self.cleaned_data['time']
+
         act_type = self.data.get('act_type')
         # act type is available as raw data from the post request
         if act_type in self.special_types:
             return time(8, 0)
-        if self.cleaned_data['time']:
-            return self.cleaned_data['time']
         raise forms.ValidationError(_(u'This field is required.'))
 
     def clean_duration(self):
-        act_type = self.data.get('act_type')
-        if act_type in self.special_types:
-            return 10
         if self.cleaned_data['duration']:
             duration = self.cleaned_data['duration']
             try:
@@ -88,6 +86,10 @@ class NewAppointmentForm(BaseForm):
                 return duration
             except ValueError:
                 raise forms.ValidationError(u'Le champ doit contenir uniquement des chiffres')
+
+        act_type = self.data.get('act_type')
+        if act_type in self.special_types:
+            return 10
         raise forms.ValidationError(_(u'This field is required.'))
 
     def clean_patient(self):
