@@ -375,7 +375,7 @@ function load_tab8_medical() {
   $(function() {
     var $tabs = $('#tabs').tabs({
       load: function(event, ui) {
-        $(document).on('click', '.js-click-to-expand', function (event) {
+        $('.js-click-to-expand').on('click', function (event) {
              $(event.target).parents('.js-expandable').toggleClass('js-expanded');
              $(event.target).next().toggle();
         });
