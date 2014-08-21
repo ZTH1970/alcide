@@ -20,7 +20,6 @@ function print_cleanup() {
 }
 
 function filter_date_bounds(tab, selector) {
-    console.log(tab);
     var from = $(tab + ' form.filter input[name=from]').datepicker('getDate');
     var to = $(tab + ' form.filter input[name=to]').datepicker('getDate');
     if (to) {
@@ -70,6 +69,10 @@ function warning_on_unsave_change() {
     $('button').on("click", function() {
         form_changed = false;
     });
+    var tabid = parseInt($.url($(location).attr('href')).fparam('tab')) + 1;
+    if ($('.errorlist', '#ui-tabs-' + tabid).length != 0) {
+      form_changed = true;
+    }
 }
 
 function state_dialog(url, state_title, state_type) {
@@ -158,34 +161,6 @@ function load_tab1_general() {
 }
 
 function load_tab2_adm() {
-    warning_on_unsave_change();
-    init_magic_dialog();
-    $('#prescription-transport-btn').click(function() {
-        $('#ajax-dlg').load('prescription-transport',
-          function () {
-             $(this).dialog({title: 'Prescription de transport', width: '800px',
-                      buttons: [ { text: "Fermer",
-                          click: function() { $(this).dialog("close"); } },
-                      { text: "Prescrire",
-                          click: function() { $("#ajax-dlg form").submit(); $(this).dialog("close"); } }]});
-             $('.addresses input[type=radio]').first().click();
-         });
-         return false;
-    });
-    $('#new-protection-btn').click(function() {
-        generic_ajaxform_dialog('protection/new', 'Ajouter une mesure de protection',
-            '#ajax-dlg', '800px', 'Ajouter', null, add_datepickers);
-    });
-    $('.update-protection-btn').click(function() {
-        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/update', 'Modifier une mesure de protection',
-            '#ajax-dlg', '800px', 'Modifier', null, add_datepickers);
-    });
-    $('.del-protection').click(function() {
-        generic_ajaxform_dialog('protection/' + $(this).data('id') + '/del', 'Supprimer une mesure de protection',
-            '#ajax-dlg', '500px', 'Supprimer');
-    });
-    $('input#id_id-birthdate').datepicker({dateFormat: 'd/m/yy', showOn: 'button' });
-    calebasse_ajax_form('#tabs-2');
 }
 
 function load_tab3_addresses() {
