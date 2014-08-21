@@ -97,6 +97,7 @@ def delete_view(request, service, model_name, pk):
 class NewSchoolView(CreateView):
     model = School
     template_name =  'ressources/new.html'
+    success_url = '..'
 
     def get_initial(self, **args):
         initial = super(NewSchoolView, self).get_initial()
@@ -108,6 +109,7 @@ new_school_view = NewSchoolView.as_view()
 class UpdateSchoolView(UpdateView):
     model = School
     template_name =  'ressources/update.html'
+    success_url = '..'
 
     def get_initial(self, **args):
         initial = super(UpdateSchoolView, self).get_initial()
