@@ -19,21 +19,28 @@ function print_cleanup() {
     });
 }
 
-function filter_date_bounds(tab, selector) {
+function filter_date_bounds(tab, container, selector) {
     var from = $(tab + ' form.filter input[name=from]').datepicker('getDate');
     var to = $(tab + ' form.filter input[name=to]').datepicker('getDate');
     if (to) {
         to.setHours(23); to.setMinutes(59); to.setSeconds(59);
     }
-    $.each($(tab + ' ' + selector), function(){
-        var current = $.datepicker.parseDate('d/m/yy', $(this).text());
-        if (current < from || (to && current >= to)) {
-            $(this).parent().parent().addClass('screen-only');
-        } else {
-            $(this).parent().parent().removeClass('screen-only');
+    $.each($(tab + ' ' + container), function(element) {
+        var block = $(this);
+        block.addClass('screen-only');
+        if ($(selector, $(this)).length) {
+            $.each($(selector, this), function() {
+                var current = $.datepicker.parseDate('d/m/yy', $(this).text());
+                if (current < from || (to && current >= to)) {
+                    $(this).parent().parent().addClass('screen-only');
+                } else {
+                    block.removeClass('screen-only');
+                    $(this).parent().parent().removeClass('screen-only');
+                }
+            });
         }
-    });
-}
+    })
+};
 
 function load_add_address_dialog() {
   var str = $("#contactform").serialize();
