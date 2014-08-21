@@ -32,6 +32,7 @@ from calebasse.dossiers.states import STATES_MAPPING, STATES_BTN_MAPPER
 from calebasse.ressources.models import (Service,
     SocialisationDuration, MDPHRequest, MDPHResponse)
 from calebasse.facturation.list_acts import list_acts_for_billing_CMPP_per_patient
+from calebasse.facturation.invoice_header import render_to_pdf_file
 
 from calebasse.decorators import validator_only
 
@@ -261,6 +262,35 @@ class PatientRecordView(cbv.UpdateView):
         return ctx
 
 patient_record = PatientRecordView.as_view()
+
+class PatientRecordPrint(cbv.DetailView):
+    model = PatientRecord
+    content_type = 'application/pdf'
+    template_name = 'dossiers/patientrecord_print.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PatientRecordPrint, self).get_context_data(*args, **kwargs)
+        for view in (PatientRecordGeneralView, PatientRecordAdmView,
+                     PatientRecordAddrView, PatientRecordNotifsView, PatientRecordOldActs,
+                     PatientRecordNextAppointmentsView, PatientRecordSocialisationView):
+            view_instance = view(request=self.request, object=self.object,
+                                 service=self.service)
+            context.update(view_instance.get_context_data(object=self.object))
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        path = render_to_pdf_file([self.template_name],
+                                  self.get_context_data(object = self.object))
+        content = File(file(path))
+        response = HttpResponse(content, self.content_type)
+        response['Content-Length'] = content.size
+        output = 'dossier_%s.pdf' % self.object.id
+        response['Content-Disposition'] = \
+            'attachment; filename="%s"' % output
+        return response
+
+patient_record_print = PatientRecordPrint.as_view()
 
 class PatientRecordGeneralView(cbv.UpdateView):
     model = PatientRecord

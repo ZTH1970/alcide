@@ -19,6 +19,9 @@
 <h2><strong>{% if current_state.status.type == 'CLOS' %}<span class="highlight">{% endif %}<span class="lastname">{{ object.last_name }}</span> {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% if current_state.status.type == 'CLOS' %} clos</span>{% endif %}</strong></h2>
 <span id="ajax-redirect" data-url="{{ object.id }}/view"/>
 <a href="..">Retourner aux dossiers</a>
+<form action="{% url "patientrecord_print" service object.id%}">
+<button class="icon-print">{% trans "Imprimer tout le dossier" %}</button>
+</form>
 {% if 'validator' in role %}{% if object.can_be_deleted %}<button type="button" id="patientrecord-delete">Supprimer</button>{% endif %}{% endif %}
 {% endblock %}
 
