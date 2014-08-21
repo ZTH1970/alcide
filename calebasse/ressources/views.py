@@ -107,7 +107,7 @@ new_school_view = NewSchoolView.as_view()
 
 class UpdateSchoolView(UpdateView):
     model = School
-    template_name =  'ressources/new.html'
+    template_name =  'ressources/update.html'
 
     def get_initial(self, **args):
         initial = super(UpdateSchoolView, self).get_initial()
