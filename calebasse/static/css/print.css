@@ -51,6 +51,12 @@ table#activity, div#activity {
   font-size: 80%;
 }
 
+div#activity table {
+    width: 100%;
+    font-size: 75%;
+    border-collapse: collapse;
+}
+
 div.worker-agenda h3 {
   display: block;
   margin-top: 0;
@@ -88,7 +94,7 @@ div.page-header {
 }
 
 div#activity {
-    float: left;
+    float: none;
 }
 
 div#activity .header {
