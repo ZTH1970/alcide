@@ -88,11 +88,6 @@ div#sidebar {
   display: none;
 }
 
-div.page-header {
-  position: fixed;
-  top: 0;
-}
-
 div#activity {
     float: none;
 }
@@ -157,6 +152,10 @@ input[value=''] {
 
 .select2-container + select {
     display: none;
+}
+
+td.avoid-page-break-before {
+    page-break-before: avoid;
 }
 
 #tabs-8 label:after {

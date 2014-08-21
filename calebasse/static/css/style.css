@@ -1444,3 +1444,7 @@ div.statistic {
 .lightgray {
     color: #bbb;
 }
+
+.no-border {
+    border: 0;
+}

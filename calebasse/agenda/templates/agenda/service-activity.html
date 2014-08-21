@@ -10,23 +10,23 @@
 
 {% block agenda-content %}
 
-<div class="print-only page-header">{{ date|date:"DATE_FORMAT"|lower }}</div>
-
-<h2 class="print-only">Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
 
 <table class="main" id="activity">
   <thead>
+      <tr><th class="no-border" colspan=5 style="border: 0;">
+          <h2 class="print-only">Activité du {{ service_name }} - {{ date|date:"DATE_FORMAT"|title }}</h2>
+      </th></tr>
       <tr> <th>Heure</th> <th>Libellé</th> <th>Absence</th> <th>Type d'acte</th> <th>Intervenants</th> </tr>
   </thead>
   <tbody>
     {% for row_appointments in appointments_times %}
     <tr class="hour-change">
-      <td class="hour"  rowspan="{{ row_appointments.1.row }}">{{ row_appointments.0 }}</td>
+      <td class="hour" rowspan="{{ row_appointments.1.row }}">{{ row_appointments.0 }}</td>
       {% for appointment in row_appointments.1.appointments %}
       {% if forloop.counter != 1 %}
       <tr>
         {% endif %}
-        <td {% if appointment.type == 2 %}colspan="2"{% endif %}>{{ appointment.label }}{% if appointment.paper_id %} - {{ appointment.paper_id }} {% endif %}{% if appointment.workers_absent %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
+        <td {% if appointment.type == 2 %}colspan="2"{% endif %} class="avoid-page-break-before" style="page-break-before: avoid;">{{ appointment.label }}{% if appointment.paper_id %} - {{ appointment.paper_id }} {% endif %}{% if appointment.workers_absent %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
         <td>{% if appointment.absent %}{{ appointment.state }}{% endif %}</td>
         {% if appointment.type != 2 %}<td>{{ appointment.act }}</td>{% endif %}
         <td>
