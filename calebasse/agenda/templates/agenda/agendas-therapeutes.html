@@ -40,7 +40,7 @@
 <span class="actions screen-only">
   <button id="uncheck-all" type="button" class="icon-uncheck screen-only">Tout décocher</button>
   <button id="check-all" type="button" style="display: none" class="icon-check screen-only">Tout cocher</button>
-  <button id='print-button-therapeutes' class="icon-print screen-only">Imprimer</button>
+  <button class="print-button-therapeutes icon-print screen-only">Imprimer</button>
 </span>
 {% for worker_agenda in workers_agenda %}
 {% if worker_agenda.appointments %}
@@ -116,7 +116,7 @@
             }
             update_page_break();
 
-            $('button#print-button-therapeutes').click(function() {
+            $('button.print-button-therapeutes').click(function() {
               $('div#activity').addClass('screen-only');
               $.each($(".printable"), function(k, v) {
                 if ($(v).is(':checked')) {
@@ -155,5 +155,5 @@
         });
     </script>
 
-<button id='print-button' class='screen-only'>Imprimer</button>
+    <button class="print-button-therapeutes icon-print screen-only">Imprimer</button>
 {% endblock %}
