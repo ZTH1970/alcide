@@ -94,16 +94,11 @@ class NewPatientContactView(RecordPatientRecordIdMixing, cbv.CreateView):
 
 new_patient_contact = NewPatientContactView.as_view()
 
-class UpdatePatientContactView(RecordPatientRecordIdMixing, cbv.UpdateView):
+class UpdatePatientContactView(RecordPatientRecordIdMixing, cbv.NotificationDisplayView, cbv.UpdateView):
     model = PatientContact
     form_class = forms.PatientContactForm
     template_name = 'dossiers/patientcontact_new.html'
     success_url = '../../view#tab=2'
-
-    def form_valid(self, form):
-        valid = super(UpdatePatientContactView, self).form_valid(form)
-        messages.info(self.request, u'Modification enregistrée avec succès')
-        return valid
 
 update_patient_contact = UpdatePatientContactView.as_view()
 
@@ -143,17 +138,11 @@ class NewPatientAddressView(cbv.CreateView):
 
 new_patient_address = NewPatientAddressView.as_view()
 
-class UpdatePatientAddressView(cbv.UpdateView):
+class UpdatePatientAddressView(cbv.NotificationDisplayView, cbv.UpdateView):
     model = PatientAddress
     form_class = forms.PatientAddressForm
     template_name = 'dossiers/patientaddress_new.html'
     success_url = '../../view#tab=2'
-
-    def form_valid(self, form):
-        messages.add_message(self.request,
-                messages.INFO,
-                u'Modification enregistrée avec succès.')
-        return super(UpdatePatientAddressView, self).form_valid(form)
 
 update_patient_address = UpdatePatientAddressView.as_view()
 
@@ -341,7 +330,7 @@ class PatientRecordAdmView(cbv.UpdateView):
 
 tab2_fiche_adm = PatientRecordAdmView.as_view()
 
-class PatientRecordAddrView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
+class PatientRecordAddrView(cbv.ServiceViewMixin, cbv.NotificationDisplayView, cbv.MultiUpdateView):
     model = PatientRecord
     forms_classes = {
             'contact': forms.PatientContactForm,

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
@@ -7,12 +9,20 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import resolve
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib import messages
 
 from calebasse.ressources.models import Service
 from calebasse.middleware.request import get_request
 from calebasse.utils import is_super_user, is_validator
 
 HOME_SERVICE_COOKIE = 'home-service'
+
+class NotificationDisplayView(object):
+
+    def form_valid(self, form):
+        valid = super(NotificationDisplayView, self).form_valid(form)
+        messages.info(self.request, u'Modification enregistrée avec succès')
+        return valid
 
 class ReturnToObjectMixin(object):
     def get_success_url(self):
