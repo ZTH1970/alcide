@@ -183,7 +183,7 @@ class Event(models.Model):
                 week = self.start_datetime.date().isocalendar()[1]
                 start_week_parity = week % 2
                 if start_week_parity != self.recurrence_week_parity:
-                    raise forms.ValidationError(u'Le date de départ de la périodicité est en semaine {week}.'.format(week=week))
+                    raise forms.ValidationError(u'La date de départ de la périodicité est en semaine {week}.'.format(week=week))
         if self.recurrence_week_rank is not None and self.start_datetime:
             start_week_ranks = weekday_ranks(self.start_datetime.date())
             if self.recurrence_week_rank not in start_week_ranks:
