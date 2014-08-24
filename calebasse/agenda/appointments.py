@@ -49,7 +49,7 @@ class Appointment(object):
 
     def init_from_event(self, event, service, validation_states=None):
         delta = event.end_datetime - event.start_datetime
-        self.event = isinstance(event, EventWithAct)
+        self.event = not isinstance(event, EventWithAct)
         self.event_id = event.id
         self.length = delta.seconds / 60
         self.title = event.title
