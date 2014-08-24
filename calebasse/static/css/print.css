@@ -39,7 +39,7 @@ div#content div.worker-agenda h2 {
   background: none;
 }
 
-.worker-agenda+.worker-agenda {
+div[class="worker-agenda"]~div[class="worker-agenda"] {
   page-break-before: always;
 }
 
