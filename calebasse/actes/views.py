@@ -114,7 +114,7 @@ class UpdateActView(UpdateView):
     success_url = '..'
 
     def form_valid(self, form):
-        result = super(UpdateView, self).form_valid(form)
+        result = super(UpdateActView, self).form_valid(form)
         if self.object.event:
             doctors = copy.copy(self.object.doctors.all())
             self.object.event.participants =  doctors
