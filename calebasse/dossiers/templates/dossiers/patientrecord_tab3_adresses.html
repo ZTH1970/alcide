@@ -31,7 +31,7 @@
         {% if object.policyholder.id == object.id %} checked="checked" {% endif %}
         id="id_policyholder-policyholder_{{ object.id }}"
         value="{{ object.id }}"
-        class="policyholder-radio"
+        class="autosubmit"
         name="policyholder-policyholder">
         <button type="button" data-id="{{ object.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
       </div>
@@ -50,7 +50,7 @@
         {% if object.policyholder.id == contact.id %} checked="checked" {% endif %}
         id="id_policyholder-policyholder_{{ contact.id }}"
         value="{{ contact.id }}"
-        class="policyholder-radio"
+        class="autosubmit"
         name="policyholder-policyholder">
         <button type="button" data-id="{{ contact.id }}" data-address-id="{{ address.id }}" class="del-contact icon-minus" title="Supprimer"></button>
         <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>
@@ -85,7 +85,7 @@
           {% if object.policyholder.id == contact.id %} checked="checked" {% endif %}
           id="id_policyholder-policyholder_{{ contact.id }}"
           value="{{ contact.id }}"
-          class="policyholder-radio"
+          class="autosubmit"
           name="policyholder-policyholder">
           <button type="button" data-id="{{ contact.id }}" data-address-id="{{ address.id }}" class="del-contact icon-minus" title="Supprimer"></button>
           <button type="button" data-id="{{ contact.id }}" class="update-contact-btn icon-edit" title="Modifier"></button>

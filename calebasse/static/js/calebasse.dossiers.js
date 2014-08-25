@@ -162,7 +162,7 @@ function load_tab1_general() {
       $('#patientrecord-history').click();
       location.hash = '';
     }
-    $('.autosubmit').click(function() {
+    $('.autosubmit').on('click', function() {
         $('#general-form').submit();
     });
 }
@@ -200,8 +200,8 @@ function load_tab3_addresses() {
          }
       });
     }
-    $('.policyholder-radio').click(function() {
-        $("#policyholder-form").submit();
+    $('.autosubmit').on('click', function() {
+        $('#policyholder-form').submit();
     });
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
