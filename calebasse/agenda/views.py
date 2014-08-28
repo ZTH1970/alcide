@@ -433,6 +433,7 @@ class AgendasTherapeutesView(AgendaHomepageView):
 
     def get_context_data(self, **kwargs):
         context = super(AgendasTherapeutesView, self).get_context_data(**kwargs)
+        current_service_only = settings.CURRENT_SERVICE_EVENTS_ONLY
 
         time_tables = TimeTable.objects.select_related('worker'). \
                 filter(services=self.service). \
@@ -444,14 +445,12 @@ class AgendasTherapeutesView(AgendaHomepageView):
                 .select_related()
         events = Event.objects.for_today(self.date) \
                 .exclude(event_type_id=1) \
-                .filter(services=self.service) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('services',
                         'exceptions',
                         'participants')
         eventswithact = EventWithAct.objects.for_today(self.date) \
-                .filter(services=self.service) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related(
@@ -460,7 +459,11 @@ class AgendasTherapeutesView(AgendaHomepageView):
                         'act_set__actvalidationstate_set',
                         'exceptions', 'participants')
 
-        context['CURRENT_SERVICE_EVENTS_ONLY'] = settings.CURRENT_SERVICE_EVENTS_ONLY
+        if current_service_only:
+            events = events.filter(services=self.service)
+            eventswithact = eventswithact.filter(services=self.service)
+
+        context['CURRENT_SERVICE_EVENTS_ONLY'] = current_service_only
 
         events = [ e.today_occurrence(self.date) for e in events ] \
              + [ e.today_occurrence(self.date) for e in eventswithact ]
