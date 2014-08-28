@@ -41,7 +41,7 @@
        {% elif worker|is_intervenant %}
        <li id="worker-{{worker.id}}" class="item intervenant worker" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="icon-toggle"></span></li>
        {% else %}
-       <li id="selector-worker-{{worker.id}}" class="item worker" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="icon-toggle"></span></li>
+       <li id="worker-{{worker.id}}" class="item worker" data-target=".worker-{{worker.id}}.agenda">{{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if not worker.services.all %} (Ext){% endif %} <span class="icon-toggle"></span></li>
        {% endif %}
        {% endfor %}
      </ul></dd>
