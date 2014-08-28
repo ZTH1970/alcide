@@ -89,14 +89,12 @@
     {% endif %}
 
     {% if appointment.validation %}
-    <div>
-      <span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong>, le {{ appointment.validation.1.created }} par {{ appointment.validation.1.author }}
-        {% if appointment.validation.1.auto %}(par validation automatique){% endif %}. {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
+      <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong> {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
         {% else %}
-        Non pointé.
+          Non pointé.
         {% endif %}
-      </span>
-    </div>
+        </span>
+       </div>
     {% endif %}
 
     {% if not appointment.validation.0.validation_locked and appointment.validation.3 %}
@@ -125,4 +123,3 @@
   {% endfor %}
 </div>
 </div>
-
