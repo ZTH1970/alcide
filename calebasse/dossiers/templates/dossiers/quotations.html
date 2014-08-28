@@ -11,22 +11,23 @@
 <div id="sidebar">
   <div>
     <form>
-      <h3>Rechercher dans les dossiers</h3>
+      <h3>Rechercher les dossiers</h3>
       <div>
-        <label>sans quotations
+        <label>
           <input name="without_quotations" type="checkbox"
-                 {% if request.GET.without_quotations == 'on' %}checked="checked"{% endif %}/></label>
+                 {% if request.GET.without_quotations == 'on' %}checked="checked"{% endif %}/> Sans quotation MISES</label>
       </div>
       <div>
-        <label>sans quotations ANAP
+        <label>
           <input name="without_anap_quotations" type="checkbox"
-                 {% if request.GET.without_anap_quotations == 'on' %}checked="checked"{% endif %}/></label>
+                 {% if request.GET.without_anap_quotations == 'on' %}checked="checked"{% endif %}/> Sans quotation ANAP</label>
       </div>
-      <h3>Avec au moins un acte (optionnel)</h3>
-      Après (jj/mm/aaaa)
+      <h5>Avec au moins un acte (optionnel)</h5>
+      Après le (jj/mm/aaaa)
       <label><input name="date_actes_start" type="text" value="{{ request.GET.date_actes_start }}"></label>
-      Avant (jj/mm/aaaa)
+      Avant le (jj/mm/aaaa)
       <label><input name="date_actes_end" type="text" value="{{ request.GET.date_actes_end }}"></label>
+      <p><br/></p>
       {% if request.GET %}
       <div class="search-reset">
         <button id="search">Rechercher</button>
@@ -38,7 +39,7 @@
       <p id="search-results" style="display: none; "></p>
   </div>
   <div id="filtre">
-    <h3>Filtres sur l'état</h3>
+    <h4>Filtres sur l'état</h4>
     {{ search_form.states }}
     <button id="btn_all_state">Tous</button>
     <button id="btn_none_state">Aucun</button>
