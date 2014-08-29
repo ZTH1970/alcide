@@ -125,11 +125,11 @@ class Appointment(object):
         self.init_busy_time(title, length, begin_time, description)
         self.holiday = True
 
-    def init_start_stop(self, title, time):
+    def init_start_stop(self, title, time, type):
         """
         title: Arrivee ou Depart
         """
-        self.type = "info"
+        self.type = type
         self.title = title
         self.__set_time(time)
 
@@ -203,14 +203,20 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         start_time = interval_set.lower_bound()
         end_time = interval_set.upper_bound()
         services = [s.slug for s in time_table.services.all() if s != service]
+
+        if services:
+            appointment_type = 'busy-elsewhere'
+        else:
+            appointment_type = 'info'
+
         appointment = Appointment()
         appointment.other_services_names = services
-        appointment.init_start_stop(u"Arrivée", start_time)
+        appointment.init_start_stop(u"Arrivée", start_time, appointment_type)
         activity['arrival'] = start_time
         appointment.weight = -1
         appointments.append(appointment)
         appointment = Appointment()
-        appointment.init_start_stop(u"Départ", end_time)
+        appointment.init_start_stop(u"Départ", end_time, appointment_type)
         appointment.other_services_names = services
         activity['departure'] = end_time
         appointment.weight = 1
