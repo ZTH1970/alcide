@@ -62,8 +62,10 @@
         <tbody>
             {% for appointment in worker_agenda.appointments %}
             <tr data-event-id="{{ appointment.event_id }}">
-                <td class="col-time">{{ appointment.begin_hour }}</td>
-                {% if not CURRENT_SERVICE_EVENTS_ONLY and not appointment.holiday and appointment.type != 'info' and appointment.other_services_names  %}
+                <td class="col-time">
+                  {{ appointment.begin_hour }}
+                </td>
+                {% if not CURRENT_SERVICE_EVENTS_ONLY and not appointment.holiday and appointment.type != 'info' and appointment.services_names and service not in appointment.services_names %}
                 <td colspan=8 class="col-record-id">
                   {% if appointment.event %}Evenement{% else %}Rendez-vous{% endif %}
                   {% with services=appointment.other_services_names|length %}
