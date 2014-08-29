@@ -202,13 +202,14 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
             continue
         start_time = interval_set.lower_bound()
         end_time = interval_set.upper_bound()
-        services = [s.slug for s in time_table.services.all() if s != service]
 
-        if services:
-            appointment_type = 'busy-elsewhere'
-        else:
+        services = time_table.services.all()
+        common_service = service in services
+        services = [s.slug for s in services if s != service]
+        if common_service:
             appointment_type = 'info'
-
+        else:
+            appointment_type = 'busy-elsewhere'
         appointment = Appointment()
         appointment.other_services_names = services
         appointment.init_start_stop(u"Arrivée", start_time, appointment_type)
