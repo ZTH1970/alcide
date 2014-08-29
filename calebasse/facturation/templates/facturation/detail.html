@@ -45,7 +45,7 @@
     <h3>Jours non verrouillés</h3>
         <ul>
         {% for day in days_not_locked %}
-            <li><a href="../../agenda/{{ day.year }}-{{ day.month }}-{{ day.day }}/validation-des-actes">{{ day.day }}/{{ day.month }}/{{ day.year }}</a></li>
+            <li><a href="../../agenda/{{ day.year }}-{{ day.month }}-{{ day.day }}/validation-des-actes" target="_blank">{{ day.day }}/{{ day.month }}/{{ day.year }}</a></li>
         {% endfor %}
         </ul>
     {% endif %}
