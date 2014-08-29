@@ -19,7 +19,7 @@ from calebasse.dossiers.models import PatientRecord
 from calebasse.agenda.models import EventWithAct
 
 SEND_MAIL = "mates@entrouvert.com"
-OUTPUT_DIR = "./"
+OUTPUT_DIR = "/var/log/calebasse"
 PREFIX = "analyse"
 
 ANALYSE_SDT = datetime(2013,1,1)
