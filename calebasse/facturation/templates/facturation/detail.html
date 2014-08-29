@@ -311,8 +311,8 @@
               {% endif %}
             {% endif %}
 
-                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <h3><span class="patient_pk">({{ patient.pk }})</span>
+                  <a href="../../dossiers/{{ patient.pk }}/view" target="_blank">{% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 {% if patient.pause %}
@@ -385,8 +385,8 @@
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
-                <h3>{% if patient.pk %}<a href="../../dossiers/{{ patient.pk }}/view" target="_blank">{% endif %}
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}{% if patient.pk %}({{ patient.pk }}) {% endif %}<span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}{% if patient.pk %}</a>{% endif %}</h3>
+                <h3><span class="patient_pk">({{ patient.pk }})</span>{% if patient.pk %}<a href="../../dossiers/{{ patient.pk }}/view" target="_blank">{% endif %}
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}<span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}{% if patient.pk %}</a>{% endif %}</h3>
                 <div class="info">
                 </div>
                 <ul>
@@ -435,8 +435,8 @@
             {% else %}
             <div class="frame dossier">
             {% endif %}
-                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 {% if patient.pause %}
@@ -474,8 +474,8 @@
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
-                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 <ul>
@@ -512,8 +512,8 @@
             {% else %}
             <div class="frame dossier">
             {% endif %}
-                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 {% if patient.pause %}
@@ -561,8 +561,8 @@
         <div id="dossiers-concernes">
         {% for patient, detail in patients_stats %}
             <div class="frame dossier" id="to-hide">
-                <h3><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
-                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}({{ patient.pk }}) <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
                 <div class="info">
                 </div>
                 <ul>
