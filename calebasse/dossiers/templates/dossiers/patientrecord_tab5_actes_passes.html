@@ -24,7 +24,7 @@
       <tbody>
       {% for act, state, missing_workers in last_rdvs %}
       <tr>
-        <td><span class="date">{{ act.date|date:"SHORT_DATE_FORMAT" }}</span>
+        <td><span class="date">{{ act.date|date:"DATE_FORMAT" }}</span>
           <span class="time">{{ act.time|date:"H:i" }}</span>{% if missing_workers %} <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>{% endif %}</td>
         <td>{% if state %}{% if act.is_absent %}<strong>{% endif %}{% if state.state_name == 'ACT_DOUBLE' or state.state_name == 'ACT_LOST' %}Présent ({{ state }}){% else %}{{ state }}{% endif %}{% if act.is_absent %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
         <td>{{ act.act_type }}</td>

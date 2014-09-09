@@ -19,7 +19,7 @@
     <tbody>
     {% for event, state, missing_participants, inactive_participants in next_rdvs %}
     <tr>
-      <td><span class="date">{{ event.start_datetime|date:"SHORT_DATE_FORMAT" }}</span>
+      <td><span class="date">{{ event.start_datetime|date:"DATE_FORMAT" }}</span>
           <span class="time">{% firstof event.start_datetime|date:"H:i"|title %}</span>{% if missing_participants or inactive_participants %} <span title="Au moins un intervenant est absent ou ne fait plus partie du service" class="icon-warning-sign absent"></span>{% endif %}</td>
       <td>{% if state %}{% if state.state_name != 'VALIDE' %}<strong>{% endif %}{{ state }}{% if state.state_name != 'VALIDE' %}</strong>{% endif %}{% else %}Non pointé.{% endif %}</td>
       <td>{{ event.act_type }}</td>
