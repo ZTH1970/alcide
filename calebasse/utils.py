@@ -1,6 +1,9 @@
 from django.contrib.auth.models import Group
+from django.conf import settings
 
 from datetime import timedelta, datetime
+
+from .middleware.request import get_request
 
 __EPOCH = datetime(day=5,month=1,year=1970)
 
@@ -75,3 +78,15 @@ def get_nir_control_key(nir):
         return (97 - (nir % 97))
     except:
         return None
+
+def get_service_setting(setting_name, default_value=None):
+    from .cbv import HOME_SERVICE_COOKIE
+    request = get_request()
+    if not request:
+        return None
+    service = request.COOKIES.get(HOME_SERVICE_COOKIE)
+    if not service:
+        return None
+    if not hasattr(settings, 'SERVICE_SETTINGS'):
+        return None
+    return settings.SERVICE_SETTINGS.get(service, {}).get(setting_name) or default_value
