@@ -21,6 +21,7 @@ from calebasse.ressources.models import (ServiceLinkedAbstractModel,
 from calebasse.actes.models import Act
 
 from ..middleware.request import get_request
+from ..utils import get_service_setting
 
 DEFAULT_ACT_NUMBER_DIAGNOSTIC = 6
 DEFAULT_ACT_NUMBER_TREATMENT = 30
@@ -368,18 +369,36 @@ class PatientContact(People):
                 return None
         return None
 
-    def age(self):
+    def age(self, age_format=None):
         if not self.birthdate:
             return 'inconnu'
+
+        if not age_format:
+            age_format = get_service_setting('age_format')
+
         now = datetime.today().date()
         age = relativedelta(now, self.birthdate)
-        if age.years < 2:
-            # for children < 2 years, return the number of months
-            months = age.years * 12 + age.months
-            if months:
-                return '%s mois' % months
-            return '%s jours' % age.days
-        return '%s ans' % age.years
+
+        # by default we return the number of months for children < 2 years, but
+        # there's a service setting to have it always displayed that way.
+        months = age.years * 12 + age.months
+        if months == 0:
+            components = []
+        elif age.years < 2 or age_format == 'months_only':
+            components = ['%s mois' % months]
+        else:
+            components = ['%s ans' % age.years]
+            if age.months:
+                components.append('%s mois' % age.months)
+
+        # under three months, we also display the number of days
+        if months < 3:
+            if age.days == 1:
+                components.append("%s jour" % age.days)
+            elif age.days > 1:
+                components.append('%s jours' % age.days)
+
+        return ' et '.join(components)
 
 
 class PatientRecordManager(models.Manager):
