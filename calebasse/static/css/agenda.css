@@ -264,6 +264,6 @@ h3 .icon-comment {
     float: right;
 }
 
-.frame.acte:target {
+.frame.acte:target, div.changed {
     box-shadow: 2px 2px .5em 5px #db9595;
 }

@@ -331,6 +331,11 @@ function event_dialog(url, title, width, btn_text) {
 
       $('button#print-button').click(function() { window.print();});
 
+      $('#actes .frame select').on('change', function() {
+          $('#actes .frame').removeClass('changed');
+          $(this).closest('.frame').addClass('changed');
+      });
+
       enable_new_event();
       enable_new_appointment();
 
