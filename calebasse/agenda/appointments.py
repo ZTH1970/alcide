@@ -38,6 +38,7 @@ class Appointment(object):
         self.holiday = False
         self.services_names = []
         self.event = False
+        self.timetable_type = None
         self.__set_time(begin_time)
 
     def __set_time(self, time):
@@ -125,13 +126,14 @@ class Appointment(object):
         self.init_busy_time(title, length, begin_time, description)
         self.holiday = True
 
-    def init_start_stop(self, title, time, type):
+    def init_start_stop(self, title, time, type, kind):
         """
         title: Arrivee ou Depart
         """
-        self.type = type
+        self.type = kind
         self.title = title
         self.__set_time(time)
+        self.timetable_type = type
 
 def get_daily_appointments(date, worker, service, time_tables, events, holidays):
     """
@@ -191,7 +193,6 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
             appointment.type = 'busy-elsewhere'
         appointment.other_services_names = [s.slug for s in services if s != service]
         appointments.append(appointment)
-    print "time tables: %s" % time_tables
     for time_table in time_tables:
         interval_set = IntervalSet.between(time_table.to_interval(date).lower_bound.time(),
                                    time_table.to_interval(date).upper_bound.time())
@@ -207,18 +208,21 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         services = time_table.services.all()
         common_service = service in services
         services = [s.slug for s in services if s != service]
+        appointment_kind = 'timetable '
         if common_service:
-            appointment_type = 'info'
+            appointment_kind += 'info'
         else:
-            appointment_type = 'busy-elsewhere'
+            appointment_kind += 'busy-elsewhere'
         appointment = Appointment()
         appointment.other_services_names = services
-        appointment.init_start_stop(u"Arrivée", start_time, appointment_type)
+        appointment.init_start_stop(u"Arrivée", start_time, 'arrival',
+                                    appointment_kind)
         activity['arrival'] = start_time
         appointment.weight = 1
         appointments.append(appointment)
         appointment = Appointment()
-        appointment.init_start_stop(u"Départ", end_time, appointment_type)
+        appointment.init_start_stop(u"Départ", end_time, 'departure',
+                                    appointment_kind)
         appointment.other_services_names = services
         activity['departure'] = end_time
         appointment.weight = -1

@@ -7,8 +7,26 @@
       {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
     <span class="hour">{{ appointment.begin_hour }}</span>
     <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} min{% endif %}</span>
-    <span class="title">{% if appointment.title %}{{ appointment.title }}{% endif %}
-    {% if appointment.patient.paper_id %} {{ appointment.patient.paper_id }} {% endif %}</span>
+    <span class="title">
+      {% if appointment.title %}
+      {{ appointment.title }}
+      {% if appointment.timetable_type and appointment.other_services_names %}
+      {% if appointment.timetable_type == 'arrival' %}
+      dans le{{appointment.other_services_names|pluralize}}
+      {% else %}
+      d{{appointment.other_services_names|pluralize:'u,es'}}
+      {% endif %}
+      service{{ appointment.other_services_names|pluralize }}
+      {% for service_name in appointment.other_services_names %}
+      {{ service_name }}{% if not forloop.last %},{% endif %}
+      {% endfor %}
+      {% endif %}
+
+      {% endif %}
+      {% if appointment.patient.paper_id %}
+      {{ appointment.patient.paper_id }}
+      {% endif %}
+    </span>
     <span class="participants">
     {% if appointment.len_workers > 4 %}
         {% if appointment.workers_absent %}<span class="absent" title="Au moins un intervenant est absent">{% endif %}
@@ -38,9 +56,13 @@
         {% if appointment.workers_absent %}
         <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>
         {% endif %}
+        {% if appointment.timetable_type %}
+        <span class="icon-{{ appointment.timetable_type }}"></span>
+        {% else %}
         {% for service_name in appointment.other_services_names %}
         <span class="box {{ service_name }}" title="{{ service_name }}"></span>
         {% endfor %}
+        {% endif %}
         <span title="Un commentaire existe" class="icon-comment" {% if appointment.description %}style='display: inline'{% endif %}></span>
         {% if appointment.event_id %}
         {% if appointment.is_recurrent %} R {% endif %}

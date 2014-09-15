@@ -267,3 +267,15 @@ h3 .icon-comment {
 .frame.acte:target, div.changed {
     box-shadow: 2px 2px .5em 5px #db9595;
 }
+
+#content div.agenda h3.timetable {
+    font-size: .8em;
+}
+
+.icon-arrival:before {
+    content: "\f090";
+}
+
+.icon-departure:before {
+    content: "\f08b";
+}
