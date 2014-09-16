@@ -543,14 +543,14 @@ class AjaxWorkerTabView(TemplateView):
                 .select_related()
         events = Event.objects.for_today(self.date) \
                 .exclude(event_type_id=1) \
-                .filter(participants=worker) \
+                .filter(participants=worker, services=self.service) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('services',
                         'exceptions',
                         'participants')
         eventswithact = EventWithAct.objects.for_today(self.date) \
-                .filter(participants=worker) \
+                .filter(participants=worker, services=self.service) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('patient__addresses',
@@ -604,7 +604,8 @@ class AjaxDisponibilityColumnView(TemplateView):
                                            self.date.day, 8, 0)
         end_datetime = datetime.datetime(self.date.year, self.date.month,
                                          self.date.day, 8, 15)
-        events = Event.objects.filter(ressource__id=ressource_id).today_occurrences(self.date)
+        events = Event.objects.filter(ressource__id=ressource_id,
+                                      services=self.service).today_occurrences(self.date)
 
         while (start_datetime.hour <= 19):
             if start_datetime.hour not in disponibility:
@@ -644,12 +645,12 @@ class AjaxDisponibilityColumnView(TemplateView):
                 order_by('start_date')
         events = Event.objects.for_today(self.date) \
                 .exclude(event_type_id=1) \
-                .filter(participants=worker) \
+                .filter(services=self.service, participants=worker) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions')
         eventswithact = EventWithAct.objects.for_today(self.date) \
-                .filter(participants=worker) \
+                .filter(services=self.service, participants=worker) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions',
