@@ -22,6 +22,7 @@ from calebasse.actes.validation_states import VALIDATION_STATES
 from calebasse.actes.models import Act, ValidationMessage
 from calebasse.actes.validation import (automated_validation, unlock_all_acts_of_the_day)
 from calebasse import cbv
+from calebasse.utils import get_service_setting
 
 from calebasse.agenda.forms import (NewAppointmentForm, NewEventForm, UpdatePeriodicAppointmentForm,
         DisablePatientAppointmentForm, UpdateAppointmentForm, UpdatePeriodicEventForm,
@@ -614,7 +615,10 @@ class AjaxDisponibilityColumnView(TemplateView):
 
             if events:
                 for event in events:
-                    overlap_events = Event.objects.overlap_occurences(start_datetime, events)
+                    if get_service_setting('show_overlapping_appointments'):
+                        overlap_events = Event.objects.overlap_occurences(start_datetime, events)
+                    else:
+                        overlap_events = []
                     if len(overlap_events) > 1:
                         dispo = 'overlap'
                     elif event.start_datetime <= start_datetime and event.end_datetime >= end_datetime:

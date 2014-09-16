@@ -7,6 +7,7 @@ from model_utils.managers import InheritanceManager, PassThroughManager, Inherit
 
 from calebasse.agenda.conf import default
 from calebasse.utils import weeks_since_epoch, weekday_ranks
+from calebasse.utils import get_service_setting
 from calebasse import agenda
 
 __all__ = (
@@ -78,7 +79,10 @@ class EventQuerySet(InheritanceQuerySet):
                 quarter = 0
             interval = IntervalSet.between(start_datetime, end_datetime, False)
             mins = quarter * 15
-            crossed_events = self.overlap_occurences(start_datetime, events)
+            if get_service_setting('show_overlapping_appointments'):
+                crossed_events = self.overlap_occurences(start_datetime, events)
+            else:
+                crossed_events = []
             if len(crossed_events) > 1:
                 result[start_datetime.hour][quarter].append((mins, {'id': participant.id, 'dispo': 'overlap'}))
             elif interval.intersection(events_intervals):
