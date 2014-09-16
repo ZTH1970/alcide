@@ -297,6 +297,11 @@ CURRENT_SERVICE_EVENTS_ONLY = True
 
 # dictionary to define non-default behaviours for some services
 SERVICE_SETTINGS = {}
+# valid keys
+# - show_overlapping_appointments: boolean (default: False)
+# - age_format: string, string (default: None, alternative behaviour to have
+#   age always displayed in months: "months_only")
+
 
 #CSV_ENCODING = 'cp1252' #For windows : windows-1252/Winlatin1
 #CSVPROFILE = {\
