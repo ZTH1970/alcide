@@ -55,7 +55,6 @@ class AgendaHomepageView(TemplateView):
         return HttpResponseRedirect('#acte-frame-'+acte_id)
 
     def get_context_data(self, **kwargs):
-        logger.info('AgendaHomepageView.get_context_data called')
         context = super(AgendaHomepageView, self).get_context_data(**kwargs)
 
         context['workers_types'] = []
