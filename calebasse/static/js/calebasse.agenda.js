@@ -199,8 +199,10 @@ function toggle_ressource(ressource) {
         var agendatabs = $.cookie('agenda-tabs');
         if ($('#users li.item.ressource.active:last').attr('id'))
             $.cookie('last-ressource', $('#users li.item.ressource.active:last').attr('id').split('-')[1], { path: COOKIE_PATH });
-        else
+        else {
+            $.cookie('active-agenda', '', {path: COOKIE_PATH})
             $.cookie('last-ressource', '', {path: COOKIE_PATH});
+        }
 
         $.each(agendatabs, function (i, value) {
             if (value == ressource_id) {
