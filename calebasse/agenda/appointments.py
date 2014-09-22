@@ -143,7 +143,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
 
     timetables_set = IntervalSet((t.to_interval(date) for t in time_tables))
     holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
-    busy_occurrences_set = IntervalSet((o.to_interval() for o in events if not o.is_event_absence()))
+    busy_occurrences_set = IntervalSet((o.to_interval() for o in events if not o.is_event_absence() and service in o.services.all()))
     for free_time in timetables_set - (busy_occurrences_set+holidays_set):
         if free_time:
             delta = free_time.upper_bound - free_time.lower_bound
@@ -218,7 +218,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
         appointment.init_start_stop(u"Arrivée", start_time, 'arrival',
                                     appointment_kind)
         activity['arrival'] = start_time
-        appointment.weight = 1
+        appointment.weight = -1
         appointments.append(appointment)
         appointment = Appointment()
         appointment.init_start_stop(u"Départ", end_time, 'departure',
