@@ -141,7 +141,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
     appointments = []
     activity = {'absences': []}
 
-    service_time_tables = time_tables.filter(services=service)
+    service_time_tables = [tt for tt in time_tables if service in tt.services.all()]
     timetables_set = IntervalSet((t.to_interval(date) for t in service_time_tables))
     holidays_set = IntervalSet((h.to_interval(date) for h in holidays))
     busy_occurrences_set = IntervalSet((o.to_interval() for o in events if not o.is_event_absence() and service in o.services.all()))
