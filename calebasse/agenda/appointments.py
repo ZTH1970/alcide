@@ -207,7 +207,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
 
         services = time_table.services.all()
         common_service = service in services
-        services = [s.slug for s in services if s != service]
+        services = [s.slug for s in services]
         appointment_kind = 'timetable '
         if common_service:
             appointment_kind += 'info'
