@@ -627,7 +627,7 @@ class AjaxDisponibilityColumnView(TemplateView):
                 filter(services=self.service, worker=worker). \
                 for_today(self.date). \
                 order_by('start_date')
-        holidays = Holiday.objects.for_worker(worker).for_service(self.service). \
+        holidays = Holiday.objects.for_worker(worker). \
                 for_period(self.date, self.date). \
                 order_by('start_date')
         events = Event.objects.for_today(self.date) \
