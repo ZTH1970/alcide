@@ -632,12 +632,12 @@ class AjaxDisponibilityColumnView(TemplateView):
                 order_by('start_date')
         events = Event.objects.for_today(self.date) \
                 .exclude(event_type_id=1) \
-                .filter(participants=worker, services=self.service) \
+                .filter(participants=worker) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions')
         eventswithact = EventWithAct.objects.for_today(self.date) \
-                .filter(participants=worker, services=self.service) \
+                .filter(participants=worker) \
                 .order_by('start_datetime') \
                 .select_related() \
                 .prefetch_related('participants', 'exceptions',
