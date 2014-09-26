@@ -4,7 +4,7 @@
            <td {% if form.recurrence_periodicity.field.required %}class="required"{% endif %}>
             <p>
            {{ form.recurrence_periodicity.label_tag }}
-           {% if object.one_act_already_billed %}
+           {% if object.one_act_not_new %}
            {{ object.recurrence_description }}
            {{ form.recurrence_periodicity.as_hidden }}
            {% else %}

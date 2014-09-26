@@ -395,6 +395,25 @@ class Event(models.Model):
                 models.Q(parent_event=self) | \
                 models.Q(parent_event__exception_to=self))
 
+    def one_act_not_new(self):
+        '''
+            Return True if at least one act of the present event or an act
+            of one of its exceptions is not new.
+        '''
+        return True if [a for a in self.acts if not a.is_new()] else False
+
+    def last_act_not_new(self):
+        '''
+            Return True if at least one act of the present event or an act
+            of one of its exceptions is not new.
+        '''
+        act = None
+        for a in self.acts:
+            if not a.is_new():
+                if not act or a.date > act.date:
+                    act = a
+        return act
+
     def one_act_already_billed(self):
         '''
             Return True if at least one act of the present event or an act

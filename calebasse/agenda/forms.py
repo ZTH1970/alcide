@@ -156,31 +156,29 @@ class UpdatePeriodicAppointmentForm(UpdateAppointmentForm):
             choices=Event.PERIODICITIES, required=True)
 
     def clean(self):
-        '''
-            Check that reccurrency bound dates
-            won't exclude already_billed acts.
-        '''
         cleaned_data = super(UpdatePeriodicAppointmentForm, self).clean()
+        '''If one act not new in the reccurrence, we prevent to modify the
+        start date or the recurrence_periodicity since this could trigger act
+        deletion'''
         start_datetime = cleaned_data.get('start_datetime')
-        if start_datetime:
-            acts = Act.objects.filter(
-                Q(parent_event=self.instance,
-                    already_billed=True, date__lt=start_datetime) | \
-                Q(parent_event__exception_to=self.instance,
-                    already_billed=True, date__lt=start_datetime))
-            if acts:
-                self._errors['start_datetime'] = self.error_class([
-                    u"La date de début doit être antérieure au premier acte déja facturé de la récurrence"])
+        if start_datetime and start_datetime != self.instance.start_datetime \
+                and self.instance.one_act_not_new():
+            self._errors['start_datetime'] = self.error_class([
+                u"La date de début ne peut-être modifiée car un acte de la récurrence est pointé"])
+#       FIXME
+#        recurrence_periodicity = cleaned_data.get('recurrence_periodicity')
+#        if recurrence_periodicity and recurrence_periodicity != str(self.instance.recurrence_periodicity) \
+#                and self.instance.one_act_not_new():
+#            self._errors['recurrence_periodicity'] = self.error_class([
+#                u"La récurrence ne peut-être modifiée car un acte de la récurrence est pointé"])
+        '''We check that the end date is posterior to the last act not new'''
         recurrence_end_date = cleaned_data.get('recurrence_end_date')
-        if recurrence_end_date:
-            acts = Act.objects.filter(
-                Q(parent_event=self.instance,
-                    already_billed=True, date__gt=recurrence_end_date) | \
-                Q(parent_event__exception_to=self.instance,
-                    already_billed=True, date__gt=recurrence_end_date))
-            if acts:
+        if recurrence_end_date and recurrence_end_date != self.instance.recurrence_end_date \
+                and self.instance.one_act_not_new():
+            last = self.instance.last_act_not_new()
+            if last and last.date > recurrence_end_date:
                 self._errors['recurrence_end_date'] = self.error_class([
-                    u"La date de fin doit être postérieure au dernier acte déja facturé de la récurrence"])
+                    u"La date de fin doit être postérieure au dernier acte pointé de la récurrence (%s)" % last])
         return cleaned_data
 
 class DisablePatientAppointmentForm(UpdateAppointmentForm):
