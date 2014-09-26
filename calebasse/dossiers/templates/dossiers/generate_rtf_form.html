@@ -24,6 +24,9 @@ errors:
 </ul>
 
 <h3>Adresse</h3>
+<p><strong>Commentaire :</strong> <br />
+{{ object.policyholder.contact_comment }}
+</p>
 
 <ul class="addresses">
   {% for address in object.addresses.all %}
@@ -66,9 +69,6 @@ errors:
 {{ form.address }}
 
 <p><label>Téléphone : </label><input id="id_phone_address" type="text" name="phone_address" value=""/></p>
-<p><label>Commentaire : </label>
-<textarea id="id_address_comment" name="address_comment">{{ object.policyholder.contact_comment }}</textarea>
-</p>
 
 {% if appointment %}
 <h3>Rendez-vous</h3>
