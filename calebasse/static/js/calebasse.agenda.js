@@ -335,6 +335,8 @@ function event_dialog(url, title, width, btn_text) {
 
       $('#actes .frame select').on('change', function() {
           $('#actes .frame').removeClass('changed');
+          if (window.location.hash)
+              $(window.location.hash).css('box-shadow', 'none');
           $(this).closest('.frame').addClass('changed');
       });
 
