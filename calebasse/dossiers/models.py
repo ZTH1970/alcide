@@ -444,6 +444,8 @@ class PatientRecord(ServiceLinkedAbstractModel, PatientContact):
             related_name='mdph_requests_of')
     mdph_responses = models.ManyToManyField('ressources.MDPHResponse',
             related_name='mdph_responses_of')
+    addresses_contacts_comment = models.TextField(verbose_name=u"Commentaire sur les adresses et contacts",
+            null=True, blank=True, default=None)
 
     # Physiology and health data
     size = models.DecimalField(verbose_name=u"Taille (cm)", max_digits=5, decimal_places=1,
@@ -1063,4 +1065,3 @@ def create_patient(first_name, last_name, service, creator,
 
 PatientRecord.DEFICIENCY_FIELDS = [field for field in PatientRecord._meta.get_all_field_names() if field.startswith('deficiency_')]
 PatientRecord.MISES_FIELDS = [field for field in PatientRecord._meta.get_all_field_names() if field.startswith('mises_')]
-
