@@ -226,7 +226,7 @@ def get_daily_appointments(date, worker, service, time_tables, events, holidays)
                                     appointment_kind)
         appointment.other_services_names = services
         activity['departure'] = end_time
-        appointment.weight = -1
+        appointment.weight = -2
         appointments.append(appointment)
 
     return activity, sorted(appointments, key=lambda app: (app.begin_time, app.weight, app.event_id))
