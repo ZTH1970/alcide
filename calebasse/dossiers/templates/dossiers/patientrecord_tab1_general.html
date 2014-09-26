@@ -20,7 +20,7 @@
       {% else %}
       <label class="highlight">Aucun lieu de vie n'est indiqué.</label>
       {% endif %}
-      {% if object.contact_comment %}<pre>{{ object.contact_comment }}</pre>{% endif %}
+      {% if object.contact_comment %}<p>{{ object.contact_comment|linebreaks }}</p>{% endif %}
         {% if object.addresses.all %}
         <ul>
           {% for address in object.addresses.all %}
