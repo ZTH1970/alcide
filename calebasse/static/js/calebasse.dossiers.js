@@ -30,7 +30,7 @@ function filter_date_bounds(tab, container, selector) {
         block.addClass('screen-only');
         if ($(selector, $(this)).length) {
             $.each($(selector, this), function() {
-                var current = $.datepicker.parseDate('d/m/yy', $(this).text());
+                var current = $.datepicker.parseDate('d/m/yy', $(this).data('start-date'));
                 if (current < from || (to && current >= to)) {
                     $(this).parent().parent().addClass('screen-only');
                 } else {
