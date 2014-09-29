@@ -246,6 +246,9 @@ AJAX_LOOKUP_CHANNELS = {
     'all-worker-or-group' : ('calebasse.ressources.lookups', 'AllWorkerOrGroupLookup'),
 }
 
+# South configuration
+SOUTH_TESTS_MIGRATE = False
+
 # Default URL after login
 LOGIN_REDIRECT_URL = '/'
 
