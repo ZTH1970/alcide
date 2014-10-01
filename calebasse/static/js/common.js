@@ -9,5 +9,5 @@ function delete_prompt(text) {
 
 function init_datepickers(on) {
     $('.datepicker-date', on).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-    $('.datepicker input', on).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+    $('.datepicker input[type=text]', on).datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
 }

@@ -22,8 +22,7 @@ function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirec
     height = 'auto';
   $(id).load(url,
       function () {
-        $('.datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-        $('.datepicker input').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
+        init_datepickers(id);
         function onsuccess(response, status, xhr, form) {
           enable_button($('#submit-btn'));
           var parse = $(response);
