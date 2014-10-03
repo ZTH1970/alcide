@@ -97,7 +97,7 @@ class WeekRankField(models.PositiveIntegerField):
             return None
 
     def formfield(self, **kwargs):
-        defaults = {'required': not self.blank, 'label': capfirst(self.verbose_name), 
+        defaults = {'required': not self.blank, 'label': capfirst(self.verbose_name),
                     'help_text': self.help_text, 'choices': self.get_choices(include_blank=False)}
         if self.has_default():
             defaults['initial'] = self.get_default()
@@ -106,4 +106,3 @@ class WeekRankField(models.PositiveIntegerField):
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^calebasse\.models\..*Field"])
-
