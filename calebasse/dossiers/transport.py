@@ -29,7 +29,6 @@ def render_transport(patient, address, data={}):
         'TRAJET_CHOICE_1': 'trajet_choice_1' in data,
         'TRAJET_CHOICE_2': 'trajet_choice_2' in data,
         'TRAJET_CHOICE_3': 'trajet_choice_3' in data,
-        'TRAJET_CHOICE_4': 'trajet_choice_4' in data,
         'TRAJET_NUMBER': data.get('trajet_number', ''),
         'PC_CHOICE_1': 'pc_choice_1' in data,
         'PC_CHOICE_2': 'pc_choice_2' in data,
