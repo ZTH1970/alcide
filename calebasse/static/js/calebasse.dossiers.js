@@ -201,7 +201,7 @@ function load_tab3_addresses() {
       });
     }
     $('.autosubmit').on('click', function() {
-        $('#policyholder-form').submit();
+        $('.autosubmit-form').submit();
     });
     $('#new-contact-btn').click(function() {
         generic_ajaxform_dialog('contact/new', 'Ajouter un contact',
@@ -475,4 +475,3 @@ function load_tab8_medical() {
     });
 
 })(window.jQuery)
-

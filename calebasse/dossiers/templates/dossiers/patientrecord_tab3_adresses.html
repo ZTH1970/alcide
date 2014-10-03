@@ -5,7 +5,6 @@
 {% load dossiers %}
 {% block content %}
 <div id="tabs-3">
-  <form method="post" action="tab3" id="policyholder-form" class="patientrecordform">{% csrf_token %}
     <p>
     {% if nb_place_of_lifes == 1 %}
     <span>Un lieu de vie unique est indiqué</span>
@@ -15,14 +14,18 @@
     <span class="highlight">Aucun lieu de vie n'est indiqué.</span>
     {% endif %}
     </p>
+    <form method="post" action="tab3" class="autosubmit-form patientrecordform">{% csrf_token %}
     <p>
     <label>Commentaire <button class="save enable-on-change btn-maj">✔</button></label>
-    {{ forms.policyholder.contact_comment }}
+    {{ forms.comment.addresses_contacts_comment }}
     </p>
+    </form>
     <p>
     <button type="button" id="new-address-btn" class="icon-home-space">Nouvelle adresse</button>
     <button type="button" id="new-contact-btn" class="icon-user-space">Nouveau contact</button>
     </p>
+
+  <form method="post" action="tab3" class="autosubmit-form patientrecordform">{% csrf_token %}
 
     <div class="contact patient">
       <h4 class="icon-user-space">Patient</h4>

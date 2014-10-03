@@ -173,13 +173,20 @@ class PaperIDForm(ModelForm):
         model = PatientRecord
         fields = ('paper_id', )
 
+class AddrCommentForm(ModelForm):
+    class Meta:
+        model = PatientRecord
+        fields = ('addresses_contacts_comment', )
+        widgets = {
+                'addresses_contacts_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
+                }
+
 class PolicyHolderForm(ModelForm):
     class Meta:
         model = PatientRecord
-        fields = ('policyholder', 'contact_comment')
-        widgets = { 
+        fields = ('policyholder',)
+        widgets = {
                 'policyholder': forms.RadioSelect(),
-                'contact_comment': forms.Textarea(attrs={'cols': 50, 'rows': 2}),
                 }
 
 class PatientContactForm(ModelForm):

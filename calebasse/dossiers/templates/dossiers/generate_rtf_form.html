@@ -24,15 +24,14 @@ errors:
 </ul>
 
 <h3>Adresse</h3>
-<p><strong>Commentaire :</strong> <br />
-{{ object.policyholder.contact_comment }}
-</p>
+
+{% if object.addresses_contacts_comment %}<p>Commentaire : <strong>{{ object.addresses_contacts_comment }}</strong></p>{% endif %}
 
 <ul class="addresses">
   {% for address in object.addresses.all %}
   <li>
   <span>{{ address.display_name }} {% if address.phone %}(Tél : {{ address.phone }}){% endif %}</span>
-  <pre>{{ address.comment }}</pre>
+  {% if address.comment %}<p><em>Commentaire : {{ address.comment }}</em></p>{% endif %}
   <ul>
     {% if address.recipient %}
     <li><input type="radio" name="contact" id="contact_{{ address.id }}_{{ contact.id }}"

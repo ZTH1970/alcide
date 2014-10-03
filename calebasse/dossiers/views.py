@@ -334,7 +334,8 @@ class PatientRecordAddrView(cbv.ServiceViewMixin, cbv.NotificationDisplayView, c
     model = PatientRecord
     forms_classes = {
             'contact': forms.PatientContactForm,
-            'policyholder': forms.PolicyHolderForm
+            'policyholder': forms.PolicyHolderForm,
+            'comment' : forms.AddrCommentForm,
             }
     template_name = 'dossiers/patientrecord_tab3_adresses.html'
     success_url = './view#tab=2'

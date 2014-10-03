@@ -56,9 +56,7 @@
         {% else %}
         <label class="highlight">Aucun lieu de vie d'indiqué</label>
         {% endif %}
-        {% if object.contact_comment %}
-        <p>{{ object.contact_comment }}</p>
-        {% endif %}
+        {% if object.addresses_contacts_comment %}<p>Commentaire : <strong>{{ object.addresses_contacts_comment }}</strong></p>{% endif %}
         {% if object.addresses.all %}
         <ul>
           {% for address in object.addresses.all %}
