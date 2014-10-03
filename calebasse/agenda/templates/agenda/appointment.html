@@ -103,9 +103,7 @@
 {% if object.exception_to %}
   <hr/>
   {% if object.id != object.exception_to.id %}
-  <p><em>Attention: cet objet est une exception à un rendez-vous périodique; si
-  vous modifiez ou supprimez le rendez-vous périodique, l'exception n'en sera pas
-  affectée.</em></p>
+  <p><em><strong>Attention: cette occurrence est une exception au rendez-vous périodique</strong>; si vous modifiez l'heure, la durée, le commentaire, la ressource, les participants ou le type d'acte du rendez-vous périodique, les exceptions ne sont pas modifiées.</em></p>
   {% endif %}
 
   <p>Occurence du {{object.exception_date}} d'un rendez-vous périodique
