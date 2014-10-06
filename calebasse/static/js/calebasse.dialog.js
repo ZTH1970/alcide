@@ -17,12 +17,42 @@ function enable_button(button) {
   $button.removeAttr('disabled');
 }
 
+function init_dialog(id) {
+    init_datepickers(id);
+    $('#id_description', id).attr('rows', '3');
+    $('#id_description', id).attr('cols', '30');
+    var deck = $('#id_participants_on_deck', id);
+    $(deck).bind('added', function() {
+      var added = $(deck).find('div:last');
+      var t = added.attr('id').indexOf('_group:');
+      if ( t == -1) return;
+
+      /* remove group element and fake id */
+      added.remove();
+      var val = $('#id_participants').val();
+      $('#id_participants').val(val.substr(0, val.substr(0, val.length-1).lastIndexOf('|')+1));
+
+      /* add all workers */
+      var query = added.attr('id').substr(t+1);
+      var receive_result = $('#id_participants_text', id).autocomplete('option', 'select');
+      $.getJSON($('#id_participants_text', id).autocomplete('option', 'source') + '?term=' + query,
+        function(data) {
+          $.each(data, function(key, val) {
+            if (key==0) return; /* ignore first element as it's the group itself */
+            var ui = Object();
+            ui.item = val;
+            receive_result(null, ui);
+          });
+        });
+    });
+}
+
 function generic_ajaxform_dialog(url, title, id, width, btn_submit_name, redirectToUrl, on_load_callback, height, extra_button, replace_content) {
   if (! height)
     height = 'auto';
   $(id).load(url,
       function () {
-        init_datepickers(id);
+        init_dialog(id);
         function onsuccess(response, status, xhr, form) {
           enable_button($('#submit-btn'));
           var parse = $(response);
@@ -104,41 +134,9 @@ function calebasse_ajax_form(id) {
 function add_dialog(on, url, title, width, btn_text) {
   // function used to add patient schedules, events and acts
 
-  function init_dialog() {
-    $('.datepicker-date').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-    $('.datepicker input').datepicker({dateFormat: 'd/m/yy', showOn: 'button'});
-    $('#id_description').attr('rows', '3');
-    $('#id_description').attr('cols', '30');
-    var deck = $('#id_participants_on_deck');
-    $(deck).bind('added', function() {
-      var added = $(deck).find('div:last');
-      var t = added.attr('id').indexOf('_group:');
-      if ( t == -1) return;
-
-      /* remove group element and fake id */
-      added.remove();
-      var val = $('#id_participants').val();
-      $('#id_participants').val(val.substr(0, val.substr(0, val.length-1).lastIndexOf('|')+1));
-
-      /* add all workers */
-      var query = added.attr('id').substr(t+1);
-      var receive_result = $('#id_participants_text').autocomplete('option', 'select');
-      $.getJSON($('#id_participants_text').autocomplete('option', 'source') + '?term=' + query,
-        function(data) {
-          $.each(data, function(key, val) {
-            if (key==0) return; /* ignore first element as it's the group itself */
-            var ui = Object();
-            ui.item = val;
-            receive_result(null, ui);
-          });
-        });
-
-    });
-  }
-
   $(on).load(url,
       function () {
-        init_dialog();
+        init_dialog(on);
         var old_background_image, old_background_repeat, $button;
         var in_submit = false;
         $(on).unbind('submit');
@@ -155,7 +153,7 @@ function add_dialog(on, url, title, width, btn_text) {
               $button.removeAttr('disabled');
               if ($('.errorlist', parse).length != 0) {
                 $(on).html(data);
-                init_dialog();
+                init_dialog(on);
               } else {
                 $('body').html(data);
               }
