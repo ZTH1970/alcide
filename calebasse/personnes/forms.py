@@ -80,6 +80,11 @@ class UserForm(forms.ModelForm):
                 else:
                     UserWorker.objects.create(user=instance, worker=worker)
             self.save_m2m = save_m2m
+        else:
+            try:
+                instance.userworker.delete()
+            except UserWorker.DoesNotExist:
+                pass
         if instance.pk:
             instance.groups = self.cleaned_data['groups']
         if commit:
