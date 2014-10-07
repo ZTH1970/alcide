@@ -7,6 +7,7 @@ user_patterns = patterns('calebasse.personnes.views',
     url(r'^new/$', 'user_new'),
     url(r'^(?P<pk>\d+)/$', 'user_update'),
     url(r'^(?P<pk>\d+)/delete/$', 'user_delete'),
+    url(r'^(?P<pk>\d+)/activate/$', 'user_activate'),
 )
 
 holiday_actions_paterns = patterns('calebasse.personnes.views',

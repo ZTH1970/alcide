@@ -6,7 +6,11 @@
 <script type="text/javascript">
     $(function() {
             $('.icon-minus').click(function() {
-                generic_ajaxform_dialog($(this).data('id') + '/delete/', "Supprimer un utilisateur",
+                generic_ajaxform_dialog($(this).data('id') + '/delete/', "Désactiver un utilisateur",
+                    '#ajax-dlg', '500px', 'Oui');
+                });
+            $('.icon-plus').click(function() {
+                generic_ajaxform_dialog($(this).data('id') + '/activate/', "Activer un utilisateur",
                     '#ajax-dlg', '500px', 'Oui');
                 });
             });
@@ -44,6 +48,7 @@
 {% block content %}
 <div class="content">
   {% if active_list %}
+  <h2>Accès actifs</h2>
   <table class="main" id="timetable-table">
     <thead>
     <tr>
@@ -51,7 +56,7 @@
       <th>Courriel</th>
       <th>Fiche Personnel</th>
       <th>Roles</th>
-      <th>Supprimer</th>
+      <th>Désactiver</th>
     </tr>
     </thead>
     <tbody>
@@ -69,9 +74,36 @@
     </tbody>
   </table>
   {% else %}
-  <p>Il n'y a aucun compte actif</p>
+  <p>Il n'y a aucun compte actif.</p>
   {% endif %}
-
+  <br/>
+  {% if inactive_list %}
+  <h2>Accès inactifs</h2>
+  <table class="main" id="timetable-table">
+    <thead>
+    <tr>
+      <th>Identifiant</th>
+      <th>Courriel</th>
+      <th>Fiche Personnel</th>
+      <th>Activer</th>
+    </tr>
+    </thead>
+    <tbody>
+   {% for object in inactive_list %}
+     <tr data-pk="{{object.pk}}" id="object-{{ object.pk}}">
+      <td>{{object.username}}</td>
+      <td>{{object.email}}</td>
+      {% with worker=object.userworker.worker %}
+      <td>{% if worker %}<a href="{{ worker.get_absolute_url }}">{{ worker }}</a>{% else %}-{% endif %}</td>
+      {% endwith %}
+      <td><button class="icon-plus" data-id="{{ object.id }}"/></a></td>
+    </tr>
+   {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Il n'y a aucun compte inactif.</p>
+  {% endif %}
 </div>
 {% endblock %}
 

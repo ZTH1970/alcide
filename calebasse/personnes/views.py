@@ -56,6 +56,7 @@ class AccessView(cbv.ListView):
     def get_context_data(self, **kwargs):
         ctx = super(AccessView, self).get_context_data(**kwargs)
         ctx['active_list'] = ctx['object_list'].filter(is_active=True)
+        ctx['inactive_list'] = ctx['object_list'].filter(is_active=False)
         return ctx
 
 
@@ -132,7 +133,7 @@ class UserCreateView(cbv.ServiceFormMixin, cbv.CreateView):
 class UserDisactivateView(cbv.DeleteView):
     model = User
     success_url = "../../"
-    template_name = 'calebasse/generic_confirm_delete.html'
+    template_name = 'personnes/disactivate_access.html'
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -140,10 +141,21 @@ class UserDisactivateView(cbv.DeleteView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
+class UserActivateView(cbv.DeleteView):
+    model = User
+    success_url = "../../"
+    template_name = 'personnes/activate_access.html'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 user_new = super_user_only(UserCreateView.as_view())
 user_update = super_user_only(AccessUpdateView.as_view())
 user_delete = super_user_only(UserDisactivateView.as_view())
+user_activate = super_user_only(UserActivateView.as_view())
 
 
 class WorkerUpdateView(cbv.ServiceViewMixin, cbv.MultiUpdateView):
