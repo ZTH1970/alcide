@@ -1,15 +1,12 @@
 import os
 import subprocess
-import tempfile
+
+from calebasse import settings
 
 class PdfTk(object):
-    def __init__(self, pdftk_path=None, prefix='tmp'):
-        self._pdftk_path = pdftk_path
+    def __init__(self, prefix='tmp'):
+        self.pdftk_path = settings.PDFTK_PATH
         self.prefix = prefix
-
-    @property
-    def pdftk_path(self):
-        return self._pdftk_path or '/usr/bin/pdftk'
 
     def do(self, args, wait=True):
         args = [self.pdftk_path] + args

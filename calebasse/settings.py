@@ -3,6 +3,7 @@
 # Django settings for calebasse project.
 
 import os
+from django.core.exceptions import ImproperlyConfigured
 from logging.handlers import SysLogHandler
 
 PROJECT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'calebasse')
@@ -305,6 +306,9 @@ SERVICE_SETTINGS = {}
 # - age_format: string, string (default: None, alternative behaviour to have
 #   age always displayed in months: "months_only")
 
+# Pdftk binary path (pdftk is used to complete CERFA)
+PDFTK_PATH = '/usr/bin/pdftk'
+
 
 #CSV_ENCODING = 'cp1252' #For windows : windows-1252/Winlatin1
 #CSVPROFILE = {\
@@ -352,6 +356,9 @@ except ImportError:
     """
     import sys
     sys.exit(1)
+
+if not os.path.exists(PDFTK_PATH):
+    raise ImproperlyConfigured("pdftk %r binary not found" % PDFTK_PATH)
 
 if RAVEN_CONFIG:
     INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
