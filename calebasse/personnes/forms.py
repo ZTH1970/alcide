@@ -29,7 +29,6 @@ class UserForm(forms.ModelForm):
     def __init__(self, service=None, *args, **kwargs):
         self.service = service
         super(UserForm, self).__init__(*args, **kwargs)
-        self.fields['worker'].queryset = Worker.objects.for_service(service)
         self.fields['username'].label = _('Identifiant')
         if self.instance:
             try:
