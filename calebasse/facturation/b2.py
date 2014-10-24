@@ -181,7 +181,7 @@ def write_invoice(output_file, invoice):
 
     return invoice_lines
 
-def b2(seq_id, hc, batches):
+def b2(seq_id, hc, batches, regenerate=False):
     to = hc.b2_000()
     total = sum(b.total for b in batches)
     first_batch = min(b.number for b in batches)
@@ -204,7 +204,8 @@ def b2(seq_id, hc, batches):
     prefix = '%s-%s-%s-%s-%s.' % (seq_id, NUMERO_EMETTEUR, to, first_batch, file_id)
 
     b2_filename = os.path.join(output_dir, prefix + 'b2')
-    assert not os.path.isfile(b2_filename), 'B2 file "%s" already exists' % b2_filename
+    if os.path.isfile(b2_filename) and not regenerate:
+        return None
 
     output_file = tempfile.NamedTemporaryFile(suffix='.b2tmp',
             prefix=prefix, dir=output_dir, delete=False)
@@ -222,7 +223,7 @@ def b2(seq_id, hc, batches):
 
     for batch in batches:
         start_1 = '1' + NUMERO_EMETTEUR + filler(6) + \
-                batch.health_center.dest_organism[0:3] + \
+                hc.dest_organism[0:3] + \
                 ('%0.3d' % batch.number) + CATEGORIE + STATUT + MODE_TARIF + \
                 NOM + 'B2' + b2date(utcnow) + ' ' + NORME[0:2] + \
                 ' ' + '062007' + 'U' + filler(2+3+1+34)
@@ -231,6 +232,7 @@ def b2(seq_id, hc, batches):
 
         infos['batches'].append({
             'batch': batch.number,
+            'dest': '%s' % hc.dest_organism[0:3],
             'hc': u'%s' % batch.health_center,
             'total': float(batch.total),
             'number_of_invoices': batch.number_of_invoices,
@@ -289,15 +291,18 @@ def b2(seq_id, hc, batches):
 
     return b2_filename
 
-def buildall(seq_id):
+def buildall(seq_id, regenerate=False):
     try:
         invoicing = Invoicing.objects.filter(seq_id=seq_id)[0]
     except IndexError:
-        raise RuntimeError('Facture introuvable')
+        raise RuntimeError('Facturation introuvable')
     batches = build_batches(invoicing)
     for hc in batches:
         for b in batches[hc]:
-            b2_filename = b2(invoicing.seq_id, hc, [b])
+            b2_filename = b2(invoicing.seq_id, hc, [b],
+                    regenerate=regenerate)
+            if b2_filename:
+                print "%s created" % b2_filename
 
 
 def sendmail_raw(mail):
