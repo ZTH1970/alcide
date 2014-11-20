@@ -863,8 +863,6 @@ class PatientRecordsQuotationsView(cbv.ListView):
         patient_records = []
         for patient_record in paginate_patient_records:
             current_state = patient_record.get_current_state() or patient_record.get_state()
-            state = current_state.status.name
-            state_class = current_state.status.type.lower()
             deficiencies = [getattr(patient_record, field) \
                             for field in self.model.DEFICIENCY_FIELDS]
             anap = any(deficiencies)
@@ -883,8 +881,7 @@ class PatientRecordsQuotationsView(cbv.ListView):
             patient_records.append(
                     {
                         'object': patient_record,
-                        'state': state,
-                        'state_class': state_class,
+                        'state': current_state,
                         'anap': anap,
                         'mises': mises,
                         'next_rdv_date': next_rdv_datetime,
