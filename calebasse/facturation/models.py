@@ -300,8 +300,7 @@ class Invoicing(models.Model):
                     if not patient.pause:
                         len_patient_invoiced_hors_pause = len_patient_invoiced_hors_pause + 1
 
-                patients = set(acts_not_locked.keys() + acts_not_valide.keys() + \
-                    acts_not_billable.keys() + acts_diagnostic.keys() + acts_treatment.keys() + \
+                patients = set(acts_diagnostic.keys() + acts_treatment.keys() + \
                     acts_losts.keys() + acts_pause.keys() + acts_losts_missing_policy.keys() + \
                     acts_losts_missing_birthdate.keys())
 
@@ -395,7 +394,6 @@ class Invoicing(models.Model):
                                 in_o.batch = b['batch']
                                 in_o.save()
 
-                            pass
                     if patient in acts_losts.keys():
                         # TODO: More details about healthcare
                         dic['losts'] = acts_losts[patient]
@@ -417,7 +415,6 @@ class Invoicing(models.Model):
                     if dic:
                         patients_stats.append((patient, dic))
                 patients_stats = sorted(patients_stats, key=lambda patient: (patient[0].last_name, patient[0].first_name))
-
                 len_patients = len(patients_stats)
 
                 if commit:
