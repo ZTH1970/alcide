@@ -300,10 +300,12 @@ class SocialisationDuration(models.Model):
 
     school = models.ForeignKey('ressources.School',
         verbose_name=u'Lieu de socialisation',
-        blank=True, null=True)
+        blank=True, null=True,
+        on_delete=models.SET_NULL)
     level = models.ForeignKey('ressources.SchoolLevel',
         verbose_name=u'Classe',
-        blank=True, null=True)
+        blank=True, null=True,
+        on_delete=models.SET_NULL)
     redoublement = models.BooleanField(verbose_name=u"Redoublement",
             default=False)
     start_date = models.DateField(verbose_name=u"Date d'arrivée")
