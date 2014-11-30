@@ -86,7 +86,7 @@
         <span>{% if event.patient %}Rendez-vous patient{% else %}Évènement{% endif %}: {{ event.recurrence_description|lower }}</span>
          —
         <span class="hour">{{ event.start_datetime.time }}</span>
-        {% if event.title %} — {{ event.title }} {% endif %}
+        {% if event.patient %} — {{ event.patient.display_name }} {% else %}{% if event.title %} — {{ event.title }} {% endif %}{% endif %}
         {% if event.patient.paper_id %} — {{ event.patient.paper_id }} {% endif %}
         {% if event.length %} — {{ event.length }} min {% endif %}
         {% if event.workers_initial %} — {{ event.workers_initial }} {% endif %}
