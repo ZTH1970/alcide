@@ -408,7 +408,11 @@ function load_tab8_medical() {
         button.attr({disabled: 'disabled'});
         button.toggleClass('icon-wip');
         $('.pagination').next().remove();
-        $.get(window.location + '&all', function(data) {
+        var target = '?all';
+        if (window.location.search) {
+            target = '&all';
+        }
+        $.get(window.location + target, function(data) {
             button.toggleClass('icon-wip');
             button.removeAttr('disabled');
             button.html(title);
