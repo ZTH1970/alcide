@@ -42,3 +42,6 @@ calebasse/calebasse.log
 
 # Databases
 *.bz2
+
+# Temp files
+*~
