@@ -1063,6 +1063,3 @@ def create_patient(first_name, last_name, service, creator,
     patient.policyholder = patient.patientcontact
     patient.save()
     return patient
-
-PatientRecord.DEFICIENCY_FIELDS = [field for field in PatientRecord._meta.get_all_field_names() if field.startswith('deficiency_')]
-PatientRecord.MISES_FIELDS = [field for field in PatientRecord._meta.get_all_field_names() if field.startswith('mises_')]
