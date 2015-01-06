@@ -11,7 +11,6 @@ from ..middleware.request import get_request
 class ActValidationState(models.Model):
 
     class Meta:
-        app_label = 'actes'
         ordering = ('-created',)
 
     act = models.ForeignKey('actes.Act',

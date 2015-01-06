@@ -50,10 +50,6 @@ class TransportPrescriptionLog(models.Model):
 
 
 class HealthCare(models.Model):
-
-    class Meta:
-        app_label = 'dossiers'
-
     start_date = models.DateField(verbose_name=u"Date de début")
     request_date = models.DateField(verbose_name=u"Date de demande",
         blank=True, null=True)
@@ -74,10 +70,6 @@ class HealthCare(models.Model):
 
 
 class CmppHealthCareDiagnostic(HealthCare):
-
-    class Meta:
-        app_label = 'dossiers'
-
     act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_DIAGNOSTIC, verbose_name=u"Nombre d'actes couverts")
     end_date = models.DateField(verbose_name=u"Date de fin",
         blank=True, null=True)
@@ -100,10 +92,6 @@ class CmppHealthCareDiagnostic(HealthCare):
 
 
 class CmppHealthCareTreatment(HealthCare):
-
-    class Meta:
-        app_label = 'dossiers'
-
     act_number = models.IntegerField(default=DEFAULT_ACT_NUMBER_TREATMENT,
             verbose_name=u"Nombre d'actes couverts")
     end_date = models.DateField(verbose_name=u"Date de fin",
@@ -154,10 +142,6 @@ class CmppHealthCareTreatment(HealthCare):
 
 
 class SessadHealthCareNotification(HealthCare):
-
-    class Meta:
-        app_label = 'dossiers'
-
     end_date = models.DateField(verbose_name=u"Date de fin",
         blank=True, null=True)
 
@@ -174,14 +158,12 @@ class SessadHealthCareNotification(HealthCare):
 class ProtectionStatus(NamedAbstractModel):
 
     class Meta:
-        app_label = 'dossiers'
         verbose_name = u"Statut d'une mesure de protection"
         verbose_name_plural = u"Statuts d'une mesure de protection"
 
 class ProtectionState(models.Model):
 
     class Meta:
-        app_label = 'dossiers'
         verbose_name = u'Mesure de protection du dossier patient'
         verbose_name_plural = u'Mesure de protections du dossier patient'
         ordering = ['-start_date']
@@ -200,7 +182,6 @@ class ProtectionState(models.Model):
 class Status(NamedAbstractModel):
 
     class Meta:
-        app_label = 'dossiers'
         verbose_name = u"Statut d'un état"
         verbose_name_plural = u"Statuts d'un état"
 
@@ -211,7 +192,6 @@ class Status(NamedAbstractModel):
 class FileState(models.Model):
 
     class Meta:
-        app_label = 'dossiers'
         verbose_name = u'Etat du dossier patient'
         verbose_name_plural = u'Etats du dossier patient'
 
