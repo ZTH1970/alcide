@@ -470,7 +470,7 @@ class TransportType(NamedAbstractModel):
 class WorkerType(NamedAbstractModel):
     intervene = models.BooleanField(
             verbose_name=u'Intervenant',
-            blank=True)
+            default=True, blank=True)
 
     class Meta:
         verbose_name = u'Type de personnel'
@@ -573,7 +573,7 @@ class MDPHResponse(models.Model):
 class HolidayType(NamedAbstractModel):
     for_group = models.BooleanField(
             verbose_name=u'Absence de groupe',
-            blank=True)
+            default=True, blank=True)
 
     class Meta:
         verbose_name = u"Type d'absence"

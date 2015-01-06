@@ -69,7 +69,7 @@ class Event(models.Model):
     exception_date = models.DateField(blank=True, null=True,
             verbose_name=u'Reporté du', db_index=True)
     # canceled can only be used with exception to
-    canceled = models.BooleanField(_('Annulé'), db_index=True)
+    canceled = models.BooleanField(_('Annulé'), db_index=True, default=False)
 
     PERIODS = (
             (1, u'Toutes les semaines'),
@@ -575,7 +575,7 @@ class EventWithAct(Event):
         verbose_name=u'Type d\'acte')
     patient = models.ForeignKey('dossiers.PatientRecord')
     convocation_sent = models.BooleanField(blank=True,
-        verbose_name=u'Convoqué', db_index=True)
+        verbose_name=u'Convoqué', db_index=True, default=False)
 
 
     @property

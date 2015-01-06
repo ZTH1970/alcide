@@ -261,7 +261,8 @@ class PatientAddress(models.Model):
             verbose_name=u'Adresse complète', editable=False)
     phone = PhoneNumberField(verbose_name=u"Téléphone", blank=True, null=True)
     fax = PhoneNumberField(verbose_name=u"Fax", blank=True, null=True)
-    place_of_life = models.BooleanField(verbose_name=u"Lieu de vie")
+    place_of_life = models.BooleanField(verbose_name=u"Lieu de vie",
+            default=True)
     number = models.CharField(max_length=12,
             verbose_name=u"Numéro", blank=True, null=True)
     recipient = models.CharField(max_length=100,
