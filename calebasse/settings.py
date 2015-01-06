@@ -150,7 +150,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reversion',
-    'south',
     'django.contrib.admin',
     'ajax_select',
     'django_select2',
@@ -174,6 +173,8 @@ INTERNAL_IPS=('127.0.0.1',)
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -245,9 +246,6 @@ AJAX_LOOKUP_CHANNELS = {
     'worker-or-group' : ('calebasse.ressources.lookups', 'WorkerOrGroupLookup'),
     'all-worker-or-group' : ('calebasse.ressources.lookups', 'AllWorkerOrGroupLookup'),
 }
-
-# South configuration
-SOUTH_TESTS_MIGRATE = False
 
 # Default URL after login
 LOGIN_REDIRECT_URL = '/'
