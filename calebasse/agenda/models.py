@@ -55,8 +55,8 @@ class Event(models.Model):
     ressource = models.ForeignKey('ressources.Ressource', blank=True, null=True,
                                   verbose_name=u'Ressource')
 
-    start_datetime = models.DateTimeField(_('Début'), db_index=True)
-    end_datetime = models.DateTimeField(_('Fin'), blank=True, null=True)
+    start_datetime = models.DateTimeField(_(u'Début'), db_index=True)
+    end_datetime = models.DateTimeField(_(u'Fin'), blank=True, null=True)
     old_ev_id = models.CharField(max_length=8, blank=True, null=True)
     old_rr_id = models.CharField(max_length=8, blank=True, null=True)
     # only used when there is no rr id
@@ -69,14 +69,14 @@ class Event(models.Model):
     exception_date = models.DateField(blank=True, null=True,
             verbose_name=u'Reporté du', db_index=True)
     # canceled can only be used with exception to
-    canceled = models.BooleanField(_('Annulé'), db_index=True, default=False)
+    canceled = models.BooleanField(_(u'Annulé'), db_index=True, default=False)
 
     PERIODS = (
             (1, u'Toutes les semaines'),
             (2, u'Une semaine sur deux'),
             (3, u'Une semaine sur trois'),
-            (4, 'Une semaine sur quatre'),
-            (5, 'Une semaine sur cinq')
+            (4, u'Une semaine sur quatre'),
+            (5, u'Une semaine sur cinq')
     )
     OFFSET = range(0, 4)
     PERIODICITIES = (
