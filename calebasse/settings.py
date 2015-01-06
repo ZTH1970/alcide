@@ -167,7 +167,6 @@ INSTALLED_APPS = (
     'calebasse.statistics',
     'calebasse.common',
     'calebasse.middleware.request',
-    'south',
     'django_journal',
 )
 
