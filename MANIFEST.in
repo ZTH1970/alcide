@@ -1,4 +1,4 @@
-include README INSTALL LICENSE AUTHORS
+include README INSTALL LICENSE AUTHORS VERSIONS
 recursive-include mockups *
 recursive-include calebasse/*/static *
 recursive-include calebasse/*/templates *
