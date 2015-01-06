@@ -213,8 +213,11 @@ class Act(models.Model):
             self.valide = True
         else:
             self.valide = False
-        get_request().record('act-update', '{obj_id} state changed to {state} by {user} from {ip}',
+        try:
+            get_request().record('act-update', '{obj_id} state changed to {state} by {user} from {ip}',
                               obj_id=self.id, state=last_validation_state, user=author)
+        except:
+            pass
         self.save()
 
     def is_billable(self):
