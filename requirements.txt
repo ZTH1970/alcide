@@ -1,8 +1,7 @@
 --allow-external pyPdf
 --allow-unverified pyPdf
 pyPdf
-Django == 1.6
-south >= 0.8.4
+Django == 1.7.2
 django-reversion == 1.8.5
 python-dateutil >= 2.2, < 2.3
 django-model-utils >= 1.5.0
