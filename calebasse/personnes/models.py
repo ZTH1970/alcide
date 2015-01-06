@@ -7,6 +7,7 @@ from django.db.models import query
 from django.contrib.auth.models import User
 from django.template.defaultfilters import date as date_filter
 from django import forms
+from django.core.urlresolvers import reverse
 
 from model_utils.managers import InheritanceManager
 
@@ -104,10 +105,9 @@ class Worker(People):
             return False
         return True
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('worker_update', (), {
-            'service': self.services.all()[0].name.lower(),
+        return reverse('worker_update', kwargs={
+            'service': self.services.all()[0].slug.lower(),
             'pk': self.pk })
 
     class Meta:
