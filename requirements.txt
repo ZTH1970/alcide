@@ -4,7 +4,7 @@ pyPdf
 Django == 1.7.2
 django-reversion == 1.8.5
 python-dateutil >= 2.2, < 2.3
-django-model-utils >= 1.5.0
+django-model-utils == 1.4.0
 django-ajax-selects == 1.3.5
 django-widget-tweaks < 1.2.0
 django-tastypie == 0.12.1
@@ -19,5 +19,6 @@ M2Crypto
 --allow-external pycairo
 django_select2 < 4.3
 django-journal
+south
 #PyGTK doesn't work with pip
 #pdftk we need the binary
