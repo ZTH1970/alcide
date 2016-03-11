@@ -242,13 +242,13 @@ def list_acts_for_billing_CMPP(end_day, service, acts=None):
     patient_ids = [p.id for p in acts_billable]
     # compute latest hcds using one query
     latest_hcd = {}
-    hcds = CmppHealthCareDiagnostic.objects.filter(patient_id__in=patient_ids).order_by('-start_date').select_related(depth=1).prefetch_related('act_set')
+    hcds = CmppHealthCareDiagnostic.objects.filter(patient_id__in=patient_ids).order_by('-start_date').select_related().prefetch_related('act_set')
     for hcd in hcds:
         if hcd.patient not in latest_hcd:
             latest_hcd[hcd.patient] = hcd
     # compute two latest hcts using one query
     latest_hcts = defaultdict(lambda:[])
-    hcts = CmppHealthCareTreatment.objects.filter(patient_id__in=patient_ids).order_by('-start_date').select_related(depth=1).prefetch_related('act_set')
+    hcts = CmppHealthCareTreatment.objects.filter(patient_id__in=patient_ids).order_by('-start_date').select_related().prefetch_related('act_set')
     for hct in hcts:
         if hct.patient not in latest_hcts or len(latest_hcts[hct.patient]) < 2:
             latest_hcts[hct.patient].append(hct)
