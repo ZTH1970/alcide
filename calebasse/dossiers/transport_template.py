@@ -3,9 +3,9 @@
 import os
 import tempfile
 
-import cairo
-import pango
-import pangocairo
+#import cairo
+#import pango
+##import pangocairo
 
 from ..pdftk import PdfTk
 
