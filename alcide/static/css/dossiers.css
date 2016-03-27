@@ -1,0 +1,161 @@
+#tabs-2 select {
+    width: auto;
+    height: auto;
+}
+
+#tabs-2 table {
+  width: 100%;
+  text-align: center;
+}
+
+#tabs-3 div {
+  margin-top: 1em;
+  position: relative;
+}
+
+#tabs-3 div.contact {
+        margin: 12px;
+        background: #eee;
+        padding: 1em;
+        border-radius: 10px;
+}
+
+#tabs-3 div.contact.patient {
+	background: #ddd;
+	border-width: 2px;
+}
+
+#tabs-3 div.contact h4 {
+        margin: 0;
+}
+
+#contact-add-address {
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+div#tabs-3 div.right {
+        text-align: right;
+        border: 0;
+        position: absolute;
+        top: 20px;
+        right: 0;
+        width: 350px;
+        padding-right: 30px;
+}
+
+div#tabs-3 div.right button {
+        margin-left: 20px;
+}
+
+div#tabs-3 div.contact div.right {
+        padding-right: 18px; /* 30px - 12px */
+        top: -4px;
+}
+
+div#tabs-2 div,
+div#tabs-3 div,
+div#tabs-4 div.frame,
+div#tabs-7 div.frame {
+        position: relative;
+}
+
+#info-membre div button.save,
+div.group_holidays button.save,
+div#tabs-7 div div.buttons,
+div#tabs-4 div div.buttons,
+div#tabs-3 div div.buttons,
+div#tabs-2 div button.save {
+        position: absolute;
+        top: 0;
+        right: 0;
+}
+
+#tabs-2 div.frame div.subframe,
+#tabs-7 div.frame div.subframe {
+	position: relative;
+        margin: 12px;
+        background: #eee;
+        padding: 1em;
+        border-radius: 10px;
+}
+
+div#tabs-3 div div.buttons,
+div#tabs-4 div div.buttons {
+	border: 0;
+	margin: 0;
+}
+
+#tabs-8 form p {
+	clear: both;
+}
+
+#new-address-btn, #new-contact-btn {
+    font-size: 1.1em;
+}
+
+#tabs textarea {
+    margin-top: 5px;
+    width: 85%;
+}
+
+#id_comment-addresses_contacts_comment {
+    margin: 0;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin-top: .4em;
+}
+
+.select2-choices {
+    font-size: 11pt;
+}
+
+#id_school_text {
+     min-width: 600px;
+}
+
+#ajax-dlg input, ul.ui-autocomplete, .results_on_deck {
+    font-size: 90%;
+}
+
+input[type=checkbox] + button {
+    display: none;
+}
+
+.patientrecord_print ul {
+    margin: 0;
+    padding: 0;
+}
+
+.patientrecord_print li {
+    list-style-type: none;
+    display: inline;
+}
+
+.patientrecord_print label {
+    margin: 0 .5em;
+}
+
+.print-container {
+    float: right;
+}
+.print-container h5 {
+    margin: 0;
+}
+
+.print-container form {
+    display: inline;
+}
+
+.js-expandable .js-click-to-expand:after { content: " [+]"; }
+.js-expanded .js-click-to-expand:after { content: " [-]"; }
+.js-click-to-expand { cursor: pointer; }
+.js-click-to-expand:hover { font-weight: bold; }
+
+.js-expandable .js-to-expand { display: none; }

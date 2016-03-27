@@ -1,0 +1,91 @@
+{% load url from future %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>{% block title %}{{ service_name }}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="print" href="{{ STATIC_URL }}css/print.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/smoothness/jquery-ui-1.8.21.custom.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}css/ajax_select.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/alcide.checkboxwidget.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/alcide.divmenu.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/alcide.datesel.css" />
+    <script src="{{ STATIC_URL }}js/jquery-1.8.2.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+    <script>$.cookie.json = true;</script>
+    <script src="{{ STATIC_URL }}js/jquery-ui-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.sortElements.js"></script>
+    <script src="{{ STATIC_URL }}development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script src="{{ STATIC_URL }}js/common.js"></script>
+    <script src="{{ STATIC_URL }}js/ajax_select.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.mousewheel.js"></script>
+    <script src="{{ STATIC_URL }}js/alcide.mousewheel.js"></script>
+    <script src="{{ STATIC_URL }}js/alcide.tables.js"></script>
+    <script src="{{ STATIC_URL }}js/alcide.text_input_wrapper.js"></script>
+    <script src="{{ STATIC_URL }}/js/alcide.checkboxwidget.js"></script>
+    <script src="{{ STATIC_URL }}/js/alcide.divmenu.js"></script>
+    {% block extrascripts %}
+    <script src="{{ STATIC_URL }}js/alcide.dialog.js"></script>
+    {% endblock %}
+    {% block extrastyles %}
+    {% endblock %}
+  </head>
+  <body class="{% firstof service params.service %} {% block body-class %}{% endblock %}{% if popup %} popup{% endif %}">
+  {% block wrapper %}
+  <div id="wrap-large">
+  {% endblock %}
+    {% if not popup %}
+    <div id="header">
+      {% block header %}<h1><a href="/">APS 42</a></h1>{% endblock %}
+    </div>
+    <div id="splash" class="{{ service }}">
+      <div id="user-links">
+        {% block user-links %}
+        <a href="{% url 'logout' %}">Déconnexion</a>
+        {% endblock %}
+      </div>
+
+      {% block messages %}
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      <script type="text/javascript">
+        $('.messages').delay(1000*(1+{{ messages|length }})).fadeOut('slow');
+      </script>
+      {% endif %}
+      {% endblock %}
+
+    </div>
+    {% endif %}
+    <div id="content">
+
+      <div id="appbar">
+        {% block appbar %}
+        {% endblock %}
+      </div>
+      {% block beforecontent %}
+      {% endblock %}
+      {% block content %}
+      {% endblock %}
+    </div>
+    {% if not popup %}
+    <div id="footer">
+      {% block footer %}Logiciel Calebasse — Copyright © Entr'ouvert{% endblock %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div id="dialogs">
+  {% block dialogs %}
+  {% endblock %}
+  </div>
+  {% block page-end %}
+  {% endblock %}
+  </body>
+</html>

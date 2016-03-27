@@ -1,0 +1,587 @@
+{% extends "facturation/base.html" %}
+{% load url from future %}
+
+{% block appbar %}
+    <h2>
+
+    {% if service_name == "CMPP" %}
+        Facturation {{ invoicing.seq_id }}
+        {% if invoicing.status == "open" %}
+            ouverte et ayant débuté le {{ invoicing.start_date }}
+        {% else %}
+            {% if invoicing.status == "closed" %}
+            fermée
+            {% else %}
+            validée
+            {% endif %}
+            couvrant la période du {{ invoicing.start_date }} au {{ invoicing.end_date }}
+        {% endif %}
+    {% else %}
+        Décompte {{ invoicing.seq_id }}
+        {% if invoicing.status == "validated" %}
+        validé
+        {% endif %}
+        pour le trimestre allant du {{ invoicing.start_date }} au {{ invoicing.end_date }}
+    {% endif %}</h2>
+    <a href="..">Retourner à la liste</a>
+    {% if service_name == "CMPP" %}
+        {% if invoicing.status == "open" %}<button id="close-invoicing">Clore cette facturation</button>{% endif %}
+        {% if invoicing.status == "closed" and previous_validated %}<button id="validate"">Valider cette facturation</button>{% endif %}
+        {% if invoicing.status == "validated" %}
+            <button onclick="window.location.href=window.location.href+'transmission/'">Télétransmission</button>
+            <button onclick="window.location.href=window.location.href+'export/'">Export comptabilité</button>
+            <button onclick="window.location.href=window.location.href+'download/'">Imprimer</button>
+        {% endif %}
+    {% else %}
+        {% if show_validation_btn %}<button id="validate">Valider ce décompte</button>{% endif %}
+        {% if invoicing.status == "validated" %}<button id="print-btn" onclick="window.location.href=window.location.href+'download/'">Imprimer</button>{% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="facturation-contents">
+    {% if days_not_locked %}
+    <h3>Jours non verrouillés</h3>
+        <ul>
+        {% for day in days_not_locked %}
+            <li><a href="../../agenda/{{ day.year }}-{{ day.month }}-{{ day.day }}/validation-des-actes" target="_blank">{{ day.day }}/{{ day.month }}/{{ day.year }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <h3>Résumé</h3>
+    {% if service_name == "CMPP" %}
+        {% if invoicing.status == "open" or invoicing.status == "closed" %}
+        <ul>
+            {% if len_acts_invoiced_hors_pause %}
+              <li>Actes facturables maintenant : {{ len_acts_invoiced_hors_pause }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_invoiced_hors_pause }}</li>
+                  <li>Nombre de factures : {{ len_invoices_hors_pause }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables maintenant.</li>
+            {% endif %}
+
+            {% if len_acts_invoiced_pause %}
+              <li>Actes facturables des dossiers en pause : {{ len_acts_invoiced_pause }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_invoiced_pause }}</li>
+                  <li>Nombre de factures : {{ len_invoices_pause }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables pour des dossiers en pause.</li>
+            {% endif %}
+
+            {% if len_acts_losts_missing_policy %}
+              <li>Actes de dossiers avec des informations de sécurité sociale manquantes : {{ len_acts_losts_missing_policy }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_with_lost_acts_missing_policy }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes pour des dossiers avec des informations de sécurité sociale manquantes.</li>
+            {% endif %}
+
+            {% if len_acts_losts_missing_birthdate %}
+              <li>Actes de dossiers dont le patient n'a pas de date de naissance d'indiquée : {{ len_acts_losts_missing_birthdate }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_with_lost_acts_missing_birthdate }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes pour des dossiers dont le patient n'a pas de date de naissance d'indiquée.</li>
+            {% endif %}
+
+            {% if len_acts_lost %}
+              <li>Actes facturables mais non pris en charge : {{ len_acts_lost }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_with_lost_acts }}</li>
+        <!--          <li>Quota des actes pris en charge dépassé : 2</li>-->
+        <!--          <li>Prises en charge expirées : 2</li>-->
+        <!--          <li>Pas de prise en charge : 1</li>-->
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables mais non pris en charge.</li>
+            {% endif %}
+
+            {% if len_acts_paused %}
+              <li>Actes facturables en pause facturation : {{ len_acts_paused }}
+                <ul>
+                  <li>Dossiers concernés : {{ len_patient_acts_paused }}</li>
+                </ul>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturables en pause facturation.</li>
+            {% endif %}
+
+        </ul>
+        {% else %}
+        <ul>
+            {% if len_acts_invoiced %}
+              <li>{{ len_acts_invoiced }} actes facturés pour un montant de {{ some_stats.total.1 }}.
+                <ul>
+                  <li>Dossiers concernés : {{ len_patients }}</li>
+                  <li>Nombre de factures : {{ len_invoices }}</li>
+                </ul>
+              </li>
+              <li>Détail par année et par tarif des actes :
+                <table class="basic">
+                  <thead><tr><th>Tarif</th><th>Année</th><th>Actes</th><th>Montant</th></tr></thead>
+                  <tbody>
+                  {% for year, x in some_stats.detail.items %}
+                  {% for ppa, stats in x.items %}
+                  <tr><td>{{ ppa }}</td><td>{{ year }}</td><td>{{ stats.0 }}</td><td>{{ stats.1 }}</td></tr>
+                  {% endfor %}
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </li>
+              <li>Détail des lots :
+                <table class="basic">
+                  <thead><tr><th>Centre</th><th>Numéro de lot</th><th>Nombre de factures</th><th>Nombre d'actes</th><th>Montant facturé</th><th>Montant des rejets</th><th>Somme perçue</th></tr></thead>
+                  <tbody>
+                  {% for hc, batch, amount_rejected, versement in batches %}
+                  <tr><td>{{ hc.name }}</td><td>{{ batch.number }}</td><td>{{ batch.number_of_invoices }}</td><td>{{ batch.number_of_acts }}</td><td>{{ batch.total }}</td><td>{{ amount_rejected }}</td><td>{{ versement }}</td></tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </li>
+            {% else %}
+              <li>Pas d'actes facturés pour cette facturation.</li>
+            {% endif %}
+        </ul>
+      {% endif %}
+    {% else %}
+        {% if service_name == "CAMSP" %}
+            {% if invoicing.status == "closed" %}
+            <ul>
+                {% if len_patient_hors_pause %}
+                  <li>Actes décomptables hors dossiers en pause : {{ len_acts_hors_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables pour les dossiers hors pause.</li>
+                {% endif %}
+
+                {% if len_patient_pause %}
+                  <li>Actes décomptables des dossiers en pause : {{ len_acts_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables pour les dossiers en pause.</li>
+                {% endif %}
+
+                {% if len_acts_paused %}
+                  <li>Actes décomptables en pause facturation : {{ len_acts_paused }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_acts_paused }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables en pause facturation.</li>
+                {% endif %}
+
+                {% if patients_missing_policy|length %}
+                  <li>Dossiers avec information de sécurité sociale manquante : {{ patients_missing_policy|length }}
+                  </li>
+                {% endif %}
+
+            </ul>
+            {% else %}
+            <ul>
+                {% if len_patient_hors_pause %}
+                  <li>Actes décomptés: {{ len_acts_hors_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptés pour ce décompte.</li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        {% else %}
+            {% if invoicing.status == "closed" %}
+            <ul>
+                {% if len_patient_hors_pause %}
+                  <li>Actes décomptables hors dossiers en pause : {{ len_acts_hors_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables pour les dossiers hors pause.</li>
+                {% endif %}
+
+                {% if len_patient_missing_notif %}
+                  <li>Actes décomptables mais non couverts par une notification : {{ len_acts_missing_notif }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_missing_notif }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables avec une notification manquante.</li>
+                {% endif %}
+
+                {% if len_patient_pause %}
+                  <li>Actes décomptables des dossiers en pause : {{ len_acts_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables pour les dossiers en pause.</li>
+                {% endif %}
+
+                {% if len_acts_paused %}
+                  <li>Actes décomptables en pause facturation : {{ len_acts_paused }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_acts_paused }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptables en pause facturation.</li>
+                {% endif %}
+
+                {% if patients_missing_policy|length %}
+                  <li>Dossiers avec information de sécurité sociale manquante : {{ patients_missing_policy|length }}
+                  </li>
+                {% endif %}
+
+            </ul>
+            {% else %}
+            <ul>
+                {% if len_patient_hors_pause %}
+                  <li>Actes décomptés : {{ len_acts_hors_pause }}
+                    <ul>
+                      <li>Dossiers concernés : {{ len_patient_hors_pause }}</li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li>Pas d'actes décomptés pour ce décompte.</li>
+                {% endif %}
+            </ul>
+            {% endif %}
+
+        {% endif %}
+    {% endif %}
+    </div>
+
+    {% if service_name == "CMPP" and patients_stats %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        {% if invoicing.status == "open" or invoicing.status == "closed" %}
+        <p id="filtre-dossiers">
+         <input type="radio" name="dossiers_filter" value="pause" group="filter"><label>N'afficher que les dossiers présentant des actes facturables en pause facturation.</label></input><br/>
+         <input type="radio" name="dossiers_filter" value="losts" group="filter"><label>N'afficher que les dossiers présentant des actes facturables non pris en charge.</label></input><br/>
+         <input type="radio" name="dossiers_filter" value="acts_paused" group="filter"><label>N'afficher que les dossiers présentant des actes facturables en pause facturation.</label></input><br/>
+         <input type="radio" name="dossiers_filter" value="missing_policy" group="filter"><label>N'afficher que les dossiers présentant des informations de sécurité sociale manquantes.</label></input><br/>
+         <input type="radio" name="dossiers_filter" value="missing_birthdate" group="filter"><label>N'afficher que les dossiers pour lesquels il manque une date de naissance pour le patient.</label></input><br/>
+         <input type="radio" name="dossiers_filter" value="all" group="filter" checked="checked"><label>Afficher tous les dossiers.</label></input>
+        </p>
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats %}
+
+            <div class="frame dossier{% if "invoices" in detail.keys and patient.pause%} not_facturable pause{% endif %}{% if "losts" in detail.keys %} not_facturable losts{% endif %}{% if "acts_paused" in detail.keys %} not_facturable acts_paused{% endif %}{% if "losts_missing_policy" in detail.keys %} not_facturable missing_policy{% endif %}{% if "losts_missing_birthdate" in detail.keys %} not_facturable missing_birthdate{% endif %}">
+
+                <h3><span class="patient_pk">({{ patient.pk }})</span>
+                  <a href="../../dossiers/{{ patient.pk }}/view" target="_blank">{% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <div class="info">
+                </div>
+                {% if patient.pause %}
+                    <p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>
+                    {% if patient.pause_comment %}<p>Commentaire : {{ patient.pause_comment }}</p>{% endif %}
+                {% endif %}
+                {% if "losts" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables non pris en charge.</span></p>{% endif %}
+                {% if "losts_missing_policy" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des informations de sécurité sociale manquantes.</span></p>{% endif %}
+                {% if "losts_missing_birthdate" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Date de naissance manquante pour le patient.</span></p>{% endif %}
+                {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "invoices" %}
+                  <li>Actes facturables <button class="blind">détails</button>
+                    <ul>
+                        {% for invoice in value %}
+                        {% for k, v in invoice.items %}
+                            {% if k == "acts" %}
+                              {% for act, hc in v %}
+                                <li>{{ act.date }} {{ act.act_type }}</li>
+                              {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "losts" %}
+                  <li>Actes facturables non pris en charge <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "losts_missing_policy" %}
+                  <li>Actes facturables mais le dossier présente des informations de sécurité sociale manquantes.<button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "losts_missing_birthdate" %}
+                  <li>Actes facturables mais le patient n'a pas de date de naissance d'indiquée.<button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "acts_paused" %}
+                  <li>Actes facturables en pause facturation <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% else %}
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats %}
+            <div class="frame dossier" id="to-hide">
+                <h3><span class="patient_pk">({{ patient.pk }})</span>{% if patient.pk %}<a href="../../dossiers/{{ patient.pk }}/view" target="_blank">{% endif %}
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %}<span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}{% if patient.pk %}</a>{% endif %}</h3>
+                <div class="info">
+                </div>
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "invoices" %}
+                  <li>Actes facturés
+                    <ul>
+                        {% for invoice in value %}
+                        <li>{% if invoice.rejected %}Facture {{ invoice.number }} <strong>rejetée</strong> <button class="blind">détails</button>
+                          <ul>
+                          {% for act in invoice.acts.all %}
+                            <li>{{ act.date }} {{ act.act_type }} </li>
+                          {% endfor %}
+                          </ul>
+                          {% else %}Facture {{ invoice.number }} <button data-id="{{ invoice.id }}" class="rebill-btn">Rejeter cette facture</button> <button class="blind">détails</button>
+                          <ul>
+                          {% for act in invoice.acts.all %}
+                            <li>{{ act.get_hc_tag }} : {{ act.date }} {{ act.act_type }} </li>
+                          {% endfor %}
+                          </ul>
+                          {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if service_name == "CAMSP" and patients_stats %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        {% if invoicing.status == "closed" %}
+            <p id="filtre-dossiers">
+             <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers en pause facturation, avec un acte en pause ou avec une information de sécurité sociale manquante.</label></input>
+            </p>
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats %}
+            {% if patient.pause or "acts_paused" in detail.keys or patient in patients_missing_policy %}
+             <div class="frame dossier facturable">
+            {% else %}
+            <div class="frame dossier">
+            {% endif %}
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <div class="info">
+                </div>
+                {% if patient.pause %}
+                    <p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>
+                    {% if patient.pause_comment %}<p>Commentaire : {{ patient.pause_comment }}</p>{% endif %}
+                {% endif %}
+                {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
+                {% if patient in patients_missing_policy %}<p id="pause-fac"><span class="hi-fact">Le dossier présente une information de sécurité sociale manquante.</span></p>{% endif %}
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptables <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "acts_paused" %}
+                  <li>Actes décomptables en pause facturation <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% else %}
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats %}
+            <div class="frame dossier" id="to-hide">
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <div class="info">
+                </div>
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptés <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if service_name == "SESSAD DYS" or service_name == "SESSAD TED" %}
+        {% if patients_stats %}
+    <div id="dossiers">
+        <h3>Dossiers concernés</h3>
+        {% if invoicing.status == "closed" %}
+            <p id="filtre-dossiers">
+             <input type="checkbox" id="hide-dossiers-cb"><label for="hide-dossiers-cb">N'afficher que les dossiers avec une notification manquante, en pause facturation, avec un acte en pause ou avec une information de sécurité sociale manquante.</label></input>
+            </p>
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats %}
+            {% if patient.pause or "acts_paused" in detail.keys or patient in patients_missing_policy or patient in patients_missing_notif %}
+             <div class="frame dossier facturable">
+            {% else %}
+            <div class="frame dossier">
+            {% endif %}
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <div class="info">
+                </div>
+                {% if patient.pause %}
+                    <p id="pause-fac"><span class="hi-fact">Le dossier patient est en pause facturation.</span></p>
+                    {% if patient.pause_comment %}<p>Commentaire : {{ patient.pause_comment }}</p>{% endif %}
+                {% endif %}
+                {% if "acts_paused" in detail.keys %}<p id="pause-fac"><span class="hi-fact">Le dossier présente des actes facturables en pause facturation.</span></p>{% endif %}
+                {% if patient in patients_missing_policy %}<p id="pause-fac"><span class="hi-fact">Le dossier présente une information de sécurité sociale manquante.</span></p>{% endif %}
+                {% if patient in patients_missing_notif %}<p id="pause-fac"><span class="hi-fact">Le dossier n'a pas de notification couvrant tous les actes.</span></p>{% endif %}
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptables <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "missings" %}
+                  <li>Actes décomptables non couverts par une notification <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                  {% if key == "acts_paused" %}
+                  <li>Actes décomptables en pause facturation <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% else %}
+        <div id="dossiers-concernes">
+        {% for patient, detail in patients_stats %}
+            <div class="frame dossier" id="to-hide">
+                <h3><span class="patient_pk">({{ patient.pk }})</span><a href="../../dossiers/{{ patient.pk }}/view" target="_blank">
+                {% if patient.paper_id %}{{ patient.paper_id }} {% endif %} <span class="lastname">{{ patient.last_name }}</span> {{ patient.first_name }}</a></h3>
+                <div class="info">
+                </div>
+                <ul>
+                {% for key, value in detail.items %}
+                  {% if key == "accepted" %}
+                  <li>Actes décomptés <button class="blind">détails</button>
+                    <ul>
+                      {% for act in value %}
+                        <li>{{ act.date }} {{ act.act_type }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% block dialogs %}
+<div id="change-record" style="display: none;" data-id="{{ invoicing.id }}" data-service-name="{{ service_name }}">
+ </div>
+
+<div id="rebill" style="display: none;"  data-id="">
+ </div>
+
+<div id="validate-dialog" title="Validation {% if service_name == "CMPP" %}de la facturation{% else %}du décompte{% endif %}">
+  <div id="validate-dialog-content">
+  </div>
+  <form method="post" action="validate/">
+    {% csrf_token %}
+    <input type="hidden" name="Close" value="1">
+  </form>
+</div>
+{% endblock %}

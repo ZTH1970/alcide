@@ -1,0 +1,10 @@
+{% load widget_tweaks %}
+
+<form action="{{ request.get_full_path }}" method="post">
+  {% csrf_token %}
+        Êtes-vous sûr de vouloir clôre la facturation en date du
+    <input id="id_date" class="date" name="date" value="{% now "d/m/Y" %}" size="10"/> ?
+    <script type="text/javascript">
+    $('#id_date').datepicker({showOn: 'button'});
+    </script>
+ </form>

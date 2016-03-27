@@ -1,0 +1,2070 @@
+[
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "1ER CONSULTATION", 
+      "old_id": "2", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 80
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ACCUEIL", 
+      "old_id": "1", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 57
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ACCUEIL", 
+      "old_id": "1", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 79
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ACCUEIL", 
+      "old_id": "1", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 139
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ACCUEIL (MR)", 
+      "old_id": "1", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 1
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ATELIER MOTS", 
+      "old_id": "49", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 176
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN COGNITIF", 
+      "old_id": "50", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 122
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN ERGOTH\u00c9RAPIE", 
+      "old_id": "33", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 161
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN LOGICO MATHEMATIQUE", 
+      "old_id": "6", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 84
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN LOGICO-MATH\u00c9MATIQUES", 
+      "old_id": "25", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 153
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN NEUROPSYCHOLOGIQUE", 
+      "old_id": "28", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 156
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN ORTHOPHONIQUE", 
+      "old_id": "4", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 82
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN ORTHOPHONIQUE", 
+      "old_id": "12", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 147
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN ORTHOPHONIQUE EN LIB\u00c9RAL", 
+      "old_id": "29", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 157
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN PSYCHOLOGIQUE", 
+      "old_id": "3", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 59
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN PSYCHOLOGIQUE", 
+      "old_id": "3", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 81
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN PSYCHOLOGIQUE", 
+      "old_id": "10", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 145
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN PSYCHOMOTEUR", 
+      "old_id": "5", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 83
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN PSYCHOMOTEUR", 
+      "old_id": "11", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 146
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN-OBSERVATION KINESITHERAPIE", 
+      "old_id": "9", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 9
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN-OBSERVATION NEUROPSYCHOLOGIQUE", 
+      "old_id": "6", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 6
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN-OBSERVATION ORTHOPHONIE", 
+      "old_id": "8", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 8
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN-OBSERVATION PSYCHOLOGIQUE", 
+      "old_id": "4", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 4
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "BILAN-OBSERVATION PSYCHOMOTRICITE", 
+      "old_id": "7", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 7
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "CO THERAPIE", 
+      "old_id": "15", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 15
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "CO-PRISE EN CHARGE", 
+      "old_id": "19", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 73
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "CONCERTATION + \u00c9QUIPE EXT\u00c9RIEURE", 
+      "old_id": "46", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 173
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": true, 
+      "name": "CONCERTATION+EQUIPE EXT.", 
+      "old_id": "34", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 108
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "CONSULTATION NEUROPEDIATRIQUE", 
+      "old_id": "2", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 2
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "CONSULTATION PEDOPSYCHIATRIQUE", 
+      "old_id": "3", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 3
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "CONSULTATION PLURIDISCIPLINAIRE D'ACCUEIL", 
+      "old_id": "39", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 167
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "COURRIER", 
+      "old_id": "14", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 149
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": true, 
+      "name": "E.S.S.", 
+      "old_id": "43", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 115
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "E.S.S.", 
+      "old_id": "27", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 155
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENFANT +  MERE", 
+      "old_id": "54", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 126
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN", 
+      "old_id": "10", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 87
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN", 
+      "old_id": "63", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 188
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN ASSISTANTE SOCIALE", 
+      "old_id": "20", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 20
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN ENFANT", 
+      "old_id": "3", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 141
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN FAMILIAL", 
+      "old_id": "2", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 58
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN FAMILIAL", 
+      "old_id": "2", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 140
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN PROFESSIONNEL EXTERIEUR", 
+      "old_id": "4", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 60
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN TELEPHONIQUE FAMILLE", 
+      "old_id": "20", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 74
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIEN TELEPHONIQUE PROFESSIONNEL", 
+      "old_id": "6", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 62
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ENTRETIENS FAMILIAUX - GUIDANCE", 
+      "old_id": "10", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 10
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ERGOTH\u00c9RAPIE", 
+      "old_id": "31", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 159
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ERGOTH\u00c9RAPIE \u00c0 L'\u00c9COLE", 
+      "old_id": "38", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 166
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ESS ", 
+      "old_id": "14", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 70
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE A MEDIATION COGNITIVE", 
+      "old_id": "44", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 171
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE DE PARENTS", 
+      "old_id": "24", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 152
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE DES FILLES CMPP/SESSAD", 
+      "old_id": "54", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 180
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE GOUTER", 
+      "old_id": "21", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 75
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE LOGICO-MATHS", 
+      "old_id": "51", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 178
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE NEURO-PSY/PSYCHOMOT", 
+      "old_id": "57", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 183
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE NEUROPSY/PSYCHOMOT + Parents", 
+      "old_id": "58", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 184
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE ORTHO PSYCHOMOT", 
+      "old_id": "56", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 182
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE PSYCHO/ORTHO", 
+      "old_id": "61", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 187
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE PSYCHO/PSYCHOMOT", 
+      "old_id": "45", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 172
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE PSYCHOMOTRICIT\u00c9", 
+      "old_id": "23", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 151
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "GROUPE xxxxxxxxx", 
+      "old_id": "17", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 72
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "LOGICO MATHEMATIQUE", 
+      "old_id": "13", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 90
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "LOGICO-MATH\u00c9MATIQUES \u00c0 L'\u00c9COLE", 
+      "old_id": "37", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 165
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "MEDIALEXIE", 
+      "old_id": "59", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 185
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "MINI SYNTHESE", 
+      "old_id": "13", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 69
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": true, 
+      "name": "MINI SYNTHESE", 
+      "old_id": "25", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 102
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "MINI-SYNTH\u00c8SE", 
+      "old_id": "41", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 169
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "NOUVELLE DEMANDE", 
+      "old_id": "60", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 132
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "OBSERVATION DIAGNOSTIQUE", 
+      "old_id": "59", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 131
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "OBSERVATION SUR LE LIEU DE SOCIALISATION", 
+      "old_id": "24", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 78
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "OBSERVATION au DOMICILE", 
+      "old_id": "22", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 76
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "OBSERVATION \u00e0 l'APS", 
+      "old_id": "5", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 61
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "OBSERVATION \u00e0 l'ECOLE", 
+      "old_id": "23", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 77
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ORTHOPHONIE", 
+      "old_id": "11", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 88
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ORTHOPHONIE", 
+      "old_id": "5", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 143
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ORTHOPHONIE EN LIB\u00c9RAL", 
+      "old_id": "30", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 158
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "ORTHOPHONIE \u00c0 L'\u00c9COLE", 
+      "old_id": "35", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 163
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PPS-ESS", 
+      "old_id": "33", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 33
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PR\u00c9SENTATION DU SERVICE", 
+      "old_id": "40", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 168
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHO THERAPIE", 
+      "old_id": "9", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 86
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOMETRIE", 
+      "old_id": "5", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 5
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOMOTRICITE", 
+      "old_id": "12", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 89
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOMOTRICIT\u00c9", 
+      "old_id": "7", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 144
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOMOTRICIT\u00c9 ENFANT + M\u00c8RE", 
+      "old_id": "53", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 179
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOMOTRICIT\u00c9 \u00c0 L'\u00c9COLE", 
+      "old_id": "36", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 164
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOTHERAPIE", 
+      "old_id": "13", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 13
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOTH\u00c9RAPIE", 
+      "old_id": "4", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 142
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "PSYCHOTH\u00c9RAPIE \u00c0 L'\u00c9COLE", 
+      "old_id": "34", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 162
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "REMEDIATION COGNITIVE", 
+      "old_id": "51", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 123
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "REM\u00c9DIATION COGNITIVE", 
+      "old_id": "43", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 170
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "RENCONTRE PARENTS/\u00c9QUIPE SESSAD", 
+      "old_id": "32", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 160
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "R\u00c9\u00c9DUCATION LOGICO-MATH\u00c9MATIQUES", 
+      "old_id": "26", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 154
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SEQUENCE EDUCATIVE APS", 
+      "old_id": "8", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 64
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SEQUENCE EDUCATIVE DOMICILE", 
+      "old_id": "11", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 67
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SEQUENCE EDUCATIVE ECOLE", 
+      "old_id": "9", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 65
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SEQUENCE EDUCATIVE LIEUX DE SOCIALISATION", 
+      "old_id": "10", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 66
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SUIVI ORTHOPHONIE", 
+      "old_id": "17", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 17
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SUIVI PETIT GROUPE (1 TH\u00c9RAPEUTE)", 
+      "old_id": "18", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 18
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SUIVI PSYCHOMOTRICITE", 
+      "old_id": "16", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 16
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SYNTHESE", 
+      "old_id": "7", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 63
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SYNTHESE AVEC INTERVENANT EXTERIEUR", 
+      "old_id": "12", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 68
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SYNTH\u00c8SE AVEC PARTICIPANTS EXT\u00c9RIEURS", 
+      "old_id": "50", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 177
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "SYNTH\u00c9SE", 
+      "old_id": "15", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 150
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "T.C.C.", 
+      "old_id": "52", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 124
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "T.C.C.", 
+      "old_id": "55", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 181
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": true, 
+      "name": "TELEPHONE", 
+      "old_id": "22", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 99
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "THERAPIE FAMILIALE", 
+      "old_id": "61", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 133
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "THERAPIE FAMILIALE ANALYTIQUE", 
+      "old_id": "53", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 125
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "TH\u00c9RAPIE FAMILIALE ANALYTIQUE", 
+      "old_id": "48", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 175
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "TRAVAIL PERSONNEL", 
+      "old_id": "16", 
+      "service": 4
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 71
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": true, 
+      "name": "TRAVAIL PERSONNEL", 
+      "old_id": "29", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 105
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "TRAVAIL PERSONNEL", 
+      "old_id": "47", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 174
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "TRAVAIL PERSONNEL", 
+      "old_id": "60", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 186
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "TRAVAIL PSYCHOLOGIQUE PARENT(S)-", 
+      "old_id": "11", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 11
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": true, 
+      "name": "T\u00c9L\u00c9PHONE", 
+      "old_id": "13", 
+      "service": 3
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 148
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "1 PSYCHO + 1 PSYCHOMOT", 
+      "old_id": "47", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 119
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "2 PSYCHO + 1 ENFANT", 
+      "old_id": "42", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 114
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "2 PSYCHOMOT + 1 ENFANT", 
+      "old_id": "37", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 110
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ACCOMPAGNEMENT - ORIENTATION", 
+      "old_id": "21", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 21
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ACTIVITE BIBLIOTHEQUE", 
+      "old_id": "47", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 47
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "AEEH", 
+      "old_id": "22", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 22
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ATELIER MOTS", 
+      "old_id": "58", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 130
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "AUTRE GROUPE (2 TH\u00c9RAPEUTES AU MOINS)", 
+      "old_id": "29", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 29
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "BILAN ERGOTHERAPIE", 
+      "old_id": "46", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 118
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "BILAN ERGOTHERAPIQUE", 
+      "old_id": "48", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 48
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "BILAN GRAPHOTHERAPIE", 
+      "old_id": "49", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 121
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "BILAN NEURO PSYCHOLOGIQUE", 
+      "old_id": "41", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 113
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "BILAN PSYCHO-PEDAGOGIQUE", 
+      "old_id": "7", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 85
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "BILAN SENSORIMOTEUR", 
+      "old_id": "53", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 53
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "CONCERTATION AVEC EQUIPE EXTERIEURE (LIEU DE VIE, CR\u00c8CHE, A.E.M.O...)", 
+      "old_id": "34", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 34
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "CONCERTATION DIRECTION", 
+      "old_id": "41", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 41
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "CONSULT TEL TCC", 
+      "old_id": "64", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 136
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ENTRETIEN GRAPHOTHERAPIE", 
+      "old_id": "57", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 129
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ENTRETIEN PSYCHOLOGIQUE AVEC LA MERE", 
+      "old_id": "44", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 44
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ENTRETIEN PSYCHOLOGIQUE AVEC LE PERE", 
+      "old_id": "43", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 43
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ERGOTHERAPIE", 
+      "old_id": "45", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 117
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "FORMATION", 
+      "old_id": "36", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 36
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GRAPHOTHERAPIE", 
+      "old_id": "44", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 116
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE A MEDIATION CORPORELLE", 
+      "old_id": "15", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 92
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE D'ACCUEIL", 
+      "old_id": "25", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 25
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE D'ADOS", 
+      "old_id": "38", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 111
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE DES IDEES PLEIN LA TETE", 
+      "old_id": "66", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 138
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE DES SENS", 
+      "old_id": "54", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 54
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE EXPRESSION", 
+      "old_id": "18", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 95
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE GOUTER", 
+      "old_id": "55", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 55
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE LANGAGE", 
+      "old_id": "16", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 93
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE LOGICO-MATHEMATIQUES", 
+      "old_id": "55", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 127
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE MERES", 
+      "old_id": "46", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 46
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE MODELAGE", 
+      "old_id": "62", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 134
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE NEUROPSYCHOLOGUE - PSYCHOMOTRICIEN", 
+      "old_id": "27", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 27
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PARENTS", 
+      "old_id": "45", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 45
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PARENTS", 
+      "old_id": "19", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 96
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PARENTS/ENFANTS", 
+      "old_id": "56", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 128
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PSYCHO(NEUROPSYCHO) - ORTHOPHONISTE", 
+      "old_id": "28", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 28
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PSYCHOMOTRICITE", 
+      "old_id": "20", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 97
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PSYCHOMOTRICITE LANGAGE", 
+      "old_id": "17", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 94
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PSYCHOMOTRICITE-LANGAGE", 
+      "old_id": "26", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 26
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "GROUPE PSYCHOTHERAPIE", 
+      "old_id": "39", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 112
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "Groupe CAMSP SESSAD TED", 
+      "old_id": "52", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 52
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "MINI SYNTHESE", 
+      "old_id": "31", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 31
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "ORTHO + MERE", 
+      "old_id": "63", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 135
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": false, 
+      "name": "PREPARATION GROUPE", 
+      "old_id": "28", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 104
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "PSYCHODRAME", 
+      "old_id": "48", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 120
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "PSYCHOMOT + MERE", 
+      "old_id": "35", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 109
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "RELAXATION", 
+      "old_id": "30", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 106
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "REMEDIATION COGNITIVE", 
+      "old_id": "14", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 14
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": false, 
+      "name": "REUNION", 
+      "old_id": "31", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 107
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "REUNION A L'EXTERIEUR", 
+      "old_id": "26", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 103
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "REUNION DE SERVICE", 
+      "old_id": "39", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 39
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "REUNION DIRECTION", 
+      "old_id": "40", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 40
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "REUNION PERINATALITE CHU NORD", 
+      "old_id": "50", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 50
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "RPP", 
+      "old_id": "14", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 91
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SUIVI ERGOTHERAPIQUE", 
+      "old_id": "49", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 49
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SUIVI KINESITHERAPIE", 
+      "old_id": "19", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 19
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SUIVI MERE-ENFANT EN PSYCHOMOTRICITE", 
+      "old_id": "51", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 51
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SUIVI PSYCHOT PARENTS/ENFANT", 
+      "old_id": "56", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 56
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SUPERVISION", 
+      "old_id": "35", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 35
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": false, 
+      "name": "SUPERVISION", 
+      "old_id": "23", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 100
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": false, 
+      "name": "SYNTHESE", 
+      "old_id": "24", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 101
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SYNTHESE D'EQUIPE", 
+      "old_id": "30", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 30
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "SYNTHESE D'EQUIPE AVEC INTERVENANT EXT\u00c9RIEUR", 
+      "old_id": "32", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 32
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "TELEPHONE FAMILLE", 
+      "old_id": "23", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 23
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "TELEPHONE PROFESSIONNEL", 
+      "old_id": "38", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 38
+  }, 
+  {
+    "fields": {
+      "billable": false, 
+      "display_first": false, 
+      "name": "TRAVAIL AVEC STAGIAIRE", 
+      "old_id": "65", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 137
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "TRAVAIL FRATRIE", 
+      "old_id": "12", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 12
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "TRAVAIL PERSONNEL", 
+      "old_id": "37", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 37
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "TRAVAIL THERAPEUTIQUE A L'EXTERIEUR", 
+      "old_id": "42", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 42
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "VAD", 
+      "old_id": "21", 
+      "service": 1
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 98
+  }, 
+  {
+    "fields": {
+      "billable": true, 
+      "display_first": false, 
+      "name": "VISITE A DOMICILE", 
+      "old_id": "24", 
+      "service": 2
+    }, 
+    "model": "ressources.acttype", 
+    "pk": 24
+  }
+]

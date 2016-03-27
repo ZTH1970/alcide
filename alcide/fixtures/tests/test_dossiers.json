@@ -1,0 +1,1111 @@
+[
+  {
+    "pk": 1,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": "",
+      "patient": 8,
+      "author": 1,
+      "created": "2012-10-29T00:00:00",
+      "previous_state": null,
+      "date_selected": "2012-11-07T00:00:00"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": "",
+      "patient": 9,
+      "author": 1,
+      "created": "2012-10-29T00:00:00",
+      "previous_state": null,
+      "date_selected": "2012-11-07T00:00:00"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 2,
+      "comment": "",
+      "patient": 10,
+      "author": 1,
+      "created": "2012-11-21T14:27:19.671",
+      "previous_state": null,
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 4,
+      "comment": "",
+      "patient": 11,
+      "author": 1,
+      "created": "2012-11-21T14:27:50.036",
+      "previous_state": null,
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 5,
+      "comment": "",
+      "patient": 12,
+      "author": 1,
+      "created": "2012-11-21T14:28:20.773",
+      "previous_state": null,
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 7,
+      "comment": "",
+      "patient": 13,
+      "author": 1,
+      "created": "2012-11-21T14:28:43.228",
+      "previous_state": null,
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 3,
+      "comment": "",
+      "patient": 9,
+      "author": 1,
+      "created": "2012-11-21T14:30:05.626",
+      "previous_state": null,
+      "date_selected": "2012-11-21T00:00:00"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": "ceci est un test",
+      "patient": 14,
+      "author": 1,
+      "created": "2012-11-28T11:28:25.717",
+      "previous_state": null,
+      "date_selected": "2012-11-28T00:00:00"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 15,
+      "author": 1,
+      "created": "2012-12-02T16:40:53.551",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 4,
+      "comment": "test",
+      "patient": 15,
+      "author": 1,
+      "created": "2012-12-02T16:41:03.557",
+      "previous_state": 9,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 16,
+      "author": 1,
+      "created": "2012-12-02T22:41:13.104",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 17,
+      "author": 1,
+      "created": "2012-12-02T22:41:24.925",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 6,
+      "comment": "En cours de bilan",
+      "patient": 17,
+      "author": 1,
+      "created": "2012-12-02T22:41:38.175",
+      "previous_state": 12,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 18,
+      "author": 1,
+      "created": "2012-12-02T22:42:31.050",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 2,
+      "comment": "",
+      "patient": 18,
+      "author": 1,
+      "created": "2012-12-02T22:42:37.927",
+      "previous_state": 14,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 19,
+      "author": 1,
+      "created": "2012-12-02T22:43:43.859",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 6,
+      "comment": "test",
+      "patient": 19,
+      "author": 1,
+      "created": "2012-12-02T22:43:59.814",
+      "previous_state": 16,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 5,
+      "comment": "C'est fini",
+      "patient": 19,
+      "author": 1,
+      "created": "2012-12-02T22:44:14.653",
+      "previous_state": 17,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 20,
+      "author": 1,
+      "created": "2012-12-02T22:48:39.386",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 2,
+      "comment": "FA",
+      "patient": 20,
+      "author": 1,
+      "created": "2012-12-02T22:49:14.877",
+      "previous_state": 19,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 5,
+      "comment": "",
+      "patient": 20,
+      "author": 1,
+      "created": "2012-12-02T22:49:35.058",
+      "previous_state": 20,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 21,
+      "author": 1,
+      "created": "2012-12-02T22:52:43.137",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 1,
+      "comment": null,
+      "patient": 22,
+      "author": 1,
+      "created": "2012-12-02T22:53:16.309",
+      "previous_state": null,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 24,
+    "model": "dossiers.filestate",
+    "fields": {
+      "status": 4,
+      "comment": "RAS",
+      "patient": 22,
+      "author": 1,
+      "created": "2012-12-02T22:54:37.063",
+      "previous_state": 23,
+      "date_selected": "2012-12-02T00:00:00"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "dossiers.patientaddress",
+    "fields": {
+      "comment": null,
+      "city": "Saint Etienne",
+      "fax": "04 77 49 28 91",
+      "display_name": "30 rue de la libert\u00e9, 4200 Saint Etienne",
+      "address_complement": "",
+      "number": "30",
+      "phone": "04 77 49 28 90",
+      "street": "rue de la libert\u00e9",
+      "place_of_life": false,
+      "zip_code": "4200"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "dossiers.patientaddress",
+    "fields": {
+      "comment": null,
+      "city": "Saint-\u00c9tienne",
+      "fax": "",
+      "display_name": "42 avenue John Doe, 4200 Saint-\u00c9tienne",
+      "address_complement": "",
+      "number": "42",
+      "phone": "04 24 42 52 36",
+      "street": "avenue John Doe",
+      "place_of_life": false,
+      "zip_code": "42000"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 12,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        1
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0644452130",
+      "health_center": null,
+      "social_security_id": "1841853654541",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 17,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 10,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        1
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0642121674",
+      "health_center": null,
+      "social_security_id": "2420910236578",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 8,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        1
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0654123654",
+      "health_center": null,
+      "social_security_id": "1424868464768",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 14,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        2
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0654123654",
+      "health_center": null,
+      "social_security_id": "1544868464768",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 22,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 13,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        1
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0608451237",
+      "health_center": null,
+      "social_security_id": "1006895123654",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 9,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        1
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0654123654",
+      "health_center": null,
+      "social_security_id": "1180549588157",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 19,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 20,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 21,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 18,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 11,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [
+        1,
+        2
+      ],
+      "thirdparty_payer": false,
+      "mobile": "0728452130",
+      "health_center": null,
+      "social_security_id": "2540913236578",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 16,
+    "model": "dossiers.patientcontact",
+    "fields": {
+      "addresses": [],
+      "thirdparty_payer": false,
+      "mobile": null,
+      "health_center": null,
+      "social_security_id": "",
+      "birthdate": null,
+      "contact_comment": null,
+      "twinning_rank": null,
+      "begin_rights": null,
+      "end_rights": null
+    }
+  },
+  {
+    "pk": 8,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        1
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "1024",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 1,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 1,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 9,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        1
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "45789",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 7,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 1,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 10,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        1
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "4243",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 3,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 1,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 11,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        1,
+        2
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "42424L",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 4,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 1,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 12,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        1
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "424546",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 4,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 1,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 13,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        1
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "425874",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 6,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 3,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 14,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [
+        2
+      ],
+      "weight": null,
+      "creator": 1,
+      "paper_id": "123456",
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 8,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 3,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7ais",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-11-28T11:02:06.292",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 15,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": "test de commentaire",
+      "transporttype": null,
+      "addresses": [],
+      "weight": 45,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": 150,
+      "last_state": 10,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 3,
+      "contacts": [],
+      "nb_children_family": 5,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "FR",
+      "parental_authority": null,
+      "sibship_place": 3,
+      "created": "2012-12-02T16:40:53.544",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 16,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 11,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 2,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": null,
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:41:13.098",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 17,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 13,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 2,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7aise",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:41:24.918",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 18,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": "Test",
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 15,
+      "externaldoctor": null,
+      "pause": true,
+      "pregnancy_term": null,
+      "service": 2,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": null,
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:42:31.043",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 19,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 18,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 2,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": null,
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:43:43.853",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 20,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": "Chanteur",
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 21,
+      "externaldoctor": null,
+      "pause": true,
+      "pregnancy_term": null,
+      "service": 3,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7aise",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:48:39.378",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 21,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": null,
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 22,
+      "externaldoctor": null,
+      "pause": false,
+      "pregnancy_term": null,
+      "service": 4,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": null,
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:52:43.130",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  },
+  {
+    "pk": 22,
+    "model": "dossiers.patientrecord",
+    "fields": {
+      "comment": "",
+      "transporttype": null,
+      "addresses": [],
+      "weight": null,
+      "creator": 1,
+      "paper_id": null,
+      "familymotive": null,
+      "externalintervener": null,
+      "size": null,
+      "last_state": 24,
+      "externaldoctor": null,
+      "pause": true,
+      "pregnancy_term": null,
+      "service": 4,
+      "contacts": [],
+      "nb_children_family": null,
+      "coordinators": [],
+      "transportcompany": null,
+      "policyholder": null,
+      "advicegiver": null,
+      "nationality": "Fran\u00e7aise",
+      "parental_authority": null,
+      "sibship_place": null,
+      "created": "2012-12-02T22:53:16.302",
+      "child_custody": null,
+      "family_situation": null,
+      "analysemotive": null
+    }
+  }
+]

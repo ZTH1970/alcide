@@ -1,0 +1,117 @@
+{% load widget_tweaks %}
+{% load url from future %}
+{{ form.non_field_errors }}
+{{ form.start_datetime }}
+{{ form.start_datetime.errors }}
+   {% if object.is_recurring and object.one_act_not_new %}<p><em>Le rendez-vous périodique a un acte qui est pointé ce qui empêche de le modifier à l'exception de la description, de la ressource et de la date de fin.</em></p>{% endif %}
+   {% if object.is_recurring and object.one_act_not_new %}<p><em>Le rendez-vous périodique a un acte qui est pointé ce qui empêche de le supprimer.</em></p>{% endif %}
+   <table id="new-appointment-table">
+       <tr>
+           <td {% if form.time.field.required %}class="required"{% endif %}>
+            <p>
+           {{ form.time.label_tag }}
+           {% if object.is_recurring and object.one_act_not_new %}
+           {{ object.time }}
+           {{ form.time.as_hidden }}
+           {% else %}
+           {{ form.time }}
+           {% endif %}
+           {{ form.time.errors }}
+           </p>
+           </td>
+           <td {% if form.duration.field.required %}class="required"{% endif %}>
+           <p>
+           {{ form.duration.label_tag }}
+           {% if object.is_recurring and object.one_act_not_new %}
+           {{ object.duration }}
+           {{ form.duration.as_hidden }}
+           {% else %}
+           {{ form.duration }}
+           {% endif %}
+           {{ form.duration.errors }}
+           </p>
+           </td>
+           <td {% if form.date.field.required %}class="required"{% endif %}>
+           <p class="datepicker">
+           {{ form.date.label_tag }}
+           {% if object.is_recurring and object.one_act_not_new %}
+           {{ object.date }}
+           {{ form.date.as_hidden }}
+           {% else %}
+           {{ form.date|add_class:"datepicker-date" }}
+           {% endif %}
+           {{ form.date.errors }}
+           </p>
+           </td>
+       </tr>
+       <tr>
+           <td>
+           <p>
+           {{ form.ressource.label_tag }}
+           {{ form.ressource }}
+           {{ form.ressource.errors }}
+           </p>
+           </td>
+       </tr>
+       <tr>
+           <td {% if form.participants.field.required %}class="required"{% endif %}>
+           <h4>{{ form.participants.label_tag }}</h4>
+           <div id="intervenants">
+           {% if object.is_recurring and object.one_act_not_new %}
+           <ul>{% for p in object.participants.all %}<li>{{ p }}</li>{% endfor %}</ul>
+           <input id="id_participants" name="participants" value="|{% for p in object.participants.all %}{{ p.id }}|{% endfor %}" type="hidden"/>
+           {% else %}
+           {{ form.participants }}
+           {% endif %}
+           {{ form.participants.errors }}
+           </div>
+           </td>
+           <td {% if form.patient.field.required %}class="required"{% endif %}>
+           <h4>{{ form.patient.label_tag }}</h4>
+           <div id="patient">
+           {% if object.is_recurring or object.exception_to or object.act.already_billed %}
+           {{ object.patient }}
+           {{ form.patient.as_hidden }}
+           {% else %}
+           {{ form.patient }}
+           {{ form.patient.errors }}
+           {% endif %}
+           </div>
+           </td>
+           <td {% if form.act_type.field.required %}class="required"{% endif %}>
+           <h4>{{ form.act_type.label_tag }}</h4>
+           {% if object.is_recurring and object.one_act_not_new %}
+           {{ object.act_type }}
+           {{ form.act_type.as_hidden }}
+           {% else %}
+           {{ form.act_type }}
+           {% endif %}
+           {{ form.act_type.errors }}
+           </td>
+       </tr>
+      <tr>
+        <td colspan="3">
+          <div id="description">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {{ form.description.errors }}
+          </div>
+        </td>
+      </tr>
+</table>
+
+{% if object.exception_to %}
+  <hr/>
+  {% if object.id != object.exception_to.id %}
+  <p><em><strong>Attention: cette occurrence est une exception au rendez-vous périodique</strong>; si vous modifiez l'heure, la durée, le commentaire, la ressource, les participants ou le type d'acte du rendez-vous périodique, les exceptions ne sont pas modifiées.</em></p>
+  {% endif %}
+
+  <p>Occurence du {{object.exception_date}} d'un rendez-vous périodique
+    {% if object.exception_to.canceled %}<em>supprimé</em> et initialement prévu{% endif %}
+    {{ object.exception_to.recurrence_description|lower }}</p>
+
+  {% if not object.exception_to.canceled %}
+  <p><button type="button" data-delete-url="{% url 'delete-event' service=service date=date pk=object.exception_to.pk %}" data-id="{{ object.exception_to.id }}" data-one_act_not_new="{{ object.exception_to.one_act_not_new }}"  class="update-periodic-rdv">Éditer le rendez-vous périodique</button></p>
+  {% endif %}
+
+{% endif %}

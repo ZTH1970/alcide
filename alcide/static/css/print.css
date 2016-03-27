@@ -1,0 +1,163 @@
+@page {
+  size: landscape;
+}
+
+html {
+  background: none;
+  color: black;
+}
+
+button {
+    display: none;
+}
+
+div#header, div#splash, div#footer, div#appbar, div#datesel,
+div#djDebugToolbarHandle, input.printable {
+  display: none;
+}
+
+div#wrap-large {
+  width: 98%;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+div#content {
+  margin: 0;
+  padding: 0;
+}
+
+div#content div.worker-agenda h2 {
+  border: 0;
+  padding: 0;
+  margin-bottom: 1ex;
+  color: black;
+  background: none;
+}
+
+div[class="worker-agenda"]~div[class="worker-agenda"] {
+  page-break-before: always;
+}
+
+div.worker-agenda table{
+  font-size: 70%;
+}
+
+table#activity, div#activity {
+  font-size: 80%;
+}
+
+div#activity table {
+    width: 100%;
+    font-size: 75%;
+    border-collapse: collapse;
+}
+
+div.worker-agenda h3 {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+div.worker-agenda .remarque {
+  display: block;
+  position: relative;
+  left: 70%;
+  top: -3em;
+}
+
+div.summary {
+  float: right;
+  margin-top: 5em;
+  margin-right: 3em;
+}
+
+.print-only {
+  display: inherit;
+}
+
+.screen-only {
+  display: none;
+}
+
+div#sidebar {
+  display: none;
+}
+
+div#activity {
+    float: none;
+}
+
+div#activity .header {
+    display: block;
+}
+
+/* quotations printing */
+
+table.main {
+    border-collapse: collapse;
+}
+
+table.main td, table.main th {
+    border: 1px solid #555;
+    padding: 0 .5em;
+}
+
+
+ /* Patient record printing */
+
+textarea, input[type=text], select {
+    border: 0;
+}
+
+textarea[value=''] {
+    display: none;
+}
+
+input[value=''] {
+    display: none;
+}
+
+#tabs > ul {
+    display: none;
+}
+
+.social-security-contact ul {
+    display: block;
+}
+
+ /* tabs-7 */
+
+#tabs-7 .subframe {
+    padding: 0 .5em;
+}
+
+ /* tabs-8 */
+
+#tabs-8 label {
+    display: inline;
+}
+
+.select2-results {
+    display: none;
+}
+
+.select2-choices {
+    list-style-type:none;
+}
+
+.select2-container + select {
+    display: none;
+}
+
+td.avoid-page-break-before {
+    page-break-before: avoid;
+}
+
+#tabs-8 label:after {
+    content: ':';
+}

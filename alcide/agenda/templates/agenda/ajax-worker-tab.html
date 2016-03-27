@@ -1,0 +1,173 @@
+{% load url from future %}
+{% load apptags %}
+<p><a href="{% url 'periodic-events-for-worker' service=service date=date worker_id=worker_agenda.worker.id %}">Rendez-vous périodiques</a></p>
+<div {% if appointment.event_id %}data-event-id="{{ appointment.event_id }}"{% endif %}>
+  {% for appointment in worker_agenda.appointments %}
+  <h3 id="{{ appointment.event_id }}" class="{{ appointment.type }} {% if appointment.act_absence %}act-absence{% endif %} appointment"
+      {% if appointment.act_absence %}title="{{appointment.act_absence}}"{% endif %}>
+    <span class="hour">{{ appointment.begin_hour }}</span>
+    <span class="length">{% if appointment.length %}{% if appointment.length|str_length_lt:3 %}&nbsp;{% endif %}{{ appointment.length }} min{% endif %}</span>
+    <span class="title">
+      {% if appointment.title %}
+      {{ appointment.title }}
+      {% if appointment.timetable_type and appointment.other_services_names %}
+      {% if appointment.timetable_type == 'arrival' %}
+      dans le{{appointment.other_services_names|pluralize}}
+      {% else %}
+      d{{appointment.other_services_names|pluralize:'u,es'}}
+      {% endif %}
+      service{{ appointment.other_services_names|pluralize }}
+      {% for service_name in appointment.other_services_names %}
+      {{ service_name }}{% if not forloop.last %},{% endif %}
+      {% endfor %}
+      {% endif %}
+
+      {% endif %}
+      {% if appointment.patient.paper_id %}
+      {{ appointment.patient.paper_id }}
+      {% endif %}
+    </span>
+    <span class="participants">
+    {% if appointment.len_workers > 4 %}
+        {% if appointment.workers_absent %}<span class="absent" title="Au moins un intervenant est absent">{% endif %}
+        {{ appointment.len_workers }} inter.
+        {% if appointment.workers_absent %}</span>{% endif %}
+    {% else %}
+        {% if appointment.workers %}
+          {% for worker in appointment.workers %}
+            {% if worker in appointment.workers_absent %}<span class="absent" title="Absent">{% endif %}
+            {{ worker.worker.initials }}{% if not forloop.last %} {% endif %}
+            {% if worker in appointment.workers_absent %}</span>{% endif %}
+          {% endfor %}
+        {% endif %}
+    {% endif %}
+    </span>
+    <span class="act_type">{% if appointment.act_type %}{{ appointment.act_type|trunc_act_type }}{% endif %}</span>
+    <span class="ressource">{% if appointment.ressource %}{{ appointment.ressource }}{% endif %}</span>
+    <span class="right">
+        {% if appointment.is_recurrent %}
+        {% if appointment.patient.periodic_appointment_transport %}
+        <span title="Transport" class="icon-car"></span>
+        {% endif %}
+        {% elif appointment.patient.simple_appointment_transport %}
+        <span title="Transport" class="icon-car"></span>
+        {% endif %}
+
+        {% if appointment.workers_absent %}
+        <span title="Au moins un intervenant est absent" class="icon-warning-sign absent"></span>
+        {% endif %}
+        {% if appointment.timetable_type %}
+        <span class="icon-{{ appointment.timetable_type }}"></span>
+        {% else %}
+        {% for service_name in appointment.other_services_names %}
+        <span class="box {{ service_name }}" title="{{ service_name }}"></span>
+        {% endfor %}
+        {% endif %}
+        <span title="Un commentaire existe" class="icon-comment" {% if appointment.description %}style='display: inline'{% endif %}></span>
+        {% if appointment.event_id %}
+        {% if appointment.is_recurrent %} R {% endif %}
+          {% if appointment.patient.confidential %}
+          <span title="Dossier confidentiel" class="icon-lock"></span>
+          {% endif %}
+          {% if appointment.convocation_sent %}
+          <button title="Courrier envoyé" class="icon-envelope">
+          {% endif %}
+         {% if service in appointment.services_names or not appointment.services_names %}
+          {% if appointment.patient_record_id %}
+            {% if not appointment.is_billed %}
+            <button title="Éditer un rendez-vous" class="edit-appointment icon-edit" data-event-id="{{ appointment.event_id }}"></button>
+            {% endif %}
+          {% else %}
+            <button title="Éditer un événement" class="edit-event icon-edit" data-event-id="{{ appointment.event_id }}">
+          {% endif %}
+          {% if not appointment.already_billed %}
+          <button class="remove-appointment icon-remove-sign" title="Supprimer un rendez-vous" data-url="{% url 'delete-occurrence' service=service date=date pk=appointment.event_id %}" data-rdv="{{ appointment.title }}"></button>
+          {% endif %}
+         {% endif %}
+        {% endif %}
+   </span>
+  </h3>
+
+  <div>
+      {% if appointment.type == 'free' %}
+      <button class='newrdv' data-url="{% url 'nouveau-rdv' service=service date=date %}" data-hour="{{ appointment.begin_hour }}" data-duration="{{ appointment.length }}">Nouveau rendez-vous patient</button>
+      <button class='newevent' data-url="{% url 'new-event' service=service date=date %}" data-hour="{{ appointment.begin_hour }}" data-duration="{{ appointment.length }}">Nouvel événement</button>
+      {% endif %}
+    {% if appointment.event_id %}
+        {% if appointment.workers %}
+          <p class="workers">
+          Intervenants :
+          {% for worker in appointment.workers %}
+            {% if worker in appointment.workers_absent %}<span class="absent" title="Absent">{% endif %}
+            {{ worker.first_name }} <span class="lastname">{{ worker.last_name }}</span>{% if forloop.last %}.{% else %}, {% endif %}
+            {% if worker in appointment.workers_absent %}</span>{% endif %}
+          {% endfor %}
+          </p>
+        {% endif %}
+    {% endif %}
+    {% if appointment.patient_record_id %}
+    <p class="phones">
+    {% if appointment.patient.mobile %}
+    <span title="{{ appointment.patient.first_name }} {{ appointment.patient.last_name|upper }} (Patient - Perso)" class="icon-user-space">
+    {{ appointment.patient.mobile }}
+    </span>
+    {% endif %}
+    {% if appointment.patient.phone %}
+    <span title="{{ appointment.patient.first_name }} {{ appointment.patient.last_name|upper }} (Patient - Pro)" class="icon-user-space">
+    {{ appointment.patient.phone }}
+    </span>
+    {% endif %}
+    {% for address in appointment.patient.addresses.all %}
+      {% if address.place_of_life %}
+        {% if address.phone %}<span title="{{ address.display_name }}" class="icon-home-space">{{ address.phone }}</span>{% endif %}
+        {% for contact in address.patientcontact_set.all  %}
+          {% if contact.id != appointment.patient.id %}
+          {% if contact.mobile %}<span title="{{ contact.first_name }} {{ contact.last_name|upper }} (Perso)" class="icon-user-space">{{ contact.mobile }}</span>{% endif %}
+          {% if contact.phone %}<span title="{{ contact.first_name }} {{ contact.last_name|upper }} (Pro)" class="icon-user-space">{{ contact.phone }}</span>{% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    </p>
+    <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view" target="_blank">Dossier patient</a> -
+    <a href="/{{ service }}/dossiers/{{ appointment.patient_record_id }}/view#tab=5" target="_blank">Prochains rendez-vous</a>
+    {% if mail %}- <a href="#" class="generate-mail-btn" data-dossier-id="{{ appointment.patient_record_id }}" data-date="{{date|date:"Y-m-d"}}" data-event-id="{{ appointment.event_id }}" data-next-url="{{ request.get_full_path }}">Courrier</a>{% endif %}
+    {% endif %}
+    {% if appointment.validation %}
+      <div><span>{% if appointment.validation.1 %}<strong>{{ appointment.validation.2 }}</strong> {% if appointment.validation.0.is_billed %}<strong>Acte facturé</strong>{% endif %}
+        {% else %}
+          Non pointé.
+        {% endif %}
+        </span>
+        {% if not appointment.validation.0.validation_locked and appointment.validation.3 %}
+          <form method="post" class="inline-form">
+          {% csrf_token %}
+          <input type="hidden" value="{{appointment.event_id}}" name="event-id">
+          <select name="act_state">
+            {% for state_name, display_state_name in appointment.validation.3 %}
+            <option value="{{ state_name }}" {% if state_name == appointment.validation.1.state_name %}selected{% endif %}>{{ display_state_name }}</option>
+            {% endfor %}
+          </select>
+          <button>Pointer</button>
+          </form>
+        {% endif %}
+       </div>
+    {% endif %}
+    {% if appointment.event_id %}
+    <div class="tabs-worker-{{ worker_agenda.worker.id }} textedit">
+            <span></span>
+            {% if service in appointment.services_names or not appointment.services_names %}
+            <textarea>{{ appointment.description }}</textarea>
+            <button disabled="disabled" data-event-id="{{ appointment.event_id }}" data-date="{{ date|date:"Y-m-d" }}">✔</button>
+            {% else %}
+            <p>{{ appointment.description }}</p>
+            {% endif %}
+        </div>
+    {% else %}
+        {% if appointment.description %}
+        <p>{{ appointment.description }}</p>
+        {% endif %}
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>

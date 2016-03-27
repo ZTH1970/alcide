@@ -1,0 +1,37 @@
+[
+    {
+        "fields": {
+            "name": "P\u00e8re"
+        }, 
+        "model": "ressources.parentalauthoritytype", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "M\u00e8re"
+        }, 
+        "model": "ressources.parentalauthoritytype", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "name": "Parents"
+        }, 
+        "model": "ressources.parentalauthoritytype", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "name": "Partag\u00e9e"
+        }, 
+        "model": "ressources.parentalauthoritytype", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "name": "Enfant plac\u00e9"
+        }, 
+        "model": "ressources.parentalauthoritytype", 
+        "pk": 5
+    }
+]

@@ -1,0 +1,3802 @@
+[
+    {
+        "fields": {
+            "address": "Place des \u00e9coles du Centre", 
+            "address_complement": "", 
+            "city": "LA RICAMARIE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole maternelle du Centre", 
+            "old_id": "1", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/80/90/35", 
+            "school_type": 2, 
+            "zip_code": "42150"
+        }, 
+        "model": "ressources.school", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "address": "All\u00e9e Bella Bartok", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Mme Galien", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Vivaldi", 
+            "old_id": "2", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/74/06/90", 
+            "school_type": 2, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "address": "16 rue Monteil", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Mme LASSALE", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Le Soleil", 
+            "old_id": "3", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/25/36/60", 
+            "school_type": 2, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "address": "Le Plat Haut", 
+            "address_complement": "", 
+            "city": "VILLARS", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Jean Ravon", 
+            "old_id": "4", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/74/67/22", 
+            "school_type": 2, 
+            "zip_code": "42390"
+        }, 
+        "model": "ressources.school", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "address": "6 IMPASSE PERIVAURE", 
+            "address_complement": "", 
+            "city": "FRAISSES", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle La P\u00e9rivaure", 
+            "old_id": "5", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/56/14/93", 
+            "school_type": 2, 
+            "zip_code": "42490"
+        }, 
+        "model": "ressources.school", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "address": "rue des \u00e9coles", 
+            "address_complement": "", 
+            "city": "ST JUST ST RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole des Erables", 
+            "old_id": "6", 
+            "old_service": "SESSAD TED", 
+            "phone": "0477365022", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "address": "impasse langonnant", 
+            "address_complement": "", 
+            "city": "SORBIERS", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Priv\u00e9e Mixte", 
+            "old_id": "7", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/53/84/86", 
+            "school_type": 8, 
+            "zip_code": "42290"
+        }, 
+        "model": "ressources.school", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "address": "18 rue de la libert\u00e9", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Madame PASSELEGUE", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Priv\u00e9e Soleil", 
+            "old_id": "8", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/33/54/28", 
+            "school_type": 2, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "address": "Rivi\u00e8re", 
+            "address_complement": "44 rue Parmentier", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Le Berclay", 
+            "old_id": "9", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/57/00/13", 
+            "school_type": 2, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "address": "1 Chemin Claude Berthier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle M\u00e9tare R\u00e9jaill\u00e8re", 
+            "old_id": "10", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/21/30/57", 
+            "school_type": 2, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "address": "29 rue Michelet", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "S\u00e9vign\u00e9", 
+            "old_id": "11", 
+            "old_service": "SESSAD TED", 
+            "phone": "04 77 32 68 95", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "12", 
+            "old_service": "SESSAD TED", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "address": "rue de la Paix", 
+            "address_complement": "", 
+            "city": "ANDREZIEUX BOUTHEON", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Louis Pasteur", 
+            "old_id": "13", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/55/04/95", 
+            "school_type": 2, 
+            "zip_code": "42160"
+        }, 
+        "model": "ressources.school", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "address": "19 rue du Forez", 
+            "address_complement": "", 
+            "city": "ST GENEST MALIFAUX", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole St Joseph", 
+            "old_id": "14", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/51/20/36", 
+            "school_type": 8, 
+            "zip_code": "42660"
+        }, 
+        "model": "ressources.school", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "address": "3 Chemin du Templiers", 
+            "address_complement": "", 
+            "city": "MARLHES", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Marcellin CHAMPAGNAT", 
+            "old_id": "15", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/51/80/25", 
+            "school_type": 8, 
+            "zip_code": "42660"
+        }, 
+        "model": "ressources.school", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "address": "13 rue Jean S\u00e9bastien Bach", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole ST SAENS", 
+            "old_id": "16", 
+            "old_service": "SESSAD TED", 
+            "phone": "0477793929", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "address": "4 bis rue JF R\u00e9vollier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Chal\u00e9assi\u00e8re", 
+            "old_id": "17", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/74/36/14", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "address": "19 rue Jean Moulin", 
+            "address_complement": "", 
+            "city": "UNIEUX", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole le Bourg", 
+            "old_id": "18", 
+            "old_service": "SESSAD TED", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": "42240"
+        }, 
+        "model": "ressources.school", 
+        "pk": 18
+    }, 
+    {
+        "fields": {
+            "address": "rue du geyser", 
+            "address_complement": "", 
+            "city": "MONTROND LES BAINS", 
+            "description": "Mme PATEL institutrice (mardi, jeudi, vendredi)  Mme DEMILLY institutrice (lundi)  Mme POUILLON AVS", 
+            "director_name": "Mme DENTRESSANGLE", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Mat Montrond les bains", 
+            "old_id": "19", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/54/51/79", 
+            "school_type": 2, 
+            "zip_code": "42210"
+        }, 
+        "model": "ressources.school", 
+        "pk": 19
+    }, 
+    {
+        "fields": {
+            "address": "8 rue Claude Odde", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Bergson", 
+            "old_id": "20", 
+            "old_service": "SESSAD TED", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 20
+    }, 
+    {
+        "fields": {
+            "address": "Place Jean Jaur\u00e8s", 
+            "address_complement": "", 
+            "city": "LE CHAMBON FEUGEROLLES", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Groupe Scolaire", 
+            "old_id": "21", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/61/02/70", 
+            "school_type": 8, 
+            "zip_code": "42500"
+        }, 
+        "model": "ressources.school", 
+        "pk": 21
+    }, 
+    {
+        "fields": {
+            "address": "Au Valjoly", 
+            "address_complement": "", 
+            "city": "SORBIERS", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole du Valjoly", 
+            "old_id": "22", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/53/67/15", 
+            "school_type": 8, 
+            "zip_code": "42290"
+        }, 
+        "model": "ressources.school", 
+        "pk": 22
+    }, 
+    {
+        "fields": {
+            "address": "22 rue Descours", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle DESCOURS", 
+            "old_id": "23", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/32/19/99", 
+            "school_type": 2, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 23
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Alexandre pourcel", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Maternelle Jules Ferry", 
+            "old_id": "24", 
+            "old_service": "SESSAD TED", 
+            "phone": "0477571671", 
+            "school_type": 2, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 24
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Jacques Desgeorges", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "", 
+            "old_id": "25", 
+            "old_service": "SESSAD TED", 
+            "phone": "04/77/49/50/95", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 25
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PUBLIQUE", 
+            "old_id": "1", 
+            "old_service": "CMPP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 26
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PRIVEE", 
+            "old_id": "2", 
+            "old_service": "CMPP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 27
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "NON SCOLARISE", 
+            "old_id": "3", 
+            "old_service": "CMPP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 28
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "NON SOCIALISE", 
+            "old_id": "1", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 29
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CRECHE-HALTE GARDERIE", 
+            "old_id": "2", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 30
+    }, 
+    {
+        "fields": {
+            "address": "14 rue Parmentier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CHAMPAGNE", 
+            "old_id": "3", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.58.20", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 31
+    }, 
+    {
+        "fields": {
+            "address": "3 Impasse No\u00ebl Mazet", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CHAPPE", 
+            "old_id": "4", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.91.63", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 32
+    }, 
+    {
+        "fields": {
+            "address": "20 rue Marcellin Allard", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CHAVANELLE", 
+            "old_id": "5", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.21.34.14", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 33
+    }, 
+    {
+        "fields": {
+            "address": "9 Impasse Louis Jouvet", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COTE CHAUDE", 
+            "old_id": "6", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.48.66", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 34
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Raoul Follereau", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COTONNE", 
+            "old_id": "7", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.47.84", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 35
+    }, 
+    {
+        "fields": {
+            "address": "20 rue Descours", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "DESCOURS", 
+            "old_id": "8", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.19.99", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 36
+    }, 
+    {
+        "fields": {
+            "address": "32 rue des Francs Ma\u00e7ons", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Mme Corinne ABDENNEBI", 
+            "email": "", 
+            "fax": "", 
+            "name": "FAURIEL", 
+            "old_id": "9", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.20.22", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 37
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Alexandre Pourcel", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "JULES FERRY", 
+            "old_id": "10", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.58.35", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 38
+    }, 
+    {
+        "fields": {
+            "address": "3 rue de l'Alma", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ALMA", 
+            "old_id": "11", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.41.16.05", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 39
+    }, 
+    {
+        "fields": {
+            "address": "rue Henri Dunand", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "BEAULIEU LA TOUR", 
+            "old_id": "12", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.21.29.73", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 40
+    }, 
+    {
+        "fields": {
+            "address": "33 rue Albert Po\u00fflo", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "BERGSON", 
+            "old_id": "13", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.79.10.88", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 41
+    }, 
+    {
+        "fields": {
+            "address": "11 rue de la Vapeur", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "BERKELEY", 
+            "old_id": "14", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.20.96", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 42
+    }, 
+    {
+        "fields": {
+            "address": "14 rue Claudius Buard", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CENTRE DEUX", 
+            "old_id": "15", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.80.04.76", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 43
+    }, 
+    {
+        "fields": {
+            "address": "4 bis rue Jean Fran\u00e7ois R\u00e9vollier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LA CHALEASSIERE", 
+            "old_id": "16", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.36.14", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 44
+    }, 
+    {
+        "fields": {
+            "address": "15 rue de l'Universit\u00e9", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COTTENCIERE", 
+            "old_id": "17", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.09.13", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 45
+    }, 
+    {
+        "fields": {
+            "address": "11 All\u00e9e Coventry", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PARC DE L'EUROPE", 
+            "old_id": "18", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.02.55", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 46
+    }, 
+    {
+        "fields": {
+            "address": "1 Chemin Cl. Berthier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "METARE REJAILLERE", 
+            "old_id": "19", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.21.30.57", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 47
+    }, 
+    {
+        "fields": {
+            "address": "21 rue de la Richelandi\u00e8re", 
+            "address_complement": "", 
+            "city": "Saint Etienne", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "GASPARD MONGE", 
+            "old_id": "20", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.12.26", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 48
+    }, 
+    {
+        "fields": {
+            "address": "2 rue de l'Egalerie", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LE MONT", 
+            "old_id": "21", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.15.54", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 49
+    }, 
+    {
+        "fields": {
+            "address": "4 All\u00e9e Vital Descos", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LE GRAND CLOS", 
+            "old_id": "22", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.01.49", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 50
+    }, 
+    {
+        "fields": {
+            "address": "10 rue Dr La\u00ebnnec", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "GUIZAY", 
+            "old_id": "23", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.53.67", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 51
+    }, 
+    {
+        "fields": {
+            "address": "77 rue de la Jomay\u00e8re", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "JOMAYERE", 
+            "old_id": "24", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.23.52", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 52
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "3 rue Baptiste Marcet", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "METARE BAPTISTE", 
+            "old_id": "25", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.46.48.49", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 53
+    }, 
+    {
+        "fields": {
+            "address": "102 rue dela Montat", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTAT", 
+            "old_id": "26", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.53.50", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 54
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Albert 1er", 
+            "address_complement": "", 
+            "city": "SAINt ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTAUD", 
+            "old_id": "27", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.37.24", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 55
+    }, 
+    {
+        "fields": {
+            "address": "4 Impasse de la Palle", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTCHOVET", 
+            "old_id": "28", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.21.05", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 56
+    }, 
+    {
+        "fields": {
+            "address": "5 All\u00e9e Rachel", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTFERRE", 
+            "old_id": "29", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.10.42", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 57
+    }, 
+    {
+        "fields": {
+            "address": "23 rue Fleming", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Mme Brigitte MONIER", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTREYNAUD FLEMING", 
+            "old_id": "30", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.19.52", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 58
+    }, 
+    {
+        "fields": {
+            "address": "17 rue Gounod", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Mr Yves SCANU", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTREYNAUD GOUNOD", 
+            "old_id": "31", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.21.04", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 59
+    }, 
+    {
+        "fields": {
+            "address": "9 Impasse Schubert", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "Mme Laurence SERGENT", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTREYNAUD MOLINA", 
+            "old_id": "32", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.79.32.93", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 60
+    }, 
+    {
+        "fields": {
+            "address": "21 rue Palluat de Besset", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PETIT COIN", 
+            "old_id": "33", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.91.61", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 61
+    }, 
+    {
+        "fields": {
+            "address": "97 rue de la Richelandi\u00e8re", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "RICHELANDIERE LE CHAT", 
+            "old_id": "34", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.13.34", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 62
+    }, 
+    {
+        "fields": {
+            "address": "44 rue Parmentier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "RIVIERE", 
+            "old_id": "35", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.00.13", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 63
+    }, 
+    {
+        "fields": {
+            "address": "24 rue rouget de l'Isle", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ROUGET DE LISLE", 
+            "old_id": "36", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.08.06", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 64
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "7 rue Paganini", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTREYNAUD PAGANINI", 
+            "old_id": "37", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.53.47", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 65
+    }, 
+    {
+        "fields": {
+            "address": "13 rue Jean S\u00e9bastien Bach", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTREYNAUD SAINT SAENS (Triolet)", 
+            "old_id": "38", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.79.39.29", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 66
+    }, 
+    {
+        "fields": {
+            "address": "All\u00e9e Bela Bartok", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTRAYNAUD VIVALDI", 
+            "old_id": "39", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.13.36", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 67
+    }, 
+    {
+        "fields": {
+            "address": "8 rue des Ovides", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "OVIDES", 
+            "old_id": "40", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.21.48.86", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 68
+    }, 
+    {
+        "fields": {
+            "address": "2 rue Basson", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PAILLON", 
+            "old_id": "41", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.04.77", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 69
+    }, 
+    {
+        "fields": {
+            "address": "23 rue Ambroise Par\u00e9", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SOLAURE", 
+            "old_id": "42", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.56.62", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 70
+    }, 
+    {
+        "fields": {
+            "address": "16 rue du Monteil", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SOLEIL", 
+            "old_id": "43", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.36.60", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 71
+    }, 
+    {
+        "fields": {
+            "address": "2 rue Robert Maurice", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TARDY", 
+            "old_id": "44", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.42.43", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 72
+    }, 
+    {
+        "fields": {
+            "address": "7 Place Jean Fran\u00e7ois Gonon", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TARENTAIZE", 
+            "old_id": "45", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.38.04.05", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 73
+    }, 
+    {
+        "fields": {
+            "address": "15 rue L\u00e9on Lamaizi\u00e8re", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TERRASSE", 
+            "old_id": "46", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.08.19", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 74
+    }, 
+    {
+        "fields": {
+            "address": "4 rue Jaboulay", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TERRENOIRE BOURG", 
+            "old_id": "47", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.95.52.90", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 75
+    }, 
+    {
+        "fields": {
+            "address": "rue Fr\u00e9d\u00e9ric Bait", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TERRENOIRE JANON", 
+            "old_id": "48", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.95.83.89", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 76
+    }, 
+    {
+        "fields": {
+            "address": "rue de la Perroti\u00e8re", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TERRENOIRE PERROTIERE", 
+            "old_id": "49", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.95.82.24", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 77
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VILLEBOEUF LE HAUT", 
+            "old_id": "50", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.12.20", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 78
+    }, 
+    {
+        "fields": {
+            "address": "4 impasse du Pr\u00e9 des Soeurs", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VIVARAIZE", 
+            "old_id": "51", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.04.67", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 79
+    }, 
+    {
+        "fields": {
+            "address": "5 All\u00e9e Jean Racine", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTHIEU", 
+            "old_id": "52", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.24.59", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 80
+    }, 
+    {
+        "fields": {
+            "address": "2 rue du Treyve", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "JULES JANIN - GALLOIS", 
+            "old_id": "53", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.79.05.70", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 81
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "GASPARD MONGE", 
+            "old_id": "54", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.12.26", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 82
+    }, 
+    {
+        "fields": {
+            "address": "15 rue de l'Universit\u00e9", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "METARE COTTANCIERE", 
+            "old_id": "55", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.09.13", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 83
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT VICTOR LE BREAT CONDAMINE", 
+            "old_id": "56", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.90.82.24", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 84
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LES HAUTS DE TERRENOIRE", 
+            "old_id": "57", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.95.61.31", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 85
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT FRANCOIS", 
+            "old_id": "58", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.62.63", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 86
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "St ENNEMOND", 
+            "old_id": "59", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.61.07", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 87
+    }, 
+    {
+        "fields": {
+            "address": "6 rue Marcelllin Champagnat", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CURE d'ARS", 
+            "old_id": "60", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.14.18", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 88
+    }, 
+    {
+        "fields": {
+            "address": "36 rue du Vernay", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.33.02.86", 
+            "name": "LES CHARTREUX SAINTE FAMILLE", 
+            "old_id": "61", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.14.86", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 89
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTAUD", 
+            "old_id": "62", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.93.27.95", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 90
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PRIVEE COTE CHAUDE", 
+            "old_id": "63", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.62.83", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 91
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINTE MARIE", 
+            "old_id": "64", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.14.00", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 92
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SOLEIL", 
+            "old_id": "65", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.54.28", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 93
+    }, 
+    {
+        "fields": {
+            "address": "10 rue Lamartine", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTAUD", 
+            "old_id": "66", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.93.27.95", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 94
+    }, 
+    {
+        "fields": {
+            "address": "171 rue Bergson", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LES PRES FLEURIS", 
+            "old_id": "67", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.04.80", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 95
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "St LOUIS", 
+            "old_id": "68", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.82.53", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 96
+    }, 
+    {
+        "fields": {
+            "address": "4 rue Jules V", 
+            "address_complement": "Vall\u00e8s", 
+            "city": "SAINT-ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT MICHEL", 
+            "old_id": "69", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.49.44.60", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 97
+    }, 
+    {
+        "fields": {
+            "address": "5 rue Jacques Desgeorges", 
+            "address_complement": "", 
+            "city": "SAINT-ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.49.50.80", 
+            "name": "SAINT PAUL", 
+            "old_id": "70", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.49.50.95", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 98
+    }, 
+    {
+        "fields": {
+            "address": "29 rue Michelet", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.32.09.88", 
+            "name": "SEVIGNE", 
+            "old_id": "71", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.68.95", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 99
+    }, 
+    {
+        "fields": {
+            "address": "8 rue Pierre et Marie Curie", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "P et M CURIE - GRANDE EGLISE", 
+            "old_id": "72", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.87.78", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 100
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT CHARLES", 
+            "old_id": "73", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.21.86.38", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 101
+    }, 
+    {
+        "fields": {
+            "address": "63 rue Parmentier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.80.62.50", 
+            "name": "SAINT PIERRE SAINT PAUL La Rivi\u00e8re", 
+            "old_id": "74", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.57.08.59", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 102
+    }, 
+    {
+        "fields": {
+            "address": "22 rue Elis\u00e9e Reclus", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINTE ANNE", 
+            "old_id": "75", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.37.15.59", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 103
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VALBENOITE", 
+            "old_id": "76", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.81.86.06", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 104
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "NOTRE DAME DU ROND POINT 04.77.46.32.46", 
+            "old_id": "77", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 105
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ROCHE LA MOLIERE JEAN YVES COUSTEAU 04.77.90.60.09", 
+            "old_id": "78", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 106
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ROCHE LA MOLIERE CENTRE 04.77.90.68.77", 
+            "old_id": "79", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 107
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ROCHE LA MOLIERE DE LA POTIERE 04.77.90.64.03", 
+            "old_id": "80", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 108
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ROCHE LA MOLIERE 1 DU CENTRE 04.77.90.68.74", 
+            "old_id": "81", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 109
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ROCHE LA MOLIERE DU PONTIN 04.77.90.63.35", 
+            "old_id": "82", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 110
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VILLARD DU BOURG 04.77.74.74.21", 
+            "old_id": "83", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 111
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VILLARD JEAN RAVON 04.77.74.67.22", 
+            "old_id": "84", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 112
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VILLARD DU BOIS MONZIL 04.77.74.29.38", 
+            "old_id": "85", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 113
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "VILLARD L'HIPPODROME 04.77.74.75.02", 
+            "old_id": "86", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 114
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PRIVEE NOTRE DAME SAINT GENEST LERPT 04.77.90.92.15", 
+            "old_id": "87", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 115
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT JEAN BONNEFOND BARAILLERE 04.77.95.08.02", 
+            "old_id": "88", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 116
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT JEAN BONNEFOND LAMARTINE 04.77.95.15.44", 
+            "old_id": "89", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 117
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT JEAN BONNEFOND SAINT JOSEPHE 04.77.95.09.21", 
+            "old_id": "90", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 118
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SORBIERS GRAND QUARTIER", 
+            "old_id": "91", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.53.14.85", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 119
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SORBIERS VALJOLY", 
+            "old_id": "92", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.53.40.22", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 120
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TALAUDIERE DANTON 04.77.53.65.11", 
+            "old_id": "93", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 121
+    }, 
+    {
+        "fields": {
+            "address": "7 Impasse du Parc", 
+            "address_complement": "", 
+            "city": "SORBIERS", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SORBIERS BENOIT LAURAS", 
+            "old_id": "94", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.53.24.15", 
+            "school_type": 8, 
+            "zip_code": "42290"
+        }, 
+        "model": "ressources.school", 
+        "pk": 122
+    }, 
+    {
+        "fields": {
+            "address": "rue Jacques Pr\u00e9vert", 
+            "address_complement": "", 
+            "city": "SAINT JUST SAINT RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "JACQUES PREVERT St Just St Rambert", 
+            "old_id": "95", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.52.48.81", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 123
+    }, 
+    {
+        "fields": {
+            "address": "rue Colette", 
+            "address_complement": "", 
+            "city": "SAINT JUST SAINT RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "BOIS DE LA DAME St Just St Rambert", 
+            "old_id": "96", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.52.03.79", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 124
+    }, 
+    {
+        "fields": {
+            "address": "rue des Ecoles", 
+            "address_complement": "", 
+            "city": "SAINT JUST SAINT RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LES ERABLES St Just St Rambert", 
+            "old_id": "97", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.36.50.22", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 125
+    }, 
+    {
+        "fields": {
+            "address": "Place Jean Gabiand", 
+            "address_complement": "", 
+            "city": "SAINt JUST SAINT RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LES PEUPLIERS St Just St Rambert", 
+            "old_id": "98", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.55.29.14", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 126
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TALAUDIERE MAXIMILIEN EVRARD 04.77.53.20.77", 
+            "old_id": "99", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 127
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TALAUDIERE PRIVEE 04.77.53.22.01", 
+            "old_id": "100", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 128
+    }, 
+    {
+        "fields": {
+            "address": "7 rue de la C\u00f4te", 
+            "address_complement": "", 
+            "city": "SORBIERS", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SORBIERS LA COTE", 
+            "old_id": "101", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.53.31.48", 
+            "school_type": 8, 
+            "zip_code": "42290"
+        }, 
+        "model": "ressources.school", 
+        "pk": 129
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT PRIEST EN JAREZ GEORGE SAND 04.77.79.13.90", 
+            "old_id": "102", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 130
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ANDREZIEUX JEANNE D'ARC PRIVEE 04.77.36.78.36", 
+            "old_id": "103", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 131
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT JUST SAINT RAMBERT JAYOL PRIVEE 04.77.36.49.70", 
+            "old_id": "104", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 132
+    }, 
+    {
+        "fields": {
+            "address": "54 Chemin des b\u00e2teliers", 
+            "address_complement": "", 
+            "city": "SAINT JUST SAINT RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ST JUST ST RAMBERT LES BARQUES", 
+            "old_id": "105", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.52.31.70", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 133
+    }, 
+    {
+        "fields": {
+            "address": "11 bd de la Lib\u00e9ration", 
+            "address_complement": "", 
+            "city": "SAINT JUST SAINT RAMBERT", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ST JUST ST RAMBERT Groupe Thibaud", 
+            "old_id": "106", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.52.34.10", 
+            "school_type": 8, 
+            "zip_code": "42170"
+        }, 
+        "model": "ressources.school", 
+        "pk": 134
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SAINT CHRISTO EN JAREZ  PUBLIQUE 04.77.20.85.43", 
+            "old_id": "107", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 135
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "AUTRES (VOIR FICHE M\u00c9MO)", 
+            "old_id": "108", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 136
+    }, 
+    {
+        "fields": {
+            "address": "7 Impasse Thivollet", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "TERRENOIRE SAINTE BLANDINE", 
+            "old_id": "109", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.95.58.15", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 137
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "SORBIERS BENOIT LAURAS IMPASSE DU PARC 04.77.53.24.15", 
+            "old_id": "110", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 138
+    }, 
+    {
+        "fields": {
+            "address": "16 rue Jean Fran\u00e7ois R\u00e9vollier", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.74.75.40", 
+            "name": "NOTRE DAME D'ESPERANCE", 
+            "old_id": "111", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.93.54.20", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 139
+    }, 
+    {
+        "fields": {
+            "address": "7 rue Paganini", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTREYNAUD PAGANINI", 
+            "old_id": "112", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.74.53.47", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 140
+    }, 
+    {
+        "fields": {
+            "address": "Centre Social de Beaulieu 11 Bd Karl Marx", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LE JARDIN D'EVEIL", 
+            "old_id": "113", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.54.68", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 141
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "114", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 142
+    }, 
+    {
+        "fields": {
+            "address": "Les Hortensias", 
+            "address_complement": "6 B Alfred De Musset", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "INTERGENERATIONNELLE", 
+            "old_id": "115", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.37.90.69", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 143
+    }, 
+    {
+        "fields": {
+            "address": "7 rue Ferdinand", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.34.25.39", 
+            "name": "LES PETITS CALINS", 
+            "old_id": "116", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.37.31.52", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 144
+    }, 
+    {
+        "fields": {
+            "address": "rue du Guizay", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LES PILLOUS", 
+            "old_id": "117", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.38.78.04", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 145
+    }, 
+    {
+        "fields": {
+            "address": "rue Grenette", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "GRENETTE", 
+            "old_id": "118", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.32.06.13", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 146
+    }, 
+    {
+        "fields": {
+            "address": "22 rue Paul Petit", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CLAIR MATIN", 
+            "old_id": "119", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.49.00.25", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 147
+    }, 
+    {
+        "fields": {
+            "address": "9 passage du Pr\u00e9 des Soeurs", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.4614.45", 
+            "name": "VIVARAIZE", 
+            "old_id": "120", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.37.15", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 148
+    }, 
+    {
+        "fields": {
+            "address": "1 rue du Dr Paul Michelon", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "L'ANGELUS", 
+            "old_id": "121", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.25.37.15", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 149
+    }, 
+    {
+        "fields": {
+            "address": "10 rue Benoit Frachon", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "LES JARDINS DU GRAND CLOS", 
+            "old_id": "122", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.33.56.75", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 150
+    }, 
+    {
+        "fields": {
+            "address": "6 bd Alfred de Musset", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ACARS", 
+            "old_id": "123", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.38.71.50", 
+            "school_type": 8, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 151
+    }, 
+    {
+        "fields": {
+            "address": "32 rue de la Convention", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "04.77.38.71.50", 
+            "name": "ANEF LOIRE FOYER", 
+            "old_id": "124", 
+            "old_service": "CAMSP", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 152
+    }, 
+    {
+        "fields": {
+            "address": "28 rue des Forges", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CENTRE SOCIAL DE LA RIVIERE", 
+            "old_id": "125", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.81.22.98", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 153
+    }, 
+    {
+        "fields": {
+            "address": "39 Bd de la Palle", 
+            "address_complement": "", 
+            "city": "SAINT ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ATTITUDE", 
+            "old_id": "126", 
+            "old_service": "CAMSP", 
+            "phone": "04.77.30.97.33", 
+            "school_type": 8, 
+            "zip_code": "42100"
+        }, 
+        "model": "ressources.school", 
+        "pk": 154
+    }, 
+    {
+        "fields": {
+            "address": "68, RUE J. PAROT", 
+            "address_complement": "", 
+            "city": "ST ETIENNE", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE J. DAST\u00c9", 
+            "old_id": "1", 
+            "old_service": "SESSAD DYS", 
+            "phone": "04.77.25.87.73", 
+            "school_type": 4, 
+            "zip_code": "42000"
+        }, 
+        "model": "ressources.school", 
+        "pk": 155
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "FAURIEL", 
+            "old_id": "2", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 156
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE ST JOSEPH - BD BELLEVUE - 42330 ST GALMIER 04.77.54.01.55", 
+            "old_id": "3", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 157
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIMAIRE LA COLOMBE - 42330 ST GALMIER 04.77.54.01.50", 
+            "old_id": "4", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 3, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 158
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "C\u00d4TE CHAUDE-11,RUE DE LA ROCHE DU GEAI ST ETIENNE 04.77.32.81.71", 
+            "old_id": "5", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 159
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE VITONE - 2,PLACE VITONE \u00c0 MONTAUD 04.77.32.13.37", 
+            "old_id": "6", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 160
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLLEGE J.DAST\u00c9 - 68,RUE J.PAROT - 04.77.25.87.73", 
+            "old_id": "7", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 161
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "FAURIEL - 16,COURS FAURIEL - 04.77.25.24.52", 
+            "old_id": "8", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 162
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLLEGE JULES ROMAINS RTE DE CUZIEU ST GALMIER - 04.77.54.00.94", 
+            "old_id": "9", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 163
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE MICHELET - RUE MICHELET LA TALAUDIERE - 04.77.53.60.69", 
+            "old_id": "10", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 164
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIV\u00c9E STLUCIE - 7,RUE JULES VERNE 42240 UNIEUX 0477567364", 
+            "old_id": "11", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 165
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "CHEVRI\u00c8RES - ROUTE DE ST GALMIER 42140 CHEVRIERES 04.77.94.02.51", 
+            "old_id": "12", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 166
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE DE MALRAY 42600 ESSERTINES EN CHATELNEUF - 04.77.58.52.43", 
+            "old_id": "13", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 167
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "MONTHIEU 3,RUE LINOSSIER 04.77.33.38.56.", 
+            "old_id": "14", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 168
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "PUITS DE LA LOIRE 17,RUE ANTOINE ROCHE 04.77.43.46.50", 
+            "old_id": "15", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 169
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE DU SOLEIL - 10,RUE DU MONTEIL ST ETIENNE 04.77.32.30.15", 
+            "old_id": "16", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 170
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE DU CENTRE LA RICAMARIE 04.77.80.41.19", 
+            "old_id": "17", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 171
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE J.MONET 42610 ST ROMAIN LE PUY 04.77.76.61.38", 
+            "old_id": "18", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 172
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIV\u00c9E - LE BOURG - 42330 ST BONNET LES OULES 04.77.54.17.29", 
+            "old_id": "19", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 173
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PAILLON - RUE PAILLON - 42000 SAINT ETIENNE - 04.77.33.23.37", 
+            "old_id": "20", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 174
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE ST MARIE - 39, RUE DES FR\u00c8RES CHAPPE - 42000 ST ETIENNE - 0477322130", 
+            "old_id": "21", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 175
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE SOLAURE - 19, RUE AMBROISE PAR\u00c9 - 42000 ST ETIENNE - 04.77.57.41.10", 
+            "old_id": "22", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 176
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PUBLIQUE - 42210 CRAINTILLEUX", 
+            "old_id": "23", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 177
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIV\u00c9E ST CHARLES - MONTBRISON", 
+            "old_id": "24", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 178
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIMAIRE PUBLIQUE J. MONET - 42610 SAINT ROMAIN LE PUY 0477766138", 
+            "old_id": "25", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 3, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 179
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIMAIRE PUBLIQUE J.Y. COUSTEAU - 42230 ROCHE LA MOLIERE 0477906009", 
+            "old_id": "26", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 3, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 180
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIMAIRE PUBLIQUE LES C\u00c8DRES - RUE ST JUST - 42480 LA FOUILLOUSE", 
+            "old_id": "27", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 3, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 181
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PASTEUR - 2, BOULEVARD PASTEUR - 42160 ANDREZIEUX", 
+            "old_id": "28", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 182
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE NOTRE DAME DE L'ESP\u00c9RANCE - 16, RUE J.F. R\u00c9VOLLIER - 42000 SAINT ETIENNE", 
+            "old_id": "29", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 183
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE PRIV\u00c9E ST JOSEPH - AVENUE ORELU - 42450 SURY LE COMTAL", 
+            "old_id": "30", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 184
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "EREA SORBIERS - MONTCHAUVET - 42290 SORBIERS", 
+            "old_id": "31", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 185
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE R. FOLLEREAU 21, ROUTE DE ST GALMIER 42140 CHAZELLES S/LYON", 
+            "old_id": "32", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 186
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE J. PR\u00c9VERT - UPI DYS - 42160 ANDREZIEUX", 
+            "old_id": "33", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 187
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE ST ST\u00c9PHANIE - 42330 ST GALMIER", 
+            "old_id": "34", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 188
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COL\u00c8GE M. CHAMPAGNAT - BP 86 6 RUE J. FERRY - 42110 FEURS", 
+            "old_id": "35", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 189
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE J. FERRY - PONTCHARRA - 3, RUE DES OVIDES - 42500 LE CHAMBON FEUGEROLLES", 
+            "old_id": "36", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 190
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "ECOLE DU BOURG A. LANGARD - 13, RUE A. LANGARD - 42152 LHORME", 
+            "old_id": "37", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 191
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE GAMBETTA - 34 BIS RUE MICHELET - BP 112 - 42000 SAINT ETIENNE", 
+            "old_id": "38", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 192
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "COLL\u00c8GE PUBLIC - 5, RUE DE L'ANCIENNE POSTE - 42610 ST ROMAIN LE PUY", 
+            "old_id": "39", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 4, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 193
+    }, 
+    {
+        "fields": {
+            "address": "1, Rue de Bretagne", 
+            "address_complement": "", 
+            "city": "SAINT CHAMOND", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "Ecole Massenet Pasteur", 
+            "old_id": "40", 
+            "old_service": "SESSAD DYS", 
+            "phone": "0477225617", 
+            "school_type": 8, 
+            "zip_code": "42400"
+        }, 
+        "model": "ressources.school", 
+        "pk": 194
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "41", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 195
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "42", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 196
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "43", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 197
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "44", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 198
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "45", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 199
+    }, 
+    {
+        "fields": {
+            "address": "", 
+            "address_complement": "", 
+            "city": "", 
+            "description": "", 
+            "director_name": "", 
+            "email": "", 
+            "fax": "", 
+            "name": "modifiez le nom", 
+            "old_id": "46", 
+            "old_service": "SESSAD DYS", 
+            "phone": "", 
+            "school_type": 8, 
+            "zip_code": ""
+        }, 
+        "model": "ressources.school", 
+        "pk": 200
+    }
+]

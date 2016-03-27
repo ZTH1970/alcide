@@ -1,0 +1,30 @@
+{% extends "statistics/base.html" %}
+{% load url from future %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Statistiques - {{ service_name }}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Statistiques</h2>
+  <a href="/">Retourner à l'accueil</a>
+{% endblock %}
+
+{% block content %}
+    <ul>
+     {% for category, stats in statistics.iteritems %}
+         <h3>{{ category }}</h3>
+         {% for n, statistic in stats %}
+         <div class="statistic">
+         {% if statistic.comment %}<p>{{ statistic.comment }}</p>{% endif %}
+         <button id="{{ n }}" class="stats">{{ statistic.display_name }}</button>
+         </div>
+         {% endfor %}
+     {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block dialogs %}
+<div id="ajax-dlg" style="display: none;"></div>
+{% endblock %}

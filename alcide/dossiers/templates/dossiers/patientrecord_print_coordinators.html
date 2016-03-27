@@ -1,0 +1,9 @@
+<li><label>Coordinateurs :</label>
+  {% if object.coordinators.all %}
+  <ul>
+    {% for coordinator in object.coordinators.all %}
+    <li>{{ coordinator.first_name }} <span class="lastname">{{ coordinator.last_name }}</span></li>
+    {% endfor %}
+  </ul>
+  {% else %}Aucun{% endif %}
+</li>

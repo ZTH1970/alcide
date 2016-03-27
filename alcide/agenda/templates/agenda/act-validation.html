@@ -1,0 +1,113 @@
+{% extends "agenda/base.html" %}
+{% load url from future %}
+
+{% block body-class %}{{ block.super }} no-left-column{% endblock %}
+
+{% block appbar %}
+<h2>Validation des actes - {{ date|date:"DATE_FORMAT" }}</h2>
+    <a href="..">Retourner à l'agenda</a>
+    {% if authorized_lock %}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="unlock-all" value="1">
+          <button id="unlock-all">Déverrouiller</button>
+        </form>
+        <button id="validate-all">Validation automatique</button>
+    {% endif %}
+{% endblock %}
+
+{% block beforecontent %}
+    <div id="extra-top-links">
+     <a href="../jours-non-verrouilles">Jours non verrouillés</a>
+    </div>
+{% endblock %}
+
+{% block agenda-content %}
+    {% if validation_msg %}
+    <ul>
+    {% for message in validation_msg %}
+     <li>{{ message.what }} ({{ message.when }})</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {% if actes %}
+    <h2>Il y a {{ actes|length }} actes.</h2>
+    <div id="actes">
+    {% for acte, last_status, last_status_name in actes %}
+    <div class="frame acte" id="acte-frame-{{ acte.id }}">
+      <h3>{{ acte.time|time:"H:i" }} - <strong><span class="lastname">{{ acte.patient.last_name }}</span> {{ acte.patient.first_name }}</strong>
+          {% if acte.patient.paper_id %} {{ acte.patient.paper_id }} {% endif %}
+          <strong>{{ acte.act_type }}</strong>
+          <p>{% if acte.doctors %}{% for doctor in acte.doctors.all %}<span class="lastname">{{ doctor.last_name }}</span> {{ doctor.first_name }} {% endfor %}{% endif %}</p>
+          {% if acte.description %} <span title="Un commentaire existe" class="icon-comment"></span>{% endif%}
+      </h3>
+      <div>
+         <span>
+         {% if last_status %}<strong>{{ last_status_name }}</strong>, le {{ last_status.created }}.
+         {% else %}
+           Non pointé.
+         {% endif %}
+         </span>
+         {% if not acte.validation_locked and not acte.is_billed %}
+           <form method="post" class="inline-form">
+           {% csrf_token %}
+           <input type="hidden" value="{{acte.id}}" name="acte-id">
+           <select data-previous="{{ last_status.state_name }}" name="act_state">
+             {% for state_name, display_state_name in validation_states %}
+             <option value="{{ state_name }}" {% if state_name == last_status.state_name %}selected{% endif %}>{{ display_state_name }}</option>
+             {% endfor %}
+           </select>
+           <button {% if last_status %}disabled{% endif %}>Modifier</button>
+           </form>
+           <label> Facturable : </label>
+           <input class="input_is_billable" data-id="{{acte.id}}" data-switch-billable="{{acte.switch_billable}}" type="checkbox" {% if acte.is_billable %}checked{% endif %}></input>
+           <label> Acte perdu : </label>
+           <input class="input_is_lost" data-id="{{acte.id}}" type="checkbox" {% if acte.is_lost %}checked{% endif %}></input>
+         {% else %}
+             {% if acte.is_billed %}<strong>Acte facturé</strong>
+             {% else%}
+                {% if acte.is_billable %}Facturable{% else %}Non facturable{% endif %}. {% if acte.is_lost %}Acte perdu.{% endif %}
+             {% endif %}
+         {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p><strong>Il n'y a pas d'acte à valider le {{ date|date:"DATE_FORMAT" }}.</strong></p>
+    {% endif %}
+{% endblock %}
+
+{% block dialogs %}
+<div id="validate-all-dialog" title="Validation">
+  <div id="validate-all-dialog-content">
+  </div>
+  <form action="{% url 'validation-all' service=service date=date %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="validate-all" value="1">
+  </form>
+</div>
+{% endblock %}
+
+
+{% block page-end %}
+<script>
+  $('#validate-all-dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+      "Valider": function () { $('#validate-all-dialog form').submit(); },
+      "Annuler": function () { $(this).dialog("close"); },
+    },
+  });
+  $('#validate-all').click(function () {
+    $('#validate-all-dialog-content').load('{% url 'validation-all' service=service date=date %}',
+      function () {
+        $('#validate-all-dialog').dialog('open');
+      }
+    );
+  });
+</script>
+{% endblock %}

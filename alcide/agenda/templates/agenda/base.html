@@ -1,0 +1,27 @@
+{% extends "alcide/base.html" %}
+{% load url from future %}
+
+{% block extrascripts %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}js/json2.js"></script>
+<script src="{{ STATIC_URL }}js/alcide.agenda.js"></script>
+<script src="{{ STATIC_URL }}js/alcide.datesel.js"></script>
+{% endblock %}
+{% block extrastyles %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/agenda.css" />
+{% endblock extrastyles %}
+
+{% block title %}{{ block.super }} - Agenda {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Agenda - {{ service_name }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+   {% include "alcide/datesel.html" %}
+   {% block agenda-content %}
+   {% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "dossiers/base.html" %}
+{% load i18n %}
+{% load url from future %}
+{% load dossiers %}
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" media="all" href="{{ STATIC_URL }}filter-widget/css/filter-widget.css"/>
+{% endblock %}
+
+{% block extrascripts %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}js/jquery.parse-url.js"></script>
+<script src="{{ STATIC_URL }}js/alcide.dossiers.js"></script>
+{% endblock %}
+
+{% block title %}{{ object.last_name }} {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% endblock %}
+
+{% block appbar %}
+<h2><strong>{% if current_state.status.type == 'CLOS' %}<span class="highlight">{% endif %}<span class="lastname">{{ object.last_name }}</span> {{ object.first_name }}{% if object.paper_id %} - Dossier {{ object.paper_id}}{% endif %}{% if current_state.status.type == 'CLOS' %} clos</span>{% endif %}</strong></h2>
+<span id="ajax-redirect" data-url="{{ object.id }}/view"/>
+<a href="..">Retourner aux dossiers</a>
+<form action="{% url "patientrecord_print" service object.id%}">
+<button class="icon-print">{% trans "Imprimer tout le dossier" %}</button>
+</form>
+{% if 'validator' in role %}{% if object.can_be_deleted %}<button type="button" id="patientrecord-delete">Supprimer</button>{% endif %}{% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="tabs">
+  <ul>
+    <li id="tab1">
+    <a data-id="0" href="tab1" class="atabs">Général</a>
+    </li>
+    <li id="tab2">
+      <a data-id="1" href="tab2" class="atabs">Fiche administrative</a>
+    </li>
+    <li id="tab3">
+      <a data-id="2" href="tab3" class="atabs">Adresses / contacts</a>
+    </li>
+    {% if object.service.slug == "cmpp" %}
+    <li><a data-id="3" href="tab4" class="atabs">Prise en charge</a></li>
+    {% elif object.service.slug == "sessad-ted" or object.service.slug == "sessad-dys" %}
+    <li><a data-id="3" href="tab4" class="atabs">Notifications</a></li>
+    {% else %}
+    <li style="display: none;"><a data-id="3" href="tab4" class="atabs">Notifications</a></li>
+    {% endif %}
+    <li><a data-id="4" class="atabs" href="tab5">Actes passés</a>
+    <li><a data-id="5" class="atabs" href="tab6">Prochains rendez-vous</a>
+    <li><a data-id="6" class="atabs" href="tab7">Socialisation</a>
+    <li><a data-id="7" class="atabs" href="tab8">Données à caractère médical</a>
+  </ul>
+</div>
+{% endblock %}
+
+{% block dialogs %}
+<div id="ajax-dlg" style="display: none;"></div>
+<div id="change-record" style="display: none;" data-id="{{ object.id }}" data-service-id="{{ service_id }}">
+ </div>
+
+  <div id="dossier-histo-dlg" style="display: none;">
+   <dl>
+    {% for state in states %}
+    <dt><b>{{ state.date_selected|date:"d/m/Y" }}</b> <!--<small>(date info: {{ state.created|date:"d/m/Y" }})</small>-->
+      <button data-id="{{ state.id }}" class="update-patient-state-btn icon-edit" title="Modifier"></button>
+      {% if states|length > 1 %}<button data-id="{{ state.id }}" class="del-patient-state-btn icon-remove"></button>{% endif %}
+    </dt>
+    <dd>
+    <p><b>{{ state.status.name }}</b>{% if state.comment %}; <label>commentaire:</label> {{ state.comment }}{% endif %}</p>
+    </dd>
+    <dd class="edit-histo-item" style="display: none;">
+
+<form action="{{ request.get_full_path }}/../update-state" method="post">
+  <input type="hidden" name="state_id" value="{{ state.id }}"/>
+  {% csrf_token %}
+   <p>
+   <label for="id_date">Date :</label>
+   {{ form.date.errors }}
+   <input id="id_date_{{state.id}}" class="date" name="date" value="{{ state.created|date:"d/m/Y" }}"/>
+   </p>
+   <p>
+    <label for="id_comment">Commentaire :</label>
+    <textarea id="id_comment" style="width: 90%;" name="comment">{% if state.comment %}{{ state.comment }}{% endif %}</textarea>
+   </p>
+   <button>Modifier</button>
+ </form>
+
+    </dd>
+    {% endfor%}
+   </dl>
+  </div>
+
+
+
+  <div id="add-prise-en-charge-dlg" style="display: none;">
+   <div>
+    <label for="id_partir">À partir du :</label>
+    <input id="id_partir" class="partir" name="partir" size="10" value="11/06/2012"/>
+   </div>
+   <div>
+    <label for="id_pour">Pour :</label>
+    <input id="id_pour" class="pour" name="pour" size="4" value="30"/> séances
+   </div>
+  </div>
+
+  <div id="add-prolongation-dlg" style="display: none;">
+   <div>
+    <label for="id_pour">Pour :</label>
+    <input id="id_pour" class="pour" name="pour" size="4" value="10"/> actes
+   </div>
+  </div>
+
+<div id="finaccueil-patientrecord-dialog" title="Patient en fin d'accueil">
+  <div id="finaccueil-patientrecord-dialog-content">
+  </div>
+  <form method="post" action="finaccueil-patientrecord/">
+    {% csrf_token %}
+    <input type="hidden" name="Close" value="1">
+  </form>
+</div>
+
+{% endblock %}

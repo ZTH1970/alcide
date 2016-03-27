@@ -1,0 +1,12 @@
+{% extends "personnes/simple-form.html" %}
+{% load static %}
+
+{% block extrascripts %}
+<script src="{% static "js/access.js" %}"></script>
+{{ block.super }}
+{% endblock %}
+
+{% block appbar %}
+  <h2>Modifier l'accès {{ object }}</h2>
+  <a href="..">{% block back-link %}Retourner au listing des accés{% endblock %}</a>
+{% endblock %}

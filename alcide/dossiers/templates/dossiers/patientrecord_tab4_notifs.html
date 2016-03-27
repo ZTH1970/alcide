@@ -1,0 +1,220 @@
+{% extends 'dossiers/patientrecord_tab.html' %}
+{% block content %}
+<div id="tabs-4">
+  {% if object.service.slug == "cmpp" %}
+  <div class="notifs">
+    <h4>Information sur la prise en charge</h4>
+    <ul>
+      <li><span{% if hc_status.1 %} class="highlight"{% endif %}>{{ hc_status.0 }}</span></li>
+      {% if object.pause %}<li><span class="highlight">Le dossier est en pause facturation.</span></li>{% endif %}
+      {% if missing_policy %}<li><span class="highlight">Informations d'assuré sociale manquantes.</span></li>{% endif %}
+      {% if missing_birthdate %}<li><span class="highlight">Date de naissance manquante.</span></li>{% endif %}
+      {% if object.policyholder.ame %}<li><span class="highlight">Le contact assuré est AME.</span></li>{% endif %}
+    </div>
+    <p>
+    <button id="new-hcdiag-btn">Nouvelle PC diagnostic</button>
+    <button id="new-hctrait-btn">Nouvelle PC traitement</button>
+    </p>
+    {% if acts_losts %}
+    <p><strong>{{ acts_losts|length }}</strong> actes facturables qui ne peuvent pas être facturés :
+    <table class="basic">
+      <thead>
+        <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
+      </thead>
+      <tbody>
+      {% for act in acts_losts %}
+      <tr>
+        <td>{{ act.date|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>{{ act.time }}</td>
+        <td>{{ act.act_type }}</td>
+        <td>{% for participant in act.doctors.all %}
+          {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+          {% endfor %}</td>
+        <td>{{ act.comment|default_if_none:"" }}</td>
+        <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </p>
+    {% endif %}
+    {% if acts_pause %}
+    <p><strong>{{ acts_pause|length }}</strong> actes qui sont en pause :
+    <table class="basic">
+      <thead>
+        <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
+      </thead>
+      <tbody>
+      {% for act in acts_pause %}
+      <tr>
+        <td>{{ act.date|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>{{ act.time }}</td>
+        <td>{{ act.act_type }}</td>
+        <td>{% for participant in act.doctors.all %}
+          {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+          {% endfor %}</td>
+        <td>{{ act.comment|default_if_none:"" }}</td>
+        <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </p>
+    {% endif %}
+    {% if hcs %}
+    {% for hc, acts, acts_cared in hcs %}
+    {% if hc.cmpphealthcarediagnostic %}
+    <div id="patient-diag">
+      <div class="frame">
+        <div class="buttons">
+          <button type="button" data-id="{{ hc.id }}" class="del-hcdiag icon-minus" title="Supprimer"></button>
+          <button type="button" data-id="{{ hc.id }}" class="update-hcdiag-btn icon-edit" title="Modifier"></button>
+        </div>
+        <h3>Prise en charge de diagnostic, débutée le {{ hc.start_date|date:"d/m/Y" }}{% if hc.cmpphealthcarediagnostic.end_date %}, se terminant le {{ hc.cmpphealthcarediagnostic.end_date|date:"d/m/Y" }}{% endif %}</h3>
+        <ul>
+          {% if hc.cmpphealthcarediagnostic.end_date %}<li><label>Date de fin</label> : {{ hc.cmpphealthcarediagnostic.end_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
+          <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcarediagnostic.get_act_number }}</strong></li>
+          {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
+          <table class="basic">
+            <thead>
+              <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
+            </thead>
+            <tbody>
+            {% for act in acts %}
+            <tr>
+              <td>{{ act.date|date:"SHORT_DATE_FORMAT" }}</td>
+              <td>{{ act.time }}</td>
+              <td>{{ act.act_type }}</td>
+              <td>{% for participant in act.doctors.all %}
+                {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+                {% endfor %}</td>
+              <td>{{ act.comment|default_if_none:"" }}</td>
+              <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+          {% if hc.get_nb_acts_cared %}
+          <li><strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés :</li>
+          <table class="basic">
+            <thead>
+              <tr> <th>Date</th> <th>Heure</th> <th>N° facture</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
+            </thead>
+            <tbody>
+            {% for act in acts_cared %}
+            <tr>
+              <td>{{ act.date|date:"SHORT_DATE_FORMAT" }}</td>
+              <td>{{ act.time }}</td>
+              <td>{{ act.get_invoice_number|default_if_none:"Ancienne facturation" }}</td>
+              <td>{{ act.act_type }}</td>
+              <td>{% for participant in act.doctors.all %}
+                {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+                {% endfor %}</td>
+              <td>{{ act.comment|default_if_none:"" }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          {% else %}<li>Aucun acte facturé.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    {% else %}
+    <div id="patient-traitement">
+      <div class="frame">
+        <div class="buttons">
+          <button type="button" data-id="{{ hc.id }}" class="del-hctrait icon-minus" title="Supprimer"></button>
+          <button type="button" data-id="{{ hc.id }}" class="update-hctrait-btn icon-edit" title="Modifier"></button>
+        </div>
+        <h3>Prise en charge de traitement, débutée le {{ hc.start_date|date:"d/m/Y" }}{% if hc.cmpphealthcaretreatment.end_date %}, se terminant le {{ hc.cmpphealthcaretreatment.end_date|date:"d/m/Y" }}{% endif %}</h3>
+        <ul>
+          {% if hc.cmpphealthcaretreatment.end_date %}<li><label>Date de fin</label> : {{ hc.cmpphealthcaretreatment.end_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
+          <li><label>Nombres d'actes de la prise en charge</label> : <strong>{{ hc.cmpphealthcaretreatment.get_act_number }}</strong></li>
+          {% if acts %}<li><strong>{{ acts|length }}</strong> actes pouvant être pris en charge lors de la prochaine facturation :</li>
+          <table class="basic">
+            <thead>
+              <tr> <th>Date</th> <th>Heure</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th> <th>Refacturation</th></tr>
+            </thead>
+            <tbody>
+            {% for act in acts %}
+            <tr>
+              <td>{{ act.date|date:"SHORT_DATE_FORMAT" }}</td>
+              <td>{{ act.time }}</td>
+              <td>{{ act.act_type }}</td>
+              <td>{% for participant in act.doctors.all %}
+                {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+                {% endfor %}</td>
+              <td>{{ act.comment|default_if_none:"" }}</td>
+              <td>{% for i in act.invoice_set.all %}{{ i.number }}{% if not forloop.last %} - {% endif %}{% endfor %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+          {% endif %}
+          {% if hc.get_nb_acts_cared %}
+          <li><strong>{{ hc.get_nb_acts_cared }}</strong> actes déja facturés :</li>
+          <table class="basic">
+            <thead>
+              <tr> <th>Date</th> <th>Heure</th> <th>N° facture</th> <th>Type d'acte</th> <th>Intervenants</th> <th>Commentaire</th></tr>
+            </thead>
+            <tbody>
+            {% for act in acts_cared %}
+            <tr>
+              <td>{{ act.date|date:"SHORT_DATE_FORMAT" }}</td>
+              <td>{{ act.time }}</td>
+              <td>{{ act.get_invoice_number|default_if_none:"Ancienne facturation" }}</td>
+              <td>{{ act.act_type }}</td>
+              <td>{% for participant in act.doctors.all %}
+                {{ participant.first_name }} <span class="lastname">{{ participant.last_name }}</span>
+                {% endfor %}</td>
+              <td>{{ act.comment|default_if_none:"" }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          {% else %}<li>Aucun acte facturé.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    {% if object.service.slug == "sessad-ted" or object.service.slug == "sessad-dys" %}
+    <p>
+    <button id="new-notification-btn">Nouvelle notification</button>
+    </p>
+    {% if hcs %}
+    {% for hc in hcs %}
+    {% if hc.sessadhealthcarenotification %}
+    <div id="patient-diag">
+      <div class="frame">
+        <div class="buttons">
+          <button type="button" data-id="{{ hc.sessadhealthcarenotification.id }}" class="del-notification icon-minus" title="Supprimer"></button>
+          <button type="button" data-id="{{ hc.sessadhealthcarenotification.id }}" class="update-notification-btn icon-edit" title="Modifier"></button>
+        </div>
+        <h3>Notification</h3>
+        <ul>
+          {% if hc.start_date %}<li><label>Date de début</label> : {{ hc.start_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.sessadhealthcarenotification.end_date %}<li><label>Date de fin</label> : {{ hc.sessadhealthcarenotification.end_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.request_date %}<li><label>Date de demande</label> : {{ hc.request_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.agree_date %}<li><label>Date d'accord</label> : {{ hc.agree_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.insist_date %}<li><label>Date de relance</label> : {{ hc.insist_date|date:"d/m/Y" }}</li>{% endif %}
+          {% if hc.comment %}<li><label>Commentaire</label> : {{ hc.comment }}</li>{% endif %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

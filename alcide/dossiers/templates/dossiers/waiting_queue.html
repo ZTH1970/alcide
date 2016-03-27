@@ -1,0 +1,60 @@
+{% extends "dossiers/base.html" %}
+{% load url from future %}
+
+{% block appbar %}
+    <h2>Dossiers sur liste d'attente{% if len_patient_records %} : {{ len_patient_records }}{% endif %}</h2>
+    <a href=".">Retourner aux dossiers</a>
+    <button id='print-button' class='icon-print'>Imprimer</button>
+{% endblock %}
+
+{% block content %}
+<div id="sidebar">
+    <div>
+    <form>
+    <h3>Rechercher dans les dossiers</h3>
+    <label>Nom <input name="last_name" type="text" value="{{ request.GET.last_name }}" class="focus"></label>
+    <label>Prénom <input name="first_name" type="text" value="{{ request.GET.first_name }}"></label>
+    <label>Numéro de dossier papier <input name="paper_id" type="text" value="{{ request.GET.paper_id }}"></label>
+    <label>Numéro de dossier inform. <input name="id" type="text" value="{{ request.GET.id }}"></label>
+    <label>Numéro d'assuré social <input name="social_security_id" value="{{ request.GET.social_security_id }}" type="text"></label>
+    {% if request.GET %}
+    <div class="search-reset">
+    <button id="search">Rechercher</button>
+    <button id="reset" class="icon-remove-sign" title="Réinitialiser"></button>
+    </div>
+    {% else %}
+    <button id="search">Rechercher</button>
+    {% endif %}
+    <p id="search-results" style="display: none; "></p>
+    </form>
+    </div>
+</div>
+<div class="content">
+  <table id="dossiers" class="main screen-only">
+  {% include "dossiers/waiting_queue_table_content.html" %}
+  </table>
+
+<div class="pagination screen-only">
+    <span class="step-links">
+        {% if paginate_patient_records.has_previous %}
+            <a href="?{{ query }}&page={{ paginate_patient_records.previous_page_number }}">««</a>
+        {% endif %}
+
+        <span class="current">
+            page {{ paginate_patient_records.number }} de {{ paginate_patient_records.paginator.num_pages }}
+        </span>
+
+        {% if paginate_patient_records.has_next %}
+            <a href="?{{ query }}&page={{ paginate_patient_records.next_page_number }}">»»</a>
+        {% endif %}
+    </span>
+</div>
+
+
+
+  {% if request.GET and not patient_records %}
+  <div>Pas de résultat pour votre recherche</div>
+  {% endif %}
+
+</div>
+{% endblock %}

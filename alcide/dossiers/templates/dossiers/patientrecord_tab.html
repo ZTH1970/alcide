@@ -1,0 +1,14 @@
+{% block print-button %}
+<button class="icon-print right print">Imprimer</button>
+{% endblock %}
+{% block content %}
+{% endblock %}
+<br style="clear:both"/>
+<script type="text/javascript">
+    init_datepickers();
+    $('button.print').on('click', function(event) {
+        {% block print-actions %}{% endblock %}
+        print_cleanup();
+        window.print();
+    });
+</script>

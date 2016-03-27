@@ -1,0 +1,2666 @@
+[
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 1, 
+            "name": "Autisme et Troubles psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 2, 
+            "name": "Troubles n\u00e9vrotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 3, 
+            "name": "Pathologies limites"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 4, 
+            "name": "Troubles reactionnels"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 5, 
+            "name": "Deficiences mentales (arri\u00e9rations, d\u00e9bilit\u00e9s mentales, d\u00e9mences)"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6, 
+            "name": "Troubles du d\u00e9veloppement et des fonctions instrumentales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 6
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7, 
+            "name": "TROUBLES DES CONDUITES ET DES COMPORTEMENTS"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 7
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 8, 
+            "name": "TROUBLES A EXPRESSION SOMATIQUE"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 8
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 9, 
+            "name": "Variations de la normale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 9
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 10, 
+            "name": "Psychoses Pr\u00e9coces (Troubles envahissants du d\u00e9veloppement)"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 10
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 10, 
+            "name": "PAS DE FACTEURS ORGANIQUES RECONNUS"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 196
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 11, 
+            "name": "Schizophr\u00e9nies"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 11
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 11, 
+            "name": "FACTEURS ANTE-NATAUX D'ORIGINE MATERNELLE"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 197
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 12, 
+            "name": "Troubles d\u00e9lirants"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 12
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 12, 
+            "name": "FACTEURS PERINATAUX"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 198
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 13, 
+            "name": "Troubles psychotiques aigus"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 13
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 13, 
+            "name": "ATTEINTES CEREBRALES POST-NATALES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 199
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14, 
+            "name": "Troubles thymiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 14, 
+            "name": "MALADIES D'ORIGINES GENETIQUES ET CONGENITALES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 200
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15, 
+            "name": "Etats d\u00e9pressifs apr\u00e8s \u00e9pisode psychotique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 15, 
+            "name": "INFIRMITES ET AFFECTIONS SOMATIQUES INVALIDANTES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 201
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 16, 
+            "name": "CONVULSIONS ET EPILEPSIES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 202
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 17, 
+            "name": "ANTECEDENTS DE MALADIES SOMATIQUES DANS L'ENFANCE"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 203
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 18, 
+            "name": "Autres Troubles Psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 18, 
+            "name": "AUTRES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 204
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 19, 
+            "name": "Troubles Psychotiques non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 19, 
+            "name": "PAS DE REPONSE POSSIBLE PAR DEFAUT D'INFORMATION"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 205
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 20, 
+            "name": "Troubles n\u00e9vrotiques \u00e0 dominante anxieuse"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 18
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 20, 
+            "name": "PAS DE FACTEURS D'ENVIRONNEMENT A RETENIR"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 249
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 21, 
+            "name": "Troubles n\u00e9vrotiques \u00e0 dominante hyst\u00e9rique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 19
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 21, 
+            "name": "TROUBLES MENTAUX OU PERTURBATIONS PSYCHOLOGIQUES AVERES DANS LA FAMILLE"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 250
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 22, 
+            "name": "Troubles n\u00e9vrotiques \u00e0 dominante phobique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 20
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 22, 
+            "name": "CARENCES AFFECTIVES, EDUCATIVES, SOCIALES, CULTURELLES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 251
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 23, 
+            "name": "Troubles n\u00e9vrotiques \u00e0 dominante obsessionnelle"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 21
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 23, 
+            "name": "MAUVAIS TRAITEMENTS ET NEGLIGENCES GRAVES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 252
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 24, 
+            "name": "Troubles n\u00e9vrotiques avec pr\u00e9dominance des inhibitions"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 22
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 24, 
+            "name": "EVENEMENTS ENTRAINANT LA RUPTURE DE LIENS AFFECTIFS"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 253
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 25, 
+            "name": "D\u00e9pression n\u00e9vrotique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 23
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 25, 
+            "name": "CONTEXTE SOCIO-FAMILIAL PARTICULIER"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 254
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 26, 
+            "name": "Caract\u00e8res n\u00e9vrotiques, pathologies n\u00e9vrotiques de la personnalit\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 24
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 26, 
+            "name": "ENFANT NE PAR PROCREATION ARTIFICIELLE"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 255
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 27, 
+            "name": "Troubles n\u00e9vrotiques avec perturbations pr\u00e9dominantes des fonctions instrumentales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 25
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 28, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 26
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 28, 
+            "name": "AUTRES"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 256
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 29, 
+            "name": "Non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 27
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 29, 
+            "name": "PAS DE REPONSE POSSIBLE PAR DEFAUT D'INFORMATION"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 257
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 30, 
+            "name": "Dysharmonies \u00e9volutives"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 28
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 31, 
+            "name": "Pathologie limite avec dominance des troubles de la personnalit\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 29
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 32, 
+            "name": "Pathologie limite \u00e0 dominante schizotypique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 30
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 33, 
+            "name": "Pathologie limite \u00e0 dominante comportementale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 31
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 34, 
+            "name": "D\u00e9pressions li\u00e9es \u00e0 une pathologie limite"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 32
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 38, 
+            "name": "Autres pathologies limites"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 33
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 39, 
+            "name": "Pathologies limites non sp\u00e9cifi\u00e9es"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 34
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 40, 
+            "name": "D\u00e9pression r\u00e9actionnelle"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 35
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 41, 
+            "name": "Manifestations r\u00e9actionnelles"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 36
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 42, 
+            "name": "Syndrome de stress post traumatique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 37
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 50, 
+            "name": "Q I 50 - 69"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 38
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 51, 
+            "name": "Q I 35 - 49"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 39
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 52, 
+            "name": "Q I 20 - 34"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 40
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 53, 
+            "name": "Q I < \u00e0 20"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 41
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 54, 
+            "name": "Q I Non sp\u00e9cifi\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 42
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 60, 
+            "name": "Troubles de la Parole et du Langage"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 43
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 61, 
+            "name": "Troubles Cognitifs et des Acquisitions Scolaires"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 44
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 62, 
+            "name": "Troubles psychomoteurs"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 45
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 70, 
+            "name": "TROUBLES hyperkin\u00e9tiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 46
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 71, 
+            "name": "Troubles des conduites alimentaires"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 47
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 72, 
+            "name": "Tentatives de suicide"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 48
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 73, 
+            "name": "Troubles li\u00e9s \u00e0 l'usage de drogues ou d'alcool"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 49
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 74, 
+            "name": "Troubles de l'angoisse de s\u00e9paration"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 50
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 75, 
+            "name": "Troubles de l'identit\u00e9 et des conduites sexuelles"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 51
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 76, 
+            "name": "Phobies scolaires"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 52
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 77, 
+            "name": "Autres troubles caract\u00e9ris\u00e9s des conduites"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 53
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 78, 
+            "name": "Autres troubles des conduites et des comportements"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 54
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 79, 
+            "name": "Troubles des conduites non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 55
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 80, 
+            "name": "Affections psychosomatiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 56
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 81, 
+            "name": "TROUBLES psychofonctionnels"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 57
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 82, 
+            "name": "Trouble hypocondriaque"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 58
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 83, 
+            "name": "Enur\u00e9sie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 59
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 84, 
+            "name": "Encopr\u00e9sie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 60
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 85, 
+            "name": "Troubles du sommeil"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 61
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 86, 
+            "name": "Retard de croissance psychog\u00e8ne"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 62
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 88, 
+            "name": "Autres troubles \u00e0 expression somatique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 63
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 89, 
+            "name": "Troubles \u00e0 expression somatique non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 64
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 90, 
+            "name": "Angoisses , rituels, peurs"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 65
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 91, 
+            "name": "Moments d\u00e9pressifs"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 66
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 92, 
+            "name": "Conduites d 'opposition"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 67
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 93, 
+            "name": "Conduites d 'isolement"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 68
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 94, 
+            "name": "Difficult\u00e9s scolaires non classables dans les cat\u00e9gories pr\u00e9c\u00e9dentes"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 69
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 95, 
+            "name": "Retards ou r\u00e9gressions transitoires"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 70
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 96, 
+            "name": "Aspects originaux de la personnalit\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 71
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 98, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 72
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 99, 
+            "name": "Non sp\u00e9cifi\u00e9es"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 73
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 100, 
+            "name": "Autisme infantile pr\u00e9coce - type Kanner"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 74
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 100, 
+            "name": "Pas de facteurs organiques reconnus"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 206
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 101, 
+            "name": "Autres formes de l'autisme"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 75
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 102, 
+            "name": "Psychose pr\u00e9coce d\u00e9ficitaire. Retard mental avec troubles autistiques ou psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 76
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 103, 
+            "name": "Syndrome d 'Asperger"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 77
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 104, 
+            "name": "Dysharmonies Psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 78
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 105, 
+            "name": "Troubles d\u00e9sint\u00e9gratifs de l'enfance"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 79
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 108, 
+            "name": "Autres psychoses pr\u00e9coces ou autres troubles envahissants du d\u00e9veloppement"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 80
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 109, 
+            "name": "Psychoses pr\u00e9coces ou troubles envahissants du d\u00e9veloppement non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 81
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 110, 
+            "name": "Schizophr\u00e9nie de l'enfant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 82
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 110, 
+            "name": "Atteinte infectieuse ou parasitaire"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 207
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 111, 
+            "name": "Troubles schizophr\u00e9niques \u00e0 l'adolescence"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 83
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 111, 
+            "name": "Atteinte toxique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 208
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 112, 
+            "name": "Atteinte li\u00e9e \u00e0 une maladie maternelle"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 209
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 113, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 210
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 120, 
+            "name": "Pr\u00e9maturit\u00e9, dysmaturit\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 211
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 121, 
+            "name": "Souffrance c\u00e9r\u00e9brale p\u00e9rinatale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 212
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 122, 
+            "name": "Incompatibilit\u00e9 sanguine foeto-maternelle"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 213
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 123, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 214
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 130, 
+            "name": "Trouble psychotique aigu polymorphe sans sympt\u00f4mes schizophr\u00e9niques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 84
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 130, 
+            "name": "Atteinte c\u00e9r\u00e9brale post-natale d'origine infectieuse ou parasitaire"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 215
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 131, 
+            "name": "Trouble psychotique aigu polymorphe avec sympt\u00f4mes schizophr\u00e9niques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 85
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 131, 
+            "name": "Atteinte c\u00e9r\u00e9brale post-natale d'origine toxique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 216
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 132, 
+            "name": "Atteinte li\u00e9e \u00e0 un traumatisme c\u00e9r\u00e9bral"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 217
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 133, 
+            "name": "Tumeurs c\u00e9r\u00e9brales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 218
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 134, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 219
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 138, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 86
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 138, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 220
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 140, 
+            "name": "Psychoses dysthymiques de l'enfant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 87
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 140, 
+            "name": "Trisomie 21 ou mongolisme"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 221
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 141, 
+            "name": "Troubles thymiques de l'adolescent"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 88
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 141, 
+            "name": "Autre maladie li\u00e9e \u00e0 une anomalie chromosomique autosomique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 222
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 142, 
+            "name": "Maladie li\u00e9e \u00e0 une anomalie chromosomique gonosomique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 223
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 143, 
+            "name": "Ph\u00e9nylc\u00e9tonurie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 224
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 144, 
+            "name": "Autres maladies m\u00e9taboliques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 225
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 145, 
+            "name": "Hypothyro\u00efdies cong\u00e9nitales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 226
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 146, 
+            "name": "Neuro-ectodermoses cong\u00e9nitales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 227
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 147, 
+            "name": "Malformations c\u00e9r\u00e9brales cong\u00e9nitales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 228
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 148, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 229
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 150, 
+            "name": "D\u00e9ficits sensoriels"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 230
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 151, 
+            "name": "Atteinte motrice d'origine c\u00e9r\u00e9brale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 231
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 152, 
+            "name": "Atteinte neurologique d'origine non c\u00e9r\u00e9brale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 232
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 153, 
+            "name": "Affections musculaires"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 233
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 154, 
+            "name": "Malformations cong\u00e9nitales autres que c\u00e9r\u00e9brales"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 234
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 155, 
+            "name": "S\u00e9quelles d'accident physique sans atteinte c\u00e9r\u00e9brale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 235
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 156, 
+            "name": "D\u00e9ficit immunitaire cong\u00e9nital ou acquis"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 236
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 157, 
+            "name": "H\u00e9mophilie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 237
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 158, 
+            "name": "Maladie somatique \u00e0 long cours"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 238
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 159, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 239
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 160, 
+            "name": "Epilepsie idiopathique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 240
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 161, 
+            "name": "Enc\u00e9phalopathie \u00e9pileptique \u00e9volutive et \u00e9pilepsies s\u00e9v\u00e8res"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 241
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 162, 
+            "name": "Autres \u00e9pilepsies symptomatiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 242
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 163, 
+            "name": "Manifestations convulsives non \u00e9pileptiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 243
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 164, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 244
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 168, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 245
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 170, 
+            "name": "Ant\u00e9c\u00e9dents de maladies somatiques dans l'enfance"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 246
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 180, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 247
+    }, 
+    {
+        "fields": {
+            "axe": 2, 
+            "code": 190, 
+            "name": "Pas de r\u00e9ponse possible par defaut d'information"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 248
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 210, 
+            "name": "Psychose puerp\u00e9rale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 258
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 211, 
+            "name": "D\u00e9pression maternelle dans la p\u00e9riode post-natale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 259
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 212, 
+            "name": "Discontinuit\u00e9 des processus de soins maternels dans la premi\u00e8re ann\u00e9e"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 260
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 213, 
+            "name": "Autre trouble important des relations pr\u00e9coces"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 261
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 214, 
+            "name": "Troubles mentaux d'un ou des parents"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 262
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 215, 
+            "name": "Troubles mentaux d'un autre membre de la famille"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 263
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 216, 
+            "name": "Alcoolisme ou toxicomanie parentale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 264
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 217, 
+            "name": "Perturbations psychologiques s\u00e9v\u00e8res et actuelles dans le r\u00e9seau familial"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 265
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 218, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 266
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 219, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 267
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 220, 
+            "name": "Carences affectives pr\u00e9coces"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 268
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 221, 
+            "name": "Carences affectives ult\u00e9rieures"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 269
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 222, 
+            "name": "Carences socio-\u00e9ducatives"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 270
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 223, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 271
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 228, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 272
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 230, 
+            "name": "S\u00e9vices et violences physiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 273
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 231, 
+            "name": "N\u00e9gligences s\u00e9v\u00e8res"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 274
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 232, 
+            "name": "Abus sexuels"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 275
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 233, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 276
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 238, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 277
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 240, 
+            "name": "Hospitalisation ou s\u00e9jour institutionnel prolong\u00e9 ou r\u00e9p\u00e9titif de l'enfant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 278
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 241, 
+            "name": "Rupture it\u00e9rative des modes de garde"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 279
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 242, 
+            "name": "Hospitalisation ou s\u00e9jour institutionnel prolong\u00e9 ou r\u00e9p\u00e9titif des parents"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 280
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 243, 
+            "name": "D\u00e9c\u00e8s d'un ou des parents"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 281
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 244, 
+            "name": "D\u00e9c\u00e8s d'un ou des grands-parents"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 282
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 245, 
+            "name": "D\u00e9c\u00e8s dans la fratrie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 283
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 246, 
+            "name": "Abandon parental"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 284
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 247, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 285
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 248, 
+            "name": "Autres"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 286
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 250, 
+            "name": "G\u00e9melit\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 287
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 251, 
+            "name": "Enfant actuellement plac\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 288
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 252, 
+            "name": "Enfant adopt\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 289
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 253, 
+            "name": "Enfant de parents divorc\u00e9s ou s\u00e9par\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 290
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 254, 
+            "name": "Enfant \u00e9lev\u00e9 par les grands-parents"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 291
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 255, 
+            "name": "Famille mono-parentale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 292
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 256, 
+            "name": "Famille immigr\u00e9e ou trnaplant\u00e9e"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 293
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 257, 
+            "name": "Maladie organique grave d'un parent"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 294
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 258, 
+            "name": "Milieu socio-familial tr\u00e8s d\u00e9favoris\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 295
+    }, 
+    {
+        "fields": {
+            "axe": 3, 
+            "code": 259, 
+            "name": "Autre"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 296
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 500, 
+            "name": "Q I 50 - 69"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 89
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 505, 
+            "name": "D\u00e9ficiences harmoniques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 90
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 506, 
+            "name": "D\u00e9ficiences dysharmoniques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 91
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 507, 
+            "name": "D\u00e9ficience avec polyhandicap sensoriel et/ou moteur"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 92
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 508, 
+            "name": "D\u00e9mences"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 93
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 509, 
+            "name": "Non sp\u00e9cifi\u00e9e"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 94
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 510, 
+            "name": "Q I 35 - 49"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 95
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 516, 
+            "name": "Q I 35 - 49 Avec D\u00e9ficience dysharmonique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 96
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 520, 
+            "name": "Q I 20 - 34"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 97
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 530, 
+            "name": "Q I < \u00e0 20"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 98
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 540, 
+            "name": "Q I Non sp\u00e9cifi\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 99
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 546, 
+            "name": "Q I Non sp\u00e9cifi\u00e9 Avec D\u00e9ficience dysharmonique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 100
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 600, 
+            "name": "Troubles isol\u00e9s de l'articulation ."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 101
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 601, 
+            "name": "Troubles du d\u00e9veloppement du langage"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 102
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 602, 
+            "name": "Aphasie acquise"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 103
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 603, 
+            "name": "Mutisme"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 104
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 604, 
+            "name": "B\u00e9gaiement."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 105
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 608, 
+            "name": "Autres troubles de la parole et du langage"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 106
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 609, 
+            "name": "Troubles de la parole et du langage non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 107
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 610, 
+            "name": "Troubles lexicographiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 108
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 611, 
+            "name": "Troubles sp\u00e9cifiques de l'arithm\u00e9tique (dyscalculie)."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 109
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 612, 
+            "name": "Troubles du raisonnement (Dysharmonies cognitives)"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 110
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 613, 
+            "name": "Troubles de l'attention sans hyperkin\u00e9sie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 111
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 618, 
+            "name": "Autres troubles cognitifs et des acquisitions scolaires."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 112
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 619, 
+            "name": "Troubles cognitifs et des acquisitions scolaires non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 113
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 620, 
+            "name": "Retard psychomoteur (Troubles sp\u00e9cifiques du d\u00e9veloppement moteur)"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 114
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 621, 
+            "name": "Tics"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 115
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 628, 
+            "name": "Autres troubles psychomoteurs"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 116
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 629, 
+            "name": "Troubles psychomoteurs non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 117
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 700, 
+            "name": "Hyperkin\u00e9sie avec troubles de l'attention"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 118
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 708, 
+            "name": "Autres troubles hyperkin\u00e9tiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 119
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 709, 
+            "name": "Troubles hyperkin\u00e9tiques non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 120
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 710, 
+            "name": "Anorexie mentale"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 121
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 711, 
+            "name": "Anorexie mentale atypique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 122
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 712, 
+            "name": "Boulimie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 123
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 713, 
+            "name": "Boulimie atypique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 124
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 714, 
+            "name": "Troubles des conduites alimentaires du nourrisson et de l'enfant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 125
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 715, 
+            "name": "Troubles alimentaires du nouveau n\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 126
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 718, 
+            "name": "Autres Troubles des Conduites Alimentaires"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 127
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 719, 
+            "name": "Troubles des Conduites Alimentaires non sp\u00e9cifi\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 128
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 731, 
+            "name": "Usage occasionnel de stup\u00e9fiant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 129
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 750, 
+            "name": "Troubles de l'identit\u00e9 sexuelle"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 130
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 751, 
+            "name": "Troubles de la pr\u00e9f\u00e9rence sexuelle"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 131
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 752, 
+            "name": "Manifestations en rapport avec des pr\u00e9occupations excessives concernant le d\u00e9veloppement sexuel et son orientation."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 132
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 758, 
+            "name": "Autres troubles des conduites sexuelles."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 133
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 759, 
+            "name": "Trouble des conduites sexuelles, sans pr\u00e9cision."
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 134
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 770, 
+            "name": "Pyromanie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 135
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 771, 
+            "name": "Kleptomanie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 136
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 772, 
+            "name": "Trichotillomanie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 137
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 773, 
+            "name": "Fugues"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 138
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 774, 
+            "name": "Violence contre les personnes"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 139
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 775, 
+            "name": "Conduites \u00e0 risques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 140
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 776, 
+            "name": "Errance"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 141
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 778, 
+            "name": "Autres troubles caract\u00e9ris\u00e9s des conduites"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 142
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 1110, 
+            "name": "Aspects prodromiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 143
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 1111, 
+            "name": "Schizophr\u00e9nie av\u00e9r\u00e9e"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 144
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 1410, 
+            "name": "Episode maniaque"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 145
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 1411, 
+            "name": "Episode d\u00e9pressif"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 146
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6010, 
+            "name": "Retard de parole"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 147
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6011, 
+            "name": "Retard (simple)de langage"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 148
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6012, 
+            "name": "Dysphasie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 149
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6018, 
+            "name": "Autres Troubles du D\u00e9veloppement du Langage"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 150
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6020, 
+            "name": "Aphasie acquise avec \u00e9pilepsie (syndrome de Landau-Kleffner)"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 151
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6028, 
+            "name": "Autres aphasies acquises"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 152
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6030, 
+            "name": "Mutisme Total"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 153
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6031, 
+            "name": "Mutisme s\u00e9lectif"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 154
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6100, 
+            "name": "Dyslexie isol\u00e9e"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 155
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6101, 
+            "name": "Trouble de l'orthographe sans trouble de la lecture"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 156
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6108, 
+            "name": "Autres troubles lexicographiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 157
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6210, 
+            "name": "Tics isol\u00e9s"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 158
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 6211, 
+            "name": "Maladie de Gilles de la Tourette"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 159
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7100, 
+            "name": "Anorexie mentale restrictive"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 160
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7101, 
+            "name": "Anorexie mentale boulimique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 161
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7300, 
+            "name": "Usage Continu de stup\u00e9fiant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 162
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7301, 
+            "name": "Morphiniques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 163
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7302, 
+            "name": "Cannabis"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 164
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7303, 
+            "name": "Hypnotiques et Tranquillisant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 165
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7304, 
+            "name": "Coca\u00efne"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 166
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7305, 
+            "name": "Autres psychostimulants et dysleptiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 167
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7306, 
+            "name": "Tabac - Caf\u00e9ine"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 168
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7307, 
+            "name": "Solvants"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 169
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7308, 
+            "name": "Polytoxicomanies"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 170
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7309, 
+            "name": "Autres ou non sp\u00e9cifi\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 171
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7310, 
+            "name": "Usage occasionnel de stup\u00e9fiant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 172
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7320, 
+            "name": "En r\u00e9mission"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 173
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7380, 
+            "name": "Autre stup\u00e9fiant"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 174
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7390, 
+            "name": "Non sp\u00e9cifi\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 175
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7500, 
+            "name": "Trouble de l'identit\u00e9 sexuelle de l'enfance"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 176
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 7501, 
+            "name": "Trouble de l'identit\u00e9 sexuelle chez lez adolescents"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 177
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14100, 
+            "name": "Episode maniaque actuel s'inscrivant dans un trouble affectif bipolaire"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 178
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14101, 
+            "name": "Manie sans sympt\u00f4mes psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 179
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14102, 
+            "name": "Manie avec sympt\u00f4mes psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 180
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14103, 
+            "name": "etat mixte"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 181
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14104, 
+            "name": "Hypomanie"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 182
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14110, 
+            "name": "Episode d\u00e9pressif actuel s'inscrivant dans un trouble affectif bipolaire"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 183
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14111, 
+            "name": "Episode d\u00e9pressif s\u00e9v\u00e8re sans dimension m\u00e9lancolique manifeste"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 184
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14112, 
+            "name": "Episode d\u00e9pressif s\u00e9v\u00e8re sans dimension m\u00e9lancolique manifeste, avec sympt\u00f4mes psychotiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 185
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14113, 
+            "name": "Episode d\u00e9pressif s\u00e9v\u00e8re avec dimension m\u00e9lancolique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 186
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 14114, 
+            "name": "Episode d\u00e9pressif s\u00e9v\u00e8re avec m\u00e9lancolie d\u00e9lirante"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 187
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15001, 
+            "name": "B1 - B\u00e9b\u00e9 \u00e0 risque de troubles s\u00e9v\u00e8res du d\u00e9veloppement"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 188
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15002, 
+            "name": "B2 - Les d\u00e9pressions du b\u00e9b\u00e9"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 189
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15003, 
+            "name": "B3 - B\u00e9b\u00e9 \u00e0 risque d'\u00e9volution dysharmonique"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 190
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15004, 
+            "name": "B4 - Les \u00e9tats du stress"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 191
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15005, 
+            "name": "B5 - Hypermaturit\u00e9 et hyper\u00e9coute pathologiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 192
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15006, 
+            "name": "B6 - Distortion du lien"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 193
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15007, 
+            "name": "B7 - Retards d'acquisition divers"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 194
+    }, 
+    {
+        "fields": {
+            "axe": 1, 
+            "code": 15008, 
+            "name": "B8 - Troubles des grandes fonctions psychosomatiques"
+        }, 
+        "model": "ressources.codecftmea", 
+        "pk": 195
+    }
+]

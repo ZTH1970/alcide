@@ -1,0 +1,20 @@
+{% extends "alcide/base.html" %}
+{% load url from future %}
+
+{% block extrastyles %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/dossiers.css" />
+{% endblock extrastyles %}
+
+
+{% block extrascripts %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}js/jquery.parse-url.js"></script>
+<script src="{{ STATIC_URL }}js/alcide.dossiers.js"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }} - Dossiers {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Dossiers - {{ service_name }}</span>
+{% endblock %}

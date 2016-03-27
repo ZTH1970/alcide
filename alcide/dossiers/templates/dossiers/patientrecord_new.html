@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+
+<form action="{{ request.get_full_path }}" method="post">
+  {% csrf_token %}
+  {% for field in form %}
+  <p>
+  {{ field.errors }}
+  {{ field.label_tag }} {{ field }}
+  </p>
+  {% endfor %}
+  <ul id="last_name_matches">
+  </ul>
+</form>

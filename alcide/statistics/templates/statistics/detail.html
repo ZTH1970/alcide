@@ -1,0 +1,53 @@
+{% extends "ressources/base.html" %}
+{% load statistics_filters %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Statistiques - {{ service_name }}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Statistique {{ dn }}</h2>
+  <a href="../..">Retourner aux statistiques</a>
+{% endblock %}
+
+{% block content %}
+    {% if data_tables_set %}
+    {% for data_tables in data_tables_set %}
+    <div class="statistic">
+    {% for data in data_tables %}
+    <table class="basic">
+      <thead>
+          <tr>
+          {% for col in data.0 %}
+          <th>{{ col }}</th>
+          {% endfor %}
+          </tr>
+      </thead>
+      <tbody>
+        {% for values in data.1 %}
+        <tr>
+            {% for value in values %}
+                {% if value|is_list %}
+                <td class="width-limited">
+                    <ul>
+                        {% for val in value %}
+                        <li>{{ val }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                {% elif value|is_dict %}
+                <td class="width-limited {{ value.style }}">{{ value.data }}</td>
+                {% else %}
+                <td class="width-limited">{{ value }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table><br/>
+    {% endfor %}
+    </div><br/><br/>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

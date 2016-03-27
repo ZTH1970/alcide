@@ -1,0 +1,9 @@
+DATE_FORMAT = 'l d F Y'
+DATE_FORMAT_W = 'l d F Y (W)'
+SHORT_DATE_FORMAT = 'j/n/Y'
+TIME_FORMAT = 'H:i'
+DATE_INPUT_FORMATS = ('%d/%m/%Y', '%d/%m/%Y', '%Y-%m-d')
+TIME_INPUT_FORMATS = ( '%Hh%M', '%H:%M', '%H%M', '%Hh' )
+DECIMAL_SEPARATOR = ','
+NUMBER_GROUPING = 3
+THOUSAND_SEPARATOR = ' '

@@ -1,0 +1,155 @@
+{% load widget_tweaks %}
+
+<form id="contactform" action="{{ request.get_full_path }}" enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          {{ form.first_name.label_tag }} :<br>
+          {{ form.first_name.errors }}
+          {{ form.first_name }}
+        </td>
+        <td>
+          {{ form.last_name.label_tag }} :<br>
+          {{ form.last_name.errors }}
+          {{ form.last_name }}
+        </td>
+        <td>
+          {{ form.gender.label_tag }} :<br>
+          {{ form.gender }}
+          {{ form.gender.errors }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.birthdate.label_tag }} :<br>
+          {{ form.birthdate.errors }}
+          {{ form.birthdate }}
+        </td>
+         <td>
+          {{ form.birthplace.label_tag }} :<br>
+          {{ form.birthplace.errors }}
+          {{ form.birthplace }}
+        </td>
+        <td>
+          {{ form.twinning_rank.label_tag }} :<br>
+          {{ form.twinning_rank.errors }}
+          {{ form.twinning_rank }}
+        </td>
+      </tr>
+  </table>
+  <table>
+      <tr>
+         <td>
+          {{ form.parente.label_tag }} :<br>
+          {{ form.parente.errors }}
+          {{ form.parente }}
+        </td>
+        <td>
+          {{ form.job.label_tag }} :<br>
+          {{ form.job.errors }}
+          {{ form.job }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Téléphone personnel :<br>
+          {{ form.mobile.errors }}
+          {{ form.mobile }}
+        </td>
+        <td>
+          Téléphone professionnel :<br>
+          {{ form.phone.errors }}
+          {{ form.phone }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.email.label_tag }} :<br>
+          {{ form.email.errors }}
+          {{ form.email }}
+        </td>
+      </tr>
+  </table>
+  <table>
+      <tr>
+        <td id="social-security-id">
+          {{ form.social_security_id.label_tag }} :<br>
+          {{ form.social_security_id.errors }}
+          {{ form.social_security_id }}
+          <p id="nir-key">Clé : <span>-</span></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.begin_rights.label_tag }} :<br>
+          {{ form.begin_rights.errors }}
+          {{ form.begin_rights }}
+        </td>
+        <td>
+          {{ form.end_rights.label_tag }} :<br>
+          {{ form.end_rights.errors }}
+          {{ form.end_rights }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.health_org.label_tag }} :<br>
+          {{ form.health_org.errors }}
+          {{ form.health_org }}
+        </td>
+        <td>
+          {{ form.other_health_center.label_tag }} :<br>
+          {{ form.other_health_center.errors }}
+          {{ form.other_health_center }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {{ form.type_of_contract.label_tag }} :<br>
+          {{ form.type_of_contract.errors }}
+          {{ form.type_of_contract }}
+        </td>
+        <td>
+          {{ form.thirdparty_payer.label_tag }} :<br>
+          {{ form.thirdparty_payer.errors }}
+          {{ form.thirdparty_payer }}
+        </td>
+        <td>
+          {{ form.ame.label_tag }} :<br>
+          {{ form.ame.errors }}
+          {{ form.ame }}
+        </td>
+      </tr>
+  </table>
+  <table>
+      <tr>
+        <td>
+          {{ form.management_code.label_tag }} :<br>
+          {{ form.management_code.errors }}
+          {{ form.management_code }}
+        </td>
+      </tr>
+      <tr {% if object.id == request.session.patientrecord_id %}style="display: none;"{%endif%}>
+        <td>
+          {{ form.addresses.label_tag }} :
+          <p id="contact-add-address">
+          <a href="#tab=2&newcontact" id="contact-add-address" role="button" title="Ajouter une adresse" onClick="javascript: load_add_address_dialog();">
+            <span class="icon-plus" title="Ajouter une adresse"></Span>
+            Ajouter une adresse
+          </a>
+          </p>
+          {{ form.addresses.errors }}
+          {{ form.addresses }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+  {{ form.contact_comment.label_tag }}
+  {{ form.contact_comment.errors }}
+  {{ form.contact_comment }}
+  </p>
+ </form>
+ <div id="address-dlg"></div>

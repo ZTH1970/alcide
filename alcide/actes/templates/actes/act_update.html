@@ -1,0 +1,40 @@
+{% load widget_tweaks %}
+<form action="{{ request.get_full_path}}" method="post">
+{% csrf_token %}
+<p>{{ object.patient.id }} {{ object.patient }} ({{ object.get_state }})</p>
+<p>{{ form.act_type }}</p>
+<p>{{ object.date }} - {{ object.time }} - {{ object.duration }} minutes
+{% if object.is_lost %}<button class="flat">Acte perdu</button>{% endif %}</p>
+{{ form.errors }}
+
+<table>
+  <tr><td width="50%">
+      <h4>Intervenants</h4>
+      <div id="intervenants">
+        {{ form.doctors.errors }}
+        {{ form.doctors }}
+      </div>
+    </td>
+
+    <td width="50%">
+
+      <ul>
+        {% for state in object.actvalidationstate_set.all %}
+        <li>{{ state }} le {{ state.created }}</li>
+        {% endfor %}
+      </ul>
+    </td>
+  </tr>
+  <tr>
+  </tr>
+</table>
+
+{{ form.is_lost }} {{ form.is_lost.label }}<br/>
+{{ form.pause }} {{ form.pause.label }}<br/>
+{{ form.switch_billable }} {{ form.switch_billable.label }}</br>
+{{ form.valide }} {{ form.valide.label }}
+<br/>
+<br/>
+{{ form.comment }}
+</form>
+

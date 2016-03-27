@@ -1,0 +1,97 @@
+{% load widget_tweaks %}
+{% load url from future %}
+{{ form.non_field_errors }}
+{{ form.start_datetime }}
+{{ form.start_datetime.errors }}
+<table>
+  <tr>
+    <td {% if form.event_type.field.required %}class="required"{% endif %}>
+      <p>
+      {{ form.event_type.label_tag }}
+      {{ form.event_type }}
+      {{ form.event_type.errors }}
+      </p>
+    </td>
+    <td {% if form.title.field.required %}class="required"{% endif %}>
+      <p>
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {{ form.title.errors }}
+      </p>
+    </td>
+    <td {% if form.ressource.field.required %}class="required"{% endif %}>
+      <p>
+      {{ form.ressource.label_tag }}
+      {{ form.ressource }}
+      </p>
+    </td>
+  </tr>
+
+  <tr>
+    <td {% if form.date.field.required %}class="required"{% endif %}>
+      <p>
+      {{ form.date.label_tag }}
+      {{ form.date|add_class:"datepicker-date" }}
+      {{ form.date.errors }}
+      </p>
+    </td>
+    <td {% if form.time.field.required %}class="required"{% endif %}>
+      <p>
+      {{ form.time.label_tag }}
+      {{ form.time }}
+      {{ form.time.errors }}
+      </p>
+    </td>
+    <td {% if form.duration.field.required %}class="required"{% endif %}>
+      <p>
+      {{ form.duration.label_tag }}
+      {{ form.duration|add_class:"mousewheel"|attr:"data-mousewheel-increment:5" }}
+      {{ form.duration.errors }}
+      <div>
+        {{ form.duration.help_text }}
+      </div>
+      </p>
+    </td>
+  </tr>
+
+  <tr>
+    <td {% if form.participants.field.required %}class="required"{% endif %}>
+      {{ form.participants.label_tag }}
+      <div id="intervenants">
+        {{ form.participants }}
+        {{ form.participants.errors }}
+      </div>
+    </td>
+    <td {% if form.services.field.required %}class="required"{% endif %}>
+      <div id="services">
+        {{ form.services.label_tag }}
+        {{ form.services }}
+        {{ form.services.errors }}
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <div id="description">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+        {{ form.description.errors }}
+      </div>
+    </td>
+  </tr>
+</table>
+
+{% if object.exception_to %}
+  <hr/>
+  {% if object.id != object.exception_to.id %}
+  <p><em>Attention: cet objet est une exception à un évènement périodique; si
+  vous modifiez ou supprimiez cet évènement périodique, l'exception n'en serait pas
+  affectée.</em></p>
+  {% endif %}
+  <div>Occurence du {{object.exception_date}} d'un évènement périodique
+    {% if object.exception_to.canceled %}<em>supprimée</em> et initialement prévue{% endif %}
+    {{ object.exception_to.recurrence_description|lower }}</div>
+  {% if not object.exception_to.canceled %}
+  <button type="button" data-delete-url="{% url 'delete-event' service=service date=date pk=object.exception_to.pk %}" data-id="{{ object.exception_to.id }}" class="update-periodic-event">Éditer l'évènement périodique</button>
+  {% endif %}
+{% endif %}

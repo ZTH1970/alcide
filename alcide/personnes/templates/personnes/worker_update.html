@@ -1,0 +1,163 @@
+{% extends "personnes/base.html" %}
+
+{% block extrascripts %}
+{{ block.super }}
+    <script>
+        $(function() {
+            $('#lundi').click(function() {
+                $('#lundi-dlg').dialog({title: 'Plages du lundi',
+                    width: '950px',
+                    buttons: [ { text: "Annuler",
+                        click: function() { $(this).dialog("close"); } },
+                    { text: "Valider",
+                        click: function() { $(this).dialog("close"); } }]}
+                );
+            });
+
+            $('button[data-action=delete]').click(function() {
+                delete_holiday({{ object.id }}, $(this).data('id'));
+            });
+
+            $('button[data-action=edit]').click(function() {
+                edit_holiday({{ object.id }}, $(this).data('id'));
+            });
+
+            $('button[data-action=new]').click(function() {
+                add_holiday({{ object.id }});
+            });
+
+        });
+</script>
+{% endblock %}
+
+{% block appbar %}
+<h2>Personnel - <span class="lastname">{{ object.last_name }}</span> {{ object.first_name }}
+  {% if holiday %}<span class="en-conge">(absent jusqu'au {{ holiday.end_date|date:"j F" }})</span>{% endif %}
+</h2>
+    <a href="..">Retourner à l'administration du personnel</a>
+    <form action="delete/" method="post" data-confirmation-msg="Êtes-vous sûr de vouloir supprimer le personnel {{object.last_name}} {{object.first_name}} ?" class="form-with-confirmation">
+      {% csrf_token %}
+      <button>Supprimer</button>
+    </form>
+{% endblock %}
+
+{% block content %}
+<div id="info-membre">
+  <form method="post" class="ajax" id="id-form">
+    {% csrf_token %}
+    <div class="frame inline">
+      <h3>État civil</h3>
+      <button class="save enable-on-change">✔</button>
+      <p>
+      {% for field in forms.id %}
+      {{ field.label_tag  }} : {{ field }}
+      {% if field.name == 'gender' %}
+      </p><p>
+      {% endif %}
+      {% endfor %}
+      </p>
+    </div>
+  </form>
+
+  <form method="post" class="ajax" id="services-form">
+    {% csrf_token %}
+    <div class="inline frame">
+      <h3>Services</h3>
+      <button class="save enable-on-change">✔</button>
+
+      <p class="services">
+      {{ forms.services.services }}
+      </p>
+    </div>
+  </form>
+
+  <div class="frame" id="schedule">
+    <h3>Horaires de travail</h3>
+
+    <table>
+      <thead>
+        <tr>
+          {% for weekday, name in weekdays %}
+            <td><a href="{{weekday}}/">{{ name|capfirst }}</a></td>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        {% for timetable in timetables %}
+        <td>
+          {% for schedule in timetable.schedules %}
+            De {{ schedule.start_time }} à {{ schedule.end_time }}
+            {% if not forloop.last %}
+            <br/>
+            {% endif %}
+          {% empty %}
+          -
+          {% endfor %}
+        </td>
+        {% endfor %}
+      </tr>
+      </tbody>
+    </table>
+  </div>
+    <div class="frame">
+      <h3>Absences</h3>
+      <!-- <button class="save icon-edit"></button> -->
+      <button class="save icon-plus" data-action='new'></button>
+      {% if holidays %}
+      <ul id="holidays">
+        <li>
+          <ul class="caption">
+            <li class="period">Période</li>
+            <li class="status">Statut</li>
+            <li class="type">Type</li>
+            <li class="comment">Commentaire</li>
+            <li class="groupe">Groupe</li>
+            <li class="actions">Actions</li>
+          </ul>
+        </li>
+        {% for holiday in holidays %}
+        <li id='{{ holiday.id }}'>
+          <ul style="background: {% cycle '#fff' '#eee' %}">
+            <li class="period">{{ holiday }}</li>
+            <li class="status">
+            {% if holiday.is_current and holiday.service %}
+            congés annuels, en cours
+            {% elif holiday.is_current %}
+            en cours
+            {% elif holiday.service %}
+            congés annuels
+            {% endif %}</li>
+            <li class="type">
+            {{ holiday.holiday_type }}
+            </li>
+            <li class="comment">
+            {% if holiday.comment %}
+            {{ holiday.comment }}
+            {% endif %}
+            </li>
+            <li class="groupe">
+              {% if holiday.holiday_type.for_group %}
+              <span class="icon-ok"></span>
+              </li>
+              <li class="actions"></li>
+              {% else %}
+              </li>
+              <li class="actions">
+              <button class="icon-edit" data-action='edit' data-id='{{ holiday.id }}'></button>
+              <button class="icon-remove" data-action='delete' data-id='{{ holiday.id }}'></button>
+              {% endif %}
+            </li>
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block dialogs %}
+<div id="holiday-dlg" style="display: none;">
+</div>
+{% endblock %}

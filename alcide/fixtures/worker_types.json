@@ -1,0 +1,162 @@
+[
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Directrice pédagogique et administrative"
+        },
+        "model": "ressources.workertype",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Assistantes sociales"
+        },
+        "model": "ressources.workertype",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Médecins"
+        },
+        "model": "ressources.workertype",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Psychologues"
+        },
+        "model": "ressources.workertype",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Neuropsychologues"
+        },
+        "model": "ressources.workertype",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Orthophonistes"
+        },
+        "model": "ressources.workertype",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Psychomotriciens"
+        },
+        "model": "ressources.workertype",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Ergothérapeutes"
+        },
+        "model": "ressources.workertype",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Educateurs"
+        },
+        "model": "ressources.workertype",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "intervene": false,
+            "name": "Secrétaires"
+        },
+        "model": "ressources.workertype",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "intervene": false,
+            "name": "Comptables"
+        },
+        "model": "ressources.workertype",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "intervene": false,
+            "name": "Agents d'entretien"
+        },
+        "model": "ressources.workertype",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "intervene": false,
+            "name": "Stagiaires"
+        },
+        "model": "ressources.workertype",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "intervene": false,
+            "name": "Formateurs"
+        },
+        "model": "ressources.workertype",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "intervene": false,
+            "name": "Président"
+        },
+        "model": "ressources.workertype",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Kinésithérapeute"
+        },
+        "model": "ressources.workertype",
+        "pk": 16
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Psychopédagogue"
+        },
+        "model": "ressources.workertype",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Non défini"
+        },
+        "model": "ressources.workertype",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Pédiatre"
+        },
+        "model": "ressources.workertype",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "intervene": true,
+            "name": "Médecin généraliste"
+        },
+        "model": "ressources.workertype",
+        "pk": 20
+    }
+]

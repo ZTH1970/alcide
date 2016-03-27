@@ -1,0 +1,200 @@
+{% extends "alcide/base.html" %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <title>APS42 — Facturation et décompte</title>
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/smoothness/jquery-ui-1.8.21.custom.css"/>
+
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="development-bundle/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+    <script>
+    </script>
+  </head>
+  <body>
+  <div id="wrap-large">
+    <div id="header">
+      <h1><a href="accueil.html">APS 42</a></h1>
+      <span>Facturation - CMPP</span>
+    </div>
+    <div id="splash" class="cmpp">
+      <div id="user-links">
+        <a href="connexion.html">Déconnexion</a>
+      </div>
+    </div>
+    <div id="content">
+
+    <div id="appbar">
+    <h2>Facturation et décompte</h2>
+    <a href="accueil.html">Retourner à l'accueil</a>
+    </div>
+
+    <ul>
+     <li><label>Facturation en cours :</label> <a href="facturation-123.html">123</a> à partir du
+     6 juillet 2012</li>
+     <li><label>Dernière facturation :</label> <a href="#">122</a> du 6 juin au
+     5 juillet 2012</li>
+    </ul>
+
+    <form>
+     Afficher la facturation : <input size="4"/> <button>OK</button>
+    </form>
+
+    <h3>Récapitulatif des facturations</h3>
+
+    <table id="tableau-recap-facturation">
+     <thead>
+      <tr>
+       <td rowspan="2"></td>
+       <th rowspan="2">2009<br/>et avant</th>
+       <th rowspan="2">2010</th>
+       <th rowspan="2">2011</th>
+       <th colspan="13">2012</th>
+       <th rowspan="2">Total</th>
+      </tr>
+      <tr>
+       <th>01</th>
+       <th>02</th>
+       <th>03</th>
+       <th>04</th>
+       <th>05</th>
+       <th>06</th>
+       <th>07</th>
+       <th>08</th>
+       <th>09</th>
+       <th>10</th>
+       <th>11</th>
+       <th>12</th>
+       <th>Total</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr id="total-row">
+       <th>Total</th>
+       <td>5931</td>
+       <td>6181</td>
+       <td>6212</td>
+       <td>600</td>
+       <td>601</td>
+       <td>602</td>
+       <td>603</td>
+       <td>604</td>
+       <td>605</td>
+       <td>50</td>
+       <td>60</td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td>3020</td>
+       <td>21344</td>
+      </tr>
+
+      <tr>
+       <th><a href="#">100</a></th>
+       <td>5079</td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td>5079</td>
+      </tr>
+
+      <tr>
+       <th><a href="#">...</a></th>
+       <td</td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+      </tr>
+
+      <tr>
+       <th><a href="#">...</a></th>
+       <td</td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+      </tr>
+
+      <tr>
+       <th><a href="facturation-124.html">124</a></th>
+       <td></td>
+       <td></td>
+       <td>7</td>
+       <td>1</td>
+       <td>1</td>
+       <td>3</td>
+       <td>7</td>
+       <td>5</td>
+       <td>14</td>
+       <td>23</td>
+       <td>45</td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td>91</td>
+       <td>91</td>
+      </tr>
+     </tbody>
+
+     <tfoot>
+
+      <tr>
+       <th>Non facturés</th>
+       <td>-1</td>
+       <td>1</td>
+       <td>9</td>
+       <td>5</td>
+       <td>3</td>
+       <td>9</td>
+       <td>7</td>
+       <td>12</td>
+       <td>24</td>
+       <td>6</td>
+       <td>15</td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td></td>
+       <td>90</td>
+       <td>90</td>
+      </tr>
+
+     </tfoot>
+
+    </table>
+
+
+    </div>
+
+    <div id="footer">
+        —
+    </div>
+  </div>
+
+  <div id="new-membre-dlg" style="display: none;">
+   <form>
+   <p>
+    <label for="id_nom">Identifiant :</label>
+    <input id="id_nom" type="text" name="nom"/>
+   </p>
+   <p>
+    <label for="id_password">Mot de passe :</label>
+    <input id="id_password" type="text" name="password"/>
+   </p>
+   <p>
+    <label for="id_member">Membre du personnel associé :</label>
+    <input id="id_member" type="text" name="member"/>
+   </p>
+   </form>
+  </div>
+  </body>
+</html>

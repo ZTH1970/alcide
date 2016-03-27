@@ -1,0 +1,17 @@
+{% extends "alcide/simple-form.html" %}
+
+{% block title %}{{ block.super }} - Gestion des ressources {% endblock %}
+
+{% block header %}
+  {{ block.super }}
+  <span>Gestion des ressources - {{ service_name }}</span>
+{% endblock %}
+
+{% block appbar %}
+  <h2>Ajouter « {{ model_verbose_name }} »</h2>
+  <a href="..">{% block back-link %}Retourner au listing{% endblock %}</a>
+{% endblock %}
+
+{% block buttons %}
+      <button>Ajouter</button>
+{% endblock %}

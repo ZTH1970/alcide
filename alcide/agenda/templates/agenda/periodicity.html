@@ -1,0 +1,24 @@
+   <hr/>
+   <table id="new-appointment-table">
+       <tr>
+           <td {% if form.recurrence_periodicity.field.required %}class="required"{% endif %}>
+            <p>
+           {{ form.recurrence_periodicity.label_tag }}
+           {% if object.one_act_not_new %}
+           {{ object.recurrence_description }}
+           {{ form.recurrence_periodicity.as_hidden }}
+           {% else %}
+           {{ form.recurrence_periodicity }}
+           {{ form.recurrence_periodicity.errors }}
+           {% endif %}
+           </p>
+           </td>
+           <td {% if form.recurrence_end_date.field.required %}class="required"{% endif %}>
+           <p class="datepicker">
+           {{ form.recurrence_end_date.label_tag }}
+           {{ form.recurrence_end_date }}
+           {{ form.recurrence_end_date.errors }}
+           </p>
+           </td>
+       </tr>
+   </table>
