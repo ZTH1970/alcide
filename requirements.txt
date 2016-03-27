@@ -20,6 +20,5 @@ M2Crypto
 django_select2 < 4.3
 django-journal
 south
-mysql-python
 #PyGTK doesn't work with pip
 #pdftk we need the binary
