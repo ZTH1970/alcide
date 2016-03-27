@@ -9,8 +9,10 @@ Installation with virtualenv on Debian
 	pip install -r requirements.txt
 
 
-        # If one uses Sqlite Run the line below.
+        # If one uses Sqlite
         # Rename alcide/local_settings_example.py to alcide/local_settings.py
+        cp alcide/local_settings_example.py to alcide/local_settings.py
+        # Run the line below.
         ./reinit.sh
 
         # If one uses MySQL
