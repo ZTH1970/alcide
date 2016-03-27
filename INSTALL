@@ -7,4 +7,17 @@ Installation with virtualenv on Debian
 	pip install -U setuptools
 	pip install -U pip
 	pip install -r requirements.txt
-        mv calebasse/fixtures/initial_price_per_act.json calebasse/fixtures/initial_price_per_act.json.inactif
+
+
+        # If one uses Sqlite Run the line below.
+        # Rename alcide/local_settings_example.py to alcide/local_settings.py
+        ./reinit.sh
+
+        # If one uses MySQL
+        # Rename alcide/local_settings_example_mysql.py to alcide/local_settings.py
+        cp alcide/local_settings_example_mysql.py to alcide/local_settings.py
+        # Edit alcide/local_settings.py 'NAME', 'USER', 'PASSWORD', 'HOST'
+        vi alcide/local_settings.py
+        # Run the line below.
+        ./reinit-mysql.sh
+
