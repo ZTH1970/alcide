@@ -5,13 +5,13 @@ import os
 import datetime
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alcide.settings")
 log = open('acts_cleaning.log', 'a+')
 
 i = 0
 j = 0
 
-from calebasse.agenda.models import EventWithAct
+from alcide.agenda.models import EventWithAct
 
 for event in EventWithAct.objects.all():
     if event.is_recurring():

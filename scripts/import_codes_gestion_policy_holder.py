@@ -8,18 +8,18 @@ import csv
 from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.contrib.auth.models import User
 
-from calebasse.agenda.models import Event, EventType
-from calebasse.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact
-from calebasse.ressources.models import Service, ManagementCode
-from calebasse.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
-from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
+from alcide.agenda.models import Event, EventType
+from alcide.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact
+from alcide.ressources.models import Service, ManagementCode
+from alcide.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
+from alcide.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
     FamilySituationType, TransportType, TransportCompany, Provenance, AnalyseMotive, FamilyMotive,
     CodeCFTMEA, SocialisationDuration, School, SchoolLevel, OutMotive, OutTo, AdviceGiver,
     MaritalStatusType, Job, PatientRelatedLink, HealthCenter)

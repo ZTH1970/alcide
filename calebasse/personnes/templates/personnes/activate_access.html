@@ -1,8 +1,0 @@
-{% load widget_tweaks %}
-
-{% if error_message %}
-<p><strong>{{ error_message }}</strong></p>
-{% endif %}
-<form action="{{ request.get_full_path }}" method="post">{% csrf_token %}
-  <p>Êtes-vous sûr de vouloir activer {{ object }} ?</p>
-</form>

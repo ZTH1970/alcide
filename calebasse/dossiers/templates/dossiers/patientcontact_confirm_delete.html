@@ -1,8 +1,0 @@
-{% load widget_tweaks %}
-
-{% if error_message %}
-<p><strong>{{ error_message }}</strong></p>
-{% endif %}
-<form action="{{ request.get_full_path }}" method="post">{% csrf_token %}
-  <p>Êtes-vous sûr de vouloir supprimer le contact : {{ object.first_name }} <span class="lastname">{{ object.last_name }}</span> ?</p>
-</form>

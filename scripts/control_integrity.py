@@ -11,15 +11,15 @@ import tempfile
 from datetime import datetime, timedelta
 from datetime import date as date_setter
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alcide.settings")
 
-from calebasse.facturation.models import Invoice
-from calebasse.actes.models import Act, ValidationMessage
-from calebasse.dossiers.models import PatientRecord
-from calebasse.agenda.models import EventWithAct
+from alcide.facturation.models import Invoice
+from alcide.actes.models import Act, ValidationMessage
+from alcide.dossiers.models import PatientRecord
+from alcide.agenda.models import EventWithAct
 
 SEND_MAIL = "mates@entrouvert.com"
-OUTPUT_DIR = "/var/log/calebasse"
+OUTPUT_DIR = "/var/log/alcide"
 PREFIX = "analyse"
 
 ANALYSE_SDT = datetime(2013,1,1)

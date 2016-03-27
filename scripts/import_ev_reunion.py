@@ -13,16 +13,16 @@ from datetime import datetime, timedelta
 log_file = "./scripts/import_ev_reunion.log"
 logging.basicConfig(filename=log_file,level=logging.DEBUG)
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.db import transaction
 
-from calebasse.agenda.models import Event, EventType
-from calebasse.personnes.models import Worker
-from calebasse.ressources.models import Service
+from alcide.agenda.models import Event, EventType
+from alcide.personnes.models import Worker
+from alcide.ressources.models import Service
 
 from scripts.import_rs import PERIOD_FAURE_NOUS
 
@@ -32,7 +32,7 @@ db_path = "./scripts/20121221-192258"
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
 tables = ['rs', 'ev', 'details_rs', 'details_ev']
 
-# Global mappers. This dicts are used to map a Faure id with a calebasse object.
+# Global mappers. This dicts are used to map a Faure id with a alcide object.
 tables_data = {}
 
 def _to_datetime(str_date):

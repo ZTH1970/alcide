@@ -10,18 +10,18 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.db import transaction
 from django.db.models import Q
 from django.contrib.auth.models import User
 
-from calebasse.agenda.models import Event, EventType
-from calebasse.personnes.models import Worker, UserWorker
-from calebasse.ressources.models import Service, WorkerType
+from alcide.agenda.models import Event, EventType
+from alcide.personnes.models import Worker, UserWorker
+from alcide.ressources.models import Service, WorkerType
 
 from scripts.import_rs import PERIOD_FAURE_NOUS
 from scripts.utils import _get_dict
@@ -32,7 +32,7 @@ db_path = "./scripts/20130104-213225"
 dbs = ["F_ST_ETIENNE_SESSAD_TED", "F_ST_ETIENNE_CMPP", "F_ST_ETIENNE_CAMSP", "F_ST_ETIENNE_SESSAD"]
 #tables = ['intervenants']
 
-# Global mappers. This dicts are used to map a Faure id with a calebasse object.
+# Global mappers. This dicts are used to map a Faure id with a alcide object.
 tables_data = {}
 
 log_file = "./scripts/import_recup_intervenants.log"

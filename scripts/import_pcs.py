@@ -8,10 +8,10 @@ import csv
 from datetime import datetime, time, date
 from dateutil.relativedelta import relativedelta
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 import logging
 logger = logging.getLogger('import_pcs')
@@ -29,17 +29,17 @@ from django.db import transaction
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
-from calebasse.agenda.models import Event, EventType
-from calebasse.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact, \
+from alcide.agenda.models import Event, EventType
+from alcide.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact, \
              CmppHealthCareDiagnostic, CmppHealthCareTreatment
 
-from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
-from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
+from alcide.ressources.models import Service
+from alcide.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
+from alcide.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
     FamilySituationType, TransportType, TransportCompany, Provenance, AnalyseMotive, FamilyMotive,
     CodeCFTMEA, SocialisationDuration, School, SchoolLevel, OutMotive, OutTo, AdviceGiver,
     MaritalStatusType, Job, PatientRelatedLink, HealthCenter)
-from calebasse.actes.models import Act
+from alcide.actes.models import Act
 
 # Configuration
 db_path = "./scripts/20130104-213225"
@@ -435,7 +435,7 @@ def import_dossiers_phase_1():
 
     author = User.objects.get(pk=1)
 
-    msg = "Suppression de toutes les prises en charge existante dans calebasse..."
+    msg = "Suppression de toutes les prises en charge existante dans alcide..."
     logger.info("%s" % msg)
     CmppHealthCareDiagnostic.objects.all().delete()
     CmppHealthCareTreatment.objects.all().delete()
@@ -451,7 +451,7 @@ def import_dossiers_phase_1():
         try:
             patient = PatientRecord.objects.get(old_id=patient_id, service=service)
         except:
-            msg = "Patient présent dans la table des prises en charge mais pas dans calebasse"
+            msg = "Patient présent dans la table des prises en charge mais pas dans alcide"
             logger.error("%s" % msg)
             msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (patient_id, str(tables_data['dossiers'][patient_id]['nom']), str(tables_data['dossiers'][patient_id]['prenom']))
             logger.error("%s" % msg)
@@ -492,7 +492,7 @@ def import_dossiers_phase_1():
     #CmppHealthCareTreatment.objects.bulk_create(HcTraits)
     # Association des actes au healthcare
 
-    msg = "Association des actes dans calebasse aux prises en charge..."
+    msg = "Association des actes dans alcide aux prises en charge..."
     logger.info("%s" % msg)
     i = 0
     j = 0
@@ -525,7 +525,7 @@ def import_dossiers_phase_1():
                     i += 1
                     continue
                 if not a.is_billed:
-                    msg = "Acte trouvé et pris en charge mais non marqué facturé dans calebasse, marquage facturé (ID acte calebasse : %d)" % a.id
+                    msg = "Acte trouvé et pris en charge mais non marqué facturé dans alcide, marquage facturé (ID acte alcide : %d)" % a.id
                     logger.warn("%s" % msg)
                     a.is_billed = True
                 a.healthcare = hc
@@ -533,7 +533,7 @@ def import_dossiers_phase_1():
                 j += 1
     msg = "Actes non trouvés : %d" % i
     logger.info("%s" % msg)
-    msg = "Actes facturés chez Faure et réimputés dans calebasse aux prises en charge : %d" % j
+    msg = "Actes facturés chez Faure et réimputés dans alcide aux prises en charge : %d" % j
     logger.info("%s" % msg)
     # Historique des dossiers, Automatic switch state ? Automated hc creation ?
 
@@ -552,7 +552,7 @@ def import_dossiers_phase_1():
     date_clos = None
     date_retour = None
 
-    msg = "Suppresion des états des dossiers dans calebasse qui ont été importés."
+    msg = "Suppresion des états des dossiers dans alcide qui ont été importés."
     logger.info("%s" % msg)
     FileState.objects.filter(patient__service=service, patient__old_id__isnull=False).delete()
 
@@ -566,7 +566,7 @@ def import_dossiers_phase_1():
         try:
             patient = PatientRecord.objects.get(old_id=dossier['id'], service=service)
         except:
-            msg = "Patient présent dans la table des dossiers mais pas dans calebasse"
+            msg = "Patient présent dans la table des dossiers mais pas dans alcide"
             logger.error("%s" % msg)
             msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (str(dossier['id']), str(dossier['nom'].encode('utf-8')), str(dossier['prenom'].encode('utf-8')))
             logger.error("%s" % msg)

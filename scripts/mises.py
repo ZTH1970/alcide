@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
 
-django.core.management.setup_environ(calebasse.settings)
-from calebasse.ressources.models import CodeCFTMEA
+django.core.management.setup_environ(alcide.settings)
+from alcide.ressources.models import CodeCFTMEA
 
 db="./scripts/MISES.TXT"
 

@@ -6,18 +6,18 @@ import csv
 
 from datetime import datetime, date
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.db import transaction
-from calebasse.agenda.models import EventWithAct
-from calebasse.dossiers.models import PatientRecord
-from calebasse.personnes.models import Worker
-from calebasse.ressources.models import Service
-from calebasse.ressources.models import ActType
-from calebasse.actes.models import Act, ActValidationState
+from alcide.agenda.models import EventWithAct
+from alcide.dossiers.models import PatientRecord
+from alcide.personnes.models import Worker
+from alcide.ressources.models import Service
+from alcide.ressources.models import ActType
+from alcide.actes.models import Act, ActValidationState
 
 from import_dossiers import map_cs
 

@@ -9,10 +9,10 @@ import random
 from datetime import datetime, time
 
 import django.core.management
-import calebasse.settings
-django.core.management.setup_environ(calebasse.settings)
+import alcide.settings
+django.core.management.setup_environ(alcide.settings)
 
-from calebasse.dossiers.models import PatientRecord
+from alcide.dossiers.models import PatientRecord
 
 def main():
     i = PatientRecord.objects.all().count()

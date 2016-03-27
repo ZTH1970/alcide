@@ -4,14 +4,14 @@ import os
 import datetime as dt
 from collections import defaultdict
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alcide.settings")
 
 from django.db import transaction
 
 @transaction.commit_on_success
 def main():
-    from calebasse.actes.validation import get_days_with_acts_not_locked
-    from calebasse.actes.models import Act
+    from alcide.actes.validation import get_days_with_acts_not_locked
+    from alcide.actes.models import Act
 
     doubles = defaultdict(lambda: set())
     days_with_acts_not_locked = get_days_with_acts_not_locked(dt.date(2010,1,1), dt.date.today())

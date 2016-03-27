@@ -1,9 +1,9 @@
 import django.core.management
-import calebasse.settings
+import alcide.settings
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
-from calebasse.facturation.models import Invoice
+from alcide.facturation.models import Invoice
 
 if __name__ == "__main__":
     for invoice in Invoice.objects.all():

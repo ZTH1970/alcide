@@ -8,10 +8,10 @@ import csv
 from datetime import datetime, time, date
 from dateutil.relativedelta import relativedelta
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 import logging
 logger = logging.getLogger('import_pcs')
@@ -25,17 +25,17 @@ from django.db import transaction
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
-from calebasse.agenda.models import Event, EventType
-from calebasse.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact, \
+from alcide.agenda.models import Event, EventType
+from alcide.dossiers.models import PatientRecord, Status, FileState, PatientAddress, PatientContact, \
              SessadHealthCareNotification, HealthCare
 
-from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
-from calebasse.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
+from alcide.ressources.models import Service
+from alcide.personnes.models import Worker, Holiday, ExternalWorker, ExternalTherapist
+from alcide.ressources.models import (WorkerType, ParentalAuthorityType, ParentalCustodyType,
     FamilySituationType, TransportType, TransportCompany, Provenance, AnalyseMotive, FamilyMotive,
     CodeCFTMEA, SocialisationDuration, School, SchoolLevel, OutMotive, OutTo, AdviceGiver,
     MaritalStatusType, Job, PatientRelatedLink, HealthCenter)
-from calebasse.actes.models import Act
+from alcide.actes.models import Act
 
 # Configuration
 db_path = "./scripts/20130104-213225"
@@ -307,7 +307,7 @@ def import_dossiers_phase_1():
 
     author = User.objects.get(pk=1)
 
-#    msg = "Suppression de toutes les notifications existantes dans calebasse..."
+#    msg = "Suppression de toutes les notifications existantes dans alcide..."
 #    logger.info("%s" % msg)
 #    SessadHealthCareNotification.objects.all().delete()
 #    msg = "Terminé"
@@ -321,7 +321,7 @@ def import_dossiers_phase_1():
         try:
             patient = PatientRecord.objects.get(old_id=patient_id, service=service)
         except:
-            msg = "Patient présent dans la table des prises en charge mais pas dans calebasse"
+            msg = "Patient présent dans la table des prises en charge mais pas dans alcide"
             logger.error("%s" % msg)
             msg = "Anciens ID : %s - Nom : %s - Prénom : %s" % (patient_id, str(tables_data['dossiers'][patient_id]['nom'].encode('utf-8')), str(tables_data['dossiers'][patient_id]['prenom'].encode('utf-8')))
             logger.error("%s" % msg)

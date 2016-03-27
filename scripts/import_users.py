@@ -9,16 +9,16 @@ import random
 from datetime import datetime, time
 
 import django.core.management
-import calebasse.settings
-django.core.management.setup_environ(calebasse.settings)
+import alcide.settings
+django.core.management.setup_environ(alcide.settings)
 
 from django.contrib.auth.models import User
-from calebasse.actes.models import EventAct
-from calebasse.agenda.models import Event, EventType
-from calebasse.dossiers.models import PatientRecord, Status, FileState
-from calebasse.ressources.models import Service
-from calebasse.personnes.models import Worker, Holiday, UserWorker
-from calebasse.ressources.models import WorkerType
+from alcide.actes.models import EventAct
+from alcide.agenda.models import Event, EventType
+from alcide.dossiers.models import PatientRecord, Status, FileState
+from alcide.ressources.models import Service
+from alcide.personnes.models import Worker, Holiday, UserWorker
+from alcide.ressources.models import WorkerType
 
 
 wt="./scripts/worker_type.csv"

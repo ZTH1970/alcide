@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import sys
-import calebasse.settings
+import alcide.settings
 import django.core.management
 from datetime import datetime
 import csv
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
-from calebasse.dossiers.models import PatientRecord
-from calebasse.actes.models import Act
+from alcide.dossiers.models import PatientRecord
+from alcide.actes.models import Act
 
 from django.db import transaction
 

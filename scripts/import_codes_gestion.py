@@ -6,15 +6,15 @@ import csv
 
 from datetime import datetime, time, date
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.contrib.auth.models import User
 
-from calebasse.ressources.models import ManagementCode
+from alcide.ressources.models import ManagementCode
 
 # Configuration
 db = "./scripts/20121221-192258/F_ST_ETIENNE_SESSAD_TED"

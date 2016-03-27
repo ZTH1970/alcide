@@ -11,10 +11,10 @@ from glob import glob
 from datetime import datetime, time
 
 import django.core.management
-import calebasse.settings
-django.core.management.setup_environ(calebasse.settings)
+import alcide.settings
+django.core.management.setup_environ(alcide.settings)
 
-from calebasse.ressources.models import ActType, Service
+from alcide.ressources.models import ActType, Service
 
 def _to_int(str_int):
     if not str_int:

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 import os
 
 def get_version():
-    from calebasse import __version__
+    from alcide import __version__
     version = __version__
     if os.path.exists('.git'):
         import subprocess
@@ -17,12 +17,12 @@ def get_version():
     return version
 
 
-setup(name='calebasse',
+setup(name='alcide',
         version=get_version(),
         license='AGPLv3',
         description='',
-        url='http://dev.entrouvert.org/projects/calebasse/',
-        download_url='http://repos.entrouvert.org/calebasse.git/',
+        url='http://dev.entrouvert.org/projects/alcide/',
+        download_url='http://repos.entrouvert.org/alcide.git/',
         author="Entr'ouvert",
         author_email="info@entrouvert.com",
         packages=find_packages(os.path.dirname(__file__) or '.'),

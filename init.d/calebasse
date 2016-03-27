@@ -1,6 +1,6 @@
 #! /bin/bash
 ### BEGIN INIT INFO
-# Provides:          calebasse
+# Provides:          alcide
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -16,18 +16,18 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Description of the service"
-NAME=calebasse
-HOME=/home/calebasse/venv
+NAME=alcide
+HOME=/home/alcide/venv
 DAEMON=$HOME/bin/gunicorn
 PID_DIR=/var/run/$NAME
 PIDFILE=$PID_DIR/gunicorn.pid
 # set timeout to 10800 seconds, as apache2 mod_proxy ProxyTimeout default value
-# put error log into /var/log/calebasse/gunicorn.error.log
-# put access log into /var/log/calebasse/gunicorn.access.log
+# put error log into /var/log/alcide/gunicorn.error.log
+# put access log into /var/log/alcide/gunicorn.access.log
 # use 4 workers
 DAEMON_ARGS="$NAME.wsgi:application -D -p $PIDFILE \
 	-t 10800 \
-	--bind=unix:$PID_DIR/calebasse.sock \
+	--bind=unix:$PID_DIR/alcide.sock \
 	--error-logfile /var/log/$NAME/gunicorn.error.log \
 	--access-logfile /var/log/$NAME/gunicorn.access.log \
 	-w 4"
@@ -36,7 +36,7 @@ START_STOP_OPTIONS="--chuid $NAME --group $NAME"
 export LANG=fr_FR.UTF-8
 
 if [ -f /etc/gunicorn/$NAME-conf.py ]; then
-       DAEMON_ARGS="$DAEMON_ARGS -c $HOME/calebasse/$NAME-conf.py"
+       DAEMON_ARGS="$DAEMON_ARGS -c $HOME/alcide/$NAME-conf.py"
 fi
 
 # Exit if the package is not installed
@@ -52,7 +52,7 @@ fi
 
 # Loading venv
 source $HOME/bin/activate
-cd $HOME/calebasse
+cd $HOME/alcide
 
 #
 # Function that starts the daemon/service

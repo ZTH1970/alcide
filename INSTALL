@@ -1,9 +1,10 @@
 Installation with virtualenv on Debian
 --------------------------------------
 
-	apt-get install libldap2-dev libsasl2-dev swig
+	apt-get install libldap2-dev libsasl2-dev swig libjpeg-dev python-dev gettext pdftk
 	virtualenv venv
 	. ./venv/bin/activate
 	pip install -U setuptools
 	pip install -U pip
 	pip install -r requirements.txt
+        mv calebasse/fixtures/initial_price_per_act.json calebasse/fixtures/initial_price_per_act.json.inactif

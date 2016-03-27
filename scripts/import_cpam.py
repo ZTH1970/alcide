@@ -4,12 +4,12 @@
 import csv
 import codecs
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
 
-django.core.management.setup_environ(calebasse.settings)
-from calebasse.ressources.models import HealthCenter, LargeRegime
+django.core.management.setup_environ(alcide.settings)
+from alcide.ressources.models import HealthCenter, LargeRegime
 
 db="./scripts/CPAM.csv"
 

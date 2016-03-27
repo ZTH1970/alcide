@@ -5,9 +5,9 @@ import os
 
 log = open('descriptions.log', 'a+')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calebasse.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alcide.settings")
 
-from calebasse.agenda.models import EventWithAct
+from alcide.agenda.models import EventWithAct
 
 for event in EventWithAct.objects.all():
     if event.act:

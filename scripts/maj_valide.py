@@ -1,12 +1,12 @@
 import sys
-import calebasse.settings
+import alcide.settings
 import django.core.management
 from datetime import datetime
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.db import transaction
-from calebasse.actes.models import Act
+from alcide.actes.models import Act
 
 @transaction.commit_manually
 def main():

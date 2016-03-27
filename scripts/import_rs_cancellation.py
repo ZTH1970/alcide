@@ -6,14 +6,14 @@ import csv
 
 from datetime import datetime
 
-import calebasse.settings
+import alcide.settings
 import django.core.management
 
-django.core.management.setup_environ(calebasse.settings)
+django.core.management.setup_environ(alcide.settings)
 
 from django.db import transaction
-from calebasse.agenda.models import Event
-from calebasse.ressources.models import Service
+from alcide.agenda.models import Event
+from alcide.ressources.models import Service
 
 import utils
 
