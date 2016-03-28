@@ -95,7 +95,7 @@
     "model": "agenda.event",
     "fields": {
       "event_type": 5,
-      "title": "Entr'ouvert",
+      "title": "Paradis Charlotte &",
       "description": "Bla bla bla",
       "participants": [
         5,

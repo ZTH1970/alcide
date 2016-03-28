@@ -1,9 +1,9 @@
 
-from alcide.lookups import CalebasseLookup
+from alcide.lookups import AlcideLookup
 
 from models import Worker
 
-class WorkerLookup(CalebasseLookup):
+class WorkerLookup(AlcideLookup):
     model = Worker
     search_field = 'display_name'
 

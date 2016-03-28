@@ -43,7 +43,7 @@ if __name__ == '__main__' :
     logger = tempfile.NamedTemporaryFile(suffix='.logtmp',
             prefix=prefix, dir=OUTPUT_DIR, delete=False)
 
-    logger.write("Script de contôle de Calebasse : %s\n\n" % datetime.utcnow())
+    logger.write("Script de contôle de Alcide : %s\n\n" % datetime.utcnow())
 
     need_mail = False
 
@@ -315,7 +315,7 @@ if __name__ == '__main__' :
         # send_mail
         pass
 
-    logger.write("Fin du script de contôle de Calebasse : %s" % datetime.utcnow())
+    logger.write("Fin du script de contôle de Alcide : %s" % datetime.utcnow())
     old_fn = logger.name
     logger.close()
     os.rename(old_fn, logger_fn)

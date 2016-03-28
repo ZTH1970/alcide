@@ -5,7 +5,7 @@ import re
 from django.db.models import Q
 
 from alcide.cbv import HOME_SERVICE_COOKIE
-from alcide.lookups import CalebasseLookup
+from alcide.lookups import AlcideLookup
 from alcide.personnes.models import Worker
 from alcide.ressources.models import Service, School
 
@@ -21,7 +21,7 @@ class FakeGroup:
         return u'Groupe: %s' % self.label
 
 
-class WorkerOrGroupLookup(CalebasseLookup):
+class WorkerOrGroupLookup(AlcideLookup):
     model = Worker
     search_field = 'last_name'
     enabled = True
@@ -62,7 +62,7 @@ class WorkerOrGroupLookup(CalebasseLookup):
 class AllWorkerOrGroupLookup(WorkerOrGroupLookup):
     enabled = False
 
-class SchoolLookup(CalebasseLookup):
+class SchoolLookup(AlcideLookup):
     model = School
     search_field = 'name'
     query_words = []

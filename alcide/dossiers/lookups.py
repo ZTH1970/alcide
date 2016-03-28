@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from alcide.cbv import HOME_SERVICE_COOKIE
-from alcide.lookups import CalebasseLookup
+from alcide.lookups import AlcideLookup
 from alcide.dossiers.models import PatientRecord, PatientAddress
 from itertools import chain
 
-class PatientRecordLookup(CalebasseLookup):
+class PatientRecordLookup(AlcideLookup):
     model = PatientRecord
     search_field = 'last_name'
     homonym = False
@@ -55,7 +55,7 @@ class PatientRecordLookup(CalebasseLookup):
             text += u')'
         return unicode(text)
 
-class PatientAddressLookup(CalebasseLookup):
+class PatientAddressLookup(AlcideLookup):
     model = PatientAddress
     search_field = 'display_name'
 
