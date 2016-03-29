@@ -140,7 +140,7 @@ class EventManager(PassThroughManager.for_queryset_class(EventQuerySet),
         Args:
             event_type: can be either an ``EventType`` object or the label
             is either created or retrieved.
-            participants: List of CalebasseUser
+            participants: List of AlcideUser
             start_datetime: will default to the current hour if ``None``
             end_datetime: will default to ``start_datetime`` plus
             default.DEFAULT_EVENT_DURATION hour if ``None``

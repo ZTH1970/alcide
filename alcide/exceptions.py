@@ -1,6 +1,6 @@
 
 
-class CalebasseException(Exception):
-    "Calebasse generic exception"
+class AlcideException(Exception):
+    "Alcide generic exception"
     pass
 

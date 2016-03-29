@@ -173,7 +173,7 @@ class ManagementCode(NamedAbstractModel):
             verbose_name=u'Ancien ID', blank=True, null=True)
 
 
-class UninvoicableCode(models.Model):
+class UninvoicableCode(NamedAbstractModel):
     class Meta:
         verbose_name = u'Code de non-facturation'
         verbose_name_plural = u'Codes de non-facturation'
